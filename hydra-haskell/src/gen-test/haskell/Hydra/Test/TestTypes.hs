@@ -12,6 +12,85 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+compareStringsType :: Core.Type
+compareStringsType =
+    Core.TypeFunction (Core.FunctionType {
+      Core.functionTypeDomain = (Core.TypeLiteral Core.LiteralTypeString),
+      Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})
+
+concatType :: Core.Type
+concatType =
+    Core.TypeFunction (Core.FunctionType {
+      Core.functionTypeDomain = (Core.TypeLiteral Core.LiteralTypeString),
+      Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
+        Core.functionTypeDomain = (Core.TypeLiteral Core.LiteralTypeString),
+        Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)}))})
+
+eitherStringOrInt8Type :: Core.Type
+eitherStringOrInt8Type =
+    Core.TypeUnion [
+      Core.FieldType {
+        Core.fieldTypeName = (Core.Name "left"),
+        Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
+      Core.FieldType {
+        Core.fieldTypeName = (Core.Name "right"),
+        Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt8))}]
+
+eitherStringOrInt8TypeName :: Core.Name
+eitherStringOrInt8TypeName = Core.Name "EitherStringOrInt8"
+
+exampleProjectionType :: Core.Type
+exampleProjectionType =
+    Core.TypeFunction (Core.FunctionType {
+      Core.functionTypeDomain = (Core.TypeVariable testTypePersonName),
+      Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})
+
+listOfInt16sType :: Core.Type
+listOfInt16sType = Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt16))
+
+listOfInt8sType :: Core.Type
+listOfInt8sType = Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt8))
+
+listOfListsOfStringsType :: Core.Type
+listOfListsOfStringsType = Core.TypeList (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))
+
+listOfSetOfStringsType :: Core.Type
+listOfSetOfStringsType = Core.TypeList (Core.TypeSet (Core.TypeLiteral Core.LiteralTypeString))
+
+listOfStringsType :: Core.Type
+listOfStringsType = Core.TypeList (Core.TypeLiteral Core.LiteralTypeString)
+
+mapOfStringsToIntsType :: Core.Type
+mapOfStringsToIntsType =
+    Core.TypeMap (Core.MapType {
+      Core.mapTypeKeys = (Core.TypeLiteral Core.LiteralTypeString),
+      Core.mapTypeValues = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})
+
+optionalInt16Type :: Core.Type
+optionalInt16Type = Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt16))
+
+optionalInt8Type :: Core.Type
+optionalInt8Type = Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt8))
+
+optionalStringType :: Core.Type
+optionalStringType = Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString)
+
+setOfStringsType :: Core.Type
+setOfStringsType = Core.TypeSet (Core.TypeLiteral Core.LiteralTypeString)
+
+stringOrIntName :: Core.Name
+stringOrIntName = Core.Name "StringOrInt"
+
+stringOrIntType :: Core.Type
+stringOrIntType =
+    Core.TypeUnion [
+      Core.FieldType {
+        Core.fieldTypeName = (Core.Name "left"),
+        Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
+      Core.FieldType {
+        Core.fieldTypeName = (Core.Name "right"),
+        Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}]
+
 testTypeBuddyListA :: Core.Type
 testTypeBuddyListA =
     Core.TypeForall (Core.ForallType {
@@ -162,6 +241,9 @@ testTypeList =
 
 testTypeListName :: Core.Name
 testTypeListName = Core.Name "List"
+
+testTypeName :: Core.Name
+testTypeName = Core.Name "Test"
 
 testTypeNumber :: Core.Type
 testTypeNumber =
@@ -328,85 +410,3 @@ testTypeUnit = Core.TypeRecord []
 
 testTypeUnitName :: Core.Name
 testTypeUnitName = Core.Name "Unit"
-
-concatType :: Core.Type
-concatType =
-    Core.TypeFunction (Core.FunctionType {
-      Core.functionTypeDomain = (Core.TypeLiteral Core.LiteralTypeString),
-      Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-        Core.functionTypeDomain = (Core.TypeLiteral Core.LiteralTypeString),
-        Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)}))})
-
-compareStringsType :: Core.Type
-compareStringsType =
-    Core.TypeFunction (Core.FunctionType {
-      Core.functionTypeDomain = (Core.TypeLiteral Core.LiteralTypeString),
-      Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})
-
-eitherStringOrInt8TypeName :: Core.Name
-eitherStringOrInt8TypeName = Core.Name "EitherStringOrInt8"
-
-eitherStringOrInt8Type :: Core.Type
-eitherStringOrInt8Type =
-    Core.TypeUnion [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "left"),
-        Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "right"),
-        Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt8))}]
-
-exampleProjectionType :: Core.Type
-exampleProjectionType =
-    Core.TypeFunction (Core.FunctionType {
-      Core.functionTypeDomain = (Core.TypeVariable testTypePersonName),
-      Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})
-
-listOfInt8sType :: Core.Type
-listOfInt8sType = Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt8))
-
-listOfInt16sType :: Core.Type
-listOfInt16sType = Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt16))
-
-listOfListsOfStringsType :: Core.Type
-listOfListsOfStringsType = Core.TypeList (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))
-
-listOfSetOfStringsType :: Core.Type
-listOfSetOfStringsType = Core.TypeList (Core.TypeSet (Core.TypeLiteral Core.LiteralTypeString))
-
-listOfStringsType :: Core.Type
-listOfStringsType = Core.TypeList (Core.TypeLiteral Core.LiteralTypeString)
-
-mapOfStringsToIntsType :: Core.Type
-mapOfStringsToIntsType =
-    Core.TypeMap (Core.MapType {
-      Core.mapTypeKeys = (Core.TypeLiteral Core.LiteralTypeString),
-      Core.mapTypeValues = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})
-
-optionalInt8Type :: Core.Type
-optionalInt8Type = Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt8))
-
-optionalInt16Type :: Core.Type
-optionalInt16Type = Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt16))
-
-optionalStringType :: Core.Type
-optionalStringType = Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString)
-
-setOfStringsType :: Core.Type
-setOfStringsType = Core.TypeSet (Core.TypeLiteral Core.LiteralTypeString)
-
-stringOrIntName :: Core.Name
-stringOrIntName = Core.Name "StringOrInt"
-
-stringOrIntType :: Core.Type
-stringOrIntType =
-    Core.TypeUnion [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "left"),
-        Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "right"),
-        Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}]
-
-testTypeName :: Core.Name
-testTypeName = Core.Name "Test"

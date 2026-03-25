@@ -62,12 +62,6 @@ public interface Core {
       new hydra.core.Field(new hydra.core.Name("right"), hydra.encode.Core.type((x).right)))));
   }
 
-  static hydra.core.Term pairType(hydra.core.PairType x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.PairType"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("first"), hydra.encode.Core.type((x).first)),
-      new hydra.core.Field(new hydra.core.Name("second"), hydra.encode.Core.type((x).second)))));
-  }
-
   static hydra.core.Term elimination(hydra.core.Elimination v1) {
     return (v1).accept(new hydra.core.Elimination.PartialVisitor<>() {
       @Override
@@ -355,6 +349,12 @@ public interface Core {
 
   static hydra.core.Term name(hydra.core.Name x) {
     return new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra.core.Name"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).value))));
+  }
+
+  static hydra.core.Term pairType(hydra.core.PairType x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.PairType"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("first"), hydra.encode.Core.type((x).first)),
+      new hydra.core.Field(new hydra.core.Name("second"), hydra.encode.Core.type((x).second)))));
   }
 
   static hydra.core.Term projection(hydra.core.Projection x) {

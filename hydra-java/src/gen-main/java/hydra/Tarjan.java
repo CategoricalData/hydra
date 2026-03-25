@@ -23,18 +23,32 @@ public interface Tarjan {
       v1)))));
   }
 
-  static <T0> hydra.util.ConsList<hydra.util.Pair<T0, hydra.util.ConsList<T0>>> adjacencyListsToGraph_sortedEdges(hydra.util.ConsList<hydra.util.Pair<T0, hydra.util.ConsList<T0>>> edges0) {
-    return hydra.lib.lists.SortOn.apply(
-      (java.util.function.Function<hydra.util.Pair<T0, hydra.util.ConsList<T0>>, T0>) ((java.util.function.Function<hydra.util.Pair<T0, hydra.util.ConsList<T0>>, T0>) (hydra.lib.pairs.First::apply)),
-      edges0);
-  }
-
   static <T0> hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.Pair<T0, hydra.util.ConsList<T0>>>> adjacencyListsToGraph_indexedEdges(hydra.util.ConsList<hydra.util.Pair<T0, hydra.util.ConsList<T0>>> sortedEdges) {
     return hydra.lib.lists.Zip.apply(
       hydra.lib.math.Range.apply(
         0,
         hydra.lib.lists.Length.apply(sortedEdges)),
       sortedEdges);
+  }
+
+  static <T0> T0 adjacencyListsToGraph_k(hydra.util.Pair<T0, hydra.util.ConsList<T0>> kNeighbors) {
+    return hydra.lib.pairs.First.apply(kNeighbors);
+  }
+
+  static <T0> T0 adjacencyListsToGraph_k2(hydra.util.Pair<T0, hydra.util.ConsList<T0>> kNeighbors) {
+    return hydra.lib.pairs.First.apply(kNeighbors);
+  }
+
+  static <T0> hydra.util.Pair<T0, hydra.util.ConsList<T0>> adjacencyListsToGraph_kNeighbors(hydra.util.Pair<Integer, hydra.util.Pair<T0, hydra.util.ConsList<T0>>> vkNeighbors) {
+    return hydra.lib.pairs.Second.apply(vkNeighbors);
+  }
+
+  static <T0> hydra.util.Pair<T0, hydra.util.ConsList<T0>> adjacencyListsToGraph_kNeighbors2(hydra.util.Pair<Integer, hydra.util.Pair<T0, hydra.util.ConsList<T0>>> vkNeighbors) {
+    return hydra.lib.pairs.Second.apply(vkNeighbors);
+  }
+
+  static <T0> hydra.util.Pair<T0, hydra.util.ConsList<T0>> adjacencyListsToGraph_kNeighbors3(hydra.util.Pair<Integer, hydra.util.Pair<T0, hydra.util.ConsList<T0>>> vkNeighbors) {
+    return hydra.lib.pairs.Second.apply(vkNeighbors);
   }
 
   static <T0> hydra.util.PersistentMap<T0, Integer> adjacencyListsToGraph_keyToVertex(hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.Pair<T0, hydra.util.ConsList<T0>>>> indexedEdges) {
@@ -44,6 +58,16 @@ public interface Tarjan {
         return (hydra.util.Pair<T0, Integer>) ((hydra.util.Pair<T0, Integer>) (new hydra.util.Pair<T0, Integer>(hydra.Tarjan.<T0>adjacencyListsToGraph_k2(hydra.Tarjan.<T0>adjacencyListsToGraph_kNeighbors3(vkNeighbors)), v.get())));
       }),
       indexedEdges));
+  }
+
+  static <T0> hydra.util.ConsList<T0> adjacencyListsToGraph_neighbors(hydra.util.Pair<T0, hydra.util.ConsList<T0>> kNeighbors) {
+    return hydra.lib.pairs.Second.apply(kNeighbors);
+  }
+
+  static <T0> hydra.util.ConsList<hydra.util.Pair<T0, hydra.util.ConsList<T0>>> adjacencyListsToGraph_sortedEdges(hydra.util.ConsList<hydra.util.Pair<T0, hydra.util.ConsList<T0>>> edges0) {
+    return hydra.lib.lists.SortOn.apply(
+      (java.util.function.Function<hydra.util.Pair<T0, hydra.util.ConsList<T0>>, T0>) ((java.util.function.Function<hydra.util.Pair<T0, hydra.util.ConsList<T0>>, T0>) (hydra.lib.pairs.First::apply)),
+      edges0);
   }
 
   static <T0> hydra.util.PersistentMap<Integer, T0> adjacencyListsToGraph_vertexMap(hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.Pair<T0, hydra.util.ConsList<T0>>>> indexedEdges) {
@@ -59,49 +83,6 @@ public interface Tarjan {
     return hydra.lib.maybes.FromJust.apply(hydra.lib.maps.Lookup.apply(
       v,
       vertexMap));
-  }
-
-  static <T0> hydra.util.Pair<T0, hydra.util.ConsList<T0>> adjacencyListsToGraph_kNeighbors(hydra.util.Pair<Integer, hydra.util.Pair<T0, hydra.util.ConsList<T0>>> vkNeighbors) {
-    return hydra.lib.pairs.Second.apply(vkNeighbors);
-  }
-
-  static <T0> hydra.util.ConsList<T0> adjacencyListsToGraph_neighbors(hydra.util.Pair<T0, hydra.util.ConsList<T0>> kNeighbors) {
-    return hydra.lib.pairs.Second.apply(kNeighbors);
-  }
-
-  static <T0> hydra.util.Pair<T0, hydra.util.ConsList<T0>> adjacencyListsToGraph_kNeighbors2(hydra.util.Pair<Integer, hydra.util.Pair<T0, hydra.util.ConsList<T0>>> vkNeighbors) {
-    return hydra.lib.pairs.Second.apply(vkNeighbors);
-  }
-
-  static <T0> T0 adjacencyListsToGraph_k(hydra.util.Pair<T0, hydra.util.ConsList<T0>> kNeighbors) {
-    return hydra.lib.pairs.First.apply(kNeighbors);
-  }
-
-  static <T0> hydra.util.Pair<T0, hydra.util.ConsList<T0>> adjacencyListsToGraph_kNeighbors3(hydra.util.Pair<Integer, hydra.util.Pair<T0, hydra.util.ConsList<T0>>> vkNeighbors) {
-    return hydra.lib.pairs.Second.apply(vkNeighbors);
-  }
-
-  static <T0> T0 adjacencyListsToGraph_k2(hydra.util.Pair<T0, hydra.util.ConsList<T0>> kNeighbors) {
-    return hydra.lib.pairs.First.apply(kNeighbors);
-  }
-
-  static hydra.util.ConsList<hydra.util.ConsList<Integer>> stronglyConnectedComponents(hydra.util.PersistentMap<Integer, hydra.util.ConsList<Integer>> graph) {
-    hydra.util.Lazy<hydra.util.ConsList<Integer>> verts = new hydra.util.Lazy<>(() -> hydra.lib.maps.Keys.apply(graph));
-    hydra.util.Lazy<hydra.topology.TarjanState> finalState = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
-      (java.util.function.Function<hydra.topology.TarjanState, java.util.function.Function<Integer, hydra.topology.TarjanState>>) (st -> (java.util.function.Function<Integer, hydra.topology.TarjanState>) (v -> hydra.lib.logic.IfElse.lazy(
-        hydra.lib.maps.Member.apply(
-          v,
-          (st).indices),
-        () -> st,
-        () -> hydra.Tarjan.strongConnect(
-          graph,
-          v,
-          st)))),
-      hydra.Tarjan.initialState(),
-      verts.get()));
-    return hydra.lib.lists.Reverse.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.util.ConsList<Integer>, hydra.util.ConsList<Integer>>) (hydra.lib.lists.Sort::apply),
-      finalState.get().sccs));
   }
 
   static hydra.topology.TarjanState initialState() {
@@ -232,5 +213,24 @@ public interface Tarjan {
         })).get();
       })).get(),
       () -> stAfterNeighbors.get());
+  }
+
+  static hydra.util.ConsList<hydra.util.ConsList<Integer>> stronglyConnectedComponents(hydra.util.PersistentMap<Integer, hydra.util.ConsList<Integer>> graph) {
+    hydra.util.Lazy<hydra.util.ConsList<Integer>> verts = new hydra.util.Lazy<>(() -> hydra.lib.maps.Keys.apply(graph));
+    hydra.util.Lazy<hydra.topology.TarjanState> finalState = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+      (java.util.function.Function<hydra.topology.TarjanState, java.util.function.Function<Integer, hydra.topology.TarjanState>>) (st -> (java.util.function.Function<Integer, hydra.topology.TarjanState>) (v -> hydra.lib.logic.IfElse.lazy(
+        hydra.lib.maps.Member.apply(
+          v,
+          (st).indices),
+        () -> st,
+        () -> hydra.Tarjan.strongConnect(
+          graph,
+          v,
+          st)))),
+      hydra.Tarjan.initialState(),
+      verts.get()));
+    return hydra.lib.lists.Reverse.apply(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.util.ConsList<Integer>, hydra.util.ConsList<Integer>>) (hydra.lib.lists.Sort::apply),
+      finalState.get().sccs));
   }
 }

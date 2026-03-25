@@ -40,15 +40,50 @@ public interface Utils {
       hydra.ext.scala.Utils.scalaEscapeName((fname).value));
   }
 
-  static String scalaTypeName(Boolean qualify, hydra.core.Name name) {
-    return hydra.lib.logic.IfElse.lazy(
-      hydra.lib.logic.Or.apply(
-        qualify,
-        hydra.lib.sets.Member.apply(
-          hydra.Names.localNameOf(name),
-          hydra.ext.scala.Utils.scalaReservedWords())),
-      () -> (name).value,
-      () -> hydra.Names.localNameOf(name));
+  static hydra.ext.scala.syntax.Data sapply(hydra.ext.scala.syntax.Data fun, hydra.util.ConsList<hydra.ext.scala.syntax.Data> args) {
+    return new hydra.ext.scala.syntax.Data.Apply(new hydra.ext.scala.syntax.Data_Apply(fun, args));
+  }
+
+  static hydra.ext.scala.syntax.Data sapplyTypes(hydra.ext.scala.syntax.Data fun, hydra.util.ConsList<hydra.ext.scala.syntax.Type> typeArgs) {
+    java.util.function.Function<hydra.ext.scala.syntax.Type, String> typeToStr = (java.util.function.Function<hydra.ext.scala.syntax.Type, String>) (t -> hydra.ext.scala.Utils.typeToString(t));
+    hydra.util.Lazy<hydra.util.ConsList<String>> typeStrings = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+      typeToStr,
+      typeArgs));
+    String typeArgStr = hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+      "[",
+      hydra.lib.strings.Intercalate.apply(
+        ", ",
+        typeStrings.get()),
+      "]"));
+    return (fun).accept(new hydra.ext.scala.syntax.Data.PartialVisitor<>() {
+      @Override
+      public hydra.ext.scala.syntax.Data otherwise(hydra.ext.scala.syntax.Data instance) {
+        return fun;
+      }
+
+      @Override
+      public hydra.ext.scala.syntax.Data visit(hydra.ext.scala.syntax.Data.Ref ref) {
+        return (ref).value.accept(new hydra.ext.scala.syntax.Data_Ref.PartialVisitor<>() {
+          @Override
+          public hydra.ext.scala.syntax.Data otherwise(hydra.ext.scala.syntax.Data_Ref instance) {
+            return fun;
+          }
+
+          @Override
+          public hydra.ext.scala.syntax.Data visit(hydra.ext.scala.syntax.Data_Ref.Name dn) {
+            hydra.ext.scala.syntax.PredefString nameStr = (dn).value.value;
+            String rawName = (nameStr).value;
+            return hydra.ext.scala.Utils.sname(hydra.lib.strings.Cat2.apply(
+              rawName,
+              typeArgStr));
+          }
+        });
+      }
+    });
+  }
+
+  static hydra.ext.scala.syntax.Data sassign(hydra.ext.scala.syntax.Data lhs, hydra.ext.scala.syntax.Data rhs) {
+    return new hydra.ext.scala.syntax.Data.Assign(new hydra.ext.scala.syntax.Data_Assign(lhs, rhs));
   }
 
   static String scalaEscapeName(String s) {
@@ -96,12 +131,19 @@ public interface Utils {
       () -> sanitized3.get());
   }
 
-  static hydra.ext.scala.syntax.Data sapply(hydra.ext.scala.syntax.Data fun, hydra.util.ConsList<hydra.ext.scala.syntax.Data> args) {
-    return new hydra.ext.scala.syntax.Data.Apply(new hydra.ext.scala.syntax.Data_Apply(fun, args));
+  static hydra.util.PersistentSet<String> scalaReservedWords() {
+    return hydra.ext.scala.Language.scalaReservedWords();
   }
 
-  static hydra.ext.scala.syntax.Data sassign(hydra.ext.scala.syntax.Data lhs, hydra.ext.scala.syntax.Data rhs) {
-    return new hydra.ext.scala.syntax.Data.Assign(new hydra.ext.scala.syntax.Data_Assign(lhs, rhs));
+  static String scalaTypeName(Boolean qualify, hydra.core.Name name) {
+    return hydra.lib.logic.IfElse.lazy(
+      hydra.lib.logic.Or.apply(
+        qualify,
+        hydra.lib.sets.Member.apply(
+          hydra.Names.localNameOf(name),
+          hydra.ext.scala.Utils.scalaReservedWords())),
+      () -> (name).value,
+      () -> hydra.Names.localNameOf(name));
   }
 
   static hydra.ext.scala.syntax.Data slambda(String v, hydra.ext.scala.syntax.Data body, hydra.util.Maybe<hydra.ext.scala.syntax.Type> sdom) {
@@ -123,42 +165,36 @@ public interface Utils {
       local));
   }
 
-  static hydra.ext.scala.syntax.Data sapplyTypes(hydra.ext.scala.syntax.Data fun, hydra.util.ConsList<hydra.ext.scala.syntax.Type> typeArgs) {
-    java.util.function.Function<hydra.ext.scala.syntax.Type, String> typeToStr = (java.util.function.Function<hydra.ext.scala.syntax.Type, String>) (t -> hydra.ext.scala.Utils.typeToString(t));
-    hydra.util.Lazy<hydra.util.ConsList<String>> typeStrings = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
-      typeToStr,
-      typeArgs));
-    String typeArgStr = hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
-      "[",
-      hydra.lib.strings.Intercalate.apply(
-        ", ",
-        typeStrings.get()),
-      "]"));
-    return (fun).accept(new hydra.ext.scala.syntax.Data.PartialVisitor<>() {
-      @Override
-      public hydra.ext.scala.syntax.Data otherwise(hydra.ext.scala.syntax.Data instance) {
-        return fun;
-      }
+  static hydra.ext.scala.syntax.Type stapply(hydra.ext.scala.syntax.Type t, hydra.util.ConsList<hydra.ext.scala.syntax.Type> args) {
+    return new hydra.ext.scala.syntax.Type.Apply(new hydra.ext.scala.syntax.Type_Apply(t, args));
+  }
 
-      @Override
-      public hydra.ext.scala.syntax.Data visit(hydra.ext.scala.syntax.Data.Ref ref) {
-        return (ref).value.accept(new hydra.ext.scala.syntax.Data_Ref.PartialVisitor<>() {
-          @Override
-          public hydra.ext.scala.syntax.Data otherwise(hydra.ext.scala.syntax.Data_Ref instance) {
-            return fun;
-          }
+  static hydra.ext.scala.syntax.Type stapply1(hydra.ext.scala.syntax.Type t1, hydra.ext.scala.syntax.Type t2) {
+    return hydra.ext.scala.Utils.stapply(
+      t1,
+      hydra.util.ConsList.of(t2));
+  }
 
-          @Override
-          public hydra.ext.scala.syntax.Data visit(hydra.ext.scala.syntax.Data_Ref.Name dn) {
-            hydra.ext.scala.syntax.PredefString nameStr = (dn).value.value;
-            String rawName = (nameStr).value;
-            return hydra.ext.scala.Utils.sname(hydra.lib.strings.Cat2.apply(
-              rawName,
-              typeArgStr));
-          }
-        });
-      }
-    });
+  static hydra.ext.scala.syntax.Type stapply2(hydra.ext.scala.syntax.Type t1, hydra.ext.scala.syntax.Type t2, hydra.ext.scala.syntax.Type t3) {
+    return hydra.ext.scala.Utils.stapply(
+      t1,
+      hydra.util.ConsList.of(
+        t2,
+        t3));
+  }
+
+  static hydra.ext.scala.syntax.Type_Param stparam(hydra.core.Name name) {
+    String v = hydra.Formatting.capitalize((name).value);
+    return new hydra.ext.scala.syntax.Type_Param((hydra.util.ConsList<hydra.ext.scala.syntax.Mod>) (hydra.util.ConsList.<hydra.ext.scala.syntax.Mod>empty()), new hydra.ext.scala.syntax.Name.Value(v), (hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param>) (hydra.util.ConsList.<hydra.ext.scala.syntax.Type_Param>empty()), (hydra.util.ConsList<hydra.ext.scala.syntax.TypeBounds>) (hydra.util.ConsList.<hydra.ext.scala.syntax.TypeBounds>empty()), (hydra.util.ConsList<hydra.ext.scala.syntax.Type>) (hydra.util.ConsList.<hydra.ext.scala.syntax.Type>empty()), (hydra.util.ConsList<hydra.ext.scala.syntax.Type>) (hydra.util.ConsList.<hydra.ext.scala.syntax.Type>empty()));
+  }
+
+  static hydra.ext.scala.syntax.Type stref(String s) {
+    return new hydra.ext.scala.syntax.Type.Ref(new hydra.ext.scala.syntax.Type_Ref.Name(new hydra.ext.scala.syntax.Type_Name(s)));
+  }
+
+  static hydra.ext.scala.syntax.Pat svar(hydra.core.Name name) {
+    String v = (name).value;
+    return new hydra.ext.scala.syntax.Pat.Var(new hydra.ext.scala.syntax.Pat_Var(new hydra.ext.scala.syntax.Data_Name(new hydra.ext.scala.syntax.PredefString(v))));
   }
 
   static String typeToString(hydra.ext.scala.syntax.Type t) {
@@ -228,41 +264,5 @@ public interface Utils {
           "]"));
       }
     });
-  }
-
-  static hydra.ext.scala.syntax.Type stapply(hydra.ext.scala.syntax.Type t, hydra.util.ConsList<hydra.ext.scala.syntax.Type> args) {
-    return new hydra.ext.scala.syntax.Type.Apply(new hydra.ext.scala.syntax.Type_Apply(t, args));
-  }
-
-  static hydra.ext.scala.syntax.Type stapply1(hydra.ext.scala.syntax.Type t1, hydra.ext.scala.syntax.Type t2) {
-    return hydra.ext.scala.Utils.stapply(
-      t1,
-      hydra.util.ConsList.of(t2));
-  }
-
-  static hydra.ext.scala.syntax.Type stapply2(hydra.ext.scala.syntax.Type t1, hydra.ext.scala.syntax.Type t2, hydra.ext.scala.syntax.Type t3) {
-    return hydra.ext.scala.Utils.stapply(
-      t1,
-      hydra.util.ConsList.of(
-        t2,
-        t3));
-  }
-
-  static hydra.ext.scala.syntax.Type_Param stparam(hydra.core.Name name) {
-    String v = hydra.Formatting.capitalize((name).value);
-    return new hydra.ext.scala.syntax.Type_Param((hydra.util.ConsList<hydra.ext.scala.syntax.Mod>) (hydra.util.ConsList.<hydra.ext.scala.syntax.Mod>empty()), new hydra.ext.scala.syntax.Name.Value(v), (hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param>) (hydra.util.ConsList.<hydra.ext.scala.syntax.Type_Param>empty()), (hydra.util.ConsList<hydra.ext.scala.syntax.TypeBounds>) (hydra.util.ConsList.<hydra.ext.scala.syntax.TypeBounds>empty()), (hydra.util.ConsList<hydra.ext.scala.syntax.Type>) (hydra.util.ConsList.<hydra.ext.scala.syntax.Type>empty()), (hydra.util.ConsList<hydra.ext.scala.syntax.Type>) (hydra.util.ConsList.<hydra.ext.scala.syntax.Type>empty()));
-  }
-
-  static hydra.ext.scala.syntax.Type stref(String s) {
-    return new hydra.ext.scala.syntax.Type.Ref(new hydra.ext.scala.syntax.Type_Ref.Name(new hydra.ext.scala.syntax.Type_Name(s)));
-  }
-
-  static hydra.ext.scala.syntax.Pat svar(hydra.core.Name name) {
-    String v = (name).value;
-    return new hydra.ext.scala.syntax.Pat.Var(new hydra.ext.scala.syntax.Pat_Var(new hydra.ext.scala.syntax.Data_Name(new hydra.ext.scala.syntax.PredefString(v))));
-  }
-
-  static hydra.util.PersistentSet<String> scalaReservedWords() {
-    return hydra.ext.scala.Language.scalaReservedWords();
   }
 }

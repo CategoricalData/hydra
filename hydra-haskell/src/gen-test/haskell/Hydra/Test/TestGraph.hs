@@ -16,6 +16,12 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+testNamespace :: Module.Namespace
+testNamespace = Module.Namespace "testGraph"
+
+testSchemaNamespace :: Module.Namespace
+testSchemaNamespace = Module.Namespace "testSchemaGraph"
+
 testTerms :: M.Map Core.Name Core.Term
 testTerms = Maps.fromList [
   (Core.Name "testDataArthur", TestTerms.testDataArthur)]
@@ -45,9 +51,3 @@ testTypes =
       (TestTypes.testTypeUnionMonomorphicName, TestTypes.testTypeUnionMonomorphic),
       (TestTypes.testTypeUnionPolymorphicRecursiveName, TestTypes.testTypeUnionPolymorphicRecursive),
       (TestTypes.testTypeUnitName, TestTypes.testTypeUnit)]
-
-testNamespace :: Module.Namespace
-testNamespace = Module.Namespace "testGraph"
-
-testSchemaNamespace :: Module.Namespace
-testSchemaNamespace = Module.Namespace "testSchemaGraph"

@@ -51,20 +51,6 @@ public interface Annotations {
         () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, java.lang.Void>right(null))));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<String>> getDebugId(hydra.context.Context cx) {
-    return hydra.lib.maybes.Maybe.applyLazy(
-      () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<String>>right((hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing())),
-      (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<String>>>) (term -> hydra.lib.eithers.Map.apply(
-        (java.util.function.Function<String, hydra.util.Maybe<String>>) (hydra.lib.maybes.Pure::apply),
-        hydra.extract.Core.string(
-          cx,
-          new hydra.graph.Graph((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeVariableMetadata>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.graph.Primitive>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.graph.Primitive>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.graph.Primitive>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())),
-          term))),
-      hydra.Annotations.getAttr(
-        hydra.Constants.key_debugId(),
-        cx));
-  }
-
   static hydra.util.Maybe<hydra.core.Term> getAttr(hydra.core.Name key, hydra.context.Context cx) {
     return hydra.lib.maps.Lookup.apply(
       key,
@@ -116,6 +102,20 @@ public interface Annotations {
       hydra.lib.maps.Lookup.apply(
         key,
         (cx).other));
+  }
+
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<String>> getDebugId(hydra.context.Context cx) {
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<String>>right((hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing())),
+      (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<String>>>) (term -> hydra.lib.eithers.Map.apply(
+        (java.util.function.Function<String, hydra.util.Maybe<String>>) (hydra.lib.maybes.Pure::apply),
+        hydra.extract.Core.string(
+          cx,
+          new hydra.graph.Graph((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeVariableMetadata>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.graph.Primitive>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.graph.Primitive>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.graph.Primitive>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())),
+          term))),
+      hydra.Annotations.getAttr(
+        hydra.Constants.key_debugId(),
+        cx));
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<String>> getDescription(hydra.context.Context cx, hydra.graph.Graph graph, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> anns) {
@@ -230,24 +230,6 @@ public interface Annotations {
       hydra.Annotations.typeAnnotationInternal(typ));
   }
 
-  static Boolean isNativeType(hydra.core.Binding el) {
-    hydra.util.Lazy<Boolean> isFlaggedAsFirstClassType = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
-      () -> false,
-      hydra.lib.maybes.Map.apply(
-        (java.util.function.Function<hydra.core.Term, Boolean>) (ignored -> true),
-        hydra.Annotations.getTermAnnotation(
-          hydra.Constants.key_firstClassType(),
-          (el).term))));
-    return hydra.lib.maybes.Maybe.applyLazy(
-      () -> false,
-      (java.util.function.Function<hydra.core.TypeScheme, Boolean>) (ts -> hydra.lib.logic.And.apply(
-        hydra.lib.equality.Equal.apply(
-          ts,
-          new hydra.core.TypeScheme((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), (hydra.util.Maybe<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))),
-        hydra.lib.logic.Not.apply(isFlaggedAsFirstClassType.get()))),
-      (el).type);
-  }
-
   static <T0> Boolean hasDescription(hydra.util.PersistentMap<hydra.core.Name, T0> anns) {
     return hydra.lib.maybes.IsJust.apply(hydra.lib.maps.Lookup.apply(
       hydra.Constants.key_description(),
@@ -267,6 +249,24 @@ public interface Annotations {
 
   static Boolean hasTypeDescription(hydra.core.Type typ) {
     return hydra.Annotations.hasDescription(hydra.Annotations.typeAnnotationInternal(typ));
+  }
+
+  static Boolean isNativeType(hydra.core.Binding el) {
+    hydra.util.Lazy<Boolean> isFlaggedAsFirstClassType = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> false,
+      hydra.lib.maybes.Map.apply(
+        (java.util.function.Function<hydra.core.Term, Boolean>) (ignored -> true),
+        hydra.Annotations.getTermAnnotation(
+          hydra.Constants.key_firstClassType(),
+          (el).term))));
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> false,
+      (java.util.function.Function<hydra.core.TypeScheme, Boolean>) (ts -> hydra.lib.logic.And.apply(
+        hydra.lib.equality.Equal.apply(
+          ts,
+          new hydra.core.TypeScheme((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), (hydra.util.Maybe<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))),
+        hydra.lib.logic.Not.apply(isFlaggedAsFirstClassType.get()))),
+      (el).type);
   }
 
   static hydra.util.Pair<Integer, hydra.context.Context> nextCount(hydra.core.Name key, hydra.context.Context cx) {

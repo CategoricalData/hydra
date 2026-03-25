@@ -84,6 +84,30 @@ public interface Serde {
           types)))));
   }
 
+  static hydra.ast.Expr constructRecordExpressionToExpr(hydra.ext.haskell.syntax.ConstructRecordExpression constructRecord) {
+    java.util.function.Function<hydra.ext.haskell.syntax.FieldUpdate, hydra.ast.Expr> fromUpdate = (java.util.function.Function<hydra.ext.haskell.syntax.FieldUpdate, hydra.ast.Expr>) (update -> {
+      hydra.ext.haskell.syntax.Name fn = (update).name;
+      hydra.ext.haskell.syntax.Expression val = (update).value;
+      return hydra.Serialization.ifx(
+        hydra.ext.haskell.Operators.defineOp(),
+        hydra.ext.haskell.Serde.nameToExpr(fn),
+        hydra.ext.haskell.Serde.expressionToExpr(val));
+    });
+    hydra.util.ConsList<hydra.ext.haskell.syntax.FieldUpdate> updates = (constructRecord).fields;
+    hydra.util.Lazy<hydra.ast.Expr> body = new hydra.util.Lazy<>(() -> hydra.Serialization.commaSep(
+      hydra.Serialization.halfBlockStyle(),
+      hydra.lib.lists.Map.apply(
+        fromUpdate,
+        updates)));
+    hydra.ext.haskell.syntax.Name name = (constructRecord).name;
+    return hydra.Serialization.spaceSep(hydra.lib.lists.Cons.apply(
+      hydra.ext.haskell.Serde.nameToExpr(name),
+      hydra.util.ConsList.of(hydra.Serialization.brackets(
+        hydra.Serialization.curlyBraces(),
+        hydra.Serialization.halfBlockStyle(),
+        body.get()))));
+  }
+
   static hydra.ast.Expr constructorToExpr(hydra.ext.haskell.syntax.Constructor cons) {
     return (cons).accept(new hydra.ext.haskell.syntax.Constructor.PartialVisitor<>() {
       @Override
@@ -330,30 +354,6 @@ public interface Serde {
         return hydra.ext.haskell.Serde.nameToExpr((name).value);
       }
     });
-  }
-
-  static hydra.ast.Expr constructRecordExpressionToExpr(hydra.ext.haskell.syntax.ConstructRecordExpression constructRecord) {
-    java.util.function.Function<hydra.ext.haskell.syntax.FieldUpdate, hydra.ast.Expr> fromUpdate = (java.util.function.Function<hydra.ext.haskell.syntax.FieldUpdate, hydra.ast.Expr>) (update -> {
-      hydra.ext.haskell.syntax.Name fn = (update).name;
-      hydra.ext.haskell.syntax.Expression val = (update).value;
-      return hydra.Serialization.ifx(
-        hydra.ext.haskell.Operators.defineOp(),
-        hydra.ext.haskell.Serde.nameToExpr(fn),
-        hydra.ext.haskell.Serde.expressionToExpr(val));
-    });
-    hydra.util.ConsList<hydra.ext.haskell.syntax.FieldUpdate> updates = (constructRecord).fields;
-    hydra.util.Lazy<hydra.ast.Expr> body = new hydra.util.Lazy<>(() -> hydra.Serialization.commaSep(
-      hydra.Serialization.halfBlockStyle(),
-      hydra.lib.lists.Map.apply(
-        fromUpdate,
-        updates)));
-    hydra.ext.haskell.syntax.Name name = (constructRecord).name;
-    return hydra.Serialization.spaceSep(hydra.lib.lists.Cons.apply(
-      hydra.ext.haskell.Serde.nameToExpr(name),
-      hydra.util.ConsList.of(hydra.Serialization.brackets(
-        hydra.Serialization.curlyBraces(),
-        hydra.Serialization.halfBlockStyle(),
-        body.get()))));
   }
 
   static hydra.ast.Expr fieldToExpr(hydra.ext.haskell.syntax.Field field) {
@@ -638,6 +638,26 @@ public interface Serde {
     return hydra.ext.haskell.Serde.expressionToExpr((stmt).value);
   }
 
+  static String toHaskellComments(String c) {
+    return hydra.lib.strings.Intercalate.apply(
+      "\n",
+      hydra.lib.lists.Map.apply(
+        (java.util.function.Function<String, String>) (s -> hydra.lib.strings.Cat2.apply(
+          "-- | ",
+          s)),
+        hydra.lib.strings.Lines.apply(c)));
+  }
+
+  static String toSimpleComments(String c) {
+    return hydra.lib.strings.Intercalate.apply(
+      "\n",
+      hydra.lib.lists.Map.apply(
+        (java.util.function.Function<String, String>) (s -> hydra.lib.strings.Cat2.apply(
+          "-- ",
+          s)),
+        hydra.lib.strings.Lines.apply(c)));
+  }
+
   static hydra.ast.Expr typeSignatureToExpr(hydra.ext.haskell.syntax.TypeSignature typeSig) {
     hydra.ext.haskell.syntax.Name name = (typeSig).name;
     hydra.ast.Expr nameExpr = hydra.ext.haskell.Serde.nameToExpr(name);
@@ -756,26 +776,6 @@ public interface Serde {
 
   static hydra.ast.Expr variableToExpr(hydra.ext.haskell.syntax.Variable variable) {
     return hydra.ext.haskell.Serde.nameToExpr((variable).value);
-  }
-
-  static String toHaskellComments(String c) {
-    return hydra.lib.strings.Intercalate.apply(
-      "\n",
-      hydra.lib.lists.Map.apply(
-        (java.util.function.Function<String, String>) (s -> hydra.lib.strings.Cat2.apply(
-          "-- | ",
-          s)),
-        hydra.lib.strings.Lines.apply(c)));
-  }
-
-  static String toSimpleComments(String c) {
-    return hydra.lib.strings.Intercalate.apply(
-      "\n",
-      hydra.lib.lists.Map.apply(
-        (java.util.function.Function<String, String>) (s -> hydra.lib.strings.Cat2.apply(
-          "-- ",
-          s)),
-        hydra.lib.strings.Lines.apply(c)));
   }
 
   static String writeQualifiedName(hydra.ext.haskell.syntax.QualifiedName qname) {

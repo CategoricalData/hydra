@@ -153,6 +153,10 @@ public interface Graph {
       new hydra.core.Field(new hydra.core.Name("implementation"), (implementation).value)))));
   }
 
+  static hydra.phantoms.TTerm<java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>>>> primitiveImplementation(hydra.phantoms.TTerm<hydra.graph.Primitive> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.graph.Primitive"), new hydra.core.Name("implementation"))))), (x).value)));
+  }
+
   static hydra.phantoms.TTerm<hydra.core.Name> primitiveName(hydra.phantoms.TTerm<hydra.graph.Primitive> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.graph.Primitive"), new hydra.core.Name("name"))))), (x).value)));
   }
@@ -161,8 +165,11 @@ public interface Graph {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.graph.Primitive"), new hydra.core.Name("type"))))), (x).value)));
   }
 
-  static hydra.phantoms.TTerm<java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>>>> primitiveImplementation(hydra.phantoms.TTerm<hydra.graph.Primitive> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.graph.Primitive"), new hydra.core.Name("implementation"))))), (x).value)));
+  static hydra.phantoms.TTerm<hydra.graph.Primitive> primitiveWithImplementation(hydra.phantoms.TTerm<hydra.graph.Primitive> original, hydra.phantoms.TTerm<java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>>>> newVal) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.graph.Primitive"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("name"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.graph.Primitive"), new hydra.core.Name("name"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("type"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.graph.Primitive"), new hydra.core.Name("type"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("implementation"), (newVal).value)))));
   }
 
   static hydra.phantoms.TTerm<hydra.graph.Primitive> primitiveWithName(hydra.phantoms.TTerm<hydra.graph.Primitive> original, hydra.phantoms.TTerm<hydra.core.Name> newVal) {
@@ -179,13 +186,6 @@ public interface Graph {
       new hydra.core.Field(new hydra.core.Name("implementation"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.graph.Primitive"), new hydra.core.Name("implementation"))))), (original).value)))))));
   }
 
-  static hydra.phantoms.TTerm<hydra.graph.Primitive> primitiveWithImplementation(hydra.phantoms.TTerm<hydra.graph.Primitive> original, hydra.phantoms.TTerm<java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>>>> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.graph.Primitive"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("name"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.graph.Primitive"), new hydra.core.Name("name"))))), (original).value))),
-      new hydra.core.Field(new hydra.core.Name("type"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.graph.Primitive"), new hydra.core.Name("type"))))), (original).value))),
-      new hydra.core.Field(new hydra.core.Name("implementation"), (newVal).value)))));
-  }
-
   static <A> hydra.phantoms.TTerm<hydra.graph.TermCoder<A>> termCoder(hydra.phantoms.TTerm<hydra.core.Type> type, hydra.phantoms.TTerm<java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, A>>>>> encode, hydra.phantoms.TTerm<java.util.function.Function<hydra.context.Context, java.util.function.Function<A, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>>> decode) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.graph.TermCoder"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("type"), (type).value),
@@ -193,23 +193,23 @@ public interface Graph {
       new hydra.core.Field(new hydra.core.Name("decode"), (decode).value)))));
   }
 
-  static <A> hydra.phantoms.TTerm<hydra.core.Type> termCoderType(hydra.phantoms.TTerm<hydra.graph.TermCoder<A>> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.graph.TermCoder"), new hydra.core.Name("type"))))), (x).value)));
+  static <A> hydra.phantoms.TTerm<java.util.function.Function<hydra.context.Context, java.util.function.Function<A, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>>> termCoderDecode(hydra.phantoms.TTerm<hydra.graph.TermCoder<A>> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.graph.TermCoder"), new hydra.core.Name("decode"))))), (x).value)));
   }
 
   static <A> hydra.phantoms.TTerm<java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, A>>>>> termCoderEncode(hydra.phantoms.TTerm<hydra.graph.TermCoder<A>> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.graph.TermCoder"), new hydra.core.Name("encode"))))), (x).value)));
   }
 
-  static <A> hydra.phantoms.TTerm<java.util.function.Function<hydra.context.Context, java.util.function.Function<A, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>>> termCoderDecode(hydra.phantoms.TTerm<hydra.graph.TermCoder<A>> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.graph.TermCoder"), new hydra.core.Name("decode"))))), (x).value)));
+  static <A> hydra.phantoms.TTerm<hydra.core.Type> termCoderType(hydra.phantoms.TTerm<hydra.graph.TermCoder<A>> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.graph.TermCoder"), new hydra.core.Name("type"))))), (x).value)));
   }
 
-  static <A> hydra.phantoms.TTerm<hydra.graph.TermCoder<A>> termCoderWithType(hydra.phantoms.TTerm<hydra.graph.TermCoder<A>> original, hydra.phantoms.TTerm<hydra.core.Type> newVal) {
+  static <A> hydra.phantoms.TTerm<hydra.graph.TermCoder<A>> termCoderWithDecode(hydra.phantoms.TTerm<hydra.graph.TermCoder<A>> original, hydra.phantoms.TTerm<java.util.function.Function<hydra.context.Context, java.util.function.Function<A, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>>> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.graph.TermCoder"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("type"), (newVal).value),
+      new hydra.core.Field(new hydra.core.Name("type"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.graph.TermCoder"), new hydra.core.Name("type"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("encode"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.graph.TermCoder"), new hydra.core.Name("encode"))))), (original).value))),
-      new hydra.core.Field(new hydra.core.Name("decode"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.graph.TermCoder"), new hydra.core.Name("decode"))))), (original).value)))))));
+      new hydra.core.Field(new hydra.core.Name("decode"), (newVal).value)))));
   }
 
   static <A> hydra.phantoms.TTerm<hydra.graph.TermCoder<A>> termCoderWithEncode(hydra.phantoms.TTerm<hydra.graph.TermCoder<A>> original, hydra.phantoms.TTerm<java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, A>>>>> newVal) {
@@ -219,10 +219,10 @@ public interface Graph {
       new hydra.core.Field(new hydra.core.Name("decode"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.graph.TermCoder"), new hydra.core.Name("decode"))))), (original).value)))))));
   }
 
-  static <A> hydra.phantoms.TTerm<hydra.graph.TermCoder<A>> termCoderWithDecode(hydra.phantoms.TTerm<hydra.graph.TermCoder<A>> original, hydra.phantoms.TTerm<java.util.function.Function<hydra.context.Context, java.util.function.Function<A, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>>> newVal) {
+  static <A> hydra.phantoms.TTerm<hydra.graph.TermCoder<A>> termCoderWithType(hydra.phantoms.TTerm<hydra.graph.TermCoder<A>> original, hydra.phantoms.TTerm<hydra.core.Type> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.graph.TermCoder"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("type"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.graph.TermCoder"), new hydra.core.Name("type"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("type"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("encode"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.graph.TermCoder"), new hydra.core.Name("encode"))))), (original).value))),
-      new hydra.core.Field(new hydra.core.Name("decode"), (newVal).value)))));
+      new hydra.core.Field(new hydra.core.Name("decode"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.graph.TermCoder"), new hydra.core.Name("decode"))))), (original).value)))))));
   }
 }

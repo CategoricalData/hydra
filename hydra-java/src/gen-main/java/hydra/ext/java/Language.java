@@ -6,10 +6,6 @@ package hydra.ext.java;
  * Language constraints and reserved words for Java
  */
 public interface Language {
-  static Integer javaMaxTupleLength() {
-    return 9;
-  }
-
   static hydra.coders.Language javaLanguage() {
     hydra.util.Lazy<hydra.util.PersistentSet<hydra.variants.EliminationVariant>> eliminationVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(
       new hydra.variants.EliminationVariant.Record(),
@@ -75,6 +71,10 @@ public interface Language {
 
   static <T0> Boolean javaLanguage_typePredicate(T0 ignored) {
     return true;
+  }
+
+  static Integer javaMaxTupleLength() {
+    return 9;
   }
 
   static hydra.util.PersistentSet<String> reservedWords() {

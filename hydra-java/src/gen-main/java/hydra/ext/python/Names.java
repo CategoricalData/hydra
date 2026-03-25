@@ -6,10 +6,6 @@ package hydra.ext.python;
  * Python naming utilities: encoding Hydra names as Python names
  */
 public interface Names {
-  static Boolean useFutureAnnotations() {
-    return true;
-  }
-
   static <T0, T1> hydra.ext.python.syntax.Name encodeConstantForFieldName(T0 env, T1 tname, hydra.core.Name fname) {
     return new hydra.ext.python.syntax.Name(hydra.Formatting.convertCase(
       new hydra.util.CaseConvention.Camel(),
@@ -156,14 +152,8 @@ public interface Names {
       v2);
   }
 
-  static hydra.ext.python.syntax.Name variantName(Boolean isQualified, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name tname, hydra.core.Name fname) {
-    return hydra.ext.python.Names.encodeName(
-      isQualified,
-      new hydra.util.CaseConvention.Pascal(),
-      env,
-      new hydra.core.Name(hydra.lib.strings.Cat2.apply(
-        (tname).value,
-        hydra.Formatting.capitalize((fname).value))));
+  static Boolean useFutureAnnotations() {
+    return true;
   }
 
   static hydra.ext.python.syntax.Expression variableReference(hydra.util.CaseConvention conv, Boolean quoted, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name name) {
@@ -189,5 +179,15 @@ public interface Names {
         sameNamespace.get()),
       () -> new hydra.ext.python.syntax.Expression.Simple(new hydra.ext.python.syntax.Disjunction(hydra.util.ConsList.of(new hydra.ext.python.syntax.Conjunction(hydra.util.ConsList.of(new hydra.ext.python.syntax.Inversion.Simple(new hydra.ext.python.syntax.Comparison(new hydra.ext.python.syntax.BitwiseOr((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseOr>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseOr>nothing()), new hydra.ext.python.syntax.BitwiseXor((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseXor>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseXor>nothing()), new hydra.ext.python.syntax.BitwiseAnd((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseAnd>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseAnd>nothing()), new hydra.ext.python.syntax.ShiftExpression((hydra.util.Maybe<hydra.ext.python.syntax.ShiftLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.ShiftLhs>nothing()), new hydra.ext.python.syntax.Sum((hydra.util.Maybe<hydra.ext.python.syntax.SumLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.SumLhs>nothing()), new hydra.ext.python.syntax.Term((hydra.util.Maybe<hydra.ext.python.syntax.TermLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.TermLhs>nothing()), new hydra.ext.python.syntax.Factor.Simple(new hydra.ext.python.syntax.Power(new hydra.ext.python.syntax.AwaitPrimary(false, new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.String_(new hydra.ext.python.syntax.String_((pyName).value, new hydra.ext.python.syntax.QuoteStyle.Double_())))), (hydra.util.Maybe<hydra.ext.python.syntax.Factor>) (hydra.util.Maybe.<hydra.ext.python.syntax.Factor>nothing()))))))))), (hydra.util.ConsList<hydra.ext.python.syntax.CompareOpBitwiseOrPair>) (hydra.util.ConsList.<hydra.ext.python.syntax.CompareOpBitwiseOrPair>empty())))))))),
       () -> unquoted.get());
+  }
+
+  static hydra.ext.python.syntax.Name variantName(Boolean isQualified, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name tname, hydra.core.Name fname) {
+    return hydra.ext.python.Names.encodeName(
+      isQualified,
+      new hydra.util.CaseConvention.Pascal(),
+      env,
+      new hydra.core.Name(hydra.lib.strings.Cat2.apply(
+        (tname).value,
+        hydra.Formatting.capitalize((fname).value))));
   }
 }

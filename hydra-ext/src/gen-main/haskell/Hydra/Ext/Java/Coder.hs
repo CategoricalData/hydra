@@ -314,7 +314,7 @@ bindingsToStatements env bindings cx g0 =
                     Environment.aliasesLambdaVars = (Environment.aliasesLambdaVars aliases),
                     Environment.aliasesTypeVarSubst = (Environment.aliasesTypeVarSubst aliases),
                     Environment.aliasesTrustedTypeVars = (Environment.aliasesTrustedTypeVars aliases),
-                    Environment.aliasesMethodCodomain = Nothing,
+                    Environment.aliasesMethodCodomain = (Environment.aliasesMethodCodomain aliases),
                     Environment.aliasesThunkedVars = (Sets.union (Environment.aliasesThunkedVars aliases) thunkedVars)}
           envExtended =
                   Environment.JavaEnvironment {
@@ -1089,7 +1089,7 @@ encodeElimination env marg dom cod elm cx g =
             in (encodeTerm env typedLambda cx g)) (\jarg ->
             let prim = Utils.javaExpressionToJavaPrimary jarg
                 consId = innerClassRef aliases tname Names.partialVisitorName
-                effectiveCod = Maybes.maybe cod (\mc -> mc) (Environment.aliasesMethodCodomain aliases)
+                effectiveCod = cod
             in (Eithers.bind (encodeType aliases Sets.empty effectiveCod cx g) (\jcod -> Eithers.bind (Utils.javaTypeToJavaReferenceType jcod cx) (\rt -> Eithers.bind (domTypeArgs aliases dom cx g) (\domArgs ->
               let targs = typeArgsOrDiamond (Lists.concat2 domArgs [
                     Syntax.TypeArgumentReference rt])
@@ -2136,7 +2136,7 @@ insertBranchVar name env =
           Environment.aliasesLambdaVars = (Environment.aliasesLambdaVars aliases),
           Environment.aliasesTypeVarSubst = (Environment.aliasesTypeVarSubst aliases),
           Environment.aliasesTrustedTypeVars = (Environment.aliasesTrustedTypeVars aliases),
-          Environment.aliasesMethodCodomain = (Environment.aliasesMethodCodomain aliases),
+          Environment.aliasesMethodCodomain = Nothing,
           Environment.aliasesThunkedVars = (Environment.aliasesThunkedVars aliases)},
         Environment.javaEnvironmentGraph = (Environment.javaEnvironmentGraph env)}
 

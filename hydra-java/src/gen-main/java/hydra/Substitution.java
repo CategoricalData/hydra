@@ -18,6 +18,15 @@ public interface Substitution {
           s2)));
   }
 
+  static hydra.typing.TypeSubst composeTypeSubstList(hydra.util.ConsList<hydra.typing.TypeSubst> v1) {
+    return hydra.lib.lists.Foldl.apply(
+      (java.util.function.Function<hydra.typing.TypeSubst, java.util.function.Function<hydra.typing.TypeSubst, hydra.typing.TypeSubst>>) (p0 -> p1 -> hydra.Substitution.composeTypeSubst(
+        p0,
+        p1)),
+      hydra.Substitution.idTypeSubst(),
+      v1);
+  }
+
   static hydra.typing.TypeSubst composeTypeSubstNonEmpty(hydra.typing.TypeSubst s1, hydra.typing.TypeSubst s2) {
     hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>> withExtra = new hydra.util.Lazy<>(() -> hydra.lib.maps.FilterWithKey.apply(
       (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Type, Boolean>>) (v1 -> (java.util.function.Function<hydra.core.Type, Boolean>) (v2 -> hydra.Substitution.composeTypeSubstNonEmpty_isExtra(
@@ -40,15 +49,6 @@ public interface Substitution {
       (s1).value));
   }
 
-  static hydra.typing.TypeSubst composeTypeSubstList(hydra.util.ConsList<hydra.typing.TypeSubst> v1) {
-    return hydra.lib.lists.Foldl.apply(
-      (java.util.function.Function<hydra.typing.TypeSubst, java.util.function.Function<hydra.typing.TypeSubst, hydra.typing.TypeSubst>>) (p0 -> p1 -> hydra.Substitution.composeTypeSubst(
-        p0,
-        p1)),
-      hydra.Substitution.idTypeSubst(),
-      v1);
-  }
-
   static hydra.typing.TypeSubst idTypeSubst() {
     return new hydra.typing.TypeSubst((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply())));
   }
@@ -57,28 +57,6 @@ public interface Substitution {
     return new hydra.typing.TypeSubst(hydra.lib.maps.Singleton.apply(
       v,
       t));
-  }
-
-  static hydra.core.Binding substituteInBinding(hydra.typing.TermSubst subst, hydra.core.Binding b) {
-    return new hydra.core.Binding((b).name, hydra.Substitution.substituteInTerm(
-      subst,
-      (b).term), (b).type);
-  }
-
-  static hydra.typing.TypeConstraint substituteInConstraint(hydra.typing.TypeSubst subst, hydra.typing.TypeConstraint c) {
-    return new hydra.typing.TypeConstraint(hydra.Substitution.substInType(
-      subst,
-      (c).left), hydra.Substitution.substInType(
-      subst,
-      (c).right), (c).comment);
-  }
-
-  static hydra.util.ConsList<hydra.typing.TypeConstraint> substituteInConstraints(hydra.typing.TypeSubst subst, hydra.util.ConsList<hydra.typing.TypeConstraint> cs) {
-    return hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.typing.TypeConstraint, hydra.typing.TypeConstraint>) (v1 -> hydra.Substitution.substituteInConstraint(
-        subst,
-        v1)),
-      cs);
   }
 
   static hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata> substInClassConstraints(hydra.typing.TypeSubst subst, hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata> constraints) {
@@ -141,79 +119,6 @@ public interface Substitution {
       subst,
       (cx).classConstraints);
     return new hydra.graph.Graph((cx2).boundTerms, (cx2).boundTypes, newClassConstraints, (cx2).lambdaVariables, (cx2).metadata, (cx2).primitives, (cx2).schemaTypes, (cx2).typeVariables);
-  }
-
-  static hydra.core.Term substituteInTerm(hydra.typing.TermSubst subst, hydra.core.Term term0) {
-    hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> s = (subst).value;
-    java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>> rewrite = (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (recurse -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (term -> {
-      java.util.function.Function<hydra.core.Lambda, hydra.core.Term> withLambda = (java.util.function.Function<hydra.core.Lambda, hydra.core.Term>) (l -> {
-        hydra.core.Name v = (l).parameter;
-        hydra.util.Lazy<hydra.typing.TermSubst> subst2 = new hydra.util.Lazy<>(() -> new hydra.typing.TermSubst(hydra.lib.maps.Delete.apply(
-          v,
-          s)));
-        return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(v, (l).domain, hydra.Substitution.substituteInTerm(
-          subst2.get(),
-          (l).body))));
-      });
-      java.util.function.Function<hydra.core.Let, hydra.core.Term> withLet = (java.util.function.Function<hydra.core.Let, hydra.core.Term>) (lt -> {
-        hydra.util.ConsList<hydra.core.Binding> bindings = (lt).bindings;
-        hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> names = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
-          projected -> projected.name,
-          bindings)));
-        hydra.util.Lazy<hydra.typing.TermSubst> subst2 = new hydra.util.Lazy<>(() -> new hydra.typing.TermSubst(hydra.lib.maps.FilterWithKey.apply(
-          (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, Boolean>>) (k -> (java.util.function.Function<hydra.core.Term, Boolean>) (v -> hydra.lib.logic.Not.apply(hydra.lib.sets.Member.apply(
-            k,
-            names.get())))),
-          s)));
-        java.util.function.Function<hydra.core.Binding, hydra.core.Binding> rewriteBinding = (java.util.function.Function<hydra.core.Binding, hydra.core.Binding>) (b -> new hydra.core.Binding((b).name, hydra.Substitution.substituteInTerm(
-          subst2.get(),
-          (b).term), (b).type));
-        return new hydra.core.Term.Let(new hydra.core.Let(hydra.lib.lists.Map.apply(
-          rewriteBinding,
-          bindings), hydra.Substitution.substituteInTerm(
-          subst2.get(),
-          (lt).body)));
-      });
-      return (term).accept(new hydra.core.Term.PartialVisitor<>() {
-        @Override
-        public hydra.core.Term otherwise(hydra.core.Term instance) {
-          return (recurse).apply(term);
-        }
-
-        @Override
-        public hydra.core.Term visit(hydra.core.Term.Function fun) {
-          return (fun).value.accept(new hydra.core.Function.PartialVisitor<>() {
-            @Override
-            public hydra.core.Term otherwise(hydra.core.Function instance) {
-              return (recurse).apply(term);
-            }
-
-            @Override
-            public hydra.core.Term visit(hydra.core.Function.Lambda l) {
-              return (withLambda).apply((l).value);
-            }
-          });
-        }
-
-        @Override
-        public hydra.core.Term visit(hydra.core.Term.Let l) {
-          return (withLet).apply((l).value);
-        }
-
-        @Override
-        public hydra.core.Term visit(hydra.core.Term.Variable name) {
-          return hydra.lib.maybes.Maybe.applyLazy(
-            () -> (recurse).apply(term),
-            (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (sterm -> sterm),
-            hydra.lib.maps.Lookup.apply(
-              (name).value,
-              s));
-        }
-      });
-    }));
-    return hydra.Rewriting.rewriteTerm(
-      rewrite,
-      term0);
   }
 
   static hydra.core.Type substInType(hydra.typing.TypeSubst subst, hydra.core.Type typ0) {
@@ -350,6 +255,101 @@ public interface Substitution {
         @Override
         public hydra.core.Term visit(hydra.core.Term.TypeLambda tl) {
           return (forTypeLambda).apply((tl).value);
+        }
+      });
+    }));
+    return hydra.Rewriting.rewriteTerm(
+      rewrite,
+      term0);
+  }
+
+  static hydra.core.Binding substituteInBinding(hydra.typing.TermSubst subst, hydra.core.Binding b) {
+    return new hydra.core.Binding((b).name, hydra.Substitution.substituteInTerm(
+      subst,
+      (b).term), (b).type);
+  }
+
+  static hydra.typing.TypeConstraint substituteInConstraint(hydra.typing.TypeSubst subst, hydra.typing.TypeConstraint c) {
+    return new hydra.typing.TypeConstraint(hydra.Substitution.substInType(
+      subst,
+      (c).left), hydra.Substitution.substInType(
+      subst,
+      (c).right), (c).comment);
+  }
+
+  static hydra.util.ConsList<hydra.typing.TypeConstraint> substituteInConstraints(hydra.typing.TypeSubst subst, hydra.util.ConsList<hydra.typing.TypeConstraint> cs) {
+    return hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.typing.TypeConstraint, hydra.typing.TypeConstraint>) (v1 -> hydra.Substitution.substituteInConstraint(
+        subst,
+        v1)),
+      cs);
+  }
+
+  static hydra.core.Term substituteInTerm(hydra.typing.TermSubst subst, hydra.core.Term term0) {
+    hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> s = (subst).value;
+    java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>> rewrite = (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (recurse -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (term -> {
+      java.util.function.Function<hydra.core.Lambda, hydra.core.Term> withLambda = (java.util.function.Function<hydra.core.Lambda, hydra.core.Term>) (l -> {
+        hydra.core.Name v = (l).parameter;
+        hydra.util.Lazy<hydra.typing.TermSubst> subst2 = new hydra.util.Lazy<>(() -> new hydra.typing.TermSubst(hydra.lib.maps.Delete.apply(
+          v,
+          s)));
+        return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(v, (l).domain, hydra.Substitution.substituteInTerm(
+          subst2.get(),
+          (l).body))));
+      });
+      java.util.function.Function<hydra.core.Let, hydra.core.Term> withLet = (java.util.function.Function<hydra.core.Let, hydra.core.Term>) (lt -> {
+        hydra.util.ConsList<hydra.core.Binding> bindings = (lt).bindings;
+        hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> names = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
+          projected -> projected.name,
+          bindings)));
+        hydra.util.Lazy<hydra.typing.TermSubst> subst2 = new hydra.util.Lazy<>(() -> new hydra.typing.TermSubst(hydra.lib.maps.FilterWithKey.apply(
+          (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, Boolean>>) (k -> (java.util.function.Function<hydra.core.Term, Boolean>) (v -> hydra.lib.logic.Not.apply(hydra.lib.sets.Member.apply(
+            k,
+            names.get())))),
+          s)));
+        java.util.function.Function<hydra.core.Binding, hydra.core.Binding> rewriteBinding = (java.util.function.Function<hydra.core.Binding, hydra.core.Binding>) (b -> new hydra.core.Binding((b).name, hydra.Substitution.substituteInTerm(
+          subst2.get(),
+          (b).term), (b).type));
+        return new hydra.core.Term.Let(new hydra.core.Let(hydra.lib.lists.Map.apply(
+          rewriteBinding,
+          bindings), hydra.Substitution.substituteInTerm(
+          subst2.get(),
+          (lt).body)));
+      });
+      return (term).accept(new hydra.core.Term.PartialVisitor<>() {
+        @Override
+        public hydra.core.Term otherwise(hydra.core.Term instance) {
+          return (recurse).apply(term);
+        }
+
+        @Override
+        public hydra.core.Term visit(hydra.core.Term.Function fun) {
+          return (fun).value.accept(new hydra.core.Function.PartialVisitor<>() {
+            @Override
+            public hydra.core.Term otherwise(hydra.core.Function instance) {
+              return (recurse).apply(term);
+            }
+
+            @Override
+            public hydra.core.Term visit(hydra.core.Function.Lambda l) {
+              return (withLambda).apply((l).value);
+            }
+          });
+        }
+
+        @Override
+        public hydra.core.Term visit(hydra.core.Term.Let l) {
+          return (withLet).apply((l).value);
+        }
+
+        @Override
+        public hydra.core.Term visit(hydra.core.Term.Variable name) {
+          return hydra.lib.maybes.Maybe.applyLazy(
+            () -> (recurse).apply(term),
+            (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (sterm -> sterm),
+            hydra.lib.maps.Lookup.apply(
+              (name).value,
+              s));
         }
       });
     }));

@@ -124,18 +124,6 @@ public interface Lexical {
     return new hydra.graph.Graph((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeVariableMetadata>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.graph.Primitive>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.graph.Primitive>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.graph.Primitive>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()));
   }
 
-  static hydra.util.ConsList<hydra.core.Binding> graphToBindings(hydra.graph.Graph g) {
-    return hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Term>, hydra.core.Binding>) (p -> {
-        hydra.util.Lazy<hydra.core.Name> name = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(p));
-        hydra.util.Lazy<hydra.core.Term> term = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(p));
-        return new hydra.core.Binding(name.get(), term.get(), hydra.lib.maps.Lookup.apply(
-          name.get(),
-          (g).boundTypes));
-      }),
-      hydra.lib.maps.ToList.apply((g).boundTerms));
-  }
-
   static hydra.util.ConsList<hydra.core.FieldType> fieldsOf(hydra.core.Type t) {
     hydra.core.Type stripped = hydra.Rewriting.deannotateType(t);
     return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -172,6 +160,18 @@ public interface Lexical {
       hydra.lib.maps.Lookup.apply(
         fname,
         m));
+  }
+
+  static hydra.util.ConsList<hydra.core.Binding> graphToBindings(hydra.graph.Graph g) {
+    return hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Term>, hydra.core.Binding>) (p -> {
+        hydra.util.Lazy<hydra.core.Name> name = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(p));
+        hydra.util.Lazy<hydra.core.Term> term = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(p));
+        return new hydra.core.Binding(name.get(), term.get(), hydra.lib.maps.Lookup.apply(
+          name.get(),
+          (g).boundTypes));
+      }),
+      hydra.lib.maps.ToList.apply((g).boundTerms));
   }
 
   static hydra.util.Maybe<hydra.core.Binding> lookupElement(hydra.graph.Graph graph, hydra.core.Name name) {
@@ -283,10 +283,6 @@ public interface Lexical {
     });
   }
 
-  static <T0> hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T0>>> matchUnion_mapping(hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T0>>>> pairs) {
-    return hydra.lib.maps.FromList.apply(pairs);
-  }
-
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T0> matchUnion_exp(hydra.context.Context cx, hydra.core.Injection injection, hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T0>>> mapping, hydra.core.Name tname) {
     hydra.core.Name fname = (injection).field.name;
     hydra.core.Term val = (injection).field.term;
@@ -302,6 +298,10 @@ public interface Lexical {
       hydra.lib.maps.Lookup.apply(
         fname,
         mapping));
+  }
+
+  static <T0> hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T0>>> matchUnion_mapping(hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T0>>>> pairs) {
+    return hydra.lib.maps.FromList.apply(pairs);
   }
 
   static <T0, T1, T2, T3> hydra.util.Pair<T0, java.util.function.Function<T2, hydra.util.Either<T3, T1>>> matchUnitField(T0 fname, T1 x) {

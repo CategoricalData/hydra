@@ -6,29 +6,6 @@ package hydra.eval.lib;
  * Evaluation-level implementations of Either functions for the Hydra interpreter.
  */
 public interface Eithers {
-  static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> bind(hydra.context.Context cx, T0 g, hydra.core.Term eitherTerm, hydra.core.Term funTerm) {
-    return (eitherTerm).accept(new hydra.core.Term.PartialVisitor<>() {
-      @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> otherwise(hydra.core.Term instance) {
-        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
-          hydra.lib.strings.Cat2.apply(
-            hydra.lib.strings.Cat2.apply(
-              "expected ",
-              "either value"),
-            " but found "),
-          hydra.show.Core.term(eitherTerm)))), cx)));
-      }
-
-      @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> visit(hydra.core.Term.Either e) {
-        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (val -> new hydra.core.Term.Either(hydra.util.Either.<hydra.core.Term, hydra.core.Term>left(val))),
-          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (val -> new hydra.core.Term.Application(new hydra.core.Application(funTerm, val))),
-          (e).value));
-      }
-    });
-  }
-
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> bimap(hydra.context.Context cx, T0 g, hydra.core.Term leftFun, hydra.core.Term rightFun, hydra.core.Term eitherTerm) {
     return (eitherTerm).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
@@ -47,6 +24,29 @@ public interface Eithers {
         return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(hydra.lib.eithers.Either.apply(
           (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (val -> new hydra.core.Term.Either(hydra.util.Either.<hydra.core.Term, hydra.core.Term>left(new hydra.core.Term.Application(new hydra.core.Application(leftFun, val))))),
           (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (val -> new hydra.core.Term.Either(hydra.util.Either.<hydra.core.Term, hydra.core.Term>right(new hydra.core.Term.Application(new hydra.core.Application(rightFun, val))))),
+          (e).value));
+      }
+    });
+  }
+
+  static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> bind(hydra.context.Context cx, T0 g, hydra.core.Term eitherTerm, hydra.core.Term funTerm) {
+    return (eitherTerm).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> otherwise(hydra.core.Term instance) {
+        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
+          hydra.lib.strings.Cat2.apply(
+            hydra.lib.strings.Cat2.apply(
+              "expected ",
+              "either value"),
+            " but found "),
+          hydra.show.Core.term(eitherTerm)))), cx)));
+      }
+
+      @Override
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> visit(hydra.core.Term.Either e) {
+        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(hydra.lib.eithers.Either.apply(
+          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (val -> new hydra.core.Term.Either(hydra.util.Either.<hydra.core.Term, hydra.core.Term>left(val))),
+          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (val -> new hydra.core.Term.Application(new hydra.core.Application(funTerm, val))),
           (e).value));
       }
     });

@@ -170,6 +170,25 @@ public interface Schemas {
       allDepNames.get());
   }
 
+  static Boolean fTypeIsPolymorphic(hydra.core.Type typ) {
+    return (typ).accept(new hydra.core.Type.PartialVisitor<>() {
+      @Override
+      public Boolean otherwise(hydra.core.Type instance) {
+        return false;
+      }
+
+      @Override
+      public Boolean visit(hydra.core.Type.Annotated at) {
+        return hydra.Schemas.fTypeIsPolymorphic((at).value.body);
+      }
+
+      @Override
+      public Boolean visit(hydra.core.Type.Forall ft) {
+        return true;
+      }
+    });
+  }
+
   static hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap(hydra.util.ConsList<hydra.core.Field> fields) {
     java.util.function.Function<hydra.core.Field, hydra.util.Pair<hydra.core.Name, hydra.core.Term>> toPair = (java.util.function.Function<hydra.core.Field, hydra.util.Pair<hydra.core.Name, hydra.core.Term>>) (f -> (hydra.util.Pair<hydra.core.Name, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Term>((f).name, (f).term))));
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
@@ -293,25 +312,6 @@ public interface Schemas {
     return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context>(hydra.lib.lists.Concat2.apply(
       names.get(),
       hydra.lib.lists.Pure.apply(name.get())), cx1.get())));
-  }
-
-  static Boolean fTypeIsPolymorphic(hydra.core.Type typ) {
-    return (typ).accept(new hydra.core.Type.PartialVisitor<>() {
-      @Override
-      public Boolean otherwise(hydra.core.Type instance) {
-        return false;
-      }
-
-      @Override
-      public Boolean visit(hydra.core.Type.Annotated at) {
-        return hydra.Schemas.fTypeIsPolymorphic((at).value.body);
-      }
-
-      @Override
-      public Boolean visit(hydra.core.Type.Forall ft) {
-        return true;
-      }
-    });
   }
 
   static hydra.core.Type fullyStripAndNormalizeType(hydra.core.Type typ) {
@@ -487,6 +487,35 @@ public interface Schemas {
     });
   }
 
+  static Boolean isNominalType(hydra.core.Type typ) {
+    return hydra.Rewriting.deannotateType(typ).accept(new hydra.core.Type.PartialVisitor<>() {
+      @Override
+      public Boolean otherwise(hydra.core.Type instance) {
+        return false;
+      }
+
+      @Override
+      public Boolean visit(hydra.core.Type.Record rt) {
+        return true;
+      }
+
+      @Override
+      public Boolean visit(hydra.core.Type.Union rt) {
+        return true;
+      }
+
+      @Override
+      public Boolean visit(hydra.core.Type.Wrap wt) {
+        return true;
+      }
+
+      @Override
+      public Boolean visit(hydra.core.Type.Forall fa) {
+        return hydra.Schemas.isNominalType((fa).value.body);
+      }
+    });
+  }
+
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, Boolean> isSerializable(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Binding el) {
     java.util.function.Function<hydra.core.Type, hydra.util.ConsList<hydra.variants.TypeVariant>> variants = (java.util.function.Function<hydra.core.Type, hydra.util.ConsList<hydra.variants.TypeVariant>>) (typ -> hydra.lib.lists.Map.apply(
       hydra.Reflect::typeVariant,
@@ -512,21 +541,6 @@ public interface Schemas {
         false,
         (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (hydra.lib.equality.Identity::apply),
         (el).name));
-  }
-
-  static Boolean isSerializableType(hydra.core.Type typ) {
-    hydra.util.Lazy<hydra.util.PersistentSet<hydra.variants.TypeVariant>> allVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
-      hydra.Reflect::typeVariant,
-      hydra.Rewriting.foldOverType(
-        new hydra.coders.TraversalOrder.Pre(),
-        (java.util.function.Function<hydra.util.ConsList<hydra.core.Type>, java.util.function.Function<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>>) (m -> (java.util.function.Function<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) (t -> hydra.lib.lists.Cons.apply(
-          t,
-          m))),
-        (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
-        typ))));
-    return hydra.lib.logic.Not.apply(hydra.lib.sets.Member.apply(
-      new hydra.variants.TypeVariant.Function(),
-      allVariants.get()));
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, Boolean> isSerializableByName(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Name name) {
@@ -556,33 +570,19 @@ public interface Schemas {
         name));
   }
 
-  static Boolean isNominalType(hydra.core.Type typ) {
-    return hydra.Rewriting.deannotateType(typ).accept(new hydra.core.Type.PartialVisitor<>() {
-      @Override
-      public Boolean otherwise(hydra.core.Type instance) {
-        return false;
-      }
-
-      @Override
-      public Boolean visit(hydra.core.Type.Record rt) {
-        return true;
-      }
-
-      @Override
-      public Boolean visit(hydra.core.Type.Union rt) {
-        return true;
-      }
-
-      @Override
-      public Boolean visit(hydra.core.Type.Wrap wt) {
-        return true;
-      }
-
-      @Override
-      public Boolean visit(hydra.core.Type.Forall fa) {
-        return hydra.Schemas.isNominalType((fa).value.body);
-      }
-    });
+  static Boolean isSerializableType(hydra.core.Type typ) {
+    hydra.util.Lazy<hydra.util.PersistentSet<hydra.variants.TypeVariant>> allVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
+      hydra.Reflect::typeVariant,
+      hydra.Rewriting.foldOverType(
+        new hydra.coders.TraversalOrder.Pre(),
+        (java.util.function.Function<hydra.util.ConsList<hydra.core.Type>, java.util.function.Function<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>>) (m -> (java.util.function.Function<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) (t -> hydra.lib.lists.Cons.apply(
+          t,
+          m))),
+        (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
+        typ))));
+    return hydra.lib.logic.Not.apply(hydra.lib.sets.Member.apply(
+      new hydra.variants.TypeVariant.Function(),
+      allVariants.get()));
   }
 
   static Boolean isType(hydra.core.Type t) {

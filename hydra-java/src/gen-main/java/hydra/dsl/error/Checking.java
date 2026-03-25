@@ -104,27 +104,27 @@ public interface Checking {
       new hydra.core.Field(new hydra.core.Name("typeArguments"), (typeArguments).value)))));
   }
 
-  static hydra.phantoms.TTerm<hydra.core.Type> typeArityMismatchErrorType(hydra.phantoms.TTerm<hydra.error.checking.TypeArityMismatchError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.TypeArityMismatchError"), new hydra.core.Name("type"))))), (x).value)));
+  static hydra.phantoms.TTerm<Integer> typeArityMismatchErrorActualArity(hydra.phantoms.TTerm<hydra.error.checking.TypeArityMismatchError> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.TypeArityMismatchError"), new hydra.core.Name("actualArity"))))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<Integer> typeArityMismatchErrorExpectedArity(hydra.phantoms.TTerm<hydra.error.checking.TypeArityMismatchError> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.TypeArityMismatchError"), new hydra.core.Name("expectedArity"))))), (x).value)));
   }
 
-  static hydra.phantoms.TTerm<Integer> typeArityMismatchErrorActualArity(hydra.phantoms.TTerm<hydra.error.checking.TypeArityMismatchError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.TypeArityMismatchError"), new hydra.core.Name("actualArity"))))), (x).value)));
+  static hydra.phantoms.TTerm<hydra.core.Type> typeArityMismatchErrorType(hydra.phantoms.TTerm<hydra.error.checking.TypeArityMismatchError> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.TypeArityMismatchError"), new hydra.core.Name("type"))))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.util.ConsList<hydra.core.Type>> typeArityMismatchErrorTypeArguments(hydra.phantoms.TTerm<hydra.error.checking.TypeArityMismatchError> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.TypeArityMismatchError"), new hydra.core.Name("typeArguments"))))), (x).value)));
   }
 
-  static hydra.phantoms.TTerm<hydra.error.checking.TypeArityMismatchError> typeArityMismatchErrorWithType(hydra.phantoms.TTerm<hydra.error.checking.TypeArityMismatchError> original, hydra.phantoms.TTerm<hydra.core.Type> newVal) {
+  static hydra.phantoms.TTerm<hydra.error.checking.TypeArityMismatchError> typeArityMismatchErrorWithActualArity(hydra.phantoms.TTerm<hydra.error.checking.TypeArityMismatchError> original, hydra.phantoms.TTerm<Integer> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.TypeArityMismatchError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("type"), (newVal).value),
+      new hydra.core.Field(new hydra.core.Name("type"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.TypeArityMismatchError"), new hydra.core.Name("type"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("expectedArity"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.TypeArityMismatchError"), new hydra.core.Name("expectedArity"))))), (original).value))),
-      new hydra.core.Field(new hydra.core.Name("actualArity"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.TypeArityMismatchError"), new hydra.core.Name("actualArity"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("actualArity"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("typeArguments"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.TypeArityMismatchError"), new hydra.core.Name("typeArguments"))))), (original).value)))))));
   }
 
@@ -136,11 +136,11 @@ public interface Checking {
       new hydra.core.Field(new hydra.core.Name("typeArguments"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.TypeArityMismatchError"), new hydra.core.Name("typeArguments"))))), (original).value)))))));
   }
 
-  static hydra.phantoms.TTerm<hydra.error.checking.TypeArityMismatchError> typeArityMismatchErrorWithActualArity(hydra.phantoms.TTerm<hydra.error.checking.TypeArityMismatchError> original, hydra.phantoms.TTerm<Integer> newVal) {
+  static hydra.phantoms.TTerm<hydra.error.checking.TypeArityMismatchError> typeArityMismatchErrorWithType(hydra.phantoms.TTerm<hydra.error.checking.TypeArityMismatchError> original, hydra.phantoms.TTerm<hydra.core.Type> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.TypeArityMismatchError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("type"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.TypeArityMismatchError"), new hydra.core.Name("type"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("type"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("expectedArity"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.TypeArityMismatchError"), new hydra.core.Name("expectedArity"))))), (original).value))),
-      new hydra.core.Field(new hydra.core.Name("actualArity"), (newVal).value),
+      new hydra.core.Field(new hydra.core.Name("actualArity"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.TypeArityMismatchError"), new hydra.core.Name("actualArity"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("typeArguments"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.TypeArityMismatchError"), new hydra.core.Name("typeArguments"))))), (original).value)))))));
   }
 
@@ -158,18 +158,12 @@ public interface Checking {
       new hydra.core.Field(new hydra.core.Name("actualType"), (actualType).value)))));
   }
 
-  static hydra.phantoms.TTerm<hydra.core.Type> typeMismatchErrorExpectedType(hydra.phantoms.TTerm<hydra.error.checking.TypeMismatchError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.TypeMismatchError"), new hydra.core.Name("expectedType"))))), (x).value)));
-  }
-
   static hydra.phantoms.TTerm<hydra.core.Type> typeMismatchErrorActualType(hydra.phantoms.TTerm<hydra.error.checking.TypeMismatchError> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.TypeMismatchError"), new hydra.core.Name("actualType"))))), (x).value)));
   }
 
-  static hydra.phantoms.TTerm<hydra.error.checking.TypeMismatchError> typeMismatchErrorWithExpectedType(hydra.phantoms.TTerm<hydra.error.checking.TypeMismatchError> original, hydra.phantoms.TTerm<hydra.core.Type> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.TypeMismatchError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("expectedType"), (newVal).value),
-      new hydra.core.Field(new hydra.core.Name("actualType"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.TypeMismatchError"), new hydra.core.Name("actualType"))))), (original).value)))))));
+  static hydra.phantoms.TTerm<hydra.core.Type> typeMismatchErrorExpectedType(hydra.phantoms.TTerm<hydra.error.checking.TypeMismatchError> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.TypeMismatchError"), new hydra.core.Name("expectedType"))))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.error.checking.TypeMismatchError> typeMismatchErrorWithActualType(hydra.phantoms.TTerm<hydra.error.checking.TypeMismatchError> original, hydra.phantoms.TTerm<hydra.core.Type> newVal) {
@@ -178,24 +172,24 @@ public interface Checking {
       new hydra.core.Field(new hydra.core.Name("actualType"), (newVal).value)))));
   }
 
+  static hydra.phantoms.TTerm<hydra.error.checking.TypeMismatchError> typeMismatchErrorWithExpectedType(hydra.phantoms.TTerm<hydra.error.checking.TypeMismatchError> original, hydra.phantoms.TTerm<hydra.core.Type> newVal) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.TypeMismatchError"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("expectedType"), (newVal).value),
+      new hydra.core.Field(new hydra.core.Name("actualType"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.TypeMismatchError"), new hydra.core.Name("actualType"))))), (original).value)))))));
+  }
+
   static hydra.phantoms.TTerm<hydra.error.checking.UnboundTypeVariablesError> unboundTypeVariablesError(hydra.phantoms.TTerm<hydra.util.PersistentSet<hydra.core.Name>> variables, hydra.phantoms.TTerm<hydra.core.Type> type) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.UnboundTypeVariablesError"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("variables"), (variables).value),
       new hydra.core.Field(new hydra.core.Name("type"), (type).value)))));
   }
 
-  static hydra.phantoms.TTerm<hydra.util.PersistentSet<hydra.core.Name>> unboundTypeVariablesErrorVariables(hydra.phantoms.TTerm<hydra.error.checking.UnboundTypeVariablesError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.UnboundTypeVariablesError"), new hydra.core.Name("variables"))))), (x).value)));
-  }
-
   static hydra.phantoms.TTerm<hydra.core.Type> unboundTypeVariablesErrorType(hydra.phantoms.TTerm<hydra.error.checking.UnboundTypeVariablesError> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.UnboundTypeVariablesError"), new hydra.core.Name("type"))))), (x).value)));
   }
 
-  static hydra.phantoms.TTerm<hydra.error.checking.UnboundTypeVariablesError> unboundTypeVariablesErrorWithVariables(hydra.phantoms.TTerm<hydra.error.checking.UnboundTypeVariablesError> original, hydra.phantoms.TTerm<hydra.util.PersistentSet<hydra.core.Name>> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.UnboundTypeVariablesError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("variables"), (newVal).value),
-      new hydra.core.Field(new hydra.core.Name("type"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.UnboundTypeVariablesError"), new hydra.core.Name("type"))))), (original).value)))))));
+  static hydra.phantoms.TTerm<hydra.util.PersistentSet<hydra.core.Name>> unboundTypeVariablesErrorVariables(hydra.phantoms.TTerm<hydra.error.checking.UnboundTypeVariablesError> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.UnboundTypeVariablesError"), new hydra.core.Name("variables"))))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.error.checking.UnboundTypeVariablesError> unboundTypeVariablesErrorWithType(hydra.phantoms.TTerm<hydra.error.checking.UnboundTypeVariablesError> original, hydra.phantoms.TTerm<hydra.core.Type> newVal) {
@@ -204,30 +198,36 @@ public interface Checking {
       new hydra.core.Field(new hydra.core.Name("type"), (newVal).value)))));
   }
 
+  static hydra.phantoms.TTerm<hydra.error.checking.UnboundTypeVariablesError> unboundTypeVariablesErrorWithVariables(hydra.phantoms.TTerm<hydra.error.checking.UnboundTypeVariablesError> original, hydra.phantoms.TTerm<hydra.util.PersistentSet<hydra.core.Name>> newVal) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.UnboundTypeVariablesError"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("variables"), (newVal).value),
+      new hydra.core.Field(new hydra.core.Name("type"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.UnboundTypeVariablesError"), new hydra.core.Name("type"))))), (original).value)))))));
+  }
+
   static hydra.phantoms.TTerm<hydra.error.checking.UnequalTypesError> unequalTypesError(hydra.phantoms.TTerm<hydra.util.ConsList<hydra.core.Type>> types, hydra.phantoms.TTerm<String> description) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.UnequalTypesError"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("types"), (types).value),
       new hydra.core.Field(new hydra.core.Name("description"), (description).value)))));
   }
 
-  static hydra.phantoms.TTerm<hydra.util.ConsList<hydra.core.Type>> unequalTypesErrorTypes(hydra.phantoms.TTerm<hydra.error.checking.UnequalTypesError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.UnequalTypesError"), new hydra.core.Name("types"))))), (x).value)));
-  }
-
   static hydra.phantoms.TTerm<String> unequalTypesErrorDescription(hydra.phantoms.TTerm<hydra.error.checking.UnequalTypesError> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.UnequalTypesError"), new hydra.core.Name("description"))))), (x).value)));
   }
 
-  static hydra.phantoms.TTerm<hydra.error.checking.UnequalTypesError> unequalTypesErrorWithTypes(hydra.phantoms.TTerm<hydra.error.checking.UnequalTypesError> original, hydra.phantoms.TTerm<hydra.util.ConsList<hydra.core.Type>> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.UnequalTypesError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("types"), (newVal).value),
-      new hydra.core.Field(new hydra.core.Name("description"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.UnequalTypesError"), new hydra.core.Name("description"))))), (original).value)))))));
+  static hydra.phantoms.TTerm<hydra.util.ConsList<hydra.core.Type>> unequalTypesErrorTypes(hydra.phantoms.TTerm<hydra.error.checking.UnequalTypesError> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.UnequalTypesError"), new hydra.core.Name("types"))))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.error.checking.UnequalTypesError> unequalTypesErrorWithDescription(hydra.phantoms.TTerm<hydra.error.checking.UnequalTypesError> original, hydra.phantoms.TTerm<String> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.UnequalTypesError"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("types"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.UnequalTypesError"), new hydra.core.Name("types"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("description"), (newVal).value)))));
+  }
+
+  static hydra.phantoms.TTerm<hydra.error.checking.UnequalTypesError> unequalTypesErrorWithTypes(hydra.phantoms.TTerm<hydra.error.checking.UnequalTypesError> original, hydra.phantoms.TTerm<hydra.util.ConsList<hydra.core.Type>> newVal) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.UnequalTypesError"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("types"), (newVal).value),
+      new hydra.core.Field(new hydra.core.Name("description"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.UnequalTypesError"), new hydra.core.Name("description"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.checking.UnsupportedTermVariantError> unsupportedTermVariantError(hydra.phantoms.TTerm<hydra.variants.TermVariant> termVariant) {

@@ -117,12 +117,12 @@ public interface Utils {
         currentSet.get())))));
   }
 
-  static <T0, T1, T2> hydra.util.Pair<hydra.util.PersistentMap<T0, T1>, hydra.util.PersistentSet<T2>> namespacesForModule_emptyState() {
-    return (hydra.util.Pair<hydra.util.PersistentMap<T0, T1>, hydra.util.PersistentSet<T2>>) ((hydra.util.Pair<hydra.util.PersistentMap<T0, T1>, hydra.util.PersistentSet<T2>>) (new hydra.util.Pair<hydra.util.PersistentMap<T0, T1>, hydra.util.PersistentSet<T2>>((hydra.util.PersistentMap<T0, T1>) ((hydra.util.PersistentMap<T0, T1>) (hydra.lib.maps.Empty.<T0, T1>apply())), (hydra.util.PersistentSet<T2>) (hydra.lib.sets.Empty.<T2>apply()))));
-  }
-
   static <T0> hydra.util.PersistentMap<T0, hydra.ext.haskell.syntax.ModuleName> namespacesForModule_currentMap(hydra.util.Pair<hydra.util.PersistentMap<T0, hydra.ext.haskell.syntax.ModuleName>, hydra.util.PersistentSet<hydra.ext.haskell.syntax.ModuleName>> state) {
     return hydra.lib.pairs.First.apply(state);
+  }
+
+  static <T0, T1, T2> hydra.util.Pair<hydra.util.PersistentMap<T0, T1>, hydra.util.PersistentSet<T2>> namespacesForModule_emptyState() {
+    return (hydra.util.Pair<hydra.util.PersistentMap<T0, T1>, hydra.util.PersistentSet<T2>>) ((hydra.util.Pair<hydra.util.PersistentMap<T0, T1>, hydra.util.PersistentSet<T2>>) (new hydra.util.Pair<hydra.util.PersistentMap<T0, T1>, hydra.util.PersistentSet<T2>>((hydra.util.PersistentMap<T0, T1>) ((hydra.util.PersistentMap<T0, T1>) (hydra.lib.maps.Empty.<T0, T1>apply())), (hydra.util.PersistentSet<T2>) (hydra.lib.sets.Empty.<T2>apply()))));
   }
 
   static <T0> T0 namespacesForModule_name(hydra.util.Pair<T0, hydra.ext.haskell.syntax.ModuleName> namePair) {

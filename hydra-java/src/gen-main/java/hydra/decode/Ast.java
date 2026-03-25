@@ -309,42 +309,6 @@ public interface Ast {
         raw));
   }
 
-  static hydra.util.Either<hydra.errors.DecodingError, hydra.ast.IndentedExpression> indentedExpression(hydra.graph.Graph cx, hydra.core.Term raw) {
-    return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.ast.IndentedExpression>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.ast.IndentedExpression>left(new hydra.errors.DecodingError(err))),
-      (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.ast.IndentedExpression>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
-        @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.ast.IndentedExpression> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.errors.DecodingError, hydra.ast.IndentedExpression>left(new hydra.errors.DecodingError("expected record"));
-        }
-
-        @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.ast.IndentedExpression> visit(hydra.core.Term.Record record) {
-          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Helpers.toFieldMap((record).value);
-          return hydra.lib.eithers.Bind.apply(
-            hydra.extract.Helpers.requireField(
-              "style",
-              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.ast.IndentStyle>>>) (p0 -> p1 -> hydra.decode.Ast.indentStyle(
-                p0,
-                p1)),
-              fieldMap,
-              cx),
-            (java.util.function.Function<hydra.ast.IndentStyle, hydra.util.Either<hydra.errors.DecodingError, hydra.ast.IndentedExpression>>) (field_style -> hydra.lib.eithers.Bind.apply(
-              hydra.extract.Helpers.requireField(
-                "expr",
-                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.ast.Expr>>>) (p0 -> p1 -> hydra.decode.Ast.expr(
-                  p0,
-                  p1)),
-                fieldMap,
-                cx),
-              (java.util.function.Function<hydra.ast.Expr, hydra.util.Either<hydra.errors.DecodingError, hydra.ast.IndentedExpression>>) (field_expr -> hydra.util.Either.<hydra.errors.DecodingError, hydra.ast.IndentedExpression>right(new hydra.ast.IndentedExpression(field_style, field_expr))))));
-        }
-      })),
-      hydra.Lexical.stripAndDereferenceTermEither(
-        cx,
-        raw));
-  }
-
   static hydra.util.Either<hydra.errors.DecodingError, hydra.ast.IndentStyle> indentStyle(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.ast.IndentStyle>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.ast.IndentStyle>left(new hydra.errors.DecodingError(err))),
@@ -425,6 +389,42 @@ public interface Ast {
             hydra.lib.maps.Lookup.apply(
               fname,
               variantMap.get()));
+        }
+      })),
+      hydra.Lexical.stripAndDereferenceTermEither(
+        cx,
+        raw));
+  }
+
+  static hydra.util.Either<hydra.errors.DecodingError, hydra.ast.IndentedExpression> indentedExpression(hydra.graph.Graph cx, hydra.core.Term raw) {
+    return hydra.lib.eithers.Either.apply(
+      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.ast.IndentedExpression>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.ast.IndentedExpression>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.ast.IndentedExpression>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
+        @Override
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.ast.IndentedExpression> otherwise(hydra.core.Term instance) {
+          return hydra.util.Either.<hydra.errors.DecodingError, hydra.ast.IndentedExpression>left(new hydra.errors.DecodingError("expected record"));
+        }
+
+        @Override
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.ast.IndentedExpression> visit(hydra.core.Term.Record record) {
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Helpers.toFieldMap((record).value);
+          return hydra.lib.eithers.Bind.apply(
+            hydra.extract.Helpers.requireField(
+              "style",
+              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.ast.IndentStyle>>>) (p0 -> p1 -> hydra.decode.Ast.indentStyle(
+                p0,
+                p1)),
+              fieldMap,
+              cx),
+            (java.util.function.Function<hydra.ast.IndentStyle, hydra.util.Either<hydra.errors.DecodingError, hydra.ast.IndentedExpression>>) (field_style -> hydra.lib.eithers.Bind.apply(
+              hydra.extract.Helpers.requireField(
+                "expr",
+                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.ast.Expr>>>) (p0 -> p1 -> hydra.decode.Ast.expr(
+                  p0,
+                  p1)),
+                fieldMap,
+                cx),
+              (java.util.function.Function<hydra.ast.Expr, hydra.util.Either<hydra.errors.DecodingError, hydra.ast.IndentedExpression>>) (field_expr -> hydra.util.Either.<hydra.errors.DecodingError, hydra.ast.IndentedExpression>right(new hydra.ast.IndentedExpression(field_style, field_expr))))));
         }
       })),
       hydra.Lexical.stripAndDereferenceTermEither(

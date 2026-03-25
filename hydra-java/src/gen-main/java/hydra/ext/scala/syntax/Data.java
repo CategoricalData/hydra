@@ -1542,10 +1542,8 @@ public abstract class Data implements Serializable, Comparable<Data> {
   }
 
   public static final class Placeholder extends hydra.ext.scala.syntax.Data implements Serializable {
-    public final java.lang.Void value;
+    public Placeholder () {
 
-    public Placeholder (java.lang.Void value) {
-      this.value = value;
     }
 
     @Override
@@ -1554,14 +1552,12 @@ public abstract class Data implements Serializable, Comparable<Data> {
         return false;
       }
       Placeholder o = (Placeholder) other;
-      return java.util.Objects.equals(
-        this.value,
-        o.value);
+      return true;
     }
 
     @Override
     public int hashCode() {
-      return 2 * java.util.Objects.hashCode(value);
+      return 0;
     }
 
     @Override
@@ -1571,8 +1567,7 @@ public abstract class Data implements Serializable, Comparable<Data> {
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Placeholder o = (Placeholder) other;
-      return ((Comparable) value).compareTo(o.value);
+      return 0;
     }
 
     @Override
