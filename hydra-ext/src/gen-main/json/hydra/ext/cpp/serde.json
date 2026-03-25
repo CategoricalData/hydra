@@ -10694,7 +10694,6 @@
     "hydra.error.core",
     "hydra.error.module",
     "hydra.errors",
-    "hydra.grammar",
     "hydra.graph",
     "hydra.json.model",
     "hydra.module",

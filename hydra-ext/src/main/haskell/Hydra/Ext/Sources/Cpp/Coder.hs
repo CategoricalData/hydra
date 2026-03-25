@@ -61,7 +61,7 @@ ns = Namespace "hydra.ext.cpp.coder"
 
 module_ :: Module
 module_ = Module ns elements
-    [moduleNamespace CppLanguageSource.cppLanguageModule,
+    [moduleNamespace CppLanguageSource.module_,
       CppSerde.ns,
       Formatting.ns, Names.ns, Rewriting.ns, Schemas.ns, Lexical.ns,
       ShowCore.ns, Annotations.ns, Sorting.ns, SerializationSource.ns,

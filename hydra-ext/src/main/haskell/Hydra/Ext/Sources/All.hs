@@ -8,15 +8,15 @@ module Hydra.Ext.Sources.All (
 import Hydra.Kernel
 import Hydra.Sources.All
 
-import Hydra.Ext.Sources.Cpp.Language
-import Hydra.Ext.Sources.Csharp.Language
-import Hydra.Ext.Sources.Graphql.Syntax
-import Hydra.Ext.Sources.Other.Datalog
-import Hydra.Ext.Sources.Protobuf.Language
-import Hydra.Ext.Sources.Python.Language
-import Hydra.Ext.Sources.Shex.Syntax
-import Hydra.Ext.Sources.Sql.Ansi
-import Hydra.Ext.Sources.TypeScript.Language
+import qualified Hydra.Ext.Sources.Cpp.Language               as CppLanguage
+import qualified Hydra.Ext.Sources.Csharp.Language             as CsharpLanguage
+import qualified Hydra.Ext.Sources.Graphql.Syntax              as GraphqlSyntax
+import qualified Hydra.Ext.Sources.Other.Datalog               as Datalog
+import qualified Hydra.Ext.Sources.Protobuf.Language           as ProtobufLanguage
+import qualified Hydra.Ext.Sources.Python.Language             as PythonLanguage
+import qualified Hydra.Ext.Sources.Shex.Syntax                 as ShexSyntax
+import qualified Hydra.Ext.Sources.Sql.Ansi                    as SqlAnsi
+import qualified Hydra.Ext.Sources.TypeScript.Language          as TypeScriptLanguage
 import qualified Hydra.Ext.Sources.Avro.Coder                  as AvroCoder
 import qualified Hydra.Ext.Sources.Avro.Environment             as AvroEnvironment
 import qualified Hydra.Ext.Sources.Avro.Language               as AvroLanguage
@@ -192,30 +192,30 @@ otherExtModules = [
   Atlas.module_,
   AvroCoder.module_,
   AvroEnvironment.module_,
-  AvroLanguage.avroLanguageModule,
+  AvroLanguage.module_,
   AvroSchema.module_,
   AvroSchemaJson.module_,
   AzureDtld.module_,
   Coq.module_,
-  datalogSyntaxModule,
+  Datalog.module_,
   DeltaParquet.module_,
   Dot.module_,
   GeoJson.module_,
-  GraphqlLanguage.graphqlLanguageModule,
+  GraphqlLanguage.module_,
   -- GraphqlCoder.module_,
   -- GraphqlSerde.module_,
-  graphqlSyntaxModule,
+  GraphqlSyntax.module_,
   GraphvizCoder.module_,
   GraphvizSerde.module_,
   IanaRelations.module_,
   Kql.module_,
   Osv.module_,
   ParquetFormat.module_,
-  PegasusLanguage.pdlLanguageModule,
+  PegasusLanguage.module_,
   PegasusCoder.module_,
   PegasusSerde.module_,
   Pdl.module_,
-  sqlModule,
+  SqlAnsi.module_,
   StacItems.module_,
   Workflow.module_,
   GenPGTransform.module_]
@@ -224,7 +224,7 @@ cppModules :: [Module]
 cppModules = [
   CppCoder.module_,
   CppEnvironment.module_,
-  cppLanguageModule,
+  CppLanguage.module_,
   CppNames.module_,
   CppSerde.module_,
   CppSyntax.module_,
@@ -232,7 +232,7 @@ cppModules = [
 
 csharpModules :: [Module]
 csharpModules = [
-  csharpLanguageModule,
+  CsharpLanguage.module_,
   CsharpSyntax.module_]
 
 goModules :: [Module]
@@ -313,14 +313,14 @@ protobufModules = [
   ProtobufAny.module_,
   ProtobufCoder.module_,
   ProtobufEnvironment.module_,
-  protobufLanguageModule,
+  ProtobufLanguage.module_,
   ProtobufSerde.module_,
   ProtobufSourceContext.module_]
 
 pythonModules :: [Module]
 pythonModules = [
   PythonEnvironment.module_,
-  pythonLanguageModule,
+  PythonLanguage.module_,
   PythonNames.module_,
   PythonSerde.module_,
   PythonSyntax.module_,
@@ -335,9 +335,9 @@ rdfModules = [
   RdfSyntax.module_,
   RdfUtils.module_,
   ShaclCoder.module_,
-  ShaclLanguage.shaclLanguageModule,
+  ShaclLanguage.module_,
   ShaclModel.module_,
-  shexSyntaxModule,
+  ShexSyntax.module_,
   XmlSchema.module_]
 
 rustModules :: [Module]
@@ -351,14 +351,14 @@ rustModules = [
 scalaModules :: [Module]
 scalaModules = [
   ScalaCoder.module_,
-  ScalaLanguage.scalaLanguageModule,
+  ScalaLanguage.module_,
   ScalaSyntax.module_,
   ScalaSerde.module_,
   ScalaUtils.module_]
 
 typescriptModules :: [Module]
 typescriptModules = [
-  typeScriptLanguageModule,
+  TypeScriptLanguage.module_,
   TypeScriptModel.module_]
 
 yamlModules :: [Module]
@@ -388,20 +388,20 @@ hydraExtRecentlyPromotedModules :: [Module]
 hydraExtRecentlyPromotedModules = [
   AvroCoder.module_,
   AvroEnvironment.module_,
-  AvroLanguage.avroLanguageModule,
+  AvroLanguage.module_,
   AvroSchemaJson.module_,
   CppCoder.module_,
   CppEnvironment.module_,
   CppNames.module_,
   CppSerde.module_,
   CppUtils.module_,
-  GraphqlLanguage.graphqlLanguageModule,
+  GraphqlLanguage.module_,
   GraphvizCoder.module_,
   GraphvizSerde.module_,
   JsonSchemaCoder.module_,
   JsonSchemaSerde.module_,
   PegasusCoder.module_,
-  PegasusLanguage.pdlLanguageModule,
+  PegasusLanguage.module_,
   PegasusSerde.module_,
   PgCoder.module_,
   PgPrinting.module_,
@@ -416,7 +416,7 @@ hydraExtRecentlyPromotedModules = [
   ScalaSerde.module_,
   ScalaUtils.module_,
   ShaclCoder.module_,
-  ShaclLanguage.shaclLanguageModule,
+  ShaclLanguage.module_,
   TinkerpopLanguage.module_,
   YamlSerde.module_]
 

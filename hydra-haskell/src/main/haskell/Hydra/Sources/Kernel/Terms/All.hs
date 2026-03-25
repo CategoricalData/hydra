@@ -16,7 +16,6 @@ import qualified Hydra.Sources.Kernel.Terms.Extract.Core    as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Extract.Helpers as ExtractHelpers
 import qualified Hydra.Sources.Kernel.Terms.Extract.Util    as ExtractUtil
 import qualified Hydra.Sources.Kernel.Terms.Formatting      as Formatting
-import qualified Hydra.Sources.Kernel.Terms.Grammars        as Grammars
 import qualified Hydra.Sources.Kernel.Terms.Hoisting        as Hoisting
 import qualified Hydra.Sources.Kernel.Terms.Inference       as Inference
 import qualified Hydra.Sources.Kernel.Terms.Languages       as Languages
@@ -56,7 +55,6 @@ import qualified Hydra.Sources.Decode.Core          as DecodeCore
 import qualified Hydra.Sources.Decode.Errors         as DecodeErrors
 import qualified Hydra.Sources.Decode.Error.Checking as DecodeErrorChecking
 import qualified Hydra.Sources.Decode.Error.Core   as DecodeErrorCore
-import qualified Hydra.Sources.Decode.Grammar       as DecodeGrammar
 import qualified Hydra.Sources.Decode.Json.Model    as DecodeJson
 import qualified Hydra.Sources.Decode.Module        as DecodeModule
 import qualified Hydra.Sources.Decode.Parsing       as DecodeParsing
@@ -80,7 +78,6 @@ import qualified Hydra.Sources.Encode.Core          as EncodeCore
 import qualified Hydra.Sources.Encode.Errors         as EncodeErrors
 import qualified Hydra.Sources.Encode.Error.Checking as EncodeErrorChecking
 import qualified Hydra.Sources.Encode.Error.Core   as EncodeErrorCore
-import qualified Hydra.Sources.Encode.Grammar       as EncodeGrammar
 import qualified Hydra.Sources.Encode.Json.Model    as EncodeJson
 import qualified Hydra.Sources.Encode.Module        as EncodeModule
 import qualified Hydra.Sources.Encode.Parsing       as EncodeParsing
@@ -113,7 +110,6 @@ kernelPrimaryTermsModules = [
   ExtractHelpers.module_,
   ExtractUtil.module_,
   Formatting.module_,
-  Grammars.module_,
   Hoisting.module_,
   Inference.module_,
   Languages.module_,
@@ -154,7 +150,6 @@ kernelDecodingModules = [
   DecodeErrors.module_,
   DecodeErrorChecking.module_,
   DecodeErrorCore.module_,
-  DecodeGrammar.module_,
   DecodeJson.module_,
   DecodeModule.module_,
   DecodeParsing.module_,
@@ -179,7 +174,6 @@ kernelEncodingModules = [
   EncodeErrors.module_,
   EncodeErrorChecking.module_,
   EncodeErrorCore.module_,
-  EncodeGrammar.module_,
   EncodeJson.module_,
   EncodeModule.module_,
   EncodeParsing.module_,

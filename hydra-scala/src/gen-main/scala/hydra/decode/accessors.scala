@@ -49,7 +49,8 @@ def accessorNode(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.erro
     hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.accessors.AccessorNode](hydra.extract.helpers.requireField("name")(hydra.decode.core.name)(fieldMap)(cx))((field_name: hydra.core.Name) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, scala.Predef.String, hydra.accessors.AccessorNode](hydra.extract.helpers.requireField("label")((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
+         scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.string(v_Literal_string_s) => Right(v_Literal_string_s)
@@ -57,7 +58,8 @@ def accessorNode(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.erro
       case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx2)(raw2)))(fieldMap)(cx))((field_label: scala.Predef.String) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, scala.Predef.String, hydra.accessors.AccessorNode](hydra.extract.helpers.requireField("id")((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
+         scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.string(v_Literal_string_s) => Right(v_Literal_string_s)
@@ -70,7 +72,8 @@ def accessorNode(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.erro
 def accessorPath(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.accessors.AccessorPath] =
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.accessors.AccessorPath]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
-  case hydra.core.Term.wrap(v_Term_wrap_wrappedTerm) => hydra.lib.eithers.map[Seq[hydra.accessors.TermAccessor], hydra.accessors.AccessorPath, hydra.errors.DecodingError]((b: Seq[hydra.accessors.TermAccessor]) => b)(hydra.extract.helpers.decodeList(hydra.decode.accessors.termAccessor)(cx)(v_Term_wrap_wrappedTerm.body))
+  case hydra.core.Term.wrap(v_Term_wrap_wrappedTerm) => hydra.lib.eithers.map[Seq[hydra.accessors.TermAccessor],
+     hydra.accessors.AccessorPath, hydra.errors.DecodingError]((b: Seq[hydra.accessors.TermAccessor]) => b)(hydra.extract.helpers.decodeList(hydra.decode.accessors.termAccessor)(cx)(v_Term_wrap_wrappedTerm.body))
   case _ => Left("expected wrapped type"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
 
 def termAccessor(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.accessors.TermAccessor] =
@@ -80,16 +83,27 @@ def termAccessor(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.erro
     lazy val field: hydra.core.Field = (v_Term_union_inj.field)
     lazy val fname: hydra.core.Name = (field.name)
     lazy val fterm: hydra.core.Term = (field.term)
-    lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.accessors.TermAccessor])] = hydra.lib.maps.fromList[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.accessors.TermAccessor]](Seq(Tuple2("annotatedBody", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Unit) => hydra.accessors.TermAccessor.annotatedBody)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("applicationFunction", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Unit) => hydra.accessors.TermAccessor.applicationFunction)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("applicationArgument", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Unit) => hydra.accessors.TermAccessor.applicationArgument)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("lambdaBody", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Unit) => hydra.accessors.TermAccessor.lambdaBody)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("unionCasesDefault", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Unit) => hydra.accessors.TermAccessor.unionCasesDefault)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("unionCasesBranch", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.core.Name, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: hydra.core.Name) => hydra.accessors.TermAccessor.unionCasesBranch(t))(hydra.decode.core.name(cx)(input))), Tuple2("letBody", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Unit) => hydra.accessors.TermAccessor.letBody)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("letBinding", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.core.Name, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: hydra.core.Name) => hydra.accessors.TermAccessor.letBinding(t))(hydra.decode.core.name(cx)(input))), Tuple2("listElement", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Int, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Int) => hydra.accessors.TermAccessor.listElement(t))(hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+    lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.accessors.TermAccessor])] = hydra.lib.maps.fromList[hydra.core.Name,
+       (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.accessors.TermAccessor]](Seq(Tuple2("annotatedBody",
+       (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Unit) => hydra.accessors.TermAccessor.annotatedBody(t))(hydra.extract.helpers.decodeUnit(cx)(input))),
+         Tuple2("applicationFunction", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Unit) => hydra.accessors.TermAccessor.applicationFunction(t))(hydra.extract.helpers.decodeUnit(cx)(input))),
+         Tuple2("applicationArgument", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Unit) => hydra.accessors.TermAccessor.applicationArgument(t))(hydra.extract.helpers.decodeUnit(cx)(input))),
+         Tuple2("lambdaBody", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Unit) => hydra.accessors.TermAccessor.lambdaBody(t))(hydra.extract.helpers.decodeUnit(cx)(input))),
+         Tuple2("unionCasesDefault", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Unit) => hydra.accessors.TermAccessor.unionCasesDefault(t))(hydra.extract.helpers.decodeUnit(cx)(input))),
+         Tuple2("unionCasesBranch", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.core.Name, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: hydra.core.Name) => hydra.accessors.TermAccessor.unionCasesBranch(t))(hydra.decode.core.name(cx)(input))),
+         Tuple2("letBody", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Unit) => hydra.accessors.TermAccessor.letBody(t))(hydra.extract.helpers.decodeUnit(cx)(input))),
+         Tuple2("letBinding", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.core.Name, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: hydra.core.Name) => hydra.accessors.TermAccessor.letBinding(t))(hydra.decode.core.name(cx)(input))),
+         Tuple2("listElement", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Int, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Int) => hydra.accessors.TermAccessor.listElement(t))(hydra.lib.eithers.either[scala.Predef.String,
+         hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.integer(v_Literal_integer_v1) => v_Literal_integer_v1 match
@@ -97,7 +111,8 @@ def termAccessor(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.erro
           case _ => Left("expected int32 value")
         case _ => Left("expected int32 literal")
       case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx)(input)))), Tuple2("mapKey", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Int, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Int) => hydra.accessors.TermAccessor.mapKey(t))(hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.map[Int, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Int) => hydra.accessors.TermAccessor.mapKey(t))(hydra.lib.eithers.either[scala.Predef.String,
+         hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.integer(v_Literal_integer_v1) => v_Literal_integer_v1 match
@@ -105,7 +120,8 @@ def termAccessor(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.erro
           case _ => Left("expected int32 value")
         case _ => Left("expected int32 literal")
       case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx)(input)))), Tuple2("mapValue", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Int, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Int) => hydra.accessors.TermAccessor.mapValue(t))(hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.map[Int, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Int) => hydra.accessors.TermAccessor.mapValue(t))(hydra.lib.eithers.either[scala.Predef.String,
+         hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.integer(v_Literal_integer_v1) => v_Literal_integer_v1 match
@@ -113,8 +129,10 @@ def termAccessor(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.erro
           case _ => Left("expected int32 value")
         case _ => Left("expected int32 literal")
       case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx)(input)))), Tuple2("maybeTerm", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Unit) => hydra.accessors.TermAccessor.maybeTerm)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("productTerm", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Int, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Int) => hydra.accessors.TermAccessor.productTerm(t))(hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Unit) => hydra.accessors.TermAccessor.maybeTerm(t))(hydra.extract.helpers.decodeUnit(cx)(input))),
+         Tuple2("productTerm", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Int, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Int) => hydra.accessors.TermAccessor.productTerm(t))(hydra.lib.eithers.either[scala.Predef.String,
+         hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.integer(v_Literal_integer_v1) => v_Literal_integer_v1 match
@@ -122,8 +140,10 @@ def termAccessor(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.erro
           case _ => Left("expected int32 value")
         case _ => Left("expected int32 literal")
       case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx)(input)))), Tuple2("recordField", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.core.Name, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: hydra.core.Name) => hydra.accessors.TermAccessor.recordField(t))(hydra.decode.core.name(cx)(input))), Tuple2("setElement", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Int, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Int) => hydra.accessors.TermAccessor.setElement(t))(hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.core.Name, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: hydra.core.Name) => hydra.accessors.TermAccessor.recordField(t))(hydra.decode.core.name(cx)(input))),
+         Tuple2("setElement", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Int, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Int) => hydra.accessors.TermAccessor.setElement(t))(hydra.lib.eithers.either[scala.Predef.String,
+         hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.integer(v_Literal_integer_v1) => v_Literal_integer_v1 match
@@ -131,11 +151,18 @@ def termAccessor(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.erro
           case _ => Left("expected int32 value")
         case _ => Left("expected int32 literal")
       case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx)(input)))), Tuple2("sumTerm", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Unit) => hydra.accessors.TermAccessor.sumTerm)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("typeLambdaBody", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Unit) => hydra.accessors.TermAccessor.typeLambdaBody)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("typeApplicationTerm", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Unit) => hydra.accessors.TermAccessor.typeApplicationTerm)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("injectionTerm", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Unit) => hydra.accessors.TermAccessor.injectionTerm)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("wrappedTerm", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Unit) => hydra.accessors.TermAccessor.wrappedTerm)(hydra.extract.helpers.decodeUnit(cx)(input)))))
-    hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.accessors.TermAccessor], (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.accessors.TermAccessor]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.accessors.TermAccessor])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.accessors.TermAccessor]](fname)(variantMap))
+      hydra.lib.eithers.map[Unit, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Unit) => hydra.accessors.TermAccessor.sumTerm(t))(hydra.extract.helpers.decodeUnit(cx)(input))),
+         Tuple2("typeLambdaBody", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Unit) => hydra.accessors.TermAccessor.typeLambdaBody(t))(hydra.extract.helpers.decodeUnit(cx)(input))),
+         Tuple2("typeApplicationTerm", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Unit) => hydra.accessors.TermAccessor.typeApplicationTerm(t))(hydra.extract.helpers.decodeUnit(cx)(input))),
+         Tuple2("injectionTerm", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Unit) => hydra.accessors.TermAccessor.injectionTerm(t))(hydra.extract.helpers.decodeUnit(cx)(input))),
+         Tuple2("wrappedTerm", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.accessors.TermAccessor, hydra.errors.DecodingError]((t: Unit) => hydra.accessors.TermAccessor.wrappedTerm(t))(hydra.extract.helpers.decodeUnit(cx)(input)))))
+    hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.accessors.TermAccessor], (hydra.core.Term) => Either[hydra.errors.DecodingError,
+       hydra.accessors.TermAccessor]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
+       hydra.accessors.TermAccessor])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
+       hydra.accessors.TermAccessor]](fname)(variantMap))
   }
   case _ => Left("expected union"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))

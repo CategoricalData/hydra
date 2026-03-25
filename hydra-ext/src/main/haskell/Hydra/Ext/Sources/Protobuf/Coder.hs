@@ -74,7 +74,7 @@ ns = Namespace "hydra.ext.protobuf.coder"
 
 module_ :: Module
 module_ = Module ns elements
-    [moduleNamespace ProtobufSerdeSource.module_, moduleNamespace ProtobufLanguageSource.protobufLanguageModule,
+    [moduleNamespace ProtobufSerdeSource.module_, moduleNamespace ProtobufLanguageSource.module_,
       Formatting.ns, Names.ns, Rewriting.ns, Schemas.ns, Lexical.ns, Serialization.ns,
       Annotations.ns, Constants.ns, ExtractCore.ns, Adapt.ns, ShowCore.ns, ShowError.ns,
       moduleNamespace DecodeCore.module_]

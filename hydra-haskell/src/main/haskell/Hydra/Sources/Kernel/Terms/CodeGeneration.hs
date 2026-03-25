@@ -23,8 +23,6 @@ import qualified Hydra.Dsl.Coders       as Coders
 import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Meta.Core         as Core
-import qualified Hydra.Dsl.Grammar      as Grammar
-import qualified Hydra.Dsl.Grammars          as Grammars
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
