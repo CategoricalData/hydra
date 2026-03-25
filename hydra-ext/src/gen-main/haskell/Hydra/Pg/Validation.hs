@@ -19,6 +19,22 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+checkAll :: [Maybe t0] -> Maybe t0
+checkAll checks =
+
+      let errors = Maybes.cat checks
+      in (Lists.safeHead errors)
+
+edgeError :: (t0 -> String) -> Model.Edge t0 -> String -> String
+edgeError showValue e = prepend (Strings.cat2 "Invalid edge with id " (showValue (Model.edgeId e)))
+
+edgeLabelMismatch :: Model.EdgeLabel -> Model.EdgeLabel -> String
+edgeLabelMismatch expected actual =
+    Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " (Model.unEdgeLabel expected)) ", found ") (Model.unEdgeLabel actual)
+
+prepend :: String -> String -> String
+prepend prefix msg = Strings.cat2 (Strings.cat2 prefix ": ") msg
+
 validateEdge :: (t0 -> t1 -> Maybe String) -> (t1 -> String) -> Maybe (t1 -> Maybe Model.VertexLabel) -> Model.EdgeType t0 -> Model.Edge t1 -> Maybe String
 validateEdge checkValue showValue labelForVertexId typ el =
 
@@ -105,22 +121,6 @@ validateVertex checkValue showValue typ el =
         checkLabel,
         checkId,
         checkProperties])
-
-checkAll :: [Maybe t0] -> Maybe t0
-checkAll checks =
-
-      let errors = Maybes.cat checks
-      in (Lists.safeHead errors)
-
-edgeError :: (t0 -> String) -> Model.Edge t0 -> String -> String
-edgeError showValue e = prepend (Strings.cat2 "Invalid edge with id " (showValue (Model.edgeId e)))
-
-edgeLabelMismatch :: Model.EdgeLabel -> Model.EdgeLabel -> String
-edgeLabelMismatch expected actual =
-    Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " (Model.unEdgeLabel expected)) ", found ") (Model.unEdgeLabel actual)
-
-prepend :: String -> String -> String
-prepend prefix msg = Strings.cat2 (Strings.cat2 prefix ": ") msg
 
 verify :: Bool -> t0 -> Maybe t0
 verify b err = Logic.ifElse b Nothing (Just err)

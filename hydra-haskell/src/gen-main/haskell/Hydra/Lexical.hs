@@ -122,17 +122,6 @@ emptyGraph =
       Graph.graphSchemaTypes = Maps.empty,
       Graph.graphTypeVariables = Sets.empty}
 
--- | Reconstruct a list of Bindings from a Graph's boundTerms and boundTypes
-graphToBindings :: Graph.Graph -> [Core.Binding]
-graphToBindings g =
-    Lists.map (\p ->
-      let name = Pairs.first p
-          term = Pairs.second p
-      in Core.Binding {
-        Core.bindingName = name,
-        Core.bindingTerm = term,
-        Core.bindingType = (Maps.lookup name (Graph.graphBoundTypes g))}) (Maps.toList (Graph.graphBoundTerms g))
-
 -- | Extract the fields of a record or union type
 fieldsOf :: Core.Type -> [Core.FieldType]
 fieldsOf t =
@@ -149,6 +138,17 @@ getField cx m fname decode =
     Maybes.maybe (Left (Context.InContext {
       Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 "expected field " (Core.unName fname)) " not found"))),
       Context.inContextContext = cx})) decode (Maps.lookup fname m)
+
+-- | Reconstruct a list of Bindings from a Graph's boundTerms and boundTypes
+graphToBindings :: Graph.Graph -> [Core.Binding]
+graphToBindings g =
+    Lists.map (\p ->
+      let name = Pairs.first p
+          term = Pairs.second p
+      in Core.Binding {
+        Core.bindingName = name,
+        Core.bindingTerm = term,
+        Core.bindingType = (Maps.lookup name (Graph.graphBoundTypes g))}) (Maps.toList (Graph.graphBoundTerms g))
 
 -- | Look up a binding in a graph by name
 lookupElement :: Graph.Graph -> Core.Name -> Maybe Core.Binding

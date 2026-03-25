@@ -26,6 +26,10 @@ composeTypeSubst :: Typing.TypeSubst -> Typing.TypeSubst -> Typing.TypeSubst
 composeTypeSubst s1 s2 =
     Logic.ifElse (Maps.null (Typing.unTypeSubst s1)) s2 (Logic.ifElse (Maps.null (Typing.unTypeSubst s2)) s1 (composeTypeSubstNonEmpty s1 s2))
 
+-- | Compose a list of type substitutions
+composeTypeSubstList :: [Typing.TypeSubst] -> Typing.TypeSubst
+composeTypeSubstList = Lists.foldl composeTypeSubst idTypeSubst
+
 -- | Compose two non-empty type substitutions (internal helper)
 composeTypeSubstNonEmpty :: Typing.TypeSubst -> Typing.TypeSubst -> Typing.TypeSubst
 composeTypeSubstNonEmpty s1 s2 =
@@ -34,10 +38,6 @@ composeTypeSubstNonEmpty s1 s2 =
           withExtra = Maps.filterWithKey isExtra (Typing.unTypeSubst s2)
       in (Typing.TypeSubst (Maps.union withExtra (Maps.map (substInType s2) (Typing.unTypeSubst s1))))
 
--- | Compose a list of type substitutions
-composeTypeSubstList :: [Typing.TypeSubst] -> Typing.TypeSubst
-composeTypeSubstList = Lists.foldl composeTypeSubst idTypeSubst
-
 -- | The identity type substitution
 idTypeSubst :: Typing.TypeSubst
 idTypeSubst = Typing.TypeSubst Maps.empty
@@ -45,26 +45,6 @@ idTypeSubst = Typing.TypeSubst Maps.empty
 -- | Create a type substitution with a single variable mapping
 singletonTypeSubst :: Core.Name -> Core.Type -> Typing.TypeSubst
 singletonTypeSubst v t = Typing.TypeSubst (Maps.singleton v t)
-
--- | Apply a term substitution to a binding
-substituteInBinding :: Typing.TermSubst -> Core.Binding -> Core.Binding
-substituteInBinding subst b =
-    Core.Binding {
-      Core.bindingName = (Core.bindingName b),
-      Core.bindingTerm = (substituteInTerm subst (Core.bindingTerm b)),
-      Core.bindingType = (Core.bindingType b)}
-
--- | Apply a type substitution to a type constraint
-substituteInConstraint :: Typing.TypeSubst -> Typing.TypeConstraint -> Typing.TypeConstraint
-substituteInConstraint subst c =
-    Typing.TypeConstraint {
-      Typing.typeConstraintLeft = (substInType subst (Typing.typeConstraintLeft c)),
-      Typing.typeConstraintRight = (substInType subst (Typing.typeConstraintRight c)),
-      Typing.typeConstraintComment = (Typing.typeConstraintComment c)}
-
--- | Apply a type substitution to a list of type constraints
-substituteInConstraints :: Typing.TypeSubst -> [Typing.TypeConstraint] -> [Typing.TypeConstraint]
-substituteInConstraints subst cs = Lists.map (substituteInConstraint subst) cs
 
 -- | Apply a type substitution to class constraints, propagating to free variables
 substInClassConstraints :: Typing.TypeSubst -> M.Map Core.Name Core.TypeVariableMetadata -> M.Map Core.Name Core.TypeVariableMetadata
@@ -109,43 +89,6 @@ substInContext subst cx =
         Graph.graphPrimitives = (Graph.graphPrimitives cx2),
         Graph.graphSchemaTypes = (Graph.graphSchemaTypes cx2),
         Graph.graphTypeVariables = (Graph.graphTypeVariables cx2)}
-
--- | Apply a term substitution to a term
-substituteInTerm :: Typing.TermSubst -> Core.Term -> Core.Term
-substituteInTerm subst term0 =
-
-      let s = Typing.unTermSubst subst
-          rewrite =
-                  \recurse -> \term ->
-                    let withLambda =
-                            \l ->
-                              let v = Core.lambdaParameter l
-                                  subst2 = Typing.TermSubst (Maps.delete v s)
-                              in (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                Core.lambdaParameter = v,
-                                Core.lambdaDomain = (Core.lambdaDomain l),
-                                Core.lambdaBody = (substituteInTerm subst2 (Core.lambdaBody l))})))
-                        withLet =
-                                \lt ->
-                                  let bindings = Core.letBindings lt
-                                      names = Sets.fromList (Lists.map Core.bindingName bindings)
-                                      subst2 = Typing.TermSubst (Maps.filterWithKey (\k -> \v -> Logic.not (Sets.member k names)) s)
-                                      rewriteBinding =
-                                              \b -> Core.Binding {
-                                                Core.bindingName = (Core.bindingName b),
-                                                Core.bindingTerm = (substituteInTerm subst2 (Core.bindingTerm b)),
-                                                Core.bindingType = (Core.bindingType b)}
-                                  in (Core.TermLet (Core.Let {
-                                    Core.letBindings = (Lists.map rewriteBinding bindings),
-                                    Core.letBody = (substituteInTerm subst2 (Core.letBody lt))}))
-                    in case term of
-                      Core.TermFunction v0 -> case v0 of
-                        Core.FunctionLambda v1 -> withLambda v1
-                        _ -> recurse term
-                      Core.TermLet v0 -> withLet v0
-                      Core.TermVariable v0 -> Maybes.maybe (recurse term) (\sterm -> sterm) (Maps.lookup v0 s)
-                      _ -> recurse term
-      in (Rewriting.rewriteTerm rewrite term0)
 
 -- | Apply a type substitution to a type
 substInType :: Typing.TypeSubst -> Core.Type -> Core.Type
@@ -217,4 +160,61 @@ substTypesInTerm subst term0 =
                   Core.TermTypeApplication v0 -> forTypeApplication v0
                   Core.TermTypeLambda v0 -> forTypeLambda v0
                   _ -> dflt
+      in (Rewriting.rewriteTerm rewrite term0)
+
+-- | Apply a term substitution to a binding
+substituteInBinding :: Typing.TermSubst -> Core.Binding -> Core.Binding
+substituteInBinding subst b =
+    Core.Binding {
+      Core.bindingName = (Core.bindingName b),
+      Core.bindingTerm = (substituteInTerm subst (Core.bindingTerm b)),
+      Core.bindingType = (Core.bindingType b)}
+
+-- | Apply a type substitution to a type constraint
+substituteInConstraint :: Typing.TypeSubst -> Typing.TypeConstraint -> Typing.TypeConstraint
+substituteInConstraint subst c =
+    Typing.TypeConstraint {
+      Typing.typeConstraintLeft = (substInType subst (Typing.typeConstraintLeft c)),
+      Typing.typeConstraintRight = (substInType subst (Typing.typeConstraintRight c)),
+      Typing.typeConstraintComment = (Typing.typeConstraintComment c)}
+
+-- | Apply a type substitution to a list of type constraints
+substituteInConstraints :: Typing.TypeSubst -> [Typing.TypeConstraint] -> [Typing.TypeConstraint]
+substituteInConstraints subst cs = Lists.map (substituteInConstraint subst) cs
+
+-- | Apply a term substitution to a term
+substituteInTerm :: Typing.TermSubst -> Core.Term -> Core.Term
+substituteInTerm subst term0 =
+
+      let s = Typing.unTermSubst subst
+          rewrite =
+                  \recurse -> \term ->
+                    let withLambda =
+                            \l ->
+                              let v = Core.lambdaParameter l
+                                  subst2 = Typing.TermSubst (Maps.delete v s)
+                              in (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                Core.lambdaParameter = v,
+                                Core.lambdaDomain = (Core.lambdaDomain l),
+                                Core.lambdaBody = (substituteInTerm subst2 (Core.lambdaBody l))})))
+                        withLet =
+                                \lt ->
+                                  let bindings = Core.letBindings lt
+                                      names = Sets.fromList (Lists.map Core.bindingName bindings)
+                                      subst2 = Typing.TermSubst (Maps.filterWithKey (\k -> \v -> Logic.not (Sets.member k names)) s)
+                                      rewriteBinding =
+                                              \b -> Core.Binding {
+                                                Core.bindingName = (Core.bindingName b),
+                                                Core.bindingTerm = (substituteInTerm subst2 (Core.bindingTerm b)),
+                                                Core.bindingType = (Core.bindingType b)}
+                                  in (Core.TermLet (Core.Let {
+                                    Core.letBindings = (Lists.map rewriteBinding bindings),
+                                    Core.letBody = (substituteInTerm subst2 (Core.letBody lt))}))
+                    in case term of
+                      Core.TermFunction v0 -> case v0 of
+                        Core.FunctionLambda v1 -> withLambda v1
+                        _ -> recurse term
+                      Core.TermLet v0 -> withLet v0
+                      Core.TermVariable v0 -> Maybes.maybe (recurse term) (\sterm -> sterm) (Maps.lookup v0 s)
+                      _ -> recurse term
       in (Rewriting.rewriteTerm rewrite term0)

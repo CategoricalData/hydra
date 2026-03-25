@@ -35,11 +35,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Convert a Hydra module to a map of file paths to PDL schema strings
-moduleToPdl :: Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (M.Map String String)
-moduleToPdl mod defs cx g =
-    Eithers.bind (moduleToPegasusSchemas cx g mod defs) (\files -> Right (Maps.fromList (Lists.map (\pair -> (Pairs.first pair, (Serialization.printExpr (Serialization.parenthesize (Serde.exprSchemaFile (Pairs.second pair)))))) (Maps.toList files))))
-
 -- | Construct PDL schema files from type definitions, with topological sorting and cycle detection
 constructModule :: Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> Module.Module -> [Module.TypeDefinition] -> Either (Context.InContext Errors.Error) (M.Map String Pdl.SchemaFile)
 constructModule cx g aliases mod typeDefs =
@@ -51,50 +46,63 @@ constructModule cx g aliases mod typeDefs =
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "types form a cycle (unsupported in PDL): [" (Strings.cat2 (Strings.intercalate ", " (Lists.map (\td -> Core.unName (Module.typeDefinitionName td)) cycle)) "]")))),
         Context.inContextContext = cx})))
 
-typeToSchema :: Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> t0 -> Module.TypeDefinition -> Either (Context.InContext Errors.Error) (Pdl.NamedSchema, [t1])
-typeToSchema cx g aliases mod typeDef =
-
-      let typ = Module.typeDefinitionType typeDef
-      in (Eithers.bind (encodeType cx g aliases typ) (\res ->
-        let ptype = Eithers.either (\schema -> Pdl.NamedSchemaTypeTyperef schema) (\t -> t) res
-        in (Eithers.bind (Annotations.getTypeDescription cx g typ) (\descr ->
-          let anns = doc descr
-              qname = pdlNameForElement aliases False (Module.typeDefinitionName typeDef)
-          in (Right (Pdl.NamedSchema {
-            Pdl.namedSchemaQualifiedName = qname,
-            Pdl.namedSchemaType = ptype,
-            Pdl.namedSchemaAnnotations = anns}, []))))))
-
-toPair :: Module.Module -> t0 -> (Pdl.NamedSchema, [Pdl.QualifiedName]) -> (String, Pdl.SchemaFile)
-toPair mod aliases schemaPair =
-
-      let schema = Pairs.first schemaPair
-          imports = Pairs.second schemaPair
-          ns_ = pdlNameForModule mod
-          local = Pdl.unName (Pdl.qualifiedNameName (Pdl.namedSchemaQualifiedName schema))
-          path =
-                  Names.namespaceToFilePath Util.CaseConventionCamel (Module.FileExtension "pdl") (Module.Namespace (Strings.cat2 (Module.unNamespace (Module.moduleNamespace mod)) (Strings.cat2 "/" local)))
-      in (path, Pdl.SchemaFile {
-        Pdl.schemaFileNamespace = ns_,
-        Pdl.schemaFilePackage = Nothing,
-        Pdl.schemaFileImports = imports,
-        Pdl.schemaFileSchemas = [
-          schema]})
-
--- | Convert a Hydra module and its definitions to PDL schema files
-moduleToPegasusSchemas :: Context.Context -> Graph.Graph -> Module.Module -> [Module.Definition] -> Either (Context.InContext Errors.Error) (M.Map String Pdl.SchemaFile)
-moduleToPegasusSchemas cx g mod defs =
-
-      let partitioned = Schemas.partitionDefinitions defs
-          typeDefs = Pairs.first partitioned
-      in (Eithers.bind (importAliasesForModule cx g mod) (\aliases -> constructModule cx g aliases mod typeDefs))
-
 -- | Create PDL annotations from an optional doc string
 doc :: Maybe String -> Pdl.Annotations
 doc s =
     Pdl.Annotations {
       Pdl.annotationsDoc = s,
       Pdl.annotationsDeprecated = False}
+
+encode :: Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> Core.Type -> Either (Context.InContext Errors.Error) Pdl.Schema
+encode cx g aliases t =
+    case (Rewriting.deannotateType t) of
+      Core.TypeRecord v0 -> Logic.ifElse (Lists.null v0) (encode cx g aliases (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) (Eithers.bind (encodeType cx g aliases t) (\res -> Eithers.either (\schema -> Right schema) (\_ -> Left (Context.InContext {
+        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "type resolved to an unsupported nested named schema: " (Core_.type_ t)))),
+        Context.inContextContext = cx})) res))
+      _ -> Eithers.bind (encodeType cx g aliases t) (\res -> Eithers.either (\schema -> Right schema) (\_ -> Left (Context.InContext {
+        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "type resolved to an unsupported nested named schema: " (Core_.type_ t)))),
+        Context.inContextContext = cx})) res)
+
+encodeEnumField :: Context.Context -> Graph.Graph -> Core.FieldType -> Either (Context.InContext Errors.Error) Pdl.EnumField
+encodeEnumField cx g ft =
+
+      let name = Core.fieldTypeName ft
+          typ = Core.fieldTypeType ft
+      in (Eithers.bind (getAnns cx g typ) (\anns -> Right (Pdl.EnumField {
+        Pdl.enumFieldName = (Pdl.EnumFieldName (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionUpperSnake (Core.unName name))),
+        Pdl.enumFieldAnnotations = anns})))
+
+encodePossiblyOptionalType :: Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> Core.Type -> Either (Context.InContext Errors.Error) (Pdl.Schema, Bool)
+encodePossiblyOptionalType cx g aliases typ =
+    case (Rewriting.deannotateType typ) of
+      Core.TypeMaybe v0 -> Eithers.bind (encode cx g aliases v0) (\t -> Right (t, True))
+      Core.TypeRecord _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
+      Core.TypeUnion _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
+      Core.TypeLiteral _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
+      Core.TypeList _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
+      Core.TypeMap _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
+      Core.TypeSet _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
+      Core.TypeVariable _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
+      Core.TypeWrap _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
+      Core.TypeEither _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
+      Core.TypePair _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
+      Core.TypeVoid -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
+      Core.TypeAnnotated v0 -> encodePossiblyOptionalType cx g aliases (Core.annotatedTypeBody v0)
+
+encodeRecordField :: Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> Core.FieldType -> Either (Context.InContext Errors.Error) Pdl.RecordField
+encodeRecordField cx g aliases ft =
+
+      let name = Core.fieldTypeName ft
+          typ = Core.fieldTypeType ft
+      in (Eithers.bind (getAnns cx g typ) (\anns -> Eithers.bind (encodePossiblyOptionalType cx g aliases typ) (\optResult ->
+        let schema = Pairs.first optResult
+            optional = Pairs.second optResult
+        in (Right (Pdl.RecordField {
+          Pdl.recordFieldName = (Pdl.FieldName (Core.unName name)),
+          Pdl.recordFieldValue = schema,
+          Pdl.recordFieldOptional = optional,
+          Pdl.recordFieldDefault = Nothing,
+          Pdl.recordFieldAnnotations = anns})))))
 
 -- | Encode a Hydra type as either a PDL Schema (Left) or a PDL NamedSchemaType (Right)
 encodeType :: Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> Core.Type -> Either (Context.InContext Errors.Error) (Either Pdl.Schema Pdl.NamedSchemaType)
@@ -171,31 +179,6 @@ encodeType cx g aliases typ =
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Expected " (Strings.cat2 "PDL-supported type" (Strings.cat2 ", found: " (Core_.type_ typ)))))),
         Context.inContextContext = cx})
 
-encode :: Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> Core.Type -> Either (Context.InContext Errors.Error) Pdl.Schema
-encode cx g aliases t =
-    case (Rewriting.deannotateType t) of
-      Core.TypeRecord v0 -> Logic.ifElse (Lists.null v0) (encode cx g aliases (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) (Eithers.bind (encodeType cx g aliases t) (\res -> Eithers.either (\schema -> Right schema) (\_ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "type resolved to an unsupported nested named schema: " (Core_.type_ t)))),
-        Context.inContextContext = cx})) res))
-      _ -> Eithers.bind (encodeType cx g aliases t) (\res -> Eithers.either (\schema -> Right schema) (\_ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "type resolved to an unsupported nested named schema: " (Core_.type_ t)))),
-        Context.inContextContext = cx})) res)
-
-encodeRecordField :: Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> Core.FieldType -> Either (Context.InContext Errors.Error) Pdl.RecordField
-encodeRecordField cx g aliases ft =
-
-      let name = Core.fieldTypeName ft
-          typ = Core.fieldTypeType ft
-      in (Eithers.bind (getAnns cx g typ) (\anns -> Eithers.bind (encodePossiblyOptionalType cx g aliases typ) (\optResult ->
-        let schema = Pairs.first optResult
-            optional = Pairs.second optResult
-        in (Right (Pdl.RecordField {
-          Pdl.recordFieldName = (Pdl.FieldName (Core.unName name)),
-          Pdl.recordFieldValue = schema,
-          Pdl.recordFieldOptional = optional,
-          Pdl.recordFieldDefault = Nothing,
-          Pdl.recordFieldAnnotations = anns})))))
-
 encodeUnionField :: Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> Core.FieldType -> Either (Context.InContext Errors.Error) Pdl.UnionMember
 encodeUnionField cx g aliases ft =
 
@@ -213,32 +196,6 @@ encodeUnionField cx g aliases ft =
           Pdl.unionMemberValue = schema,
           Pdl.unionMemberAnnotations = anns})))))
 
-encodeEnumField :: Context.Context -> Graph.Graph -> Core.FieldType -> Either (Context.InContext Errors.Error) Pdl.EnumField
-encodeEnumField cx g ft =
-
-      let name = Core.fieldTypeName ft
-          typ = Core.fieldTypeType ft
-      in (Eithers.bind (getAnns cx g typ) (\anns -> Right (Pdl.EnumField {
-        Pdl.enumFieldName = (Pdl.EnumFieldName (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionUpperSnake (Core.unName name))),
-        Pdl.enumFieldAnnotations = anns})))
-
-encodePossiblyOptionalType :: Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> Core.Type -> Either (Context.InContext Errors.Error) (Pdl.Schema, Bool)
-encodePossiblyOptionalType cx g aliases typ =
-    case (Rewriting.deannotateType typ) of
-      Core.TypeMaybe v0 -> Eithers.bind (encode cx g aliases v0) (\t -> Right (t, True))
-      Core.TypeRecord _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
-      Core.TypeUnion _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
-      Core.TypeLiteral _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
-      Core.TypeList _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
-      Core.TypeMap _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
-      Core.TypeSet _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
-      Core.TypeVariable _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
-      Core.TypeWrap _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
-      Core.TypeEither _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
-      Core.TypePair _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
-      Core.TypeVoid -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
-      Core.TypeAnnotated v0 -> encodePossiblyOptionalType cx g aliases (Core.annotatedTypeBody v0)
-
 getAnns :: Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Errors.Error) Pdl.Annotations
 getAnns cx g typ = Eithers.bind (Annotations.getTypeDescription cx g typ) (\r -> Right (doc r))
 
@@ -246,6 +203,19 @@ getAnns cx g typ = Eithers.bind (Annotations.getTypeDescription cx g typ) (\r ->
 importAliasesForModule :: Context.Context -> Graph.Graph -> Module.Module -> Either (Context.InContext Errors.Error) (M.Map Module.Namespace String)
 importAliasesForModule cx g mod =
     Eithers.bind (Schemas.moduleDependencyNamespaces cx g False True True False mod) (\nss -> Right (Maps.fromList (Lists.map (\ns_ -> (ns_, (slashesToDots (Module.unNamespace ns_)))) (Sets.toList nss))))
+
+-- | Convert a Hydra module to a map of file paths to PDL schema strings
+moduleToPdl :: Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (M.Map String String)
+moduleToPdl mod defs cx g =
+    Eithers.bind (moduleToPegasusSchemas cx g mod defs) (\files -> Right (Maps.fromList (Lists.map (\pair -> (Pairs.first pair, (Serialization.printExpr (Serialization.parenthesize (Serde.exprSchemaFile (Pairs.second pair)))))) (Maps.toList files))))
+
+-- | Convert a Hydra module and its definitions to PDL schema files
+moduleToPegasusSchemas :: Context.Context -> Graph.Graph -> Module.Module -> [Module.Definition] -> Either (Context.InContext Errors.Error) (M.Map String Pdl.SchemaFile)
+moduleToPegasusSchemas cx g mod defs =
+
+      let partitioned = Schemas.partitionDefinitions defs
+          typeDefs = Pairs.first partitioned
+      in (Eithers.bind (importAliasesForModule cx g mod) (\aliases -> constructModule cx g aliases mod typeDefs))
 
 -- | Empty PDL annotations
 noAnnotations :: Pdl.Annotations
@@ -281,3 +251,33 @@ simpleUnionMember schema =
 -- | Replace all forward slashes with dots in a string
 slashesToDots :: String -> String
 slashesToDots s = Strings.intercalate "." (Strings.splitOn "/" s)
+
+toPair :: Module.Module -> t0 -> (Pdl.NamedSchema, [Pdl.QualifiedName]) -> (String, Pdl.SchemaFile)
+toPair mod aliases schemaPair =
+
+      let schema = Pairs.first schemaPair
+          imports = Pairs.second schemaPair
+          ns_ = pdlNameForModule mod
+          local = Pdl.unName (Pdl.qualifiedNameName (Pdl.namedSchemaQualifiedName schema))
+          path =
+                  Names.namespaceToFilePath Util.CaseConventionCamel (Module.FileExtension "pdl") (Module.Namespace (Strings.cat2 (Module.unNamespace (Module.moduleNamespace mod)) (Strings.cat2 "/" local)))
+      in (path, Pdl.SchemaFile {
+        Pdl.schemaFileNamespace = ns_,
+        Pdl.schemaFilePackage = Nothing,
+        Pdl.schemaFileImports = imports,
+        Pdl.schemaFileSchemas = [
+          schema]})
+
+typeToSchema :: Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> t0 -> Module.TypeDefinition -> Either (Context.InContext Errors.Error) (Pdl.NamedSchema, [t1])
+typeToSchema cx g aliases mod typeDef =
+
+      let typ = Module.typeDefinitionType typeDef
+      in (Eithers.bind (encodeType cx g aliases typ) (\res ->
+        let ptype = Eithers.either (\schema -> Pdl.NamedSchemaTypeTyperef schema) (\t -> t) res
+        in (Eithers.bind (Annotations.getTypeDescription cx g typ) (\descr ->
+          let anns = doc descr
+              qname = pdlNameForElement aliases False (Module.typeDefinitionName typeDef)
+          in (Right (Pdl.NamedSchema {
+            Pdl.namedSchemaQualifiedName = qname,
+            Pdl.namedSchemaType = ptype,
+            Pdl.namedSchemaAnnotations = anns}, []))))))

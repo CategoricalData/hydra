@@ -37,247 +37,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Normalize a comment string for consistent output across coders
-normalizeComment :: String -> String
-normalizeComment s =
-
-      let stripped = Formatting.stripLeadingAndTrailingWhitespace s
-      in (Logic.ifElse (Strings.null stripped) "" (
-        let lastIdx = Math.sub (Strings.length stripped) 1
-            lastChar = Strings.charAt lastIdx stripped
-        in (Logic.ifElse (Equality.equal lastChar 46) stripped (Strings.cat2 stripped "."))))
-
--- | Gather applications from a term, returning (args, baseTerm)
-gatherApplications :: Core.Term -> ([Core.Term], Core.Term)
-gatherApplications term =
-
-      let go =
-              \args -> \t -> case (Rewriting.deannotateTerm t) of
-                Core.TermApplication v0 ->
-                  let lhs = Core.applicationFunction v0
-                      rhs = Core.applicationArgument v0
-                  in (go (Lists.cons rhs args) lhs)
-                _ -> (args, t)
-      in (go [] term)
-
--- | Gather term arguments, stripping type-level constructs
-gatherArgs :: Core.Term -> [Core.Term] -> (Core.Term, [Core.Term])
-gatherArgs term args =
-    case (Rewriting.deannotateTerm term) of
-      Core.TermApplication v0 ->
-        let lhs = Core.applicationFunction v0
-            rhs = Core.applicationArgument v0
-        in (gatherArgs lhs (Lists.cons rhs args))
-      Core.TermTypeLambda v0 ->
-        let body = Core.typeLambdaBody v0
-        in (gatherArgs body args)
-      Core.TermTypeApplication v0 ->
-        let body = Core.typeApplicationTermBody v0
-        in (gatherArgs body args)
-      _ -> (term, args)
-
--- | Gather term and type arguments from a term
-gatherArgsWithTypeApps :: Core.Term -> [Core.Term] -> [Core.Type] -> (Core.Term, ([Core.Term], [Core.Type]))
-gatherArgsWithTypeApps term args tyArgs =
-    case (Rewriting.deannotateTerm term) of
-      Core.TermApplication v0 ->
-        let lhs = Core.applicationFunction v0
-            rhs = Core.applicationArgument v0
-        in (gatherArgsWithTypeApps lhs (Lists.cons rhs args) tyArgs)
-      Core.TermTypeLambda v0 ->
-        let body = Core.typeLambdaBody v0
-        in (gatherArgsWithTypeApps body args tyArgs)
-      Core.TermTypeApplication v0 ->
-        let body = Core.typeApplicationTermBody v0
-            typ = Core.typeApplicationTermType v0
-        in (gatherArgsWithTypeApps body args (Lists.cons typ tyArgs))
-      _ -> (term, (args, tyArgs))
-
--- | Check if a term can be encoded as a simple assignment
-isSimpleAssignment :: Core.Term -> Bool
-isSimpleAssignment term =
-    case term of
-      Core.TermAnnotated v0 -> isSimpleAssignment (Core.annotatedTermBody v0)
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionLambda _ -> False
-        _ -> True
-      Core.TermLet _ -> False
-      Core.TermTypeLambda _ -> False
-      Core.TermTypeApplication v0 -> isSimpleAssignment (Core.typeApplicationTermBody v0)
-      _ ->
-        let baseTerm = Pairs.first (gatherArgs term [])
-        in case baseTerm of
-          Core.TermFunction v0 -> case v0 of
-            Core.FunctionElimination v1 -> case v1 of
-              Core.EliminationUnion _ -> False
-              _ -> True
-            _ -> True
-          _ -> True
-
--- | Check if a term needs to be treated as a function rather than a simple value
-isComplexTerm :: Graph.Graph -> Core.Term -> Bool
-isComplexTerm tc t =
-    case t of
-      Core.TermLet _ -> True
-      Core.TermTypeApplication _ -> True
-      Core.TermTypeLambda _ -> True
-      Core.TermVariable v0 -> isComplexVariable tc v0
-      _ -> Lists.foldl (\b -> \sub -> Logic.or b (isComplexTerm tc sub)) False (Rewriting.subterms t)
-
--- | Check if a variable is bound to a complex term
-isComplexVariable :: Graph.Graph -> Core.Name -> Bool
-isComplexVariable tc name =
-
-      let metaLookup = Maps.lookup name (Graph.graphMetadata tc)
-      in (Logic.ifElse (Maybes.isJust metaLookup) True (Logic.ifElse (Sets.member name (Graph.graphLambdaVariables tc)) True (
-        let typeLookup = Maps.lookup name (Graph.graphBoundTypes tc)
-        in (Maybes.maybe True (\ts -> Equality.gt (Arity.typeSchemeArity ts) 0) typeLookup))))
-
--- | Check if a binding needs to be treated as a function
-isComplexBinding :: Graph.Graph -> Core.Binding -> Bool
-isComplexBinding tc b =
-
-      let term = Core.bindingTerm b
-          mts = Core.bindingType b
-      in (Maybes.cases mts (isComplexTerm tc term) (\ts ->
-        let isPolymorphic = Logic.not (Lists.null (Core.typeSchemeVariables ts))
-            isNonNullary = Equality.gt (Arity.typeArity (Core.typeSchemeType ts)) 0
-            isComplex = isComplexTerm tc term
-        in (Logic.or (Logic.or isPolymorphic isNonNullary) isComplex)))
-
--- | Check if a term is trivially cheap (no thunking needed)
-isTrivialTerm :: Core.Term -> Bool
-isTrivialTerm t =
-    case (Rewriting.deannotateTerm t) of
-      Core.TermLiteral _ -> True
-      Core.TermVariable _ -> True
-      Core.TermUnit -> True
-      Core.TermApplication v0 ->
-        let fun = Core.applicationFunction v0
-            arg = Core.applicationArgument v0
-        in case fun of
-          Core.TermFunction v1 -> case v1 of
-            Core.FunctionElimination v2 -> case v2 of
-              Core.EliminationRecord _ -> isTrivialTerm arg
-              Core.EliminationWrap _ -> isTrivialTerm arg
-              _ -> False
-            _ -> False
-          _ -> False
-      Core.TermMaybe v0 -> Maybes.maybe True (\inner -> isTrivialTerm inner) v0
-      Core.TermRecord v0 -> Lists.foldl (\acc -> \fld -> Logic.and acc (isTrivialTerm (Core.fieldTerm fld))) True (Core.recordFields v0)
-      Core.TermWrap v0 -> isTrivialTerm (Core.wrappedTermBody v0)
-      Core.TermTypeApplication v0 -> isTrivialTerm (Core.typeApplicationTermBody v0)
-      Core.TermTypeLambda v0 -> isTrivialTerm (Core.typeLambdaBody v0)
-      _ -> False
-
--- | Check if a term body is self-tail-recursive with respect to a function name
-isSelfTailRecursive :: Core.Name -> Core.Term -> Bool
-isSelfTailRecursive funcName body =
-
-      let callsSelf = Logic.not (Rewriting.isFreeVariableInTerm funcName body)
-      in (Logic.ifElse callsSelf (isTailRecursiveInTailPosition funcName body) False)
-
--- | Check that all self-references are in tail position
-isTailRecursiveInTailPosition :: Core.Name -> Core.Term -> Bool
-isTailRecursiveInTailPosition funcName term =
-
-      let stripped = Rewriting.deannotateAndDetypeTerm term
-      in case stripped of
-        Core.TermApplication _ ->
-          let gathered = gatherApplications stripped
-              gatherArgs = Pairs.first gathered
-              gatherFun = Pairs.second gathered
-              strippedFun = Rewriting.deannotateAndDetypeTerm gatherFun
-          in case strippedFun of
-            Core.TermVariable v1 -> Logic.ifElse (Equality.equal v1 funcName) (
-              let argsNoFunc = Lists.foldl (\ok -> \arg -> Logic.and ok (Rewriting.isFreeVariableInTerm funcName arg)) True gatherArgs
-                  argsNoLambda =
-                          Lists.foldl (\ok -> \arg -> Logic.and ok (Logic.not (Rewriting.foldOverTerm Coders.TraversalOrderPre (\found -> \t -> Logic.or found (case t of
-                            Core.TermFunction v2 -> case v2 of
-                              Core.FunctionLambda v3 ->
-                                let ignore = Core.lambdaBody v3
-                                in True
-                              _ -> False
-                            _ -> False)) False arg))) True gatherArgs
-              in (Logic.and argsNoFunc argsNoLambda)) (Rewriting.isFreeVariableInTerm funcName term)
-            Core.TermFunction v1 -> case v1 of
-              Core.FunctionElimination v2 -> case v2 of
-                Core.EliminationUnion v3 ->
-                  let cases_ = Core.caseStatementCases v3
-                      dflt = Core.caseStatementDefault v3
-                      branchesOk =
-                              Lists.foldl (\ok -> \field -> Logic.and ok (isTailRecursiveInTailPosition funcName (Core.fieldTerm field))) True cases_
-                      dfltOk = Maybes.maybe True (\d -> isTailRecursiveInTailPosition funcName d) dflt
-                      argsOk = Lists.foldl (\ok -> \arg -> Logic.and ok (Rewriting.isFreeVariableInTerm funcName arg)) True gatherArgs
-                  in (Logic.and (Logic.and branchesOk dfltOk) argsOk)
-                _ -> Rewriting.isFreeVariableInTerm funcName term
-              _ -> Rewriting.isFreeVariableInTerm funcName term
-            _ -> Rewriting.isFreeVariableInTerm funcName term
-        Core.TermFunction v0 -> case v0 of
-          Core.FunctionLambda v1 -> isTailRecursiveInTailPosition funcName (Core.lambdaBody v1)
-          _ -> Rewriting.isFreeVariableInTerm funcName term
-        Core.TermLet v0 ->
-          let bindingsOk =
-                  Lists.foldl (\ok -> \b -> Logic.and ok (Rewriting.isFreeVariableInTerm funcName (Core.bindingTerm b))) True (Core.letBindings v0)
-          in (Logic.and bindingsOk (isTailRecursiveInTailPosition funcName (Core.letBody v0)))
-        _ -> Rewriting.isFreeVariableInTerm funcName term
-
--- | Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator
-nameToFilePath :: Util.CaseConvention -> Util.CaseConvention -> Module.FileExtension -> Core.Name -> String
-nameToFilePath nsConv localConv ext name =
-
-      let qualName = Names.qualifyName name
-          ns = Module.qualifiedNameNamespace qualName
-          local = Module.qualifiedNameLocal qualName
-          nsToFilePath =
-                  \ns -> Strings.intercalate "/" (Lists.map (\part -> Formatting.convertCase Util.CaseConventionCamel nsConv part) (Strings.splitOn "." (Module.unNamespace ns)))
-          prefix = Maybes.maybe "" (\n -> Strings.cat2 (nsToFilePath n) "/") ns
-          suffix = Formatting.convertCase Util.CaseConventionPascal localConv local
-      in (Strings.cat [
-        prefix,
-        suffix,
-        ".",
-        (Module.unFileExtension ext)])
-
--- | Reorder definitions: types first (with hydra.core.Name first among types), then topologically sorted terms
-reorderDefs :: [Module.Definition] -> [Module.Definition]
-reorderDefs defs =
-
-      let partitioned = Schemas.partitionDefinitions defs
-          typeDefsRaw = Pairs.first partitioned
-          nameFirst = Lists.filter (\td -> Equality.equal (Module.typeDefinitionName td) (Core.Name "hydra.core.Name")) typeDefsRaw
-          nameRest =
-                  Lists.filter (\td -> Logic.not (Equality.equal (Module.typeDefinitionName td) (Core.Name "hydra.core.Name"))) typeDefsRaw
-          typeDefs =
-                  Lists.concat [
-                    Lists.map (\td -> Module.DefinitionType td) nameFirst,
-                    (Lists.map (\td -> Module.DefinitionType td) nameRest)]
-          termDefsWrapped = Lists.map (\td -> Module.DefinitionTerm td) (Pairs.second partitioned)
-          sortedTermDefs =
-                  Lists.concat (Sorting.topologicalSortNodes (\d -> case d of
-                    Module.DefinitionTerm v0 -> Module.termDefinitionName v0) (\d -> case d of
-                    Module.DefinitionTerm v0 -> Sets.toList (Rewriting.freeVariablesInTerm (Module.termDefinitionTerm v0))
-                    _ -> []) termDefsWrapped)
-      in (Lists.concat [
-        typeDefs,
-        sortedTermDefs])
-
--- | Extract comments/description from a Binding
-commentsFromBinding :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Errors.Error) (Maybe String)
-commentsFromBinding cx g b = Annotations.getTermDescription cx g (Core.bindingTerm b)
-
--- | Extract comments/description from a FieldType
-commentsFromFieldType :: Context.Context -> Graph.Graph -> Core.FieldType -> Either (Context.InContext Errors.Error) (Maybe String)
-commentsFromFieldType cx g ft = Annotations.getTypeDescription cx g (Core.fieldTypeType ft)
-
--- | Check the type of a term
-typeOfTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Core.Type
-typeOfTerm cx g term = Eithers.map Pairs.first (Checking.typeOf cx g [] term)
-
--- | Produces metadata for a binding if it is complex
-bindingMetadata :: Graph.Graph -> Core.Binding -> Maybe Core.Term
-bindingMetadata tc b = Logic.ifElse (isComplexBinding tc b) (Just (Core.TermLiteral (Core.LiteralBoolean True))) Nothing
-
 -- | Analyze a function term, collecting lambdas, type lambdas, lets, and type applications
 analyzeFunctionTerm :: Context.Context -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
 analyzeFunctionTerm cx getTC setTC env term = analyzeFunctionTermWith cx bindingMetadata getTC setTC env term
@@ -330,3 +89,244 @@ analyzeFunctionTermWith_gather cx forBinding getTC setTC argMode gEnv tparams ar
             newEnv = setTC (Rewriting.extendGraphForTypeLambda (getTC gEnv) v0) gEnv
         in (analyzeFunctionTermWith_gather cx forBinding getTC setTC argMode newEnv (Lists.cons tvar tparams) args bindings doms tapps tlBody)
       _ -> analyzeFunctionTermWith_finish cx getTC gEnv tparams args bindings doms tapps t
+
+-- | Produces metadata for a binding if it is complex
+bindingMetadata :: Graph.Graph -> Core.Binding -> Maybe Core.Term
+bindingMetadata tc b = Logic.ifElse (isComplexBinding tc b) (Just (Core.TermLiteral (Core.LiteralBoolean True))) Nothing
+
+-- | Extract comments/description from a Binding
+commentsFromBinding :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Errors.Error) (Maybe String)
+commentsFromBinding cx g b = Annotations.getTermDescription cx g (Core.bindingTerm b)
+
+-- | Extract comments/description from a FieldType
+commentsFromFieldType :: Context.Context -> Graph.Graph -> Core.FieldType -> Either (Context.InContext Errors.Error) (Maybe String)
+commentsFromFieldType cx g ft = Annotations.getTypeDescription cx g (Core.fieldTypeType ft)
+
+-- | Gather applications from a term, returning (args, baseTerm)
+gatherApplications :: Core.Term -> ([Core.Term], Core.Term)
+gatherApplications term =
+
+      let go =
+              \args -> \t -> case (Rewriting.deannotateTerm t) of
+                Core.TermApplication v0 ->
+                  let lhs = Core.applicationFunction v0
+                      rhs = Core.applicationArgument v0
+                  in (go (Lists.cons rhs args) lhs)
+                _ -> (args, t)
+      in (go [] term)
+
+-- | Gather term arguments, stripping type-level constructs
+gatherArgs :: Core.Term -> [Core.Term] -> (Core.Term, [Core.Term])
+gatherArgs term args =
+    case (Rewriting.deannotateTerm term) of
+      Core.TermApplication v0 ->
+        let lhs = Core.applicationFunction v0
+            rhs = Core.applicationArgument v0
+        in (gatherArgs lhs (Lists.cons rhs args))
+      Core.TermTypeLambda v0 ->
+        let body = Core.typeLambdaBody v0
+        in (gatherArgs body args)
+      Core.TermTypeApplication v0 ->
+        let body = Core.typeApplicationTermBody v0
+        in (gatherArgs body args)
+      _ -> (term, args)
+
+-- | Gather term and type arguments from a term
+gatherArgsWithTypeApps :: Core.Term -> [Core.Term] -> [Core.Type] -> (Core.Term, ([Core.Term], [Core.Type]))
+gatherArgsWithTypeApps term args tyArgs =
+    case (Rewriting.deannotateTerm term) of
+      Core.TermApplication v0 ->
+        let lhs = Core.applicationFunction v0
+            rhs = Core.applicationArgument v0
+        in (gatherArgsWithTypeApps lhs (Lists.cons rhs args) tyArgs)
+      Core.TermTypeLambda v0 ->
+        let body = Core.typeLambdaBody v0
+        in (gatherArgsWithTypeApps body args tyArgs)
+      Core.TermTypeApplication v0 ->
+        let body = Core.typeApplicationTermBody v0
+            typ = Core.typeApplicationTermType v0
+        in (gatherArgsWithTypeApps body args (Lists.cons typ tyArgs))
+      _ -> (term, (args, tyArgs))
+
+-- | Check if a binding needs to be treated as a function
+isComplexBinding :: Graph.Graph -> Core.Binding -> Bool
+isComplexBinding tc b =
+
+      let term = Core.bindingTerm b
+          mts = Core.bindingType b
+      in (Maybes.cases mts (isComplexTerm tc term) (\ts ->
+        let isPolymorphic = Logic.not (Lists.null (Core.typeSchemeVariables ts))
+            isNonNullary = Equality.gt (Arity.typeArity (Core.typeSchemeType ts)) 0
+            isComplex = isComplexTerm tc term
+        in (Logic.or (Logic.or isPolymorphic isNonNullary) isComplex)))
+
+-- | Check if a term needs to be treated as a function rather than a simple value
+isComplexTerm :: Graph.Graph -> Core.Term -> Bool
+isComplexTerm tc t =
+    case t of
+      Core.TermLet _ -> True
+      Core.TermTypeApplication _ -> True
+      Core.TermTypeLambda _ -> True
+      Core.TermVariable v0 -> isComplexVariable tc v0
+      _ -> Lists.foldl (\b -> \sub -> Logic.or b (isComplexTerm tc sub)) False (Rewriting.subterms t)
+
+-- | Check if a variable is bound to a complex term
+isComplexVariable :: Graph.Graph -> Core.Name -> Bool
+isComplexVariable tc name =
+
+      let metaLookup = Maps.lookup name (Graph.graphMetadata tc)
+      in (Logic.ifElse (Maybes.isJust metaLookup) True (Logic.ifElse (Sets.member name (Graph.graphLambdaVariables tc)) True (
+        let typeLookup = Maps.lookup name (Graph.graphBoundTypes tc)
+        in (Maybes.maybe True (\ts -> Equality.gt (Arity.typeSchemeArity ts) 0) typeLookup))))
+
+-- | Check if a term body is self-tail-recursive with respect to a function name
+isSelfTailRecursive :: Core.Name -> Core.Term -> Bool
+isSelfTailRecursive funcName body =
+
+      let callsSelf = Logic.not (Rewriting.isFreeVariableInTerm funcName body)
+      in (Logic.ifElse callsSelf (isTailRecursiveInTailPosition funcName body) False)
+
+-- | Check if a term can be encoded as a simple assignment
+isSimpleAssignment :: Core.Term -> Bool
+isSimpleAssignment term =
+    case term of
+      Core.TermAnnotated v0 -> isSimpleAssignment (Core.annotatedTermBody v0)
+      Core.TermFunction v0 -> case v0 of
+        Core.FunctionLambda _ -> False
+        _ -> True
+      Core.TermLet _ -> False
+      Core.TermTypeLambda _ -> False
+      Core.TermTypeApplication v0 -> isSimpleAssignment (Core.typeApplicationTermBody v0)
+      _ ->
+        let baseTerm = Pairs.first (gatherArgs term [])
+        in case baseTerm of
+          Core.TermFunction v0 -> case v0 of
+            Core.FunctionElimination v1 -> case v1 of
+              Core.EliminationUnion _ -> False
+              _ -> True
+            _ -> True
+          _ -> True
+
+-- | Check that all self-references are in tail position
+isTailRecursiveInTailPosition :: Core.Name -> Core.Term -> Bool
+isTailRecursiveInTailPosition funcName term =
+
+      let stripped = Rewriting.deannotateAndDetypeTerm term
+      in case stripped of
+        Core.TermApplication _ ->
+          let gathered = gatherApplications stripped
+              gatherArgs = Pairs.first gathered
+              gatherFun = Pairs.second gathered
+              strippedFun = Rewriting.deannotateAndDetypeTerm gatherFun
+          in case strippedFun of
+            Core.TermVariable v1 -> Logic.ifElse (Equality.equal v1 funcName) (
+              let argsNoFunc = Lists.foldl (\ok -> \arg -> Logic.and ok (Rewriting.isFreeVariableInTerm funcName arg)) True gatherArgs
+                  argsNoLambda =
+                          Lists.foldl (\ok -> \arg -> Logic.and ok (Logic.not (Rewriting.foldOverTerm Coders.TraversalOrderPre (\found -> \t -> Logic.or found (case t of
+                            Core.TermFunction v2 -> case v2 of
+                              Core.FunctionLambda v3 ->
+                                let ignore = Core.lambdaBody v3
+                                in True
+                              _ -> False
+                            _ -> False)) False arg))) True gatherArgs
+              in (Logic.and argsNoFunc argsNoLambda)) (Rewriting.isFreeVariableInTerm funcName term)
+            Core.TermFunction v1 -> case v1 of
+              Core.FunctionElimination v2 -> case v2 of
+                Core.EliminationUnion v3 ->
+                  let cases_ = Core.caseStatementCases v3
+                      dflt = Core.caseStatementDefault v3
+                      branchesOk =
+                              Lists.foldl (\ok -> \field -> Logic.and ok (isTailRecursiveInTailPosition funcName (Core.fieldTerm field))) True cases_
+                      dfltOk = Maybes.maybe True (\d -> isTailRecursiveInTailPosition funcName d) dflt
+                      argsOk = Lists.foldl (\ok -> \arg -> Logic.and ok (Rewriting.isFreeVariableInTerm funcName arg)) True gatherArgs
+                  in (Logic.and (Logic.and branchesOk dfltOk) argsOk)
+                _ -> Rewriting.isFreeVariableInTerm funcName term
+              _ -> Rewriting.isFreeVariableInTerm funcName term
+            _ -> Rewriting.isFreeVariableInTerm funcName term
+        Core.TermFunction v0 -> case v0 of
+          Core.FunctionLambda v1 -> isTailRecursiveInTailPosition funcName (Core.lambdaBody v1)
+          _ -> Rewriting.isFreeVariableInTerm funcName term
+        Core.TermLet v0 ->
+          let bindingsOk =
+                  Lists.foldl (\ok -> \b -> Logic.and ok (Rewriting.isFreeVariableInTerm funcName (Core.bindingTerm b))) True (Core.letBindings v0)
+          in (Logic.and bindingsOk (isTailRecursiveInTailPosition funcName (Core.letBody v0)))
+        _ -> Rewriting.isFreeVariableInTerm funcName term
+
+-- | Check if a term is trivially cheap (no thunking needed)
+isTrivialTerm :: Core.Term -> Bool
+isTrivialTerm t =
+    case (Rewriting.deannotateTerm t) of
+      Core.TermLiteral _ -> True
+      Core.TermVariable _ -> True
+      Core.TermUnit -> True
+      Core.TermApplication v0 ->
+        let fun = Core.applicationFunction v0
+            arg = Core.applicationArgument v0
+        in case fun of
+          Core.TermFunction v1 -> case v1 of
+            Core.FunctionElimination v2 -> case v2 of
+              Core.EliminationRecord _ -> isTrivialTerm arg
+              Core.EliminationWrap _ -> isTrivialTerm arg
+              _ -> False
+            _ -> False
+          _ -> False
+      Core.TermMaybe v0 -> Maybes.maybe True (\inner -> isTrivialTerm inner) v0
+      Core.TermRecord v0 -> Lists.foldl (\acc -> \fld -> Logic.and acc (isTrivialTerm (Core.fieldTerm fld))) True (Core.recordFields v0)
+      Core.TermWrap v0 -> isTrivialTerm (Core.wrappedTermBody v0)
+      Core.TermTypeApplication v0 -> isTrivialTerm (Core.typeApplicationTermBody v0)
+      Core.TermTypeLambda v0 -> isTrivialTerm (Core.typeLambdaBody v0)
+      _ -> False
+
+-- | Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator
+nameToFilePath :: Util.CaseConvention -> Util.CaseConvention -> Module.FileExtension -> Core.Name -> String
+nameToFilePath nsConv localConv ext name =
+
+      let qualName = Names.qualifyName name
+          ns = Module.qualifiedNameNamespace qualName
+          local = Module.qualifiedNameLocal qualName
+          nsToFilePath =
+                  \ns -> Strings.intercalate "/" (Lists.map (\part -> Formatting.convertCase Util.CaseConventionCamel nsConv part) (Strings.splitOn "." (Module.unNamespace ns)))
+          prefix = Maybes.maybe "" (\n -> Strings.cat2 (nsToFilePath n) "/") ns
+          suffix = Formatting.convertCase Util.CaseConventionPascal localConv local
+      in (Strings.cat [
+        prefix,
+        suffix,
+        ".",
+        (Module.unFileExtension ext)])
+
+-- | Normalize a comment string for consistent output across coders
+normalizeComment :: String -> String
+normalizeComment s =
+
+      let stripped = Formatting.stripLeadingAndTrailingWhitespace s
+      in (Logic.ifElse (Strings.null stripped) "" (
+        let lastIdx = Math.sub (Strings.length stripped) 1
+            lastChar = Strings.charAt lastIdx stripped
+        in (Logic.ifElse (Equality.equal lastChar 46) stripped (Strings.cat2 stripped "."))))
+
+-- | Reorder definitions: types first (with hydra.core.Name first among types), then topologically sorted terms
+reorderDefs :: [Module.Definition] -> [Module.Definition]
+reorderDefs defs =
+
+      let partitioned = Schemas.partitionDefinitions defs
+          typeDefsRaw = Pairs.first partitioned
+          nameFirst = Lists.filter (\td -> Equality.equal (Module.typeDefinitionName td) (Core.Name "hydra.core.Name")) typeDefsRaw
+          nameRest =
+                  Lists.filter (\td -> Logic.not (Equality.equal (Module.typeDefinitionName td) (Core.Name "hydra.core.Name"))) typeDefsRaw
+          typeDefs =
+                  Lists.concat [
+                    Lists.map (\td -> Module.DefinitionType td) nameFirst,
+                    (Lists.map (\td -> Module.DefinitionType td) nameRest)]
+          termDefsWrapped = Lists.map (\td -> Module.DefinitionTerm td) (Pairs.second partitioned)
+          sortedTermDefs =
+                  Lists.concat (Sorting.topologicalSortNodes (\d -> case d of
+                    Module.DefinitionTerm v0 -> Module.termDefinitionName v0) (\d -> case d of
+                    Module.DefinitionTerm v0 -> Sets.toList (Rewriting.freeVariablesInTerm (Module.termDefinitionTerm v0))
+                    _ -> []) termDefsWrapped)
+      in (Lists.concat [
+        typeDefs,
+        sortedTermDefs])
+
+-- | Check the type of a term
+typeOfTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Core.Type
+typeOfTerm cx g term = Eithers.map Pairs.first (Checking.typeOf cx g [] term)

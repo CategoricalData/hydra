@@ -58,11 +58,6 @@ grammarToModule ns grammar desc =
           capitalizedNames = Lists.map (\pair -> Formatting.capitalize (Pairs.first pair)) prodPairs
           patterns = Lists.map (\pair -> Pairs.second pair) prodPairs
           elementPairs = Lists.concat (Lists.zipWith (makeElements False ns) capitalizedNames patterns)
-          wrapType t = case t of
-                Core.TypeRecord _ -> t
-                Core.TypeUnion _ -> t
-                Core.TypeWrap _ -> t
-                _ -> Core.TypeWrap t
           typeDefs =
                   Lists.map (\pair ->
                     let lname = Pairs.first pair
@@ -156,6 +151,10 @@ rawName pat =
       Grammar.PatternSequence _ -> "sequence"
       Grammar.PatternStar v0 -> Strings.cat2 "listOf" (Formatting.capitalize (rawName v0))
 
+-- | Replace Placeholder names in a type with the actual element name (no-op since types no longer carry names)
+replacePlaceholders :: t0 -> t1 -> t1
+replacePlaceholders elName typ = typ
+
 -- | Remove trivial patterns from records
 simplify :: Bool -> [Grammar.Pattern] -> [Grammar.Pattern]
 simplify isRecord pats =
@@ -172,3 +171,12 @@ toName ns local =
     Names.unqualifyName (Module.QualifiedName {
       Module.qualifiedNameNamespace = (Just ns),
       Module.qualifiedNameLocal = local})
+
+-- | Wrap a type in a placeholder name, unless it is already a wrapper, record, or union type
+wrapType :: Core.Type -> Core.Type
+wrapType t =
+    case t of
+      Core.TypeRecord _ -> t
+      Core.TypeUnion _ -> t
+      Core.TypeWrap _ -> t
+      _ -> Core.TypeWrap t

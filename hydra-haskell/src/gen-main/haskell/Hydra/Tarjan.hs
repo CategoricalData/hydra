@@ -48,15 +48,6 @@ adjacencyListsToGraph edges0 =
           vertexToKey = \v -> Maybes.fromJust (Maps.lookup v vertexMap)
       in (graph, vertexToKey)
 
--- | Compute the strongly connected components of the given graph. The components are returned in reverse topological order
-stronglyConnectedComponents :: M.Map Topology.Vertex [Topology.Vertex] -> [[Topology.Vertex]]
-stronglyConnectedComponents graph =
-
-      let verts = Maps.keys graph
-          finalState =
-                  Lists.foldl (\st -> \v -> Logic.ifElse (Maps.member v (Topology.tarjanStateIndices st)) st (strongConnect graph v st)) initialState verts
-      in (Lists.reverse (Lists.map Lists.sort (Topology.tarjanStateSccs finalState)))
-
 -- | Initial state for Tarjan's algorithm
 initialState :: Topology.TarjanState
 initialState =
@@ -148,3 +139,12 @@ strongConnect graph v st =
           Topology.tarjanStateStack = (Topology.tarjanStateStack stPopped),
           Topology.tarjanStateOnStack = (Topology.tarjanStateOnStack stPopped),
           Topology.tarjanStateSccs = (Lists.cons comp (Topology.tarjanStateSccs stPopped))}) stAfterNeighbors)
+
+-- | Compute the strongly connected components of the given graph. The components are returned in reverse topological order
+stronglyConnectedComponents :: M.Map Topology.Vertex [Topology.Vertex] -> [[Topology.Vertex]]
+stronglyConnectedComponents graph =
+
+      let verts = Maps.keys graph
+          finalState =
+                  Lists.foldl (\st -> \v -> Logic.ifElse (Maps.member v (Topology.tarjanStateIndices st)) st (strongConnect graph v st)) initialState verts
+      in (Lists.reverse (Lists.map Lists.sort (Topology.tarjanStateSccs finalState)))

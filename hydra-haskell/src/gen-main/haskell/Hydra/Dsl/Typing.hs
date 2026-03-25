@@ -42,22 +42,6 @@ functionStructure typeParams params bindings body domains codomain environment =
           Core.fieldName = (Core.Name "environment"),
           Core.fieldTerm = (Phantoms.unTTerm environment)}]}))
 
-functionStructureTypeParams :: Phantoms.TTerm (Typing.FunctionStructure env) -> Phantoms.TTerm [Core.Name]
-functionStructureTypeParams x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
-        Core.projectionField = (Core.Name "typeParams")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-functionStructureParams :: Phantoms.TTerm (Typing.FunctionStructure env) -> Phantoms.TTerm [Core.Name]
-functionStructureParams x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
-        Core.projectionField = (Core.Name "params")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 functionStructureBindings :: Phantoms.TTerm (Typing.FunctionStructure env) -> Phantoms.TTerm [Core.Binding]
 functionStructureBindings x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -74,20 +58,20 @@ functionStructureBody x =
         Core.projectionField = (Core.Name "body")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-functionStructureDomains :: Phantoms.TTerm (Typing.FunctionStructure env) -> Phantoms.TTerm [Core.Type]
-functionStructureDomains x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
-        Core.projectionField = (Core.Name "domains")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 functionStructureCodomain :: Phantoms.TTerm (Typing.FunctionStructure env) -> Phantoms.TTerm (Maybe Core.Type)
 functionStructureCodomain x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
         Core.projectionField = (Core.Name "codomain")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+functionStructureDomains :: Phantoms.TTerm (Typing.FunctionStructure env) -> Phantoms.TTerm [Core.Type]
+functionStructureDomains x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
+        Core.projectionField = (Core.Name "domains")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 functionStructureEnvironment :: Phantoms.TTerm (Typing.FunctionStructure env) -> Phantoms.TTerm env
@@ -98,107 +82,21 @@ functionStructureEnvironment x =
         Core.projectionField = (Core.Name "environment")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-functionStructureWithTypeParams :: Phantoms.TTerm (Typing.FunctionStructure env) -> Phantoms.TTerm [Core.Name] -> Phantoms.TTerm (Typing.FunctionStructure env)
-functionStructureWithTypeParams original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.typing.FunctionStructure"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "typeParams"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "params"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
-              Core.projectionField = (Core.Name "params")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "bindings"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
-              Core.projectionField = (Core.Name "bindings")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
-              Core.projectionField = (Core.Name "body")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "domains"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
-              Core.projectionField = (Core.Name "domains")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "codomain"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
-              Core.projectionField = (Core.Name "codomain")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "environment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
-              Core.projectionField = (Core.Name "environment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+functionStructureParams :: Phantoms.TTerm (Typing.FunctionStructure env) -> Phantoms.TTerm [Core.Name]
+functionStructureParams x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
+        Core.projectionField = (Core.Name "params")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-functionStructureWithParams :: Phantoms.TTerm (Typing.FunctionStructure env) -> Phantoms.TTerm [Core.Name] -> Phantoms.TTerm (Typing.FunctionStructure env)
-functionStructureWithParams original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.typing.FunctionStructure"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "typeParams"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
-              Core.projectionField = (Core.Name "typeParams")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "params"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "bindings"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
-              Core.projectionField = (Core.Name "bindings")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
-              Core.projectionField = (Core.Name "body")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "domains"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
-              Core.projectionField = (Core.Name "domains")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "codomain"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
-              Core.projectionField = (Core.Name "codomain")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "environment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
-              Core.projectionField = (Core.Name "environment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+functionStructureTypeParams :: Phantoms.TTerm (Typing.FunctionStructure env) -> Phantoms.TTerm [Core.Name]
+functionStructureTypeParams x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
+        Core.projectionField = (Core.Name "typeParams")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 functionStructureWithBindings :: Phantoms.TTerm (Typing.FunctionStructure env) -> Phantoms.TTerm [Core.Binding] -> Phantoms.TTerm (Typing.FunctionStructure env)
 functionStructureWithBindings original newVal =
@@ -302,57 +200,6 @@ functionStructureWithBody original newVal =
               Core.projectionField = (Core.Name "environment")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-functionStructureWithDomains :: Phantoms.TTerm (Typing.FunctionStructure env) -> Phantoms.TTerm [Core.Type] -> Phantoms.TTerm (Typing.FunctionStructure env)
-functionStructureWithDomains original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.typing.FunctionStructure"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "typeParams"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
-              Core.projectionField = (Core.Name "typeParams")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "params"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
-              Core.projectionField = (Core.Name "params")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "bindings"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
-              Core.projectionField = (Core.Name "bindings")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
-              Core.projectionField = (Core.Name "body")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "domains"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "codomain"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
-              Core.projectionField = (Core.Name "codomain")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "environment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
-              Core.projectionField = (Core.Name "environment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
 functionStructureWithCodomain :: Phantoms.TTerm (Typing.FunctionStructure env) -> Phantoms.TTerm (Maybe Core.Type) -> Phantoms.TTerm (Typing.FunctionStructure env)
 functionStructureWithCodomain original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -396,6 +243,57 @@ functionStructureWithCodomain original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "codomain"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "environment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
+              Core.projectionField = (Core.Name "environment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+functionStructureWithDomains :: Phantoms.TTerm (Typing.FunctionStructure env) -> Phantoms.TTerm [Core.Type] -> Phantoms.TTerm (Typing.FunctionStructure env)
+functionStructureWithDomains original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.FunctionStructure"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "typeParams"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
+              Core.projectionField = (Core.Name "typeParams")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "params"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
+              Core.projectionField = (Core.Name "params")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "bindings"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
+              Core.projectionField = (Core.Name "bindings")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "body"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
+              Core.projectionField = (Core.Name "body")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "domains"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "codomain"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
+              Core.projectionField = (Core.Name "codomain")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "environment"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -455,6 +353,108 @@ functionStructureWithEnvironment original newVal =
           Core.fieldName = (Core.Name "environment"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+functionStructureWithParams :: Phantoms.TTerm (Typing.FunctionStructure env) -> Phantoms.TTerm [Core.Name] -> Phantoms.TTerm (Typing.FunctionStructure env)
+functionStructureWithParams original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.FunctionStructure"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "typeParams"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
+              Core.projectionField = (Core.Name "typeParams")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "params"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "bindings"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
+              Core.projectionField = (Core.Name "bindings")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "body"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
+              Core.projectionField = (Core.Name "body")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "domains"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
+              Core.projectionField = (Core.Name "domains")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "codomain"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
+              Core.projectionField = (Core.Name "codomain")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "environment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
+              Core.projectionField = (Core.Name "environment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+functionStructureWithTypeParams :: Phantoms.TTerm (Typing.FunctionStructure env) -> Phantoms.TTerm [Core.Name] -> Phantoms.TTerm (Typing.FunctionStructure env)
+functionStructureWithTypeParams original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.FunctionStructure"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "typeParams"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "params"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
+              Core.projectionField = (Core.Name "params")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "bindings"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
+              Core.projectionField = (Core.Name "bindings")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "body"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
+              Core.projectionField = (Core.Name "body")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "domains"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
+              Core.projectionField = (Core.Name "domains")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "codomain"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
+              Core.projectionField = (Core.Name "codomain")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "environment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
+              Core.projectionField = (Core.Name "environment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 inferenceResult :: Phantoms.TTerm Core.Term -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Typing.TypeSubst -> Phantoms.TTerm (M.Map Core.Name Core.TypeVariableMetadata) -> Phantoms.TTerm Context.Context -> Phantoms.TTerm Typing.InferenceResult
 inferenceResult term type_ subst classConstraints context =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -476,30 +476,6 @@ inferenceResult term type_ subst classConstraints context =
           Core.fieldName = (Core.Name "context"),
           Core.fieldTerm = (Phantoms.unTTerm context)}]}))
 
-inferenceResultTerm :: Phantoms.TTerm Typing.InferenceResult -> Phantoms.TTerm Core.Term
-inferenceResultTerm x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
-        Core.projectionField = (Core.Name "term")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-inferenceResultType :: Phantoms.TTerm Typing.InferenceResult -> Phantoms.TTerm Core.Type
-inferenceResultType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
-        Core.projectionField = (Core.Name "type")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-inferenceResultSubst :: Phantoms.TTerm Typing.InferenceResult -> Phantoms.TTerm Typing.TypeSubst
-inferenceResultSubst x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
-        Core.projectionField = (Core.Name "subst")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 inferenceResultClassConstraints :: Phantoms.TTerm Typing.InferenceResult -> Phantoms.TTerm (M.Map Core.Name Core.TypeVariableMetadata)
 inferenceResultClassConstraints x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -516,116 +492,29 @@ inferenceResultContext x =
         Core.projectionField = (Core.Name "context")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-inferenceResultWithTerm :: Phantoms.TTerm Typing.InferenceResult -> Phantoms.TTerm Core.Term -> Phantoms.TTerm Typing.InferenceResult
-inferenceResultWithTerm original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.typing.InferenceResult"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "term"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "subst"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
-              Core.projectionField = (Core.Name "subst")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "classConstraints"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
-              Core.projectionField = (Core.Name "classConstraints")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "context"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
-              Core.projectionField = (Core.Name "context")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+inferenceResultSubst :: Phantoms.TTerm Typing.InferenceResult -> Phantoms.TTerm Typing.TypeSubst
+inferenceResultSubst x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
+        Core.projectionField = (Core.Name "subst")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-inferenceResultWithType :: Phantoms.TTerm Typing.InferenceResult -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Typing.InferenceResult
-inferenceResultWithType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.typing.InferenceResult"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "term"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
-              Core.projectionField = (Core.Name "term")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "subst"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
-              Core.projectionField = (Core.Name "subst")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "classConstraints"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
-              Core.projectionField = (Core.Name "classConstraints")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "context"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
-              Core.projectionField = (Core.Name "context")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+inferenceResultTerm :: Phantoms.TTerm Typing.InferenceResult -> Phantoms.TTerm Core.Term
+inferenceResultTerm x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
+        Core.projectionField = (Core.Name "term")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-inferenceResultWithSubst :: Phantoms.TTerm Typing.InferenceResult -> Phantoms.TTerm Typing.TypeSubst -> Phantoms.TTerm Typing.InferenceResult
-inferenceResultWithSubst original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.typing.InferenceResult"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "term"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
-              Core.projectionField = (Core.Name "term")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "subst"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "classConstraints"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
-              Core.projectionField = (Core.Name "classConstraints")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "context"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
-              Core.projectionField = (Core.Name "context")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+inferenceResultType :: Phantoms.TTerm Typing.InferenceResult -> Phantoms.TTerm Core.Type
+inferenceResultType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
+        Core.projectionField = (Core.Name "type")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 inferenceResultWithClassConstraints :: Phantoms.TTerm Typing.InferenceResult -> Phantoms.TTerm (M.Map Core.Name Core.TypeVariableMetadata) -> Phantoms.TTerm Typing.InferenceResult
 inferenceResultWithClassConstraints original newVal =
@@ -701,17 +590,122 @@ inferenceResultWithContext original newVal =
           Core.fieldName = (Core.Name "context"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+inferenceResultWithSubst :: Phantoms.TTerm Typing.InferenceResult -> Phantoms.TTerm Typing.TypeSubst -> Phantoms.TTerm Typing.InferenceResult
+inferenceResultWithSubst original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.InferenceResult"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "term"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
+              Core.projectionField = (Core.Name "term")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "subst"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "classConstraints"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
+              Core.projectionField = (Core.Name "classConstraints")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "context"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
+              Core.projectionField = (Core.Name "context")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+inferenceResultWithTerm :: Phantoms.TTerm Typing.InferenceResult -> Phantoms.TTerm Core.Term -> Phantoms.TTerm Typing.InferenceResult
+inferenceResultWithTerm original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.InferenceResult"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "term"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "subst"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
+              Core.projectionField = (Core.Name "subst")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "classConstraints"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
+              Core.projectionField = (Core.Name "classConstraints")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "context"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
+              Core.projectionField = (Core.Name "context")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+inferenceResultWithType :: Phantoms.TTerm Typing.InferenceResult -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Typing.InferenceResult
+inferenceResultWithType original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.InferenceResult"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "term"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
+              Core.projectionField = (Core.Name "term")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "subst"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
+              Core.projectionField = (Core.Name "subst")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "classConstraints"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
+              Core.projectionField = (Core.Name "classConstraints")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "context"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
+              Core.projectionField = (Core.Name "context")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 termSubst :: Phantoms.TTerm (M.Map Core.Name Core.Term) -> Phantoms.TTerm Typing.TermSubst
 termSubst x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.typing.TermSubst"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unTermSubst :: Phantoms.TTerm Typing.TermSubst -> Phantoms.TTerm (M.Map Core.Name Core.Term)
-unTermSubst x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.typing.TermSubst")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeConstraint :: Phantoms.TTerm Core.Type -> Phantoms.TTerm Core.Type -> Phantoms.TTerm String -> Phantoms.TTerm Typing.TypeConstraint
 typeConstraint left right comment =
@@ -727,6 +721,14 @@ typeConstraint left right comment =
         Core.Field {
           Core.fieldName = (Core.Name "comment"),
           Core.fieldTerm = (Phantoms.unTTerm comment)}]}))
+
+typeConstraintComment :: Phantoms.TTerm Typing.TypeConstraint -> Phantoms.TTerm String
+typeConstraintComment x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.typing.TypeConstraint"),
+        Core.projectionField = (Core.Name "comment")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeConstraintLeft :: Phantoms.TTerm Typing.TypeConstraint -> Phantoms.TTerm Core.Type
 typeConstraintLeft x =
@@ -744,13 +746,28 @@ typeConstraintRight x =
         Core.projectionField = (Core.Name "right")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-typeConstraintComment :: Phantoms.TTerm Typing.TypeConstraint -> Phantoms.TTerm String
-typeConstraintComment x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.typing.TypeConstraint"),
-        Core.projectionField = (Core.Name "comment")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+typeConstraintWithComment :: Phantoms.TTerm Typing.TypeConstraint -> Phantoms.TTerm String -> Phantoms.TTerm Typing.TypeConstraint
+typeConstraintWithComment original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.TypeConstraint"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "left"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.TypeConstraint"),
+              Core.projectionField = (Core.Name "left")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "right"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.TypeConstraint"),
+              Core.projectionField = (Core.Name "right")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
 typeConstraintWithLeft :: Phantoms.TTerm Typing.TypeConstraint -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Typing.TypeConstraint
 typeConstraintWithLeft original newVal =
@@ -798,34 +815,17 @@ typeConstraintWithRight original newVal =
               Core.projectionField = (Core.Name "comment")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-typeConstraintWithComment :: Phantoms.TTerm Typing.TypeConstraint -> Phantoms.TTerm String -> Phantoms.TTerm Typing.TypeConstraint
-typeConstraintWithComment original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.typing.TypeConstraint"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "left"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.TypeConstraint"),
-              Core.projectionField = (Core.Name "left")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.typing.TypeConstraint"),
-              Core.projectionField = (Core.Name "right")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
 typeSubst :: Phantoms.TTerm (M.Map Core.Name Core.Type) -> Phantoms.TTerm Typing.TypeSubst
 typeSubst x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.typing.TypeSubst"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+unTermSubst :: Phantoms.TTerm Typing.TermSubst -> Phantoms.TTerm (M.Map Core.Name Core.Term)
+unTermSubst x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.typing.TermSubst")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unTypeSubst :: Phantoms.TTerm Typing.TypeSubst -> Phantoms.TTerm (M.Map Core.Name Core.Type)
 unTypeSubst x =

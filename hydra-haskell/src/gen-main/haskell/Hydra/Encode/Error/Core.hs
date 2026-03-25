@@ -16,6 +16,18 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+constantConditionError :: Core__.ConstantConditionError -> Core.Term
+constantConditionError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.ConstantConditionError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.constantConditionErrorLocation x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "value"),
+          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralBoolean x)) (Core__.constantConditionErrorValue x))}]})
+
 duplicateBindingError :: Core__.DuplicateBindingError -> Core.Term
 duplicateBindingError x =
     Core.TermRecord (Core.Record {
@@ -40,53 +52,29 @@ duplicateFieldError x =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core_.name (Core__.duplicateFieldErrorName x))}]})
 
-undefinedFieldError :: Core__.UndefinedFieldError -> Core.Term
-undefinedFieldError x =
+duplicateRecordTypeFieldNamesError :: Core__.DuplicateRecordTypeFieldNamesError -> Core.Term
+duplicateRecordTypeFieldNamesError x =
     Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.UndefinedFieldError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "fieldName"),
-          Core.fieldTerm = (Core_.name (Core__.undefinedFieldErrorFieldName x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "typeName"),
-          Core.fieldTerm = (Core_.name (Core__.undefinedFieldErrorTypeName x))}]})
-
-unexpectedTermVariantError :: Core__.UnexpectedTermVariantError -> Core.Term
-unexpectedTermVariantError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.UnexpectedTermVariantError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "expectedVariant"),
-          Core.fieldTerm = (Variants.termVariant (Core__.unexpectedTermVariantErrorExpectedVariant x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "actualTerm"),
-          Core.fieldTerm = (Core_.term (Core__.unexpectedTermVariantErrorActualTerm x))}]})
-
-unexpectedTypeVariantError :: Core__.UnexpectedTypeVariantError -> Core.Term
-unexpectedTypeVariantError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.UnexpectedTypeVariantError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "expectedVariant"),
-          Core.fieldTerm = (Variants.typeVariant (Core__.unexpectedTypeVariantErrorExpectedVariant x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "actualType"),
-          Core.fieldTerm = (Core_.type_ (Core__.unexpectedTypeVariantErrorActualType x))}]})
-
-constantConditionError :: Core__.ConstantConditionError -> Core.Term
-constantConditionError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.ConstantConditionError"),
+      Core.recordTypeName = (Core.Name "hydra.error.core.DuplicateRecordTypeFieldNamesError"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.constantConditionErrorLocation x))},
+          Core.fieldTerm = (Accessors.accessorPath (Core__.duplicateRecordTypeFieldNamesErrorLocation x))},
         Core.Field {
-          Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralBoolean x)) (Core__.constantConditionErrorValue x))}]})
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core_.name (Core__.duplicateRecordTypeFieldNamesErrorName x))}]})
+
+duplicateUnionTypeFieldNamesError :: Core__.DuplicateUnionTypeFieldNamesError -> Core.Term
+duplicateUnionTypeFieldNamesError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.DuplicateUnionTypeFieldNamesError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.duplicateUnionTypeFieldNamesErrorLocation x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core_.name (Core__.duplicateUnionTypeFieldNamesErrorName x))}]})
 
 emptyCaseStatementError :: Core__.EmptyCaseStatementError -> Core.Term
 emptyCaseStatementError x =
@@ -109,6 +97,15 @@ emptyLetBindingsError x =
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Accessors.accessorPath (Core__.emptyLetBindingsErrorLocation x))}]})
 
+emptyRecordTypeError :: Core__.EmptyRecordTypeError -> Core.Term
+emptyRecordTypeError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.EmptyRecordTypeError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.emptyRecordTypeErrorLocation x))}]})
+
 emptyTermAnnotationError :: Core__.EmptyTermAnnotationError -> Core.Term
 emptyTermAnnotationError x =
     Core.TermRecord (Core.Record {
@@ -118,6 +115,15 @@ emptyTermAnnotationError x =
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Accessors.accessorPath (Core__.emptyTermAnnotationErrorLocation x))}]})
 
+emptyTypeAnnotationError :: Core__.EmptyTypeAnnotationError -> Core.Term
+emptyTypeAnnotationError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.EmptyTypeAnnotationError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.emptyTypeAnnotationErrorLocation x))}]})
+
 emptyTypeNameInTermError :: Core__.EmptyTypeNameInTermError -> Core.Term
 emptyTypeNameInTermError x =
     Core.TermRecord (Core.Record {
@@ -126,6 +132,27 @@ emptyTypeNameInTermError x =
         Core.Field {
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Accessors.accessorPath (Core__.emptyTypeNameInTermErrorLocation x))}]})
+
+emptyUnionTypeError :: Core__.EmptyUnionTypeError -> Core.Term
+emptyUnionTypeError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.EmptyUnionTypeError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.emptyUnionTypeErrorLocation x))}]})
+
+invalidForallParameterNameError :: Core__.InvalidForallParameterNameError -> Core.Term
+invalidForallParameterNameError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.InvalidForallParameterNameError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.invalidForallParameterNameErrorLocation x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core_.name (Core__.invalidForallParameterNameErrorName x))}]})
 
 invalidLambdaParameterNameError :: Core__.InvalidLambdaParameterNameError -> Core.Term
 invalidLambdaParameterNameError x =
@@ -150,156 +177,6 @@ invalidLetBindingNameError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core_.name (Core__.invalidLetBindingNameErrorName x))}]})
-
-invalidTypeLambdaParameterNameError :: Core__.InvalidTypeLambdaParameterNameError -> Core.Term
-invalidTypeLambdaParameterNameError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.InvalidTypeLambdaParameterNameError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.invalidTypeLambdaParameterNameErrorLocation x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Core__.invalidTypeLambdaParameterNameErrorName x))}]})
-
-nestedTermAnnotationError :: Core__.NestedTermAnnotationError -> Core.Term
-nestedTermAnnotationError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.NestedTermAnnotationError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.nestedTermAnnotationErrorLocation x))}]})
-
-redundantWrapUnwrapError :: Core__.RedundantWrapUnwrapError -> Core.Term
-redundantWrapUnwrapError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.RedundantWrapUnwrapError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.redundantWrapUnwrapErrorLocation x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "typeName"),
-          Core.fieldTerm = (Core_.name (Core__.redundantWrapUnwrapErrorTypeName x))}]})
-
-selfApplicationError :: Core__.SelfApplicationError -> Core.Term
-selfApplicationError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.SelfApplicationError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.selfApplicationErrorLocation x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Core__.selfApplicationErrorName x))}]})
-
-termVariableShadowingError :: Core__.TermVariableShadowingError -> Core.Term
-termVariableShadowingError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.TermVariableShadowingError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.termVariableShadowingErrorLocation x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Core__.termVariableShadowingErrorName x))}]})
-
-typeVariableShadowingInTypeLambdaError :: Core__.TypeVariableShadowingInTypeLambdaError -> Core.Term
-typeVariableShadowingInTypeLambdaError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.TypeVariableShadowingInTypeLambdaError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.typeVariableShadowingInTypeLambdaErrorLocation x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Core__.typeVariableShadowingInTypeLambdaErrorName x))}]})
-
-undefinedTermVariableError :: Core__.UndefinedTermVariableError -> Core.Term
-undefinedTermVariableError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.UndefinedTermVariableError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.undefinedTermVariableErrorLocation x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Core__.undefinedTermVariableErrorName x))}]})
-
-undefinedTypeVariableInBindingTypeError :: Core__.UndefinedTypeVariableInBindingTypeError -> Core.Term
-undefinedTypeVariableInBindingTypeError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInBindingTypeError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.undefinedTypeVariableInBindingTypeErrorLocation x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Core__.undefinedTypeVariableInBindingTypeErrorName x))}]})
-
-undefinedTypeVariableInLambdaDomainError :: Core__.UndefinedTypeVariableInLambdaDomainError -> Core.Term
-undefinedTypeVariableInLambdaDomainError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.undefinedTypeVariableInLambdaDomainErrorLocation x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Core__.undefinedTypeVariableInLambdaDomainErrorName x))}]})
-
-undefinedTypeVariableInTypeApplicationError :: Core__.UndefinedTypeVariableInTypeApplicationError -> Core.Term
-undefinedTypeVariableInTypeApplicationError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInTypeApplicationError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.undefinedTypeVariableInTypeApplicationErrorLocation x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Core__.undefinedTypeVariableInTypeApplicationErrorName x))}]})
-
-unknownPrimitiveNameError :: Core__.UnknownPrimitiveNameError -> Core.Term
-unknownPrimitiveNameError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.UnknownPrimitiveNameError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.unknownPrimitiveNameErrorLocation x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Core__.unknownPrimitiveNameErrorName x))}]})
-
-unnecessaryIdentityApplicationError :: Core__.UnnecessaryIdentityApplicationError -> Core.Term
-unnecessaryIdentityApplicationError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.UnnecessaryIdentityApplicationError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.unnecessaryIdentityApplicationErrorLocation x))}]})
-
-untypedTermVariableError :: Core__.UntypedTermVariableError -> Core.Term
-untypedTermVariableError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.UntypedTermVariableError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.untypedTermVariableErrorLocation x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Core__.untypedTermVariableErrorName x))}]})
 
 invalidTermError :: Core__.InvalidTermError -> Core.Term
 invalidTermError x =
@@ -415,159 +292,6 @@ invalidTermError x =
           Core.fieldName = (Core.Name "untypedTermVariable"),
           Core.fieldTerm = (untypedTermVariableError v0)}})
 
-duplicateRecordTypeFieldNamesError :: Core__.DuplicateRecordTypeFieldNamesError -> Core.Term
-duplicateRecordTypeFieldNamesError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.DuplicateRecordTypeFieldNamesError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.duplicateRecordTypeFieldNamesErrorLocation x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Core__.duplicateRecordTypeFieldNamesErrorName x))}]})
-
-duplicateUnionTypeFieldNamesError :: Core__.DuplicateUnionTypeFieldNamesError -> Core.Term
-duplicateUnionTypeFieldNamesError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.DuplicateUnionTypeFieldNamesError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.duplicateUnionTypeFieldNamesErrorLocation x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Core__.duplicateUnionTypeFieldNamesErrorName x))}]})
-
-emptyRecordTypeError :: Core__.EmptyRecordTypeError -> Core.Term
-emptyRecordTypeError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.EmptyRecordTypeError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.emptyRecordTypeErrorLocation x))}]})
-
-emptyTypeAnnotationError :: Core__.EmptyTypeAnnotationError -> Core.Term
-emptyTypeAnnotationError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.EmptyTypeAnnotationError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.emptyTypeAnnotationErrorLocation x))}]})
-
-emptyUnionTypeError :: Core__.EmptyUnionTypeError -> Core.Term
-emptyUnionTypeError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.EmptyUnionTypeError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.emptyUnionTypeErrorLocation x))}]})
-
-invalidForallParameterNameError :: Core__.InvalidForallParameterNameError -> Core.Term
-invalidForallParameterNameError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.InvalidForallParameterNameError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.invalidForallParameterNameErrorLocation x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Core__.invalidForallParameterNameErrorName x))}]})
-
-invalidTypeSchemeVariableNameError :: Core__.InvalidTypeSchemeVariableNameError -> Core.Term
-invalidTypeSchemeVariableNameError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.InvalidTypeSchemeVariableNameError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.invalidTypeSchemeVariableNameErrorLocation x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Core__.invalidTypeSchemeVariableNameErrorName x))}]})
-
-nestedTypeAnnotationError :: Core__.NestedTypeAnnotationError -> Core.Term
-nestedTypeAnnotationError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.NestedTypeAnnotationError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.nestedTypeAnnotationErrorLocation x))}]})
-
-nonComparableMapKeyTypeError :: Core__.NonComparableMapKeyTypeError -> Core.Term
-nonComparableMapKeyTypeError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.NonComparableMapKeyTypeError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.nonComparableMapKeyTypeErrorLocation x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "keyType"),
-          Core.fieldTerm = (Core_.type_ (Core__.nonComparableMapKeyTypeErrorKeyType x))}]})
-
-nonComparableSetElementTypeError :: Core__.NonComparableSetElementTypeError -> Core.Term
-nonComparableSetElementTypeError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.NonComparableSetElementTypeError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.nonComparableSetElementTypeErrorLocation x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "elementType"),
-          Core.fieldTerm = (Core_.type_ (Core__.nonComparableSetElementTypeErrorElementType x))}]})
-
-singleVariantUnionError :: Core__.SingleVariantUnionError -> Core.Term
-singleVariantUnionError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.SingleVariantUnionError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.singleVariantUnionErrorLocation x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "fieldName"),
-          Core.fieldTerm = (Core_.name (Core__.singleVariantUnionErrorFieldName x))}]})
-
-typeVariableShadowingInForallError :: Core__.TypeVariableShadowingInForallError -> Core.Term
-typeVariableShadowingInForallError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.TypeVariableShadowingInForallError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.typeVariableShadowingInForallErrorLocation x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Core__.typeVariableShadowingInForallErrorName x))}]})
-
-undefinedTypeVariableError :: Core__.UndefinedTypeVariableError -> Core.Term
-undefinedTypeVariableError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.undefinedTypeVariableErrorLocation x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Core__.undefinedTypeVariableErrorName x))}]})
-
-voidInNonBottomPositionError :: Core__.VoidInNonBottomPositionError -> Core.Term
-voidInNonBottomPositionError x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.error.core.VoidInNonBottomPositionError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.voidInNonBottomPositionErrorLocation x))}]})
-
 invalidTypeError :: Core__.InvalidTypeError -> Core.Term
 invalidTypeError x =
     case x of
@@ -641,3 +365,279 @@ invalidTypeError x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "voidInNonBottomPosition"),
           Core.fieldTerm = (voidInNonBottomPositionError v0)}})
+
+invalidTypeLambdaParameterNameError :: Core__.InvalidTypeLambdaParameterNameError -> Core.Term
+invalidTypeLambdaParameterNameError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.InvalidTypeLambdaParameterNameError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.invalidTypeLambdaParameterNameErrorLocation x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core_.name (Core__.invalidTypeLambdaParameterNameErrorName x))}]})
+
+invalidTypeSchemeVariableNameError :: Core__.InvalidTypeSchemeVariableNameError -> Core.Term
+invalidTypeSchemeVariableNameError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.InvalidTypeSchemeVariableNameError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.invalidTypeSchemeVariableNameErrorLocation x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core_.name (Core__.invalidTypeSchemeVariableNameErrorName x))}]})
+
+nestedTermAnnotationError :: Core__.NestedTermAnnotationError -> Core.Term
+nestedTermAnnotationError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.NestedTermAnnotationError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.nestedTermAnnotationErrorLocation x))}]})
+
+nestedTypeAnnotationError :: Core__.NestedTypeAnnotationError -> Core.Term
+nestedTypeAnnotationError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.NestedTypeAnnotationError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.nestedTypeAnnotationErrorLocation x))}]})
+
+nonComparableMapKeyTypeError :: Core__.NonComparableMapKeyTypeError -> Core.Term
+nonComparableMapKeyTypeError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.NonComparableMapKeyTypeError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.nonComparableMapKeyTypeErrorLocation x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "keyType"),
+          Core.fieldTerm = (Core_.type_ (Core__.nonComparableMapKeyTypeErrorKeyType x))}]})
+
+nonComparableSetElementTypeError :: Core__.NonComparableSetElementTypeError -> Core.Term
+nonComparableSetElementTypeError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.NonComparableSetElementTypeError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.nonComparableSetElementTypeErrorLocation x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "elementType"),
+          Core.fieldTerm = (Core_.type_ (Core__.nonComparableSetElementTypeErrorElementType x))}]})
+
+redundantWrapUnwrapError :: Core__.RedundantWrapUnwrapError -> Core.Term
+redundantWrapUnwrapError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.RedundantWrapUnwrapError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.redundantWrapUnwrapErrorLocation x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "typeName"),
+          Core.fieldTerm = (Core_.name (Core__.redundantWrapUnwrapErrorTypeName x))}]})
+
+selfApplicationError :: Core__.SelfApplicationError -> Core.Term
+selfApplicationError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.SelfApplicationError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.selfApplicationErrorLocation x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core_.name (Core__.selfApplicationErrorName x))}]})
+
+singleVariantUnionError :: Core__.SingleVariantUnionError -> Core.Term
+singleVariantUnionError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.SingleVariantUnionError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.singleVariantUnionErrorLocation x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "fieldName"),
+          Core.fieldTerm = (Core_.name (Core__.singleVariantUnionErrorFieldName x))}]})
+
+termVariableShadowingError :: Core__.TermVariableShadowingError -> Core.Term
+termVariableShadowingError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.TermVariableShadowingError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.termVariableShadowingErrorLocation x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core_.name (Core__.termVariableShadowingErrorName x))}]})
+
+typeVariableShadowingInForallError :: Core__.TypeVariableShadowingInForallError -> Core.Term
+typeVariableShadowingInForallError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.TypeVariableShadowingInForallError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.typeVariableShadowingInForallErrorLocation x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core_.name (Core__.typeVariableShadowingInForallErrorName x))}]})
+
+typeVariableShadowingInTypeLambdaError :: Core__.TypeVariableShadowingInTypeLambdaError -> Core.Term
+typeVariableShadowingInTypeLambdaError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.TypeVariableShadowingInTypeLambdaError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.typeVariableShadowingInTypeLambdaErrorLocation x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core_.name (Core__.typeVariableShadowingInTypeLambdaErrorName x))}]})
+
+undefinedFieldError :: Core__.UndefinedFieldError -> Core.Term
+undefinedFieldError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.UndefinedFieldError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "fieldName"),
+          Core.fieldTerm = (Core_.name (Core__.undefinedFieldErrorFieldName x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "typeName"),
+          Core.fieldTerm = (Core_.name (Core__.undefinedFieldErrorTypeName x))}]})
+
+undefinedTermVariableError :: Core__.UndefinedTermVariableError -> Core.Term
+undefinedTermVariableError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.UndefinedTermVariableError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.undefinedTermVariableErrorLocation x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core_.name (Core__.undefinedTermVariableErrorName x))}]})
+
+undefinedTypeVariableError :: Core__.UndefinedTypeVariableError -> Core.Term
+undefinedTypeVariableError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.undefinedTypeVariableErrorLocation x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core_.name (Core__.undefinedTypeVariableErrorName x))}]})
+
+undefinedTypeVariableInBindingTypeError :: Core__.UndefinedTypeVariableInBindingTypeError -> Core.Term
+undefinedTypeVariableInBindingTypeError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInBindingTypeError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.undefinedTypeVariableInBindingTypeErrorLocation x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core_.name (Core__.undefinedTypeVariableInBindingTypeErrorName x))}]})
+
+undefinedTypeVariableInLambdaDomainError :: Core__.UndefinedTypeVariableInLambdaDomainError -> Core.Term
+undefinedTypeVariableInLambdaDomainError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.undefinedTypeVariableInLambdaDomainErrorLocation x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core_.name (Core__.undefinedTypeVariableInLambdaDomainErrorName x))}]})
+
+undefinedTypeVariableInTypeApplicationError :: Core__.UndefinedTypeVariableInTypeApplicationError -> Core.Term
+undefinedTypeVariableInTypeApplicationError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInTypeApplicationError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.undefinedTypeVariableInTypeApplicationErrorLocation x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core_.name (Core__.undefinedTypeVariableInTypeApplicationErrorName x))}]})
+
+unexpectedTermVariantError :: Core__.UnexpectedTermVariantError -> Core.Term
+unexpectedTermVariantError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.UnexpectedTermVariantError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "expectedVariant"),
+          Core.fieldTerm = (Variants.termVariant (Core__.unexpectedTermVariantErrorExpectedVariant x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "actualTerm"),
+          Core.fieldTerm = (Core_.term (Core__.unexpectedTermVariantErrorActualTerm x))}]})
+
+unexpectedTypeVariantError :: Core__.UnexpectedTypeVariantError -> Core.Term
+unexpectedTypeVariantError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.UnexpectedTypeVariantError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "expectedVariant"),
+          Core.fieldTerm = (Variants.typeVariant (Core__.unexpectedTypeVariantErrorExpectedVariant x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "actualType"),
+          Core.fieldTerm = (Core_.type_ (Core__.unexpectedTypeVariantErrorActualType x))}]})
+
+unknownPrimitiveNameError :: Core__.UnknownPrimitiveNameError -> Core.Term
+unknownPrimitiveNameError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.UnknownPrimitiveNameError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.unknownPrimitiveNameErrorLocation x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core_.name (Core__.unknownPrimitiveNameErrorName x))}]})
+
+unnecessaryIdentityApplicationError :: Core__.UnnecessaryIdentityApplicationError -> Core.Term
+unnecessaryIdentityApplicationError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.UnnecessaryIdentityApplicationError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.unnecessaryIdentityApplicationErrorLocation x))}]})
+
+untypedTermVariableError :: Core__.UntypedTermVariableError -> Core.Term
+untypedTermVariableError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.UntypedTermVariableError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.untypedTermVariableErrorLocation x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core_.name (Core__.untypedTermVariableErrorName x))}]})
+
+voidInNonBottomPositionError :: Core__.VoidInNonBottomPositionError -> Core.Term
+voidInNonBottomPositionError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.VoidInNonBottomPositionError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "location"),
+          Core.fieldTerm = (Accessors.accessorPath (Core__.voidInNonBottomPositionErrorLocation x))}]})

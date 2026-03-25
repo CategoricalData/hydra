@@ -32,47 +32,314 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-javaIdentifier :: String -> Syntax.Identifier
-javaIdentifier s = Syntax.Identifier (sanitizeJavaName s)
+addExpressions :: [Syntax.MultiplicativeExpression] -> Syntax.AdditiveExpression
+addExpressions exprs =
 
-javaTypeIdentifier :: String -> Syntax.TypeIdentifier
-javaTypeIdentifier s = Syntax.TypeIdentifier (Syntax.Identifier s)
+      let first = Syntax.AdditiveExpressionUnary (Lists.head exprs)
+          rest = Lists.tail exprs
+      in (Lists.foldl (\ae -> \me -> Syntax.AdditiveExpressionPlus (Syntax.AdditiveExpression_Binary {
+        Syntax.additiveExpression_BinaryLhs = ae,
+        Syntax.additiveExpression_BinaryRhs = me})) first rest)
 
-javaTypeName :: Syntax.Identifier -> Syntax.TypeName
-javaTypeName id =
-    Syntax.TypeName {
-      Syntax.typeNameIdentifier = (Syntax.TypeIdentifier id),
-      Syntax.typeNameQualifier = Nothing}
+addInScopeVar :: Core.Name -> Environment.Aliases -> Environment.Aliases
+addInScopeVar name aliases =
+    Environment.Aliases {
+      Environment.aliasesCurrentNamespace = (Environment.aliasesCurrentNamespace aliases),
+      Environment.aliasesPackages = (Environment.aliasesPackages aliases),
+      Environment.aliasesBranchVars = (Environment.aliasesBranchVars aliases),
+      Environment.aliasesRecursiveVars = (Environment.aliasesRecursiveVars aliases),
+      Environment.aliasesInScopeTypeParams = (Environment.aliasesInScopeTypeParams aliases),
+      Environment.aliasesPolymorphicLocals = (Environment.aliasesPolymorphicLocals aliases),
+      Environment.aliasesInScopeJavaVars = (Sets.insert name (Environment.aliasesInScopeJavaVars aliases)),
+      Environment.aliasesVarRenames = (Environment.aliasesVarRenames aliases),
+      Environment.aliasesLambdaVars = (Environment.aliasesLambdaVars aliases),
+      Environment.aliasesTypeVarSubst = (Environment.aliasesTypeVarSubst aliases),
+      Environment.aliasesTrustedTypeVars = (Environment.aliasesTrustedTypeVars aliases),
+      Environment.aliasesMethodCodomain = (Environment.aliasesMethodCodomain aliases),
+      Environment.aliasesThunkedVars = (Environment.aliasesThunkedVars aliases)}
 
-javaDeclName :: Core.Name -> Syntax.TypeIdentifier
-javaDeclName name = Syntax.TypeIdentifier (javaVariableName name)
+addInScopeVars :: [Core.Name] -> Environment.Aliases -> Environment.Aliases
+addInScopeVars names aliases = Lists.foldl (\a -> \n -> addInScopeVar n a) aliases names
 
-javaVariableName :: Core.Name -> Syntax.Identifier
-javaVariableName name = javaIdentifier (Names_.localNameOf name)
+addJavaTypeParameter :: Syntax.ReferenceType -> Syntax.Type -> Context.Context -> Either (Context.InContext Errors.Error) Syntax.Type
+addJavaTypeParameter rt t cx =
+    case t of
+      Syntax.TypeReference v0 -> case v0 of
+        Syntax.ReferenceTypeClassOrInterface v1 -> case v1 of
+          Syntax.ClassOrInterfaceTypeClass v2 ->
+            let anns = Syntax.classTypeAnnotations v2
+                qual = Syntax.classTypeQualifier v2
+                id = Syntax.classTypeIdentifier v2
+                args = Syntax.classTypeArguments v2
+            in (Right (Syntax.TypeReference (Syntax.ReferenceTypeClassOrInterface (Syntax.ClassOrInterfaceTypeClass (Syntax.ClassType {
+              Syntax.classTypeAnnotations = anns,
+              Syntax.classTypeQualifier = qual,
+              Syntax.classTypeIdentifier = id,
+              Syntax.classTypeArguments = (Lists.concat2 args [
+                Syntax.TypeArgumentReference rt])})))))
+          Syntax.ClassOrInterfaceTypeInterface _ -> Left (Context.InContext {
+            Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "expected a Java class type")),
+            Context.inContextContext = cx})
+        Syntax.ReferenceTypeVariable v1 -> Right (javaTypeVariableToType v1)
+        Syntax.ReferenceTypeArray _ -> Left (Context.InContext {
+          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "expected a Java class or interface type, or a variable")),
+          Context.inContextContext = cx})
+      Syntax.TypePrimitive _ -> Left (Context.InContext {
+        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "expected a reference type")),
+        Context.inContextContext = cx})
 
-javaVariableDeclaratorId :: Syntax.Identifier -> Syntax.VariableDeclaratorId
-javaVariableDeclaratorId id =
-    Syntax.VariableDeclaratorId {
-      Syntax.variableDeclaratorIdIdentifier = id,
-      Syntax.variableDeclaratorIdDims = Nothing}
+addVarRename :: Core.Name -> Core.Name -> Environment.Aliases -> Environment.Aliases
+addVarRename original renamed aliases =
+    Environment.Aliases {
+      Environment.aliasesCurrentNamespace = (Environment.aliasesCurrentNamespace aliases),
+      Environment.aliasesPackages = (Environment.aliasesPackages aliases),
+      Environment.aliasesBranchVars = (Environment.aliasesBranchVars aliases),
+      Environment.aliasesRecursiveVars = (Environment.aliasesRecursiveVars aliases),
+      Environment.aliasesInScopeTypeParams = (Environment.aliasesInScopeTypeParams aliases),
+      Environment.aliasesPolymorphicLocals = (Environment.aliasesPolymorphicLocals aliases),
+      Environment.aliasesInScopeJavaVars = (Environment.aliasesInScopeJavaVars aliases),
+      Environment.aliasesVarRenames = (Maps.insert original renamed (Environment.aliasesVarRenames aliases)),
+      Environment.aliasesLambdaVars = (Environment.aliasesLambdaVars aliases),
+      Environment.aliasesTypeVarSubst = (Environment.aliasesTypeVarSubst aliases),
+      Environment.aliasesTrustedTypeVars = (Environment.aliasesTrustedTypeVars aliases),
+      Environment.aliasesMethodCodomain = (Environment.aliasesMethodCodomain aliases),
+      Environment.aliasesThunkedVars = (Environment.aliasesThunkedVars aliases)}
 
-javaVariableDeclarator :: Syntax.Identifier -> Maybe Syntax.VariableInitializer -> Syntax.VariableDeclarator
-javaVariableDeclarator id minit =
-    Syntax.VariableDeclarator {
-      Syntax.variableDeclaratorId = (javaVariableDeclaratorId id),
-      Syntax.variableDeclaratorInitializer = minit}
+fieldExpression :: Syntax.Identifier -> Syntax.Identifier -> Syntax.ExpressionName
+fieldExpression varId fieldId =
+    Syntax.ExpressionName {
+      Syntax.expressionNameQualifier = (Just (Syntax.AmbiguousName [
+        varId])),
+      Syntax.expressionNameIdentifier = fieldId}
+
+fieldNameToJavaExpression :: Core.Name -> Syntax.Expression
+fieldNameToJavaExpression fname =
+    Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
+      Syntax.ConditionalAndExpression [
+        Syntax.InclusiveOrExpression [
+          Syntax.ExclusiveOrExpression [
+            Syntax.AndExpression [
+              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionName (javaIdentifierToJavaExpressionName (fieldNameToJavaIdentifier fname)))))))))]]]]])))
+
+fieldNameToJavaIdentifier :: Core.Name -> Syntax.Identifier
+fieldNameToJavaIdentifier fname = javaIdentifier (Core.unName fname)
+
+fieldNameToJavaVariableDeclarator :: Core.Name -> Syntax.VariableDeclarator
+fieldNameToJavaVariableDeclarator fname = javaVariableDeclarator (javaIdentifier (Core.unName fname)) Nothing
+
+fieldNameToJavaVariableDeclaratorId :: Core.Name -> Syntax.VariableDeclaratorId
+fieldNameToJavaVariableDeclaratorId fname = javaVariableDeclaratorId (javaIdentifier (Core.unName fname))
+
+finalVarDeclarationStatement :: Syntax.Identifier -> Syntax.Expression -> Syntax.BlockStatement
+finalVarDeclarationStatement id rhs =
+    Syntax.BlockStatementLocalVariableDeclaration (Syntax.LocalVariableDeclarationStatement (Syntax.LocalVariableDeclaration {
+      Syntax.localVariableDeclarationModifiers = [
+        Syntax.VariableModifierFinal],
+      Syntax.localVariableDeclarationType = Syntax.LocalVariableTypeVar,
+      Syntax.localVariableDeclarationDeclarators = [
+        javaVariableDeclarator id (Just (Syntax.VariableInitializerExpression rhs))]}))
+
+importAliasesForModule :: Module.Module -> Environment.Aliases
+importAliasesForModule mod =
+    Environment.Aliases {
+      Environment.aliasesCurrentNamespace = (Module.moduleNamespace mod),
+      Environment.aliasesPackages = Maps.empty,
+      Environment.aliasesBranchVars = Sets.empty,
+      Environment.aliasesRecursiveVars = Sets.empty,
+      Environment.aliasesInScopeTypeParams = Sets.empty,
+      Environment.aliasesPolymorphicLocals = Sets.empty,
+      Environment.aliasesInScopeJavaVars = Sets.empty,
+      Environment.aliasesVarRenames = Maps.empty,
+      Environment.aliasesLambdaVars = Sets.empty,
+      Environment.aliasesTypeVarSubst = Maps.empty,
+      Environment.aliasesTrustedTypeVars = Sets.empty,
+      Environment.aliasesMethodCodomain = Nothing,
+      Environment.aliasesThunkedVars = Sets.empty}
+
+interfaceMethodDeclaration :: [Syntax.InterfaceMethodModifier] -> [Syntax.TypeParameter] -> String -> [Syntax.FormalParameter] -> Syntax.Result -> Maybe [Syntax.BlockStatement] -> Syntax.InterfaceMemberDeclaration
+interfaceMethodDeclaration mods tparams methodName params result stmts =
+    Syntax.InterfaceMemberDeclarationInterfaceMethod (Syntax.InterfaceMethodDeclaration {
+      Syntax.interfaceMethodDeclarationModifiers = mods,
+      Syntax.interfaceMethodDeclarationHeader = (javaMethodHeader tparams methodName params result),
+      Syntax.interfaceMethodDeclarationBody = (javaMethodBody stmts)})
+
+isEscaped :: String -> Bool
+isEscaped s = Equality.equal (Strings.charAt 0 s) 36
+
+javaAdditiveExpressionToJavaExpression :: Syntax.AdditiveExpression -> Syntax.Expression
+javaAdditiveExpressionToJavaExpression ae =
+    Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
+      Syntax.ConditionalAndExpression [
+        Syntax.InclusiveOrExpression [
+          Syntax.ExclusiveOrExpression [
+            Syntax.AndExpression [
+              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary ae))]]]]])))
+
+javaArrayCreation :: Syntax.PrimitiveTypeWithAnnotations -> Maybe Syntax.ArrayInitializer -> Syntax.Expression
+javaArrayCreation primType minit =
+
+      let init_ = Maybes.cases minit (Syntax.ArrayInitializer []) (\i -> i)
+      in (javaPrimaryToJavaExpression (Syntax.PrimaryArrayCreation (Syntax.ArrayCreationExpressionPrimitiveArray (Syntax.ArrayCreationExpression_PrimitiveArray {
+        Syntax.arrayCreationExpression_PrimitiveArrayType = primType,
+        Syntax.arrayCreationExpression_PrimitiveArrayDims = [],
+        Syntax.arrayCreationExpression_PrimitiveArrayArray = init_}))))
+
+javaArrayInitializer :: [Syntax.Expression] -> Syntax.ArrayInitializer
+javaArrayInitializer exprs = Syntax.ArrayInitializer [
+  Lists.map (\e -> Syntax.VariableInitializerExpression e) exprs]
+
+javaAssignmentStatement :: Syntax.LeftHandSide -> Syntax.Expression -> Syntax.Statement
+javaAssignmentStatement lhs rhs =
+    Syntax.StatementWithoutTrailing (Syntax.StatementWithoutTrailingSubstatementExpression (Syntax.ExpressionStatement (Syntax.StatementExpressionAssignment (Syntax.Assignment {
+      Syntax.assignmentLhs = lhs,
+      Syntax.assignmentOp = Syntax.AssignmentOperatorSimple,
+      Syntax.assignmentExpression = rhs}))))
 
 javaBoolean :: Bool -> Syntax.Literal
 javaBoolean b = Syntax.LiteralBoolean b
 
-javaInt :: Integer -> Syntax.Literal
-javaInt i = Syntax.LiteralInteger (Syntax.IntegerLiteral i)
+javaBooleanExpression :: Bool -> Syntax.Expression
+javaBooleanExpression b = javaPrimaryToJavaExpression (javaLiteralToJavaPrimary (javaBoolean b))
 
-javaString :: String -> Syntax.Literal
-javaString s = Syntax.LiteralString (Syntax.StringLiteral s)
+javaBooleanType :: Syntax.Type
+javaBooleanType = javaPrimitiveTypeToJavaType Syntax.PrimitiveTypeBoolean
 
-javaLiteralToJavaPrimary :: Syntax.Literal -> Syntax.Primary
-javaLiteralToJavaPrimary lit = Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayLiteral lit)
+javaBytePrimitiveType :: Syntax.PrimitiveTypeWithAnnotations
+javaBytePrimitiveType =
+    Syntax.PrimitiveTypeWithAnnotations {
+      Syntax.primitiveTypeWithAnnotationsType = (Syntax.PrimitiveTypeNumeric (Syntax.NumericTypeIntegral Syntax.IntegralTypeByte)),
+      Syntax.primitiveTypeWithAnnotationsAnnotations = []}
+
+javaCastExpression :: Syntax.ReferenceType -> Syntax.UnaryExpression -> Syntax.CastExpression
+javaCastExpression rt expr =
+    Syntax.CastExpressionNotPlusMinus (Syntax.CastExpression_NotPlusMinus {
+      Syntax.castExpression_NotPlusMinusRefAndBounds = Syntax.CastExpression_RefAndBounds {
+        Syntax.castExpression_RefAndBoundsType = rt,
+        Syntax.castExpression_RefAndBoundsBounds = []},
+      Syntax.castExpression_NotPlusMinusExpression = expr})
+
+javaCastExpressionToJavaExpression :: Syntax.CastExpression -> Syntax.Expression
+javaCastExpressionToJavaExpression ce =
+    Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
+      Syntax.ConditionalAndExpression [
+        Syntax.InclusiveOrExpression [
+          Syntax.ExclusiveOrExpression [
+            Syntax.AndExpression [
+              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusCast ce))))))]]]]])))
+
+javaCastPrimitive :: Syntax.PrimitiveType -> Syntax.UnaryExpression -> Syntax.CastExpression
+javaCastPrimitive pt expr =
+    Syntax.CastExpressionPrimitive (Syntax.CastExpression_Primitive {
+      Syntax.castExpression_PrimitiveType = Syntax.PrimitiveTypeWithAnnotations {
+        Syntax.primitiveTypeWithAnnotationsType = pt,
+        Syntax.primitiveTypeWithAnnotationsAnnotations = []},
+      Syntax.castExpression_PrimitiveExpression = expr})
+
+javaClassDeclaration :: Environment.Aliases -> [Syntax.TypeParameter] -> Core.Name -> [Syntax.ClassModifier] -> Maybe Core.Name -> [Syntax.InterfaceType] -> [Syntax.ClassBodyDeclarationWithComments] -> Syntax.ClassDeclaration
+javaClassDeclaration aliases tparams elName mods supname impls bodyDecls =
+
+      let extends_ = Maybes.map (\n -> nameToJavaClassType aliases True [] n Nothing) supname
+      in (Syntax.ClassDeclarationNormal (Syntax.NormalClassDeclaration {
+        Syntax.normalClassDeclarationModifiers = mods,
+        Syntax.normalClassDeclarationIdentifier = (javaDeclName elName),
+        Syntax.normalClassDeclarationParameters = tparams,
+        Syntax.normalClassDeclarationExtends = extends_,
+        Syntax.normalClassDeclarationImplements = impls,
+        Syntax.normalClassDeclarationBody = (Syntax.ClassBody bodyDecls)}))
+
+javaClassType :: [Syntax.ReferenceType] -> Maybe Syntax.PackageName -> String -> Syntax.ClassType
+javaClassType args pkg id =
+
+      let qual = Maybes.cases pkg Syntax.ClassTypeQualifierNone (\p -> Syntax.ClassTypeQualifierPackage p)
+          targs = Lists.map (\rt -> Syntax.TypeArgumentReference rt) args
+      in Syntax.ClassType {
+        Syntax.classTypeAnnotations = [],
+        Syntax.classTypeQualifier = qual,
+        Syntax.classTypeIdentifier = (javaTypeIdentifier id),
+        Syntax.classTypeArguments = targs}
+
+javaClassTypeToJavaType :: Syntax.ClassType -> Syntax.Type
+javaClassTypeToJavaType ct =
+    Syntax.TypeReference (Syntax.ReferenceTypeClassOrInterface (Syntax.ClassOrInterfaceTypeClass ct))
+
+javaConditionalAndExpressionToJavaExpression :: Syntax.ConditionalAndExpression -> Syntax.Expression
+javaConditionalAndExpressionToJavaExpression cae =
+    Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
+      cae])))
+
+javaConstructorCall :: Syntax.ClassOrInterfaceTypeToInstantiate -> [Syntax.Expression] -> Maybe Syntax.ClassBody -> Syntax.Expression
+javaConstructorCall ci args mbody =
+    Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
+      Syntax.ConditionalAndExpression [
+        Syntax.InclusiveOrExpression [
+          Syntax.ExclusiveOrExpression [
+            Syntax.AndExpression [
+              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayClassInstance (Syntax.ClassInstanceCreationExpression {
+                Syntax.classInstanceCreationExpressionQualifier = Nothing,
+                Syntax.classInstanceCreationExpressionExpression = Syntax.UnqualifiedClassInstanceCreationExpression {
+                  Syntax.unqualifiedClassInstanceCreationExpressionTypeArguments = [],
+                  Syntax.unqualifiedClassInstanceCreationExpressionClassOrInterface = ci,
+                  Syntax.unqualifiedClassInstanceCreationExpressionArguments = args,
+                  Syntax.unqualifiedClassInstanceCreationExpressionBody = mbody}}))))))))))]]]]])))
+
+javaConstructorName :: Syntax.Identifier -> Maybe Syntax.TypeArgumentsOrDiamond -> Syntax.ClassOrInterfaceTypeToInstantiate
+javaConstructorName id targs =
+    Syntax.ClassOrInterfaceTypeToInstantiate {
+      Syntax.classOrInterfaceTypeToInstantiateIdentifiers = [
+        Syntax.AnnotatedIdentifier {
+          Syntax.annotatedIdentifierAnnotations = [],
+          Syntax.annotatedIdentifierIdentifier = id}],
+      Syntax.classOrInterfaceTypeToInstantiateTypeArguments = targs}
+
+javaDeclName :: Core.Name -> Syntax.TypeIdentifier
+javaDeclName name = Syntax.TypeIdentifier (javaVariableName name)
+
+javaDoubleCastExpression :: Syntax.ReferenceType -> Syntax.ReferenceType -> Syntax.UnaryExpression -> Syntax.CastExpression
+javaDoubleCastExpression rawRt targetRt expr =
+
+      let firstCast = javaCastExpressionToJavaExpression (javaCastExpression rawRt expr)
+      in (javaCastExpression targetRt (javaExpressionToJavaUnaryExpression firstCast))
+
+javaDoubleCastExpressionToJavaExpression :: Syntax.ReferenceType -> Syntax.ReferenceType -> Syntax.UnaryExpression -> Syntax.Expression
+javaDoubleCastExpressionToJavaExpression rawRt targetRt expr =
+    javaCastExpressionToJavaExpression (javaDoubleCastExpression rawRt targetRt expr)
+
+javaEmptyStatement :: Syntax.Statement
+javaEmptyStatement = Syntax.StatementWithoutTrailing Syntax.StatementWithoutTrailingSubstatementEmpty
+
+javaEqualityExpressionToJavaExpression :: Syntax.EqualityExpression -> Syntax.Expression
+javaEqualityExpressionToJavaExpression ee =
+    Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
+      Syntax.ConditionalAndExpression [
+        Syntax.InclusiveOrExpression [
+          Syntax.ExclusiveOrExpression [
+            Syntax.AndExpression [
+              ee]]]]])))
+
+javaEqualityExpressionToJavaInclusiveOrExpression :: Syntax.EqualityExpression -> Syntax.InclusiveOrExpression
+javaEqualityExpressionToJavaInclusiveOrExpression ee =
+    Syntax.InclusiveOrExpression [
+      Syntax.ExclusiveOrExpression [
+        Syntax.AndExpression [
+          ee]]]
+
+javaEquals :: Syntax.EqualityExpression -> Syntax.RelationalExpression -> Syntax.EqualityExpression
+javaEquals lhs rhs =
+    Syntax.EqualityExpressionEqual (Syntax.EqualityExpression_Binary {
+      Syntax.equalityExpression_BinaryLhs = lhs,
+      Syntax.equalityExpression_BinaryRhs = rhs})
+
+javaEqualsNull :: Syntax.EqualityExpression -> Syntax.EqualityExpression
+javaEqualsNull lhs = javaEquals lhs (javaLiteralToJavaRelationalExpression Syntax.LiteralNull)
+
+javaExpressionNameToJavaExpression :: Syntax.ExpressionName -> Syntax.Expression
+javaExpressionNameToJavaExpression en =
+    Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
+      Syntax.ConditionalAndExpression [
+        Syntax.InclusiveOrExpression [
+          Syntax.ExclusiveOrExpression [
+            Syntax.AndExpression [
+              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionName en)))))))]]]]])))
 
 -- | Convert an Expression to a Primary, avoiding unnecessary parentheses when the expression is already a simple primary chain
 javaExpressionToJavaPrimary :: Syntax.Expression -> Syntax.Primary
@@ -113,86 +380,21 @@ javaExpressionToJavaPrimary e =
           _ -> fallback
         _ -> fallback
 
-javaPrimaryToJavaUnaryExpression :: Syntax.Primary -> Syntax.UnaryExpression
-javaPrimaryToJavaUnaryExpression p =
-    Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary p))
+javaExpressionToJavaUnaryExpression :: Syntax.Expression -> Syntax.UnaryExpression
+javaExpressionToJavaUnaryExpression e =
+    Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayParens e))))
 
-javaPrimaryToJavaExpression :: Syntax.Primary -> Syntax.Expression
-javaPrimaryToJavaExpression p =
+javaFieldAccessToJavaExpression :: Syntax.FieldAccess -> Syntax.Expression
+javaFieldAccessToJavaExpression fa =
     Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
       Syntax.ConditionalAndExpression [
         Syntax.InclusiveOrExpression [
           Syntax.ExclusiveOrExpression [
             Syntax.AndExpression [
-              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary p)))))))]]]]])))
+              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayFieldAccess fa)))))))))]]]]])))
 
-javaPostfixExpressionToJavaUnaryExpression :: Syntax.PostfixExpression -> Syntax.UnaryExpression
-javaPostfixExpressionToJavaUnaryExpression pe = Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix pe)
-
-javaPostfixExpressionToJavaExpression :: Syntax.PostfixExpression -> Syntax.Expression
-javaPostfixExpressionToJavaExpression pe =
-    Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
-      Syntax.ConditionalAndExpression [
-        Syntax.InclusiveOrExpression [
-          Syntax.ExclusiveOrExpression [
-            Syntax.AndExpression [
-              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix pe))))))]]]]])))
-
-javaPostfixExpressionToJavaRelationalExpression :: Syntax.PostfixExpression -> Syntax.RelationalExpression
-javaPostfixExpressionToJavaRelationalExpression pe =
-    Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix pe)))))
-
-javaUnaryExpressionToJavaRelationalExpression :: Syntax.UnaryExpression -> Syntax.RelationalExpression
-javaUnaryExpressionToJavaRelationalExpression ue =
-    Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary ue)))
-
-javaUnaryExpressionToJavaExpression :: Syntax.UnaryExpression -> Syntax.Expression
-javaUnaryExpressionToJavaExpression ue =
-    Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
-      Syntax.ConditionalAndExpression [
-        Syntax.InclusiveOrExpression [
-          Syntax.ExclusiveOrExpression [
-            Syntax.AndExpression [
-              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary ue))))]]]]])))
-
-javaRelationalExpressionToJavaExpression :: Syntax.RelationalExpression -> Syntax.Expression
-javaRelationalExpressionToJavaExpression re = javaEqualityExpressionToJavaExpression (Syntax.EqualityExpressionUnary re)
-
-javaRelationalExpressionToJavaUnaryExpression :: Syntax.RelationalExpression -> Syntax.UnaryExpression
-javaRelationalExpressionToJavaUnaryExpression re =
-    Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayParens (Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
-      Syntax.ConditionalAndExpression [
-        Syntax.InclusiveOrExpression [
-          Syntax.ExclusiveOrExpression [
-            Syntax.AndExpression [
-              Syntax.EqualityExpressionUnary re]]]]]))))))))
-
-javaMultiplicativeExpressionToJavaRelationalExpression :: Syntax.MultiplicativeExpression -> Syntax.RelationalExpression
-javaMultiplicativeExpressionToJavaRelationalExpression me =
-    Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary me))
-
-javaLiteralToJavaMultiplicativeExpression :: Syntax.Literal -> Syntax.MultiplicativeExpression
-javaLiteralToJavaMultiplicativeExpression lit =
-    Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayLiteral lit)))))
-
-javaLiteralToJavaRelationalExpression :: Syntax.Literal -> Syntax.RelationalExpression
-javaLiteralToJavaRelationalExpression lit =
-    Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayLiteral lit))))))))
-
-javaLiteralToJavaExpression :: Syntax.Literal -> Syntax.Expression
-javaLiteralToJavaExpression lit =
-    Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
-      Syntax.ConditionalAndExpression [
-        Syntax.InclusiveOrExpression [
-          Syntax.ExclusiveOrExpression [
-            Syntax.AndExpression [
-              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayLiteral lit)))))))))]]]]])))
-
-javaIdentifierToJavaExpressionName :: Syntax.Identifier -> Syntax.ExpressionName
-javaIdentifierToJavaExpressionName id =
-    Syntax.ExpressionName {
-      Syntax.expressionNameQualifier = Nothing,
-      Syntax.expressionNameIdentifier = id}
+javaIdentifier :: String -> Syntax.Identifier
+javaIdentifier s = Syntax.Identifier (sanitizeJavaName s)
 
 javaIdentifierToJavaExpression :: Syntax.Identifier -> Syntax.Expression
 javaIdentifierToJavaExpression id =
@@ -204,6 +406,12 @@ javaIdentifierToJavaExpression id =
               Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionName (Syntax.ExpressionName {
                 Syntax.expressionNameQualifier = Nothing,
                 Syntax.expressionNameIdentifier = id}))))))))]]]]])))
+
+javaIdentifierToJavaExpressionName :: Syntax.Identifier -> Syntax.ExpressionName
+javaIdentifierToJavaExpressionName id =
+    Syntax.ExpressionName {
+      Syntax.expressionNameQualifier = Nothing,
+      Syntax.expressionNameIdentifier = id}
 
 javaIdentifierToJavaRelationalExpression :: Syntax.Identifier -> Syntax.RelationalExpression
 javaIdentifierToJavaRelationalExpression id =
@@ -217,35 +425,82 @@ javaIdentifierToJavaUnaryExpression id =
       Syntax.expressionNameQualifier = Nothing,
       Syntax.expressionNameIdentifier = id})))
 
-javaExpressionNameToJavaExpression :: Syntax.ExpressionName -> Syntax.Expression
-javaExpressionNameToJavaExpression en =
+javaInstanceOf :: Syntax.RelationalExpression -> Syntax.ReferenceType -> Syntax.RelationalExpression
+javaInstanceOf lhs rhs =
+    Syntax.RelationalExpressionInstanceof (Syntax.RelationalExpression_InstanceOf {
+      Syntax.relationalExpression_InstanceOfLhs = lhs,
+      Syntax.relationalExpression_InstanceOfRhs = rhs})
+
+javaInt :: Integer -> Syntax.Literal
+javaInt i = Syntax.LiteralInteger (Syntax.IntegerLiteral i)
+
+javaIntExpression :: Integer -> Syntax.Expression
+javaIntExpression i = javaPrimaryToJavaExpression (javaLiteralToJavaPrimary (javaInt i))
+
+javaIntType :: Syntax.Type
+javaIntType = javaPrimitiveTypeToJavaType (Syntax.PrimitiveTypeNumeric (Syntax.NumericTypeIntegral Syntax.IntegralTypeInt))
+
+javaInterfaceDeclarationToJavaClassBodyDeclaration :: Syntax.NormalInterfaceDeclaration -> Syntax.ClassBodyDeclaration
+javaInterfaceDeclarationToJavaClassBodyDeclaration nid =
+    Syntax.ClassBodyDeclarationClassMember (Syntax.ClassMemberDeclarationInterface (Syntax.InterfaceDeclarationNormalInterface nid))
+
+javaLambda :: Core.Name -> Syntax.Expression -> Syntax.Expression
+javaLambda v body =
+    Syntax.ExpressionLambda (Syntax.LambdaExpression {
+      Syntax.lambdaExpressionParameters = (Syntax.LambdaParametersSingle (variableToJavaIdentifier v)),
+      Syntax.lambdaExpressionBody = (Syntax.LambdaBodyExpression body)})
+
+javaLambdaFromBlock :: Core.Name -> Syntax.Block -> Syntax.Expression
+javaLambdaFromBlock v block =
+    Syntax.ExpressionLambda (Syntax.LambdaExpression {
+      Syntax.lambdaExpressionParameters = (Syntax.LambdaParametersSingle (variableToJavaIdentifier v)),
+      Syntax.lambdaExpressionBody = (Syntax.LambdaBodyBlock block)})
+
+javaLiteralToJavaExpression :: Syntax.Literal -> Syntax.Expression
+javaLiteralToJavaExpression lit =
     Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
       Syntax.ConditionalAndExpression [
         Syntax.InclusiveOrExpression [
           Syntax.ExclusiveOrExpression [
             Syntax.AndExpression [
-              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionName en)))))))]]]]])))
+              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayLiteral lit)))))))))]]]]])))
 
-javaFieldAccessToJavaExpression :: Syntax.FieldAccess -> Syntax.Expression
-javaFieldAccessToJavaExpression fa =
-    Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
-      Syntax.ConditionalAndExpression [
-        Syntax.InclusiveOrExpression [
-          Syntax.ExclusiveOrExpression [
-            Syntax.AndExpression [
-              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayFieldAccess fa)))))))))]]]]])))
+javaLiteralToJavaMultiplicativeExpression :: Syntax.Literal -> Syntax.MultiplicativeExpression
+javaLiteralToJavaMultiplicativeExpression lit =
+    Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayLiteral lit)))))
 
-javaCastExpressionToJavaExpression :: Syntax.CastExpression -> Syntax.Expression
-javaCastExpressionToJavaExpression ce =
-    Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
-      Syntax.ConditionalAndExpression [
-        Syntax.InclusiveOrExpression [
-          Syntax.ExclusiveOrExpression [
-            Syntax.AndExpression [
-              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusCast ce))))))]]]]])))
+javaLiteralToJavaPrimary :: Syntax.Literal -> Syntax.Primary
+javaLiteralToJavaPrimary lit = Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayLiteral lit)
 
-javaMethodInvocationToJavaPrimary :: Syntax.MethodInvocation -> Syntax.Primary
-javaMethodInvocationToJavaPrimary mi = Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayMethodInvocation mi)
+javaLiteralToJavaRelationalExpression :: Syntax.Literal -> Syntax.RelationalExpression
+javaLiteralToJavaRelationalExpression lit =
+    Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayLiteral lit))))))))
+
+javaMemberField :: [Syntax.FieldModifier] -> Syntax.Type -> Syntax.VariableDeclarator -> Syntax.ClassBodyDeclaration
+javaMemberField mods jt v =
+    Syntax.ClassBodyDeclarationClassMember (Syntax.ClassMemberDeclarationField (Syntax.FieldDeclaration {
+      Syntax.fieldDeclarationModifiers = mods,
+      Syntax.fieldDeclarationUnannType = (Syntax.UnannType jt),
+      Syntax.fieldDeclarationVariableDeclarators = [
+        v]}))
+
+javaMethodBody :: Maybe [Syntax.BlockStatement] -> Syntax.MethodBody
+javaMethodBody mstmts = Maybes.cases mstmts Syntax.MethodBodyNone (\stmts -> Syntax.MethodBodyBlock (Syntax.Block stmts))
+
+javaMethodDeclarationToJavaClassBodyDeclaration :: Syntax.MethodDeclaration -> Syntax.ClassBodyDeclaration
+javaMethodDeclarationToJavaClassBodyDeclaration md =
+    Syntax.ClassBodyDeclarationClassMember (Syntax.ClassMemberDeclarationMethod md)
+
+javaMethodHeader :: [Syntax.TypeParameter] -> String -> [Syntax.FormalParameter] -> Syntax.Result -> Syntax.MethodHeader
+javaMethodHeader tparams methodName params result =
+    Syntax.MethodHeader {
+      Syntax.methodHeaderParameters = tparams,
+      Syntax.methodHeaderResult = result,
+      Syntax.methodHeaderDeclarator = Syntax.MethodDeclarator {
+        Syntax.methodDeclaratorIdentifier = (Syntax.Identifier methodName),
+        Syntax.methodDeclaratorReceiverParameter = Nothing,
+        Syntax.methodDeclaratorFormalParameters = params},
+      Syntax.methodHeaderThrows = Nothing}
 
 javaMethodInvocationToJavaExpression :: Syntax.MethodInvocation -> Syntax.Expression
 javaMethodInvocationToJavaExpression mi =
@@ -260,34 +515,35 @@ javaMethodInvocationToJavaPostfixExpression :: Syntax.MethodInvocation -> Syntax
 javaMethodInvocationToJavaPostfixExpression mi =
     Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayMethodInvocation mi))
 
+javaMethodInvocationToJavaPrimary :: Syntax.MethodInvocation -> Syntax.Primary
+javaMethodInvocationToJavaPrimary mi = Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayMethodInvocation mi)
+
 javaMethodInvocationToJavaStatement :: Syntax.MethodInvocation -> Syntax.Statement
 javaMethodInvocationToJavaStatement mi =
     Syntax.StatementWithoutTrailing (Syntax.StatementWithoutTrailingSubstatementExpression (Syntax.ExpressionStatement (Syntax.StatementExpressionMethodInvocation mi)))
 
-javaConditionalAndExpressionToJavaExpression :: Syntax.ConditionalAndExpression -> Syntax.Expression
-javaConditionalAndExpressionToJavaExpression cae =
-    Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
-      cae])))
+javaMultiplicativeExpressionToJavaRelationalExpression :: Syntax.MultiplicativeExpression -> Syntax.RelationalExpression
+javaMultiplicativeExpressionToJavaRelationalExpression me =
+    Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary me))
 
-javaEqualityExpressionToJavaInclusiveOrExpression :: Syntax.EqualityExpression -> Syntax.InclusiveOrExpression
-javaEqualityExpressionToJavaInclusiveOrExpression ee =
-    Syntax.InclusiveOrExpression [
-      Syntax.ExclusiveOrExpression [
-        Syntax.AndExpression [
-          ee]]]
+javaPackageDeclaration :: Module.Namespace -> Syntax.PackageDeclaration
+javaPackageDeclaration ns =
+    Syntax.PackageDeclaration {
+      Syntax.packageDeclarationModifiers = [],
+      Syntax.packageDeclarationIdentifiers = (Lists.map (\s -> Syntax.Identifier s) (Strings.splitOn "." (Module.unNamespace ns)))}
 
-javaEqualityExpressionToJavaExpression :: Syntax.EqualityExpression -> Syntax.Expression
-javaEqualityExpressionToJavaExpression ee =
+javaPostfixExpressionToJavaEqualityExpression :: Syntax.PostfixExpression -> Syntax.EqualityExpression
+javaPostfixExpressionToJavaEqualityExpression pe =
+    Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix pe))))))
+
+javaPostfixExpressionToJavaExpression :: Syntax.PostfixExpression -> Syntax.Expression
+javaPostfixExpressionToJavaExpression pe =
     Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
       Syntax.ConditionalAndExpression [
         Syntax.InclusiveOrExpression [
           Syntax.ExclusiveOrExpression [
             Syntax.AndExpression [
-              ee]]]]])))
-
-javaPostfixExpressionToJavaEqualityExpression :: Syntax.PostfixExpression -> Syntax.EqualityExpression
-javaPostfixExpressionToJavaEqualityExpression pe =
-    Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix pe))))))
+              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix pe))))))]]]]])))
 
 javaPostfixExpressionToJavaInclusiveOrExpression :: Syntax.PostfixExpression -> Syntax.InclusiveOrExpression
 javaPostfixExpressionToJavaInclusiveOrExpression pe =
@@ -296,18 +552,25 @@ javaPostfixExpressionToJavaInclusiveOrExpression pe =
         Syntax.AndExpression [
           Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix pe))))))]]]
 
-javaAdditiveExpressionToJavaExpression :: Syntax.AdditiveExpression -> Syntax.Expression
-javaAdditiveExpressionToJavaExpression ae =
+javaPostfixExpressionToJavaRelationalExpression :: Syntax.PostfixExpression -> Syntax.RelationalExpression
+javaPostfixExpressionToJavaRelationalExpression pe =
+    Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix pe)))))
+
+javaPostfixExpressionToJavaUnaryExpression :: Syntax.PostfixExpression -> Syntax.UnaryExpression
+javaPostfixExpressionToJavaUnaryExpression pe = Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix pe)
+
+javaPrimaryToJavaExpression :: Syntax.Primary -> Syntax.Expression
+javaPrimaryToJavaExpression p =
     Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
       Syntax.ConditionalAndExpression [
         Syntax.InclusiveOrExpression [
           Syntax.ExclusiveOrExpression [
             Syntax.AndExpression [
-              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary ae))]]]]])))
+              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary p)))))))]]]]])))
 
-javaExpressionToJavaUnaryExpression :: Syntax.Expression -> Syntax.UnaryExpression
-javaExpressionToJavaUnaryExpression e =
-    Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayParens e))))
+javaPrimaryToJavaUnaryExpression :: Syntax.Primary -> Syntax.UnaryExpression
+javaPrimaryToJavaUnaryExpression p =
+    Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary p))
 
 javaPrimitiveTypeToJavaType :: Syntax.PrimitiveType -> Syntax.Type
 javaPrimitiveTypeToJavaType pt =
@@ -315,124 +578,111 @@ javaPrimitiveTypeToJavaType pt =
       Syntax.primitiveTypeWithAnnotationsType = pt,
       Syntax.primitiveTypeWithAnnotationsAnnotations = []})
 
-javaClassTypeToJavaType :: Syntax.ClassType -> Syntax.Type
-javaClassTypeToJavaType ct =
-    Syntax.TypeReference (Syntax.ReferenceTypeClassOrInterface (Syntax.ClassOrInterfaceTypeClass ct))
-
-javaTypeVariableToType :: Syntax.TypeVariable -> Syntax.Type
-javaTypeVariableToType tv = Syntax.TypeReference (Syntax.ReferenceTypeVariable tv)
-
 javaRefType :: [Syntax.ReferenceType] -> Maybe Syntax.PackageName -> String -> Syntax.Type
 javaRefType args pkg id =
     Syntax.TypeReference (Syntax.ReferenceTypeClassOrInterface (Syntax.ClassOrInterfaceTypeClass (javaClassType args pkg id)))
 
-javaClassType :: [Syntax.ReferenceType] -> Maybe Syntax.PackageName -> String -> Syntax.ClassType
-javaClassType args pkg id =
+javaReferenceTypeToRawType :: Syntax.ReferenceType -> Syntax.ReferenceType
+javaReferenceTypeToRawType rt =
+    case rt of
+      Syntax.ReferenceTypeClassOrInterface v0 -> case v0 of
+        Syntax.ClassOrInterfaceTypeClass v1 ->
+          let anns = Syntax.classTypeAnnotations v1
+              qual = Syntax.classTypeQualifier v1
+              id = Syntax.classTypeIdentifier v1
+          in (Syntax.ReferenceTypeClassOrInterface (Syntax.ClassOrInterfaceTypeClass (Syntax.ClassType {
+            Syntax.classTypeAnnotations = anns,
+            Syntax.classTypeQualifier = qual,
+            Syntax.classTypeIdentifier = id,
+            Syntax.classTypeArguments = []})))
+        Syntax.ClassOrInterfaceTypeInterface v1 ->
+          let ct = Syntax.unInterfaceType v1
+              anns = Syntax.classTypeAnnotations ct
+              qual = Syntax.classTypeQualifier ct
+              id = Syntax.classTypeIdentifier ct
+          in (Syntax.ReferenceTypeClassOrInterface (Syntax.ClassOrInterfaceTypeInterface (Syntax.InterfaceType (Syntax.ClassType {
+            Syntax.classTypeAnnotations = anns,
+            Syntax.classTypeQualifier = qual,
+            Syntax.classTypeIdentifier = id,
+            Syntax.classTypeArguments = []}))))
+      _ -> rt
 
-      let qual = Maybes.cases pkg Syntax.ClassTypeQualifierNone (\p -> Syntax.ClassTypeQualifierPackage p)
-          targs = Lists.map (\rt -> Syntax.TypeArgumentReference rt) args
-      in Syntax.ClassType {
-        Syntax.classTypeAnnotations = [],
-        Syntax.classTypeQualifier = qual,
-        Syntax.classTypeIdentifier = (javaTypeIdentifier id),
-        Syntax.classTypeArguments = targs}
+javaRelationalExpressionToJavaEqualityExpression :: Syntax.RelationalExpression -> Syntax.EqualityExpression
+javaRelationalExpressionToJavaEqualityExpression re = Syntax.EqualityExpressionUnary re
 
-javaTypeVariable :: String -> Syntax.ReferenceType
-javaTypeVariable v =
-    Syntax.ReferenceTypeVariable (Syntax.TypeVariable {
-      Syntax.typeVariableAnnotations = [],
-      Syntax.typeVariableIdentifier = (javaTypeIdentifier (Formatting.capitalize v))})
+javaRelationalExpressionToJavaExpression :: Syntax.RelationalExpression -> Syntax.Expression
+javaRelationalExpressionToJavaExpression re = javaEqualityExpressionToJavaExpression (Syntax.EqualityExpressionUnary re)
 
-javaBooleanType :: Syntax.Type
-javaBooleanType = javaPrimitiveTypeToJavaType Syntax.PrimitiveTypeBoolean
-
-javaIntType :: Syntax.Type
-javaIntType = javaPrimitiveTypeToJavaType (Syntax.PrimitiveTypeNumeric (Syntax.NumericTypeIntegral Syntax.IntegralTypeInt))
-
-javaBooleanExpression :: Bool -> Syntax.Expression
-javaBooleanExpression b = javaPrimaryToJavaExpression (javaLiteralToJavaPrimary (javaBoolean b))
-
-javaIntExpression :: Integer -> Syntax.Expression
-javaIntExpression i = javaPrimaryToJavaExpression (javaLiteralToJavaPrimary (javaInt i))
-
-javaCastExpression :: Syntax.ReferenceType -> Syntax.UnaryExpression -> Syntax.CastExpression
-javaCastExpression rt expr =
-    Syntax.CastExpressionNotPlusMinus (Syntax.CastExpression_NotPlusMinus {
-      Syntax.castExpression_NotPlusMinusRefAndBounds = Syntax.CastExpression_RefAndBounds {
-        Syntax.castExpression_RefAndBoundsType = rt,
-        Syntax.castExpression_RefAndBoundsBounds = []},
-      Syntax.castExpression_NotPlusMinusExpression = expr})
-
-javaCastPrimitive :: Syntax.PrimitiveType -> Syntax.UnaryExpression -> Syntax.CastExpression
-javaCastPrimitive pt expr =
-    Syntax.CastExpressionPrimitive (Syntax.CastExpression_Primitive {
-      Syntax.castExpression_PrimitiveType = Syntax.PrimitiveTypeWithAnnotations {
-        Syntax.primitiveTypeWithAnnotationsType = pt,
-        Syntax.primitiveTypeWithAnnotationsAnnotations = []},
-      Syntax.castExpression_PrimitiveExpression = expr})
+javaRelationalExpressionToJavaUnaryExpression :: Syntax.RelationalExpression -> Syntax.UnaryExpression
+javaRelationalExpressionToJavaUnaryExpression re =
+    Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayParens (Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
+      Syntax.ConditionalAndExpression [
+        Syntax.InclusiveOrExpression [
+          Syntax.ExclusiveOrExpression [
+            Syntax.AndExpression [
+              Syntax.EqualityExpressionUnary re]]]]]))))))))
 
 javaReturnStatement :: Maybe Syntax.Expression -> Syntax.Statement
 javaReturnStatement mex =
     Syntax.StatementWithoutTrailing (Syntax.StatementWithoutTrailingSubstatementReturn (Syntax.ReturnStatement mex))
 
+javaStatementsToBlock :: [Syntax.Statement] -> Syntax.Block
+javaStatementsToBlock stmts = Syntax.Block (Lists.map (\s -> Syntax.BlockStatementStatement s) stmts)
+
+javaString :: String -> Syntax.Literal
+javaString s = Syntax.LiteralString (Syntax.StringLiteral s)
+
+javaStringMultiplicativeExpression :: String -> Syntax.MultiplicativeExpression
+javaStringMultiplicativeExpression s = javaLiteralToJavaMultiplicativeExpression (javaString s)
+
+javaThis :: Syntax.Expression
+javaThis =
+    Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
+      Syntax.ConditionalAndExpression [
+        Syntax.InclusiveOrExpression [
+          Syntax.ExclusiveOrExpression [
+            Syntax.AndExpression [
+              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ Syntax.PrimaryNoNewArrayThis))))))))]]]]])))
+
+javaThrowIllegalArgumentException :: [Syntax.Expression] -> Syntax.Statement
+javaThrowIllegalArgumentException args =
+    javaThrowStatement (javaConstructorCall (javaConstructorName (Syntax.Identifier "IllegalArgumentException") Nothing) args Nothing)
+
+javaThrowIllegalStateException :: [Syntax.Expression] -> Syntax.Statement
+javaThrowIllegalStateException args =
+    javaThrowStatement (javaConstructorCall (javaConstructorName (Syntax.Identifier "IllegalStateException") Nothing) args Nothing)
+
 javaThrowStatement :: Syntax.Expression -> Syntax.Statement
 javaThrowStatement e =
     Syntax.StatementWithoutTrailing (Syntax.StatementWithoutTrailingSubstatementThrow (Syntax.ThrowStatement e))
 
-javaEmptyStatement :: Syntax.Statement
-javaEmptyStatement = Syntax.StatementWithoutTrailing Syntax.StatementWithoutTrailingSubstatementEmpty
+javaTypeFromTypeName :: Environment.Aliases -> Core.Name -> Syntax.Type
+javaTypeFromTypeName aliases elName =
+    javaTypeVariableToType (Syntax.TypeVariable {
+      Syntax.typeVariableAnnotations = [],
+      Syntax.typeVariableIdentifier = (nameToJavaTypeIdentifier aliases False elName)})
 
-javaAssignmentStatement :: Syntax.LeftHandSide -> Syntax.Expression -> Syntax.Statement
-javaAssignmentStatement lhs rhs =
-    Syntax.StatementWithoutTrailing (Syntax.StatementWithoutTrailingSubstatementExpression (Syntax.ExpressionStatement (Syntax.StatementExpressionAssignment (Syntax.Assignment {
-      Syntax.assignmentLhs = lhs,
-      Syntax.assignmentOp = Syntax.AssignmentOperatorSimple,
-      Syntax.assignmentExpression = rhs}))))
+javaTypeIdentifier :: String -> Syntax.TypeIdentifier
+javaTypeIdentifier s = Syntax.TypeIdentifier (Syntax.Identifier s)
 
-javaStatementsToBlock :: [Syntax.Statement] -> Syntax.Block
-javaStatementsToBlock stmts = Syntax.Block (Lists.map (\s -> Syntax.BlockStatementStatement s) stmts)
+javaTypeIdentifierToJavaTypeArgument :: Syntax.TypeIdentifier -> Syntax.TypeArgument
+javaTypeIdentifierToJavaTypeArgument id =
+    Syntax.TypeArgumentReference (Syntax.ReferenceTypeVariable (Syntax.TypeVariable {
+      Syntax.typeVariableAnnotations = [],
+      Syntax.typeVariableIdentifier = id}))
 
-javaLambda :: Core.Name -> Syntax.Expression -> Syntax.Expression
-javaLambda v body =
-    Syntax.ExpressionLambda (Syntax.LambdaExpression {
-      Syntax.lambdaExpressionParameters = (Syntax.LambdaParametersSingle (variableToJavaIdentifier v)),
-      Syntax.lambdaExpressionBody = (Syntax.LambdaBodyExpression body)})
+javaTypeName :: Syntax.Identifier -> Syntax.TypeName
+javaTypeName id =
+    Syntax.TypeName {
+      Syntax.typeNameIdentifier = (Syntax.TypeIdentifier id),
+      Syntax.typeNameQualifier = Nothing}
 
-javaLambdaFromBlock :: Core.Name -> Syntax.Block -> Syntax.Expression
-javaLambdaFromBlock v block =
-    Syntax.ExpressionLambda (Syntax.LambdaExpression {
-      Syntax.lambdaExpressionParameters = (Syntax.LambdaParametersSingle (variableToJavaIdentifier v)),
-      Syntax.lambdaExpressionBody = (Syntax.LambdaBodyBlock block)})
-
-javaMethodBody :: Maybe [Syntax.BlockStatement] -> Syntax.MethodBody
-javaMethodBody mstmts = Maybes.cases mstmts Syntax.MethodBodyNone (\stmts -> Syntax.MethodBodyBlock (Syntax.Block stmts))
-
-javaMethodHeader :: [Syntax.TypeParameter] -> String -> [Syntax.FormalParameter] -> Syntax.Result -> Syntax.MethodHeader
-javaMethodHeader tparams methodName params result =
-    Syntax.MethodHeader {
-      Syntax.methodHeaderParameters = tparams,
-      Syntax.methodHeaderResult = result,
-      Syntax.methodHeaderDeclarator = Syntax.MethodDeclarator {
-        Syntax.methodDeclaratorIdentifier = (Syntax.Identifier methodName),
-        Syntax.methodDeclaratorReceiverParameter = Nothing,
-        Syntax.methodDeclaratorFormalParameters = params},
-      Syntax.methodHeaderThrows = Nothing}
-
-javaMethodDeclarationToJavaClassBodyDeclaration :: Syntax.MethodDeclaration -> Syntax.ClassBodyDeclaration
-javaMethodDeclarationToJavaClassBodyDeclaration md =
-    Syntax.ClassBodyDeclarationClassMember (Syntax.ClassMemberDeclarationMethod md)
-
-javaInterfaceDeclarationToJavaClassBodyDeclaration :: Syntax.NormalInterfaceDeclaration -> Syntax.ClassBodyDeclaration
-javaInterfaceDeclarationToJavaClassBodyDeclaration nid =
-    Syntax.ClassBodyDeclarationClassMember (Syntax.ClassMemberDeclarationInterface (Syntax.InterfaceDeclarationNormalInterface nid))
-
-javaMemberField :: [Syntax.FieldModifier] -> Syntax.Type -> Syntax.VariableDeclarator -> Syntax.ClassBodyDeclaration
-javaMemberField mods jt v =
-    Syntax.ClassBodyDeclarationClassMember (Syntax.ClassMemberDeclarationField (Syntax.FieldDeclaration {
-      Syntax.fieldDeclarationModifiers = mods,
-      Syntax.fieldDeclarationUnannType = (Syntax.UnannType jt),
-      Syntax.fieldDeclarationVariableDeclarators = [
-        v]}))
+javaTypeParameter :: String -> Syntax.TypeParameter
+javaTypeParameter v =
+    Syntax.TypeParameter {
+      Syntax.typeParameterModifiers = [],
+      Syntax.typeParameterIdentifier = (javaTypeIdentifier v),
+      Syntax.typeParameterBound = Nothing}
 
 javaTypeToJavaFormalParameter :: Syntax.Type -> Core.Name -> Syntax.FormalParameter
 javaTypeToJavaFormalParameter jt fname =
@@ -440,6 +690,14 @@ javaTypeToJavaFormalParameter jt fname =
       Syntax.formalParameter_SimpleModifiers = [],
       Syntax.formalParameter_SimpleType = (Syntax.UnannType jt),
       Syntax.formalParameter_SimpleId = (fieldNameToJavaVariableDeclaratorId fname)})
+
+javaTypeToJavaReferenceType :: Syntax.Type -> Context.Context -> Either (Context.InContext Errors.Error) Syntax.ReferenceType
+javaTypeToJavaReferenceType t cx =
+    case t of
+      Syntax.TypeReference v0 -> Right v0
+      Syntax.TypePrimitive _ -> Left (Context.InContext {
+        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "expected a Java reference type")),
+        Context.inContextContext = cx})
 
 javaTypeToJavaResult :: Syntax.Type -> Syntax.Result
 javaTypeToJavaResult jt = Syntax.ResultType (Syntax.UnannType jt)
@@ -452,372 +710,46 @@ javaTypeToJavaTypeArgument t =
         Syntax.wildcardAnnotations = [],
         Syntax.wildcardWildcard = Nothing})
 
-referenceTypeToResult :: Syntax.ReferenceType -> Syntax.Result
-referenceTypeToResult rt = javaTypeToJavaResult (Syntax.TypeReference rt)
-
-javaConstructorName :: Syntax.Identifier -> Maybe Syntax.TypeArgumentsOrDiamond -> Syntax.ClassOrInterfaceTypeToInstantiate
-javaConstructorName id targs =
-    Syntax.ClassOrInterfaceTypeToInstantiate {
-      Syntax.classOrInterfaceTypeToInstantiateIdentifiers = [
-        Syntax.AnnotatedIdentifier {
-          Syntax.annotatedIdentifierAnnotations = [],
-          Syntax.annotatedIdentifierIdentifier = id}],
-      Syntax.classOrInterfaceTypeToInstantiateTypeArguments = targs}
-
-javaConstructorCall :: Syntax.ClassOrInterfaceTypeToInstantiate -> [Syntax.Expression] -> Maybe Syntax.ClassBody -> Syntax.Expression
-javaConstructorCall ci args mbody =
-    Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
-      Syntax.ConditionalAndExpression [
-        Syntax.InclusiveOrExpression [
-          Syntax.ExclusiveOrExpression [
-            Syntax.AndExpression [
-              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayClassInstance (Syntax.ClassInstanceCreationExpression {
-                Syntax.classInstanceCreationExpressionQualifier = Nothing,
-                Syntax.classInstanceCreationExpressionExpression = Syntax.UnqualifiedClassInstanceCreationExpression {
-                  Syntax.unqualifiedClassInstanceCreationExpressionTypeArguments = [],
-                  Syntax.unqualifiedClassInstanceCreationExpressionClassOrInterface = ci,
-                  Syntax.unqualifiedClassInstanceCreationExpressionArguments = args,
-                  Syntax.unqualifiedClassInstanceCreationExpressionBody = mbody}}))))))))))]]]]])))
-
-javaThis :: Syntax.Expression
-javaThis =
-    Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
-      Syntax.ConditionalAndExpression [
-        Syntax.InclusiveOrExpression [
-          Syntax.ExclusiveOrExpression [
-            Syntax.AndExpression [
-              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ Syntax.PrimaryNoNewArrayThis))))))))]]]]])))
-
-javaTypeParameter :: String -> Syntax.TypeParameter
-javaTypeParameter v =
-    Syntax.TypeParameter {
-      Syntax.typeParameterModifiers = [],
-      Syntax.typeParameterIdentifier = (javaTypeIdentifier v),
-      Syntax.typeParameterBound = Nothing}
-
-javaTypeIdentifierToJavaTypeArgument :: Syntax.TypeIdentifier -> Syntax.TypeArgument
-javaTypeIdentifierToJavaTypeArgument id =
-    Syntax.TypeArgumentReference (Syntax.ReferenceTypeVariable (Syntax.TypeVariable {
+javaTypeVariable :: String -> Syntax.ReferenceType
+javaTypeVariable v =
+    Syntax.ReferenceTypeVariable (Syntax.TypeVariable {
       Syntax.typeVariableAnnotations = [],
-      Syntax.typeVariableIdentifier = id}))
+      Syntax.typeVariableIdentifier = (javaTypeIdentifier (Formatting.capitalize v))})
 
-typeParameterToTypeArgument :: Syntax.TypeParameter -> Syntax.TypeArgument
-typeParameterToTypeArgument tp = javaTypeIdentifierToJavaTypeArgument (Syntax.typeParameterIdentifier tp)
+javaTypeVariableToType :: Syntax.TypeVariable -> Syntax.Type
+javaTypeVariableToType tv = Syntax.TypeReference (Syntax.ReferenceTypeVariable tv)
 
-typeParameterToReferenceType :: Syntax.TypeParameter -> Syntax.ReferenceType
-typeParameterToReferenceType tp =
-    javaTypeVariable (Syntax.unIdentifier (Syntax.unTypeIdentifier (Syntax.typeParameterIdentifier tp)))
-
-fieldNameToJavaIdentifier :: Core.Name -> Syntax.Identifier
-fieldNameToJavaIdentifier fname = javaIdentifier (Core.unName fname)
-
-fieldNameToJavaExpression :: Core.Name -> Syntax.Expression
-fieldNameToJavaExpression fname =
+javaUnaryExpressionToJavaExpression :: Syntax.UnaryExpression -> Syntax.Expression
+javaUnaryExpressionToJavaExpression ue =
     Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
       Syntax.ConditionalAndExpression [
         Syntax.InclusiveOrExpression [
           Syntax.ExclusiveOrExpression [
             Syntax.AndExpression [
-              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionName (javaIdentifierToJavaExpressionName (fieldNameToJavaIdentifier fname)))))))))]]]]])))
+              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary ue))))]]]]])))
 
-fieldNameToJavaVariableDeclaratorId :: Core.Name -> Syntax.VariableDeclaratorId
-fieldNameToJavaVariableDeclaratorId fname = javaVariableDeclaratorId (javaIdentifier (Core.unName fname))
+javaUnaryExpressionToJavaRelationalExpression :: Syntax.UnaryExpression -> Syntax.RelationalExpression
+javaUnaryExpressionToJavaRelationalExpression ue =
+    Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary ue)))
 
-fieldNameToJavaVariableDeclarator :: Core.Name -> Syntax.VariableDeclarator
-fieldNameToJavaVariableDeclarator fname = javaVariableDeclarator (javaIdentifier (Core.unName fname)) Nothing
+javaVariableDeclarator :: Syntax.Identifier -> Maybe Syntax.VariableInitializer -> Syntax.VariableDeclarator
+javaVariableDeclarator id minit =
+    Syntax.VariableDeclarator {
+      Syntax.variableDeclaratorId = (javaVariableDeclaratorId id),
+      Syntax.variableDeclaratorInitializer = minit}
 
-fieldExpression :: Syntax.Identifier -> Syntax.Identifier -> Syntax.ExpressionName
-fieldExpression varId fieldId =
-    Syntax.ExpressionName {
-      Syntax.expressionNameQualifier = (Just (Syntax.AmbiguousName [
-        varId])),
-      Syntax.expressionNameIdentifier = fieldId}
+javaVariableDeclaratorId :: Syntax.Identifier -> Syntax.VariableDeclaratorId
+javaVariableDeclaratorId id =
+    Syntax.VariableDeclaratorId {
+      Syntax.variableDeclaratorIdIdentifier = id,
+      Syntax.variableDeclaratorIdDims = Nothing}
 
-variableToJavaIdentifier :: Core.Name -> Syntax.Identifier
-variableToJavaIdentifier name =
-
-      let v = Core.unName name
-      in (Logic.ifElse (Equality.equal v "_") (Syntax.Identifier "ignored") (Syntax.Identifier (sanitizeJavaName v)))
-
-varDeclarationStatement :: Syntax.Identifier -> Syntax.Expression -> Syntax.BlockStatement
-varDeclarationStatement id rhs =
-    Syntax.BlockStatementLocalVariableDeclaration (Syntax.LocalVariableDeclarationStatement (Syntax.LocalVariableDeclaration {
-      Syntax.localVariableDeclarationModifiers = [],
-      Syntax.localVariableDeclarationType = Syntax.LocalVariableTypeVar,
-      Syntax.localVariableDeclarationDeclarators = [
-        javaVariableDeclarator id (Just (Syntax.VariableInitializerExpression rhs))]}))
-
-sanitizeJavaName :: String -> String
-sanitizeJavaName name =
-    Logic.ifElse (isEscaped name) (unescape name) (Logic.ifElse (Equality.equal name "_") "ignored" (Formatting.sanitizeWithUnderscores Language.reservedWords name))
-
-isEscaped :: String -> Bool
-isEscaped s = Equality.equal (Strings.charAt 0 s) 36
-
-unescape :: String -> String
-unescape s = Strings.fromList (Lists.tail (Strings.toList s))
-
-javaPackageDeclaration :: Module.Namespace -> Syntax.PackageDeclaration
-javaPackageDeclaration ns =
-    Syntax.PackageDeclaration {
-      Syntax.packageDeclarationModifiers = [],
-      Syntax.packageDeclarationIdentifiers = (Lists.map (\s -> Syntax.Identifier s) (Strings.splitOn "." (Module.unNamespace ns)))}
-
-overrideAnnotation :: Syntax.Annotation
-overrideAnnotation = Syntax.AnnotationMarker (Syntax.MarkerAnnotation (javaTypeName (Syntax.Identifier "Override")))
-
-methodInvocation :: Maybe (Either Syntax.ExpressionName Syntax.Primary) -> Syntax.Identifier -> [Syntax.Expression] -> Syntax.MethodInvocation
-methodInvocation lhs methodName args =
-
-      let header =
-              Maybes.cases lhs (Syntax.MethodInvocation_HeaderSimple (Syntax.MethodName methodName)) (\either -> Syntax.MethodInvocation_HeaderComplex (Syntax.MethodInvocation_Complex {
-                Syntax.methodInvocation_ComplexVariant = (Eithers.either (\en -> Syntax.MethodInvocation_VariantExpression en) (\p -> Syntax.MethodInvocation_VariantPrimary p) either),
-                Syntax.methodInvocation_ComplexTypeArguments = [],
-                Syntax.methodInvocation_ComplexIdentifier = methodName}))
-      in Syntax.MethodInvocation {
-        Syntax.methodInvocationHeader = header,
-        Syntax.methodInvocationArguments = args}
-
-methodInvocationStatic :: Syntax.Identifier -> Syntax.Identifier -> [Syntax.Expression] -> Syntax.MethodInvocation
-methodInvocationStatic self methodName args =
-    methodInvocation (Just (Left (javaIdentifierToJavaExpressionName self))) methodName args
-
-methodDeclaration :: [Syntax.MethodModifier] -> [Syntax.TypeParameter] -> [Syntax.Annotation] -> String -> [Syntax.FormalParameter] -> Syntax.Result -> Maybe [Syntax.BlockStatement] -> Syntax.ClassBodyDeclaration
-methodDeclaration mods tparams anns methodName params result stmts =
-    javaMethodDeclarationToJavaClassBodyDeclaration (Syntax.MethodDeclaration {
-      Syntax.methodDeclarationAnnotations = anns,
-      Syntax.methodDeclarationModifiers = mods,
-      Syntax.methodDeclarationHeader = (javaMethodHeader tparams methodName params result),
-      Syntax.methodDeclarationBody = (javaMethodBody stmts)})
-
-interfaceMethodDeclaration :: [Syntax.InterfaceMethodModifier] -> [Syntax.TypeParameter] -> String -> [Syntax.FormalParameter] -> Syntax.Result -> Maybe [Syntax.BlockStatement] -> Syntax.InterfaceMemberDeclaration
-interfaceMethodDeclaration mods tparams methodName params result stmts =
-    Syntax.InterfaceMemberDeclarationInterfaceMethod (Syntax.InterfaceMethodDeclaration {
-      Syntax.interfaceMethodDeclarationModifiers = mods,
-      Syntax.interfaceMethodDeclarationHeader = (javaMethodHeader tparams methodName params result),
-      Syntax.interfaceMethodDeclarationBody = (javaMethodBody stmts)})
-
-javaEquals :: Syntax.EqualityExpression -> Syntax.RelationalExpression -> Syntax.EqualityExpression
-javaEquals lhs rhs =
-    Syntax.EqualityExpressionEqual (Syntax.EqualityExpression_Binary {
-      Syntax.equalityExpression_BinaryLhs = lhs,
-      Syntax.equalityExpression_BinaryRhs = rhs})
-
-javaEqualsNull :: Syntax.EqualityExpression -> Syntax.EqualityExpression
-javaEqualsNull lhs = javaEquals lhs (javaLiteralToJavaRelationalExpression Syntax.LiteralNull)
-
-javaInstanceOf :: Syntax.RelationalExpression -> Syntax.ReferenceType -> Syntax.RelationalExpression
-javaInstanceOf lhs rhs =
-    Syntax.RelationalExpressionInstanceof (Syntax.RelationalExpression_InstanceOf {
-      Syntax.relationalExpression_InstanceOfLhs = lhs,
-      Syntax.relationalExpression_InstanceOfRhs = rhs})
-
-javaThrowIllegalArgumentException :: [Syntax.Expression] -> Syntax.Statement
-javaThrowIllegalArgumentException args =
-    javaThrowStatement (javaConstructorCall (javaConstructorName (Syntax.Identifier "IllegalArgumentException") Nothing) args Nothing)
-
-javaThrowIllegalStateException :: [Syntax.Expression] -> Syntax.Statement
-javaThrowIllegalStateException args =
-    javaThrowStatement (javaConstructorCall (javaConstructorName (Syntax.Identifier "IllegalStateException") Nothing) args Nothing)
-
-addExpressions :: [Syntax.MultiplicativeExpression] -> Syntax.AdditiveExpression
-addExpressions exprs =
-
-      let first = Syntax.AdditiveExpressionUnary (Lists.head exprs)
-          rest = Lists.tail exprs
-      in (Lists.foldl (\ae -> \me -> Syntax.AdditiveExpressionPlus (Syntax.AdditiveExpression_Binary {
-        Syntax.additiveExpression_BinaryLhs = ae,
-        Syntax.additiveExpression_BinaryRhs = me})) first rest)
-
-javaRelationalExpressionToJavaEqualityExpression :: Syntax.RelationalExpression -> Syntax.EqualityExpression
-javaRelationalExpressionToJavaEqualityExpression re = Syntax.EqualityExpressionUnary re
-
-nameToQualifiedJavaName :: Environment.Aliases -> Bool -> Core.Name -> Maybe String -> (Syntax.TypeIdentifier, Syntax.ClassTypeQualifier)
-nameToQualifiedJavaName aliases qualify name mlocal =
-
-      let qn = Names_.qualifyName name
-          ns_ = Module.qualifiedNameNamespace qn
-          local = Module.qualifiedNameLocal qn
-          alias =
-                  Maybes.cases ns_ Nothing (\n -> Just (Maybes.cases (Maps.lookup n (Environment.aliasesPackages aliases)) (Names.javaPackageName (Strings.splitOn "." (Module.unNamespace n))) (\id -> id)))
-          pkg =
-                  Logic.ifElse qualify (Maybes.cases alias Syntax.ClassTypeQualifierNone (\p -> Syntax.ClassTypeQualifierPackage p)) Syntax.ClassTypeQualifierNone
-          jid =
-                  javaTypeIdentifier (Maybes.cases mlocal (sanitizeJavaName local) (\l -> Strings.cat2 (Strings.cat2 (sanitizeJavaName local) ".") (sanitizeJavaName l)))
-      in (jid, pkg)
-
-nameToJavaClassType :: Environment.Aliases -> Bool -> [Syntax.TypeArgument] -> Core.Name -> Maybe String -> Syntax.ClassType
-nameToJavaClassType aliases qualify args name mlocal =
-
-      let result = nameToQualifiedJavaName aliases qualify name mlocal
-          id = Pairs.first result
-          pkg = Pairs.second result
-      in Syntax.ClassType {
-        Syntax.classTypeAnnotations = [],
-        Syntax.classTypeQualifier = pkg,
-        Syntax.classTypeIdentifier = id,
-        Syntax.classTypeArguments = args}
-
-nameToJavaReferenceType :: Environment.Aliases -> Bool -> [Syntax.TypeArgument] -> Core.Name -> Maybe String -> Syntax.ReferenceType
-nameToJavaReferenceType aliases qualify args name mlocal =
-    Syntax.ReferenceTypeClassOrInterface (Syntax.ClassOrInterfaceTypeClass (nameToJavaClassType aliases qualify args name mlocal))
-
-nameToJavaName :: Environment.Aliases -> Core.Name -> Syntax.Identifier
-nameToJavaName aliases name =
-
-      let qn = Names_.qualifyName name
-          ns_ = Module.qualifiedNameNamespace qn
-          local = Module.qualifiedNameLocal qn
-      in (Logic.ifElse (isEscaped (Core.unName name)) (Syntax.Identifier (sanitizeJavaName local)) (Maybes.cases ns_ (Syntax.Identifier local) (\gname ->
-        let parts =
-                Maybes.cases (Maps.lookup gname (Environment.aliasesPackages aliases)) (Strings.splitOn "." (Module.unNamespace gname)) (\pkgName -> Lists.map (\i -> Syntax.unIdentifier i) (Syntax.unPackageName pkgName))
-            allParts = Lists.concat2 parts [
-                  sanitizeJavaName local]
-        in (Syntax.Identifier (Strings.intercalate "." allParts)))))
-
-nameToJavaTypeIdentifier :: Environment.Aliases -> Bool -> Core.Name -> Syntax.TypeIdentifier
-nameToJavaTypeIdentifier aliases qualify name = Pairs.first (nameToQualifiedJavaName aliases qualify name Nothing)
-
-javaTypeFromTypeName :: Environment.Aliases -> Core.Name -> Syntax.Type
-javaTypeFromTypeName aliases elName =
-    javaTypeVariableToType (Syntax.TypeVariable {
-      Syntax.typeVariableAnnotations = [],
-      Syntax.typeVariableIdentifier = (nameToJavaTypeIdentifier aliases False elName)})
-
-javaDoubleCastExpression :: Syntax.ReferenceType -> Syntax.ReferenceType -> Syntax.UnaryExpression -> Syntax.CastExpression
-javaDoubleCastExpression rawRt targetRt expr =
-
-      let firstCast = javaCastExpressionToJavaExpression (javaCastExpression rawRt expr)
-      in (javaCastExpression targetRt (javaExpressionToJavaUnaryExpression firstCast))
-
-javaDoubleCastExpressionToJavaExpression :: Syntax.ReferenceType -> Syntax.ReferenceType -> Syntax.UnaryExpression -> Syntax.Expression
-javaDoubleCastExpressionToJavaExpression rawRt targetRt expr =
-    javaCastExpressionToJavaExpression (javaDoubleCastExpression rawRt targetRt expr)
-
-javaBytePrimitiveType :: Syntax.PrimitiveTypeWithAnnotations
-javaBytePrimitiveType =
-    Syntax.PrimitiveTypeWithAnnotations {
-      Syntax.primitiveTypeWithAnnotationsType = (Syntax.PrimitiveTypeNumeric (Syntax.NumericTypeIntegral Syntax.IntegralTypeByte)),
-      Syntax.primitiveTypeWithAnnotationsAnnotations = []}
-
-visitorTypeVariable :: Syntax.ReferenceType
-visitorTypeVariable = javaTypeVariable "r"
+javaVariableName :: Core.Name -> Syntax.Identifier
+javaVariableName name = javaIdentifier (Names_.localNameOf name)
 
 lookupJavaVarName :: Environment.Aliases -> Core.Name -> Core.Name
 lookupJavaVarName aliases name =
     Maybes.cases (Maps.lookup name (Environment.aliasesVarRenames aliases)) name (\renamed -> renamed)
-
-variantClassName :: Bool -> Core.Name -> Core.Name -> Core.Name
-variantClassName qualify elName fname =
-
-      let qn = Names_.qualifyName elName
-          ns_ = Module.qualifiedNameNamespace qn
-          local = Module.qualifiedNameLocal qn
-          flocal = Formatting.capitalize (Core.unName fname)
-          local1 =
-                  Logic.ifElse qualify (Strings.cat2 (Strings.cat2 local ".") flocal) (Logic.ifElse (Equality.equal flocal local) (Strings.cat2 flocal "_") flocal)
-      in (Names_.unqualifyName (Module.QualifiedName {
-        Module.qualifiedNameNamespace = ns_,
-        Module.qualifiedNameLocal = local1}))
-
-variableDeclarationStatement :: t0 -> Syntax.Type -> Syntax.Identifier -> Syntax.Expression -> Syntax.BlockStatement
-variableDeclarationStatement aliases jtype id rhs =
-
-      let init_ = Syntax.VariableInitializerExpression rhs
-          vdec = javaVariableDeclarator id (Just init_)
-      in (Syntax.BlockStatementLocalVariableDeclaration (Syntax.LocalVariableDeclarationStatement (Syntax.LocalVariableDeclaration {
-        Syntax.localVariableDeclarationModifiers = [],
-        Syntax.localVariableDeclarationType = (Syntax.LocalVariableTypeType (Syntax.UnannType jtype)),
-        Syntax.localVariableDeclarationDeclarators = [
-          vdec]})))
-
-finalVarDeclarationStatement :: Syntax.Identifier -> Syntax.Expression -> Syntax.BlockStatement
-finalVarDeclarationStatement id rhs =
-    Syntax.BlockStatementLocalVariableDeclaration (Syntax.LocalVariableDeclarationStatement (Syntax.LocalVariableDeclaration {
-      Syntax.localVariableDeclarationModifiers = [
-        Syntax.VariableModifierFinal],
-      Syntax.localVariableDeclarationType = Syntax.LocalVariableTypeVar,
-      Syntax.localVariableDeclarationDeclarators = [
-        javaVariableDeclarator id (Just (Syntax.VariableInitializerExpression rhs))]}))
-
-javaStringMultiplicativeExpression :: String -> Syntax.MultiplicativeExpression
-javaStringMultiplicativeExpression s = javaLiteralToJavaMultiplicativeExpression (javaString s)
-
-suppressWarningsUncheckedAnnotation :: Syntax.Annotation
-suppressWarningsUncheckedAnnotation =
-    Syntax.AnnotationSingleElement (Syntax.SingleElementAnnotation {
-      Syntax.singleElementAnnotationName = (javaTypeName (Syntax.Identifier "SuppressWarnings")),
-      Syntax.singleElementAnnotationValue = (Just (Syntax.ElementValueConditionalExpression (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
-        Syntax.ConditionalAndExpression [
-          javaPostfixExpressionToJavaInclusiveOrExpression (Syntax.PostfixExpressionPrimary (javaLiteralToJavaPrimary (javaString "unchecked")))]]))))})
-
-methodInvocationStaticWithTypeArgs :: Syntax.Identifier -> Syntax.Identifier -> [Syntax.TypeArgument] -> [Syntax.Expression] -> Syntax.MethodInvocation
-methodInvocationStaticWithTypeArgs self methodName targs args =
-
-      let header =
-              Syntax.MethodInvocation_HeaderComplex (Syntax.MethodInvocation_Complex {
-                Syntax.methodInvocation_ComplexVariant = (Syntax.MethodInvocation_VariantExpression (javaIdentifierToJavaExpressionName self)),
-                Syntax.methodInvocation_ComplexTypeArguments = targs,
-                Syntax.methodInvocation_ComplexIdentifier = methodName})
-      in Syntax.MethodInvocation {
-        Syntax.methodInvocationHeader = header,
-        Syntax.methodInvocationArguments = args}
-
-javaArrayCreation :: Syntax.PrimitiveTypeWithAnnotations -> Maybe Syntax.ArrayInitializer -> Syntax.Expression
-javaArrayCreation primType minit =
-
-      let init_ = Maybes.cases minit (Syntax.ArrayInitializer []) (\i -> i)
-      in (javaPrimaryToJavaExpression (Syntax.PrimaryArrayCreation (Syntax.ArrayCreationExpressionPrimitiveArray (Syntax.ArrayCreationExpression_PrimitiveArray {
-        Syntax.arrayCreationExpression_PrimitiveArrayType = primType,
-        Syntax.arrayCreationExpression_PrimitiveArrayDims = [],
-        Syntax.arrayCreationExpression_PrimitiveArrayArray = init_}))))
-
-javaArrayInitializer :: [Syntax.Expression] -> Syntax.ArrayInitializer
-javaArrayInitializer exprs = Syntax.ArrayInitializer [
-  Lists.map (\e -> Syntax.VariableInitializerExpression e) exprs]
-
-toAssignStmt :: Core.Name -> Syntax.Statement
-toAssignStmt fname =
-
-      let id = fieldNameToJavaIdentifier fname
-          lhs =
-                  Syntax.LeftHandSideFieldAccess (Syntax.FieldAccess {
-                    Syntax.fieldAccessQualifier = (Syntax.FieldAccess_QualifierPrimary (Syntax.PrimaryNoNewArray_ Syntax.PrimaryNoNewArrayThis)),
-                    Syntax.fieldAccessIdentifier = id})
-          rhs = fieldNameToJavaExpression fname
-      in (javaAssignmentStatement lhs rhs)
-
-unTypeParameter :: Syntax.TypeParameter -> String
-unTypeParameter tp = Syntax.unIdentifier (Syntax.unTypeIdentifier (Syntax.typeParameterIdentifier tp))
-
-importAliasesForModule :: Module.Module -> Environment.Aliases
-importAliasesForModule mod =
-    Environment.Aliases {
-      Environment.aliasesCurrentNamespace = (Module.moduleNamespace mod),
-      Environment.aliasesPackages = Maps.empty,
-      Environment.aliasesBranchVars = Sets.empty,
-      Environment.aliasesRecursiveVars = Sets.empty,
-      Environment.aliasesInScopeTypeParams = Sets.empty,
-      Environment.aliasesPolymorphicLocals = Sets.empty,
-      Environment.aliasesInScopeJavaVars = Sets.empty,
-      Environment.aliasesVarRenames = Maps.empty,
-      Environment.aliasesLambdaVars = Sets.empty,
-      Environment.aliasesTypeVarSubst = Maps.empty,
-      Environment.aliasesTrustedTypeVars = Sets.empty,
-      Environment.aliasesMethodCodomain = Nothing,
-      Environment.aliasesThunkedVars = Sets.empty}
-
-javaClassDeclaration :: Environment.Aliases -> [Syntax.TypeParameter] -> Core.Name -> [Syntax.ClassModifier] -> Maybe Core.Name -> [Syntax.InterfaceType] -> [Syntax.ClassBodyDeclarationWithComments] -> Syntax.ClassDeclaration
-javaClassDeclaration aliases tparams elName mods supname impls bodyDecls =
-
-      let extends_ = Maybes.map (\n -> nameToJavaClassType aliases True [] n Nothing) supname
-      in (Syntax.ClassDeclarationNormal (Syntax.NormalClassDeclaration {
-        Syntax.normalClassDeclarationModifiers = mods,
-        Syntax.normalClassDeclarationIdentifier = (javaDeclName elName),
-        Syntax.normalClassDeclarationParameters = tparams,
-        Syntax.normalClassDeclarationExtends = extends_,
-        Syntax.normalClassDeclarationImplements = impls,
-        Syntax.normalClassDeclarationBody = (Syntax.ClassBody bodyDecls)}))
 
 makeConstructor :: Environment.Aliases -> Core.Name -> Bool -> [Syntax.FormalParameter] -> [Syntax.BlockStatement] -> Syntax.ClassBodyDeclaration
 makeConstructor aliases elName private params stmts =
@@ -840,6 +772,106 @@ makeConstructor aliases elName private params stmts =
         Syntax.constructorDeclarationConstructor = cons,
         Syntax.constructorDeclarationThrows = Nothing,
         Syntax.constructorDeclarationBody = body}))
+
+methodDeclaration :: [Syntax.MethodModifier] -> [Syntax.TypeParameter] -> [Syntax.Annotation] -> String -> [Syntax.FormalParameter] -> Syntax.Result -> Maybe [Syntax.BlockStatement] -> Syntax.ClassBodyDeclaration
+methodDeclaration mods tparams anns methodName params result stmts =
+    javaMethodDeclarationToJavaClassBodyDeclaration (Syntax.MethodDeclaration {
+      Syntax.methodDeclarationAnnotations = anns,
+      Syntax.methodDeclarationModifiers = mods,
+      Syntax.methodDeclarationHeader = (javaMethodHeader tparams methodName params result),
+      Syntax.methodDeclarationBody = (javaMethodBody stmts)})
+
+methodInvocation :: Maybe (Either Syntax.ExpressionName Syntax.Primary) -> Syntax.Identifier -> [Syntax.Expression] -> Syntax.MethodInvocation
+methodInvocation lhs methodName args =
+
+      let header =
+              Maybes.cases lhs (Syntax.MethodInvocation_HeaderSimple (Syntax.MethodName methodName)) (\either -> Syntax.MethodInvocation_HeaderComplex (Syntax.MethodInvocation_Complex {
+                Syntax.methodInvocation_ComplexVariant = (Eithers.either (\en -> Syntax.MethodInvocation_VariantExpression en) (\p -> Syntax.MethodInvocation_VariantPrimary p) either),
+                Syntax.methodInvocation_ComplexTypeArguments = [],
+                Syntax.methodInvocation_ComplexIdentifier = methodName}))
+      in Syntax.MethodInvocation {
+        Syntax.methodInvocationHeader = header,
+        Syntax.methodInvocationArguments = args}
+
+methodInvocationStatic :: Syntax.Identifier -> Syntax.Identifier -> [Syntax.Expression] -> Syntax.MethodInvocation
+methodInvocationStatic self methodName args =
+    methodInvocation (Just (Left (javaIdentifierToJavaExpressionName self))) methodName args
+
+methodInvocationStaticWithTypeArgs :: Syntax.Identifier -> Syntax.Identifier -> [Syntax.TypeArgument] -> [Syntax.Expression] -> Syntax.MethodInvocation
+methodInvocationStaticWithTypeArgs self methodName targs args =
+
+      let header =
+              Syntax.MethodInvocation_HeaderComplex (Syntax.MethodInvocation_Complex {
+                Syntax.methodInvocation_ComplexVariant = (Syntax.MethodInvocation_VariantExpression (javaIdentifierToJavaExpressionName self)),
+                Syntax.methodInvocation_ComplexTypeArguments = targs,
+                Syntax.methodInvocation_ComplexIdentifier = methodName})
+      in Syntax.MethodInvocation {
+        Syntax.methodInvocationHeader = header,
+        Syntax.methodInvocationArguments = args}
+
+nameToJavaClassType :: Environment.Aliases -> Bool -> [Syntax.TypeArgument] -> Core.Name -> Maybe String -> Syntax.ClassType
+nameToJavaClassType aliases qualify args name mlocal =
+
+      let result = nameToQualifiedJavaName aliases qualify name mlocal
+          id = Pairs.first result
+          pkg = Pairs.second result
+      in Syntax.ClassType {
+        Syntax.classTypeAnnotations = [],
+        Syntax.classTypeQualifier = pkg,
+        Syntax.classTypeIdentifier = id,
+        Syntax.classTypeArguments = args}
+
+nameToJavaName :: Environment.Aliases -> Core.Name -> Syntax.Identifier
+nameToJavaName aliases name =
+
+      let qn = Names_.qualifyName name
+          ns_ = Module.qualifiedNameNamespace qn
+          local = Module.qualifiedNameLocal qn
+      in (Logic.ifElse (isEscaped (Core.unName name)) (Syntax.Identifier (sanitizeJavaName local)) (Maybes.cases ns_ (Syntax.Identifier local) (\gname ->
+        let parts =
+                Maybes.cases (Maps.lookup gname (Environment.aliasesPackages aliases)) (Strings.splitOn "." (Module.unNamespace gname)) (\pkgName -> Lists.map (\i -> Syntax.unIdentifier i) (Syntax.unPackageName pkgName))
+            allParts = Lists.concat2 parts [
+                  sanitizeJavaName local]
+        in (Syntax.Identifier (Strings.intercalate "." allParts)))))
+
+nameToJavaReferenceType :: Environment.Aliases -> Bool -> [Syntax.TypeArgument] -> Core.Name -> Maybe String -> Syntax.ReferenceType
+nameToJavaReferenceType aliases qualify args name mlocal =
+    Syntax.ReferenceTypeClassOrInterface (Syntax.ClassOrInterfaceTypeClass (nameToJavaClassType aliases qualify args name mlocal))
+
+nameToJavaTypeIdentifier :: Environment.Aliases -> Bool -> Core.Name -> Syntax.TypeIdentifier
+nameToJavaTypeIdentifier aliases qualify name = Pairs.first (nameToQualifiedJavaName aliases qualify name Nothing)
+
+nameToQualifiedJavaName :: Environment.Aliases -> Bool -> Core.Name -> Maybe String -> (Syntax.TypeIdentifier, Syntax.ClassTypeQualifier)
+nameToQualifiedJavaName aliases qualify name mlocal =
+
+      let qn = Names_.qualifyName name
+          ns_ = Module.qualifiedNameNamespace qn
+          local = Module.qualifiedNameLocal qn
+          alias =
+                  Maybes.cases ns_ Nothing (\n -> Just (Maybes.cases (Maps.lookup n (Environment.aliasesPackages aliases)) (Names.javaPackageName (Strings.splitOn "." (Module.unNamespace n))) (\id -> id)))
+          pkg =
+                  Logic.ifElse qualify (Maybes.cases alias Syntax.ClassTypeQualifierNone (\p -> Syntax.ClassTypeQualifierPackage p)) Syntax.ClassTypeQualifierNone
+          jid =
+                  javaTypeIdentifier (Maybes.cases mlocal (sanitizeJavaName local) (\l -> Strings.cat2 (Strings.cat2 (sanitizeJavaName local) ".") (sanitizeJavaName l)))
+      in (jid, pkg)
+
+overrideAnnotation :: Syntax.Annotation
+overrideAnnotation = Syntax.AnnotationMarker (Syntax.MarkerAnnotation (javaTypeName (Syntax.Identifier "Override")))
+
+referenceTypeToResult :: Syntax.ReferenceType -> Syntax.Result
+referenceTypeToResult rt = javaTypeToJavaResult (Syntax.TypeReference rt)
+
+sanitizeJavaName :: String -> String
+sanitizeJavaName name =
+    Logic.ifElse (isEscaped name) (unescape name) (Logic.ifElse (Equality.equal name "_") "ignored" (Formatting.sanitizeWithUnderscores Language.reservedWords name))
+
+suppressWarningsUncheckedAnnotation :: Syntax.Annotation
+suppressWarningsUncheckedAnnotation =
+    Syntax.AnnotationSingleElement (Syntax.SingleElementAnnotation {
+      Syntax.singleElementAnnotationName = (javaTypeName (Syntax.Identifier "SuppressWarnings")),
+      Syntax.singleElementAnnotationValue = (Just (Syntax.ElementValueConditionalExpression (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
+        Syntax.ConditionalAndExpression [
+          javaPostfixExpressionToJavaInclusiveOrExpression (Syntax.PostfixExpressionPrimary (javaLiteralToJavaPrimary (javaString "unchecked")))]]))))})
 
 toAcceptMethod :: Bool -> [Syntax.TypeParameter] -> Syntax.ClassBodyDeclaration
 toAcceptMethod abstract vtparams =
@@ -871,6 +903,17 @@ toAcceptMethod abstract vtparams =
       in (methodDeclaration mods tparams anns Names.acceptMethodName [
         param] result body)
 
+toAssignStmt :: Core.Name -> Syntax.Statement
+toAssignStmt fname =
+
+      let id = fieldNameToJavaIdentifier fname
+          lhs =
+                  Syntax.LeftHandSideFieldAccess (Syntax.FieldAccess {
+                    Syntax.fieldAccessQualifier = (Syntax.FieldAccess_QualifierPrimary (Syntax.PrimaryNoNewArray_ Syntax.PrimaryNoNewArrayThis)),
+                    Syntax.fieldAccessIdentifier = id})
+          rhs = fieldNameToJavaExpression fname
+      in (javaAssignmentStatement lhs rhs)
+
 toJavaArrayType :: Syntax.Type -> Context.Context -> Either (Context.InContext Errors.Error) Syntax.Type
 toJavaArrayType t cx =
     case t of
@@ -894,65 +937,18 @@ toJavaArrayType t cx =
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "don't know how to make Java type into array type")),
         Context.inContextContext = cx})
 
-javaTypeToJavaReferenceType :: Syntax.Type -> Context.Context -> Either (Context.InContext Errors.Error) Syntax.ReferenceType
-javaTypeToJavaReferenceType t cx =
-    case t of
-      Syntax.TypeReference v0 -> Right v0
-      Syntax.TypePrimitive _ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "expected a Java reference type")),
-        Context.inContextContext = cx})
+typeParameterToReferenceType :: Syntax.TypeParameter -> Syntax.ReferenceType
+typeParameterToReferenceType tp =
+    javaTypeVariable (Syntax.unIdentifier (Syntax.unTypeIdentifier (Syntax.typeParameterIdentifier tp)))
 
-javaReferenceTypeToRawType :: Syntax.ReferenceType -> Syntax.ReferenceType
-javaReferenceTypeToRawType rt =
-    case rt of
-      Syntax.ReferenceTypeClassOrInterface v0 -> case v0 of
-        Syntax.ClassOrInterfaceTypeClass v1 ->
-          let anns = Syntax.classTypeAnnotations v1
-              qual = Syntax.classTypeQualifier v1
-              id = Syntax.classTypeIdentifier v1
-          in (Syntax.ReferenceTypeClassOrInterface (Syntax.ClassOrInterfaceTypeClass (Syntax.ClassType {
-            Syntax.classTypeAnnotations = anns,
-            Syntax.classTypeQualifier = qual,
-            Syntax.classTypeIdentifier = id,
-            Syntax.classTypeArguments = []})))
-        Syntax.ClassOrInterfaceTypeInterface v1 ->
-          let ct = Syntax.unInterfaceType v1
-              anns = Syntax.classTypeAnnotations ct
-              qual = Syntax.classTypeQualifier ct
-              id = Syntax.classTypeIdentifier ct
-          in (Syntax.ReferenceTypeClassOrInterface (Syntax.ClassOrInterfaceTypeInterface (Syntax.InterfaceType (Syntax.ClassType {
-            Syntax.classTypeAnnotations = anns,
-            Syntax.classTypeQualifier = qual,
-            Syntax.classTypeIdentifier = id,
-            Syntax.classTypeArguments = []}))))
-      _ -> rt
+typeParameterToTypeArgument :: Syntax.TypeParameter -> Syntax.TypeArgument
+typeParameterToTypeArgument tp = javaTypeIdentifierToJavaTypeArgument (Syntax.typeParameterIdentifier tp)
 
-addJavaTypeParameter :: Syntax.ReferenceType -> Syntax.Type -> Context.Context -> Either (Context.InContext Errors.Error) Syntax.Type
-addJavaTypeParameter rt t cx =
-    case t of
-      Syntax.TypeReference v0 -> case v0 of
-        Syntax.ReferenceTypeClassOrInterface v1 -> case v1 of
-          Syntax.ClassOrInterfaceTypeClass v2 ->
-            let anns = Syntax.classTypeAnnotations v2
-                qual = Syntax.classTypeQualifier v2
-                id = Syntax.classTypeIdentifier v2
-                args = Syntax.classTypeArguments v2
-            in (Right (Syntax.TypeReference (Syntax.ReferenceTypeClassOrInterface (Syntax.ClassOrInterfaceTypeClass (Syntax.ClassType {
-              Syntax.classTypeAnnotations = anns,
-              Syntax.classTypeQualifier = qual,
-              Syntax.classTypeIdentifier = id,
-              Syntax.classTypeArguments = (Lists.concat2 args [
-                Syntax.TypeArgumentReference rt])})))))
-          Syntax.ClassOrInterfaceTypeInterface _ -> Left (Context.InContext {
-            Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "expected a Java class type")),
-            Context.inContextContext = cx})
-        Syntax.ReferenceTypeVariable v1 -> Right (javaTypeVariableToType v1)
-        Syntax.ReferenceTypeArray _ -> Left (Context.InContext {
-          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "expected a Java class or interface type, or a variable")),
-          Context.inContextContext = cx})
-      Syntax.TypePrimitive _ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "expected a reference type")),
-        Context.inContextContext = cx})
+unTypeParameter :: Syntax.TypeParameter -> String
+unTypeParameter tp = Syntax.unIdentifier (Syntax.unTypeIdentifier (Syntax.typeParameterIdentifier tp))
+
+unescape :: String -> String
+unescape s = Strings.fromList (Lists.tail (Strings.toList s))
 
 uniqueVarName :: Environment.Aliases -> Core.Name -> Core.Name
 uniqueVarName aliases name =
@@ -964,39 +960,43 @@ uniqueVarName_go aliases base n =
       let candidate = Core.Name (Strings.cat2 base (Literals.showInt32 n))
       in (Logic.ifElse (Sets.member candidate (Environment.aliasesInScopeJavaVars aliases)) (uniqueVarName_go aliases base (Math.add n 1)) candidate)
 
-addInScopeVar :: Core.Name -> Environment.Aliases -> Environment.Aliases
-addInScopeVar name aliases =
-    Environment.Aliases {
-      Environment.aliasesCurrentNamespace = (Environment.aliasesCurrentNamespace aliases),
-      Environment.aliasesPackages = (Environment.aliasesPackages aliases),
-      Environment.aliasesBranchVars = (Environment.aliasesBranchVars aliases),
-      Environment.aliasesRecursiveVars = (Environment.aliasesRecursiveVars aliases),
-      Environment.aliasesInScopeTypeParams = (Environment.aliasesInScopeTypeParams aliases),
-      Environment.aliasesPolymorphicLocals = (Environment.aliasesPolymorphicLocals aliases),
-      Environment.aliasesInScopeJavaVars = (Sets.insert name (Environment.aliasesInScopeJavaVars aliases)),
-      Environment.aliasesVarRenames = (Environment.aliasesVarRenames aliases),
-      Environment.aliasesLambdaVars = (Environment.aliasesLambdaVars aliases),
-      Environment.aliasesTypeVarSubst = (Environment.aliasesTypeVarSubst aliases),
-      Environment.aliasesTrustedTypeVars = (Environment.aliasesTrustedTypeVars aliases),
-      Environment.aliasesMethodCodomain = (Environment.aliasesMethodCodomain aliases),
-      Environment.aliasesThunkedVars = (Environment.aliasesThunkedVars aliases)}
+varDeclarationStatement :: Syntax.Identifier -> Syntax.Expression -> Syntax.BlockStatement
+varDeclarationStatement id rhs =
+    Syntax.BlockStatementLocalVariableDeclaration (Syntax.LocalVariableDeclarationStatement (Syntax.LocalVariableDeclaration {
+      Syntax.localVariableDeclarationModifiers = [],
+      Syntax.localVariableDeclarationType = Syntax.LocalVariableTypeVar,
+      Syntax.localVariableDeclarationDeclarators = [
+        javaVariableDeclarator id (Just (Syntax.VariableInitializerExpression rhs))]}))
 
-addInScopeVars :: [Core.Name] -> Environment.Aliases -> Environment.Aliases
-addInScopeVars names aliases = Lists.foldl (\a -> \n -> addInScopeVar n a) aliases names
+variableDeclarationStatement :: t0 -> Syntax.Type -> Syntax.Identifier -> Syntax.Expression -> Syntax.BlockStatement
+variableDeclarationStatement aliases jtype id rhs =
 
-addVarRename :: Core.Name -> Core.Name -> Environment.Aliases -> Environment.Aliases
-addVarRename original renamed aliases =
-    Environment.Aliases {
-      Environment.aliasesCurrentNamespace = (Environment.aliasesCurrentNamespace aliases),
-      Environment.aliasesPackages = (Environment.aliasesPackages aliases),
-      Environment.aliasesBranchVars = (Environment.aliasesBranchVars aliases),
-      Environment.aliasesRecursiveVars = (Environment.aliasesRecursiveVars aliases),
-      Environment.aliasesInScopeTypeParams = (Environment.aliasesInScopeTypeParams aliases),
-      Environment.aliasesPolymorphicLocals = (Environment.aliasesPolymorphicLocals aliases),
-      Environment.aliasesInScopeJavaVars = (Environment.aliasesInScopeJavaVars aliases),
-      Environment.aliasesVarRenames = (Maps.insert original renamed (Environment.aliasesVarRenames aliases)),
-      Environment.aliasesLambdaVars = (Environment.aliasesLambdaVars aliases),
-      Environment.aliasesTypeVarSubst = (Environment.aliasesTypeVarSubst aliases),
-      Environment.aliasesTrustedTypeVars = (Environment.aliasesTrustedTypeVars aliases),
-      Environment.aliasesMethodCodomain = (Environment.aliasesMethodCodomain aliases),
-      Environment.aliasesThunkedVars = (Environment.aliasesThunkedVars aliases)}
+      let init_ = Syntax.VariableInitializerExpression rhs
+          vdec = javaVariableDeclarator id (Just init_)
+      in (Syntax.BlockStatementLocalVariableDeclaration (Syntax.LocalVariableDeclarationStatement (Syntax.LocalVariableDeclaration {
+        Syntax.localVariableDeclarationModifiers = [],
+        Syntax.localVariableDeclarationType = (Syntax.LocalVariableTypeType (Syntax.UnannType jtype)),
+        Syntax.localVariableDeclarationDeclarators = [
+          vdec]})))
+
+variableToJavaIdentifier :: Core.Name -> Syntax.Identifier
+variableToJavaIdentifier name =
+
+      let v = Core.unName name
+      in (Logic.ifElse (Equality.equal v "_") (Syntax.Identifier "ignored") (Syntax.Identifier (sanitizeJavaName v)))
+
+variantClassName :: Bool -> Core.Name -> Core.Name -> Core.Name
+variantClassName qualify elName fname =
+
+      let qn = Names_.qualifyName elName
+          ns_ = Module.qualifiedNameNamespace qn
+          local = Module.qualifiedNameLocal qn
+          flocal = Formatting.capitalize (Core.unName fname)
+          local1 =
+                  Logic.ifElse qualify (Strings.cat2 (Strings.cat2 local ".") flocal) (Logic.ifElse (Equality.equal flocal local) (Strings.cat2 flocal "_") flocal)
+      in (Names_.unqualifyName (Module.QualifiedName {
+        Module.qualifiedNameNamespace = ns_,
+        Module.qualifiedNameLocal = local1}))
+
+visitorTypeVariable :: Syntax.ReferenceType
+visitorTypeVariable = javaTypeVariable "r"

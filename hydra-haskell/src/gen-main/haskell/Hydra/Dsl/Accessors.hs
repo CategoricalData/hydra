@@ -29,20 +29,20 @@ accessorEdge source path target =
           Core.fieldName = (Core.Name "target"),
           Core.fieldTerm = (Phantoms.unTTerm target)}]}))
 
-accessorEdgeSource :: Phantoms.TTerm Accessors.AccessorEdge -> Phantoms.TTerm Accessors.AccessorNode
-accessorEdgeSource x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.accessors.AccessorEdge"),
-        Core.projectionField = (Core.Name "source")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 accessorEdgePath :: Phantoms.TTerm Accessors.AccessorEdge -> Phantoms.TTerm Accessors.AccessorPath
 accessorEdgePath x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.accessors.AccessorEdge"),
         Core.projectionField = (Core.Name "path")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+accessorEdgeSource :: Phantoms.TTerm Accessors.AccessorEdge -> Phantoms.TTerm Accessors.AccessorNode
+accessorEdgeSource x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.accessors.AccessorEdge"),
+        Core.projectionField = (Core.Name "source")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 accessorEdgeTarget :: Phantoms.TTerm Accessors.AccessorEdge -> Phantoms.TTerm Accessors.AccessorNode
@@ -52,29 +52,6 @@ accessorEdgeTarget x =
         Core.projectionTypeName = (Core.Name "hydra.accessors.AccessorEdge"),
         Core.projectionField = (Core.Name "target")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-accessorEdgeWithSource :: Phantoms.TTerm Accessors.AccessorEdge -> Phantoms.TTerm Accessors.AccessorNode -> Phantoms.TTerm Accessors.AccessorEdge
-accessorEdgeWithSource original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.accessors.AccessorEdge"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "source"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "path"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.accessors.AccessorEdge"),
-              Core.projectionField = (Core.Name "path")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "target"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.accessors.AccessorEdge"),
-              Core.projectionField = (Core.Name "target")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 accessorEdgeWithPath :: Phantoms.TTerm Accessors.AccessorEdge -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Accessors.AccessorEdge
 accessorEdgeWithPath original newVal =
@@ -91,6 +68,29 @@ accessorEdgeWithPath original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "path"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "target"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.accessors.AccessorEdge"),
+              Core.projectionField = (Core.Name "target")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+accessorEdgeWithSource :: Phantoms.TTerm Accessors.AccessorEdge -> Phantoms.TTerm Accessors.AccessorNode -> Phantoms.TTerm Accessors.AccessorEdge
+accessorEdgeWithSource original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.accessors.AccessorEdge"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "source"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "path"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.accessors.AccessorEdge"),
+              Core.projectionField = (Core.Name "path")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "target"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -134,14 +134,6 @@ accessorGraph nodes edges =
           Core.fieldName = (Core.Name "edges"),
           Core.fieldTerm = (Phantoms.unTTerm edges)}]}))
 
-accessorGraphNodes :: Phantoms.TTerm Accessors.AccessorGraph -> Phantoms.TTerm [Accessors.AccessorNode]
-accessorGraphNodes x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.accessors.AccessorGraph"),
-        Core.projectionField = (Core.Name "nodes")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 accessorGraphEdges :: Phantoms.TTerm Accessors.AccessorGraph -> Phantoms.TTerm [Accessors.AccessorEdge]
 accessorGraphEdges x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -150,21 +142,13 @@ accessorGraphEdges x =
         Core.projectionField = (Core.Name "edges")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-accessorGraphWithNodes :: Phantoms.TTerm Accessors.AccessorGraph -> Phantoms.TTerm [Accessors.AccessorNode] -> Phantoms.TTerm Accessors.AccessorGraph
-accessorGraphWithNodes original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.accessors.AccessorGraph"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "nodes"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "edges"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.accessors.AccessorGraph"),
-              Core.projectionField = (Core.Name "edges")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+accessorGraphNodes :: Phantoms.TTerm Accessors.AccessorGraph -> Phantoms.TTerm [Accessors.AccessorNode]
+accessorGraphNodes x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.accessors.AccessorGraph"),
+        Core.projectionField = (Core.Name "nodes")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 accessorGraphWithEdges :: Phantoms.TTerm Accessors.AccessorGraph -> Phantoms.TTerm [Accessors.AccessorEdge] -> Phantoms.TTerm Accessors.AccessorGraph
 accessorGraphWithEdges original newVal =
@@ -182,6 +166,22 @@ accessorGraphWithEdges original newVal =
           Core.fieldName = (Core.Name "edges"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+accessorGraphWithNodes :: Phantoms.TTerm Accessors.AccessorGraph -> Phantoms.TTerm [Accessors.AccessorNode] -> Phantoms.TTerm Accessors.AccessorGraph
+accessorGraphWithNodes original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.accessors.AccessorGraph"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "nodes"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "edges"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.accessors.AccessorGraph"),
+              Core.projectionField = (Core.Name "edges")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 accessorNode :: Phantoms.TTerm Core.Name -> Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm Accessors.AccessorNode
 accessorNode name label id =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -197,12 +197,12 @@ accessorNode name label id =
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Phantoms.unTTerm id)}]}))
 
-accessorNodeName :: Phantoms.TTerm Accessors.AccessorNode -> Phantoms.TTerm Core.Name
-accessorNodeName x =
+accessorNodeId :: Phantoms.TTerm Accessors.AccessorNode -> Phantoms.TTerm String
+accessorNodeId x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.accessors.AccessorNode"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "id")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 accessorNodeLabel :: Phantoms.TTerm Accessors.AccessorNode -> Phantoms.TTerm String
@@ -213,59 +213,13 @@ accessorNodeLabel x =
         Core.projectionField = (Core.Name "label")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-accessorNodeId :: Phantoms.TTerm Accessors.AccessorNode -> Phantoms.TTerm String
-accessorNodeId x =
+accessorNodeName :: Phantoms.TTerm Accessors.AccessorNode -> Phantoms.TTerm Core.Name
+accessorNodeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.accessors.AccessorNode"),
-        Core.projectionField = (Core.Name "id")})))),
+        Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-accessorNodeWithName :: Phantoms.TTerm Accessors.AccessorNode -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Accessors.AccessorNode
-accessorNodeWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.accessors.AccessorNode"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "label"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.accessors.AccessorNode"),
-              Core.projectionField = (Core.Name "label")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.accessors.AccessorNode"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-accessorNodeWithLabel :: Phantoms.TTerm Accessors.AccessorNode -> Phantoms.TTerm String -> Phantoms.TTerm Accessors.AccessorNode
-accessorNodeWithLabel original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.accessors.AccessorNode"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.accessors.AccessorNode"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "label"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.accessors.AccessorNode"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 accessorNodeWithId :: Phantoms.TTerm Accessors.AccessorNode -> Phantoms.TTerm String -> Phantoms.TTerm Accessors.AccessorNode
 accessorNodeWithId original newVal =
@@ -290,17 +244,57 @@ accessorNodeWithId original newVal =
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+accessorNodeWithLabel :: Phantoms.TTerm Accessors.AccessorNode -> Phantoms.TTerm String -> Phantoms.TTerm Accessors.AccessorNode
+accessorNodeWithLabel original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.accessors.AccessorNode"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.accessors.AccessorNode"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "label"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.accessors.AccessorNode"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+accessorNodeWithName :: Phantoms.TTerm Accessors.AccessorNode -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Accessors.AccessorNode
+accessorNodeWithName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.accessors.AccessorNode"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "label"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.accessors.AccessorNode"),
+              Core.projectionField = (Core.Name "label")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.accessors.AccessorNode"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 accessorPath :: Phantoms.TTerm [Accessors.TermAccessor] -> Phantoms.TTerm Accessors.AccessorPath
 accessorPath x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.accessors.AccessorPath"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unAccessorPath :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm [Accessors.TermAccessor]
-unAccessorPath x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.accessors.AccessorPath")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 termAccessorAnnotatedBody :: Phantoms.TTerm Accessors.TermAccessor
 termAccessorAnnotatedBody =
@@ -308,14 +302,6 @@ termAccessorAnnotatedBody =
       Core.injectionTypeName = (Core.Name "hydra.accessors.TermAccessor"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotatedBody"),
-        Core.fieldTerm = Core.TermUnit}}))
-
-termAccessorApplicationFunction :: Phantoms.TTerm Accessors.TermAccessor
-termAccessorApplicationFunction =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.accessors.TermAccessor"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "applicationFunction"),
         Core.fieldTerm = Core.TermUnit}}))
 
 termAccessorApplicationArgument :: Phantoms.TTerm Accessors.TermAccessor
@@ -326,36 +312,28 @@ termAccessorApplicationArgument =
         Core.fieldName = (Core.Name "applicationArgument"),
         Core.fieldTerm = Core.TermUnit}}))
 
+termAccessorApplicationFunction :: Phantoms.TTerm Accessors.TermAccessor
+termAccessorApplicationFunction =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.accessors.TermAccessor"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "applicationFunction"),
+        Core.fieldTerm = Core.TermUnit}}))
+
+termAccessorInjectionTerm :: Phantoms.TTerm Accessors.TermAccessor
+termAccessorInjectionTerm =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.accessors.TermAccessor"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "injectionTerm"),
+        Core.fieldTerm = Core.TermUnit}}))
+
 termAccessorLambdaBody :: Phantoms.TTerm Accessors.TermAccessor
 termAccessorLambdaBody =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.accessors.TermAccessor"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lambdaBody"),
-        Core.fieldTerm = Core.TermUnit}}))
-
-termAccessorUnionCasesDefault :: Phantoms.TTerm Accessors.TermAccessor
-termAccessorUnionCasesDefault =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.accessors.TermAccessor"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "unionCasesDefault"),
-        Core.fieldTerm = Core.TermUnit}}))
-
-termAccessorUnionCasesBranch :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Accessors.TermAccessor
-termAccessorUnionCasesBranch x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.accessors.TermAccessor"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "unionCasesBranch"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
-termAccessorLetBody :: Phantoms.TTerm Accessors.TermAccessor
-termAccessorLetBody =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.accessors.TermAccessor"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "letBody"),
         Core.fieldTerm = Core.TermUnit}}))
 
 termAccessorLetBinding :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Accessors.TermAccessor
@@ -365,6 +343,14 @@ termAccessorLetBinding x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "letBinding"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+termAccessorLetBody :: Phantoms.TTerm Accessors.TermAccessor
+termAccessorLetBody =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.accessors.TermAccessor"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "letBody"),
+        Core.fieldTerm = Core.TermUnit}}))
 
 termAccessorListElement :: Phantoms.TTerm Int -> Phantoms.TTerm Accessors.TermAccessor
 termAccessorListElement x =
@@ -430,14 +416,6 @@ termAccessorSumTerm =
         Core.fieldName = (Core.Name "sumTerm"),
         Core.fieldTerm = Core.TermUnit}}))
 
-termAccessorTypeLambdaBody :: Phantoms.TTerm Accessors.TermAccessor
-termAccessorTypeLambdaBody =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.accessors.TermAccessor"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "typeLambdaBody"),
-        Core.fieldTerm = Core.TermUnit}}))
-
 termAccessorTypeApplicationTerm :: Phantoms.TTerm Accessors.TermAccessor
 termAccessorTypeApplicationTerm =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
@@ -446,12 +424,28 @@ termAccessorTypeApplicationTerm =
         Core.fieldName = (Core.Name "typeApplicationTerm"),
         Core.fieldTerm = Core.TermUnit}}))
 
-termAccessorInjectionTerm :: Phantoms.TTerm Accessors.TermAccessor
-termAccessorInjectionTerm =
+termAccessorTypeLambdaBody :: Phantoms.TTerm Accessors.TermAccessor
+termAccessorTypeLambdaBody =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.accessors.TermAccessor"),
       Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "injectionTerm"),
+        Core.fieldName = (Core.Name "typeLambdaBody"),
+        Core.fieldTerm = Core.TermUnit}}))
+
+termAccessorUnionCasesBranch :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Accessors.TermAccessor
+termAccessorUnionCasesBranch x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.accessors.TermAccessor"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "unionCasesBranch"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+termAccessorUnionCasesDefault :: Phantoms.TTerm Accessors.TermAccessor
+termAccessorUnionCasesDefault =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.accessors.TermAccessor"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "unionCasesDefault"),
         Core.fieldTerm = Core.TermUnit}}))
 
 termAccessorWrappedTerm :: Phantoms.TTerm Accessors.TermAccessor
@@ -461,3 +455,9 @@ termAccessorWrappedTerm =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "wrappedTerm"),
         Core.fieldTerm = Core.TermUnit}}))
+
+unAccessorPath :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm [Accessors.TermAccessor]
+unAccessorPath x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.accessors.AccessorPath")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))

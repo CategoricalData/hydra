@@ -20,23 +20,11 @@ anySimpleType x =
       Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.AnySimpleType"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-unAnySimpleType :: Phantoms.TTerm Schema.AnySimpleType -> Phantoms.TTerm String
-unAnySimpleType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.AnySimpleType")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 anyType :: Phantoms.TTerm String -> Phantoms.TTerm Schema.AnyType
 anyType x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.AnyType"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unAnyType :: Phantoms.TTerm Schema.AnyType -> Phantoms.TTerm String
-unAnyType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.AnyType")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 anyURI :: Phantoms.TTerm String -> Phantoms.TTerm Schema.AnyURI
 anyURI x =
@@ -44,23 +32,11 @@ anyURI x =
       Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.AnyURI"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-unAnyURI :: Phantoms.TTerm Schema.AnyURI -> Phantoms.TTerm String
-unAnyURI x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.AnyURI")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 base64Binary :: Phantoms.TTerm String -> Phantoms.TTerm Schema.Base64Binary
 base64Binary x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Base64Binary"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unBase64Binary :: Phantoms.TTerm Schema.Base64Binary -> Phantoms.TTerm String
-unBase64Binary x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Base64Binary")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 boolean :: Phantoms.TTerm Bool -> Phantoms.TTerm Schema.Boolean
 boolean x =
@@ -68,491 +44,17 @@ boolean x =
       Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Boolean"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-unBoolean :: Phantoms.TTerm Schema.Boolean -> Phantoms.TTerm Bool
-unBoolean x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Boolean")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 byte :: Phantoms.TTerm I.Int8 -> Phantoms.TTerm Schema.Byte
 byte x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Byte"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-unByte :: Phantoms.TTerm Schema.Byte -> Phantoms.TTerm I.Int8
-unByte x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Byte")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-date :: Phantoms.TTerm String -> Phantoms.TTerm Schema.Date
-date x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Date"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unDate :: Phantoms.TTerm Schema.Date -> Phantoms.TTerm String
-unDate x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Date")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-dateTime :: Phantoms.TTerm String -> Phantoms.TTerm Schema.DateTime
-dateTime x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.DateTime"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unDateTime :: Phantoms.TTerm Schema.DateTime -> Phantoms.TTerm String
-unDateTime x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.DateTime")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-decimal :: Phantoms.TTerm String -> Phantoms.TTerm Schema.Decimal
-decimal x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Decimal"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unDecimal :: Phantoms.TTerm Schema.Decimal -> Phantoms.TTerm String
-unDecimal x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Decimal")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-double :: Phantoms.TTerm Double -> Phantoms.TTerm Schema.Double_
-double x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Double"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unDouble :: Phantoms.TTerm Schema.Double_ -> Phantoms.TTerm Double
-unDouble x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Double")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-duration :: Phantoms.TTerm String -> Phantoms.TTerm Schema.Duration
-duration x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Duration"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unDuration :: Phantoms.TTerm Schema.Duration -> Phantoms.TTerm String
-unDuration x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Duration")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-eNTITIES :: Phantoms.TTerm String -> Phantoms.TTerm Schema.ENTITIES
-eNTITIES x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.ENTITIES"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unENTITIES :: Phantoms.TTerm Schema.ENTITIES -> Phantoms.TTerm String
-unENTITIES x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.ENTITIES")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-eNTITY :: Phantoms.TTerm String -> Phantoms.TTerm Schema.ENTITY
-eNTITY x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.ENTITY"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unENTITY :: Phantoms.TTerm Schema.ENTITY -> Phantoms.TTerm String
-unENTITY x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.ENTITY")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-float :: Phantoms.TTerm Float -> Phantoms.TTerm Schema.Float_
-float x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Float"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unFloat :: Phantoms.TTerm Schema.Float_ -> Phantoms.TTerm Float
-unFloat x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Float")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-gDay :: Phantoms.TTerm String -> Phantoms.TTerm Schema.GDay
-gDay x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.GDay"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unGDay :: Phantoms.TTerm Schema.GDay -> Phantoms.TTerm String
-unGDay x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.GDay")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-gMonth :: Phantoms.TTerm String -> Phantoms.TTerm Schema.GMonth
-gMonth x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.GMonth"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unGMonth :: Phantoms.TTerm Schema.GMonth -> Phantoms.TTerm String
-unGMonth x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.GMonth")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-gMonthDay :: Phantoms.TTerm String -> Phantoms.TTerm Schema.GMonthDay
-gMonthDay x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.GMonthDay"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unGMonthDay :: Phantoms.TTerm Schema.GMonthDay -> Phantoms.TTerm String
-unGMonthDay x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.GMonthDay")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-gYear :: Phantoms.TTerm String -> Phantoms.TTerm Schema.GYear
-gYear x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.GYear"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unGYear :: Phantoms.TTerm Schema.GYear -> Phantoms.TTerm String
-unGYear x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.GYear")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-gYearMonth :: Phantoms.TTerm String -> Phantoms.TTerm Schema.GYearMonth
-gYearMonth x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.GYearMonth"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unGYearMonth :: Phantoms.TTerm Schema.GYearMonth -> Phantoms.TTerm String
-unGYearMonth x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.GYearMonth")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-hexBinary :: Phantoms.TTerm String -> Phantoms.TTerm Schema.HexBinary
-hexBinary x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.HexBinary"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unHexBinary :: Phantoms.TTerm Schema.HexBinary -> Phantoms.TTerm String
-unHexBinary x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.HexBinary")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-iD :: Phantoms.TTerm String -> Phantoms.TTerm Schema.ID
-iD x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.ID"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unID :: Phantoms.TTerm Schema.ID -> Phantoms.TTerm String
-unID x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.ID")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-iDREF :: Phantoms.TTerm String -> Phantoms.TTerm Schema.IDREF
-iDREF x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.IDREF"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unIDREF :: Phantoms.TTerm Schema.IDREF -> Phantoms.TTerm String
-unIDREF x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.IDREF")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-iDREFS :: Phantoms.TTerm String -> Phantoms.TTerm Schema.IDREFS
-iDREFS x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.IDREFS"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unIDREFS :: Phantoms.TTerm Schema.IDREFS -> Phantoms.TTerm String
-unIDREFS x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.IDREFS")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-int :: Phantoms.TTerm Int -> Phantoms.TTerm Schema.Int_
-int x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Int"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unInt :: Phantoms.TTerm Schema.Int_ -> Phantoms.TTerm Int
-unInt x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Int")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-integer :: Phantoms.TTerm Integer -> Phantoms.TTerm Schema.Integer_
-integer x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Integer"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unInteger :: Phantoms.TTerm Schema.Integer_ -> Phantoms.TTerm Integer
-unInteger x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Integer")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-language :: Phantoms.TTerm String -> Phantoms.TTerm Schema.Language
-language x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Language"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unLanguage :: Phantoms.TTerm Schema.Language -> Phantoms.TTerm String
-unLanguage x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Language")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-long :: Phantoms.TTerm I.Int64 -> Phantoms.TTerm Schema.Long
-long x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Long"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unLong :: Phantoms.TTerm Schema.Long -> Phantoms.TTerm I.Int64
-unLong x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Long")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-nMTOKEN :: Phantoms.TTerm String -> Phantoms.TTerm Schema.NMTOKEN
-nMTOKEN x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.NMTOKEN"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unNMTOKEN :: Phantoms.TTerm Schema.NMTOKEN -> Phantoms.TTerm String
-unNMTOKEN x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.NMTOKEN")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-nOTATION :: Phantoms.TTerm String -> Phantoms.TTerm Schema.NOTATION
-nOTATION x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.NOTATION"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unNOTATION :: Phantoms.TTerm Schema.NOTATION -> Phantoms.TTerm String
-unNOTATION x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.NOTATION")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-name :: Phantoms.TTerm String -> Phantoms.TTerm Schema.Name
-name x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Name"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unName :: Phantoms.TTerm Schema.Name -> Phantoms.TTerm String
-unName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Name")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-negativeInteger :: Phantoms.TTerm Integer -> Phantoms.TTerm Schema.NegativeInteger
-negativeInteger x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.NegativeInteger"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unNegativeInteger :: Phantoms.TTerm Schema.NegativeInteger -> Phantoms.TTerm Integer
-unNegativeInteger x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.NegativeInteger")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-nonNegativeInteger :: Phantoms.TTerm Integer -> Phantoms.TTerm Schema.NonNegativeInteger
-nonNegativeInteger x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.NonNegativeInteger"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unNonNegativeInteger :: Phantoms.TTerm Schema.NonNegativeInteger -> Phantoms.TTerm Integer
-unNonNegativeInteger x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.NonNegativeInteger")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-nonPositiveInteger :: Phantoms.TTerm Integer -> Phantoms.TTerm Schema.NonPositiveInteger
-nonPositiveInteger x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.NonPositiveInteger"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unNonPositiveInteger :: Phantoms.TTerm Schema.NonPositiveInteger -> Phantoms.TTerm Integer
-unNonPositiveInteger x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.NonPositiveInteger")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-normalizedString :: Phantoms.TTerm String -> Phantoms.TTerm Schema.NormalizedString
-normalizedString x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.NormalizedString"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unNormalizedString :: Phantoms.TTerm Schema.NormalizedString -> Phantoms.TTerm String
-unNormalizedString x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.NormalizedString")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-positiveInteger :: Phantoms.TTerm Integer -> Phantoms.TTerm Schema.PositiveInteger
-positiveInteger x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.PositiveInteger"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unPositiveInteger :: Phantoms.TTerm Schema.PositiveInteger -> Phantoms.TTerm Integer
-unPositiveInteger x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.PositiveInteger")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-qName :: Phantoms.TTerm String -> Phantoms.TTerm Schema.QName
-qName x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.QName"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unQName :: Phantoms.TTerm Schema.QName -> Phantoms.TTerm String
-unQName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.QName")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-short :: Phantoms.TTerm I.Int16 -> Phantoms.TTerm Schema.Short
-short x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Short"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unShort :: Phantoms.TTerm Schema.Short -> Phantoms.TTerm I.Int16
-unShort x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Short")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-string :: Phantoms.TTerm String -> Phantoms.TTerm Schema.String_
-string x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.String"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unString :: Phantoms.TTerm Schema.String_ -> Phantoms.TTerm String
-unString x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.String")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-time :: Phantoms.TTerm String -> Phantoms.TTerm Schema.Time
-time x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Time"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unTime :: Phantoms.TTerm Schema.Time -> Phantoms.TTerm String
-unTime x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Time")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-token :: Phantoms.TTerm String -> Phantoms.TTerm Schema.Token
-token x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Token"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unToken :: Phantoms.TTerm Schema.Token -> Phantoms.TTerm String
-unToken x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Token")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-unsignedByte :: Phantoms.TTerm I.Int16 -> Phantoms.TTerm Schema.UnsignedByte
-unsignedByte x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.UnsignedByte"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unUnsignedByte :: Phantoms.TTerm Schema.UnsignedByte -> Phantoms.TTerm I.Int16
-unUnsignedByte x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.UnsignedByte")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-unsignedInt :: Phantoms.TTerm I.Int64 -> Phantoms.TTerm Schema.UnsignedInt
-unsignedInt x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.UnsignedInt"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unUnsignedInt :: Phantoms.TTerm Schema.UnsignedInt -> Phantoms.TTerm I.Int64
-unUnsignedInt x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.UnsignedInt")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-unsignedLong :: Phantoms.TTerm Integer -> Phantoms.TTerm Schema.UnsignedLong
-unsignedLong x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.UnsignedLong"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unUnsignedLong :: Phantoms.TTerm Schema.UnsignedLong -> Phantoms.TTerm Integer
-unUnsignedLong x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.UnsignedLong")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-unsignedShort :: Phantoms.TTerm Int -> Phantoms.TTerm Schema.UnsignedShort
-unsignedShort x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.UnsignedShort"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unUnsignedShort :: Phantoms.TTerm Schema.UnsignedShort -> Phantoms.TTerm Int
-unUnsignedShort x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.UnsignedShort")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 constrainingFacet :: Phantoms.TTerm () -> Phantoms.TTerm Schema.ConstrainingFacet
 constrainingFacet x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.ConstrainingFacet"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unConstrainingFacet :: Phantoms.TTerm Schema.ConstrainingFacet -> Phantoms.TTerm ()
-unConstrainingFacet x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.ConstrainingFacet")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 datatypeAnySimpleType :: Phantoms.TTerm Schema.Datatype
 datatypeAnySimpleType =
@@ -905,3 +407,501 @@ datatypeUnsignedShort =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unsignedShort"),
         Core.fieldTerm = Core.TermUnit}}))
+
+date :: Phantoms.TTerm String -> Phantoms.TTerm Schema.Date
+date x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Date"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+dateTime :: Phantoms.TTerm String -> Phantoms.TTerm Schema.DateTime
+dateTime x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.DateTime"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+decimal :: Phantoms.TTerm String -> Phantoms.TTerm Schema.Decimal
+decimal x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Decimal"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+double :: Phantoms.TTerm Double -> Phantoms.TTerm Schema.Double_
+double x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Double"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+duration :: Phantoms.TTerm String -> Phantoms.TTerm Schema.Duration
+duration x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Duration"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+eNTITIES :: Phantoms.TTerm String -> Phantoms.TTerm Schema.ENTITIES
+eNTITIES x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.ENTITIES"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+eNTITY :: Phantoms.TTerm String -> Phantoms.TTerm Schema.ENTITY
+eNTITY x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.ENTITY"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+float :: Phantoms.TTerm Float -> Phantoms.TTerm Schema.Float_
+float x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Float"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+gDay :: Phantoms.TTerm String -> Phantoms.TTerm Schema.GDay
+gDay x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.GDay"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+gMonth :: Phantoms.TTerm String -> Phantoms.TTerm Schema.GMonth
+gMonth x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.GMonth"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+gMonthDay :: Phantoms.TTerm String -> Phantoms.TTerm Schema.GMonthDay
+gMonthDay x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.GMonthDay"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+gYear :: Phantoms.TTerm String -> Phantoms.TTerm Schema.GYear
+gYear x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.GYear"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+gYearMonth :: Phantoms.TTerm String -> Phantoms.TTerm Schema.GYearMonth
+gYearMonth x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.GYearMonth"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+hexBinary :: Phantoms.TTerm String -> Phantoms.TTerm Schema.HexBinary
+hexBinary x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.HexBinary"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+iD :: Phantoms.TTerm String -> Phantoms.TTerm Schema.ID
+iD x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.ID"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+iDREF :: Phantoms.TTerm String -> Phantoms.TTerm Schema.IDREF
+iDREF x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.IDREF"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+iDREFS :: Phantoms.TTerm String -> Phantoms.TTerm Schema.IDREFS
+iDREFS x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.IDREFS"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+int :: Phantoms.TTerm Int -> Phantoms.TTerm Schema.Int_
+int x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Int"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+integer :: Phantoms.TTerm Integer -> Phantoms.TTerm Schema.Integer_
+integer x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Integer"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+language :: Phantoms.TTerm String -> Phantoms.TTerm Schema.Language
+language x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Language"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+long :: Phantoms.TTerm I.Int64 -> Phantoms.TTerm Schema.Long
+long x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Long"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+nMTOKEN :: Phantoms.TTerm String -> Phantoms.TTerm Schema.NMTOKEN
+nMTOKEN x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.NMTOKEN"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+nOTATION :: Phantoms.TTerm String -> Phantoms.TTerm Schema.NOTATION
+nOTATION x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.NOTATION"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+name :: Phantoms.TTerm String -> Phantoms.TTerm Schema.Name
+name x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Name"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+negativeInteger :: Phantoms.TTerm Integer -> Phantoms.TTerm Schema.NegativeInteger
+negativeInteger x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.NegativeInteger"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+nonNegativeInteger :: Phantoms.TTerm Integer -> Phantoms.TTerm Schema.NonNegativeInteger
+nonNegativeInteger x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.NonNegativeInteger"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+nonPositiveInteger :: Phantoms.TTerm Integer -> Phantoms.TTerm Schema.NonPositiveInteger
+nonPositiveInteger x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.NonPositiveInteger"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+normalizedString :: Phantoms.TTerm String -> Phantoms.TTerm Schema.NormalizedString
+normalizedString x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.NormalizedString"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+positiveInteger :: Phantoms.TTerm Integer -> Phantoms.TTerm Schema.PositiveInteger
+positiveInteger x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.PositiveInteger"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+qName :: Phantoms.TTerm String -> Phantoms.TTerm Schema.QName
+qName x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.QName"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+short :: Phantoms.TTerm I.Int16 -> Phantoms.TTerm Schema.Short
+short x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Short"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+string :: Phantoms.TTerm String -> Phantoms.TTerm Schema.String_
+string x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.String"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+time :: Phantoms.TTerm String -> Phantoms.TTerm Schema.Time
+time x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Time"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+token :: Phantoms.TTerm String -> Phantoms.TTerm Schema.Token
+token x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.Token"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+unAnySimpleType :: Phantoms.TTerm Schema.AnySimpleType -> Phantoms.TTerm String
+unAnySimpleType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.AnySimpleType")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unAnyType :: Phantoms.TTerm Schema.AnyType -> Phantoms.TTerm String
+unAnyType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.AnyType")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unAnyURI :: Phantoms.TTerm Schema.AnyURI -> Phantoms.TTerm String
+unAnyURI x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.AnyURI")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unBase64Binary :: Phantoms.TTerm Schema.Base64Binary -> Phantoms.TTerm String
+unBase64Binary x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Base64Binary")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unBoolean :: Phantoms.TTerm Schema.Boolean -> Phantoms.TTerm Bool
+unBoolean x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Boolean")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unByte :: Phantoms.TTerm Schema.Byte -> Phantoms.TTerm I.Int8
+unByte x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Byte")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unConstrainingFacet :: Phantoms.TTerm Schema.ConstrainingFacet -> Phantoms.TTerm ()
+unConstrainingFacet x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.ConstrainingFacet")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unDate :: Phantoms.TTerm Schema.Date -> Phantoms.TTerm String
+unDate x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Date")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unDateTime :: Phantoms.TTerm Schema.DateTime -> Phantoms.TTerm String
+unDateTime x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.DateTime")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unDecimal :: Phantoms.TTerm Schema.Decimal -> Phantoms.TTerm String
+unDecimal x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Decimal")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unDouble :: Phantoms.TTerm Schema.Double_ -> Phantoms.TTerm Double
+unDouble x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Double")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unDuration :: Phantoms.TTerm Schema.Duration -> Phantoms.TTerm String
+unDuration x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Duration")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unENTITIES :: Phantoms.TTerm Schema.ENTITIES -> Phantoms.TTerm String
+unENTITIES x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.ENTITIES")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unENTITY :: Phantoms.TTerm Schema.ENTITY -> Phantoms.TTerm String
+unENTITY x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.ENTITY")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unFloat :: Phantoms.TTerm Schema.Float_ -> Phantoms.TTerm Float
+unFloat x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Float")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unGDay :: Phantoms.TTerm Schema.GDay -> Phantoms.TTerm String
+unGDay x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.GDay")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unGMonth :: Phantoms.TTerm Schema.GMonth -> Phantoms.TTerm String
+unGMonth x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.GMonth")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unGMonthDay :: Phantoms.TTerm Schema.GMonthDay -> Phantoms.TTerm String
+unGMonthDay x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.GMonthDay")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unGYear :: Phantoms.TTerm Schema.GYear -> Phantoms.TTerm String
+unGYear x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.GYear")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unGYearMonth :: Phantoms.TTerm Schema.GYearMonth -> Phantoms.TTerm String
+unGYearMonth x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.GYearMonth")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unHexBinary :: Phantoms.TTerm Schema.HexBinary -> Phantoms.TTerm String
+unHexBinary x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.HexBinary")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unID :: Phantoms.TTerm Schema.ID -> Phantoms.TTerm String
+unID x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.ID")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unIDREF :: Phantoms.TTerm Schema.IDREF -> Phantoms.TTerm String
+unIDREF x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.IDREF")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unIDREFS :: Phantoms.TTerm Schema.IDREFS -> Phantoms.TTerm String
+unIDREFS x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.IDREFS")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unInt :: Phantoms.TTerm Schema.Int_ -> Phantoms.TTerm Int
+unInt x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Int")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unInteger :: Phantoms.TTerm Schema.Integer_ -> Phantoms.TTerm Integer
+unInteger x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Integer")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unLanguage :: Phantoms.TTerm Schema.Language -> Phantoms.TTerm String
+unLanguage x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Language")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unLong :: Phantoms.TTerm Schema.Long -> Phantoms.TTerm I.Int64
+unLong x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Long")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unNMTOKEN :: Phantoms.TTerm Schema.NMTOKEN -> Phantoms.TTerm String
+unNMTOKEN x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.NMTOKEN")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unNOTATION :: Phantoms.TTerm Schema.NOTATION -> Phantoms.TTerm String
+unNOTATION x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.NOTATION")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unName :: Phantoms.TTerm Schema.Name -> Phantoms.TTerm String
+unName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Name")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unNegativeInteger :: Phantoms.TTerm Schema.NegativeInteger -> Phantoms.TTerm Integer
+unNegativeInteger x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.NegativeInteger")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unNonNegativeInteger :: Phantoms.TTerm Schema.NonNegativeInteger -> Phantoms.TTerm Integer
+unNonNegativeInteger x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.NonNegativeInteger")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unNonPositiveInteger :: Phantoms.TTerm Schema.NonPositiveInteger -> Phantoms.TTerm Integer
+unNonPositiveInteger x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.NonPositiveInteger")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unNormalizedString :: Phantoms.TTerm Schema.NormalizedString -> Phantoms.TTerm String
+unNormalizedString x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.NormalizedString")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unPositiveInteger :: Phantoms.TTerm Schema.PositiveInteger -> Phantoms.TTerm Integer
+unPositiveInteger x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.PositiveInteger")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unQName :: Phantoms.TTerm Schema.QName -> Phantoms.TTerm String
+unQName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.QName")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unShort :: Phantoms.TTerm Schema.Short -> Phantoms.TTerm I.Int16
+unShort x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Short")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unString :: Phantoms.TTerm Schema.String_ -> Phantoms.TTerm String
+unString x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.String")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unTime :: Phantoms.TTerm Schema.Time -> Phantoms.TTerm String
+unTime x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Time")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unToken :: Phantoms.TTerm Schema.Token -> Phantoms.TTerm String
+unToken x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.Token")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unUnsignedByte :: Phantoms.TTerm Schema.UnsignedByte -> Phantoms.TTerm I.Int16
+unUnsignedByte x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.UnsignedByte")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unUnsignedInt :: Phantoms.TTerm Schema.UnsignedInt -> Phantoms.TTerm I.Int64
+unUnsignedInt x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.UnsignedInt")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unUnsignedLong :: Phantoms.TTerm Schema.UnsignedLong -> Phantoms.TTerm Integer
+unUnsignedLong x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.UnsignedLong")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unUnsignedShort :: Phantoms.TTerm Schema.UnsignedShort -> Phantoms.TTerm Int
+unUnsignedShort x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.w3.xml.schema.UnsignedShort")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unsignedByte :: Phantoms.TTerm I.Int16 -> Phantoms.TTerm Schema.UnsignedByte
+unsignedByte x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.UnsignedByte"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+unsignedInt :: Phantoms.TTerm I.Int64 -> Phantoms.TTerm Schema.UnsignedInt
+unsignedInt x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.UnsignedInt"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+unsignedLong :: Phantoms.TTerm Integer -> Phantoms.TTerm Schema.UnsignedLong
+unsignedLong x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.UnsignedLong"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+unsignedShort :: Phantoms.TTerm Int -> Phantoms.TTerm Schema.UnsignedShort
+unsignedShort x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.w3.xml.schema.UnsignedShort"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))

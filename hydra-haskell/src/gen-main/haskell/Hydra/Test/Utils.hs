@@ -20,19 +20,10 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Run type inference on all terms in a TestGroup to ensure lambdas have domain types
-inferTestGroupTerms :: Graph.Graph -> Testing.TestGroup -> Either String Testing.TestGroup
-inferTestGroupTerms g tg =
-
-      let name_ = Testing.testGroupName tg
-          desc = Testing.testGroupDescription tg
-          subgroups = Testing.testGroupSubgroups tg
-          cases_ = Testing.testGroupCases tg
-      in (Eithers.bind (Eithers.mapList (\sg -> inferTestGroupTerms g sg) subgroups) (\inferredSubgroups -> Eithers.map (\inferredCases -> Testing.TestGroup {
-        Testing.testGroupName = name_,
-        Testing.testGroupDescription = desc,
-        Testing.testGroupSubgroups = inferredSubgroups,
-        Testing.testGroupCases = inferredCases}) (Eithers.mapList (\tc -> inferTestCase g tc) cases_)))
+-- | Run type inference on a single term
+inferTerm :: Graph.Graph -> Core.Term -> Either String Core.Term
+inferTerm g term =
+    Eithers.bimap (\ic -> Errors.error (Context.inContextObject ic)) (\x -> Typing.inferenceResultTerm x) (Inference.inferInGraphContext Lexical.emptyContext g term)
 
 -- | Run type inference on the terms in a test case
 inferTestCase :: Graph.Graph -> Testing.TestCaseWithMetadata -> Either String Testing.TestCaseWithMetadata
@@ -55,7 +46,16 @@ inferTestCase g tcm =
             Testing.delegatedEvaluationTestCaseOutput = inferredOutput})) (inferTerm g output_)))
         _ -> Right tcase))
 
--- | Run type inference on a single term
-inferTerm :: Graph.Graph -> Core.Term -> Either String Core.Term
-inferTerm g term =
-    Eithers.bimap (\ic -> Errors.error (Context.inContextObject ic)) (\x -> Typing.inferenceResultTerm x) (Inference.inferInGraphContext Lexical.emptyContext g term)
+-- | Run type inference on all terms in a TestGroup to ensure lambdas have domain types
+inferTestGroupTerms :: Graph.Graph -> Testing.TestGroup -> Either String Testing.TestGroup
+inferTestGroupTerms g tg =
+
+      let name_ = Testing.testGroupName tg
+          desc = Testing.testGroupDescription tg
+          subgroups = Testing.testGroupSubgroups tg
+          cases_ = Testing.testGroupCases tg
+      in (Eithers.bind (Eithers.mapList (\sg -> inferTestGroupTerms g sg) subgroups) (\inferredSubgroups -> Eithers.map (\inferredCases -> Testing.TestGroup {
+        Testing.testGroupName = name_,
+        Testing.testGroupDescription = desc,
+        Testing.testGroupSubgroups = inferredSubgroups,
+        Testing.testGroupCases = inferredCases}) (Eithers.mapList (\tc -> inferTestCase g tc) cases_)))

@@ -20,105 +20,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-key_additionalItems :: String
-key_additionalItems = "additionalItems"
-
-key_additionalProperties :: String
-key_additionalProperties = "additionalProperties"
-
-key_allOf :: String
-key_allOf = "allOf"
-
-key_anyOf :: String
-key_anyOf = "anyOf"
-
-key_definitions :: String
-key_definitions = "$defs"
-
-key_dependencies :: String
-key_dependencies = "dependencies"
-
-key_description :: String
-key_description = "description"
-
-key_enum :: String
-key_enum = "enum"
-
-key_exclusiveMaximum :: String
-key_exclusiveMaximum = "exclusiveMaximum"
-
-key_exclusiveMinimum :: String
-key_exclusiveMinimum = "exclusiveMinimum"
-
-key_id :: String
-key_id = "$id"
-
-key_items :: String
-key_items = "items"
-
-key_label :: String
-key_label = "label"
-
-key_maxItems :: String
-key_maxItems = "maxItems"
-
-key_maxLength :: String
-key_maxLength = "maxLength"
-
-key_maxProperties :: String
-key_maxProperties = "maxProperties"
-
-key_maximum :: String
-key_maximum = "maximum"
-
-key_minItems :: String
-key_minItems = "minItems"
-
-key_minimum :: String
-key_minimum = "minimum"
-
-key_minLength :: String
-key_minLength = "minLength"
-
-key_minProperties :: String
-key_minProperties = "minProperties"
-
-key_multipleOf :: String
-key_multipleOf = "multipleOf"
-
-key_not :: String
-key_not = "not"
-
-key_oneOf :: String
-key_oneOf = "oneOf"
-
-key_pattern :: String
-key_pattern = "pattern"
-
-key_patternProperties :: String
-key_patternProperties = "patternProperties"
-
-key_properties :: String
-key_properties = "properties"
-
-key_ref :: String
-key_ref = "$ref"
-
-key_required :: String
-key_required = "required"
-
-key_schema :: String
-key_schema = "$schema"
-
-key_title :: String
-key_title = "title"
-
-key_type :: String
-key_type = "type"
-
-key_uniqueItems :: String
-key_uniqueItems = "uniqueItems"
-
 -- | Encode additional items as a JSON value
 encodeAdditionalItems :: Schema.AdditionalItems -> Model.Value
 encodeAdditionalItems ai =
@@ -192,6 +93,18 @@ encodeNumericRestriction r =
       Schema.NumericRestrictionMultipleOf v0 -> [
         (key_multipleOf, (encodeInteger v0))]
 
+-- | Encode an object restriction as a key-value pair
+encodeObjectRestriction :: Schema.ObjectRestriction -> (String, Model.Value)
+encodeObjectRestriction r =
+    case r of
+      Schema.ObjectRestrictionProperties v0 -> (key_properties, (Model.ValueObject (Maps.fromList (Lists.map encodeProperty (Maps.toList v0)))))
+      Schema.ObjectRestrictionAdditionalProperties v0 -> (key_additionalProperties, (encodeAdditionalItems v0))
+      Schema.ObjectRestrictionRequired v0 -> (key_required, (Model.ValueArray (Lists.map encodeKeyword v0)))
+      Schema.ObjectRestrictionMinProperties v0 -> (key_minProperties, (encodeInteger v0))
+      Schema.ObjectRestrictionMaxProperties v0 -> (key_maxProperties, (encodeInteger v0))
+      Schema.ObjectRestrictionDependencies v0 -> (key_dependencies, (Model.ValueObject (Maps.fromList (Lists.map encodeKeywordSchemaOrArray (Maps.toList v0)))))
+      Schema.ObjectRestrictionPatternProperties v0 -> (key_patternProperties, (Model.ValueObject (Maps.fromList (Lists.map encodePatternProperty (Maps.toList v0)))))
+
 -- | Encode a pattern property pair as a key-value pair
 encodePatternProperty :: (Schema.RegularExpression, Schema.Schema) -> (String, Model.Value)
 encodePatternProperty p =
@@ -207,18 +120,6 @@ encodeProperty p =
       let k = Pairs.first p
           s = Pairs.second p
       in (Schema.unKeyword k, (encodeSchema s))
-
--- | Encode an object restriction as a key-value pair
-encodeObjectRestriction :: Schema.ObjectRestriction -> (String, Model.Value)
-encodeObjectRestriction r =
-    case r of
-      Schema.ObjectRestrictionProperties v0 -> (key_properties, (Model.ValueObject (Maps.fromList (Lists.map encodeProperty (Maps.toList v0)))))
-      Schema.ObjectRestrictionAdditionalProperties v0 -> (key_additionalProperties, (encodeAdditionalItems v0))
-      Schema.ObjectRestrictionRequired v0 -> (key_required, (Model.ValueArray (Lists.map encodeKeyword v0)))
-      Schema.ObjectRestrictionMinProperties v0 -> (key_minProperties, (encodeInteger v0))
-      Schema.ObjectRestrictionMaxProperties v0 -> (key_maxProperties, (encodeInteger v0))
-      Schema.ObjectRestrictionDependencies v0 -> (key_dependencies, (Model.ValueObject (Maps.fromList (Lists.map encodeKeywordSchemaOrArray (Maps.toList v0)))))
-      Schema.ObjectRestrictionPatternProperties v0 -> (key_patternProperties, (Model.ValueObject (Maps.fromList (Lists.map encodePatternProperty (Maps.toList v0)))))
 
 -- | Encode a restriction as a list of key-value pairs
 encodeRestriction :: Schema.Restriction -> [(String, Model.Value)]
@@ -242,14 +143,6 @@ encodeRestriction r =
       Schema.RestrictionDescription v0 -> [
         (key_description, (Model.ValueString v0))]
 
--- | Encode a string restriction as a key-value pair
-encodeStringRestriction :: Schema.StringRestriction -> (String, Model.Value)
-encodeStringRestriction r =
-    case r of
-      Schema.StringRestrictionMaxLength v0 -> (key_maxLength, (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint v0))))
-      Schema.StringRestrictionMinLength v0 -> (key_minLength, (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint v0))))
-      Schema.StringRestrictionPattern v0 -> (key_pattern, (Model.ValueString (Schema.unRegularExpression v0)))
-
 -- | Encode a schema as a JSON object value
 encodeSchema :: Schema.Schema -> Model.Value
 encodeSchema s = Model.ValueObject (Maps.fromList (Lists.concat (Lists.map encodeRestriction (Schema.unSchema s))))
@@ -264,6 +157,14 @@ encodeSchemaOrArray soa =
 -- | Encode a schema reference as a JSON string value
 encodeSchemaReference :: Schema.SchemaReference -> Model.Value
 encodeSchemaReference sr = Model.ValueString (Schema.unSchemaReference sr)
+
+-- | Encode a string restriction as a key-value pair
+encodeStringRestriction :: Schema.StringRestriction -> (String, Model.Value)
+encodeStringRestriction r =
+    case r of
+      Schema.StringRestrictionMaxLength v0 -> (key_maxLength, (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint v0))))
+      Schema.StringRestrictionMinLength v0 -> (key_minLength, (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint v0))))
+      Schema.StringRestrictionPattern v0 -> (key_pattern, (Model.ValueString (Schema.unRegularExpression v0)))
 
 -- | Encode a type as a JSON value
 encodeType :: Schema.Type -> Model.Value
@@ -283,6 +184,12 @@ encodeTypeName t =
       Schema.TypeNameNull -> Model.ValueString "null"
       Schema.TypeNameArray -> Model.ValueString "array"
       Schema.TypeNameObject -> Model.ValueString "object"
+
+-- | Extract the map from a JSON object value
+fromObject :: Model.Value -> M.Map String Model.Value
+fromObject v =
+    case v of
+      Model.ValueObject v0 -> v0
 
 -- | Convert a JSON Schema document to a JSON value
 jsonSchemaDocumentToJsonValue :: Schema.Document -> Model.Value
@@ -306,11 +213,104 @@ jsonSchemaDocumentToJsonValue doc =
 jsonSchemaDocumentToString :: Schema.Document -> String
 jsonSchemaDocumentToString doc = Writer.printJson (jsonSchemaDocumentToJsonValue doc)
 
--- | Extract the map from a JSON object value
-fromObject :: Model.Value -> M.Map String Model.Value
-fromObject v =
-    case v of
-      Model.ValueObject v0 -> v0
+key_additionalItems :: String
+key_additionalItems = "additionalItems"
+
+key_additionalProperties :: String
+key_additionalProperties = "additionalProperties"
+
+key_allOf :: String
+key_allOf = "allOf"
+
+key_anyOf :: String
+key_anyOf = "anyOf"
+
+key_definitions :: String
+key_definitions = "$defs"
+
+key_dependencies :: String
+key_dependencies = "dependencies"
+
+key_description :: String
+key_description = "description"
+
+key_enum :: String
+key_enum = "enum"
+
+key_exclusiveMaximum :: String
+key_exclusiveMaximum = "exclusiveMaximum"
+
+key_exclusiveMinimum :: String
+key_exclusiveMinimum = "exclusiveMinimum"
+
+key_id :: String
+key_id = "$id"
+
+key_items :: String
+key_items = "items"
+
+key_label :: String
+key_label = "label"
+
+key_maxItems :: String
+key_maxItems = "maxItems"
+
+key_maxLength :: String
+key_maxLength = "maxLength"
+
+key_maxProperties :: String
+key_maxProperties = "maxProperties"
+
+key_maximum :: String
+key_maximum = "maximum"
+
+key_minItems :: String
+key_minItems = "minItems"
+
+key_minLength :: String
+key_minLength = "minLength"
+
+key_minProperties :: String
+key_minProperties = "minProperties"
+
+key_minimum :: String
+key_minimum = "minimum"
+
+key_multipleOf :: String
+key_multipleOf = "multipleOf"
+
+key_not :: String
+key_not = "not"
+
+key_oneOf :: String
+key_oneOf = "oneOf"
+
+key_pattern :: String
+key_pattern = "pattern"
+
+key_patternProperties :: String
+key_patternProperties = "patternProperties"
+
+key_properties :: String
+key_properties = "properties"
+
+key_ref :: String
+key_ref = "$ref"
+
+key_required :: String
+key_required = "required"
+
+key_schema :: String
+key_schema = "$schema"
+
+key_title :: String
+key_title = "title"
+
+key_type :: String
+key_type = "type"
+
+key_uniqueItems :: String
+key_uniqueItems = "uniqueItems"
 
 -- | Construct a JSON object from a list of optional key-value pairs, filtering out Nothing values
 toObject :: [(String, (Maybe Model.Value))] -> Model.Value

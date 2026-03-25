@@ -33,6 +33,14 @@ checkDuplicateBindings path bindings =
         Core_.duplicateBindingErrorLocation = path,
         Core_.duplicateBindingErrorName = name})) dup)
 
+-- | Check for duplicate field names in a list of field types
+checkDuplicateFieldTypes :: [Core.FieldType] -> (Core.Name -> Maybe t0) -> Maybe t0
+checkDuplicateFieldTypes fields mkError =
+
+      let names = Lists.map Core.fieldTypeName fields
+          dup = findDuplicateFieldType names
+      in (Maybes.cases dup Nothing (\name -> mkError name))
+
 -- | Check for duplicate field names in a list of fields
 checkDuplicateFields :: Accessors.AccessorPath -> [Core.Name] -> Maybe Core_.InvalidTermError
 checkDuplicateFields path names =
@@ -41,14 +49,6 @@ checkDuplicateFields path names =
       in (Maybes.map (\name -> Core_.InvalidTermErrorDuplicateField (Core_.DuplicateFieldError {
         Core_.duplicateFieldErrorLocation = path,
         Core_.duplicateFieldErrorName = name})) dup)
-
--- | Check for duplicate field names in a list of field types
-checkDuplicateFieldTypes :: [Core.FieldType] -> (Core.Name -> Maybe t0) -> Maybe t0
-checkDuplicateFieldTypes fields mkError =
-
-      let names = Lists.map Core.fieldTypeName fields
-          dup = findDuplicateFieldType names
-      in (Maybes.cases dup Nothing (\name -> mkError name))
 
 -- | Check if any name in a list shadows a variable already in scope
 checkShadowing :: Accessors.AccessorPath -> Graph.Graph -> [Core.Name] -> Maybe Core_.InvalidTermError
@@ -200,78 +200,6 @@ checkTerm typed path cx term =
           Core_.emptyTypeNameInTermErrorLocation = path}))) Nothing)
       _ -> Nothing
 
--- | Check a single type node for validation errors
-validateTypeNode :: S.Set Core.Name -> Core.Type -> Maybe Core_.InvalidTypeError
-validateTypeNode boundVars typ =
-    case typ of
-      Core.TypeAnnotated v0 ->
-        let body = Core.annotatedTypeBody v0
-            annMap = Core.annotatedTypeAnnotation v0
-        in (firstTypeError [
-          Logic.ifElse (Maps.null annMap) (Just (Core_.InvalidTypeErrorEmptyTypeAnnotation (Core_.EmptyTypeAnnotationError {
-            Core_.emptyTypeAnnotationErrorLocation = (Accessors.AccessorPath [])}))) Nothing,
-          case body of
-            Core.TypeAnnotated _ -> Just (Core_.InvalidTypeErrorNestedTypeAnnotation (Core_.NestedTypeAnnotationError {
-              Core_.nestedTypeAnnotationErrorLocation = (Accessors.AccessorPath [])}))
-            _ -> Nothing])
-      Core.TypeEither v0 -> firstTypeError [
-        checkVoid (Core.eitherTypeLeft v0),
-        (checkVoid (Core.eitherTypeRight v0))]
-      Core.TypeForall v0 ->
-        let paramName = Core.forallTypeParameter v0
-        in (firstTypeError [
-          Logic.ifElse (Sets.member paramName boundVars) (Just (Core_.InvalidTypeErrorTypeVariableShadowingInForall (Core_.TypeVariableShadowingInForallError {
-            Core_.typeVariableShadowingInForallErrorLocation = (Accessors.AccessorPath []),
-            Core_.typeVariableShadowingInForallErrorName = paramName}))) Nothing,
-          (Logic.ifElse (isValidName paramName) Nothing (Just (Core_.InvalidTypeErrorInvalidForallParameterName (Core_.InvalidForallParameterNameError {
-            Core_.invalidForallParameterNameErrorLocation = (Accessors.AccessorPath []),
-            Core_.invalidForallParameterNameErrorName = paramName}))))])
-      Core.TypeFunction v0 -> checkVoid (Core.functionTypeCodomain v0)
-      Core.TypeList v0 -> checkVoid v0
-      Core.TypeMap v0 ->
-        let keyType = Core.mapTypeKeys v0
-        in (firstTypeError [
-          case keyType of
-            Core.TypeFunction _ -> Just (Core_.InvalidTypeErrorNonComparableMapKeyType (Core_.NonComparableMapKeyTypeError {
-              Core_.nonComparableMapKeyTypeErrorLocation = (Accessors.AccessorPath []),
-              Core_.nonComparableMapKeyTypeErrorKeyType = keyType}))
-            _ -> Nothing,
-          (checkVoid keyType),
-          (checkVoid (Core.mapTypeValues v0))])
-      Core.TypePair v0 -> firstTypeError [
-        checkVoid (Core.pairTypeFirst v0),
-        (checkVoid (Core.pairTypeSecond v0))]
-      Core.TypeRecord v0 -> firstTypeError [
-        Logic.ifElse (Lists.null v0) (Just (Core_.InvalidTypeErrorEmptyRecordType (Core_.EmptyRecordTypeError {
-          Core_.emptyRecordTypeErrorLocation = (Accessors.AccessorPath [])}))) Nothing,
-        (checkDuplicateFieldTypes v0 (\dupName -> Just (Core_.InvalidTypeErrorDuplicateRecordTypeFieldNames (Core_.DuplicateRecordTypeFieldNamesError {
-          Core_.duplicateRecordTypeFieldNamesErrorLocation = (Accessors.AccessorPath []),
-          Core_.duplicateRecordTypeFieldNamesErrorName = dupName})))),
-        (firstTypeError (Lists.map (\f -> checkVoid (Core.fieldTypeType f)) v0))]
-      Core.TypeSet v0 -> firstTypeError [
-        case v0 of
-          Core.TypeFunction _ -> Just (Core_.InvalidTypeErrorNonComparableSetElementType (Core_.NonComparableSetElementTypeError {
-            Core_.nonComparableSetElementTypeErrorLocation = (Accessors.AccessorPath []),
-            Core_.nonComparableSetElementTypeErrorElementType = v0}))
-          _ -> Nothing,
-        (checkVoid v0)]
-      Core.TypeUnion v0 -> firstTypeError [
-        Logic.ifElse (Lists.null v0) (Just (Core_.InvalidTypeErrorEmptyUnionType (Core_.EmptyUnionTypeError {
-          Core_.emptyUnionTypeErrorLocation = (Accessors.AccessorPath [])}))) Nothing,
-        (Logic.ifElse (Equality.equal (Lists.length v0) 1) (
-          let singleField = Lists.head v0
-          in (Just (Core_.InvalidTypeErrorSingleVariantUnion (Core_.SingleVariantUnionError {
-            Core_.singleVariantUnionErrorLocation = (Accessors.AccessorPath []),
-            Core_.singleVariantUnionErrorFieldName = (Core.fieldTypeName singleField)})))) Nothing),
-        (checkDuplicateFieldTypes v0 (\dupName -> Just (Core_.InvalidTypeErrorDuplicateUnionTypeFieldNames (Core_.DuplicateUnionTypeFieldNamesError {
-          Core_.duplicateUnionTypeFieldNamesErrorLocation = (Accessors.AccessorPath []),
-          Core_.duplicateUnionTypeFieldNamesErrorName = dupName})))),
-        (firstTypeError (Lists.map (\f -> checkVoid (Core.fieldTypeType f)) v0))]
-      Core.TypeVariable v0 -> Logic.ifElse (Sets.member v0 boundVars) Nothing (Just (Core_.InvalidTypeErrorUndefinedTypeVariable (Core_.UndefinedTypeVariableError {
-        Core_.undefinedTypeVariableErrorLocation = (Accessors.AccessorPath []),
-        Core_.undefinedTypeVariableErrorName = v0})))
-      _ -> Nothing
-
 -- | Check a type for type variables not bound in the current scope
 checkUndefinedTypeVariablesInType :: t0 -> Graph.Graph -> Core.Type -> (Core.Name -> Maybe t1) -> Maybe t1
 checkUndefinedTypeVariablesInType path cx typ mkError =
@@ -373,3 +301,75 @@ type_ boundVars typ =
         Core.TypeUnion v0 -> firstTypeError (Lists.map (\f -> type_ boundVars (Core.fieldTypeType f)) v0)
         Core.TypeWrap v0 -> type_ boundVars v0
         _ -> Nothing) (\err -> Just err))
+
+-- | Check a single type node for validation errors
+validateTypeNode :: S.Set Core.Name -> Core.Type -> Maybe Core_.InvalidTypeError
+validateTypeNode boundVars typ =
+    case typ of
+      Core.TypeAnnotated v0 ->
+        let body = Core.annotatedTypeBody v0
+            annMap = Core.annotatedTypeAnnotation v0
+        in (firstTypeError [
+          Logic.ifElse (Maps.null annMap) (Just (Core_.InvalidTypeErrorEmptyTypeAnnotation (Core_.EmptyTypeAnnotationError {
+            Core_.emptyTypeAnnotationErrorLocation = (Accessors.AccessorPath [])}))) Nothing,
+          case body of
+            Core.TypeAnnotated _ -> Just (Core_.InvalidTypeErrorNestedTypeAnnotation (Core_.NestedTypeAnnotationError {
+              Core_.nestedTypeAnnotationErrorLocation = (Accessors.AccessorPath [])}))
+            _ -> Nothing])
+      Core.TypeEither v0 -> firstTypeError [
+        checkVoid (Core.eitherTypeLeft v0),
+        (checkVoid (Core.eitherTypeRight v0))]
+      Core.TypeForall v0 ->
+        let paramName = Core.forallTypeParameter v0
+        in (firstTypeError [
+          Logic.ifElse (Sets.member paramName boundVars) (Just (Core_.InvalidTypeErrorTypeVariableShadowingInForall (Core_.TypeVariableShadowingInForallError {
+            Core_.typeVariableShadowingInForallErrorLocation = (Accessors.AccessorPath []),
+            Core_.typeVariableShadowingInForallErrorName = paramName}))) Nothing,
+          (Logic.ifElse (isValidName paramName) Nothing (Just (Core_.InvalidTypeErrorInvalidForallParameterName (Core_.InvalidForallParameterNameError {
+            Core_.invalidForallParameterNameErrorLocation = (Accessors.AccessorPath []),
+            Core_.invalidForallParameterNameErrorName = paramName}))))])
+      Core.TypeFunction v0 -> checkVoid (Core.functionTypeCodomain v0)
+      Core.TypeList v0 -> checkVoid v0
+      Core.TypeMap v0 ->
+        let keyType = Core.mapTypeKeys v0
+        in (firstTypeError [
+          case keyType of
+            Core.TypeFunction _ -> Just (Core_.InvalidTypeErrorNonComparableMapKeyType (Core_.NonComparableMapKeyTypeError {
+              Core_.nonComparableMapKeyTypeErrorLocation = (Accessors.AccessorPath []),
+              Core_.nonComparableMapKeyTypeErrorKeyType = keyType}))
+            _ -> Nothing,
+          (checkVoid keyType),
+          (checkVoid (Core.mapTypeValues v0))])
+      Core.TypePair v0 -> firstTypeError [
+        checkVoid (Core.pairTypeFirst v0),
+        (checkVoid (Core.pairTypeSecond v0))]
+      Core.TypeRecord v0 -> firstTypeError [
+        Logic.ifElse (Lists.null v0) (Just (Core_.InvalidTypeErrorEmptyRecordType (Core_.EmptyRecordTypeError {
+          Core_.emptyRecordTypeErrorLocation = (Accessors.AccessorPath [])}))) Nothing,
+        (checkDuplicateFieldTypes v0 (\dupName -> Just (Core_.InvalidTypeErrorDuplicateRecordTypeFieldNames (Core_.DuplicateRecordTypeFieldNamesError {
+          Core_.duplicateRecordTypeFieldNamesErrorLocation = (Accessors.AccessorPath []),
+          Core_.duplicateRecordTypeFieldNamesErrorName = dupName})))),
+        (firstTypeError (Lists.map (\f -> checkVoid (Core.fieldTypeType f)) v0))]
+      Core.TypeSet v0 -> firstTypeError [
+        case v0 of
+          Core.TypeFunction _ -> Just (Core_.InvalidTypeErrorNonComparableSetElementType (Core_.NonComparableSetElementTypeError {
+            Core_.nonComparableSetElementTypeErrorLocation = (Accessors.AccessorPath []),
+            Core_.nonComparableSetElementTypeErrorElementType = v0}))
+          _ -> Nothing,
+        (checkVoid v0)]
+      Core.TypeUnion v0 -> firstTypeError [
+        Logic.ifElse (Lists.null v0) (Just (Core_.InvalidTypeErrorEmptyUnionType (Core_.EmptyUnionTypeError {
+          Core_.emptyUnionTypeErrorLocation = (Accessors.AccessorPath [])}))) Nothing,
+        (Logic.ifElse (Equality.equal (Lists.length v0) 1) (
+          let singleField = Lists.head v0
+          in (Just (Core_.InvalidTypeErrorSingleVariantUnion (Core_.SingleVariantUnionError {
+            Core_.singleVariantUnionErrorLocation = (Accessors.AccessorPath []),
+            Core_.singleVariantUnionErrorFieldName = (Core.fieldTypeName singleField)})))) Nothing),
+        (checkDuplicateFieldTypes v0 (\dupName -> Just (Core_.InvalidTypeErrorDuplicateUnionTypeFieldNames (Core_.DuplicateUnionTypeFieldNamesError {
+          Core_.duplicateUnionTypeFieldNamesErrorLocation = (Accessors.AccessorPath []),
+          Core_.duplicateUnionTypeFieldNamesErrorName = dupName})))),
+        (firstTypeError (Lists.map (\f -> checkVoid (Core.fieldTypeType f)) v0))]
+      Core.TypeVariable v0 -> Logic.ifElse (Sets.member v0 boundVars) Nothing (Just (Core_.InvalidTypeErrorUndefinedTypeVariable (Core_.UndefinedTypeVariableError {
+        Core_.undefinedTypeVariableErrorLocation = (Accessors.AccessorPath []),
+        Core_.undefinedTypeVariableErrorName = v0})))
+      _ -> Nothing

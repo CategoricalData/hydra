@@ -110,6 +110,26 @@ cases cx name graph term0 =
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "case statement") " but found ") (Core_.term term)))),
         Context.inContextContext = cx}))
 
+-- | Extract an either value from a term, applying functions to the left and right values
+eitherTerm :: Context.Context -> (Core.Term -> Either (Context.InContext Errors.Error) t0) -> (Core.Term -> Either (Context.InContext Errors.Error) t1) -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) (Either t0 t1)
+eitherTerm cx leftFun rightFun graph term0 =
+    Eithers.bind (Lexical.stripAndDereferenceTerm cx graph term0) (\term -> case term of
+      Core.TermEither v0 -> Eithers.either (\l -> Eithers.map (\x -> Left x) (leftFun l)) (\r -> Eithers.map (\x -> Right x) (rightFun r)) v0
+      _ -> Left (Context.InContext {
+        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "either value") " but found ") (Core_.term term)))),
+        Context.inContextContext = cx}))
+
+-- | Extract the left and right types from an either type
+eitherType :: Context.Context -> Core.Type -> Either (Context.InContext Errors.Error) Core.EitherType
+eitherType cx typ =
+
+      let stripped = Rewriting.deannotateType typ
+      in case stripped of
+        Core.TypeEither v0 -> Right v0
+        _ -> Left (Context.InContext {
+          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "either type") " but found ") (Core_.type_ typ)))),
+          Context.inContextContext = cx})
+
 -- | Extract a field value from a list of fields
 field :: Context.Context -> Core.Name -> (Core.Term -> Either (Context.InContext Errors.Error) t0) -> Graph.Graph -> [Core.Field] -> Either (Context.InContext Errors.Error) t0
 field cx fname mapping graph fields =
@@ -159,26 +179,6 @@ floatLiteral cx lit =
 -- | Extract a float value from a term
 floatValue :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Core.FloatValue
 floatValue cx graph t = Eithers.bind (literal cx graph t) (\l -> floatLiteral cx l)
-
--- | Extract an either value from a term, applying functions to the left and right values
-eitherTerm :: Context.Context -> (Core.Term -> Either (Context.InContext Errors.Error) t0) -> (Core.Term -> Either (Context.InContext Errors.Error) t1) -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) (Either t0 t1)
-eitherTerm cx leftFun rightFun graph term0 =
-    Eithers.bind (Lexical.stripAndDereferenceTerm cx graph term0) (\term -> case term of
-      Core.TermEither v0 -> Eithers.either (\l -> Eithers.map (\x -> Left x) (leftFun l)) (\r -> Eithers.map (\x -> Right x) (rightFun r)) v0
-      _ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "either value") " but found ") (Core_.term term)))),
-        Context.inContextContext = cx}))
-
--- | Extract the left and right types from an either type
-eitherType :: Context.Context -> Core.Type -> Either (Context.InContext Errors.Error) Core.EitherType
-eitherType cx typ =
-
-      let stripped = Rewriting.deannotateType typ
-      in case stripped of
-        Core.TypeEither v0 -> Right v0
-        _ -> Left (Context.InContext {
-          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "either type") " but found ") (Core_.type_ typ)))),
-          Context.inContextContext = cx})
 
 -- | Extract a function type from a type
 functionType :: Context.Context -> Core.Type -> Either (Context.InContext Errors.Error) Core.FunctionType
@@ -267,10 +267,6 @@ integerLiteral cx lit =
 integerValue :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Core.IntegerValue
 integerValue cx graph t = Eithers.bind (literal cx graph t) (\l -> integerLiteral cx l)
 
--- | Extract the body of a lambda term
-lambdaBody :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
-lambdaBody cx graph term = Eithers.map Core.lambdaBody (lambda cx graph term)
-
 -- | Extract a lambda from a term
 lambda :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Core.Lambda
 lambda cx graph term0 =
@@ -282,6 +278,19 @@ lambda cx graph term0 =
           Context.inContextContext = cx})
       _ -> Left (Context.InContext {
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "lambda") " but found ") (Core_.term term)))),
+        Context.inContextContext = cx}))
+
+-- | Extract the body of a lambda term
+lambdaBody :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
+lambdaBody cx graph term = Eithers.map Core.lambdaBody (lambda cx graph term)
+
+-- | Extract a let expression from a term
+let_ :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Core.Let
+let_ cx graph term0 =
+    Eithers.bind (Lexical.stripAndDereferenceTerm cx graph term0) (\term -> case term of
+      Core.TermLet v0 -> Right v0
+      _ -> Left (Context.InContext {
+        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "let term") " but found ") (Core_.term term)))),
         Context.inContextContext = cx}))
 
 -- | Extract a binding with the given name from a let term
@@ -297,15 +306,6 @@ letBinding cx n graph term =
           Context.inContextContext = cx})) (Logic.ifElse (Equality.equal (Lists.length matchingBindings) 1) (Right (Core.bindingTerm (Lists.head matchingBindings))) (Left (Context.InContext {
           Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "multiple bindings named " n))),
           Context.inContextContext = cx}))))))
-
--- | Extract a let expression from a term
-let_ :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Core.Let
-let_ cx graph term0 =
-    Eithers.bind (Lexical.stripAndDereferenceTerm cx graph term0) (\term -> case term of
-      Core.TermLet v0 -> Right v0
-      _ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "let term") " but found ") (Core_.term term)))),
-        Context.inContextContext = cx}))
 
 -- | Extract a list of terms from a term
 list :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) [Core.Term]
@@ -373,16 +373,6 @@ mapType cx typ =
           Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map type") " but found ") (Core_.type_ typ)))),
           Context.inContextContext = cx})
 
--- | Ensure a function has the expected number of arguments
-nArgs :: Context.Context -> Core.Name -> Int -> [t0] -> Either (Context.InContext Errors.Error) ()
-nArgs cx name n args =
-    Logic.ifElse (Equality.equal (Lists.length args) n) (Right ()) (Left (Context.InContext {
-      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " (Strings.cat [
-        Literals.showInt32 n,
-        " arguments to primitive ",
-        (Literals.showString (Core.unName name))])) " but found ") (Literals.showInt32 (Lists.length args))))),
-      Context.inContextContext = cx}))
-
 -- | Extract an optional value from a term, applying a function to the value if present
 maybeTerm :: Context.Context -> (Core.Term -> Either (Context.InContext Errors.Error) t0) -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) (Maybe t0)
 maybeTerm cx f graph term0 =
@@ -402,6 +392,16 @@ maybeType cx typ =
         _ -> Left (Context.InContext {
           Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "maybe type") " but found ") (Core_.type_ typ)))),
           Context.inContextContext = cx})
+
+-- | Ensure a function has the expected number of arguments
+nArgs :: Context.Context -> Core.Name -> Int -> [t0] -> Either (Context.InContext Errors.Error) ()
+nArgs cx name n args =
+    Logic.ifElse (Equality.equal (Lists.length args) n) (Right ()) (Left (Context.InContext {
+      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " (Strings.cat [
+        Literals.showInt32 n,
+        " arguments to primitive ",
+        (Literals.showString (Core.unName name))])) " but found ") (Literals.showInt32 (Lists.length args))))),
+      Context.inContextContext = cx}))
 
 -- | Extract a pair of values from a term, applying functions to each component
 pair :: Context.Context -> (Core.Term -> Either (Context.InContext Errors.Error) t0) -> (Core.Term -> Either (Context.InContext Errors.Error) t1) -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) (t0, t1)

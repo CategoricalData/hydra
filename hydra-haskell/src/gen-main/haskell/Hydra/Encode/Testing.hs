@@ -45,20 +45,6 @@ alphaConversionTestCase x =
           Core.fieldName = (Core.Name "result"),
           Core.fieldTerm = (Core_.term (Testing.alphaConversionTestCaseResult x))}]})
 
-evaluationStyle :: Testing.EvaluationStyle -> Core.Term
-evaluationStyle x =
-    case x of
-      Testing.EvaluationStyleEager -> Core.TermUnion (Core.Injection {
-        Core.injectionTypeName = (Core.Name "hydra.testing.EvaluationStyle"),
-        Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "eager"),
-          Core.fieldTerm = Core.TermUnit}})
-      Testing.EvaluationStyleLazy -> Core.TermUnion (Core.Injection {
-        Core.injectionTypeName = (Core.Name "hydra.testing.EvaluationStyle"),
-        Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "lazy"),
-          Core.fieldTerm = Core.TermUnit}})
-
 caseConversionTestCase :: Testing.CaseConversionTestCase -> Core.Term
 caseConversionTestCase x =
     Core.TermRecord (Core.Record {
@@ -76,6 +62,30 @@ caseConversionTestCase x =
         Core.Field {
           Core.fieldName = (Core.Name "toString"),
           Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Testing.caseConversionTestCaseToString x))}]})
+
+deannotateTermTestCase :: Testing.DeannotateTermTestCase -> Core.Term
+deannotateTermTestCase x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.DeannotateTermTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "input"),
+          Core.fieldTerm = (Core_.term (Testing.deannotateTermTestCaseInput x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "output"),
+          Core.fieldTerm = (Core_.term (Testing.deannotateTermTestCaseOutput x))}]})
+
+deannotateTypeTestCase :: Testing.DeannotateTypeTestCase -> Core.Term
+deannotateTypeTestCase x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.DeannotateTypeTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "input"),
+          Core.fieldTerm = (Core_.type_ (Testing.deannotateTypeTestCaseInput x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "output"),
+          Core.fieldTerm = (Core_.type_ (Testing.deannotateTypeTestCaseOutput x))}]})
 
 delegatedEvaluationTestCase :: Testing.DelegatedEvaluationTestCase -> Core.Term
 delegatedEvaluationTestCase x =
@@ -101,29 +111,34 @@ etaExpansionTestCase x =
           Core.fieldName = (Core.Name "output"),
           Core.fieldTerm = (Core_.term (Testing.etaExpansionTestCaseOutput x))}]})
 
-deannotateTermTestCase :: Testing.DeannotateTermTestCase -> Core.Term
-deannotateTermTestCase x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.testing.DeannotateTermTestCase"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "input"),
-          Core.fieldTerm = (Core_.term (Testing.deannotateTermTestCaseInput x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "output"),
-          Core.fieldTerm = (Core_.term (Testing.deannotateTermTestCaseOutput x))}]})
+evaluationStyle :: Testing.EvaluationStyle -> Core.Term
+evaluationStyle x =
+    case x of
+      Testing.EvaluationStyleEager -> Core.TermUnion (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.testing.EvaluationStyle"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "eager"),
+          Core.fieldTerm = Core.TermUnit}})
+      Testing.EvaluationStyleLazy -> Core.TermUnion (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.testing.EvaluationStyle"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "lazy"),
+          Core.fieldTerm = Core.TermUnit}})
 
-deannotateTypeTestCase :: Testing.DeannotateTypeTestCase -> Core.Term
-deannotateTypeTestCase x =
+evaluationTestCase :: Testing.EvaluationTestCase -> Core.Term
+evaluationTestCase x =
     Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.testing.DeannotateTypeTestCase"),
+      Core.recordTypeName = (Core.Name "hydra.testing.EvaluationTestCase"),
       Core.recordFields = [
         Core.Field {
+          Core.fieldName = (Core.Name "evaluationStyle"),
+          Core.fieldTerm = (evaluationStyle (Testing.evaluationTestCaseEvaluationStyle x))},
+        Core.Field {
           Core.fieldName = (Core.Name "input"),
-          Core.fieldTerm = (Core_.type_ (Testing.deannotateTypeTestCaseInput x))},
+          Core.fieldTerm = (Core_.term (Testing.evaluationTestCaseInput x))},
         Core.Field {
           Core.fieldName = (Core.Name "output"),
-          Core.fieldTerm = (Core_.type_ (Testing.deannotateTypeTestCaseOutput x))}]})
+          Core.fieldTerm = (Core_.term (Testing.evaluationTestCaseOutput x))}]})
 
 flattenLetTermsTestCase :: Testing.FlattenLetTermsTestCase -> Core.Term
 flattenLetTermsTestCase x =
@@ -186,29 +201,17 @@ freeVariablesTestCase x =
           Core.fieldName = (Core.Name "output"),
           Core.fieldTerm = ((\s -> Core.TermSet (Sets.map Core_.name s)) (Testing.freeVariablesTestCaseOutput x))}]})
 
-hoistPredicate :: Testing.HoistPredicate -> Core.Term
-hoistPredicate x =
-    case x of
-      Testing.HoistPredicateCaseStatements -> Core.TermUnion (Core.Injection {
-        Core.injectionTypeName = (Core.Name "hydra.testing.HoistPredicate"),
-        Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "caseStatements"),
-          Core.fieldTerm = Core.TermUnit}})
-      Testing.HoistPredicateApplications -> Core.TermUnion (Core.Injection {
-        Core.injectionTypeName = (Core.Name "hydra.testing.HoistPredicate"),
-        Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "applications"),
-          Core.fieldTerm = Core.TermUnit}})
-      Testing.HoistPredicateLists -> Core.TermUnion (Core.Injection {
-        Core.injectionTypeName = (Core.Name "hydra.testing.HoistPredicate"),
-        Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "lists"),
-          Core.fieldTerm = Core.TermUnit}})
-      Testing.HoistPredicateNothing -> Core.TermUnion (Core.Injection {
-        Core.injectionTypeName = (Core.Name "hydra.testing.HoistPredicate"),
-        Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "nothing"),
-          Core.fieldTerm = Core.TermUnit}})
+hoistCaseStatementsTestCase :: Testing.HoistCaseStatementsTestCase -> Core.Term
+hoistCaseStatementsTestCase x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.HoistCaseStatementsTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "input"),
+          Core.fieldTerm = (Core_.term (Testing.hoistCaseStatementsTestCaseInput x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "output"),
+          Core.fieldTerm = (Core_.term (Testing.hoistCaseStatementsTestCaseOutput x))}]})
 
 hoistLetBindingsTestCase :: Testing.HoistLetBindingsTestCase -> Core.Term
 hoistLetBindingsTestCase x =
@@ -234,6 +237,30 @@ hoistPolymorphicLetBindingsTestCase x =
           Core.fieldName = (Core.Name "output"),
           Core.fieldTerm = (Core_.let_ (Testing.hoistPolymorphicLetBindingsTestCaseOutput x))}]})
 
+hoistPredicate :: Testing.HoistPredicate -> Core.Term
+hoistPredicate x =
+    case x of
+      Testing.HoistPredicateCaseStatements -> Core.TermUnion (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.testing.HoistPredicate"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "caseStatements"),
+          Core.fieldTerm = Core.TermUnit}})
+      Testing.HoistPredicateApplications -> Core.TermUnion (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.testing.HoistPredicate"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "applications"),
+          Core.fieldTerm = Core.TermUnit}})
+      Testing.HoistPredicateLists -> Core.TermUnion (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.testing.HoistPredicate"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "lists"),
+          Core.fieldTerm = Core.TermUnit}})
+      Testing.HoistPredicateNothing -> Core.TermUnion (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.testing.HoistPredicate"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "nothing"),
+          Core.fieldTerm = Core.TermUnit}})
+
 hoistSubtermsTestCase :: Testing.HoistSubtermsTestCase -> Core.Term
 hoistSubtermsTestCase x =
     Core.TermRecord (Core.Record {
@@ -248,86 +275,6 @@ hoistSubtermsTestCase x =
         Core.Field {
           Core.fieldName = (Core.Name "output"),
           Core.fieldTerm = (Core_.term (Testing.hoistSubtermsTestCaseOutput x))}]})
-
-hoistCaseStatementsTestCase :: Testing.HoistCaseStatementsTestCase -> Core.Term
-hoistCaseStatementsTestCase x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.testing.HoistCaseStatementsTestCase"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "input"),
-          Core.fieldTerm = (Core_.term (Testing.hoistCaseStatementsTestCaseInput x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "output"),
-          Core.fieldTerm = (Core_.term (Testing.hoistCaseStatementsTestCaseOutput x))}]})
-
-termRewriter :: Testing.TermRewriter -> Core.Term
-termRewriter x =
-    case x of
-      Testing.TermRewriterReplaceFooWithBar -> Core.TermUnion (Core.Injection {
-        Core.injectionTypeName = (Core.Name "hydra.testing.TermRewriter"),
-        Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "replaceFooWithBar"),
-          Core.fieldTerm = Core.TermUnit}})
-      Testing.TermRewriterReplaceInt32WithInt64 -> Core.TermUnion (Core.Injection {
-        Core.injectionTypeName = (Core.Name "hydra.testing.TermRewriter"),
-        Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "replaceInt32WithInt64"),
-          Core.fieldTerm = Core.TermUnit}})
-
-rewriteTermTestCase :: Testing.RewriteTermTestCase -> Core.Term
-rewriteTermTestCase x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.testing.RewriteTermTestCase"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "input"),
-          Core.fieldTerm = (Core_.term (Testing.rewriteTermTestCaseInput x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "rewriter"),
-          Core.fieldTerm = (termRewriter (Testing.rewriteTermTestCaseRewriter x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "output"),
-          Core.fieldTerm = (Core_.term (Testing.rewriteTermTestCaseOutput x))}]})
-
-typeRewriter :: Testing.TypeRewriter -> Core.Term
-typeRewriter x =
-    case x of
-      Testing.TypeRewriterReplaceStringWithInt32 -> Core.TermUnion (Core.Injection {
-        Core.injectionTypeName = (Core.Name "hydra.testing.TypeRewriter"),
-        Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "replaceStringWithInt32"),
-          Core.fieldTerm = Core.TermUnit}})
-
-rewriteTypeTestCase :: Testing.RewriteTypeTestCase -> Core.Term
-rewriteTypeTestCase x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.testing.RewriteTypeTestCase"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "input"),
-          Core.fieldTerm = (Core_.type_ (Testing.rewriteTypeTestCaseInput x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "rewriter"),
-          Core.fieldTerm = (typeRewriter (Testing.rewriteTypeTestCaseRewriter x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "output"),
-          Core.fieldTerm = (Core_.type_ (Testing.rewriteTypeTestCaseOutput x))}]})
-
-evaluationTestCase :: Testing.EvaluationTestCase -> Core.Term
-evaluationTestCase x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.testing.EvaluationTestCase"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "evaluationStyle"),
-          Core.fieldTerm = (evaluationStyle (Testing.evaluationTestCaseEvaluationStyle x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "input"),
-          Core.fieldTerm = (Core_.term (Testing.evaluationTestCaseInput x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "output"),
-          Core.fieldTerm = (Core_.term (Testing.evaluationTestCaseOutput x))}]})
 
 inferenceFailureTestCase :: Testing.InferenceFailureTestCase -> Core.Term
 inferenceFailureTestCase x =
@@ -349,6 +296,21 @@ inferenceTestCase x =
         Core.Field {
           Core.fieldName = (Core.Name "output"),
           Core.fieldTerm = (Core_.typeScheme (Testing.inferenceTestCaseOutput x))}]})
+
+joinTypesTestCase :: Testing.JoinTypesTestCase -> Core.Term
+joinTypesTestCase x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.JoinTypesTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "left"),
+          Core.fieldTerm = (Core_.type_ (Testing.joinTypesTestCaseLeft x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "right"),
+          Core.fieldTerm = (Core_.type_ (Testing.joinTypesTestCaseRight x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "expected"),
+          Core.fieldTerm = ((\e -> Core.TermEither (Eithers.bimap (\_ -> Core.TermUnit) (\xs -> Core.TermList (Lists.map Typing.typeConstraint xs)) e)) (Testing.joinTypesTestCaseExpected x))}]})
 
 jsonDecodeTestCase :: Testing.JsonDecodeTestCase -> Core.Term
 jsonDecodeTestCase x =
@@ -392,6 +354,9 @@ jsonRoundtripTestCase x =
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core_.term (Testing.jsonRoundtripTestCaseTerm x))}]})
 
+jsonWriterTestCase :: Testing.WriterTestCase Model_.Value -> Core.Term
+jsonWriterTestCase = writerTestCase Model.value
+
 liftLambdaAboveLetTestCase :: Testing.LiftLambdaAboveLetTestCase -> Core.Term
 liftLambdaAboveLetTestCase x =
     Core.TermRecord (Core.Record {
@@ -404,8 +369,17 @@ liftLambdaAboveLetTestCase x =
           Core.fieldName = (Core.Name "output"),
           Core.fieldTerm = (Core_.term (Testing.liftLambdaAboveLetTestCaseOutput x))}]})
 
-jsonWriterTestCase :: Testing.WriterTestCase Model_.Value -> Core.Term
-jsonWriterTestCase = writerTestCase Model.value
+normalizeTypeVariablesTestCase :: Testing.NormalizeTypeVariablesTestCase -> Core.Term
+normalizeTypeVariablesTestCase x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.NormalizeTypeVariablesTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "input"),
+          Core.fieldTerm = (Core_.term (Testing.normalizeTypeVariablesTestCaseInput x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "output"),
+          Core.fieldTerm = (Core_.term (Testing.normalizeTypeVariablesTestCaseOutput x))}]})
 
 parserTestCase :: (t0 -> Core.Term) -> Testing.ParserTestCase t0 -> Core.Term
 parserTestCase a x =
@@ -419,11 +393,94 @@ parserTestCase a x =
           Core.fieldName = (Core.Name "output"),
           Core.fieldTerm = (Parsing.parseResult a (Testing.parserTestCaseOutput x))}]})
 
+rewriteTermTestCase :: Testing.RewriteTermTestCase -> Core.Term
+rewriteTermTestCase x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.RewriteTermTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "input"),
+          Core.fieldTerm = (Core_.term (Testing.rewriteTermTestCaseInput x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "rewriter"),
+          Core.fieldTerm = (termRewriter (Testing.rewriteTermTestCaseRewriter x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "output"),
+          Core.fieldTerm = (Core_.term (Testing.rewriteTermTestCaseOutput x))}]})
+
+rewriteTypeTestCase :: Testing.RewriteTypeTestCase -> Core.Term
+rewriteTypeTestCase x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.RewriteTypeTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "input"),
+          Core.fieldTerm = (Core_.type_ (Testing.rewriteTypeTestCaseInput x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "rewriter"),
+          Core.fieldTerm = (typeRewriter (Testing.rewriteTypeTestCaseRewriter x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "output"),
+          Core.fieldTerm = (Core_.type_ (Testing.rewriteTypeTestCaseOutput x))}]})
+
+serializationTestCase :: Testing.SerializationTestCase -> Core.Term
+serializationTestCase x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.SerializationTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "input"),
+          Core.fieldTerm = (Ast.expr (Testing.serializationTestCaseInput x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "output"),
+          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Testing.serializationTestCaseOutput x))}]})
+
+simplifyTermTestCase :: Testing.SimplifyTermTestCase -> Core.Term
+simplifyTermTestCase x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.SimplifyTermTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "input"),
+          Core.fieldTerm = (Core_.term (Testing.simplifyTermTestCaseInput x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "output"),
+          Core.fieldTerm = (Core_.term (Testing.simplifyTermTestCaseOutput x))}]})
+
+substInTypeTestCase :: Testing.SubstInTypeTestCase -> Core.Term
+substInTypeTestCase x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.SubstInTypeTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "substitution"),
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (\p -> Core.TermPair (Pairs.bimap Core_.name Core_.type_ p)) xs)) (Testing.substInTypeTestCaseSubstitution x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "input"),
+          Core.fieldTerm = (Core_.type_ (Testing.substInTypeTestCaseInput x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "output"),
+          Core.fieldTerm = (Core_.type_ (Testing.substInTypeTestCaseOutput x))}]})
+
 tag :: Testing.Tag -> Core.Term
 tag x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.testing.Tag"),
       Core.wrappedTermBody = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Testing.unTag x))})
+
+termRewriter :: Testing.TermRewriter -> Core.Term
+termRewriter x =
+    case x of
+      Testing.TermRewriterReplaceFooWithBar -> Core.TermUnion (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.testing.TermRewriter"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "replaceFooWithBar"),
+          Core.fieldTerm = Core.TermUnit}})
+      Testing.TermRewriterReplaceInt32WithInt64 -> Core.TermUnion (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.testing.TermRewriter"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "replaceInt32WithInt64"),
+          Core.fieldTerm = Core.TermUnit}})
 
 testCase :: Testing.TestCase -> Core.Term
 testCase x =
@@ -660,6 +717,51 @@ testGroup x =
           Core.fieldName = (Core.Name "cases"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map testCaseWithMetadata xs)) (Testing.testGroupCases x))}]})
 
+topologicalSortBindingsTestCase :: Testing.TopologicalSortBindingsTestCase -> Core.Term
+topologicalSortBindingsTestCase x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.TopologicalSortBindingsTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "bindings"),
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (\p -> Core.TermPair (Pairs.bimap Core_.name Core_.term p)) xs)) (Testing.topologicalSortBindingsTestCaseBindings x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "expected"),
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (\xs -> Core.TermList (Lists.map (\p -> Core.TermPair (Pairs.bimap Core_.name Core_.term p)) xs)) xs)) (Testing.topologicalSortBindingsTestCaseExpected x))}]})
+
+topologicalSortSCCTestCase :: Testing.TopologicalSortSCCTestCase -> Core.Term
+topologicalSortSCCTestCase x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.TopologicalSortSCCTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "adjacencyList"),
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (\p -> Core.TermPair (Pairs.bimap (\x -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x))) (\xs -> Core.TermList (Lists.map (\x -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x))) xs)) p)) xs)) (Testing.topologicalSortSCCTestCaseAdjacencyList x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "expected"),
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (\xs -> Core.TermList (Lists.map (\x -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x))) xs)) xs)) (Testing.topologicalSortSCCTestCaseExpected x))}]})
+
+topologicalSortTestCase :: Testing.TopologicalSortTestCase -> Core.Term
+topologicalSortTestCase x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.TopologicalSortTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "adjacencyList"),
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (\p -> Core.TermPair (Pairs.bimap (\x -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x))) (\xs -> Core.TermList (Lists.map (\x -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x))) xs)) p)) xs)) (Testing.topologicalSortTestCaseAdjacencyList x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "expected"),
+          Core.fieldTerm = ((\e -> Core.TermEither (Eithers.bimap (\xs -> Core.TermList (Lists.map (\xs -> Core.TermList (Lists.map (\x -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x))) xs)) xs)) (\xs -> Core.TermList (Lists.map (\x -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x))) xs)) e)) (Testing.topologicalSortTestCaseExpected x))}]})
+
+typeCheckingFailureTestCase :: Testing.TypeCheckingFailureTestCase -> Core.Term
+typeCheckingFailureTestCase x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.TypeCheckingFailureTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "input"),
+          Core.fieldTerm = (Core_.term (Testing.typeCheckingFailureTestCaseInput x))}]})
+
 typeCheckingTestCase :: Testing.TypeCheckingTestCase -> Core.Term
 typeCheckingTestCase x =
     Core.TermRecord (Core.Record {
@@ -675,87 +777,6 @@ typeCheckingTestCase x =
           Core.fieldName = (Core.Name "outputType"),
           Core.fieldTerm = (Core_.type_ (Testing.typeCheckingTestCaseOutputType x))}]})
 
-typeCheckingFailureTestCase :: Testing.TypeCheckingFailureTestCase -> Core.Term
-typeCheckingFailureTestCase x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.testing.TypeCheckingFailureTestCase"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "input"),
-          Core.fieldTerm = (Core_.term (Testing.typeCheckingFailureTestCaseInput x))}]})
-
-topologicalSortBindingsTestCase :: Testing.TopologicalSortBindingsTestCase -> Core.Term
-topologicalSortBindingsTestCase x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.testing.TopologicalSortBindingsTestCase"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "bindings"),
-          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (\p -> Core.TermPair (Pairs.bimap Core_.name Core_.term p)) xs)) (Testing.topologicalSortBindingsTestCaseBindings x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "expected"),
-          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (\xs -> Core.TermList (Lists.map (\p -> Core.TermPair (Pairs.bimap Core_.name Core_.term p)) xs)) xs)) (Testing.topologicalSortBindingsTestCaseExpected x))}]})
-
-topologicalSortTestCase :: Testing.TopologicalSortTestCase -> Core.Term
-topologicalSortTestCase x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.testing.TopologicalSortTestCase"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "adjacencyList"),
-          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (\p -> Core.TermPair (Pairs.bimap (\x -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x))) (\xs -> Core.TermList (Lists.map (\x -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x))) xs)) p)) xs)) (Testing.topologicalSortTestCaseAdjacencyList x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "expected"),
-          Core.fieldTerm = ((\e -> Core.TermEither (Eithers.bimap (\xs -> Core.TermList (Lists.map (\xs -> Core.TermList (Lists.map (\x -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x))) xs)) xs)) (\xs -> Core.TermList (Lists.map (\x -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x))) xs)) e)) (Testing.topologicalSortTestCaseExpected x))}]})
-
-topologicalSortSCCTestCase :: Testing.TopologicalSortSCCTestCase -> Core.Term
-topologicalSortSCCTestCase x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.testing.TopologicalSortSCCTestCase"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "adjacencyList"),
-          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (\p -> Core.TermPair (Pairs.bimap (\x -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x))) (\xs -> Core.TermList (Lists.map (\x -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x))) xs)) p)) xs)) (Testing.topologicalSortSCCTestCaseAdjacencyList x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "expected"),
-          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (\xs -> Core.TermList (Lists.map (\x -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x))) xs)) xs)) (Testing.topologicalSortSCCTestCaseExpected x))}]})
-
-serializationTestCase :: Testing.SerializationTestCase -> Core.Term
-serializationTestCase x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.testing.SerializationTestCase"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "input"),
-          Core.fieldTerm = (Ast.expr (Testing.serializationTestCaseInput x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "output"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Testing.serializationTestCaseOutput x))}]})
-
-simplifyTermTestCase :: Testing.SimplifyTermTestCase -> Core.Term
-simplifyTermTestCase x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.testing.SimplifyTermTestCase"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "input"),
-          Core.fieldTerm = (Core_.term (Testing.simplifyTermTestCaseInput x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "output"),
-          Core.fieldTerm = (Core_.term (Testing.simplifyTermTestCaseOutput x))}]})
-
-normalizeTypeVariablesTestCase :: Testing.NormalizeTypeVariablesTestCase -> Core.Term
-normalizeTypeVariablesTestCase x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.testing.NormalizeTypeVariablesTestCase"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "input"),
-          Core.fieldTerm = (Core_.term (Testing.normalizeTypeVariablesTestCaseInput x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "output"),
-          Core.fieldTerm = (Core_.term (Testing.normalizeTypeVariablesTestCaseOutput x))}]})
-
 typeReductionTestCase :: Testing.TypeReductionTestCase -> Core.Term
 typeReductionTestCase x =
     Core.TermRecord (Core.Record {
@@ -768,59 +789,14 @@ typeReductionTestCase x =
           Core.fieldName = (Core.Name "output"),
           Core.fieldTerm = (Core_.type_ (Testing.typeReductionTestCaseOutput x))}]})
 
-writerTestCase :: (t0 -> Core.Term) -> Testing.WriterTestCase t0 -> Core.Term
-writerTestCase a x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.testing.WriterTestCase"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "input"),
-          Core.fieldTerm = (a (Testing.writerTestCaseInput x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "output"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Testing.writerTestCaseOutput x))}]})
-
-substInTypeTestCase :: Testing.SubstInTypeTestCase -> Core.Term
-substInTypeTestCase x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.testing.SubstInTypeTestCase"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "substitution"),
-          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (\p -> Core.TermPair (Pairs.bimap Core_.name Core_.type_ p)) xs)) (Testing.substInTypeTestCaseSubstitution x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "input"),
-          Core.fieldTerm = (Core_.type_ (Testing.substInTypeTestCaseInput x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "output"),
-          Core.fieldTerm = (Core_.type_ (Testing.substInTypeTestCaseOutput x))}]})
-
-variableOccursInTypeTestCase :: Testing.VariableOccursInTypeTestCase -> Core.Term
-variableOccursInTypeTestCase x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.testing.VariableOccursInTypeTestCase"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Core_.name (Testing.variableOccursInTypeTestCaseVariable x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core_.type_ (Testing.variableOccursInTypeTestCaseType x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "expected"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralBoolean x)) (Testing.variableOccursInTypeTestCaseExpected x))}]})
-
-unshadowVariablesTestCase :: Testing.UnshadowVariablesTestCase -> Core.Term
-unshadowVariablesTestCase x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.testing.UnshadowVariablesTestCase"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "input"),
-          Core.fieldTerm = (Core_.term (Testing.unshadowVariablesTestCaseInput x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "output"),
-          Core.fieldTerm = (Core_.term (Testing.unshadowVariablesTestCaseOutput x))}]})
+typeRewriter :: Testing.TypeRewriter -> Core.Term
+typeRewriter x =
+    case x of
+      Testing.TypeRewriterReplaceStringWithInt32 -> Core.TermUnion (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.testing.TypeRewriter"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "replaceStringWithInt32"),
+          Core.fieldTerm = Core.TermUnit}})
 
 unifyTypesTestCase :: Testing.UnifyTypesTestCase -> Core.Term
 unifyTypesTestCase x =
@@ -840,20 +816,17 @@ unifyTypesTestCase x =
           Core.fieldName = (Core.Name "expected"),
           Core.fieldTerm = ((\e -> Core.TermEither (Eithers.bimap (\x -> Core.TermLiteral (Core.LiteralString x)) Typing.typeSubst e)) (Testing.unifyTypesTestCaseExpected x))}]})
 
-joinTypesTestCase :: Testing.JoinTypesTestCase -> Core.Term
-joinTypesTestCase x =
+unshadowVariablesTestCase :: Testing.UnshadowVariablesTestCase -> Core.Term
+unshadowVariablesTestCase x =
     Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.testing.JoinTypesTestCase"),
+      Core.recordTypeName = (Core.Name "hydra.testing.UnshadowVariablesTestCase"),
       Core.recordFields = [
         Core.Field {
-          Core.fieldName = (Core.Name "left"),
-          Core.fieldTerm = (Core_.type_ (Testing.joinTypesTestCaseLeft x))},
+          Core.fieldName = (Core.Name "input"),
+          Core.fieldTerm = (Core_.term (Testing.unshadowVariablesTestCaseInput x))},
         Core.Field {
-          Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Core_.type_ (Testing.joinTypesTestCaseRight x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "expected"),
-          Core.fieldTerm = ((\e -> Core.TermEither (Eithers.bimap (\_ -> Core.TermUnit) (\xs -> Core.TermList (Lists.map Typing.typeConstraint xs)) e)) (Testing.joinTypesTestCaseExpected x))}]})
+          Core.fieldName = (Core.Name "output"),
+          Core.fieldTerm = (Core_.term (Testing.unshadowVariablesTestCaseOutput x))}]})
 
 validateCoreTermTestCase :: Testing.ValidateCoreTermTestCase -> Core.Term
 validateCoreTermTestCase x =
@@ -869,3 +842,30 @@ validateCoreTermTestCase x =
         Core.Field {
           Core.fieldName = (Core.Name "output"),
           Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map Core__.invalidTermError opt)) (Testing.validateCoreTermTestCaseOutput x))}]})
+
+variableOccursInTypeTestCase :: Testing.VariableOccursInTypeTestCase -> Core.Term
+variableOccursInTypeTestCase x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.VariableOccursInTypeTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "variable"),
+          Core.fieldTerm = (Core_.name (Testing.variableOccursInTypeTestCaseVariable x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core_.type_ (Testing.variableOccursInTypeTestCaseType x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "expected"),
+          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralBoolean x)) (Testing.variableOccursInTypeTestCaseExpected x))}]})
+
+writerTestCase :: (t0 -> Core.Term) -> Testing.WriterTestCase t0 -> Core.Term
+writerTestCase a x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.WriterTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "input"),
+          Core.fieldTerm = (a (Testing.writerTestCaseInput x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "output"),
+          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Testing.writerTestCaseOutput x))}]})

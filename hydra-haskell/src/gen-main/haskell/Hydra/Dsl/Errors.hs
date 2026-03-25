@@ -22,12 +22,6 @@ decodingError x =
       Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-unDecodingError :: Phantoms.TTerm Errors.DecodingError -> Phantoms.TTerm String
-unDecodingError x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.errors.DecodingError")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 errorChecking :: Phantoms.TTerm Checking.CheckingError -> Phantoms.TTerm Errors.Error
 errorChecking x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
@@ -84,14 +78,6 @@ errorUndefinedTermVariable x =
         Core.fieldName = (Core.Name "undefinedTermVariable"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-errorUntypedTermVariable :: Phantoms.TTerm Core_.UntypedTermVariableError -> Phantoms.TTerm Errors.Error
-errorUntypedTermVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "untypedTermVariable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
 errorUnexpectedTermVariant :: Phantoms.TTerm Core_.UnexpectedTermVariantError -> Phantoms.TTerm Errors.Error
 errorUnexpectedTermVariant x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
@@ -116,11 +102,25 @@ errorUnification x =
         Core.fieldName = (Core.Name "unification"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
+errorUntypedTermVariable :: Phantoms.TTerm Core_.UntypedTermVariableError -> Phantoms.TTerm Errors.Error
+errorUntypedTermVariable x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "untypedTermVariable"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
 otherError :: Phantoms.TTerm String -> Phantoms.TTerm Errors.OtherError
 otherError x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.errors.OtherError"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+unDecodingError :: Phantoms.TTerm Errors.DecodingError -> Phantoms.TTerm String
+unDecodingError x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.errors.DecodingError")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unOtherError :: Phantoms.TTerm Errors.OtherError -> Phantoms.TTerm String
 unOtherError x =
@@ -151,20 +151,20 @@ unificationErrorLeftType x =
         Core.projectionField = (Core.Name "leftType")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-unificationErrorRightType :: Phantoms.TTerm Errors.UnificationError -> Phantoms.TTerm Core.Type
-unificationErrorRightType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.errors.UnificationError"),
-        Core.projectionField = (Core.Name "rightType")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 unificationErrorMessage :: Phantoms.TTerm Errors.UnificationError -> Phantoms.TTerm String
 unificationErrorMessage x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.errors.UnificationError"),
         Core.projectionField = (Core.Name "message")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unificationErrorRightType :: Phantoms.TTerm Errors.UnificationError -> Phantoms.TTerm Core.Type
+unificationErrorRightType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.errors.UnificationError"),
+        Core.projectionField = (Core.Name "rightType")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unificationErrorWithLeftType :: Phantoms.TTerm Errors.UnificationError -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Errors.UnificationError
@@ -182,29 +182,6 @@ unificationErrorWithLeftType original newVal =
               Core.projectionTypeName = (Core.Name "hydra.errors.UnificationError"),
               Core.projectionField = (Core.Name "rightType")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "message"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.errors.UnificationError"),
-              Core.projectionField = (Core.Name "message")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-unificationErrorWithRightType :: Phantoms.TTerm Errors.UnificationError -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Errors.UnificationError
-unificationErrorWithRightType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.errors.UnificationError"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "leftType"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.errors.UnificationError"),
-              Core.projectionField = (Core.Name "leftType")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "rightType"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "message"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -235,3 +212,26 @@ unificationErrorWithMessage original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "message"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+unificationErrorWithRightType :: Phantoms.TTerm Errors.UnificationError -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Errors.UnificationError
+unificationErrorWithRightType original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.errors.UnificationError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "leftType"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.errors.UnificationError"),
+              Core.projectionField = (Core.Name "leftType")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "rightType"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "message"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.errors.UnificationError"),
+              Core.projectionField = (Core.Name "message")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))

@@ -19,6 +19,13 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Decode a YAML node to a Hydra term via JSON decoding.
+fromYaml :: M.Map Core.Name Core.Type -> Core.Name -> Core.Type -> Model.Node -> Either String Core.Term
+fromYaml types tname typ node =
+
+      let jsonResult = yamlToJson node
+      in (Eithers.either (\err -> Left err) (\json -> Decode.fromJson types tname typ json) jsonResult)
+
 -- | Convert a YAML node to a JSON value. Fails for non-JSON YAML features (e.g. non-string mapping keys).
 yamlToJson :: Model.Node -> Either String Model_.Value
 yamlToJson node =
@@ -48,10 +55,3 @@ yamlToJson node =
       Model.NodeSequence v0 ->
         let results = Eithers.mapList (\n -> yamlToJson n) v0
         in (Eithers.map (\vs -> Model_.ValueArray vs) results)
-
--- | Decode a YAML node to a Hydra term via JSON decoding.
-fromYaml :: M.Map Core.Name Core.Type -> Core.Name -> Core.Type -> Model.Node -> Either String Core.Term
-fromYaml types tname typ node =
-
-      let jsonResult = yamlToJson node
-      in (Eithers.either (\err -> Left err) (\json -> Decode.fromJson types tname typ json) jsonResult)

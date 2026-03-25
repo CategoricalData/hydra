@@ -20,55 +20,69 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Escape single quotes by doubling them
+escapeSingleQuotes :: String -> String
+escapeSingleQuotes s =
+
+      let squote = 39
+      in (Strings.fromList (Lists.bind (Strings.toList s) (\c -> Logic.ifElse (Equality.equal c squote) [
+        squote,
+        squote] [
+        c])))
+
+-- | Check if a string has leading or trailing whitespace
+hasLeadingTrailingSpace :: String -> Bool
+hasLeadingTrailingSpace s =
+
+      let chars = Strings.toList s
+      in (Logic.ifElse (Lists.null chars) False (Logic.or (Chars.isSpace (Lists.head chars)) (Chars.isSpace (Lists.last chars))))
+
 -- | Serialize a YAML node to a string
 hydraYamlToString :: Model.Node -> String
 hydraYamlToString node = writeNode node
 
--- | Write a YAML node as a top-level value in block style
-writeNode :: Model.Node -> String
-writeNode node =
-    case node of
-      Model.NodeScalar v0 -> Strings.cat2 (writeScalar v0) "\n"
-      Model.NodeSequence v0 -> Logic.ifElse (Lists.null v0) "[]\n" (Strings.cat (Lists.map (\item -> writeSequenceItem item) v0))
-      Model.NodeMapping v0 -> Logic.ifElse (Equality.equal (Maps.size v0) 0) "{}\n" (Strings.cat (Lists.map (\e -> writeMappingEntry e) (Maps.toList v0)))
+-- | Indent all lines of a string by 2 spaces
+indentString :: String -> String
+indentString s =
+    Strings.cat (Lists.map (\line -> Logic.ifElse (Strings.null line) "" (Strings.cat [
+      "  ",
+      line,
+      "\n"])) (Strings.lines s))
 
--- | Write a scalar value
-writeScalar :: Model.Scalar -> String
-writeScalar s =
-    case s of
-      Model.ScalarBool v0 -> Logic.ifElse v0 "true" "false"
-      Model.ScalarFloat v0 -> Literals.showBigfloat v0
-      Model.ScalarInt v0 -> Literals.showBigint v0
-      Model.ScalarNull -> "null"
-      Model.ScalarStr v0 -> writeString v0
+-- | Check if character codes represent a decimal number
+isDecimalString :: [Int] -> Bool
+isDecimalString chars =
 
--- | Write a string value, quoting if necessary
-writeString :: String -> String
-writeString s =
-    Logic.ifElse (needsQuoting s) (Strings.cat [
-      "'",
-      (escapeSingleQuotes s),
-      "'"]) s
+      let dotCode = 46
+          parts = Lists.span (\c -> Logic.not (Equality.equal c dotCode)) chars
+          before = Pairs.first parts
+          afterWithDot = Pairs.second parts
+      in (Logic.ifElse (Lists.null before) False (Logic.ifElse (Lists.null afterWithDot) False (
+        let after = Lists.tail afterWithDot
+        in (Logic.ifElse (Lists.null after) False (
+          let isDigitFn = \c -> Logic.and (Equality.gte c 48) (Equality.lte c 57)
+          in (Logic.and (Lists.null (Lists.filter (\c -> Logic.not (isDigitFn c)) before)) (Lists.null (Lists.filter (\c -> Logic.not (isDigitFn c)) after))))))))
 
--- | Write a sequence item in block style
-writeSequenceItem :: Model.Node -> String
-writeSequenceItem node =
-    case node of
-      Model.NodeScalar v0 -> Strings.cat [
-        "- ",
-        (writeScalar v0),
-        "\n"]
-      Model.NodeSequence v0 -> Logic.ifElse (Lists.null v0) "- []\n" (Strings.cat2 "-\n" (indentString (writeNode node)))
-      Model.NodeMapping v0 -> Logic.ifElse (Equality.equal (Maps.size v0) 0) "- {}\n" (
-        let entries = Maps.toList v0
-            firstEntry = Lists.head entries
-            restEntries = Lists.tail entries
-            firstStr = writeMappingEntryInline firstEntry
-            restStr = Strings.cat (Lists.map (\e -> writeMappingEntry e) restEntries)
-        in (Strings.cat [
-          "- ",
-          firstStr,
-          (indentString restStr)]))
+-- | Check if a string looks like a number
+looksLikeNumber :: String -> Bool
+looksLikeNumber s =
+
+      let chars = Strings.toList s
+      in (Logic.ifElse (Lists.null chars) False (
+        let rest = Logic.ifElse (Equality.equal (Lists.head chars) 45) (Lists.tail chars) chars
+        in (Logic.ifElse (Lists.null rest) False (
+          let isDigitFn = \c -> Logic.and (Equality.gte c 48) (Equality.lte c 57)
+              allDigits = Lists.null (Lists.filter (\c -> Logic.not (isDigitFn c)) rest)
+          in (Logic.ifElse allDigits True (isDecimalString rest))))))
+
+-- | Check if a string needs quoting in YAML
+needsQuoting :: String -> Bool
+needsQuoting s =
+    Logic.ifElse (Strings.null s) True (Logic.ifElse (Lists.elem s yamlReservedWords) True (Logic.ifElse (looksLikeNumber s) True (
+      let chars = Strings.toList s
+          specials = Strings.toList yamlSpecialChars
+          hasSpecial = Logic.not (Lists.null (Lists.filter (\c -> Lists.elem c specials) chars))
+      in (Logic.ifElse hasSpecial True (hasLeadingTrailingSpace s)))))
 
 -- | Write a mapping entry in block style
 writeMappingEntry :: (Model.Node, Model.Node) -> String
@@ -120,6 +134,14 @@ writeMappingEntryInline entry =
           ":\n",
           (indentString (writeNode value))])
 
+-- | Write a YAML node as a top-level value in block style
+writeNode :: Model.Node -> String
+writeNode node =
+    case node of
+      Model.NodeScalar v0 -> Strings.cat2 (writeScalar v0) "\n"
+      Model.NodeSequence v0 -> Logic.ifElse (Lists.null v0) "[]\n" (Strings.cat (Lists.map (\item -> writeSequenceItem item) v0))
+      Model.NodeMapping v0 -> Logic.ifElse (Equality.equal (Maps.size v0) 0) "{}\n" (Strings.cat (Lists.map (\e -> writeMappingEntry e) (Maps.toList v0)))
+
 -- | Write a node inline (for use as a mapping key)
 writeNodeInline :: Model.Node -> String
 writeNodeInline node =
@@ -140,65 +162,43 @@ writeNodeInline node =
           (Strings.intercalate ", " (Lists.map writeFlowEntry (Maps.toList v0))),
           "}"])
 
--- | Indent all lines of a string by 2 spaces
-indentString :: String -> String
-indentString s =
-    Strings.cat (Lists.map (\line -> Logic.ifElse (Strings.null line) "" (Strings.cat [
-      "  ",
-      line,
-      "\n"])) (Strings.lines s))
+-- | Write a scalar value
+writeScalar :: Model.Scalar -> String
+writeScalar s =
+    case s of
+      Model.ScalarBool v0 -> Logic.ifElse v0 "true" "false"
+      Model.ScalarFloat v0 -> Literals.showBigfloat v0
+      Model.ScalarInt v0 -> Literals.showBigint v0
+      Model.ScalarNull -> "null"
+      Model.ScalarStr v0 -> writeString v0
 
--- | Check if a string needs quoting in YAML
-needsQuoting :: String -> Bool
-needsQuoting s =
-    Logic.ifElse (Strings.null s) True (Logic.ifElse (Lists.elem s yamlReservedWords) True (Logic.ifElse (looksLikeNumber s) True (
-      let chars = Strings.toList s
-          specials = Strings.toList yamlSpecialChars
-          hasSpecial = Logic.not (Lists.null (Lists.filter (\c -> Lists.elem c specials) chars))
-      in (Logic.ifElse hasSpecial True (hasLeadingTrailingSpace s)))))
+-- | Write a sequence item in block style
+writeSequenceItem :: Model.Node -> String
+writeSequenceItem node =
+    case node of
+      Model.NodeScalar v0 -> Strings.cat [
+        "- ",
+        (writeScalar v0),
+        "\n"]
+      Model.NodeSequence v0 -> Logic.ifElse (Lists.null v0) "- []\n" (Strings.cat2 "-\n" (indentString (writeNode node)))
+      Model.NodeMapping v0 -> Logic.ifElse (Equality.equal (Maps.size v0) 0) "- {}\n" (
+        let entries = Maps.toList v0
+            firstEntry = Lists.head entries
+            restEntries = Lists.tail entries
+            firstStr = writeMappingEntryInline firstEntry
+            restStr = Strings.cat (Lists.map (\e -> writeMappingEntry e) restEntries)
+        in (Strings.cat [
+          "- ",
+          firstStr,
+          (indentString restStr)]))
 
--- | Check if a string looks like a number
-looksLikeNumber :: String -> Bool
-looksLikeNumber s =
-
-      let chars = Strings.toList s
-      in (Logic.ifElse (Lists.null chars) False (
-        let rest = Logic.ifElse (Equality.equal (Lists.head chars) 45) (Lists.tail chars) chars
-        in (Logic.ifElse (Lists.null rest) False (
-          let isDigitFn = \c -> Logic.and (Equality.gte c 48) (Equality.lte c 57)
-              allDigits = Lists.null (Lists.filter (\c -> Logic.not (isDigitFn c)) rest)
-          in (Logic.ifElse allDigits True (isDecimalString rest))))))
-
--- | Check if character codes represent a decimal number
-isDecimalString :: [Int] -> Bool
-isDecimalString chars =
-
-      let dotCode = 46
-          parts = Lists.span (\c -> Logic.not (Equality.equal c dotCode)) chars
-          before = Pairs.first parts
-          afterWithDot = Pairs.second parts
-      in (Logic.ifElse (Lists.null before) False (Logic.ifElse (Lists.null afterWithDot) False (
-        let after = Lists.tail afterWithDot
-        in (Logic.ifElse (Lists.null after) False (
-          let isDigitFn = \c -> Logic.and (Equality.gte c 48) (Equality.lte c 57)
-          in (Logic.and (Lists.null (Lists.filter (\c -> Logic.not (isDigitFn c)) before)) (Lists.null (Lists.filter (\c -> Logic.not (isDigitFn c)) after))))))))
-
--- | Check if a string has leading or trailing whitespace
-hasLeadingTrailingSpace :: String -> Bool
-hasLeadingTrailingSpace s =
-
-      let chars = Strings.toList s
-      in (Logic.ifElse (Lists.null chars) False (Logic.or (Chars.isSpace (Lists.head chars)) (Chars.isSpace (Lists.last chars))))
-
--- | Escape single quotes by doubling them
-escapeSingleQuotes :: String -> String
-escapeSingleQuotes s =
-
-      let squote = 39
-      in (Strings.fromList (Lists.bind (Strings.toList s) (\c -> Logic.ifElse (Equality.equal c squote) [
-        squote,
-        squote] [
-        c])))
+-- | Write a string value, quoting if necessary
+writeString :: String -> String
+writeString s =
+    Logic.ifElse (needsQuoting s) (Strings.cat [
+      "'",
+      (escapeSingleQuotes s),
+      "'"]) s
 
 -- | YAML reserved words that need quoting
 yamlReservedWords :: [String]

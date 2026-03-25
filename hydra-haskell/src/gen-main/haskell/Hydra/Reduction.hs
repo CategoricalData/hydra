@@ -94,43 +94,6 @@ contractTerm term =
 countPrimitiveInvocations :: Bool
 countPrimitiveInvocations = True
 
--- | Eta-reduce a term by removing redundant lambda abstractions
-etaReduceTerm :: Core.Term -> Core.Term
-etaReduceTerm term =
-
-      let noChange = term
-          reduceLambda =
-                  \l ->
-                    let v = Core.lambdaParameter l
-                        d = Core.lambdaDomain l
-                        body = Core.lambdaBody l
-                    in case (etaReduceTerm body) of
-                      Core.TermAnnotated v0 -> reduceLambda (Core.Lambda {
-                        Core.lambdaParameter = v,
-                        Core.lambdaDomain = d,
-                        Core.lambdaBody = (Core.annotatedTermBody v0)})
-                      Core.TermApplication v0 ->
-                        let lhs = Core.applicationFunction v0
-                            rhs = Core.applicationArgument v0
-                        in case (etaReduceTerm rhs) of
-                          Core.TermAnnotated v1 -> reduceLambda (Core.Lambda {
-                            Core.lambdaParameter = v,
-                            Core.lambdaDomain = d,
-                            Core.lambdaBody = (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = lhs,
-                              Core.applicationArgument = (Core.annotatedTermBody v1)}))})
-                          Core.TermVariable v1 -> Logic.ifElse (Logic.and (Equality.equal (Core.unName v) (Core.unName v1)) (Logic.not (Rewriting.isFreeVariableInTerm v lhs))) (etaReduceTerm lhs) noChange
-                          _ -> noChange
-                      _ -> noChange
-      in case term of
-        Core.TermAnnotated v0 -> Core.TermAnnotated (Core.AnnotatedTerm {
-          Core.annotatedTermBody = (etaReduceTerm (Core.annotatedTermBody v0)),
-          Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v0)})
-        Core.TermFunction v0 -> case v0 of
-          Core.FunctionLambda v1 -> reduceLambda v1
-          _ -> noChange
-        _ -> noChange
-
 -- | Recursively transform arbitrary terms like 'add 42' into terms like '\x.add 42 x', in which the implicit parameters of primitive functions and eliminations are made into explicit lambda parameters. Variable references are not expanded. This is useful for targets like Python with weaker support for currying than Hydra or Haskell. Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references.
 etaExpandTerm :: Graph.Graph -> Core.Term -> Core.Term
 etaExpandTerm graph term =
@@ -354,21 +317,6 @@ etaExpandTermNew tx0 term0 =
                         Core.wrappedTermBody = (recurse tx (Core.wrappedTermBody v0))}))
       in (contractTerm (rewriteWithArgs [] tx0 term0))
 
--- | Calculate the arity for eta expansion Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references.
-etaExpansionArity :: Graph.Graph -> Core.Term -> Int
-etaExpansionArity graph term =
-    case term of
-      Core.TermAnnotated v0 -> etaExpansionArity graph (Core.annotatedTermBody v0)
-      Core.TermApplication v0 -> Math.sub (etaExpansionArity graph (Core.applicationFunction v0)) 1
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionElimination _ -> 1
-        Core.FunctionLambda _ -> 0
-        Core.FunctionPrimitive v1 -> Arity.primitiveArity (Maybes.fromJust (Lexical.lookupPrimitive graph v1))
-      Core.TermTypeLambda v0 -> etaExpansionArity graph (Core.typeLambdaBody v0)
-      Core.TermTypeApplication v0 -> etaExpansionArity graph (Core.typeApplicationTermBody v0)
-      Core.TermVariable v0 -> Maybes.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeType ts)) (Maybes.bind (Lexical.lookupElement graph v0) (\b -> Core.bindingType b))
-      _ -> 0
-
 -- | Recursively transform arbitrary terms like 'add 42' into terms like '\x.add 42 x', eliminating partial application. Variable references are not expanded. This is useful for targets like Python with weaker support for currying than Hydra or Haskell. Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references. It also assumes that type inference has already been performed. After eta expansion, type inference needs to be performed again, as new, untyped lambdas may have been added.
 etaExpandTypedTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 etaExpandTypedTerm cx tx0 term0 =
@@ -479,6 +427,58 @@ etaExpandTypedTerm cx tx0 term0 =
                     in (recurse txt term)
                   _ -> recurseOrForce term
       in (Rewriting.rewriteTermWithContextM (rewrite True False []) tx0 term0)
+
+-- | Calculate the arity for eta expansion Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references.
+etaExpansionArity :: Graph.Graph -> Core.Term -> Int
+etaExpansionArity graph term =
+    case term of
+      Core.TermAnnotated v0 -> etaExpansionArity graph (Core.annotatedTermBody v0)
+      Core.TermApplication v0 -> Math.sub (etaExpansionArity graph (Core.applicationFunction v0)) 1
+      Core.TermFunction v0 -> case v0 of
+        Core.FunctionElimination _ -> 1
+        Core.FunctionLambda _ -> 0
+        Core.FunctionPrimitive v1 -> Arity.primitiveArity (Maybes.fromJust (Lexical.lookupPrimitive graph v1))
+      Core.TermTypeLambda v0 -> etaExpansionArity graph (Core.typeLambdaBody v0)
+      Core.TermTypeApplication v0 -> etaExpansionArity graph (Core.typeApplicationTermBody v0)
+      Core.TermVariable v0 -> Maybes.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeType ts)) (Maybes.bind (Lexical.lookupElement graph v0) (\b -> Core.bindingType b))
+      _ -> 0
+
+-- | Eta-reduce a term by removing redundant lambda abstractions
+etaReduceTerm :: Core.Term -> Core.Term
+etaReduceTerm term =
+
+      let noChange = term
+          reduceLambda =
+                  \l ->
+                    let v = Core.lambdaParameter l
+                        d = Core.lambdaDomain l
+                        body = Core.lambdaBody l
+                    in case (etaReduceTerm body) of
+                      Core.TermAnnotated v0 -> reduceLambda (Core.Lambda {
+                        Core.lambdaParameter = v,
+                        Core.lambdaDomain = d,
+                        Core.lambdaBody = (Core.annotatedTermBody v0)})
+                      Core.TermApplication v0 ->
+                        let lhs = Core.applicationFunction v0
+                            rhs = Core.applicationArgument v0
+                        in case (etaReduceTerm rhs) of
+                          Core.TermAnnotated v1 -> reduceLambda (Core.Lambda {
+                            Core.lambdaParameter = v,
+                            Core.lambdaDomain = d,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = lhs,
+                              Core.applicationArgument = (Core.annotatedTermBody v1)}))})
+                          Core.TermVariable v1 -> Logic.ifElse (Logic.and (Equality.equal (Core.unName v) (Core.unName v1)) (Logic.not (Rewriting.isFreeVariableInTerm v lhs))) (etaReduceTerm lhs) noChange
+                          _ -> noChange
+                      _ -> noChange
+      in case term of
+        Core.TermAnnotated v0 -> Core.TermAnnotated (Core.AnnotatedTerm {
+          Core.annotatedTermBody = (etaReduceTerm (Core.annotatedTermBody v0)),
+          Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v0)})
+        Core.TermFunction v0 -> case v0 of
+          Core.FunctionLambda v1 -> reduceLambda v1
+          _ -> noChange
+        _ -> noChange
 
 -- | A term evaluation function which is alternatively lazy or eager
 reduceTerm :: Context.Context -> Graph.Graph -> Bool -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term

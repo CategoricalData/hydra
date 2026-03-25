@@ -60,6 +60,54 @@ writeCase c =
         (Serialization.cst "=>"),
         (writeTerm term)])
 
+-- | Convert function data to an expression
+writeData_FunctionData :: Syntax.Data_FunctionData -> Ast.Expr
+writeData_FunctionData ft =
+    case ft of
+      Syntax.Data_FunctionDataFunction v0 ->
+        let params = Syntax.data_FunctionParams v0
+            body = Syntax.data_FunctionBody v0
+            bodyExpr = writeTerm body
+            bodyLen = Serialization.expressionLength bodyExpr
+        in (Logic.ifElse (Equality.gt bodyLen 60) (Serialization.noSep [
+          Serialization.parenList False (Lists.map writeData_Param params),
+          (Serialization.cst " =>\n  "),
+          bodyExpr]) (Serialization.spaceSep [
+          Serialization.parenList False (Lists.map writeData_Param params),
+          (Serialization.cst "=>"),
+          bodyExpr]))
+
+-- | Convert a data name to an expression
+writeData_Name :: Syntax.Data_Name -> Ast.Expr
+writeData_Name dn = Serialization.cst (Syntax.unPredefString (Syntax.data_NameValue dn))
+
+-- | Convert a data parameter to an expression
+writeData_Param :: Syntax.Data_Param -> Ast.Expr
+writeData_Param dp =
+
+      let name = Syntax.data_ParamName dp
+          stype = Syntax.data_ParamDecltpe dp
+      in (Serialization.noSep (Maybes.cat [
+        Maybes.pure (writeName name),
+        (Maybes.map (\t -> Serialization.spaceSep [
+          Serialization.cst ":",
+          (writeType t)]) stype)]))
+
+-- | Convert a data reference to an expression
+writeData_Ref :: Syntax.Data_Ref -> Ast.Expr
+writeData_Ref ref =
+    case ref of
+      Syntax.Data_RefName v0 -> writeData_Name v0
+      Syntax.Data_RefSelect v0 -> writeData_Select v0
+
+-- | Convert a data select to an expression
+writeData_Select :: Syntax.Data_Select -> Ast.Expr
+writeData_Select sel =
+
+      let arg = Syntax.data_SelectQual sel
+          name = Syntax.data_SelectName sel
+      in (Serialization.ifx dotOp (writeTerm arg) (writeTerm (Syntax.DataRef (Syntax.Data_RefName name))))
+
 -- | Convert a definition to an expression
 writeDefn :: Syntax.Defn -> Ast.Expr
 writeDefn def =
@@ -223,6 +271,10 @@ writeImporter imp =
           Serialization.cst refName,
           forImportees])])
 
+-- | Convert an init to an expression
+writeInit :: Syntax.Init -> Ast.Expr
+writeInit init = writeType (Syntax.initTpe init)
+
 -- | Convert a literal to an expression
 writeLit :: Syntax.Lit -> Ast.Expr
 writeLit lit =
@@ -237,6 +289,20 @@ writeLit lit =
       Syntax.LitUnit -> Serialization.cst "()"
       Syntax.LitString v0 -> Serialization.cst (Strings.cat2 "\"" (Strings.cat2 (Serde.escapeJavaString v0) "\""))
       _ -> Serialization.cst "TODO:literal"
+
+-- | Convert a modifier to an expression
+writeMod :: Syntax.Mod -> Ast.Expr
+writeMod m =
+    case m of
+      Syntax.ModCase -> Serialization.cst "case"
+      Syntax.ModSealed -> Serialization.cst "sealed"
+      Syntax.ModAbstract -> Serialization.cst "abstract"
+      Syntax.ModFinal -> Serialization.cst "final"
+      Syntax.ModOverride -> Serialization.cst "override"
+      Syntax.ModImplicit -> Serialization.cst "implicit"
+      Syntax.ModLazy -> Serialization.cst "lazy"
+      Syntax.ModPrivate _ -> Serialization.cst "private"
+      Syntax.ModProtected _ -> Serialization.cst "protected"
 
 -- | Convert a name to an expression
 writeName :: Syntax.Name -> Ast.Expr
@@ -309,54 +375,6 @@ writeTerm term =
         let stats = Syntax.data_BlockStats v0
         in (Serialization.curlyBlock Serialization.fullBlockStyle (Serialization.newlineSep (Lists.map writeStat stats)))
 
--- | Convert function data to an expression
-writeData_FunctionData :: Syntax.Data_FunctionData -> Ast.Expr
-writeData_FunctionData ft =
-    case ft of
-      Syntax.Data_FunctionDataFunction v0 ->
-        let params = Syntax.data_FunctionParams v0
-            body = Syntax.data_FunctionBody v0
-            bodyExpr = writeTerm body
-            bodyLen = Serialization.expressionLength bodyExpr
-        in (Logic.ifElse (Equality.gt bodyLen 60) (Serialization.noSep [
-          Serialization.parenList False (Lists.map writeData_Param params),
-          (Serialization.cst " =>\n  "),
-          bodyExpr]) (Serialization.spaceSep [
-          Serialization.parenList False (Lists.map writeData_Param params),
-          (Serialization.cst "=>"),
-          bodyExpr]))
-
--- | Convert a data name to an expression
-writeData_Name :: Syntax.Data_Name -> Ast.Expr
-writeData_Name dn = Serialization.cst (Syntax.unPredefString (Syntax.data_NameValue dn))
-
--- | Convert a data parameter to an expression
-writeData_Param :: Syntax.Data_Param -> Ast.Expr
-writeData_Param dp =
-
-      let name = Syntax.data_ParamName dp
-          stype = Syntax.data_ParamDecltpe dp
-      in (Serialization.noSep (Maybes.cat [
-        Maybes.pure (writeName name),
-        (Maybes.map (\t -> Serialization.spaceSep [
-          Serialization.cst ":",
-          (writeType t)]) stype)]))
-
--- | Convert a data reference to an expression
-writeData_Ref :: Syntax.Data_Ref -> Ast.Expr
-writeData_Ref ref =
-    case ref of
-      Syntax.Data_RefName v0 -> writeData_Name v0
-      Syntax.Data_RefSelect v0 -> writeData_Select v0
-
--- | Convert a data select to an expression
-writeData_Select :: Syntax.Data_Select -> Ast.Expr
-writeData_Select sel =
-
-      let arg = Syntax.data_SelectQual sel
-          name = Syntax.data_SelectName sel
-      in (Serialization.ifx dotOp (writeTerm arg) (writeTerm (Syntax.DataRef (Syntax.Data_RefName name))))
-
 -- | Convert a type to an expression
 writeType :: Syntax.Type -> Ast.Expr
 writeType typ =
@@ -389,21 +407,3 @@ writeType_Name tn = Serialization.cst (Syntax.type_NameValue tn)
 -- | Convert a type parameter to an expression
 writeType_Param :: Syntax.Type_Param -> Ast.Expr
 writeType_Param tp = writeName (Syntax.type_ParamName tp)
-
--- | Convert an init to an expression
-writeInit :: Syntax.Init -> Ast.Expr
-writeInit init = writeType (Syntax.initTpe init)
-
--- | Convert a modifier to an expression
-writeMod :: Syntax.Mod -> Ast.Expr
-writeMod m =
-    case m of
-      Syntax.ModCase -> Serialization.cst "case"
-      Syntax.ModSealed -> Serialization.cst "sealed"
-      Syntax.ModAbstract -> Serialization.cst "abstract"
-      Syntax.ModFinal -> Serialization.cst "final"
-      Syntax.ModOverride -> Serialization.cst "override"
-      Syntax.ModImplicit -> Serialization.cst "implicit"
-      Syntax.ModLazy -> Serialization.cst "lazy"
-      Syntax.ModPrivate _ -> Serialization.cst "private"
-      Syntax.ModProtected _ -> Serialization.cst "protected"

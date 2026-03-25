@@ -34,19 +34,16 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-avro_foreignKey :: String
-avro_foreignKey = "@foreignKey"
-
-avro_primaryKey :: String
-avro_primaryKey = "@primaryKey"
-
--- | An empty Avro environment with no named adapters, no namespace, and no elements
-emptyAvroEnvironment :: Environment.AvroEnvironment
-emptyAvroEnvironment =
-    Environment.AvroEnvironment {
-      Environment.avroEnvironmentNamedAdapters = Maps.empty,
-      Environment.avroEnvironmentNamespace = Nothing,
-      Environment.avroEnvironmentElements = Maps.empty}
+-- | Annotate an adapter's target type with optional annotations
+annotateAdapter :: Maybe (M.Map Core.Name Core.Term) -> Util.Adapter t0 Core.Type t1 t2 -> Util.Adapter t0 Core.Type t1 t2
+annotateAdapter ann ad =
+    Maybes.maybe ad (\n -> Util.Adapter {
+      Util.adapterIsLossy = (Util.adapterIsLossy ad),
+      Util.adapterSource = (Util.adapterSource ad),
+      Util.adapterTarget = (Core.TypeAnnotated (Core.AnnotatedType {
+        Core.annotatedTypeBody = (Util.adapterTarget ad),
+        Core.annotatedTypeAnnotation = n})),
+      Util.adapterCoder = (Util.adapterCoder ad)}) ann
 
 -- | Create an adapter between Avro schemas and Hydra types/terms
 avroHydraAdapter :: Context.Context -> Schema.Schema -> Environment.AvroEnvironment -> Either (Context.InContext Errors.Error) (Util.Adapter Schema.Schema Core.Type Model.Value Core.Term, Environment.AvroEnvironment)
@@ -322,18 +319,134 @@ avroHydraAdapter cx schema env0 =
               Util.adapterTarget = (Util.adapterTarget ad),
               Util.adapterCoder = (Util.adapterCoder ad)}, env1)))))))
 
--- | Thread AvroEnvironment through preparing multiple fields
-prepareFields :: Context.Context -> Environment.AvroEnvironment -> [Schema.Field] -> Either (Context.InContext Errors.Error) (M.Map String (Schema.Field, (Util.Adapter Schema.Schema Core.Type Model.Value Core.Term)), Environment.AvroEnvironment)
-prepareFields cx env fields =
-    Lists.foldl (\acc -> \f -> Eithers.bind acc (\accPair ->
-      let m = Pairs.first accPair
-          env1 = Pairs.second accPair
-      in (Eithers.bind (prepareField cx env1 f) (\result ->
-        let kv = Pairs.first result
-            env2 = Pairs.second result
-            k = Pairs.first kv
-            v = Pairs.second kv
-        in (Right (Maps.insert k v m, env2)))))) (Right (Maps.empty, env)) fields
+-- | Convert an Avro qualified name to a Hydra name
+avroNameToHydraName :: Environment.AvroQualifiedName -> Core.Name
+avroNameToHydraName qname =
+
+      let mns = Environment.avroQualifiedNameNamespace qname
+          local = Environment.avroQualifiedNameName qname
+      in (Names.unqualifyName (Module.QualifiedName {
+        Module.qualifiedNameNamespace = (Maybes.map (\s -> Module.Namespace s) mns),
+        Module.qualifiedNameLocal = local}))
+
+avro_foreignKey :: String
+avro_foreignKey = "@foreignKey"
+
+avro_primaryKey :: String
+avro_primaryKey = "@primaryKey"
+
+-- | An empty Avro environment with no named adapters, no namespace, and no elements
+emptyAvroEnvironment :: Environment.AvroEnvironment
+emptyAvroEnvironment =
+    Environment.AvroEnvironment {
+      Environment.avroEnvironmentNamedAdapters = Maps.empty,
+      Environment.avroEnvironmentNamespace = Nothing,
+      Environment.avroEnvironmentElements = Maps.empty}
+
+-- | Encode a JSON value as a Hydra term for annotation purposes
+encodeAnnotationValue :: Model.Value -> Core.Term
+encodeAnnotationValue v =
+    case v of
+      Model.ValueArray v0 -> Core.TermList (Lists.map encodeAnnotationValue v0)
+      Model.ValueBoolean v0 -> Core.TermLiteral (Core.LiteralBoolean v0)
+      Model.ValueNull -> Core.TermUnit
+      Model.ValueNumber v0 -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat v0))
+      Model.ValueObject v0 -> Core.TermMap (Maps.fromList (Lists.map (\entry ->
+        let k = Pairs.first entry
+            v_ = Pairs.second entry
+        in (Core.TermLiteral (Core.LiteralString k), (encodeAnnotationValue v_))) (Maps.toList v0)))
+      Model.ValueString v0 -> Core.TermLiteral (Core.LiteralString v0)
+
+-- | Construct an error result with a message in context
+err :: Context.Context -> String -> Either (Context.InContext Errors.Error) t0
+err cx msg =
+    Left (Context.InContext {
+      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError msg)),
+      Context.inContextContext = cx})
+
+-- | Extract a JSON array or return an error
+expectArrayE :: t0 -> Model.Value -> Either t1 [Model.Value]
+expectArrayE cx value =
+    case value of
+      Model.ValueArray v0 -> Right v0
+
+-- | Extract a JSON object or return an error
+expectObjectE :: t0 -> Model.Value -> Either t1 (M.Map String Model.Value)
+expectObjectE cx value =
+    case value of
+      Model.ValueObject v0 -> Right v0
+
+-- | Extract a JSON string or return an error
+expectStringE :: t0 -> Model.Value -> Either t1 String
+expectStringE cx value =
+    case value of
+      Model.ValueString v0 -> Right v0
+
+-- | Extract field annotations and convert them to core Name/Term pairs
+fieldAnnotationsToCore :: Schema.Field -> M.Map Core.Name Core.Term
+fieldAnnotationsToCore f =
+    Maps.fromList (Lists.map (\entry ->
+      let k = Pairs.first entry
+          v = Pairs.second entry
+      in (Core.Name k, (encodeAnnotationValue v))) (Maps.toList (Schema.fieldAnnotations f)))
+
+-- | Find the primary key field among a list of Avro fields
+findAvroPrimaryKeyField :: Context.Context -> Environment.AvroQualifiedName -> [Schema.Field] -> Either (Context.InContext Errors.Error) (Maybe Environment.AvroPrimaryKey)
+findAvroPrimaryKeyField cx qname avroFields =
+
+      let keys = Maybes.cat (Lists.map (\f -> primaryKeyE cx f) avroFields)
+      in (Logic.ifElse (Lists.null keys) (Right Nothing) (Logic.ifElse (Equality.equal (Lists.length keys) 1) (Right (Just (Lists.head keys))) (err cx (Strings.cat2 "multiple primary key fields for " (showQname qname)))))
+
+-- | Extract a foreign key annotation from a field, if present
+foreignKeyE :: Context.Context -> Schema.Field -> Either (Context.InContext Errors.Error) (Maybe Environment.AvroForeignKey)
+foreignKeyE cx f =
+    Maybes.maybe (Right Nothing) (\v -> Eithers.bind (expectObjectE cx v) (\m -> Eithers.bind (Eithers.map (\s -> Core.Name s) (requireStringE cx "type" m)) (\tname -> Eithers.bind (optStringE cx "pattern" m) (\pattern_ ->
+      let constr = Maybes.maybe (\s -> Core.Name s) (\pat -> patternToNameConstructor pat) pattern_
+      in (Right (Just (Environment.AvroForeignKey {
+        Environment.avroForeignKeyTypeName = tname,
+        Environment.avroForeignKeyConstructor = constr}))))))) (Maps.lookup avro_foreignKey (Schema.fieldAnnotations f))
+
+-- | Look up an adapter by qualified name in the environment
+getAvroHydraAdapter :: Environment.AvroQualifiedName -> Environment.AvroEnvironment -> Maybe (Util.Adapter Schema.Schema Core.Type Model.Value Core.Term)
+getAvroHydraAdapter qname env = Maps.lookup qname (Environment.avroEnvironmentNamedAdapters env)
+
+-- | Convert a JSON value to a string, supporting booleans, strings, and numbers
+jsonToStringE :: Context.Context -> Model.Value -> Either (Context.InContext Errors.Error) String
+jsonToStringE cx v =
+    case v of
+      Model.ValueBoolean v0 -> Right (Logic.ifElse v0 "true" "false")
+      Model.ValueString v0 -> Right v0
+      Model.ValueNumber v0 -> Right (Literals.showBigfloat v0)
+      _ -> unexpectedE cx "string, number, or boolean" "other"
+
+-- | Extract named type annotations and convert them to core Name/Term pairs
+namedAnnotationsToCore :: Schema.Named -> M.Map Core.Name Core.Term
+namedAnnotationsToCore n =
+    Maps.fromList (Lists.map (\entry ->
+      let k = Pairs.first entry
+          v = Pairs.second entry
+      in (Core.Name k, (encodeAnnotationValue v))) (Maps.toList (Schema.namedAnnotations n)))
+
+-- | Look up an optional string attribute in a JSON object map
+optStringE :: Ord t1 => (t0 -> t1 -> M.Map t1 Model.Value -> Either t2 (Maybe String))
+optStringE cx fname m =
+    Maybes.maybe (Right Nothing) (\v -> Eithers.map (\s -> Maybes.pure s) (expectStringE cx v)) (Maps.lookup fname m)
+
+-- | Parse a dotted Avro name into a qualified name
+parseAvroName :: Maybe String -> String -> Environment.AvroQualifiedName
+parseAvroName mns name_ =
+
+      let parts = Strings.splitOn "." name_
+          local = Lists.last parts
+      in (Logic.ifElse (Equality.equal (Lists.length parts) 1) (Environment.AvroQualifiedName {
+        Environment.avroQualifiedNameNamespace = mns,
+        Environment.avroQualifiedNameName = local}) (Environment.AvroQualifiedName {
+        Environment.avroQualifiedNameNamespace = (Just (Strings.intercalate "." (Lists.init parts))),
+        Environment.avroQualifiedNameName = local}))
+
+-- | Create a name constructor from a pattern string
+patternToNameConstructor :: String -> String -> Core.Name
+patternToNameConstructor pat s = Core.Name (Strings.intercalate s (Strings.splitOn "${}" pat))
 
 -- | Prepare a single field, producing an adapter and updated environment
 prepareField :: Context.Context -> Environment.AvroEnvironment -> Schema.Field -> Either (Context.InContext Errors.Error) ((String, (Schema.Field, (Util.Adapter Schema.Schema Core.Type Model.Value Core.Term))), Environment.AvroEnvironment)
@@ -381,80 +494,18 @@ prepareField cx env f =
             env1 = Pairs.second adEnv
         in (Right ((Schema.fieldName f, (f, (annotateAdapter ann ad))), env1)))))
 
--- | Annotate an adapter's target type with optional annotations
-annotateAdapter :: Maybe (M.Map Core.Name Core.Term) -> Util.Adapter t0 Core.Type t1 t2 -> Util.Adapter t0 Core.Type t1 t2
-annotateAdapter ann ad =
-    Maybes.maybe ad (\n -> Util.Adapter {
-      Util.adapterIsLossy = (Util.adapterIsLossy ad),
-      Util.adapterSource = (Util.adapterSource ad),
-      Util.adapterTarget = (Core.TypeAnnotated (Core.AnnotatedType {
-        Core.annotatedTypeBody = (Util.adapterTarget ad),
-        Core.annotatedTypeAnnotation = n})),
-      Util.adapterCoder = (Util.adapterCoder ad)}) ann
-
--- | Find the primary key field among a list of Avro fields
-findAvroPrimaryKeyField :: Context.Context -> Environment.AvroQualifiedName -> [Schema.Field] -> Either (Context.InContext Errors.Error) (Maybe Environment.AvroPrimaryKey)
-findAvroPrimaryKeyField cx qname avroFields =
-
-      let keys = Maybes.cat (Lists.map (\f -> primaryKeyE cx f) avroFields)
-      in (Logic.ifElse (Lists.null keys) (Right Nothing) (Logic.ifElse (Equality.equal (Lists.length keys) 1) (Right (Just (Lists.head keys))) (err cx (Strings.cat2 "multiple primary key fields for " (showQname qname)))))
-
--- | Convert an Avro qualified name to a Hydra name
-avroNameToHydraName :: Environment.AvroQualifiedName -> Core.Name
-avroNameToHydraName qname =
-
-      let mns = Environment.avroQualifiedNameNamespace qname
-          local = Environment.avroQualifiedNameName qname
-      in (Names.unqualifyName (Module.QualifiedName {
-        Module.qualifiedNameNamespace = (Maybes.map (\s -> Module.Namespace s) mns),
-        Module.qualifiedNameLocal = local}))
-
--- | Encode a JSON value as a Hydra term for annotation purposes
-encodeAnnotationValue :: Model.Value -> Core.Term
-encodeAnnotationValue v =
-    case v of
-      Model.ValueArray v0 -> Core.TermList (Lists.map encodeAnnotationValue v0)
-      Model.ValueBoolean v0 -> Core.TermLiteral (Core.LiteralBoolean v0)
-      Model.ValueNull -> Core.TermUnit
-      Model.ValueNumber v0 -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat v0))
-      Model.ValueObject v0 -> Core.TermMap (Maps.fromList (Lists.map (\entry ->
-        let k = Pairs.first entry
-            v_ = Pairs.second entry
-        in (Core.TermLiteral (Core.LiteralString k), (encodeAnnotationValue v_))) (Maps.toList v0)))
-      Model.ValueString v0 -> Core.TermLiteral (Core.LiteralString v0)
-
--- | Extract field annotations and convert them to core Name/Term pairs
-fieldAnnotationsToCore :: Schema.Field -> M.Map Core.Name Core.Term
-fieldAnnotationsToCore f =
-    Maps.fromList (Lists.map (\entry ->
-      let k = Pairs.first entry
-          v = Pairs.second entry
-      in (Core.Name k, (encodeAnnotationValue v))) (Maps.toList (Schema.fieldAnnotations f)))
-
--- | Extract named type annotations and convert them to core Name/Term pairs
-namedAnnotationsToCore :: Schema.Named -> M.Map Core.Name Core.Term
-namedAnnotationsToCore n =
-    Maps.fromList (Lists.map (\entry ->
-      let k = Pairs.first entry
-          v = Pairs.second entry
-      in (Core.Name k, (encodeAnnotationValue v))) (Maps.toList (Schema.namedAnnotations n)))
-
--- | Look up an adapter by qualified name in the environment
-getAvroHydraAdapter :: Environment.AvroQualifiedName -> Environment.AvroEnvironment -> Maybe (Util.Adapter Schema.Schema Core.Type Model.Value Core.Term)
-getAvroHydraAdapter qname env = Maps.lookup qname (Environment.avroEnvironmentNamedAdapters env)
-
--- | Extract a foreign key annotation from a field, if present
-foreignKeyE :: Context.Context -> Schema.Field -> Either (Context.InContext Errors.Error) (Maybe Environment.AvroForeignKey)
-foreignKeyE cx f =
-    Maybes.maybe (Right Nothing) (\v -> Eithers.bind (expectObjectE cx v) (\m -> Eithers.bind (Eithers.map (\s -> Core.Name s) (requireStringE cx "type" m)) (\tname -> Eithers.bind (optStringE cx "pattern" m) (\pattern_ ->
-      let constr = Maybes.maybe (\s -> Core.Name s) (\pat -> patternToNameConstructor pat) pattern_
-      in (Right (Just (Environment.AvroForeignKey {
-        Environment.avroForeignKeyTypeName = tname,
-        Environment.avroForeignKeyConstructor = constr}))))))) (Maps.lookup avro_foreignKey (Schema.fieldAnnotations f))
-
--- | Create a name constructor from a pattern string
-patternToNameConstructor :: String -> String -> Core.Name
-patternToNameConstructor pat s = Core.Name (Strings.intercalate s (Strings.splitOn "${}" pat))
+-- | Thread AvroEnvironment through preparing multiple fields
+prepareFields :: Context.Context -> Environment.AvroEnvironment -> [Schema.Field] -> Either (Context.InContext Errors.Error) (M.Map String (Schema.Field, (Util.Adapter Schema.Schema Core.Type Model.Value Core.Term)), Environment.AvroEnvironment)
+prepareFields cx env fields =
+    Lists.foldl (\acc -> \f -> Eithers.bind acc (\accPair ->
+      let m = Pairs.first accPair
+          env1 = Pairs.second accPair
+      in (Eithers.bind (prepareField cx env1 f) (\result ->
+        let kv = Pairs.first result
+            env2 = Pairs.second result
+            k = Pairs.first kv
+            v = Pairs.second kv
+        in (Right (Maps.insert k v m, env2)))))) (Right (Maps.empty, env)) fields
 
 -- | Extract a primary key annotation from a field, if present
 primaryKeyE :: t0 -> Schema.Field -> Maybe Environment.AvroPrimaryKey
@@ -463,18 +514,6 @@ primaryKeyE cx f =
       Environment.avroPrimaryKeyFieldName = (Core.Name (Schema.fieldName f)),
       Environment.avroPrimaryKeyConstructor = (patternToNameConstructor s)})) (expectStringE cx v)) (Maps.lookup avro_primaryKey (Schema.fieldAnnotations f))
 
--- | Parse a dotted Avro name into a qualified name
-parseAvroName :: Maybe String -> String -> Environment.AvroQualifiedName
-parseAvroName mns name_ =
-
-      let parts = Strings.splitOn "." name_
-          local = Lists.last parts
-      in (Logic.ifElse (Equality.equal (Lists.length parts) 1) (Environment.AvroQualifiedName {
-        Environment.avroQualifiedNameNamespace = mns,
-        Environment.avroQualifiedNameName = local}) (Environment.AvroQualifiedName {
-        Environment.avroQualifiedNameNamespace = (Just (Strings.intercalate "." (Lists.init parts))),
-        Environment.avroQualifiedNameName = local}))
-
 -- | Store an adapter in the environment by qualified name
 putAvroHydraAdapter :: Environment.AvroQualifiedName -> Util.Adapter Schema.Schema Core.Type Model.Value Core.Term -> Environment.AvroEnvironment -> Environment.AvroEnvironment
 putAvroHydraAdapter qname ad env =
@@ -482,6 +521,14 @@ putAvroHydraAdapter qname ad env =
       Environment.avroEnvironmentNamedAdapters = (Maps.insert qname ad (Environment.avroEnvironmentNamedAdapters env)),
       Environment.avroEnvironmentNamespace = (Environment.avroEnvironmentNamespace env),
       Environment.avroEnvironmentElements = (Environment.avroEnvironmentElements env)}
+
+-- | Look up a required string attribute in a JSON object map
+requireStringE :: Context.Context -> String -> M.Map String Model.Value -> Either (Context.InContext Errors.Error) String
+requireStringE cx fname m =
+    Maybes.maybe (err cx (Strings.cat [
+      "required attribute ",
+      (Literals.showString fname),
+      " not found"])) (\v -> expectStringE cx v) (Maps.lookup fname m)
 
 -- | Recursively rewrite an Avro schema using a monadic transformation function
 rewriteAvroSchemaM :: ((Schema.Schema -> Either t0 Schema.Schema) -> Schema.Schema -> Either t0 Schema.Schema) -> Schema.Schema -> Either t0 Schema.Schema
@@ -514,15 +561,6 @@ rewriteAvroSchemaM f schema =
                     Schema.SchemaUnion v0 -> Eithers.map (\schemas_ -> Schema.SchemaUnion (Schema.Union schemas_)) (Eithers.mapList (\us -> recurse us) (Schema.unUnion v0))
                     _ -> Right s
       in (f fsub schema)
-
--- | Convert a JSON value to a string, supporting booleans, strings, and numbers
-jsonToStringE :: Context.Context -> Model.Value -> Either (Context.InContext Errors.Error) String
-jsonToStringE cx v =
-    case v of
-      Model.ValueBoolean v0 -> Right (Logic.ifElse v0 "true" "false")
-      Model.ValueString v0 -> Right v0
-      Model.ValueNumber v0 -> Right (Literals.showBigfloat v0)
-      _ -> unexpectedE cx "string, number, or boolean" "other"
 
 -- | Convert an Avro qualified name to a display string
 showQname :: Environment.AvroQualifiedName -> String
@@ -576,13 +614,6 @@ termToStringE cx term =
       Core.TermMaybe v0 -> Maybes.maybe (unexpectedE cx "literal value" "Nothing") (\term_ -> termToStringE cx term_) v0
       _ -> unexpectedE cx "literal value" "other"
 
--- | Construct an error result with a message in context
-err :: Context.Context -> String -> Either (Context.InContext Errors.Error) t0
-err cx msg =
-    Left (Context.InContext {
-      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError msg)),
-      Context.inContextContext = cx})
-
 -- | Construct an error for unexpected values
 unexpectedE :: Context.Context -> String -> String -> Either (Context.InContext Errors.Error) t0
 unexpectedE cx expected found =
@@ -591,34 +622,3 @@ unexpectedE cx expected found =
       expected,
       ", found: ",
       found])
-
--- | Extract a JSON array or return an error
-expectArrayE :: t0 -> Model.Value -> Either t1 [Model.Value]
-expectArrayE cx value =
-    case value of
-      Model.ValueArray v0 -> Right v0
-
--- | Extract a JSON object or return an error
-expectObjectE :: t0 -> Model.Value -> Either t1 (M.Map String Model.Value)
-expectObjectE cx value =
-    case value of
-      Model.ValueObject v0 -> Right v0
-
--- | Extract a JSON string or return an error
-expectStringE :: t0 -> Model.Value -> Either t1 String
-expectStringE cx value =
-    case value of
-      Model.ValueString v0 -> Right v0
-
--- | Look up a required string attribute in a JSON object map
-requireStringE :: Context.Context -> String -> M.Map String Model.Value -> Either (Context.InContext Errors.Error) String
-requireStringE cx fname m =
-    Maybes.maybe (err cx (Strings.cat [
-      "required attribute ",
-      (Literals.showString fname),
-      " not found"])) (\v -> expectStringE cx v) (Maps.lookup fname m)
-
--- | Look up an optional string attribute in a JSON object map
-optStringE :: Ord t1 => (t0 -> t1 -> M.Map t1 Model.Value -> Either t2 (Maybe String))
-optStringE cx fname m =
-    Maybes.maybe (Right Nothing) (\v -> Eithers.map (\s -> Maybes.pure s) (expectStringE cx v)) (Maps.lookup fname m)

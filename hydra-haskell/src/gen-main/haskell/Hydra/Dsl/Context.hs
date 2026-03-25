@@ -29,14 +29,6 @@ context trace messages other =
           Core.fieldName = (Core.Name "other"),
           Core.fieldTerm = (Phantoms.unTTerm other)}]}))
 
-contextTrace :: Phantoms.TTerm Context.Context -> Phantoms.TTerm [String]
-contextTrace x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.context.Context"),
-        Core.projectionField = (Core.Name "trace")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 contextMessages :: Phantoms.TTerm Context.Context -> Phantoms.TTerm [String]
 contextMessages x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -53,28 +45,13 @@ contextOther x =
         Core.projectionField = (Core.Name "other")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-contextWithTrace :: Phantoms.TTerm Context.Context -> Phantoms.TTerm [String] -> Phantoms.TTerm Context.Context
-contextWithTrace original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.context.Context"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "trace"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "messages"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.context.Context"),
-              Core.projectionField = (Core.Name "messages")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "other"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.context.Context"),
-              Core.projectionField = (Core.Name "other")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+contextTrace :: Phantoms.TTerm Context.Context -> Phantoms.TTerm [String]
+contextTrace x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.context.Context"),
+        Core.projectionField = (Core.Name "trace")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 contextWithMessages :: Phantoms.TTerm Context.Context -> Phantoms.TTerm [String] -> Phantoms.TTerm Context.Context
 contextWithMessages original newVal =
@@ -122,6 +99,29 @@ contextWithOther original newVal =
           Core.fieldName = (Core.Name "other"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+contextWithTrace :: Phantoms.TTerm Context.Context -> Phantoms.TTerm [String] -> Phantoms.TTerm Context.Context
+contextWithTrace original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.context.Context"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "trace"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "messages"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.context.Context"),
+              Core.projectionField = (Core.Name "messages")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "other"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.context.Context"),
+              Core.projectionField = (Core.Name "other")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 inContext :: Phantoms.TTerm e -> Phantoms.TTerm Context.Context -> Phantoms.TTerm (Context.InContext e)
 inContext object context =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -134,14 +134,6 @@ inContext object context =
           Core.fieldName = (Core.Name "context"),
           Core.fieldTerm = (Phantoms.unTTerm context)}]}))
 
-inContextObject :: Phantoms.TTerm (Context.InContext e) -> Phantoms.TTerm e
-inContextObject x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.context.InContext"),
-        Core.projectionField = (Core.Name "object")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 inContextContext :: Phantoms.TTerm (Context.InContext e) -> Phantoms.TTerm Context.Context
 inContextContext x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -150,21 +142,13 @@ inContextContext x =
         Core.projectionField = (Core.Name "context")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-inContextWithObject :: Phantoms.TTerm (Context.InContext e) -> Phantoms.TTerm e -> Phantoms.TTerm (Context.InContext e)
-inContextWithObject original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.context.InContext"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "object"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "context"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.context.InContext"),
-              Core.projectionField = (Core.Name "context")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+inContextObject :: Phantoms.TTerm (Context.InContext e) -> Phantoms.TTerm e
+inContextObject x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.context.InContext"),
+        Core.projectionField = (Core.Name "object")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 inContextWithContext :: Phantoms.TTerm (Context.InContext e) -> Phantoms.TTerm Context.Context -> Phantoms.TTerm (Context.InContext e)
 inContextWithContext original newVal =
@@ -181,3 +165,19 @@ inContextWithContext original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "context"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+inContextWithObject :: Phantoms.TTerm (Context.InContext e) -> Phantoms.TTerm e -> Phantoms.TTerm (Context.InContext e)
+inContextWithObject original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.context.InContext"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "object"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "context"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.context.InContext"),
+              Core.projectionField = (Core.Name "context")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))

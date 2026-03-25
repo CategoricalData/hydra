@@ -40,12 +40,23 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Convert a Hydra module to Scala source code
-moduleToScala :: Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (M.Map String String)
-moduleToScala mod defs cx g =
-    Eithers.bind (constructModule cx g mod defs) (\pkg ->
-      let s = Serialization.printExpr (Serialization.parenthesize (Serde.writePkg pkg))
-      in (Right (Maps.singleton (Names.namespaceToFilePath Util.CaseConventionCamel (Module.FileExtension "scala") (Module.moduleNamespace mod)) s)))
+-- | Apply a variable to a term, performing substitution for lambdas
+applyVar :: Core.Term -> Core.Name -> Core.Term
+applyVar fterm avar =
+
+      let v = Core.unName avar
+      in case (Rewriting.deannotateAndDetypeTerm fterm) of
+        Core.TermFunction v0 -> case v0 of
+          Core.FunctionLambda v1 ->
+            let lamParam = Core.lambdaParameter v1
+                lamBody = Core.lambdaBody v1
+            in (Logic.ifElse (Rewriting.isFreeVariableInTerm lamParam lamBody) lamBody (Rewriting.substituteVariable lamParam avar lamBody))
+          _ -> Core.TermApplication (Core.Application {
+            Core.applicationFunction = fterm,
+            Core.applicationArgument = (Core.TermVariable avar)})
+        _ -> Core.TermApplication (Core.Application {
+          Core.applicationFunction = fterm,
+          Core.applicationArgument = (Core.TermVariable avar)})
 
 -- | Construct a Scala package from a Hydra module and its definitions
 constructModule :: Context.Context -> Graph.Graph -> Module.Module -> [Module.Definition] -> Either (Context.InContext Errors.Error) Syntax.Pkg
@@ -67,164 +78,107 @@ constructModule cx g mod defs =
           typeDeclStats,
           termDeclStats])})))))
 
--- | Find import statements for the module
-findImports :: Context.Context -> Graph.Graph -> Module.Module -> Either (Context.InContext Errors.Error) [Syntax.Stat]
-findImports cx g mod =
-    Eithers.bind (Schemas.moduleDependencyNamespaces cx g False False True False mod) (\elImps -> Eithers.bind (Schemas.moduleDependencyNamespaces cx g False True False False mod) (\primImps -> Right (Lists.concat [
-      Lists.map toElImport (Sets.toList elImps),
-      (Lists.map toPrimImport (Sets.toList primImps))])))
+-- | Drop N domain types from a function type, returning the remaining type
+dropDomains :: Int -> Core.Type -> Core.Type
+dropDomains n t =
+    Logic.ifElse (Equality.lte n 0) t (case (Rewriting.deannotateType t) of
+      Core.TypeFunction v0 -> dropDomains (Math.sub n 1) (Core.functionTypeCodomain v0)
+      Core.TypeForall v0 -> dropDomains n (Core.forallTypeBody v0)
+      _ -> t)
 
--- | Create an element import statement
-toElImport :: Module.Namespace -> Syntax.Stat
-toElImport ns =
-    Syntax.StatImportExport (Syntax.ImportExportStatImport (Syntax.Import {
-      Syntax.importImporters = [
-        Syntax.Importer {
-          Syntax.importerRef = (Syntax.Data_RefName (Syntax.Data_Name {
-            Syntax.data_NameValue = (Syntax.PredefString (Strings.intercalate "." (Strings.splitOn "." (Module.unNamespace ns))))})),
-          Syntax.importerImportees = [
-            Syntax.ImporteeWildcard]}]}))
+-- | Encode a case branch
+encodeCase :: Context.Context -> Graph.Graph -> M.Map Core.Name Core.Type -> Maybe Core.Name -> Core.Field -> Either (Context.InContext Errors.Error) Syntax.Case
+encodeCase cx g ftypes sn f =
 
--- | Create a primitive import statement
-toPrimImport :: Module.Namespace -> Syntax.Stat
-toPrimImport ns =
-    Syntax.StatImportExport (Syntax.ImportExportStatImport (Syntax.Import {
-      Syntax.importImporters = [
-        Syntax.Importer {
-          Syntax.importerRef = (Syntax.Data_RefName (Syntax.Data_Name {
-            Syntax.data_NameValue = (Syntax.PredefString (Strings.intercalate "." (Strings.splitOn "." (Module.unNamespace ns))))})),
-          Syntax.importerImportees = []}]}))
+      let fname = Core.fieldName f
+          fterm = Core.fieldTerm f
+          isUnit =
+                  Maybes.maybe (case (Rewriting.deannotateAndDetypeTerm fterm) of
+                    Core.TermFunction v0 -> case v0 of
+                      Core.FunctionLambda v1 ->
+                        let lamParam = Core.lambdaParameter v1
+                            lamBody = Core.lambdaBody v1
+                            domIsUnit = Maybes.maybe False (\dom -> Equality.equal dom Core.TypeUnit) (Core.lambdaDomain v1)
+                            bodyIgnoresParam = Rewriting.isFreeVariableInTerm lamParam lamBody
+                        in (Logic.or domIsUnit bodyIgnoresParam)
+                      _ -> False
+                    Core.TermRecord v0 -> Equality.equal (Lists.length (Core.recordFields v0)) 0
+                    Core.TermUnit -> True
+                    _ -> False) (\dom -> case (Rewriting.deannotateType dom) of
+                    Core.TypeUnit -> True
+                    Core.TypeRecord v0 -> Equality.equal (Lists.length v0) 0
+                    _ -> False) (Maps.lookup fname ftypes)
+          shortTypeName = Lists.last (Strings.splitOn "." (Maybes.maybe "x" (\n -> Core.unName n) sn))
+          lamParamSuffix =
+                  case (Rewriting.deannotateAndDetypeTerm fterm) of
+                    Core.TermFunction v0 -> case v0 of
+                      Core.FunctionLambda v1 ->
+                        let rawName = Core.unName (Core.lambdaParameter v1)
+                            safeName = Strings.fromList (Lists.map (\c -> Logic.ifElse (Equality.equal c 39) 95 c) (Strings.toList rawName))
+                        in (Strings.cat2 "_" safeName)
+                      _ -> ""
+                    _ -> ""
+          v =
+                  Core.Name (Strings.cat [
+                    "v_",
+                    shortTypeName,
+                    "_",
+                    (Core.unName fname),
+                    lamParamSuffix])
+          patArgs = Logic.ifElse isUnit [] [
+                Utils.svar v]
+          pat =
+                  Syntax.PatExtract (Syntax.Pat_Extract {
+                    Syntax.pat_ExtractFun = (Utils.sname (Utils.qualifyUnionFieldName "MATCHED." sn fname)),
+                    Syntax.pat_ExtractArgs = patArgs})
+          applied = applyVar fterm v
+      in (Eithers.bind (encodeTerm cx g applied) (\body -> Right (Syntax.Case {
+        Syntax.casePat = pat,
+        Syntax.caseCond = Nothing,
+        Syntax.caseBody = body})))
 
--- | Encode a type definition as a Scala statement
-encodeTypeDefinition :: Context.Context -> t0 -> Module.TypeDefinition -> Either (Context.InContext Errors.Error) Syntax.Stat
-encodeTypeDefinition cx g td =
+-- | Encode a complex term definition with proper parameter types from the type signature
+encodeComplexTermDef :: Context.Context -> Graph.Graph -> String -> Core.Term -> Core.Type -> Either (Context.InContext Errors.Error) Syntax.Stat
+encodeComplexTermDef cx g lname term typ =
 
-      let name = Module.typeDefinitionName td
-          typ = Module.typeDefinitionType td
-          lname = Names.localNameOf name
-          tname = Syntax.Type_Name {
-                Syntax.type_NameValue = lname}
-          dname = Syntax.Data_Name {
-                Syntax.data_NameValue = (Syntax.PredefString lname)}
-          freeVars =
+      let doms = extractDomains typ
+          paramNames = extractParams term
+          paramCount = Math.min (Lists.length paramNames) (Lists.length doms)
+          cod = dropDomains paramCount typ
+          zippedParams = Lists.zip (Lists.take paramCount paramNames) (Lists.take paramCount doms)
+          freeTypeVars =
                   Lists.filter (\v -> Logic.not (Lists.elem 46 (Strings.toList (Core.unName v)))) (Sets.toList (Rewriting.freeVariablesInType typ))
-          tparams =
-                  Lists.map (\_v ->
-                    let vn = Formatting.capitalize (Core.unName _v)
-                    in Syntax.Type_Param {
-                      Syntax.type_ParamMods = [],
-                      Syntax.type_ParamName = (Syntax.NameValue vn),
-                      Syntax.type_ParamTparams = [],
-                      Syntax.type_ParamTbounds = [],
-                      Syntax.type_ParamVbounds = [],
-                      Syntax.type_ParamCbounds = []}) freeVars
-      in case (Rewriting.deannotateType typ) of
-        Core.TypeForall v0 ->
-          let forallBody = Core.forallTypeBody v0
-              forallParam = Core.forallTypeParameter v0
-              collectForallParams =
-                      \t -> \acc -> case (Rewriting.deannotateType t) of
-                        Core.TypeForall v1 -> collectForallParams (Core.forallTypeBody v1) (Lists.cons (Core.forallTypeParameter v1) acc)
-                        _ -> (acc, t)
-              collected = collectForallParams forallBody [
-                    forallParam]
-              allForallParams = Lists.reverse (Pairs.first collected)
-              innerBody = Pairs.second collected
-              allTparams =
-                      Lists.map (\_v ->
-                        let vn = Formatting.capitalize (Core.unName _v)
-                        in Syntax.Type_Param {
-                          Syntax.type_ParamMods = [],
-                          Syntax.type_ParamName = (Syntax.NameValue vn),
-                          Syntax.type_ParamTparams = [],
-                          Syntax.type_ParamTbounds = [],
-                          Syntax.type_ParamVbounds = [],
-                          Syntax.type_ParamCbounds = []}) allForallParams
-          in case (Rewriting.deannotateType innerBody) of
-            Core.TypeRecord v1 -> Eithers.bind (Eithers.mapList (\f -> fieldToParam cx g f) v1) (\params -> Right (Syntax.StatDefn (Syntax.DefnClass (Syntax.Defn_Class {
-              Syntax.defn_ClassMods = [
-                Syntax.ModCase],
-              Syntax.defn_ClassName = tname,
-              Syntax.defn_ClassTparams = allTparams,
-              Syntax.defn_ClassCtor = Syntax.Ctor_Primary {
-                Syntax.ctor_PrimaryMods = [],
-                Syntax.ctor_PrimaryName = (Syntax.NameValue ""),
-                Syntax.ctor_PrimaryParamss = [
-                  params]},
-              Syntax.defn_ClassTemplate = Syntax.Template {
-                Syntax.templateEarly = [],
-                Syntax.templateInits = [],
-                Syntax.templateSelf = (Syntax.Self ()),
-                Syntax.templateStats = []}}))))
-            Core.TypeUnion v1 -> Eithers.bind (Eithers.mapList (\f -> fieldToEnumCase cx g lname allTparams f) v1) (\cases -> Right (Syntax.StatDefn (Syntax.DefnEnum (Syntax.Defn_Enum {
-              Syntax.defn_EnumMods = [],
-              Syntax.defn_EnumName = tname,
-              Syntax.defn_EnumTparams = allTparams,
-              Syntax.defn_EnumCtor = Syntax.Ctor_Primary {
-                Syntax.ctor_PrimaryMods = [],
-                Syntax.ctor_PrimaryName = (Syntax.NameValue ""),
-                Syntax.ctor_PrimaryParamss = []},
-              Syntax.defn_EnumTemplate = Syntax.Template {
-                Syntax.templateEarly = [],
-                Syntax.templateInits = [],
-                Syntax.templateSelf = (Syntax.Self ()),
-                Syntax.templateStats = cases}}))))
-            Core.TypeWrap v1 -> Eithers.bind (encodeType cx g v1) (\styp -> Right (Syntax.StatDefn (Syntax.DefnType (Syntax.Defn_Type {
-              Syntax.defn_TypeMods = [],
-              Syntax.defn_TypeName = tname,
-              Syntax.defn_TypeTparams = allTparams,
-              Syntax.defn_TypeBody = styp}))))
-            _ ->
-              let mkAlias =
-                      \styp -> Right (Syntax.StatDefn (Syntax.DefnType (Syntax.Defn_Type {
-                        Syntax.defn_TypeMods = [],
-                        Syntax.defn_TypeName = Syntax.Type_Name {
-                          Syntax.type_NameValue = lname},
-                        Syntax.defn_TypeTparams = allTparams,
-                        Syntax.defn_TypeBody = styp})))
-              in (Eithers.either (\_ -> mkAlias (Utils.stref "Any")) mkAlias (encodeType cx g innerBody))
-        Core.TypeRecord v0 -> Eithers.bind (Eithers.mapList (\f -> fieldToParam cx g f) v0) (\params -> Right (Syntax.StatDefn (Syntax.DefnClass (Syntax.Defn_Class {
-          Syntax.defn_ClassMods = [
-            Syntax.ModCase],
-          Syntax.defn_ClassName = tname,
-          Syntax.defn_ClassTparams = tparams,
-          Syntax.defn_ClassCtor = Syntax.Ctor_Primary {
-            Syntax.ctor_PrimaryMods = [],
-            Syntax.ctor_PrimaryName = (Syntax.NameValue ""),
-            Syntax.ctor_PrimaryParamss = [
-              params]},
-          Syntax.defn_ClassTemplate = Syntax.Template {
-            Syntax.templateEarly = [],
-            Syntax.templateInits = [],
-            Syntax.templateSelf = (Syntax.Self ()),
-            Syntax.templateStats = []}}))))
-        Core.TypeUnion v0 -> Eithers.bind (Eithers.mapList (\f -> fieldToEnumCase cx g lname tparams f) v0) (\cases -> Right (Syntax.StatDefn (Syntax.DefnEnum (Syntax.Defn_Enum {
-          Syntax.defn_EnumMods = [],
-          Syntax.defn_EnumName = tname,
-          Syntax.defn_EnumTparams = tparams,
-          Syntax.defn_EnumCtor = Syntax.Ctor_Primary {
-            Syntax.ctor_PrimaryMods = [],
-            Syntax.ctor_PrimaryName = (Syntax.NameValue ""),
-            Syntax.ctor_PrimaryParamss = []},
-          Syntax.defn_EnumTemplate = Syntax.Template {
-            Syntax.templateEarly = [],
-            Syntax.templateInits = [],
-            Syntax.templateSelf = (Syntax.Self ()),
-            Syntax.templateStats = cases}}))))
-        Core.TypeWrap v0 -> Eithers.bind (encodeType cx g v0) (\styp -> Right (Syntax.StatDefn (Syntax.DefnType (Syntax.Defn_Type {
-          Syntax.defn_TypeMods = [],
-          Syntax.defn_TypeName = tname,
-          Syntax.defn_TypeTparams = tparams,
-          Syntax.defn_TypeBody = styp}))))
-        _ ->
-          let mkAlias =
-                  \styp -> Right (Syntax.StatDefn (Syntax.DefnType (Syntax.Defn_Type {
-                    Syntax.defn_TypeMods = [],
-                    Syntax.defn_TypeName = Syntax.Type_Name {
-                      Syntax.type_NameValue = lname},
-                    Syntax.defn_TypeTparams = tparams,
-                    Syntax.defn_TypeBody = styp})))
-          in (Eithers.either (\_ -> mkAlias (Utils.stref "Any")) mkAlias (encodeType cx g typ))
+          tparams = Lists.map (\tv -> Utils.stparam tv) freeTypeVars
+          letBindings = extractLetBindings term
+          gWithTypeVars =
+                  Graph.Graph {
+                    Graph.graphBoundTerms = (Graph.graphBoundTerms g),
+                    Graph.graphBoundTypes = (Graph.graphBoundTypes g),
+                    Graph.graphClassConstraints = (Graph.graphClassConstraints g),
+                    Graph.graphLambdaVariables = (Graph.graphLambdaVariables g),
+                    Graph.graphMetadata = (Graph.graphMetadata g),
+                    Graph.graphPrimitives = (Graph.graphPrimitives g),
+                    Graph.graphSchemaTypes = (Graph.graphSchemaTypes g),
+                    Graph.graphTypeVariables = (Sets.union (Sets.fromList freeTypeVars) (Graph.graphTypeVariables g))}
+      in (Eithers.bind (Eithers.mapList (encodeTypedParam cx gWithTypeVars) zippedParams) (\sparams -> Eithers.bind (encodeTerm cx gWithTypeVars (extractBody term)) (\sbody -> Eithers.bind (encodeType cx g cod) (\scod ->
+        let gForLets =
+                Logic.ifElse (Lists.null letBindings) gWithTypeVars (Rewriting.extendGraphForLet CoderUtils.bindingMetadata gWithTypeVars (Core.Let {
+                  Core.letBindings = letBindings,
+                  Core.letBody = (Core.TermVariable (Core.Name "dummy"))}))
+        in (Eithers.bind (Eithers.mapList (encodeLetBinding cx gForLets (Sets.fromList freeTypeVars)) letBindings) (\sbindings ->
+          let defBody =
+                  Logic.ifElse (Lists.null sbindings) sbody (Syntax.DataBlock (Syntax.Data_Block {
+                    Syntax.data_BlockStats = (Lists.concat2 sbindings [
+                      Syntax.StatTerm sbody])}))
+          in (Right (Syntax.StatDefn (Syntax.DefnDef (Syntax.Defn_Def {
+            Syntax.defn_DefMods = [],
+            Syntax.defn_DefName = Syntax.Data_Name {
+              Syntax.data_NameValue = (Syntax.PredefString lname)},
+            Syntax.defn_DefTparams = tparams,
+            Syntax.defn_DefParamss = (Lists.map (\p -> [
+              p]) sparams),
+            Syntax.defn_DefDecltpe = (Just scod),
+            Syntax.defn_DefBody = defBody}))))))))))
 
 -- | Encode a Hydra function as a Scala expression
 encodeFunction :: Context.Context -> Graph.Graph -> M.Map Core.Name Core.Term -> Core.Function -> Maybe Core.Term -> Either (Context.InContext Errors.Error) Syntax.Data
@@ -281,6 +235,41 @@ encodeFunction cx g meta fun arg =
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unsupported function")),
         Context.inContextContext = cx})
 
+-- | Encode a let binding as a val or def declaration. outerTypeVars are type params from the enclosing scope.
+encodeLetBinding :: Context.Context -> Graph.Graph -> S.Set Core.Name -> Core.Binding -> Either (Context.InContext Errors.Error) Syntax.Stat
+encodeLetBinding cx g outerTypeVars b =
+
+      let bname = Utils.scalaEscapeName (Core.unName (Core.bindingName b))
+          bterm = Core.bindingTerm b
+          mts = Maybes.maybe (Maps.lookup (Core.bindingName b) (Graph.graphBoundTypes g)) (\ts -> Just ts) (Core.bindingType b)
+          isFn =
+                  Maybes.maybe False (\ts -> case (Rewriting.deannotateType (Core.typeSchemeType ts)) of
+                    Core.TypeFunction _ -> True
+                    Core.TypeForall v0 -> case (Rewriting.deannotateType (Core.forallTypeBody v0)) of
+                      Core.TypeFunction _ -> True
+                      _ -> False
+                    _ -> False) mts
+      in (Maybes.maybe (Eithers.bind (encodeTerm cx g bterm) (\srhs -> Right (Syntax.StatDefn (Syntax.DefnVal (Syntax.Defn_Val {
+        Syntax.defn_ValMods = [
+          Syntax.ModLazy],
+        Syntax.defn_ValPats = [
+          Syntax.PatVar (Syntax.Pat_Var {
+            Syntax.pat_VarName = Syntax.Data_Name {
+              Syntax.data_NameValue = (Syntax.PredefString bname)}})],
+        Syntax.defn_ValDecltpe = Nothing,
+        Syntax.defn_ValRhs = srhs}))))) (\ts ->
+        let newVars = Lists.filter (\v -> Logic.not (Sets.member v outerTypeVars)) (Core.typeSchemeVariables ts)
+            useDef = Logic.or isFn (Logic.not (Lists.null newVars))
+        in (Logic.ifElse useDef (encodeLocalDef cx g outerTypeVars bname bterm (Core.typeSchemeType ts)) (Eithers.bind (encodeTerm cx g bterm) (\srhs -> Eithers.bind (encodeType cx g (Core.typeSchemeType ts)) (\styp -> Right (Syntax.StatDefn (Syntax.DefnVal (Syntax.Defn_Val {
+          Syntax.defn_ValMods = [
+            Syntax.ModLazy],
+          Syntax.defn_ValPats = [
+            Syntax.PatVar (Syntax.Pat_Var {
+              Syntax.pat_VarName = Syntax.Data_Name {
+                Syntax.data_NameValue = (Syntax.PredefString bname)}})],
+          Syntax.defn_ValDecltpe = (Just styp),
+          Syntax.defn_ValRhs = srhs})))))))) mts)
+
 -- | Encode a literal value as a Scala literal
 encodeLiteral :: Context.Context -> t0 -> Core.Literal -> Either (Context.InContext Errors.Error) Syntax.Lit
 encodeLiteral cx g av =
@@ -312,33 +301,49 @@ encodeLiteral cx g av =
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected literal")),
         Context.inContextContext = cx})
 
--- | Strip wrap eliminations from terms (newtypes are erased in Scala)
-stripWrapEliminations :: Core.Term -> Core.Term
-stripWrapEliminations t =
-    case (Rewriting.deannotateAndDetypeTerm t) of
-      Core.TermApplication v0 ->
-        let appFun = Core.applicationFunction v0
-            appArg = Core.applicationArgument v0
-        in case (Rewriting.deannotateAndDetypeTerm appFun) of
-          Core.TermFunction v1 -> case v1 of
-            Core.FunctionElimination v2 -> case v2 of
-              Core.EliminationWrap _ -> stripWrapEliminations appArg
-              _ -> t
-            _ -> t
-          Core.TermApplication v1 ->
-            let innerFun = Core.applicationFunction v1
-                innerArg = Core.applicationArgument v1
-            in case (Rewriting.deannotateAndDetypeTerm innerFun) of
-              Core.TermFunction v2 -> case v2 of
-                Core.FunctionElimination v3 -> case v3 of
-                  Core.EliminationWrap _ -> stripWrapEliminations (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = innerArg,
-                    Core.applicationArgument = appArg}))
-                  _ -> t
-                _ -> t
-              _ -> t
-          _ -> t
-      _ -> t
+-- | Encode a local def. outerTypeVars are type params already in scope (don't redeclare them).
+encodeLocalDef :: Context.Context -> Graph.Graph -> S.Set Core.Name -> String -> Core.Term -> Core.Type -> Either (Context.InContext Errors.Error) Syntax.Stat
+encodeLocalDef cx g outerTypeVars lname term typ =
+
+      let freeTypeVars =
+              Lists.filter (\v -> Logic.and (Logic.not (Lists.elem 46 (Strings.toList (Core.unName v)))) (Logic.not (Sets.member v outerTypeVars))) (Sets.toList (Rewriting.freeVariablesInType typ))
+          doms = extractDomains typ
+          paramNames = extractParams term
+          paramCount = Math.min (Lists.length paramNames) (Lists.length doms)
+          cod = dropDomains paramCount typ
+          zippedParams = Lists.zip (Lists.take paramCount paramNames) (Lists.take paramCount doms)
+          letBindings = extractLetBindings term
+          tparams = Lists.map (\tv -> Utils.stparam tv) freeTypeVars
+          allTypeVars = Sets.union outerTypeVars (Sets.fromList freeTypeVars)
+          gWithTypeVars =
+                  Graph.Graph {
+                    Graph.graphBoundTerms = (Graph.graphBoundTerms g),
+                    Graph.graphBoundTypes = (Graph.graphBoundTypes g),
+                    Graph.graphClassConstraints = (Graph.graphClassConstraints g),
+                    Graph.graphLambdaVariables = (Graph.graphLambdaVariables g),
+                    Graph.graphMetadata = (Graph.graphMetadata g),
+                    Graph.graphPrimitives = (Graph.graphPrimitives g),
+                    Graph.graphSchemaTypes = (Graph.graphSchemaTypes g),
+                    Graph.graphTypeVariables = (Sets.union allTypeVars (Graph.graphTypeVariables g))}
+      in (Eithers.bind (Eithers.mapList (encodeTypedParam cx gWithTypeVars) zippedParams) (\sparams -> Eithers.bind (encodeTerm cx gWithTypeVars (extractBody term)) (\sbody -> Eithers.bind (encodeType cx gWithTypeVars cod) (\scod ->
+        let gForLets =
+                Logic.ifElse (Lists.null letBindings) gWithTypeVars (Rewriting.extendGraphForLet CoderUtils.bindingMetadata gWithTypeVars (Core.Let {
+                  Core.letBindings = letBindings,
+                  Core.letBody = (Core.TermVariable (Core.Name "dummy"))}))
+        in (Eithers.bind (Eithers.mapList (encodeLetBinding cx gForLets allTypeVars) letBindings) (\sbindings ->
+          let defBody =
+                  Logic.ifElse (Lists.null sbindings) sbody (Syntax.DataBlock (Syntax.Data_Block {
+                    Syntax.data_BlockStats = (Lists.concat2 sbindings [
+                      Syntax.StatTerm sbody])}))
+          in (Right (Syntax.StatDefn (Syntax.DefnDef (Syntax.Defn_Def {
+            Syntax.defn_DefMods = [],
+            Syntax.defn_DefName = Syntax.Data_Name {
+              Syntax.data_NameValue = (Syntax.PredefString lname)},
+            Syntax.defn_DefTparams = tparams,
+            Syntax.defn_DefParamss = (Lists.map (\p -> [
+              p]) sparams),
+            Syntax.defn_DefDecltpe = (Just scod),
+            Syntax.defn_DefBody = defBody}))))))))))
 
 -- | Encode a Hydra term as a Scala expression
 encodeTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Syntax.Data
@@ -483,6 +488,31 @@ encodeTerm cx g term0 =
           Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected term")),
           Context.inContextContext = cx})
 
+-- | Encode a term definition as a Scala statement
+encodeTermDefinition :: Context.Context -> Graph.Graph -> Module.TermDefinition -> Either (Context.InContext Errors.Error) Syntax.Stat
+encodeTermDefinition cx g td =
+
+      let name = Module.termDefinitionName td
+          term = Module.termDefinitionTerm td
+          lname = Utils.scalaEscapeName (Names.localNameOf name)
+          typ_ = Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeType (Module.termDefinitionType td)
+          isFunctionType =
+                  case (Rewriting.deannotateType typ_) of
+                    Core.TypeFunction _ -> True
+                    Core.TypeForall v0 -> case (Rewriting.deannotateType (Core.forallTypeBody v0)) of
+                      Core.TypeFunction _ -> True
+                      _ -> False
+                    _ -> False
+      in (Logic.ifElse isFunctionType (encodeComplexTermDef cx g lname term typ_) (Eithers.bind (encodeType cx g typ_) (\stype -> Eithers.bind (encodeTerm cx g term) (\rhs -> Right (Syntax.StatDefn (Syntax.DefnVal (Syntax.Defn_Val {
+        Syntax.defn_ValMods = [
+          Syntax.ModLazy],
+        Syntax.defn_ValPats = [
+          Syntax.PatVar (Syntax.Pat_Var {
+            Syntax.pat_VarName = Syntax.Data_Name {
+              Syntax.data_NameValue = (Syntax.PredefString lname)}})],
+        Syntax.defn_ValDecltpe = (Just stype),
+        Syntax.defn_ValRhs = rhs})))))))
+
 -- | Encode a Hydra type as a Scala type
 encodeType :: Context.Context -> t0 -> Core.Type -> Either (Context.InContext Errors.Error) Syntax.Type
 encodeType cx g t =
@@ -599,22 +629,205 @@ encodeType cx g t =
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unsupported type")),
         Context.inContextContext = cx})
 
+-- | Encode a type definition as a Scala statement
+encodeTypeDefinition :: Context.Context -> t0 -> Module.TypeDefinition -> Either (Context.InContext Errors.Error) Syntax.Stat
+encodeTypeDefinition cx g td =
+
+      let name = Module.typeDefinitionName td
+          typ = Module.typeDefinitionType td
+          lname = Names.localNameOf name
+          tname = Syntax.Type_Name {
+                Syntax.type_NameValue = lname}
+          dname = Syntax.Data_Name {
+                Syntax.data_NameValue = (Syntax.PredefString lname)}
+          freeVars =
+                  Lists.filter (\v -> Logic.not (Lists.elem 46 (Strings.toList (Core.unName v)))) (Sets.toList (Rewriting.freeVariablesInType typ))
+          tparams =
+                  Lists.map (\_v ->
+                    let vn = Formatting.capitalize (Core.unName _v)
+                    in Syntax.Type_Param {
+                      Syntax.type_ParamMods = [],
+                      Syntax.type_ParamName = (Syntax.NameValue vn),
+                      Syntax.type_ParamTparams = [],
+                      Syntax.type_ParamTbounds = [],
+                      Syntax.type_ParamVbounds = [],
+                      Syntax.type_ParamCbounds = []}) freeVars
+      in case (Rewriting.deannotateType typ) of
+        Core.TypeForall v0 ->
+          let forallBody = Core.forallTypeBody v0
+              forallParam = Core.forallTypeParameter v0
+              collectForallParams =
+                      \t -> \acc -> case (Rewriting.deannotateType t) of
+                        Core.TypeForall v1 -> collectForallParams (Core.forallTypeBody v1) (Lists.cons (Core.forallTypeParameter v1) acc)
+                        _ -> (acc, t)
+              collected = collectForallParams forallBody [
+                    forallParam]
+              allForallParams = Lists.reverse (Pairs.first collected)
+              innerBody = Pairs.second collected
+              allTparams =
+                      Lists.map (\_v ->
+                        let vn = Formatting.capitalize (Core.unName _v)
+                        in Syntax.Type_Param {
+                          Syntax.type_ParamMods = [],
+                          Syntax.type_ParamName = (Syntax.NameValue vn),
+                          Syntax.type_ParamTparams = [],
+                          Syntax.type_ParamTbounds = [],
+                          Syntax.type_ParamVbounds = [],
+                          Syntax.type_ParamCbounds = []}) allForallParams
+          in case (Rewriting.deannotateType innerBody) of
+            Core.TypeRecord v1 -> Eithers.bind (Eithers.mapList (\f -> fieldToParam cx g f) v1) (\params -> Right (Syntax.StatDefn (Syntax.DefnClass (Syntax.Defn_Class {
+              Syntax.defn_ClassMods = [
+                Syntax.ModCase],
+              Syntax.defn_ClassName = tname,
+              Syntax.defn_ClassTparams = allTparams,
+              Syntax.defn_ClassCtor = Syntax.Ctor_Primary {
+                Syntax.ctor_PrimaryMods = [],
+                Syntax.ctor_PrimaryName = (Syntax.NameValue ""),
+                Syntax.ctor_PrimaryParamss = [
+                  params]},
+              Syntax.defn_ClassTemplate = Syntax.Template {
+                Syntax.templateEarly = [],
+                Syntax.templateInits = [],
+                Syntax.templateSelf = (Syntax.Self ()),
+                Syntax.templateStats = []}}))))
+            Core.TypeUnion v1 -> Eithers.bind (Eithers.mapList (\f -> fieldToEnumCase cx g lname allTparams f) v1) (\cases -> Right (Syntax.StatDefn (Syntax.DefnEnum (Syntax.Defn_Enum {
+              Syntax.defn_EnumMods = [],
+              Syntax.defn_EnumName = tname,
+              Syntax.defn_EnumTparams = allTparams,
+              Syntax.defn_EnumCtor = Syntax.Ctor_Primary {
+                Syntax.ctor_PrimaryMods = [],
+                Syntax.ctor_PrimaryName = (Syntax.NameValue ""),
+                Syntax.ctor_PrimaryParamss = []},
+              Syntax.defn_EnumTemplate = Syntax.Template {
+                Syntax.templateEarly = [],
+                Syntax.templateInits = [],
+                Syntax.templateSelf = (Syntax.Self ()),
+                Syntax.templateStats = cases}}))))
+            Core.TypeWrap v1 -> Eithers.bind (encodeType cx g v1) (\styp -> Right (Syntax.StatDefn (Syntax.DefnType (Syntax.Defn_Type {
+              Syntax.defn_TypeMods = [],
+              Syntax.defn_TypeName = tname,
+              Syntax.defn_TypeTparams = allTparams,
+              Syntax.defn_TypeBody = styp}))))
+            _ ->
+              let mkAlias =
+                      \styp -> Right (Syntax.StatDefn (Syntax.DefnType (Syntax.Defn_Type {
+                        Syntax.defn_TypeMods = [],
+                        Syntax.defn_TypeName = Syntax.Type_Name {
+                          Syntax.type_NameValue = lname},
+                        Syntax.defn_TypeTparams = allTparams,
+                        Syntax.defn_TypeBody = styp})))
+              in (Eithers.either (\_ -> mkAlias (Utils.stref "Any")) mkAlias (encodeType cx g innerBody))
+        Core.TypeRecord v0 -> Eithers.bind (Eithers.mapList (\f -> fieldToParam cx g f) v0) (\params -> Right (Syntax.StatDefn (Syntax.DefnClass (Syntax.Defn_Class {
+          Syntax.defn_ClassMods = [
+            Syntax.ModCase],
+          Syntax.defn_ClassName = tname,
+          Syntax.defn_ClassTparams = tparams,
+          Syntax.defn_ClassCtor = Syntax.Ctor_Primary {
+            Syntax.ctor_PrimaryMods = [],
+            Syntax.ctor_PrimaryName = (Syntax.NameValue ""),
+            Syntax.ctor_PrimaryParamss = [
+              params]},
+          Syntax.defn_ClassTemplate = Syntax.Template {
+            Syntax.templateEarly = [],
+            Syntax.templateInits = [],
+            Syntax.templateSelf = (Syntax.Self ()),
+            Syntax.templateStats = []}}))))
+        Core.TypeUnion v0 -> Eithers.bind (Eithers.mapList (\f -> fieldToEnumCase cx g lname tparams f) v0) (\cases -> Right (Syntax.StatDefn (Syntax.DefnEnum (Syntax.Defn_Enum {
+          Syntax.defn_EnumMods = [],
+          Syntax.defn_EnumName = tname,
+          Syntax.defn_EnumTparams = tparams,
+          Syntax.defn_EnumCtor = Syntax.Ctor_Primary {
+            Syntax.ctor_PrimaryMods = [],
+            Syntax.ctor_PrimaryName = (Syntax.NameValue ""),
+            Syntax.ctor_PrimaryParamss = []},
+          Syntax.defn_EnumTemplate = Syntax.Template {
+            Syntax.templateEarly = [],
+            Syntax.templateInits = [],
+            Syntax.templateSelf = (Syntax.Self ()),
+            Syntax.templateStats = cases}}))))
+        Core.TypeWrap v0 -> Eithers.bind (encodeType cx g v0) (\styp -> Right (Syntax.StatDefn (Syntax.DefnType (Syntax.Defn_Type {
+          Syntax.defn_TypeMods = [],
+          Syntax.defn_TypeName = tname,
+          Syntax.defn_TypeTparams = tparams,
+          Syntax.defn_TypeBody = styp}))))
+        _ ->
+          let mkAlias =
+                  \styp -> Right (Syntax.StatDefn (Syntax.DefnType (Syntax.Defn_Type {
+                    Syntax.defn_TypeMods = [],
+                    Syntax.defn_TypeName = Syntax.Type_Name {
+                      Syntax.type_NameValue = lname},
+                    Syntax.defn_TypeTparams = tparams,
+                    Syntax.defn_TypeBody = styp})))
+          in (Eithers.either (\_ -> mkAlias (Utils.stref "Any")) mkAlias (encodeType cx g typ))
+
+-- | Encode a parameter with its type annotation
+encodeTypedParam :: Context.Context -> t0 -> (Core.Name, Core.Type) -> Either (Context.InContext Errors.Error) Syntax.Data_Param
+encodeTypedParam cx g pair =
+
+      let pname = Utils.scalaEscapeName (Names.localNameOf (Pairs.first pair))
+          pdom = Pairs.second pair
+      in (Eithers.bind (encodeType cx g pdom) (\sdom -> Right (Syntax.Data_Param {
+        Syntax.data_ParamMods = [],
+        Syntax.data_ParamName = (Syntax.NameValue pname),
+        Syntax.data_ParamDecltpe = (Just sdom),
+        Syntax.data_ParamDefault = Nothing})))
+
 -- | Encode an untyped application term by first inferring types
 encodeUntypeApplicationTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Syntax.Data
 encodeUntypeApplicationTerm cx g term =
     Eithers.bind (Inference.inferInGraphContext cx g term) (\result -> encodeTerm cx g (Typing.inferenceResultTerm result))
 
--- | Convert a field type to a Scala parameter
-fieldToParam :: Context.Context -> t0 -> Core.FieldType -> Either (Context.InContext Errors.Error) Syntax.Data_Param
-fieldToParam cx g ft =
+-- | Extract the innermost body from a term
+extractBody :: Core.Term -> Core.Term
+extractBody t =
+    case (Rewriting.deannotateAndDetypeTerm t) of
+      Core.TermFunction v0 -> case v0 of
+        Core.FunctionLambda v1 -> extractBody (Core.lambdaBody v1)
+        _ -> t
+      Core.TermTypeLambda v0 -> extractBody (Core.typeLambdaBody v0)
+      Core.TermTypeApplication v0 -> extractBody (Core.typeApplicationTermBody v0)
+      Core.TermLet v0 -> extractBody (Core.letBody v0)
+      _ -> t
 
-      let fname = Utils.scalaEscapeName (Core.unName (Core.fieldTypeName ft))
-          ftyp = Core.fieldTypeType ft
-      in (Eithers.bind (encodeType cx g ftyp) (\sftyp -> Right (Syntax.Data_Param {
-        Syntax.data_ParamMods = [],
-        Syntax.data_ParamName = (Syntax.NameValue fname),
-        Syntax.data_ParamDecltpe = (Just sftyp),
-        Syntax.data_ParamDefault = Nothing})))
+-- | Extract the final return type from a function type
+extractCodomain :: Core.Type -> Core.Type
+extractCodomain t =
+    case (Rewriting.deannotateType t) of
+      Core.TypeFunction v0 -> extractCodomain (Core.functionTypeCodomain v0)
+      Core.TypeForall v0 -> extractCodomain (Core.forallTypeBody v0)
+      _ -> t
+
+-- | Extract domain types from a function type
+extractDomains :: Core.Type -> [Core.Type]
+extractDomains t =
+    case (Rewriting.deannotateType t) of
+      Core.TypeFunction v0 -> Lists.cons (Core.functionTypeDomain v0) (extractDomains (Core.functionTypeCodomain v0))
+      Core.TypeForall v0 -> extractDomains (Core.forallTypeBody v0)
+      _ -> []
+
+-- | Extract let bindings from a term
+extractLetBindings :: Core.Term -> [Core.Binding]
+extractLetBindings t =
+    case (Rewriting.deannotateAndDetypeTerm t) of
+      Core.TermFunction v0 -> case v0 of
+        Core.FunctionLambda v1 -> extractLetBindings (Core.lambdaBody v1)
+        _ -> []
+      Core.TermTypeLambda v0 -> extractLetBindings (Core.typeLambdaBody v0)
+      Core.TermTypeApplication v0 -> extractLetBindings (Core.typeApplicationTermBody v0)
+      Core.TermLet v0 -> Lists.concat2 (Core.letBindings v0) (extractLetBindings (Core.letBody v0))
+      _ -> []
+
+-- | Extract parameter names from a term
+extractParams :: Core.Term -> [Core.Name]
+extractParams t =
+    case (Rewriting.deannotateAndDetypeTerm t) of
+      Core.TermFunction v0 -> case v0 of
+        Core.FunctionLambda v1 -> Lists.cons (Core.lambdaParameter v1) (extractParams (Core.lambdaBody v1))
+        _ -> []
+      Core.TermTypeLambda v0 -> extractParams (Core.typeLambdaBody v0)
+      Core.TermTypeApplication v0 -> extractParams (Core.typeApplicationTermBody v0)
+      Core.TermLet v0 -> extractParams (Core.letBody v0)
+      _ -> []
 
 -- | Convert a field type to a Scala enum case
 fieldToEnumCase :: Context.Context -> t0 -> String -> [Syntax.Type_Param] -> Core.FieldType -> Either (Context.InContext Errors.Error) Syntax.Stat
@@ -655,237 +868,37 @@ fieldToEnumCase cx g parentName tparams ft =
             Syntax.initName = (Syntax.NameValue ""),
             Syntax.initArgss = []}]})))))
 
--- | Convert a type parameter to a type variable reference
-typeParamToTypeVar :: Syntax.Type_Param -> Syntax.Type
-typeParamToTypeVar tp =
+-- | Convert a field type to a Scala parameter
+fieldToParam :: Context.Context -> t0 -> Core.FieldType -> Either (Context.InContext Errors.Error) Syntax.Data_Param
+fieldToParam cx g ft =
 
-      let n = Syntax.type_ParamName tp
-          s =
-                  case n of
-                    Syntax.NameValue v0 -> v0
-                    _ -> ""
-      in (Syntax.TypeVar (Syntax.Type_Var {
-        Syntax.type_VarName = Syntax.Type_Name {
-          Syntax.type_NameValue = s}}))
-
--- | Encode a term definition as a Scala statement
-encodeTermDefinition :: Context.Context -> Graph.Graph -> Module.TermDefinition -> Either (Context.InContext Errors.Error) Syntax.Stat
-encodeTermDefinition cx g td =
-
-      let name = Module.termDefinitionName td
-          term = Module.termDefinitionTerm td
-          lname = Utils.scalaEscapeName (Names.localNameOf name)
-          typ_ = Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeType (Module.termDefinitionType td)
-          isFunctionType =
-                  case (Rewriting.deannotateType typ_) of
-                    Core.TypeFunction _ -> True
-                    Core.TypeForall v0 -> case (Rewriting.deannotateType (Core.forallTypeBody v0)) of
-                      Core.TypeFunction _ -> True
-                      _ -> False
-                    _ -> False
-      in (Logic.ifElse isFunctionType (encodeComplexTermDef cx g lname term typ_) (Eithers.bind (encodeType cx g typ_) (\stype -> Eithers.bind (encodeTerm cx g term) (\rhs -> Right (Syntax.StatDefn (Syntax.DefnVal (Syntax.Defn_Val {
-        Syntax.defn_ValMods = [
-          Syntax.ModLazy],
-        Syntax.defn_ValPats = [
-          Syntax.PatVar (Syntax.Pat_Var {
-            Syntax.pat_VarName = Syntax.Data_Name {
-              Syntax.data_NameValue = (Syntax.PredefString lname)}})],
-        Syntax.defn_ValDecltpe = (Just stype),
-        Syntax.defn_ValRhs = rhs})))))))
-
--- | Extract domain types from a function type
-extractDomains :: Core.Type -> [Core.Type]
-extractDomains t =
-    case (Rewriting.deannotateType t) of
-      Core.TypeFunction v0 -> Lists.cons (Core.functionTypeDomain v0) (extractDomains (Core.functionTypeCodomain v0))
-      Core.TypeForall v0 -> extractDomains (Core.forallTypeBody v0)
-      _ -> []
-
--- | Extract the final return type from a function type
-extractCodomain :: Core.Type -> Core.Type
-extractCodomain t =
-    case (Rewriting.deannotateType t) of
-      Core.TypeFunction v0 -> extractCodomain (Core.functionTypeCodomain v0)
-      Core.TypeForall v0 -> extractCodomain (Core.forallTypeBody v0)
-      _ -> t
-
--- | Drop N domain types from a function type, returning the remaining type
-dropDomains :: Int -> Core.Type -> Core.Type
-dropDomains n t =
-    Logic.ifElse (Equality.lte n 0) t (case (Rewriting.deannotateType t) of
-      Core.TypeFunction v0 -> dropDomains (Math.sub n 1) (Core.functionTypeCodomain v0)
-      Core.TypeForall v0 -> dropDomains n (Core.forallTypeBody v0)
-      _ -> t)
-
--- | Extract parameter names from a term
-extractParams :: Core.Term -> [Core.Name]
-extractParams t =
-    case (Rewriting.deannotateAndDetypeTerm t) of
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionLambda v1 -> Lists.cons (Core.lambdaParameter v1) (extractParams (Core.lambdaBody v1))
-        _ -> []
-      Core.TermTypeLambda v0 -> extractParams (Core.typeLambdaBody v0)
-      Core.TermTypeApplication v0 -> extractParams (Core.typeApplicationTermBody v0)
-      Core.TermLet v0 -> extractParams (Core.letBody v0)
-      _ -> []
-
--- | Extract the innermost body from a term
-extractBody :: Core.Term -> Core.Term
-extractBody t =
-    case (Rewriting.deannotateAndDetypeTerm t) of
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionLambda v1 -> extractBody (Core.lambdaBody v1)
-        _ -> t
-      Core.TermTypeLambda v0 -> extractBody (Core.typeLambdaBody v0)
-      Core.TermTypeApplication v0 -> extractBody (Core.typeApplicationTermBody v0)
-      Core.TermLet v0 -> extractBody (Core.letBody v0)
-      _ -> t
-
--- | Extract let bindings from a term
-extractLetBindings :: Core.Term -> [Core.Binding]
-extractLetBindings t =
-    case (Rewriting.deannotateAndDetypeTerm t) of
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionLambda v1 -> extractLetBindings (Core.lambdaBody v1)
-        _ -> []
-      Core.TermTypeLambda v0 -> extractLetBindings (Core.typeLambdaBody v0)
-      Core.TermTypeApplication v0 -> extractLetBindings (Core.typeApplicationTermBody v0)
-      Core.TermLet v0 -> Lists.concat2 (Core.letBindings v0) (extractLetBindings (Core.letBody v0))
-      _ -> []
-
--- | Encode a complex term definition with proper parameter types from the type signature
-encodeComplexTermDef :: Context.Context -> Graph.Graph -> String -> Core.Term -> Core.Type -> Either (Context.InContext Errors.Error) Syntax.Stat
-encodeComplexTermDef cx g lname term typ =
-
-      let doms = extractDomains typ
-          paramNames = extractParams term
-          paramCount = Math.min (Lists.length paramNames) (Lists.length doms)
-          cod = dropDomains paramCount typ
-          zippedParams = Lists.zip (Lists.take paramCount paramNames) (Lists.take paramCount doms)
-          freeTypeVars =
-                  Lists.filter (\v -> Logic.not (Lists.elem 46 (Strings.toList (Core.unName v)))) (Sets.toList (Rewriting.freeVariablesInType typ))
-          tparams = Lists.map (\tv -> Utils.stparam tv) freeTypeVars
-          letBindings = extractLetBindings term
-          gWithTypeVars =
-                  Graph.Graph {
-                    Graph.graphBoundTerms = (Graph.graphBoundTerms g),
-                    Graph.graphBoundTypes = (Graph.graphBoundTypes g),
-                    Graph.graphClassConstraints = (Graph.graphClassConstraints g),
-                    Graph.graphLambdaVariables = (Graph.graphLambdaVariables g),
-                    Graph.graphMetadata = (Graph.graphMetadata g),
-                    Graph.graphPrimitives = (Graph.graphPrimitives g),
-                    Graph.graphSchemaTypes = (Graph.graphSchemaTypes g),
-                    Graph.graphTypeVariables = (Sets.union (Sets.fromList freeTypeVars) (Graph.graphTypeVariables g))}
-      in (Eithers.bind (Eithers.mapList (encodeTypedParam cx gWithTypeVars) zippedParams) (\sparams -> Eithers.bind (encodeTerm cx gWithTypeVars (extractBody term)) (\sbody -> Eithers.bind (encodeType cx g cod) (\scod ->
-        let gForLets =
-                Logic.ifElse (Lists.null letBindings) gWithTypeVars (Rewriting.extendGraphForLet CoderUtils.bindingMetadata gWithTypeVars (Core.Let {
-                  Core.letBindings = letBindings,
-                  Core.letBody = (Core.TermVariable (Core.Name "dummy"))}))
-        in (Eithers.bind (Eithers.mapList (encodeLetBinding cx gForLets (Sets.fromList freeTypeVars)) letBindings) (\sbindings ->
-          let defBody =
-                  Logic.ifElse (Lists.null sbindings) sbody (Syntax.DataBlock (Syntax.Data_Block {
-                    Syntax.data_BlockStats = (Lists.concat2 sbindings [
-                      Syntax.StatTerm sbody])}))
-          in (Right (Syntax.StatDefn (Syntax.DefnDef (Syntax.Defn_Def {
-            Syntax.defn_DefMods = [],
-            Syntax.defn_DefName = Syntax.Data_Name {
-              Syntax.data_NameValue = (Syntax.PredefString lname)},
-            Syntax.defn_DefTparams = tparams,
-            Syntax.defn_DefParamss = (Lists.map (\p -> [
-              p]) sparams),
-            Syntax.defn_DefDecltpe = (Just scod),
-            Syntax.defn_DefBody = defBody}))))))))))
-
--- | Encode a local def. outerTypeVars are type params already in scope (don't redeclare them).
-encodeLocalDef :: Context.Context -> Graph.Graph -> S.Set Core.Name -> String -> Core.Term -> Core.Type -> Either (Context.InContext Errors.Error) Syntax.Stat
-encodeLocalDef cx g outerTypeVars lname term typ =
-
-      let freeTypeVars =
-              Lists.filter (\v -> Logic.and (Logic.not (Lists.elem 46 (Strings.toList (Core.unName v)))) (Logic.not (Sets.member v outerTypeVars))) (Sets.toList (Rewriting.freeVariablesInType typ))
-          doms = extractDomains typ
-          paramNames = extractParams term
-          paramCount = Math.min (Lists.length paramNames) (Lists.length doms)
-          cod = dropDomains paramCount typ
-          zippedParams = Lists.zip (Lists.take paramCount paramNames) (Lists.take paramCount doms)
-          letBindings = extractLetBindings term
-          tparams = Lists.map (\tv -> Utils.stparam tv) freeTypeVars
-          allTypeVars = Sets.union outerTypeVars (Sets.fromList freeTypeVars)
-          gWithTypeVars =
-                  Graph.Graph {
-                    Graph.graphBoundTerms = (Graph.graphBoundTerms g),
-                    Graph.graphBoundTypes = (Graph.graphBoundTypes g),
-                    Graph.graphClassConstraints = (Graph.graphClassConstraints g),
-                    Graph.graphLambdaVariables = (Graph.graphLambdaVariables g),
-                    Graph.graphMetadata = (Graph.graphMetadata g),
-                    Graph.graphPrimitives = (Graph.graphPrimitives g),
-                    Graph.graphSchemaTypes = (Graph.graphSchemaTypes g),
-                    Graph.graphTypeVariables = (Sets.union allTypeVars (Graph.graphTypeVariables g))}
-      in (Eithers.bind (Eithers.mapList (encodeTypedParam cx gWithTypeVars) zippedParams) (\sparams -> Eithers.bind (encodeTerm cx gWithTypeVars (extractBody term)) (\sbody -> Eithers.bind (encodeType cx gWithTypeVars cod) (\scod ->
-        let gForLets =
-                Logic.ifElse (Lists.null letBindings) gWithTypeVars (Rewriting.extendGraphForLet CoderUtils.bindingMetadata gWithTypeVars (Core.Let {
-                  Core.letBindings = letBindings,
-                  Core.letBody = (Core.TermVariable (Core.Name "dummy"))}))
-        in (Eithers.bind (Eithers.mapList (encodeLetBinding cx gForLets allTypeVars) letBindings) (\sbindings ->
-          let defBody =
-                  Logic.ifElse (Lists.null sbindings) sbody (Syntax.DataBlock (Syntax.Data_Block {
-                    Syntax.data_BlockStats = (Lists.concat2 sbindings [
-                      Syntax.StatTerm sbody])}))
-          in (Right (Syntax.StatDefn (Syntax.DefnDef (Syntax.Defn_Def {
-            Syntax.defn_DefMods = [],
-            Syntax.defn_DefName = Syntax.Data_Name {
-              Syntax.data_NameValue = (Syntax.PredefString lname)},
-            Syntax.defn_DefTparams = tparams,
-            Syntax.defn_DefParamss = (Lists.map (\p -> [
-              p]) sparams),
-            Syntax.defn_DefDecltpe = (Just scod),
-            Syntax.defn_DefBody = defBody}))))))))))
-
--- | Encode a parameter with its type annotation
-encodeTypedParam :: Context.Context -> t0 -> (Core.Name, Core.Type) -> Either (Context.InContext Errors.Error) Syntax.Data_Param
-encodeTypedParam cx g pair =
-
-      let pname = Utils.scalaEscapeName (Names.localNameOf (Pairs.first pair))
-          pdom = Pairs.second pair
-      in (Eithers.bind (encodeType cx g pdom) (\sdom -> Right (Syntax.Data_Param {
+      let fname = Utils.scalaEscapeName (Core.unName (Core.fieldTypeName ft))
+          ftyp = Core.fieldTypeType ft
+      in (Eithers.bind (encodeType cx g ftyp) (\sftyp -> Right (Syntax.Data_Param {
         Syntax.data_ParamMods = [],
-        Syntax.data_ParamName = (Syntax.NameValue pname),
-        Syntax.data_ParamDecltpe = (Just sdom),
+        Syntax.data_ParamName = (Syntax.NameValue fname),
+        Syntax.data_ParamDecltpe = (Just sftyp),
         Syntax.data_ParamDefault = Nothing})))
 
--- | Encode a let binding as a val or def declaration. outerTypeVars are type params from the enclosing scope.
-encodeLetBinding :: Context.Context -> Graph.Graph -> S.Set Core.Name -> Core.Binding -> Either (Context.InContext Errors.Error) Syntax.Stat
-encodeLetBinding cx g outerTypeVars b =
+-- | Find the domain type from annotations
+findDomain :: Context.Context -> Graph.Graph -> M.Map Core.Name Core.Term -> Either (Context.InContext Errors.Error) Core.Type
+findDomain cx g meta =
+    Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
+      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
+      Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g meta)) (\r -> Maybes.maybe (Left (Context.InContext {
+      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "expected a typed term")),
+      Context.inContextContext = cx})) (\t -> case (Rewriting.deannotateType t) of
+      Core.TypeFunction v0 -> Right (Core.functionTypeDomain v0)
+      _ -> Left (Context.InContext {
+        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "expected a function type")),
+        Context.inContextContext = cx})) r)
 
-      let bname = Utils.scalaEscapeName (Core.unName (Core.bindingName b))
-          bterm = Core.bindingTerm b
-          mts = Maybes.maybe (Maps.lookup (Core.bindingName b) (Graph.graphBoundTypes g)) (\ts -> Just ts) (Core.bindingType b)
-          isFn =
-                  Maybes.maybe False (\ts -> case (Rewriting.deannotateType (Core.typeSchemeType ts)) of
-                    Core.TypeFunction _ -> True
-                    Core.TypeForall v0 -> case (Rewriting.deannotateType (Core.forallTypeBody v0)) of
-                      Core.TypeFunction _ -> True
-                      _ -> False
-                    _ -> False) mts
-      in (Maybes.maybe (Eithers.bind (encodeTerm cx g bterm) (\srhs -> Right (Syntax.StatDefn (Syntax.DefnVal (Syntax.Defn_Val {
-        Syntax.defn_ValMods = [
-          Syntax.ModLazy],
-        Syntax.defn_ValPats = [
-          Syntax.PatVar (Syntax.Pat_Var {
-            Syntax.pat_VarName = Syntax.Data_Name {
-              Syntax.data_NameValue = (Syntax.PredefString bname)}})],
-        Syntax.defn_ValDecltpe = Nothing,
-        Syntax.defn_ValRhs = srhs}))))) (\ts ->
-        let newVars = Lists.filter (\v -> Logic.not (Sets.member v outerTypeVars)) (Core.typeSchemeVariables ts)
-            useDef = Logic.or isFn (Logic.not (Lists.null newVars))
-        in (Logic.ifElse useDef (encodeLocalDef cx g outerTypeVars bname bterm (Core.typeSchemeType ts)) (Eithers.bind (encodeTerm cx g bterm) (\srhs -> Eithers.bind (encodeType cx g (Core.typeSchemeType ts)) (\styp -> Right (Syntax.StatDefn (Syntax.DefnVal (Syntax.Defn_Val {
-          Syntax.defn_ValMods = [
-            Syntax.ModLazy],
-          Syntax.defn_ValPats = [
-            Syntax.PatVar (Syntax.Pat_Var {
-              Syntax.pat_VarName = Syntax.Data_Name {
-                Syntax.data_NameValue = (Syntax.PredefString bname)}})],
-          Syntax.defn_ValDecltpe = (Just styp),
-          Syntax.defn_ValRhs = srhs})))))))) mts)
+-- | Find import statements for the module
+findImports :: Context.Context -> Graph.Graph -> Module.Module -> Either (Context.InContext Errors.Error) [Syntax.Stat]
+findImports cx g mod =
+    Eithers.bind (Schemas.moduleDependencyNamespaces cx g False False True False mod) (\elImps -> Eithers.bind (Schemas.moduleDependencyNamespaces cx g False True False False mod) (\primImps -> Right (Lists.concat [
+      Lists.map toElImport (Sets.toList elImps),
+      (Lists.map toPrimImport (Sets.toList primImps))])))
 
 -- | Find the Scala domain type for a function from annotations
 findSdom :: Context.Context -> Graph.Graph -> M.Map Core.Name Core.Term -> Either (Context.InContext Errors.Error) (Maybe Syntax.Type)
@@ -903,84 +916,71 @@ findSdom cx g meta =
         _ -> Right Nothing
       _ -> Eithers.bind (encodeType cx g t) (\st -> Right (Just st))) mtyp)
 
--- | Find the domain type from annotations
-findDomain :: Context.Context -> Graph.Graph -> M.Map Core.Name Core.Term -> Either (Context.InContext Errors.Error) Core.Type
-findDomain cx g meta =
-    Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
-      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
-      Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g meta)) (\r -> Maybes.maybe (Left (Context.InContext {
-      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "expected a typed term")),
-      Context.inContextContext = cx})) (\t -> case (Rewriting.deannotateType t) of
-      Core.TypeFunction v0 -> Right (Core.functionTypeDomain v0)
-      _ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "expected a function type")),
-        Context.inContextContext = cx})) r)
+-- | Convert a Hydra module to Scala source code
+moduleToScala :: Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (M.Map String String)
+moduleToScala mod defs cx g =
+    Eithers.bind (constructModule cx g mod defs) (\pkg ->
+      let s = Serialization.printExpr (Serialization.parenthesize (Serde.writePkg pkg))
+      in (Right (Maps.singleton (Names.namespaceToFilePath Util.CaseConventionCamel (Module.FileExtension "scala") (Module.moduleNamespace mod)) s)))
 
--- | Encode a case branch
-encodeCase :: Context.Context -> Graph.Graph -> M.Map Core.Name Core.Type -> Maybe Core.Name -> Core.Field -> Either (Context.InContext Errors.Error) Syntax.Case
-encodeCase cx g ftypes sn f =
+-- | Strip wrap eliminations from terms (newtypes are erased in Scala)
+stripWrapEliminations :: Core.Term -> Core.Term
+stripWrapEliminations t =
+    case (Rewriting.deannotateAndDetypeTerm t) of
+      Core.TermApplication v0 ->
+        let appFun = Core.applicationFunction v0
+            appArg = Core.applicationArgument v0
+        in case (Rewriting.deannotateAndDetypeTerm appFun) of
+          Core.TermFunction v1 -> case v1 of
+            Core.FunctionElimination v2 -> case v2 of
+              Core.EliminationWrap _ -> stripWrapEliminations appArg
+              _ -> t
+            _ -> t
+          Core.TermApplication v1 ->
+            let innerFun = Core.applicationFunction v1
+                innerArg = Core.applicationArgument v1
+            in case (Rewriting.deannotateAndDetypeTerm innerFun) of
+              Core.TermFunction v2 -> case v2 of
+                Core.FunctionElimination v3 -> case v3 of
+                  Core.EliminationWrap _ -> stripWrapEliminations (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = innerArg,
+                    Core.applicationArgument = appArg}))
+                  _ -> t
+                _ -> t
+              _ -> t
+          _ -> t
+      _ -> t
 
-      let fname = Core.fieldName f
-          fterm = Core.fieldTerm f
-          isUnit =
-                  Maybes.maybe (case (Rewriting.deannotateAndDetypeTerm fterm) of
-                    Core.TermFunction v0 -> case v0 of
-                      Core.FunctionLambda v1 ->
-                        let lamParam = Core.lambdaParameter v1
-                            lamBody = Core.lambdaBody v1
-                            domIsUnit = Maybes.maybe False (\dom -> Equality.equal dom Core.TypeUnit) (Core.lambdaDomain v1)
-                            bodyIgnoresParam = Rewriting.isFreeVariableInTerm lamParam lamBody
-                        in (Logic.or domIsUnit bodyIgnoresParam)
-                      _ -> False
-                    Core.TermRecord v0 -> Equality.equal (Lists.length (Core.recordFields v0)) 0
-                    Core.TermUnit -> True
-                    _ -> False) (\dom -> case (Rewriting.deannotateType dom) of
-                    Core.TypeUnit -> True
-                    Core.TypeRecord v0 -> Equality.equal (Lists.length v0) 0
-                    _ -> False) (Maps.lookup fname ftypes)
-          shortTypeName = Lists.last (Strings.splitOn "." (Maybes.maybe "x" (\n -> Core.unName n) sn))
-          lamParamSuffix =
-                  case (Rewriting.deannotateAndDetypeTerm fterm) of
-                    Core.TermFunction v0 -> case v0 of
-                      Core.FunctionLambda v1 ->
-                        let rawName = Core.unName (Core.lambdaParameter v1)
-                            safeName = Strings.fromList (Lists.map (\c -> Logic.ifElse (Equality.equal c 39) 95 c) (Strings.toList rawName))
-                        in (Strings.cat2 "_" safeName)
-                      _ -> ""
+-- | Create an element import statement
+toElImport :: Module.Namespace -> Syntax.Stat
+toElImport ns =
+    Syntax.StatImportExport (Syntax.ImportExportStatImport (Syntax.Import {
+      Syntax.importImporters = [
+        Syntax.Importer {
+          Syntax.importerRef = (Syntax.Data_RefName (Syntax.Data_Name {
+            Syntax.data_NameValue = (Syntax.PredefString (Strings.intercalate "." (Strings.splitOn "." (Module.unNamespace ns))))})),
+          Syntax.importerImportees = [
+            Syntax.ImporteeWildcard]}]}))
+
+-- | Create a primitive import statement
+toPrimImport :: Module.Namespace -> Syntax.Stat
+toPrimImport ns =
+    Syntax.StatImportExport (Syntax.ImportExportStatImport (Syntax.Import {
+      Syntax.importImporters = [
+        Syntax.Importer {
+          Syntax.importerRef = (Syntax.Data_RefName (Syntax.Data_Name {
+            Syntax.data_NameValue = (Syntax.PredefString (Strings.intercalate "." (Strings.splitOn "." (Module.unNamespace ns))))})),
+          Syntax.importerImportees = []}]}))
+
+-- | Convert a type parameter to a type variable reference
+typeParamToTypeVar :: Syntax.Type_Param -> Syntax.Type
+typeParamToTypeVar tp =
+
+      let n = Syntax.type_ParamName tp
+          s =
+                  case n of
+                    Syntax.NameValue v0 -> v0
                     _ -> ""
-          v =
-                  Core.Name (Strings.cat [
-                    "v_",
-                    shortTypeName,
-                    "_",
-                    (Core.unName fname),
-                    lamParamSuffix])
-          patArgs = Logic.ifElse isUnit [] [
-                Utils.svar v]
-          pat =
-                  Syntax.PatExtract (Syntax.Pat_Extract {
-                    Syntax.pat_ExtractFun = (Utils.sname (Utils.qualifyUnionFieldName "MATCHED." sn fname)),
-                    Syntax.pat_ExtractArgs = patArgs})
-          applied = applyVar fterm v
-      in (Eithers.bind (encodeTerm cx g applied) (\body -> Right (Syntax.Case {
-        Syntax.casePat = pat,
-        Syntax.caseCond = Nothing,
-        Syntax.caseBody = body})))
-
--- | Apply a variable to a term, performing substitution for lambdas
-applyVar :: Core.Term -> Core.Name -> Core.Term
-applyVar fterm avar =
-
-      let v = Core.unName avar
-      in case (Rewriting.deannotateAndDetypeTerm fterm) of
-        Core.TermFunction v0 -> case v0 of
-          Core.FunctionLambda v1 ->
-            let lamParam = Core.lambdaParameter v1
-                lamBody = Core.lambdaBody v1
-            in (Logic.ifElse (Rewriting.isFreeVariableInTerm lamParam lamBody) lamBody (Rewriting.substituteVariable lamParam avar lamBody))
-          _ -> Core.TermApplication (Core.Application {
-            Core.applicationFunction = fterm,
-            Core.applicationArgument = (Core.TermVariable avar)})
-        _ -> Core.TermApplication (Core.Application {
-          Core.applicationFunction = fterm,
-          Core.applicationArgument = (Core.TermVariable avar)})
+      in (Syntax.TypeVar (Syntax.Type_Var {
+        Syntax.type_VarName = Syntax.Type_Name {
+          Syntax.type_NameValue = s}}))

@@ -45,18 +45,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Whether to include type definitions in generated Haskell modules
-includeTypeDefinitions :: Bool
-includeTypeDefinitions = False
-
--- | Whether to use the Hydra core import in generated modules
-useCoreImport :: Bool
-useCoreImport = True
-
--- | The key used to track Haskell variable depth in annotations
-keyHaskellVar :: Core.Name
-keyHaskellVar = Core.Name "haskellVar"
-
 -- | Adapt a Hydra type to Haskell's type system and encode it
 adaptTypeToHaskellAndEncode :: Module.Namespaces Syntax.ModuleName -> Core.Type -> Context.Context -> t0 -> Either (Context.InContext Errors.Error) Syntax.Type
 adaptTypeToHaskellAndEncode namespaces typ cx g =
@@ -494,10 +482,13 @@ getImplicitTypeClasses typ =
             Classes.TypeClassOrdering]))
       in (Maps.fromList (Lists.map toPair (Sets.toList (findOrdVariables typ))))
 
--- | Convert a Hydra module and definitions to a Haskell module AST
-moduleToHaskellModule :: Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Module
-moduleToHaskellModule mod defs cx g =
-    Eithers.bind (Utils.namespacesForModule mod cx g) (\namespaces -> constructModule namespaces mod defs cx g)
+-- | Whether to include type definitions in generated Haskell modules
+includeTypeDefinitions :: Bool
+includeTypeDefinitions = False
+
+-- | The key used to track Haskell variable depth in annotations
+keyHaskellVar :: Core.Name
+keyHaskellVar = Core.Name "haskellVar"
 
 -- | Convert a Hydra module to Haskell source code as a filepath-to-content map
 moduleToHaskell :: Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (M.Map String String)
@@ -506,6 +497,11 @@ moduleToHaskell mod defs cx g =
       let s = Serialization.printExpr (Serialization.parenthesize (Serde.moduleToExpr hsmod))
           filepath = Names.namespaceToFilePath Util.CaseConventionPascal (Module.FileExtension "hs") (Module.moduleNamespace mod)
       in (Right (Maps.singleton filepath s)))
+
+-- | Convert a Hydra module and definitions to a Haskell module AST
+moduleToHaskellModule :: Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Module
+moduleToHaskellModule mod defs cx g =
+    Eithers.bind (Utils.namespacesForModule mod cx g) (\namespaces -> constructModule namespaces mod defs cx g)
 
 -- | Generate Haskell declarations for type and field name constants
 nameDecls :: Module.Namespaces Syntax.ModuleName -> Core.Name -> Core.Type -> [Syntax.DeclarationWithComments]
@@ -781,3 +777,7 @@ typeSchemeConstraintsToClassMap maybeConstraints =
                     isOrd = Equality.equal classNameStr (Core.unName (Core.Name "ordering"))
                 in (Logic.ifElse isEq (Just Classes.TypeClassEquality) (Logic.ifElse isOrd (Just Classes.TypeClassOrdering) Nothing))
       in (Maybes.maybe Maps.empty (\constraints -> Maps.map (\meta -> Sets.fromList (Maybes.cat (Lists.map nameToTypeClass (Sets.toList (Core.typeVariableMetadataClasses meta))))) constraints) maybeConstraints)
+
+-- | Whether to use the Hydra core import in generated modules
+useCoreImport :: Bool
+useCoreImport = True

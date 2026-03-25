@@ -686,6 +686,14 @@ linkRelationTypePrev =
         Core.fieldName = (Core.Name "prev"),
         Core.fieldTerm = Core.TermUnit}}))
 
+linkRelationTypePrev_archive :: Phantoms.TTerm Linkrelations.LinkRelationType
+linkRelationTypePrev_archive =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.org.iana.linkrelations.LinkRelationType"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "prev-archive"),
+        Core.fieldTerm = Core.TermUnit}}))
+
 linkRelationTypePreview :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypePreview =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
@@ -700,14 +708,6 @@ linkRelationTypePrevious =
       Core.injectionTypeName = (Core.Name "hydra.ext.org.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "previous"),
-        Core.fieldTerm = Core.TermUnit}}))
-
-linkRelationTypePrev_archive :: Phantoms.TTerm Linkrelations.LinkRelationType
-linkRelationTypePrev_archive =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.org.iana.linkrelations.LinkRelationType"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "prev-archive"),
         Core.fieldTerm = Core.TermUnit}}))
 
 linkRelationTypePrivacy_policy :: Phantoms.TTerm Linkrelations.LinkRelationType
@@ -742,20 +742,20 @@ linkRelationTypeRelated =
         Core.fieldName = (Core.Name "related"),
         Core.fieldTerm = Core.TermUnit}}))
 
-linkRelationTypeRestconf :: Phantoms.TTerm Linkrelations.LinkRelationType
-linkRelationTypeRestconf =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.org.iana.linkrelations.LinkRelationType"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "restconf"),
-        Core.fieldTerm = Core.TermUnit}}))
-
 linkRelationTypeReplies :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeReplies =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.ext.org.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "replies"),
+        Core.fieldTerm = Core.TermUnit}}))
+
+linkRelationTypeRestconf :: Phantoms.TTerm Linkrelations.LinkRelationType
+linkRelationTypeRestconf =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.org.iana.linkrelations.LinkRelationType"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "restconf"),
         Core.fieldTerm = Core.TermUnit}}))
 
 linkRelationTypeRuleinput :: Phantoms.TTerm Linkrelations.LinkRelationType

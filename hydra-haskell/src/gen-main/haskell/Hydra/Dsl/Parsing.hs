@@ -74,20 +74,20 @@ parseErrorWithRemainder original newVal =
           Core.fieldName = (Core.Name "remainder"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-parseResultSuccess :: Phantoms.TTerm (Parsing.ParseSuccess a) -> Phantoms.TTerm (Parsing.ParseResult a)
-parseResultSuccess x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.parsing.ParseResult"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "success"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
 parseResultFailure :: Phantoms.TTerm Parsing.ParseError -> Phantoms.TTerm (Parsing.ParseResult a)
 parseResultFailure x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parsing.ParseResult"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "failure"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+parseResultSuccess :: Phantoms.TTerm (Parsing.ParseSuccess a) -> Phantoms.TTerm (Parsing.ParseResult a)
+parseResultSuccess x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.parsing.ParseResult"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "success"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 parseSuccess :: Phantoms.TTerm a -> Phantoms.TTerm String -> Phantoms.TTerm (Parsing.ParseSuccess a)
@@ -102,14 +102,6 @@ parseSuccess value remainder =
           Core.fieldName = (Core.Name "remainder"),
           Core.fieldTerm = (Phantoms.unTTerm remainder)}]}))
 
-parseSuccessValue :: Phantoms.TTerm (Parsing.ParseSuccess a) -> Phantoms.TTerm a
-parseSuccessValue x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
-        Core.projectionField = (Core.Name "value")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 parseSuccessRemainder :: Phantoms.TTerm (Parsing.ParseSuccess a) -> Phantoms.TTerm String
 parseSuccessRemainder x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -118,21 +110,13 @@ parseSuccessRemainder x =
         Core.projectionField = (Core.Name "remainder")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-parseSuccessWithValue :: Phantoms.TTerm (Parsing.ParseSuccess a) -> Phantoms.TTerm a -> Phantoms.TTerm (Parsing.ParseSuccess a)
-parseSuccessWithValue original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "remainder"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
-              Core.projectionField = (Core.Name "remainder")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+parseSuccessValue :: Phantoms.TTerm (Parsing.ParseSuccess a) -> Phantoms.TTerm a
+parseSuccessValue x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
+        Core.projectionField = (Core.Name "value")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 parseSuccessWithRemainder :: Phantoms.TTerm (Parsing.ParseSuccess a) -> Phantoms.TTerm String -> Phantoms.TTerm (Parsing.ParseSuccess a)
 parseSuccessWithRemainder original newVal =
@@ -149,6 +133,22 @@ parseSuccessWithRemainder original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "remainder"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+parseSuccessWithValue :: Phantoms.TTerm (Parsing.ParseSuccess a) -> Phantoms.TTerm a -> Phantoms.TTerm (Parsing.ParseSuccess a)
+parseSuccessWithValue original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "value"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "remainder"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
+              Core.projectionField = (Core.Name "remainder")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 parser :: Phantoms.TTerm (String -> Parsing.ParseResult a) -> Phantoms.TTerm (Parsing.Parser a)
 parser x =

@@ -14,6 +14,2072 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+aggregateFunctionFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AggregateFunctionFeatures
+aggregateFunctionFeatures avg collect count max min percentileCont percentileDisc stdev stdevp sum =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "avg"),
+          Core.fieldTerm = (Phantoms.unTTerm avg)},
+        Core.Field {
+          Core.fieldName = (Core.Name "collect"),
+          Core.fieldTerm = (Phantoms.unTTerm collect)},
+        Core.Field {
+          Core.fieldName = (Core.Name "count"),
+          Core.fieldTerm = (Phantoms.unTTerm count)},
+        Core.Field {
+          Core.fieldName = (Core.Name "max"),
+          Core.fieldTerm = (Phantoms.unTTerm max)},
+        Core.Field {
+          Core.fieldName = (Core.Name "min"),
+          Core.fieldTerm = (Phantoms.unTTerm min)},
+        Core.Field {
+          Core.fieldName = (Core.Name "percentileCont"),
+          Core.fieldTerm = (Phantoms.unTTerm percentileCont)},
+        Core.Field {
+          Core.fieldName = (Core.Name "percentileDisc"),
+          Core.fieldTerm = (Phantoms.unTTerm percentileDisc)},
+        Core.Field {
+          Core.fieldName = (Core.Name "stdev"),
+          Core.fieldTerm = (Phantoms.unTTerm stdev)},
+        Core.Field {
+          Core.fieldName = (Core.Name "stdevp"),
+          Core.fieldTerm = (Phantoms.unTTerm stdevp)},
+        Core.Field {
+          Core.fieldName = (Core.Name "sum"),
+          Core.fieldTerm = (Phantoms.unTTerm sum)}]}))
+
+aggregateFunctionFeaturesAvg :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool
+aggregateFunctionFeaturesAvg x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+        Core.projectionField = (Core.Name "avg")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+aggregateFunctionFeaturesCollect :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool
+aggregateFunctionFeaturesCollect x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+        Core.projectionField = (Core.Name "collect")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+aggregateFunctionFeaturesCount :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool
+aggregateFunctionFeaturesCount x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+        Core.projectionField = (Core.Name "count")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+aggregateFunctionFeaturesMax :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool
+aggregateFunctionFeaturesMax x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+        Core.projectionField = (Core.Name "max")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+aggregateFunctionFeaturesMin :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool
+aggregateFunctionFeaturesMin x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+        Core.projectionField = (Core.Name "min")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+aggregateFunctionFeaturesPercentileCont :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool
+aggregateFunctionFeaturesPercentileCont x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+        Core.projectionField = (Core.Name "percentileCont")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+aggregateFunctionFeaturesPercentileDisc :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool
+aggregateFunctionFeaturesPercentileDisc x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+        Core.projectionField = (Core.Name "percentileDisc")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+aggregateFunctionFeaturesStdev :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool
+aggregateFunctionFeaturesStdev x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+        Core.projectionField = (Core.Name "stdev")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+aggregateFunctionFeaturesStdevp :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool
+aggregateFunctionFeaturesStdevp x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+        Core.projectionField = (Core.Name "stdevp")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+aggregateFunctionFeaturesSum :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool
+aggregateFunctionFeaturesSum x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+        Core.projectionField = (Core.Name "sum")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+aggregateFunctionFeaturesWithAvg :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AggregateFunctionFeatures
+aggregateFunctionFeaturesWithAvg original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "avg"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "collect"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "collect")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "count"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "count")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "max"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "max")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "min"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "min")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "percentileCont"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "percentileCont")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "percentileDisc"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "percentileDisc")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "stdev"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "stdev")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "stdevp"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "stdevp")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "sum"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "sum")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+aggregateFunctionFeaturesWithCollect :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AggregateFunctionFeatures
+aggregateFunctionFeaturesWithCollect original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "avg"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "avg")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "collect"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "count"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "count")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "max"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "max")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "min"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "min")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "percentileCont"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "percentileCont")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "percentileDisc"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "percentileDisc")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "stdev"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "stdev")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "stdevp"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "stdevp")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "sum"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "sum")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+aggregateFunctionFeaturesWithCount :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AggregateFunctionFeatures
+aggregateFunctionFeaturesWithCount original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "avg"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "avg")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "collect"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "collect")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "count"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "max"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "max")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "min"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "min")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "percentileCont"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "percentileCont")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "percentileDisc"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "percentileDisc")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "stdev"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "stdev")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "stdevp"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "stdevp")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "sum"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "sum")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+aggregateFunctionFeaturesWithMax :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AggregateFunctionFeatures
+aggregateFunctionFeaturesWithMax original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "avg"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "avg")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "collect"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "collect")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "count"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "count")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "max"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "min"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "min")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "percentileCont"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "percentileCont")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "percentileDisc"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "percentileDisc")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "stdev"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "stdev")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "stdevp"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "stdevp")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "sum"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "sum")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+aggregateFunctionFeaturesWithMin :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AggregateFunctionFeatures
+aggregateFunctionFeaturesWithMin original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "avg"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "avg")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "collect"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "collect")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "count"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "count")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "max"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "max")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "min"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "percentileCont"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "percentileCont")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "percentileDisc"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "percentileDisc")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "stdev"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "stdev")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "stdevp"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "stdevp")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "sum"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "sum")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+aggregateFunctionFeaturesWithPercentileCont :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AggregateFunctionFeatures
+aggregateFunctionFeaturesWithPercentileCont original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "avg"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "avg")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "collect"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "collect")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "count"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "count")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "max"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "max")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "min"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "min")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "percentileCont"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "percentileDisc"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "percentileDisc")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "stdev"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "stdev")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "stdevp"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "stdevp")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "sum"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "sum")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+aggregateFunctionFeaturesWithPercentileDisc :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AggregateFunctionFeatures
+aggregateFunctionFeaturesWithPercentileDisc original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "avg"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "avg")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "collect"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "collect")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "count"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "count")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "max"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "max")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "min"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "min")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "percentileCont"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "percentileCont")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "percentileDisc"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "stdev"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "stdev")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "stdevp"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "stdevp")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "sum"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "sum")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+aggregateFunctionFeaturesWithStdev :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AggregateFunctionFeatures
+aggregateFunctionFeaturesWithStdev original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "avg"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "avg")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "collect"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "collect")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "count"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "count")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "max"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "max")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "min"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "min")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "percentileCont"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "percentileCont")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "percentileDisc"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "percentileDisc")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "stdev"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "stdevp"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "stdevp")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "sum"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "sum")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+aggregateFunctionFeaturesWithStdevp :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AggregateFunctionFeatures
+aggregateFunctionFeaturesWithStdevp original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "avg"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "avg")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "collect"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "collect")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "count"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "count")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "max"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "max")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "min"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "min")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "percentileCont"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "percentileCont")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "percentileDisc"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "percentileDisc")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "stdev"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "stdev")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "stdevp"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "sum"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "sum")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+aggregateFunctionFeaturesWithSum :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AggregateFunctionFeatures
+aggregateFunctionFeaturesWithSum original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "avg"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "avg")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "collect"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "collect")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "count"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "count")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "max"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "max")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "min"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "min")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "percentileCont"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "percentileCont")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "percentileDisc"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "percentileDisc")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "stdev"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "stdev")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "stdevp"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
+              Core.projectionField = (Core.Name "stdevp")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "sum"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+arithmeticFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ArithmeticFeatures
+arithmeticFeatures plus minus multiply divide modulus powerOf =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "plus"),
+          Core.fieldTerm = (Phantoms.unTTerm plus)},
+        Core.Field {
+          Core.fieldName = (Core.Name "minus"),
+          Core.fieldTerm = (Phantoms.unTTerm minus)},
+        Core.Field {
+          Core.fieldName = (Core.Name "multiply"),
+          Core.fieldTerm = (Phantoms.unTTerm multiply)},
+        Core.Field {
+          Core.fieldName = (Core.Name "divide"),
+          Core.fieldTerm = (Phantoms.unTTerm divide)},
+        Core.Field {
+          Core.fieldName = (Core.Name "modulus"),
+          Core.fieldTerm = (Phantoms.unTTerm modulus)},
+        Core.Field {
+          Core.fieldName = (Core.Name "powerOf"),
+          Core.fieldTerm = (Phantoms.unTTerm powerOf)}]}))
+
+arithmeticFeaturesDivide :: Phantoms.TTerm Features.ArithmeticFeatures -> Phantoms.TTerm Bool
+arithmeticFeaturesDivide x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+        Core.projectionField = (Core.Name "divide")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+arithmeticFeaturesMinus :: Phantoms.TTerm Features.ArithmeticFeatures -> Phantoms.TTerm Bool
+arithmeticFeaturesMinus x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+        Core.projectionField = (Core.Name "minus")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+arithmeticFeaturesModulus :: Phantoms.TTerm Features.ArithmeticFeatures -> Phantoms.TTerm Bool
+arithmeticFeaturesModulus x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+        Core.projectionField = (Core.Name "modulus")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+arithmeticFeaturesMultiply :: Phantoms.TTerm Features.ArithmeticFeatures -> Phantoms.TTerm Bool
+arithmeticFeaturesMultiply x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+        Core.projectionField = (Core.Name "multiply")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+arithmeticFeaturesPlus :: Phantoms.TTerm Features.ArithmeticFeatures -> Phantoms.TTerm Bool
+arithmeticFeaturesPlus x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+        Core.projectionField = (Core.Name "plus")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+arithmeticFeaturesPowerOf :: Phantoms.TTerm Features.ArithmeticFeatures -> Phantoms.TTerm Bool
+arithmeticFeaturesPowerOf x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+        Core.projectionField = (Core.Name "powerOf")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+arithmeticFeaturesWithDivide :: Phantoms.TTerm Features.ArithmeticFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ArithmeticFeatures
+arithmeticFeaturesWithDivide original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "plus"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "plus")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "minus"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "minus")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "multiply"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "multiply")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "divide"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "modulus"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "modulus")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "powerOf"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "powerOf")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+arithmeticFeaturesWithMinus :: Phantoms.TTerm Features.ArithmeticFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ArithmeticFeatures
+arithmeticFeaturesWithMinus original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "plus"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "plus")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "minus"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "multiply"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "multiply")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "divide"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "divide")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "modulus"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "modulus")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "powerOf"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "powerOf")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+arithmeticFeaturesWithModulus :: Phantoms.TTerm Features.ArithmeticFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ArithmeticFeatures
+arithmeticFeaturesWithModulus original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "plus"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "plus")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "minus"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "minus")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "multiply"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "multiply")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "divide"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "divide")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "modulus"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "powerOf"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "powerOf")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+arithmeticFeaturesWithMultiply :: Phantoms.TTerm Features.ArithmeticFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ArithmeticFeatures
+arithmeticFeaturesWithMultiply original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "plus"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "plus")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "minus"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "minus")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "multiply"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "divide"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "divide")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "modulus"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "modulus")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "powerOf"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "powerOf")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+arithmeticFeaturesWithPlus :: Phantoms.TTerm Features.ArithmeticFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ArithmeticFeatures
+arithmeticFeaturesWithPlus original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "plus"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "minus"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "minus")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "multiply"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "multiply")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "divide"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "divide")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "modulus"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "modulus")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "powerOf"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "powerOf")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+arithmeticFeaturesWithPowerOf :: Phantoms.TTerm Features.ArithmeticFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ArithmeticFeatures
+arithmeticFeaturesWithPowerOf original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "plus"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "plus")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "minus"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "minus")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "multiply"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "multiply")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "divide"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "divide")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "modulus"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+              Core.projectionField = (Core.Name "modulus")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "powerOf"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+atomFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AtomFeatures
+atomFeatures caseExpression count existentialSubquery functionInvocation parameter patternComprehension patternPredicate variable =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "caseExpression"),
+          Core.fieldTerm = (Phantoms.unTTerm caseExpression)},
+        Core.Field {
+          Core.fieldName = (Core.Name "count"),
+          Core.fieldTerm = (Phantoms.unTTerm count)},
+        Core.Field {
+          Core.fieldName = (Core.Name "existentialSubquery"),
+          Core.fieldTerm = (Phantoms.unTTerm existentialSubquery)},
+        Core.Field {
+          Core.fieldName = (Core.Name "functionInvocation"),
+          Core.fieldTerm = (Phantoms.unTTerm functionInvocation)},
+        Core.Field {
+          Core.fieldName = (Core.Name "parameter"),
+          Core.fieldTerm = (Phantoms.unTTerm parameter)},
+        Core.Field {
+          Core.fieldName = (Core.Name "patternComprehension"),
+          Core.fieldTerm = (Phantoms.unTTerm patternComprehension)},
+        Core.Field {
+          Core.fieldName = (Core.Name "patternPredicate"),
+          Core.fieldTerm = (Phantoms.unTTerm patternPredicate)},
+        Core.Field {
+          Core.fieldName = (Core.Name "variable"),
+          Core.fieldTerm = (Phantoms.unTTerm variable)}]}))
+
+atomFeaturesCaseExpression :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool
+atomFeaturesCaseExpression x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+        Core.projectionField = (Core.Name "caseExpression")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+atomFeaturesCount :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool
+atomFeaturesCount x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+        Core.projectionField = (Core.Name "count")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+atomFeaturesExistentialSubquery :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool
+atomFeaturesExistentialSubquery x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+        Core.projectionField = (Core.Name "existentialSubquery")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+atomFeaturesFunctionInvocation :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool
+atomFeaturesFunctionInvocation x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+        Core.projectionField = (Core.Name "functionInvocation")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+atomFeaturesParameter :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool
+atomFeaturesParameter x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+        Core.projectionField = (Core.Name "parameter")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+atomFeaturesPatternComprehension :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool
+atomFeaturesPatternComprehension x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+        Core.projectionField = (Core.Name "patternComprehension")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+atomFeaturesPatternPredicate :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool
+atomFeaturesPatternPredicate x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+        Core.projectionField = (Core.Name "patternPredicate")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+atomFeaturesVariable :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool
+atomFeaturesVariable x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+        Core.projectionField = (Core.Name "variable")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+atomFeaturesWithCaseExpression :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AtomFeatures
+atomFeaturesWithCaseExpression original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "caseExpression"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "count"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "count")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "existentialSubquery"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "existentialSubquery")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "functionInvocation"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "functionInvocation")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "parameter"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "parameter")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "patternComprehension"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "patternComprehension")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "patternPredicate"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "patternPredicate")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "variable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "variable")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+atomFeaturesWithCount :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AtomFeatures
+atomFeaturesWithCount original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "caseExpression"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "caseExpression")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "count"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "existentialSubquery"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "existentialSubquery")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "functionInvocation"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "functionInvocation")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "parameter"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "parameter")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "patternComprehension"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "patternComprehension")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "patternPredicate"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "patternPredicate")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "variable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "variable")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+atomFeaturesWithExistentialSubquery :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AtomFeatures
+atomFeaturesWithExistentialSubquery original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "caseExpression"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "caseExpression")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "count"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "count")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "existentialSubquery"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "functionInvocation"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "functionInvocation")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "parameter"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "parameter")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "patternComprehension"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "patternComprehension")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "patternPredicate"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "patternPredicate")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "variable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "variable")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+atomFeaturesWithFunctionInvocation :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AtomFeatures
+atomFeaturesWithFunctionInvocation original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "caseExpression"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "caseExpression")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "count"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "count")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "existentialSubquery"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "existentialSubquery")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "functionInvocation"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "parameter"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "parameter")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "patternComprehension"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "patternComprehension")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "patternPredicate"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "patternPredicate")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "variable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "variable")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+atomFeaturesWithParameter :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AtomFeatures
+atomFeaturesWithParameter original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "caseExpression"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "caseExpression")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "count"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "count")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "existentialSubquery"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "existentialSubquery")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "functionInvocation"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "functionInvocation")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "parameter"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "patternComprehension"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "patternComprehension")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "patternPredicate"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "patternPredicate")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "variable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "variable")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+atomFeaturesWithPatternComprehension :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AtomFeatures
+atomFeaturesWithPatternComprehension original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "caseExpression"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "caseExpression")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "count"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "count")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "existentialSubquery"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "existentialSubquery")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "functionInvocation"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "functionInvocation")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "parameter"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "parameter")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "patternComprehension"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "patternPredicate"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "patternPredicate")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "variable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "variable")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+atomFeaturesWithPatternPredicate :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AtomFeatures
+atomFeaturesWithPatternPredicate original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "caseExpression"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "caseExpression")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "count"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "count")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "existentialSubquery"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "existentialSubquery")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "functionInvocation"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "functionInvocation")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "parameter"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "parameter")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "patternComprehension"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "patternComprehension")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "patternPredicate"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "variable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "variable")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+atomFeaturesWithVariable :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AtomFeatures
+atomFeaturesWithVariable original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "caseExpression"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "caseExpression")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "count"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "count")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "existentialSubquery"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "existentialSubquery")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "functionInvocation"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "functionInvocation")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "parameter"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "parameter")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "patternComprehension"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "patternComprehension")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "patternPredicate"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
+              Core.projectionField = (Core.Name "patternPredicate")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "variable"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+comparisonFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ComparisonFeatures
+comparisonFeatures equal greaterThan greaterThanOrEqual lessThan lessThanOrEqual notEqual =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "equal"),
+          Core.fieldTerm = (Phantoms.unTTerm equal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "greaterThan"),
+          Core.fieldTerm = (Phantoms.unTTerm greaterThan)},
+        Core.Field {
+          Core.fieldName = (Core.Name "greaterThanOrEqual"),
+          Core.fieldTerm = (Phantoms.unTTerm greaterThanOrEqual)},
+        Core.Field {
+          Core.fieldName = (Core.Name "lessThan"),
+          Core.fieldTerm = (Phantoms.unTTerm lessThan)},
+        Core.Field {
+          Core.fieldName = (Core.Name "lessThanOrEqual"),
+          Core.fieldTerm = (Phantoms.unTTerm lessThanOrEqual)},
+        Core.Field {
+          Core.fieldName = (Core.Name "notEqual"),
+          Core.fieldTerm = (Phantoms.unTTerm notEqual)}]}))
+
+comparisonFeaturesEqual :: Phantoms.TTerm Features.ComparisonFeatures -> Phantoms.TTerm Bool
+comparisonFeaturesEqual x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+        Core.projectionField = (Core.Name "equal")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+comparisonFeaturesGreaterThan :: Phantoms.TTerm Features.ComparisonFeatures -> Phantoms.TTerm Bool
+comparisonFeaturesGreaterThan x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+        Core.projectionField = (Core.Name "greaterThan")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+comparisonFeaturesGreaterThanOrEqual :: Phantoms.TTerm Features.ComparisonFeatures -> Phantoms.TTerm Bool
+comparisonFeaturesGreaterThanOrEqual x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+        Core.projectionField = (Core.Name "greaterThanOrEqual")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+comparisonFeaturesLessThan :: Phantoms.TTerm Features.ComparisonFeatures -> Phantoms.TTerm Bool
+comparisonFeaturesLessThan x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+        Core.projectionField = (Core.Name "lessThan")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+comparisonFeaturesLessThanOrEqual :: Phantoms.TTerm Features.ComparisonFeatures -> Phantoms.TTerm Bool
+comparisonFeaturesLessThanOrEqual x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+        Core.projectionField = (Core.Name "lessThanOrEqual")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+comparisonFeaturesNotEqual :: Phantoms.TTerm Features.ComparisonFeatures -> Phantoms.TTerm Bool
+comparisonFeaturesNotEqual x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+        Core.projectionField = (Core.Name "notEqual")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+comparisonFeaturesWithEqual :: Phantoms.TTerm Features.ComparisonFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ComparisonFeatures
+comparisonFeaturesWithEqual original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "equal"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "greaterThan"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "greaterThan")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "greaterThanOrEqual"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "greaterThanOrEqual")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "lessThan"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "lessThan")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "lessThanOrEqual"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "lessThanOrEqual")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "notEqual"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "notEqual")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+comparisonFeaturesWithGreaterThan :: Phantoms.TTerm Features.ComparisonFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ComparisonFeatures
+comparisonFeaturesWithGreaterThan original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "equal"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "equal")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "greaterThan"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "greaterThanOrEqual"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "greaterThanOrEqual")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "lessThan"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "lessThan")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "lessThanOrEqual"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "lessThanOrEqual")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "notEqual"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "notEqual")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+comparisonFeaturesWithGreaterThanOrEqual :: Phantoms.TTerm Features.ComparisonFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ComparisonFeatures
+comparisonFeaturesWithGreaterThanOrEqual original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "equal"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "equal")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "greaterThan"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "greaterThan")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "greaterThanOrEqual"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "lessThan"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "lessThan")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "lessThanOrEqual"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "lessThanOrEqual")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "notEqual"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "notEqual")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+comparisonFeaturesWithLessThan :: Phantoms.TTerm Features.ComparisonFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ComparisonFeatures
+comparisonFeaturesWithLessThan original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "equal"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "equal")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "greaterThan"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "greaterThan")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "greaterThanOrEqual"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "greaterThanOrEqual")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "lessThan"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "lessThanOrEqual"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "lessThanOrEqual")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "notEqual"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "notEqual")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+comparisonFeaturesWithLessThanOrEqual :: Phantoms.TTerm Features.ComparisonFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ComparisonFeatures
+comparisonFeaturesWithLessThanOrEqual original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "equal"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "equal")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "greaterThan"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "greaterThan")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "greaterThanOrEqual"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "greaterThanOrEqual")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "lessThan"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "lessThan")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "lessThanOrEqual"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "notEqual"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "notEqual")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+comparisonFeaturesWithNotEqual :: Phantoms.TTerm Features.ComparisonFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ComparisonFeatures
+comparisonFeaturesWithNotEqual original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "equal"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "equal")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "greaterThan"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "greaterThan")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "greaterThanOrEqual"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "greaterThanOrEqual")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "lessThan"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "lessThan")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "lessThanOrEqual"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
+              Core.projectionField = (Core.Name "lessThanOrEqual")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "notEqual"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
 cypherFeatures :: Phantoms.TTerm Features.ArithmeticFeatures -> Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Features.ComparisonFeatures -> Phantoms.TTerm Features.DeleteFeatures -> Phantoms.TTerm Features.FunctionFeatures -> Phantoms.TTerm Features.ListFeatures -> Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Features.LogicalFeatures -> Phantoms.TTerm Features.MatchFeatures -> Phantoms.TTerm Features.MergeFeatures -> Phantoms.TTerm Features.NodePatternFeatures -> Phantoms.TTerm Features.NullFeatures -> Phantoms.TTerm Features.PathFeatures -> Phantoms.TTerm Features.ProcedureCallFeatures -> Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Features.QuantifierFeatures -> Phantoms.TTerm Features.RangeLiteralFeatures -> Phantoms.TTerm Features.ReadingFeatures -> Phantoms.TTerm Features.RelationshipDirectionFeatures -> Phantoms.TTerm Features.RelationshipPatternFeatures -> Phantoms.TTerm Features.RemoveFeatures -> Phantoms.TTerm Features.SetFeatures -> Phantoms.TTerm Features.StringFeatures -> Phantoms.TTerm Features.UpdatingFeatures -> Phantoms.TTerm Features.CypherFeatures
 cypherFeatures arithmetic atom comparison delete function list literal logical match merge nodePattern null path procedureCall projection quantifier rangeLiteral reading relationshipDirection relationshipPattern remove set string updating =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -4364,1234 +6430,30 @@ cypherFeaturesWithUpdating original newVal =
           Core.fieldName = (Core.Name "updating"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-arithmeticFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ArithmeticFeatures
-arithmeticFeatures plus minus multiply divide modulus powerOf =
+databaseFunctionFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Features.DatabaseFunctionFeatures
+databaseFunctionFeatures dbNameFromElementId =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.DatabaseFunctionFeatures"),
       Core.recordFields = [
         Core.Field {
-          Core.fieldName = (Core.Name "plus"),
-          Core.fieldTerm = (Phantoms.unTTerm plus)},
-        Core.Field {
-          Core.fieldName = (Core.Name "minus"),
-          Core.fieldTerm = (Phantoms.unTTerm minus)},
-        Core.Field {
-          Core.fieldName = (Core.Name "multiply"),
-          Core.fieldTerm = (Phantoms.unTTerm multiply)},
-        Core.Field {
-          Core.fieldName = (Core.Name "divide"),
-          Core.fieldTerm = (Phantoms.unTTerm divide)},
-        Core.Field {
-          Core.fieldName = (Core.Name "modulus"),
-          Core.fieldTerm = (Phantoms.unTTerm modulus)},
-        Core.Field {
-          Core.fieldName = (Core.Name "powerOf"),
-          Core.fieldTerm = (Phantoms.unTTerm powerOf)}]}))
+          Core.fieldName = (Core.Name "dbNameFromElementId"),
+          Core.fieldTerm = (Phantoms.unTTerm dbNameFromElementId)}]}))
 
-arithmeticFeaturesPlus :: Phantoms.TTerm Features.ArithmeticFeatures -> Phantoms.TTerm Bool
-arithmeticFeaturesPlus x =
+databaseFunctionFeaturesDbNameFromElementId :: Phantoms.TTerm Features.DatabaseFunctionFeatures -> Phantoms.TTerm Bool
+databaseFunctionFeaturesDbNameFromElementId x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-        Core.projectionField = (Core.Name "plus")})))),
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.DatabaseFunctionFeatures"),
+        Core.projectionField = (Core.Name "dbNameFromElementId")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-arithmeticFeaturesMinus :: Phantoms.TTerm Features.ArithmeticFeatures -> Phantoms.TTerm Bool
-arithmeticFeaturesMinus x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-        Core.projectionField = (Core.Name "minus")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-arithmeticFeaturesMultiply :: Phantoms.TTerm Features.ArithmeticFeatures -> Phantoms.TTerm Bool
-arithmeticFeaturesMultiply x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-        Core.projectionField = (Core.Name "multiply")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-arithmeticFeaturesDivide :: Phantoms.TTerm Features.ArithmeticFeatures -> Phantoms.TTerm Bool
-arithmeticFeaturesDivide x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-        Core.projectionField = (Core.Name "divide")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-arithmeticFeaturesModulus :: Phantoms.TTerm Features.ArithmeticFeatures -> Phantoms.TTerm Bool
-arithmeticFeaturesModulus x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-        Core.projectionField = (Core.Name "modulus")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-arithmeticFeaturesPowerOf :: Phantoms.TTerm Features.ArithmeticFeatures -> Phantoms.TTerm Bool
-arithmeticFeaturesPowerOf x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-        Core.projectionField = (Core.Name "powerOf")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-arithmeticFeaturesWithPlus :: Phantoms.TTerm Features.ArithmeticFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ArithmeticFeatures
-arithmeticFeaturesWithPlus original newVal =
+databaseFunctionFeaturesWithDbNameFromElementId :: Phantoms.TTerm Features.DatabaseFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.DatabaseFunctionFeatures
+databaseFunctionFeaturesWithDbNameFromElementId original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.DatabaseFunctionFeatures"),
       Core.recordFields = [
         Core.Field {
-          Core.fieldName = (Core.Name "plus"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "minus"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "minus")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "multiply"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "multiply")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "divide"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "divide")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "modulus"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "modulus")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "powerOf"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "powerOf")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-arithmeticFeaturesWithMinus :: Phantoms.TTerm Features.ArithmeticFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ArithmeticFeatures
-arithmeticFeaturesWithMinus original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "plus"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "plus")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "minus"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "multiply"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "multiply")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "divide"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "divide")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "modulus"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "modulus")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "powerOf"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "powerOf")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-arithmeticFeaturesWithMultiply :: Phantoms.TTerm Features.ArithmeticFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ArithmeticFeatures
-arithmeticFeaturesWithMultiply original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "plus"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "plus")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "minus"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "minus")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "multiply"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "divide"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "divide")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "modulus"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "modulus")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "powerOf"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "powerOf")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-arithmeticFeaturesWithDivide :: Phantoms.TTerm Features.ArithmeticFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ArithmeticFeatures
-arithmeticFeaturesWithDivide original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "plus"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "plus")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "minus"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "minus")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "multiply"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "multiply")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "divide"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "modulus"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "modulus")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "powerOf"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "powerOf")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-arithmeticFeaturesWithModulus :: Phantoms.TTerm Features.ArithmeticFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ArithmeticFeatures
-arithmeticFeaturesWithModulus original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "plus"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "plus")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "minus"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "minus")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "multiply"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "multiply")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "divide"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "divide")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "modulus"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "powerOf"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "powerOf")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-arithmeticFeaturesWithPowerOf :: Phantoms.TTerm Features.ArithmeticFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ArithmeticFeatures
-arithmeticFeaturesWithPowerOf original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "plus"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "plus")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "minus"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "minus")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "multiply"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "multiply")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "divide"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "divide")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "modulus"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"),
-              Core.projectionField = (Core.Name "modulus")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "powerOf"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-atomFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AtomFeatures
-atomFeatures caseExpression count existentialSubquery functionInvocation parameter patternComprehension patternPredicate variable =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "caseExpression"),
-          Core.fieldTerm = (Phantoms.unTTerm caseExpression)},
-        Core.Field {
-          Core.fieldName = (Core.Name "count"),
-          Core.fieldTerm = (Phantoms.unTTerm count)},
-        Core.Field {
-          Core.fieldName = (Core.Name "existentialSubquery"),
-          Core.fieldTerm = (Phantoms.unTTerm existentialSubquery)},
-        Core.Field {
-          Core.fieldName = (Core.Name "functionInvocation"),
-          Core.fieldTerm = (Phantoms.unTTerm functionInvocation)},
-        Core.Field {
-          Core.fieldName = (Core.Name "parameter"),
-          Core.fieldTerm = (Phantoms.unTTerm parameter)},
-        Core.Field {
-          Core.fieldName = (Core.Name "patternComprehension"),
-          Core.fieldTerm = (Phantoms.unTTerm patternComprehension)},
-        Core.Field {
-          Core.fieldName = (Core.Name "patternPredicate"),
-          Core.fieldTerm = (Phantoms.unTTerm patternPredicate)},
-        Core.Field {
-          Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Phantoms.unTTerm variable)}]}))
-
-atomFeaturesCaseExpression :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool
-atomFeaturesCaseExpression x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-        Core.projectionField = (Core.Name "caseExpression")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-atomFeaturesCount :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool
-atomFeaturesCount x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-        Core.projectionField = (Core.Name "count")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-atomFeaturesExistentialSubquery :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool
-atomFeaturesExistentialSubquery x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-        Core.projectionField = (Core.Name "existentialSubquery")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-atomFeaturesFunctionInvocation :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool
-atomFeaturesFunctionInvocation x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-        Core.projectionField = (Core.Name "functionInvocation")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-atomFeaturesParameter :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool
-atomFeaturesParameter x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-        Core.projectionField = (Core.Name "parameter")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-atomFeaturesPatternComprehension :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool
-atomFeaturesPatternComprehension x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-        Core.projectionField = (Core.Name "patternComprehension")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-atomFeaturesPatternPredicate :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool
-atomFeaturesPatternPredicate x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-        Core.projectionField = (Core.Name "patternPredicate")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-atomFeaturesVariable :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool
-atomFeaturesVariable x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-        Core.projectionField = (Core.Name "variable")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-atomFeaturesWithCaseExpression :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AtomFeatures
-atomFeaturesWithCaseExpression original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "caseExpression"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "count"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "count")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "existentialSubquery"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "existentialSubquery")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "functionInvocation"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "functionInvocation")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "parameter"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "parameter")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "patternComprehension"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "patternComprehension")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "patternPredicate"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "patternPredicate")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "variable")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-atomFeaturesWithCount :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AtomFeatures
-atomFeaturesWithCount original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "caseExpression"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "caseExpression")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "count"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "existentialSubquery"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "existentialSubquery")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "functionInvocation"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "functionInvocation")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "parameter"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "parameter")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "patternComprehension"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "patternComprehension")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "patternPredicate"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "patternPredicate")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "variable")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-atomFeaturesWithExistentialSubquery :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AtomFeatures
-atomFeaturesWithExistentialSubquery original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "caseExpression"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "caseExpression")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "count"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "count")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "existentialSubquery"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "functionInvocation"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "functionInvocation")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "parameter"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "parameter")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "patternComprehension"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "patternComprehension")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "patternPredicate"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "patternPredicate")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "variable")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-atomFeaturesWithFunctionInvocation :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AtomFeatures
-atomFeaturesWithFunctionInvocation original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "caseExpression"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "caseExpression")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "count"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "count")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "existentialSubquery"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "existentialSubquery")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "functionInvocation"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "parameter"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "parameter")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "patternComprehension"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "patternComprehension")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "patternPredicate"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "patternPredicate")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "variable")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-atomFeaturesWithParameter :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AtomFeatures
-atomFeaturesWithParameter original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "caseExpression"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "caseExpression")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "count"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "count")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "existentialSubquery"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "existentialSubquery")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "functionInvocation"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "functionInvocation")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "parameter"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "patternComprehension"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "patternComprehension")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "patternPredicate"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "patternPredicate")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "variable")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-atomFeaturesWithPatternComprehension :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AtomFeatures
-atomFeaturesWithPatternComprehension original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "caseExpression"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "caseExpression")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "count"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "count")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "existentialSubquery"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "existentialSubquery")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "functionInvocation"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "functionInvocation")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "parameter"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "parameter")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "patternComprehension"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "patternPredicate"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "patternPredicate")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "variable")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-atomFeaturesWithPatternPredicate :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AtomFeatures
-atomFeaturesWithPatternPredicate original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "caseExpression"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "caseExpression")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "count"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "count")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "existentialSubquery"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "existentialSubquery")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "functionInvocation"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "functionInvocation")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "parameter"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "parameter")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "patternComprehension"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "patternComprehension")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "patternPredicate"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "variable")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-atomFeaturesWithVariable :: Phantoms.TTerm Features.AtomFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AtomFeatures
-atomFeaturesWithVariable original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "caseExpression"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "caseExpression")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "count"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "count")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "existentialSubquery"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "existentialSubquery")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "functionInvocation"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "functionInvocation")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "parameter"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "parameter")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "patternComprehension"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "patternComprehension")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "patternPredicate"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AtomFeatures"),
-              Core.projectionField = (Core.Name "patternPredicate")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-comparisonFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ComparisonFeatures
-comparisonFeatures equal greaterThan greaterThanOrEqual lessThan lessThanOrEqual notEqual =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "equal"),
-          Core.fieldTerm = (Phantoms.unTTerm equal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "greaterThan"),
-          Core.fieldTerm = (Phantoms.unTTerm greaterThan)},
-        Core.Field {
-          Core.fieldName = (Core.Name "greaterThanOrEqual"),
-          Core.fieldTerm = (Phantoms.unTTerm greaterThanOrEqual)},
-        Core.Field {
-          Core.fieldName = (Core.Name "lessThan"),
-          Core.fieldTerm = (Phantoms.unTTerm lessThan)},
-        Core.Field {
-          Core.fieldName = (Core.Name "lessThanOrEqual"),
-          Core.fieldTerm = (Phantoms.unTTerm lessThanOrEqual)},
-        Core.Field {
-          Core.fieldName = (Core.Name "notEqual"),
-          Core.fieldTerm = (Phantoms.unTTerm notEqual)}]}))
-
-comparisonFeaturesEqual :: Phantoms.TTerm Features.ComparisonFeatures -> Phantoms.TTerm Bool
-comparisonFeaturesEqual x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-        Core.projectionField = (Core.Name "equal")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-comparisonFeaturesGreaterThan :: Phantoms.TTerm Features.ComparisonFeatures -> Phantoms.TTerm Bool
-comparisonFeaturesGreaterThan x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-        Core.projectionField = (Core.Name "greaterThan")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-comparisonFeaturesGreaterThanOrEqual :: Phantoms.TTerm Features.ComparisonFeatures -> Phantoms.TTerm Bool
-comparisonFeaturesGreaterThanOrEqual x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-        Core.projectionField = (Core.Name "greaterThanOrEqual")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-comparisonFeaturesLessThan :: Phantoms.TTerm Features.ComparisonFeatures -> Phantoms.TTerm Bool
-comparisonFeaturesLessThan x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-        Core.projectionField = (Core.Name "lessThan")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-comparisonFeaturesLessThanOrEqual :: Phantoms.TTerm Features.ComparisonFeatures -> Phantoms.TTerm Bool
-comparisonFeaturesLessThanOrEqual x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-        Core.projectionField = (Core.Name "lessThanOrEqual")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-comparisonFeaturesNotEqual :: Phantoms.TTerm Features.ComparisonFeatures -> Phantoms.TTerm Bool
-comparisonFeaturesNotEqual x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-        Core.projectionField = (Core.Name "notEqual")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-comparisonFeaturesWithEqual :: Phantoms.TTerm Features.ComparisonFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ComparisonFeatures
-comparisonFeaturesWithEqual original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "equal"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "greaterThan"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "greaterThan")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "greaterThanOrEqual"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "greaterThanOrEqual")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "lessThan"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "lessThan")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "lessThanOrEqual"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "lessThanOrEqual")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "notEqual"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "notEqual")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-comparisonFeaturesWithGreaterThan :: Phantoms.TTerm Features.ComparisonFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ComparisonFeatures
-comparisonFeaturesWithGreaterThan original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "equal"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "equal")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "greaterThan"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "greaterThanOrEqual"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "greaterThanOrEqual")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "lessThan"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "lessThan")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "lessThanOrEqual"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "lessThanOrEqual")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "notEqual"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "notEqual")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-comparisonFeaturesWithGreaterThanOrEqual :: Phantoms.TTerm Features.ComparisonFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ComparisonFeatures
-comparisonFeaturesWithGreaterThanOrEqual original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "equal"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "equal")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "greaterThan"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "greaterThan")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "greaterThanOrEqual"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "lessThan"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "lessThan")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "lessThanOrEqual"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "lessThanOrEqual")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "notEqual"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "notEqual")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-comparisonFeaturesWithLessThan :: Phantoms.TTerm Features.ComparisonFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ComparisonFeatures
-comparisonFeaturesWithLessThan original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "equal"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "equal")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "greaterThan"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "greaterThan")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "greaterThanOrEqual"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "greaterThanOrEqual")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "lessThan"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "lessThanOrEqual"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "lessThanOrEqual")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "notEqual"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "notEqual")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-comparisonFeaturesWithLessThanOrEqual :: Phantoms.TTerm Features.ComparisonFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ComparisonFeatures
-comparisonFeaturesWithLessThanOrEqual original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "equal"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "equal")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "greaterThan"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "greaterThan")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "greaterThanOrEqual"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "greaterThanOrEqual")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "lessThan"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "lessThan")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "lessThanOrEqual"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "notEqual"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "notEqual")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-comparisonFeaturesWithNotEqual :: Phantoms.TTerm Features.ComparisonFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ComparisonFeatures
-comparisonFeaturesWithNotEqual original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "equal"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "equal")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "greaterThan"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "greaterThan")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "greaterThanOrEqual"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "greaterThanOrEqual")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "lessThan"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "lessThan")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "lessThanOrEqual"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures"),
-              Core.projectionField = (Core.Name "lessThanOrEqual")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "notEqual"),
+          Core.fieldName = (Core.Name "dbNameFromElementId"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
 deleteFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.DeleteFeatures
@@ -7660,868 +8522,6 @@ functionFeaturesWithVectorFunction original newVal =
           Core.fieldName = (Core.Name "vectorFunction"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-aggregateFunctionFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AggregateFunctionFeatures
-aggregateFunctionFeatures avg collect count max min percentileCont percentileDisc stdev stdevp sum =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "avg"),
-          Core.fieldTerm = (Phantoms.unTTerm avg)},
-        Core.Field {
-          Core.fieldName = (Core.Name "collect"),
-          Core.fieldTerm = (Phantoms.unTTerm collect)},
-        Core.Field {
-          Core.fieldName = (Core.Name "count"),
-          Core.fieldTerm = (Phantoms.unTTerm count)},
-        Core.Field {
-          Core.fieldName = (Core.Name "max"),
-          Core.fieldTerm = (Phantoms.unTTerm max)},
-        Core.Field {
-          Core.fieldName = (Core.Name "min"),
-          Core.fieldTerm = (Phantoms.unTTerm min)},
-        Core.Field {
-          Core.fieldName = (Core.Name "percentileCont"),
-          Core.fieldTerm = (Phantoms.unTTerm percentileCont)},
-        Core.Field {
-          Core.fieldName = (Core.Name "percentileDisc"),
-          Core.fieldTerm = (Phantoms.unTTerm percentileDisc)},
-        Core.Field {
-          Core.fieldName = (Core.Name "stdev"),
-          Core.fieldTerm = (Phantoms.unTTerm stdev)},
-        Core.Field {
-          Core.fieldName = (Core.Name "stdevp"),
-          Core.fieldTerm = (Phantoms.unTTerm stdevp)},
-        Core.Field {
-          Core.fieldName = (Core.Name "sum"),
-          Core.fieldTerm = (Phantoms.unTTerm sum)}]}))
-
-aggregateFunctionFeaturesAvg :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool
-aggregateFunctionFeaturesAvg x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-        Core.projectionField = (Core.Name "avg")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-aggregateFunctionFeaturesCollect :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool
-aggregateFunctionFeaturesCollect x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-        Core.projectionField = (Core.Name "collect")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-aggregateFunctionFeaturesCount :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool
-aggregateFunctionFeaturesCount x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-        Core.projectionField = (Core.Name "count")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-aggregateFunctionFeaturesMax :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool
-aggregateFunctionFeaturesMax x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-        Core.projectionField = (Core.Name "max")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-aggregateFunctionFeaturesMin :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool
-aggregateFunctionFeaturesMin x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-        Core.projectionField = (Core.Name "min")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-aggregateFunctionFeaturesPercentileCont :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool
-aggregateFunctionFeaturesPercentileCont x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-        Core.projectionField = (Core.Name "percentileCont")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-aggregateFunctionFeaturesPercentileDisc :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool
-aggregateFunctionFeaturesPercentileDisc x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-        Core.projectionField = (Core.Name "percentileDisc")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-aggregateFunctionFeaturesStdev :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool
-aggregateFunctionFeaturesStdev x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-        Core.projectionField = (Core.Name "stdev")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-aggregateFunctionFeaturesStdevp :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool
-aggregateFunctionFeaturesStdevp x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-        Core.projectionField = (Core.Name "stdevp")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-aggregateFunctionFeaturesSum :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool
-aggregateFunctionFeaturesSum x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-        Core.projectionField = (Core.Name "sum")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-aggregateFunctionFeaturesWithAvg :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AggregateFunctionFeatures
-aggregateFunctionFeaturesWithAvg original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "avg"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "collect"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "collect")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "count"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "count")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "max"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "max")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "min"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "min")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "percentileCont"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "percentileCont")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "percentileDisc"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "percentileDisc")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "stdev"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "stdev")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "stdevp"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "stdevp")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "sum"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "sum")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-aggregateFunctionFeaturesWithCollect :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AggregateFunctionFeatures
-aggregateFunctionFeaturesWithCollect original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "avg"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "avg")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "collect"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "count"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "count")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "max"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "max")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "min"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "min")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "percentileCont"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "percentileCont")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "percentileDisc"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "percentileDisc")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "stdev"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "stdev")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "stdevp"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "stdevp")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "sum"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "sum")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-aggregateFunctionFeaturesWithCount :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AggregateFunctionFeatures
-aggregateFunctionFeaturesWithCount original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "avg"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "avg")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "collect"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "collect")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "count"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "max"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "max")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "min"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "min")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "percentileCont"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "percentileCont")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "percentileDisc"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "percentileDisc")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "stdev"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "stdev")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "stdevp"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "stdevp")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "sum"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "sum")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-aggregateFunctionFeaturesWithMax :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AggregateFunctionFeatures
-aggregateFunctionFeaturesWithMax original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "avg"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "avg")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "collect"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "collect")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "count"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "count")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "max"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "min"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "min")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "percentileCont"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "percentileCont")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "percentileDisc"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "percentileDisc")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "stdev"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "stdev")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "stdevp"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "stdevp")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "sum"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "sum")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-aggregateFunctionFeaturesWithMin :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AggregateFunctionFeatures
-aggregateFunctionFeaturesWithMin original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "avg"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "avg")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "collect"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "collect")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "count"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "count")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "max"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "max")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "min"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "percentileCont"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "percentileCont")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "percentileDisc"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "percentileDisc")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "stdev"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "stdev")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "stdevp"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "stdevp")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "sum"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "sum")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-aggregateFunctionFeaturesWithPercentileCont :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AggregateFunctionFeatures
-aggregateFunctionFeaturesWithPercentileCont original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "avg"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "avg")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "collect"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "collect")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "count"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "count")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "max"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "max")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "min"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "min")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "percentileCont"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "percentileDisc"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "percentileDisc")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "stdev"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "stdev")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "stdevp"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "stdevp")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "sum"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "sum")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-aggregateFunctionFeaturesWithPercentileDisc :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AggregateFunctionFeatures
-aggregateFunctionFeaturesWithPercentileDisc original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "avg"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "avg")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "collect"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "collect")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "count"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "count")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "max"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "max")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "min"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "min")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "percentileCont"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "percentileCont")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "percentileDisc"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "stdev"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "stdev")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "stdevp"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "stdevp")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "sum"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "sum")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-aggregateFunctionFeaturesWithStdev :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AggregateFunctionFeatures
-aggregateFunctionFeaturesWithStdev original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "avg"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "avg")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "collect"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "collect")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "count"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "count")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "max"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "max")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "min"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "min")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "percentileCont"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "percentileCont")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "percentileDisc"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "percentileDisc")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "stdev"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "stdevp"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "stdevp")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "sum"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "sum")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-aggregateFunctionFeaturesWithStdevp :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AggregateFunctionFeatures
-aggregateFunctionFeaturesWithStdevp original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "avg"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "avg")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "collect"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "collect")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "count"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "count")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "max"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "max")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "min"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "min")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "percentileCont"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "percentileCont")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "percentileDisc"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "percentileDisc")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "stdev"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "stdev")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "stdevp"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "sum"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "sum")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-aggregateFunctionFeaturesWithSum :: Phantoms.TTerm Features.AggregateFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AggregateFunctionFeatures
-aggregateFunctionFeaturesWithSum original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "avg"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "avg")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "collect"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "collect")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "count"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "count")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "max"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "max")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "min"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "min")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "percentileCont"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "percentileCont")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "percentileDisc"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "percentileDisc")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "stdev"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "stdev")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "stdevp"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"),
-              Core.projectionField = (Core.Name "stdevp")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "sum"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-databaseFunctionFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Features.DatabaseFunctionFeatures
-databaseFunctionFeatures dbNameFromElementId =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.DatabaseFunctionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "dbNameFromElementId"),
-          Core.fieldTerm = (Phantoms.unTTerm dbNameFromElementId)}]}))
-
-databaseFunctionFeaturesDbNameFromElementId :: Phantoms.TTerm Features.DatabaseFunctionFeatures -> Phantoms.TTerm Bool
-databaseFunctionFeaturesDbNameFromElementId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.DatabaseFunctionFeatures"),
-        Core.projectionField = (Core.Name "dbNameFromElementId")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-databaseFunctionFeaturesWithDbNameFromElementId :: Phantoms.TTerm Features.DatabaseFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.DatabaseFunctionFeatures
-databaseFunctionFeaturesWithDbNameFromElementId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.DatabaseFunctionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "dbNameFromElementId"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
 genAIFunctionFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Features.GenAIFunctionFeatures
 genAIFunctionFeatures genaiVectorEncode =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -8716,6 +8716,66 @@ graphFunctionFeaturesWithGraphPropertiesByName original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "graphPropertiesByName"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+listFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ListFeatures
+listFeatures listComprehension listRange =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ListFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "listComprehension"),
+          Core.fieldTerm = (Phantoms.unTTerm listComprehension)},
+        Core.Field {
+          Core.fieldName = (Core.Name "listRange"),
+          Core.fieldTerm = (Phantoms.unTTerm listRange)}]}))
+
+listFeaturesListComprehension :: Phantoms.TTerm Features.ListFeatures -> Phantoms.TTerm Bool
+listFeaturesListComprehension x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ListFeatures"),
+        Core.projectionField = (Core.Name "listComprehension")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+listFeaturesListRange :: Phantoms.TTerm Features.ListFeatures -> Phantoms.TTerm Bool
+listFeaturesListRange x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ListFeatures"),
+        Core.projectionField = (Core.Name "listRange")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+listFeaturesWithListComprehension :: Phantoms.TTerm Features.ListFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ListFeatures
+listFeaturesWithListComprehension original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ListFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "listComprehension"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "listRange"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ListFeatures"),
+              Core.projectionField = (Core.Name "listRange")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+listFeaturesWithListRange :: Phantoms.TTerm Features.ListFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ListFeatures
+listFeaturesWithListRange original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ListFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "listComprehension"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ListFeatures"),
+              Core.projectionField = (Core.Name "listComprehension")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "listRange"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
 listFunctionFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ListFunctionFeatures
@@ -9888,6 +9948,446 @@ listFunctionFeaturesWithToStringList original newVal =
           Core.fieldName = (Core.Name "toStringList"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+literalFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LiteralFeatures
+literalFeatures boolean double integer list map null string =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "boolean"),
+          Core.fieldTerm = (Phantoms.unTTerm boolean)},
+        Core.Field {
+          Core.fieldName = (Core.Name "double"),
+          Core.fieldTerm = (Phantoms.unTTerm double)},
+        Core.Field {
+          Core.fieldName = (Core.Name "integer"),
+          Core.fieldTerm = (Phantoms.unTTerm integer)},
+        Core.Field {
+          Core.fieldName = (Core.Name "list"),
+          Core.fieldTerm = (Phantoms.unTTerm list)},
+        Core.Field {
+          Core.fieldName = (Core.Name "map"),
+          Core.fieldTerm = (Phantoms.unTTerm map)},
+        Core.Field {
+          Core.fieldName = (Core.Name "null"),
+          Core.fieldTerm = (Phantoms.unTTerm null)},
+        Core.Field {
+          Core.fieldName = (Core.Name "string"),
+          Core.fieldTerm = (Phantoms.unTTerm string)}]}))
+
+literalFeaturesBoolean :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool
+literalFeaturesBoolean x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+        Core.projectionField = (Core.Name "boolean")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+literalFeaturesDouble :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool
+literalFeaturesDouble x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+        Core.projectionField = (Core.Name "double")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+literalFeaturesInteger :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool
+literalFeaturesInteger x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+        Core.projectionField = (Core.Name "integer")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+literalFeaturesList :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool
+literalFeaturesList x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+        Core.projectionField = (Core.Name "list")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+literalFeaturesMap :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool
+literalFeaturesMap x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+        Core.projectionField = (Core.Name "map")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+literalFeaturesNull :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool
+literalFeaturesNull x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+        Core.projectionField = (Core.Name "null")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+literalFeaturesString :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool
+literalFeaturesString x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+        Core.projectionField = (Core.Name "string")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+literalFeaturesWithBoolean :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LiteralFeatures
+literalFeaturesWithBoolean original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "boolean"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "double"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "double")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "integer"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "integer")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "list"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "list")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "map"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "map")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "null"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "null")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "string"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "string")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+literalFeaturesWithDouble :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LiteralFeatures
+literalFeaturesWithDouble original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "boolean"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "boolean")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "double"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "integer"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "integer")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "list"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "list")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "map"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "map")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "null"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "null")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "string"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "string")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+literalFeaturesWithInteger :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LiteralFeatures
+literalFeaturesWithInteger original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "boolean"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "boolean")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "double"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "double")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "integer"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "list"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "list")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "map"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "map")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "null"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "null")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "string"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "string")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+literalFeaturesWithList :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LiteralFeatures
+literalFeaturesWithList original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "boolean"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "boolean")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "double"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "double")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "integer"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "integer")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "list"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "map"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "map")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "null"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "null")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "string"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "string")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+literalFeaturesWithMap :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LiteralFeatures
+literalFeaturesWithMap original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "boolean"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "boolean")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "double"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "double")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "integer"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "integer")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "list"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "list")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "map"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "null"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "null")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "string"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "string")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+literalFeaturesWithNull :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LiteralFeatures
+literalFeaturesWithNull original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "boolean"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "boolean")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "double"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "double")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "integer"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "integer")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "list"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "list")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "map"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "map")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "null"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "string"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "string")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+literalFeaturesWithString :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LiteralFeatures
+literalFeaturesWithString original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "boolean"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "boolean")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "double"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "double")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "integer"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "integer")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "list"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "list")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "map"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "map")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "null"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
+              Core.projectionField = (Core.Name "null")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "string"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
 loadCSVFunctionFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LoadCSVFunctionFeatures
 loadCSVFunctionFeatures file linenumber =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -10193,6 +10693,650 @@ logarithmicFunctionFeaturesWithSqrt original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "sqrt"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+logicalFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LogicalFeatures
+logicalFeatures and not or xor =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "and"),
+          Core.fieldTerm = (Phantoms.unTTerm and)},
+        Core.Field {
+          Core.fieldName = (Core.Name "not"),
+          Core.fieldTerm = (Phantoms.unTTerm not)},
+        Core.Field {
+          Core.fieldName = (Core.Name "or"),
+          Core.fieldTerm = (Phantoms.unTTerm or)},
+        Core.Field {
+          Core.fieldName = (Core.Name "xor"),
+          Core.fieldTerm = (Phantoms.unTTerm xor)}]}))
+
+logicalFeaturesAnd :: Phantoms.TTerm Features.LogicalFeatures -> Phantoms.TTerm Bool
+logicalFeaturesAnd x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
+        Core.projectionField = (Core.Name "and")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+logicalFeaturesNot :: Phantoms.TTerm Features.LogicalFeatures -> Phantoms.TTerm Bool
+logicalFeaturesNot x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
+        Core.projectionField = (Core.Name "not")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+logicalFeaturesOr :: Phantoms.TTerm Features.LogicalFeatures -> Phantoms.TTerm Bool
+logicalFeaturesOr x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
+        Core.projectionField = (Core.Name "or")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+logicalFeaturesWithAnd :: Phantoms.TTerm Features.LogicalFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LogicalFeatures
+logicalFeaturesWithAnd original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "and"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "not"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
+              Core.projectionField = (Core.Name "not")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "or"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
+              Core.projectionField = (Core.Name "or")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "xor"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
+              Core.projectionField = (Core.Name "xor")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+logicalFeaturesWithNot :: Phantoms.TTerm Features.LogicalFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LogicalFeatures
+logicalFeaturesWithNot original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "and"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
+              Core.projectionField = (Core.Name "and")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "not"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "or"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
+              Core.projectionField = (Core.Name "or")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "xor"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
+              Core.projectionField = (Core.Name "xor")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+logicalFeaturesWithOr :: Phantoms.TTerm Features.LogicalFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LogicalFeatures
+logicalFeaturesWithOr original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "and"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
+              Core.projectionField = (Core.Name "and")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "not"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
+              Core.projectionField = (Core.Name "not")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "or"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "xor"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
+              Core.projectionField = (Core.Name "xor")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+logicalFeaturesWithXor :: Phantoms.TTerm Features.LogicalFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LogicalFeatures
+logicalFeaturesWithXor original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "and"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
+              Core.projectionField = (Core.Name "and")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "not"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
+              Core.projectionField = (Core.Name "not")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "or"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
+              Core.projectionField = (Core.Name "or")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "xor"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+logicalFeaturesXor :: Phantoms.TTerm Features.LogicalFeatures -> Phantoms.TTerm Bool
+logicalFeaturesXor x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
+        Core.projectionField = (Core.Name "xor")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+matchFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.MatchFeatures
+matchFeatures match optionalMatch =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.MatchFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "match"),
+          Core.fieldTerm = (Phantoms.unTTerm match)},
+        Core.Field {
+          Core.fieldName = (Core.Name "optionalMatch"),
+          Core.fieldTerm = (Phantoms.unTTerm optionalMatch)}]}))
+
+matchFeaturesMatch :: Phantoms.TTerm Features.MatchFeatures -> Phantoms.TTerm Bool
+matchFeaturesMatch x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.MatchFeatures"),
+        Core.projectionField = (Core.Name "match")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+matchFeaturesOptionalMatch :: Phantoms.TTerm Features.MatchFeatures -> Phantoms.TTerm Bool
+matchFeaturesOptionalMatch x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.MatchFeatures"),
+        Core.projectionField = (Core.Name "optionalMatch")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+matchFeaturesWithMatch :: Phantoms.TTerm Features.MatchFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.MatchFeatures
+matchFeaturesWithMatch original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.MatchFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "match"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "optionalMatch"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.MatchFeatures"),
+              Core.projectionField = (Core.Name "optionalMatch")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+matchFeaturesWithOptionalMatch :: Phantoms.TTerm Features.MatchFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.MatchFeatures
+matchFeaturesWithOptionalMatch original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.MatchFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "match"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.MatchFeatures"),
+              Core.projectionField = (Core.Name "match")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "optionalMatch"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+mergeFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.MergeFeatures
+mergeFeatures merge mergeOnCreate mergeOnMatch =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.MergeFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "merge"),
+          Core.fieldTerm = (Phantoms.unTTerm merge)},
+        Core.Field {
+          Core.fieldName = (Core.Name "mergeOnCreate"),
+          Core.fieldTerm = (Phantoms.unTTerm mergeOnCreate)},
+        Core.Field {
+          Core.fieldName = (Core.Name "mergeOnMatch"),
+          Core.fieldTerm = (Phantoms.unTTerm mergeOnMatch)}]}))
+
+mergeFeaturesMerge :: Phantoms.TTerm Features.MergeFeatures -> Phantoms.TTerm Bool
+mergeFeaturesMerge x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.MergeFeatures"),
+        Core.projectionField = (Core.Name "merge")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+mergeFeaturesMergeOnCreate :: Phantoms.TTerm Features.MergeFeatures -> Phantoms.TTerm Bool
+mergeFeaturesMergeOnCreate x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.MergeFeatures"),
+        Core.projectionField = (Core.Name "mergeOnCreate")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+mergeFeaturesMergeOnMatch :: Phantoms.TTerm Features.MergeFeatures -> Phantoms.TTerm Bool
+mergeFeaturesMergeOnMatch x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.MergeFeatures"),
+        Core.projectionField = (Core.Name "mergeOnMatch")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+mergeFeaturesWithMerge :: Phantoms.TTerm Features.MergeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.MergeFeatures
+mergeFeaturesWithMerge original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.MergeFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "merge"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "mergeOnCreate"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.MergeFeatures"),
+              Core.projectionField = (Core.Name "mergeOnCreate")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "mergeOnMatch"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.MergeFeatures"),
+              Core.projectionField = (Core.Name "mergeOnMatch")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+mergeFeaturesWithMergeOnCreate :: Phantoms.TTerm Features.MergeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.MergeFeatures
+mergeFeaturesWithMergeOnCreate original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.MergeFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "merge"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.MergeFeatures"),
+              Core.projectionField = (Core.Name "merge")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "mergeOnCreate"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "mergeOnMatch"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.MergeFeatures"),
+              Core.projectionField = (Core.Name "mergeOnMatch")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+mergeFeaturesWithMergeOnMatch :: Phantoms.TTerm Features.MergeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.MergeFeatures
+mergeFeaturesWithMergeOnMatch original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.MergeFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "merge"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.MergeFeatures"),
+              Core.projectionField = (Core.Name "merge")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "mergeOnCreate"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.MergeFeatures"),
+              Core.projectionField = (Core.Name "mergeOnCreate")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "mergeOnMatch"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+nodePatternFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.NodePatternFeatures
+nodePatternFeatures multipleLabels parameter propertyMap variableNode wildcardLabel =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "multipleLabels"),
+          Core.fieldTerm = (Phantoms.unTTerm multipleLabels)},
+        Core.Field {
+          Core.fieldName = (Core.Name "parameter"),
+          Core.fieldTerm = (Phantoms.unTTerm parameter)},
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyMap"),
+          Core.fieldTerm = (Phantoms.unTTerm propertyMap)},
+        Core.Field {
+          Core.fieldName = (Core.Name "variableNode"),
+          Core.fieldTerm = (Phantoms.unTTerm variableNode)},
+        Core.Field {
+          Core.fieldName = (Core.Name "wildcardLabel"),
+          Core.fieldTerm = (Phantoms.unTTerm wildcardLabel)}]}))
+
+nodePatternFeaturesMultipleLabels :: Phantoms.TTerm Features.NodePatternFeatures -> Phantoms.TTerm Bool
+nodePatternFeaturesMultipleLabels x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+        Core.projectionField = (Core.Name "multipleLabels")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+nodePatternFeaturesParameter :: Phantoms.TTerm Features.NodePatternFeatures -> Phantoms.TTerm Bool
+nodePatternFeaturesParameter x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+        Core.projectionField = (Core.Name "parameter")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+nodePatternFeaturesPropertyMap :: Phantoms.TTerm Features.NodePatternFeatures -> Phantoms.TTerm Bool
+nodePatternFeaturesPropertyMap x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+        Core.projectionField = (Core.Name "propertyMap")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+nodePatternFeaturesVariableNode :: Phantoms.TTerm Features.NodePatternFeatures -> Phantoms.TTerm Bool
+nodePatternFeaturesVariableNode x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+        Core.projectionField = (Core.Name "variableNode")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+nodePatternFeaturesWildcardLabel :: Phantoms.TTerm Features.NodePatternFeatures -> Phantoms.TTerm Bool
+nodePatternFeaturesWildcardLabel x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+        Core.projectionField = (Core.Name "wildcardLabel")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+nodePatternFeaturesWithMultipleLabels :: Phantoms.TTerm Features.NodePatternFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.NodePatternFeatures
+nodePatternFeaturesWithMultipleLabels original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "multipleLabels"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "parameter"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+              Core.projectionField = (Core.Name "parameter")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyMap"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+              Core.projectionField = (Core.Name "propertyMap")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "variableNode"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+              Core.projectionField = (Core.Name "variableNode")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "wildcardLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+              Core.projectionField = (Core.Name "wildcardLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+nodePatternFeaturesWithParameter :: Phantoms.TTerm Features.NodePatternFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.NodePatternFeatures
+nodePatternFeaturesWithParameter original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "multipleLabels"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+              Core.projectionField = (Core.Name "multipleLabels")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "parameter"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyMap"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+              Core.projectionField = (Core.Name "propertyMap")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "variableNode"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+              Core.projectionField = (Core.Name "variableNode")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "wildcardLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+              Core.projectionField = (Core.Name "wildcardLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+nodePatternFeaturesWithPropertyMap :: Phantoms.TTerm Features.NodePatternFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.NodePatternFeatures
+nodePatternFeaturesWithPropertyMap original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "multipleLabels"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+              Core.projectionField = (Core.Name "multipleLabels")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "parameter"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+              Core.projectionField = (Core.Name "parameter")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyMap"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "variableNode"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+              Core.projectionField = (Core.Name "variableNode")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "wildcardLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+              Core.projectionField = (Core.Name "wildcardLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+nodePatternFeaturesWithVariableNode :: Phantoms.TTerm Features.NodePatternFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.NodePatternFeatures
+nodePatternFeaturesWithVariableNode original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "multipleLabels"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+              Core.projectionField = (Core.Name "multipleLabels")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "parameter"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+              Core.projectionField = (Core.Name "parameter")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyMap"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+              Core.projectionField = (Core.Name "propertyMap")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "variableNode"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "wildcardLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+              Core.projectionField = (Core.Name "wildcardLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+nodePatternFeaturesWithWildcardLabel :: Phantoms.TTerm Features.NodePatternFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.NodePatternFeatures
+nodePatternFeaturesWithWildcardLabel original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "multipleLabels"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+              Core.projectionField = (Core.Name "multipleLabels")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "parameter"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+              Core.projectionField = (Core.Name "parameter")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyMap"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+              Core.projectionField = (Core.Name "propertyMap")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "variableNode"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
+              Core.projectionField = (Core.Name "variableNode")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "wildcardLabel"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+nullFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.NullFeatures
+nullFeatures isNull isNotNull =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.NullFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "isNull"),
+          Core.fieldTerm = (Phantoms.unTTerm isNull)},
+        Core.Field {
+          Core.fieldName = (Core.Name "isNotNull"),
+          Core.fieldTerm = (Phantoms.unTTerm isNotNull)}]}))
+
+nullFeaturesIsNotNull :: Phantoms.TTerm Features.NullFeatures -> Phantoms.TTerm Bool
+nullFeaturesIsNotNull x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NullFeatures"),
+        Core.projectionField = (Core.Name "isNotNull")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+nullFeaturesIsNull :: Phantoms.TTerm Features.NullFeatures -> Phantoms.TTerm Bool
+nullFeaturesIsNull x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NullFeatures"),
+        Core.projectionField = (Core.Name "isNull")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+nullFeaturesWithIsNotNull :: Phantoms.TTerm Features.NullFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.NullFeatures
+nullFeaturesWithIsNotNull original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.NullFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "isNull"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NullFeatures"),
+              Core.projectionField = (Core.Name "isNull")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "isNotNull"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+nullFeaturesWithIsNull :: Phantoms.TTerm Features.NullFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.NullFeatures
+nullFeaturesWithIsNull original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.NullFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "isNull"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "isNotNull"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NullFeatures"),
+              Core.projectionField = (Core.Name "isNotNull")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 numericFunctionFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.NumericFunctionFeatures
 numericFunctionFeatures abs ceil floor isNaN rand round sign =
@@ -10634,6 +11778,32 @@ numericFunctionFeaturesWithSign original newVal =
           Core.fieldName = (Core.Name "sign"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+pathFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Features.PathFeatures
+pathFeatures shortestPath =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.PathFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "shortestPath"),
+          Core.fieldTerm = (Phantoms.unTTerm shortestPath)}]}))
+
+pathFeaturesShortestPath :: Phantoms.TTerm Features.PathFeatures -> Phantoms.TTerm Bool
+pathFeaturesShortestPath x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.PathFeatures"),
+        Core.projectionField = (Core.Name "shortestPath")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+pathFeaturesWithShortestPath :: Phantoms.TTerm Features.PathFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.PathFeatures
+pathFeaturesWithShortestPath original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.PathFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "shortestPath"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
 predicateFunctionFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.PredicateFunctionFeatures
 predicateFunctionFeatures all any exists isEmpty none single =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -10968,6 +12138,1416 @@ predicateFunctionFeaturesWithSingle original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "single"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+procedureCallFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ProcedureCallFeatures
+procedureCallFeatures inQueryCall standaloneCall yield =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "inQueryCall"),
+          Core.fieldTerm = (Phantoms.unTTerm inQueryCall)},
+        Core.Field {
+          Core.fieldName = (Core.Name "standaloneCall"),
+          Core.fieldTerm = (Phantoms.unTTerm standaloneCall)},
+        Core.Field {
+          Core.fieldName = (Core.Name "yield"),
+          Core.fieldTerm = (Phantoms.unTTerm yield)}]}))
+
+procedureCallFeaturesInQueryCall :: Phantoms.TTerm Features.ProcedureCallFeatures -> Phantoms.TTerm Bool
+procedureCallFeaturesInQueryCall x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"),
+        Core.projectionField = (Core.Name "inQueryCall")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+procedureCallFeaturesStandaloneCall :: Phantoms.TTerm Features.ProcedureCallFeatures -> Phantoms.TTerm Bool
+procedureCallFeaturesStandaloneCall x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"),
+        Core.projectionField = (Core.Name "standaloneCall")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+procedureCallFeaturesWithInQueryCall :: Phantoms.TTerm Features.ProcedureCallFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ProcedureCallFeatures
+procedureCallFeaturesWithInQueryCall original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "inQueryCall"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "standaloneCall"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"),
+              Core.projectionField = (Core.Name "standaloneCall")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "yield"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"),
+              Core.projectionField = (Core.Name "yield")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+procedureCallFeaturesWithStandaloneCall :: Phantoms.TTerm Features.ProcedureCallFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ProcedureCallFeatures
+procedureCallFeaturesWithStandaloneCall original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "inQueryCall"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"),
+              Core.projectionField = (Core.Name "inQueryCall")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "standaloneCall"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "yield"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"),
+              Core.projectionField = (Core.Name "yield")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+procedureCallFeaturesWithYield :: Phantoms.TTerm Features.ProcedureCallFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ProcedureCallFeatures
+procedureCallFeaturesWithYield original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "inQueryCall"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"),
+              Core.projectionField = (Core.Name "inQueryCall")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "standaloneCall"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"),
+              Core.projectionField = (Core.Name "standaloneCall")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "yield"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+procedureCallFeaturesYield :: Phantoms.TTerm Features.ProcedureCallFeatures -> Phantoms.TTerm Bool
+procedureCallFeaturesYield x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"),
+        Core.projectionField = (Core.Name "yield")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+projectionFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ProjectionFeatures
+projectionFeatures limit orderBy projectDistinct projectAll projectAs skip sortOrder =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "limit"),
+          Core.fieldTerm = (Phantoms.unTTerm limit)},
+        Core.Field {
+          Core.fieldName = (Core.Name "orderBy"),
+          Core.fieldTerm = (Phantoms.unTTerm orderBy)},
+        Core.Field {
+          Core.fieldName = (Core.Name "projectDistinct"),
+          Core.fieldTerm = (Phantoms.unTTerm projectDistinct)},
+        Core.Field {
+          Core.fieldName = (Core.Name "projectAll"),
+          Core.fieldTerm = (Phantoms.unTTerm projectAll)},
+        Core.Field {
+          Core.fieldName = (Core.Name "projectAs"),
+          Core.fieldTerm = (Phantoms.unTTerm projectAs)},
+        Core.Field {
+          Core.fieldName = (Core.Name "skip"),
+          Core.fieldTerm = (Phantoms.unTTerm skip)},
+        Core.Field {
+          Core.fieldName = (Core.Name "sortOrder"),
+          Core.fieldTerm = (Phantoms.unTTerm sortOrder)}]}))
+
+projectionFeaturesLimit :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool
+projectionFeaturesLimit x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+        Core.projectionField = (Core.Name "limit")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+projectionFeaturesOrderBy :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool
+projectionFeaturesOrderBy x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+        Core.projectionField = (Core.Name "orderBy")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+projectionFeaturesProjectAll :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool
+projectionFeaturesProjectAll x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+        Core.projectionField = (Core.Name "projectAll")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+projectionFeaturesProjectAs :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool
+projectionFeaturesProjectAs x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+        Core.projectionField = (Core.Name "projectAs")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+projectionFeaturesProjectDistinct :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool
+projectionFeaturesProjectDistinct x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+        Core.projectionField = (Core.Name "projectDistinct")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+projectionFeaturesSkip :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool
+projectionFeaturesSkip x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+        Core.projectionField = (Core.Name "skip")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+projectionFeaturesSortOrder :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool
+projectionFeaturesSortOrder x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+        Core.projectionField = (Core.Name "sortOrder")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+projectionFeaturesWithLimit :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ProjectionFeatures
+projectionFeaturesWithLimit original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "limit"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "orderBy"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "orderBy")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "projectDistinct"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "projectDistinct")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "projectAll"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "projectAll")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "projectAs"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "projectAs")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "skip"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "skip")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "sortOrder"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "sortOrder")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+projectionFeaturesWithOrderBy :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ProjectionFeatures
+projectionFeaturesWithOrderBy original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "limit"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "limit")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "orderBy"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "projectDistinct"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "projectDistinct")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "projectAll"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "projectAll")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "projectAs"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "projectAs")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "skip"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "skip")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "sortOrder"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "sortOrder")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+projectionFeaturesWithProjectAll :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ProjectionFeatures
+projectionFeaturesWithProjectAll original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "limit"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "limit")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "orderBy"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "orderBy")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "projectDistinct"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "projectDistinct")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "projectAll"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "projectAs"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "projectAs")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "skip"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "skip")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "sortOrder"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "sortOrder")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+projectionFeaturesWithProjectAs :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ProjectionFeatures
+projectionFeaturesWithProjectAs original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "limit"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "limit")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "orderBy"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "orderBy")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "projectDistinct"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "projectDistinct")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "projectAll"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "projectAll")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "projectAs"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "skip"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "skip")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "sortOrder"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "sortOrder")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+projectionFeaturesWithProjectDistinct :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ProjectionFeatures
+projectionFeaturesWithProjectDistinct original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "limit"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "limit")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "orderBy"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "orderBy")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "projectDistinct"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "projectAll"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "projectAll")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "projectAs"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "projectAs")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "skip"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "skip")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "sortOrder"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "sortOrder")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+projectionFeaturesWithSkip :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ProjectionFeatures
+projectionFeaturesWithSkip original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "limit"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "limit")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "orderBy"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "orderBy")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "projectDistinct"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "projectDistinct")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "projectAll"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "projectAll")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "projectAs"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "projectAs")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "skip"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "sortOrder"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "sortOrder")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+projectionFeaturesWithSortOrder :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ProjectionFeatures
+projectionFeaturesWithSortOrder original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "limit"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "limit")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "orderBy"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "orderBy")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "projectDistinct"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "projectDistinct")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "projectAll"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "projectAll")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "projectAs"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "projectAs")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "skip"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
+              Core.projectionField = (Core.Name "skip")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "sortOrder"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+quantifierFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.QuantifierFeatures
+quantifierFeatures all any none single =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "all"),
+          Core.fieldTerm = (Phantoms.unTTerm all)},
+        Core.Field {
+          Core.fieldName = (Core.Name "any"),
+          Core.fieldTerm = (Phantoms.unTTerm any)},
+        Core.Field {
+          Core.fieldName = (Core.Name "none"),
+          Core.fieldTerm = (Phantoms.unTTerm none)},
+        Core.Field {
+          Core.fieldName = (Core.Name "single"),
+          Core.fieldTerm = (Phantoms.unTTerm single)}]}))
+
+quantifierFeaturesAll :: Phantoms.TTerm Features.QuantifierFeatures -> Phantoms.TTerm Bool
+quantifierFeaturesAll x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
+        Core.projectionField = (Core.Name "all")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+quantifierFeaturesAny :: Phantoms.TTerm Features.QuantifierFeatures -> Phantoms.TTerm Bool
+quantifierFeaturesAny x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
+        Core.projectionField = (Core.Name "any")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+quantifierFeaturesNone :: Phantoms.TTerm Features.QuantifierFeatures -> Phantoms.TTerm Bool
+quantifierFeaturesNone x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
+        Core.projectionField = (Core.Name "none")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+quantifierFeaturesSingle :: Phantoms.TTerm Features.QuantifierFeatures -> Phantoms.TTerm Bool
+quantifierFeaturesSingle x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
+        Core.projectionField = (Core.Name "single")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+quantifierFeaturesWithAll :: Phantoms.TTerm Features.QuantifierFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.QuantifierFeatures
+quantifierFeaturesWithAll original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "all"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "any"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
+              Core.projectionField = (Core.Name "any")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "none"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
+              Core.projectionField = (Core.Name "none")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "single"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
+              Core.projectionField = (Core.Name "single")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+quantifierFeaturesWithAny :: Phantoms.TTerm Features.QuantifierFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.QuantifierFeatures
+quantifierFeaturesWithAny original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "all"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
+              Core.projectionField = (Core.Name "all")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "any"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "none"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
+              Core.projectionField = (Core.Name "none")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "single"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
+              Core.projectionField = (Core.Name "single")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+quantifierFeaturesWithNone :: Phantoms.TTerm Features.QuantifierFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.QuantifierFeatures
+quantifierFeaturesWithNone original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "all"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
+              Core.projectionField = (Core.Name "all")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "any"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
+              Core.projectionField = (Core.Name "any")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "none"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "single"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
+              Core.projectionField = (Core.Name "single")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+quantifierFeaturesWithSingle :: Phantoms.TTerm Features.QuantifierFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.QuantifierFeatures
+quantifierFeaturesWithSingle original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "all"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
+              Core.projectionField = (Core.Name "all")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "any"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
+              Core.projectionField = (Core.Name "any")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "none"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
+              Core.projectionField = (Core.Name "none")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "single"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+rangeLiteralFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RangeLiteralFeatures
+rangeLiteralFeatures bounds exactRange lowerBound starRange upperBound =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "bounds"),
+          Core.fieldTerm = (Phantoms.unTTerm bounds)},
+        Core.Field {
+          Core.fieldName = (Core.Name "exactRange"),
+          Core.fieldTerm = (Phantoms.unTTerm exactRange)},
+        Core.Field {
+          Core.fieldName = (Core.Name "lowerBound"),
+          Core.fieldTerm = (Phantoms.unTTerm lowerBound)},
+        Core.Field {
+          Core.fieldName = (Core.Name "starRange"),
+          Core.fieldTerm = (Phantoms.unTTerm starRange)},
+        Core.Field {
+          Core.fieldName = (Core.Name "upperBound"),
+          Core.fieldTerm = (Phantoms.unTTerm upperBound)}]}))
+
+rangeLiteralFeaturesBounds :: Phantoms.TTerm Features.RangeLiteralFeatures -> Phantoms.TTerm Bool
+rangeLiteralFeaturesBounds x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+        Core.projectionField = (Core.Name "bounds")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+rangeLiteralFeaturesExactRange :: Phantoms.TTerm Features.RangeLiteralFeatures -> Phantoms.TTerm Bool
+rangeLiteralFeaturesExactRange x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+        Core.projectionField = (Core.Name "exactRange")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+rangeLiteralFeaturesLowerBound :: Phantoms.TTerm Features.RangeLiteralFeatures -> Phantoms.TTerm Bool
+rangeLiteralFeaturesLowerBound x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+        Core.projectionField = (Core.Name "lowerBound")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+rangeLiteralFeaturesStarRange :: Phantoms.TTerm Features.RangeLiteralFeatures -> Phantoms.TTerm Bool
+rangeLiteralFeaturesStarRange x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+        Core.projectionField = (Core.Name "starRange")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+rangeLiteralFeaturesUpperBound :: Phantoms.TTerm Features.RangeLiteralFeatures -> Phantoms.TTerm Bool
+rangeLiteralFeaturesUpperBound x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+        Core.projectionField = (Core.Name "upperBound")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+rangeLiteralFeaturesWithBounds :: Phantoms.TTerm Features.RangeLiteralFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RangeLiteralFeatures
+rangeLiteralFeaturesWithBounds original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "bounds"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "exactRange"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+              Core.projectionField = (Core.Name "exactRange")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "lowerBound"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+              Core.projectionField = (Core.Name "lowerBound")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "starRange"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+              Core.projectionField = (Core.Name "starRange")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "upperBound"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+              Core.projectionField = (Core.Name "upperBound")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+rangeLiteralFeaturesWithExactRange :: Phantoms.TTerm Features.RangeLiteralFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RangeLiteralFeatures
+rangeLiteralFeaturesWithExactRange original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "bounds"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+              Core.projectionField = (Core.Name "bounds")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "exactRange"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "lowerBound"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+              Core.projectionField = (Core.Name "lowerBound")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "starRange"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+              Core.projectionField = (Core.Name "starRange")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "upperBound"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+              Core.projectionField = (Core.Name "upperBound")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+rangeLiteralFeaturesWithLowerBound :: Phantoms.TTerm Features.RangeLiteralFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RangeLiteralFeatures
+rangeLiteralFeaturesWithLowerBound original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "bounds"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+              Core.projectionField = (Core.Name "bounds")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "exactRange"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+              Core.projectionField = (Core.Name "exactRange")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "lowerBound"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "starRange"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+              Core.projectionField = (Core.Name "starRange")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "upperBound"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+              Core.projectionField = (Core.Name "upperBound")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+rangeLiteralFeaturesWithStarRange :: Phantoms.TTerm Features.RangeLiteralFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RangeLiteralFeatures
+rangeLiteralFeaturesWithStarRange original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "bounds"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+              Core.projectionField = (Core.Name "bounds")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "exactRange"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+              Core.projectionField = (Core.Name "exactRange")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "lowerBound"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+              Core.projectionField = (Core.Name "lowerBound")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "starRange"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "upperBound"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+              Core.projectionField = (Core.Name "upperBound")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+rangeLiteralFeaturesWithUpperBound :: Phantoms.TTerm Features.RangeLiteralFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RangeLiteralFeatures
+rangeLiteralFeaturesWithUpperBound original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "bounds"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+              Core.projectionField = (Core.Name "bounds")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "exactRange"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+              Core.projectionField = (Core.Name "exactRange")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "lowerBound"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+              Core.projectionField = (Core.Name "lowerBound")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "starRange"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
+              Core.projectionField = (Core.Name "starRange")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "upperBound"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+readingFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ReadingFeatures
+readingFeatures union unionAll unwind =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ReadingFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "union"),
+          Core.fieldTerm = (Phantoms.unTTerm union)},
+        Core.Field {
+          Core.fieldName = (Core.Name "unionAll"),
+          Core.fieldTerm = (Phantoms.unTTerm unionAll)},
+        Core.Field {
+          Core.fieldName = (Core.Name "unwind"),
+          Core.fieldTerm = (Phantoms.unTTerm unwind)}]}))
+
+readingFeaturesUnion :: Phantoms.TTerm Features.ReadingFeatures -> Phantoms.TTerm Bool
+readingFeaturesUnion x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ReadingFeatures"),
+        Core.projectionField = (Core.Name "union")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+readingFeaturesUnionAll :: Phantoms.TTerm Features.ReadingFeatures -> Phantoms.TTerm Bool
+readingFeaturesUnionAll x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ReadingFeatures"),
+        Core.projectionField = (Core.Name "unionAll")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+readingFeaturesUnwind :: Phantoms.TTerm Features.ReadingFeatures -> Phantoms.TTerm Bool
+readingFeaturesUnwind x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ReadingFeatures"),
+        Core.projectionField = (Core.Name "unwind")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+readingFeaturesWithUnion :: Phantoms.TTerm Features.ReadingFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ReadingFeatures
+readingFeaturesWithUnion original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ReadingFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "union"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "unionAll"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ReadingFeatures"),
+              Core.projectionField = (Core.Name "unionAll")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "unwind"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ReadingFeatures"),
+              Core.projectionField = (Core.Name "unwind")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+readingFeaturesWithUnionAll :: Phantoms.TTerm Features.ReadingFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ReadingFeatures
+readingFeaturesWithUnionAll original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ReadingFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "union"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ReadingFeatures"),
+              Core.projectionField = (Core.Name "union")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "unionAll"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "unwind"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ReadingFeatures"),
+              Core.projectionField = (Core.Name "unwind")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+readingFeaturesWithUnwind :: Phantoms.TTerm Features.ReadingFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ReadingFeatures
+readingFeaturesWithUnwind original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ReadingFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "union"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ReadingFeatures"),
+              Core.projectionField = (Core.Name "union")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "unionAll"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ReadingFeatures"),
+              Core.projectionField = (Core.Name "unionAll")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "unwind"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+relationshipDirectionFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RelationshipDirectionFeatures
+relationshipDirectionFeatures both left neither right =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "both"),
+          Core.fieldTerm = (Phantoms.unTTerm both)},
+        Core.Field {
+          Core.fieldName = (Core.Name "left"),
+          Core.fieldTerm = (Phantoms.unTTerm left)},
+        Core.Field {
+          Core.fieldName = (Core.Name "neither"),
+          Core.fieldTerm = (Phantoms.unTTerm neither)},
+        Core.Field {
+          Core.fieldName = (Core.Name "right"),
+          Core.fieldTerm = (Phantoms.unTTerm right)}]}))
+
+relationshipDirectionFeaturesBoth :: Phantoms.TTerm Features.RelationshipDirectionFeatures -> Phantoms.TTerm Bool
+relationshipDirectionFeaturesBoth x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
+        Core.projectionField = (Core.Name "both")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+relationshipDirectionFeaturesLeft :: Phantoms.TTerm Features.RelationshipDirectionFeatures -> Phantoms.TTerm Bool
+relationshipDirectionFeaturesLeft x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
+        Core.projectionField = (Core.Name "left")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+relationshipDirectionFeaturesNeither :: Phantoms.TTerm Features.RelationshipDirectionFeatures -> Phantoms.TTerm Bool
+relationshipDirectionFeaturesNeither x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
+        Core.projectionField = (Core.Name "neither")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+relationshipDirectionFeaturesRight :: Phantoms.TTerm Features.RelationshipDirectionFeatures -> Phantoms.TTerm Bool
+relationshipDirectionFeaturesRight x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
+        Core.projectionField = (Core.Name "right")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+relationshipDirectionFeaturesWithBoth :: Phantoms.TTerm Features.RelationshipDirectionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RelationshipDirectionFeatures
+relationshipDirectionFeaturesWithBoth original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "both"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "left"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
+              Core.projectionField = (Core.Name "left")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "neither"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
+              Core.projectionField = (Core.Name "neither")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "right"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
+              Core.projectionField = (Core.Name "right")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+relationshipDirectionFeaturesWithLeft :: Phantoms.TTerm Features.RelationshipDirectionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RelationshipDirectionFeatures
+relationshipDirectionFeaturesWithLeft original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "both"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
+              Core.projectionField = (Core.Name "both")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "left"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "neither"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
+              Core.projectionField = (Core.Name "neither")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "right"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
+              Core.projectionField = (Core.Name "right")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+relationshipDirectionFeaturesWithNeither :: Phantoms.TTerm Features.RelationshipDirectionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RelationshipDirectionFeatures
+relationshipDirectionFeaturesWithNeither original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "both"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
+              Core.projectionField = (Core.Name "both")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "left"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
+              Core.projectionField = (Core.Name "left")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "neither"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "right"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
+              Core.projectionField = (Core.Name "right")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+relationshipDirectionFeaturesWithRight :: Phantoms.TTerm Features.RelationshipDirectionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RelationshipDirectionFeatures
+relationshipDirectionFeaturesWithRight original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "both"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
+              Core.projectionField = (Core.Name "both")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "left"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
+              Core.projectionField = (Core.Name "left")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "neither"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
+              Core.projectionField = (Core.Name "neither")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "right"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+relationshipPatternFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RelationshipPatternFeatures
+relationshipPatternFeatures multipleTypes variableRelationship wildcardType =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "multipleTypes"),
+          Core.fieldTerm = (Phantoms.unTTerm multipleTypes)},
+        Core.Field {
+          Core.fieldName = (Core.Name "variableRelationship"),
+          Core.fieldTerm = (Phantoms.unTTerm variableRelationship)},
+        Core.Field {
+          Core.fieldName = (Core.Name "wildcardType"),
+          Core.fieldTerm = (Phantoms.unTTerm wildcardType)}]}))
+
+relationshipPatternFeaturesMultipleTypes :: Phantoms.TTerm Features.RelationshipPatternFeatures -> Phantoms.TTerm Bool
+relationshipPatternFeaturesMultipleTypes x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"),
+        Core.projectionField = (Core.Name "multipleTypes")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+relationshipPatternFeaturesVariableRelationship :: Phantoms.TTerm Features.RelationshipPatternFeatures -> Phantoms.TTerm Bool
+relationshipPatternFeaturesVariableRelationship x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"),
+        Core.projectionField = (Core.Name "variableRelationship")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+relationshipPatternFeaturesWildcardType :: Phantoms.TTerm Features.RelationshipPatternFeatures -> Phantoms.TTerm Bool
+relationshipPatternFeaturesWildcardType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"),
+        Core.projectionField = (Core.Name "wildcardType")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+relationshipPatternFeaturesWithMultipleTypes :: Phantoms.TTerm Features.RelationshipPatternFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RelationshipPatternFeatures
+relationshipPatternFeaturesWithMultipleTypes original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "multipleTypes"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "variableRelationship"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"),
+              Core.projectionField = (Core.Name "variableRelationship")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "wildcardType"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"),
+              Core.projectionField = (Core.Name "wildcardType")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+relationshipPatternFeaturesWithVariableRelationship :: Phantoms.TTerm Features.RelationshipPatternFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RelationshipPatternFeatures
+relationshipPatternFeaturesWithVariableRelationship original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "multipleTypes"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"),
+              Core.projectionField = (Core.Name "multipleTypes")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "variableRelationship"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "wildcardType"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"),
+              Core.projectionField = (Core.Name "wildcardType")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+relationshipPatternFeaturesWithWildcardType :: Phantoms.TTerm Features.RelationshipPatternFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RelationshipPatternFeatures
+relationshipPatternFeaturesWithWildcardType original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "multipleTypes"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"),
+              Core.projectionField = (Core.Name "multipleTypes")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "variableRelationship"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"),
+              Core.projectionField = (Core.Name "variableRelationship")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "wildcardType"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+removeFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RemoveFeatures
+removeFeatures byLabel byProperty =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RemoveFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "byLabel"),
+          Core.fieldTerm = (Phantoms.unTTerm byLabel)},
+        Core.Field {
+          Core.fieldName = (Core.Name "byProperty"),
+          Core.fieldTerm = (Phantoms.unTTerm byProperty)}]}))
+
+removeFeaturesByLabel :: Phantoms.TTerm Features.RemoveFeatures -> Phantoms.TTerm Bool
+removeFeaturesByLabel x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RemoveFeatures"),
+        Core.projectionField = (Core.Name "byLabel")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+removeFeaturesByProperty :: Phantoms.TTerm Features.RemoveFeatures -> Phantoms.TTerm Bool
+removeFeaturesByProperty x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RemoveFeatures"),
+        Core.projectionField = (Core.Name "byProperty")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+removeFeaturesWithByLabel :: Phantoms.TTerm Features.RemoveFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RemoveFeatures
+removeFeaturesWithByLabel original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RemoveFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "byLabel"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "byProperty"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RemoveFeatures"),
+              Core.projectionField = (Core.Name "byProperty")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+removeFeaturesWithByProperty :: Phantoms.TTerm Features.RemoveFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RemoveFeatures
+removeFeaturesWithByProperty original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RemoveFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "byLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RemoveFeatures"),
+              Core.projectionField = (Core.Name "byLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "byProperty"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
 scalarFunctionFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ScalarFunctionFeatures
@@ -14650,6 +17230,176 @@ scalarFunctionFeaturesWithValueType original newVal =
           Core.fieldName = (Core.Name "valueType"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+setFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.SetFeatures
+setFeatures propertyEquals variableEquals variablePlusEquals variableWithNodeLabels =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyEquals"),
+          Core.fieldTerm = (Phantoms.unTTerm propertyEquals)},
+        Core.Field {
+          Core.fieldName = (Core.Name "variableEquals"),
+          Core.fieldTerm = (Phantoms.unTTerm variableEquals)},
+        Core.Field {
+          Core.fieldName = (Core.Name "variablePlusEquals"),
+          Core.fieldTerm = (Phantoms.unTTerm variablePlusEquals)},
+        Core.Field {
+          Core.fieldName = (Core.Name "variableWithNodeLabels"),
+          Core.fieldTerm = (Phantoms.unTTerm variableWithNodeLabels)}]}))
+
+setFeaturesPropertyEquals :: Phantoms.TTerm Features.SetFeatures -> Phantoms.TTerm Bool
+setFeaturesPropertyEquals x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
+        Core.projectionField = (Core.Name "propertyEquals")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+setFeaturesVariableEquals :: Phantoms.TTerm Features.SetFeatures -> Phantoms.TTerm Bool
+setFeaturesVariableEquals x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
+        Core.projectionField = (Core.Name "variableEquals")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+setFeaturesVariablePlusEquals :: Phantoms.TTerm Features.SetFeatures -> Phantoms.TTerm Bool
+setFeaturesVariablePlusEquals x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
+        Core.projectionField = (Core.Name "variablePlusEquals")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+setFeaturesVariableWithNodeLabels :: Phantoms.TTerm Features.SetFeatures -> Phantoms.TTerm Bool
+setFeaturesVariableWithNodeLabels x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
+        Core.projectionField = (Core.Name "variableWithNodeLabels")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+setFeaturesWithPropertyEquals :: Phantoms.TTerm Features.SetFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.SetFeatures
+setFeaturesWithPropertyEquals original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyEquals"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "variableEquals"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
+              Core.projectionField = (Core.Name "variableEquals")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "variablePlusEquals"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
+              Core.projectionField = (Core.Name "variablePlusEquals")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "variableWithNodeLabels"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
+              Core.projectionField = (Core.Name "variableWithNodeLabels")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+setFeaturesWithVariableEquals :: Phantoms.TTerm Features.SetFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.SetFeatures
+setFeaturesWithVariableEquals original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyEquals"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
+              Core.projectionField = (Core.Name "propertyEquals")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "variableEquals"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "variablePlusEquals"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
+              Core.projectionField = (Core.Name "variablePlusEquals")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "variableWithNodeLabels"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
+              Core.projectionField = (Core.Name "variableWithNodeLabels")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+setFeaturesWithVariablePlusEquals :: Phantoms.TTerm Features.SetFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.SetFeatures
+setFeaturesWithVariablePlusEquals original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyEquals"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
+              Core.projectionField = (Core.Name "propertyEquals")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "variableEquals"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
+              Core.projectionField = (Core.Name "variableEquals")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "variablePlusEquals"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "variableWithNodeLabels"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
+              Core.projectionField = (Core.Name "variableWithNodeLabels")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+setFeaturesWithVariableWithNodeLabels :: Phantoms.TTerm Features.SetFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.SetFeatures
+setFeaturesWithVariableWithNodeLabels original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyEquals"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
+              Core.projectionField = (Core.Name "propertyEquals")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "variableEquals"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
+              Core.projectionField = (Core.Name "variableEquals")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "variablePlusEquals"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
+              Core.projectionField = (Core.Name "variablePlusEquals")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "variableWithNodeLabels"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
 spatialFunctionFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.SpatialFunctionFeatures
 spatialFunctionFeatures pointDistance point pointWithinBBox =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -14665,20 +17415,20 @@ spatialFunctionFeatures pointDistance point pointWithinBBox =
           Core.fieldName = (Core.Name "pointWithinBBox"),
           Core.fieldTerm = (Phantoms.unTTerm pointWithinBBox)}]}))
 
-spatialFunctionFeaturesPointDistance :: Phantoms.TTerm Features.SpatialFunctionFeatures -> Phantoms.TTerm Bool
-spatialFunctionFeaturesPointDistance x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures"),
-        Core.projectionField = (Core.Name "pointDistance")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 spatialFunctionFeaturesPoint :: Phantoms.TTerm Features.SpatialFunctionFeatures -> Phantoms.TTerm Bool
 spatialFunctionFeaturesPoint x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures"),
         Core.projectionField = (Core.Name "point")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+spatialFunctionFeaturesPointDistance :: Phantoms.TTerm Features.SpatialFunctionFeatures -> Phantoms.TTerm Bool
+spatialFunctionFeaturesPointDistance x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures"),
+        Core.projectionField = (Core.Name "pointDistance")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 spatialFunctionFeaturesPointWithinBBox :: Phantoms.TTerm Features.SpatialFunctionFeatures -> Phantoms.TTerm Bool
@@ -14688,29 +17438,6 @@ spatialFunctionFeaturesPointWithinBBox x =
         Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures"),
         Core.projectionField = (Core.Name "pointWithinBBox")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-spatialFunctionFeaturesWithPointDistance :: Phantoms.TTerm Features.SpatialFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.SpatialFunctionFeatures
-spatialFunctionFeaturesWithPointDistance original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "pointDistance"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "point"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures"),
-              Core.projectionField = (Core.Name "point")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "pointWithinBBox"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures"),
-              Core.projectionField = (Core.Name "pointWithinBBox")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 spatialFunctionFeaturesWithPoint :: Phantoms.TTerm Features.SpatialFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.SpatialFunctionFeatures
 spatialFunctionFeaturesWithPoint original newVal =
@@ -14727,6 +17454,29 @@ spatialFunctionFeaturesWithPoint original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "point"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "pointWithinBBox"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures"),
+              Core.projectionField = (Core.Name "pointWithinBBox")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+spatialFunctionFeaturesWithPointDistance :: Phantoms.TTerm Features.SpatialFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.SpatialFunctionFeatures
+spatialFunctionFeaturesWithPointDistance original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "pointDistance"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "point"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures"),
+              Core.projectionField = (Core.Name "point")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pointWithinBBox"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -14756,6 +17506,176 @@ spatialFunctionFeaturesWithPointWithinBBox original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pointWithinBBox"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+stringFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.StringFeatures
+stringFeatures contains endsWith in_ startsWith =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "contains"),
+          Core.fieldTerm = (Phantoms.unTTerm contains)},
+        Core.Field {
+          Core.fieldName = (Core.Name "endsWith"),
+          Core.fieldTerm = (Phantoms.unTTerm endsWith)},
+        Core.Field {
+          Core.fieldName = (Core.Name "in"),
+          Core.fieldTerm = (Phantoms.unTTerm in_)},
+        Core.Field {
+          Core.fieldName = (Core.Name "startsWith"),
+          Core.fieldTerm = (Phantoms.unTTerm startsWith)}]}))
+
+stringFeaturesContains :: Phantoms.TTerm Features.StringFeatures -> Phantoms.TTerm Bool
+stringFeaturesContains x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
+        Core.projectionField = (Core.Name "contains")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+stringFeaturesEndsWith :: Phantoms.TTerm Features.StringFeatures -> Phantoms.TTerm Bool
+stringFeaturesEndsWith x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
+        Core.projectionField = (Core.Name "endsWith")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+stringFeaturesIn :: Phantoms.TTerm Features.StringFeatures -> Phantoms.TTerm Bool
+stringFeaturesIn x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
+        Core.projectionField = (Core.Name "in")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+stringFeaturesStartsWith :: Phantoms.TTerm Features.StringFeatures -> Phantoms.TTerm Bool
+stringFeaturesStartsWith x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
+        Core.projectionField = (Core.Name "startsWith")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+stringFeaturesWithContains :: Phantoms.TTerm Features.StringFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.StringFeatures
+stringFeaturesWithContains original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "contains"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "endsWith"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
+              Core.projectionField = (Core.Name "endsWith")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "in"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
+              Core.projectionField = (Core.Name "in")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "startsWith"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
+              Core.projectionField = (Core.Name "startsWith")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+stringFeaturesWithEndsWith :: Phantoms.TTerm Features.StringFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.StringFeatures
+stringFeaturesWithEndsWith original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "contains"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
+              Core.projectionField = (Core.Name "contains")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "endsWith"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "in"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
+              Core.projectionField = (Core.Name "in")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "startsWith"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
+              Core.projectionField = (Core.Name "startsWith")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+stringFeaturesWithIn :: Phantoms.TTerm Features.StringFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.StringFeatures
+stringFeaturesWithIn original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "contains"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
+              Core.projectionField = (Core.Name "contains")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "endsWith"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
+              Core.projectionField = (Core.Name "endsWith")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "in"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "startsWith"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
+              Core.projectionField = (Core.Name "startsWith")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+stringFeaturesWithStartsWith :: Phantoms.TTerm Features.StringFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.StringFeatures
+stringFeaturesWithStartsWith original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "contains"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
+              Core.projectionField = (Core.Name "contains")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "endsWith"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
+              Core.projectionField = (Core.Name "endsWith")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "in"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
+              Core.projectionField = (Core.Name "in")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "startsWith"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
 stringFunctionFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.StringFunctionFeatures
@@ -23884,2986 +26804,6 @@ trigonometricFunctionFeaturesWithTan original newVal =
           Core.fieldName = (Core.Name "tan"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-vectorFunctionFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.VectorFunctionFeatures
-vectorFunctionFeatures vectorSimilarityCosine vectorSimilarityEuclidean =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "vectorSimilarityCosine"),
-          Core.fieldTerm = (Phantoms.unTTerm vectorSimilarityCosine)},
-        Core.Field {
-          Core.fieldName = (Core.Name "vectorSimilarityEuclidean"),
-          Core.fieldTerm = (Phantoms.unTTerm vectorSimilarityEuclidean)}]}))
-
-vectorFunctionFeaturesVectorSimilarityCosine :: Phantoms.TTerm Features.VectorFunctionFeatures -> Phantoms.TTerm Bool
-vectorFunctionFeaturesVectorSimilarityCosine x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"),
-        Core.projectionField = (Core.Name "vectorSimilarityCosine")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-vectorFunctionFeaturesVectorSimilarityEuclidean :: Phantoms.TTerm Features.VectorFunctionFeatures -> Phantoms.TTerm Bool
-vectorFunctionFeaturesVectorSimilarityEuclidean x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"),
-        Core.projectionField = (Core.Name "vectorSimilarityEuclidean")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-vectorFunctionFeaturesWithVectorSimilarityCosine :: Phantoms.TTerm Features.VectorFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.VectorFunctionFeatures
-vectorFunctionFeaturesWithVectorSimilarityCosine original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "vectorSimilarityCosine"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "vectorSimilarityEuclidean"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"),
-              Core.projectionField = (Core.Name "vectorSimilarityEuclidean")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-vectorFunctionFeaturesWithVectorSimilarityEuclidean :: Phantoms.TTerm Features.VectorFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.VectorFunctionFeatures
-vectorFunctionFeaturesWithVectorSimilarityEuclidean original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "vectorSimilarityCosine"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"),
-              Core.projectionField = (Core.Name "vectorSimilarityCosine")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "vectorSimilarityEuclidean"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-listFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ListFeatures
-listFeatures listComprehension listRange =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ListFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "listComprehension"),
-          Core.fieldTerm = (Phantoms.unTTerm listComprehension)},
-        Core.Field {
-          Core.fieldName = (Core.Name "listRange"),
-          Core.fieldTerm = (Phantoms.unTTerm listRange)}]}))
-
-listFeaturesListComprehension :: Phantoms.TTerm Features.ListFeatures -> Phantoms.TTerm Bool
-listFeaturesListComprehension x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ListFeatures"),
-        Core.projectionField = (Core.Name "listComprehension")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-listFeaturesListRange :: Phantoms.TTerm Features.ListFeatures -> Phantoms.TTerm Bool
-listFeaturesListRange x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ListFeatures"),
-        Core.projectionField = (Core.Name "listRange")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-listFeaturesWithListComprehension :: Phantoms.TTerm Features.ListFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ListFeatures
-listFeaturesWithListComprehension original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ListFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "listComprehension"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "listRange"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ListFeatures"),
-              Core.projectionField = (Core.Name "listRange")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-listFeaturesWithListRange :: Phantoms.TTerm Features.ListFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ListFeatures
-listFeaturesWithListRange original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ListFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "listComprehension"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ListFeatures"),
-              Core.projectionField = (Core.Name "listComprehension")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "listRange"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-literalFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LiteralFeatures
-literalFeatures boolean double integer list map null string =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "boolean"),
-          Core.fieldTerm = (Phantoms.unTTerm boolean)},
-        Core.Field {
-          Core.fieldName = (Core.Name "double"),
-          Core.fieldTerm = (Phantoms.unTTerm double)},
-        Core.Field {
-          Core.fieldName = (Core.Name "integer"),
-          Core.fieldTerm = (Phantoms.unTTerm integer)},
-        Core.Field {
-          Core.fieldName = (Core.Name "list"),
-          Core.fieldTerm = (Phantoms.unTTerm list)},
-        Core.Field {
-          Core.fieldName = (Core.Name "map"),
-          Core.fieldTerm = (Phantoms.unTTerm map)},
-        Core.Field {
-          Core.fieldName = (Core.Name "null"),
-          Core.fieldTerm = (Phantoms.unTTerm null)},
-        Core.Field {
-          Core.fieldName = (Core.Name "string"),
-          Core.fieldTerm = (Phantoms.unTTerm string)}]}))
-
-literalFeaturesBoolean :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool
-literalFeaturesBoolean x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-        Core.projectionField = (Core.Name "boolean")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-literalFeaturesDouble :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool
-literalFeaturesDouble x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-        Core.projectionField = (Core.Name "double")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-literalFeaturesInteger :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool
-literalFeaturesInteger x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-        Core.projectionField = (Core.Name "integer")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-literalFeaturesList :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool
-literalFeaturesList x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-        Core.projectionField = (Core.Name "list")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-literalFeaturesMap :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool
-literalFeaturesMap x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-        Core.projectionField = (Core.Name "map")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-literalFeaturesNull :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool
-literalFeaturesNull x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-        Core.projectionField = (Core.Name "null")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-literalFeaturesString :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool
-literalFeaturesString x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-        Core.projectionField = (Core.Name "string")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-literalFeaturesWithBoolean :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LiteralFeatures
-literalFeaturesWithBoolean original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "boolean"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "double"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "double")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "integer"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "integer")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "list"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "list")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "map"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "map")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "null"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "null")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "string"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "string")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-literalFeaturesWithDouble :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LiteralFeatures
-literalFeaturesWithDouble original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "boolean"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "boolean")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "double"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "integer"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "integer")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "list"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "list")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "map"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "map")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "null"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "null")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "string"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "string")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-literalFeaturesWithInteger :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LiteralFeatures
-literalFeaturesWithInteger original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "boolean"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "boolean")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "double"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "double")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "integer"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "list"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "list")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "map"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "map")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "null"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "null")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "string"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "string")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-literalFeaturesWithList :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LiteralFeatures
-literalFeaturesWithList original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "boolean"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "boolean")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "double"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "double")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "integer"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "integer")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "list"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "map"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "map")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "null"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "null")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "string"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "string")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-literalFeaturesWithMap :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LiteralFeatures
-literalFeaturesWithMap original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "boolean"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "boolean")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "double"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "double")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "integer"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "integer")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "list"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "list")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "map"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "null"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "null")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "string"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "string")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-literalFeaturesWithNull :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LiteralFeatures
-literalFeaturesWithNull original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "boolean"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "boolean")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "double"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "double")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "integer"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "integer")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "list"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "list")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "map"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "map")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "null"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "string"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "string")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-literalFeaturesWithString :: Phantoms.TTerm Features.LiteralFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LiteralFeatures
-literalFeaturesWithString original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "boolean"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "boolean")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "double"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "double")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "integer"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "integer")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "list"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "list")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "map"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "map")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "null"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LiteralFeatures"),
-              Core.projectionField = (Core.Name "null")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "string"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-logicalFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LogicalFeatures
-logicalFeatures and not or xor =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "and"),
-          Core.fieldTerm = (Phantoms.unTTerm and)},
-        Core.Field {
-          Core.fieldName = (Core.Name "not"),
-          Core.fieldTerm = (Phantoms.unTTerm not)},
-        Core.Field {
-          Core.fieldName = (Core.Name "or"),
-          Core.fieldTerm = (Phantoms.unTTerm or)},
-        Core.Field {
-          Core.fieldName = (Core.Name "xor"),
-          Core.fieldTerm = (Phantoms.unTTerm xor)}]}))
-
-logicalFeaturesAnd :: Phantoms.TTerm Features.LogicalFeatures -> Phantoms.TTerm Bool
-logicalFeaturesAnd x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
-        Core.projectionField = (Core.Name "and")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-logicalFeaturesNot :: Phantoms.TTerm Features.LogicalFeatures -> Phantoms.TTerm Bool
-logicalFeaturesNot x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
-        Core.projectionField = (Core.Name "not")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-logicalFeaturesOr :: Phantoms.TTerm Features.LogicalFeatures -> Phantoms.TTerm Bool
-logicalFeaturesOr x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
-        Core.projectionField = (Core.Name "or")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-logicalFeaturesXor :: Phantoms.TTerm Features.LogicalFeatures -> Phantoms.TTerm Bool
-logicalFeaturesXor x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
-        Core.projectionField = (Core.Name "xor")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-logicalFeaturesWithAnd :: Phantoms.TTerm Features.LogicalFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LogicalFeatures
-logicalFeaturesWithAnd original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "and"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "not"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
-              Core.projectionField = (Core.Name "not")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "or"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
-              Core.projectionField = (Core.Name "or")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "xor"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
-              Core.projectionField = (Core.Name "xor")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-logicalFeaturesWithNot :: Phantoms.TTerm Features.LogicalFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LogicalFeatures
-logicalFeaturesWithNot original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "and"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
-              Core.projectionField = (Core.Name "and")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "not"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "or"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
-              Core.projectionField = (Core.Name "or")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "xor"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
-              Core.projectionField = (Core.Name "xor")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-logicalFeaturesWithOr :: Phantoms.TTerm Features.LogicalFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LogicalFeatures
-logicalFeaturesWithOr original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "and"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
-              Core.projectionField = (Core.Name "and")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "not"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
-              Core.projectionField = (Core.Name "not")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "or"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "xor"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
-              Core.projectionField = (Core.Name "xor")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-logicalFeaturesWithXor :: Phantoms.TTerm Features.LogicalFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.LogicalFeatures
-logicalFeaturesWithXor original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "and"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
-              Core.projectionField = (Core.Name "and")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "not"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
-              Core.projectionField = (Core.Name "not")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "or"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.LogicalFeatures"),
-              Core.projectionField = (Core.Name "or")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "xor"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-matchFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.MatchFeatures
-matchFeatures match optionalMatch =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.MatchFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "match"),
-          Core.fieldTerm = (Phantoms.unTTerm match)},
-        Core.Field {
-          Core.fieldName = (Core.Name "optionalMatch"),
-          Core.fieldTerm = (Phantoms.unTTerm optionalMatch)}]}))
-
-matchFeaturesMatch :: Phantoms.TTerm Features.MatchFeatures -> Phantoms.TTerm Bool
-matchFeaturesMatch x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.MatchFeatures"),
-        Core.projectionField = (Core.Name "match")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-matchFeaturesOptionalMatch :: Phantoms.TTerm Features.MatchFeatures -> Phantoms.TTerm Bool
-matchFeaturesOptionalMatch x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.MatchFeatures"),
-        Core.projectionField = (Core.Name "optionalMatch")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-matchFeaturesWithMatch :: Phantoms.TTerm Features.MatchFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.MatchFeatures
-matchFeaturesWithMatch original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.MatchFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "match"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "optionalMatch"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.MatchFeatures"),
-              Core.projectionField = (Core.Name "optionalMatch")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-matchFeaturesWithOptionalMatch :: Phantoms.TTerm Features.MatchFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.MatchFeatures
-matchFeaturesWithOptionalMatch original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.MatchFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "match"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.MatchFeatures"),
-              Core.projectionField = (Core.Name "match")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "optionalMatch"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-mergeFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.MergeFeatures
-mergeFeatures merge mergeOnCreate mergeOnMatch =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.MergeFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "merge"),
-          Core.fieldTerm = (Phantoms.unTTerm merge)},
-        Core.Field {
-          Core.fieldName = (Core.Name "mergeOnCreate"),
-          Core.fieldTerm = (Phantoms.unTTerm mergeOnCreate)},
-        Core.Field {
-          Core.fieldName = (Core.Name "mergeOnMatch"),
-          Core.fieldTerm = (Phantoms.unTTerm mergeOnMatch)}]}))
-
-mergeFeaturesMerge :: Phantoms.TTerm Features.MergeFeatures -> Phantoms.TTerm Bool
-mergeFeaturesMerge x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.MergeFeatures"),
-        Core.projectionField = (Core.Name "merge")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-mergeFeaturesMergeOnCreate :: Phantoms.TTerm Features.MergeFeatures -> Phantoms.TTerm Bool
-mergeFeaturesMergeOnCreate x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.MergeFeatures"),
-        Core.projectionField = (Core.Name "mergeOnCreate")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-mergeFeaturesMergeOnMatch :: Phantoms.TTerm Features.MergeFeatures -> Phantoms.TTerm Bool
-mergeFeaturesMergeOnMatch x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.MergeFeatures"),
-        Core.projectionField = (Core.Name "mergeOnMatch")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-mergeFeaturesWithMerge :: Phantoms.TTerm Features.MergeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.MergeFeatures
-mergeFeaturesWithMerge original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.MergeFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "merge"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "mergeOnCreate"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.MergeFeatures"),
-              Core.projectionField = (Core.Name "mergeOnCreate")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "mergeOnMatch"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.MergeFeatures"),
-              Core.projectionField = (Core.Name "mergeOnMatch")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-mergeFeaturesWithMergeOnCreate :: Phantoms.TTerm Features.MergeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.MergeFeatures
-mergeFeaturesWithMergeOnCreate original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.MergeFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "merge"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.MergeFeatures"),
-              Core.projectionField = (Core.Name "merge")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "mergeOnCreate"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "mergeOnMatch"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.MergeFeatures"),
-              Core.projectionField = (Core.Name "mergeOnMatch")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-mergeFeaturesWithMergeOnMatch :: Phantoms.TTerm Features.MergeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.MergeFeatures
-mergeFeaturesWithMergeOnMatch original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.MergeFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "merge"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.MergeFeatures"),
-              Core.projectionField = (Core.Name "merge")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "mergeOnCreate"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.MergeFeatures"),
-              Core.projectionField = (Core.Name "mergeOnCreate")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "mergeOnMatch"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-nodePatternFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.NodePatternFeatures
-nodePatternFeatures multipleLabels parameter propertyMap variableNode wildcardLabel =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "multipleLabels"),
-          Core.fieldTerm = (Phantoms.unTTerm multipleLabels)},
-        Core.Field {
-          Core.fieldName = (Core.Name "parameter"),
-          Core.fieldTerm = (Phantoms.unTTerm parameter)},
-        Core.Field {
-          Core.fieldName = (Core.Name "propertyMap"),
-          Core.fieldTerm = (Phantoms.unTTerm propertyMap)},
-        Core.Field {
-          Core.fieldName = (Core.Name "variableNode"),
-          Core.fieldTerm = (Phantoms.unTTerm variableNode)},
-        Core.Field {
-          Core.fieldName = (Core.Name "wildcardLabel"),
-          Core.fieldTerm = (Phantoms.unTTerm wildcardLabel)}]}))
-
-nodePatternFeaturesMultipleLabels :: Phantoms.TTerm Features.NodePatternFeatures -> Phantoms.TTerm Bool
-nodePatternFeaturesMultipleLabels x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-        Core.projectionField = (Core.Name "multipleLabels")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-nodePatternFeaturesParameter :: Phantoms.TTerm Features.NodePatternFeatures -> Phantoms.TTerm Bool
-nodePatternFeaturesParameter x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-        Core.projectionField = (Core.Name "parameter")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-nodePatternFeaturesPropertyMap :: Phantoms.TTerm Features.NodePatternFeatures -> Phantoms.TTerm Bool
-nodePatternFeaturesPropertyMap x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-        Core.projectionField = (Core.Name "propertyMap")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-nodePatternFeaturesVariableNode :: Phantoms.TTerm Features.NodePatternFeatures -> Phantoms.TTerm Bool
-nodePatternFeaturesVariableNode x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-        Core.projectionField = (Core.Name "variableNode")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-nodePatternFeaturesWildcardLabel :: Phantoms.TTerm Features.NodePatternFeatures -> Phantoms.TTerm Bool
-nodePatternFeaturesWildcardLabel x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-        Core.projectionField = (Core.Name "wildcardLabel")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-nodePatternFeaturesWithMultipleLabels :: Phantoms.TTerm Features.NodePatternFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.NodePatternFeatures
-nodePatternFeaturesWithMultipleLabels original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "multipleLabels"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "parameter"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-              Core.projectionField = (Core.Name "parameter")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "propertyMap"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-              Core.projectionField = (Core.Name "propertyMap")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "variableNode"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-              Core.projectionField = (Core.Name "variableNode")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "wildcardLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-              Core.projectionField = (Core.Name "wildcardLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-nodePatternFeaturesWithParameter :: Phantoms.TTerm Features.NodePatternFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.NodePatternFeatures
-nodePatternFeaturesWithParameter original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "multipleLabels"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-              Core.projectionField = (Core.Name "multipleLabels")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "parameter"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "propertyMap"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-              Core.projectionField = (Core.Name "propertyMap")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "variableNode"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-              Core.projectionField = (Core.Name "variableNode")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "wildcardLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-              Core.projectionField = (Core.Name "wildcardLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-nodePatternFeaturesWithPropertyMap :: Phantoms.TTerm Features.NodePatternFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.NodePatternFeatures
-nodePatternFeaturesWithPropertyMap original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "multipleLabels"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-              Core.projectionField = (Core.Name "multipleLabels")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "parameter"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-              Core.projectionField = (Core.Name "parameter")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "propertyMap"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "variableNode"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-              Core.projectionField = (Core.Name "variableNode")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "wildcardLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-              Core.projectionField = (Core.Name "wildcardLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-nodePatternFeaturesWithVariableNode :: Phantoms.TTerm Features.NodePatternFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.NodePatternFeatures
-nodePatternFeaturesWithVariableNode original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "multipleLabels"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-              Core.projectionField = (Core.Name "multipleLabels")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "parameter"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-              Core.projectionField = (Core.Name "parameter")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "propertyMap"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-              Core.projectionField = (Core.Name "propertyMap")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "variableNode"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "wildcardLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-              Core.projectionField = (Core.Name "wildcardLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-nodePatternFeaturesWithWildcardLabel :: Phantoms.TTerm Features.NodePatternFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.NodePatternFeatures
-nodePatternFeaturesWithWildcardLabel original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "multipleLabels"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-              Core.projectionField = (Core.Name "multipleLabels")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "parameter"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-              Core.projectionField = (Core.Name "parameter")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "propertyMap"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-              Core.projectionField = (Core.Name "propertyMap")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "variableNode"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures"),
-              Core.projectionField = (Core.Name "variableNode")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "wildcardLabel"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-nullFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.NullFeatures
-nullFeatures isNull isNotNull =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.NullFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "isNull"),
-          Core.fieldTerm = (Phantoms.unTTerm isNull)},
-        Core.Field {
-          Core.fieldName = (Core.Name "isNotNull"),
-          Core.fieldTerm = (Phantoms.unTTerm isNotNull)}]}))
-
-nullFeaturesIsNull :: Phantoms.TTerm Features.NullFeatures -> Phantoms.TTerm Bool
-nullFeaturesIsNull x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NullFeatures"),
-        Core.projectionField = (Core.Name "isNull")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-nullFeaturesIsNotNull :: Phantoms.TTerm Features.NullFeatures -> Phantoms.TTerm Bool
-nullFeaturesIsNotNull x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NullFeatures"),
-        Core.projectionField = (Core.Name "isNotNull")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-nullFeaturesWithIsNull :: Phantoms.TTerm Features.NullFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.NullFeatures
-nullFeaturesWithIsNull original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.NullFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "isNull"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "isNotNull"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NullFeatures"),
-              Core.projectionField = (Core.Name "isNotNull")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-nullFeaturesWithIsNotNull :: Phantoms.TTerm Features.NullFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.NullFeatures
-nullFeaturesWithIsNotNull original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.NullFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "isNull"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.NullFeatures"),
-              Core.projectionField = (Core.Name "isNull")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "isNotNull"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-pathFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Features.PathFeatures
-pathFeatures shortestPath =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.PathFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "shortestPath"),
-          Core.fieldTerm = (Phantoms.unTTerm shortestPath)}]}))
-
-pathFeaturesShortestPath :: Phantoms.TTerm Features.PathFeatures -> Phantoms.TTerm Bool
-pathFeaturesShortestPath x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.PathFeatures"),
-        Core.projectionField = (Core.Name "shortestPath")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-pathFeaturesWithShortestPath :: Phantoms.TTerm Features.PathFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.PathFeatures
-pathFeaturesWithShortestPath original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.PathFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "shortestPath"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-procedureCallFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ProcedureCallFeatures
-procedureCallFeatures inQueryCall standaloneCall yield =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "inQueryCall"),
-          Core.fieldTerm = (Phantoms.unTTerm inQueryCall)},
-        Core.Field {
-          Core.fieldName = (Core.Name "standaloneCall"),
-          Core.fieldTerm = (Phantoms.unTTerm standaloneCall)},
-        Core.Field {
-          Core.fieldName = (Core.Name "yield"),
-          Core.fieldTerm = (Phantoms.unTTerm yield)}]}))
-
-procedureCallFeaturesInQueryCall :: Phantoms.TTerm Features.ProcedureCallFeatures -> Phantoms.TTerm Bool
-procedureCallFeaturesInQueryCall x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"),
-        Core.projectionField = (Core.Name "inQueryCall")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-procedureCallFeaturesStandaloneCall :: Phantoms.TTerm Features.ProcedureCallFeatures -> Phantoms.TTerm Bool
-procedureCallFeaturesStandaloneCall x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"),
-        Core.projectionField = (Core.Name "standaloneCall")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-procedureCallFeaturesYield :: Phantoms.TTerm Features.ProcedureCallFeatures -> Phantoms.TTerm Bool
-procedureCallFeaturesYield x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"),
-        Core.projectionField = (Core.Name "yield")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-procedureCallFeaturesWithInQueryCall :: Phantoms.TTerm Features.ProcedureCallFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ProcedureCallFeatures
-procedureCallFeaturesWithInQueryCall original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "inQueryCall"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "standaloneCall"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"),
-              Core.projectionField = (Core.Name "standaloneCall")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "yield"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"),
-              Core.projectionField = (Core.Name "yield")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-procedureCallFeaturesWithStandaloneCall :: Phantoms.TTerm Features.ProcedureCallFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ProcedureCallFeatures
-procedureCallFeaturesWithStandaloneCall original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "inQueryCall"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"),
-              Core.projectionField = (Core.Name "inQueryCall")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "standaloneCall"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "yield"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"),
-              Core.projectionField = (Core.Name "yield")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-procedureCallFeaturesWithYield :: Phantoms.TTerm Features.ProcedureCallFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ProcedureCallFeatures
-procedureCallFeaturesWithYield original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "inQueryCall"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"),
-              Core.projectionField = (Core.Name "inQueryCall")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "standaloneCall"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"),
-              Core.projectionField = (Core.Name "standaloneCall")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "yield"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-projectionFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ProjectionFeatures
-projectionFeatures limit orderBy projectDistinct projectAll projectAs skip sortOrder =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "limit"),
-          Core.fieldTerm = (Phantoms.unTTerm limit)},
-        Core.Field {
-          Core.fieldName = (Core.Name "orderBy"),
-          Core.fieldTerm = (Phantoms.unTTerm orderBy)},
-        Core.Field {
-          Core.fieldName = (Core.Name "projectDistinct"),
-          Core.fieldTerm = (Phantoms.unTTerm projectDistinct)},
-        Core.Field {
-          Core.fieldName = (Core.Name "projectAll"),
-          Core.fieldTerm = (Phantoms.unTTerm projectAll)},
-        Core.Field {
-          Core.fieldName = (Core.Name "projectAs"),
-          Core.fieldTerm = (Phantoms.unTTerm projectAs)},
-        Core.Field {
-          Core.fieldName = (Core.Name "skip"),
-          Core.fieldTerm = (Phantoms.unTTerm skip)},
-        Core.Field {
-          Core.fieldName = (Core.Name "sortOrder"),
-          Core.fieldTerm = (Phantoms.unTTerm sortOrder)}]}))
-
-projectionFeaturesLimit :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool
-projectionFeaturesLimit x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-        Core.projectionField = (Core.Name "limit")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-projectionFeaturesOrderBy :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool
-projectionFeaturesOrderBy x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-        Core.projectionField = (Core.Name "orderBy")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-projectionFeaturesProjectDistinct :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool
-projectionFeaturesProjectDistinct x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-        Core.projectionField = (Core.Name "projectDistinct")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-projectionFeaturesProjectAll :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool
-projectionFeaturesProjectAll x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-        Core.projectionField = (Core.Name "projectAll")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-projectionFeaturesProjectAs :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool
-projectionFeaturesProjectAs x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-        Core.projectionField = (Core.Name "projectAs")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-projectionFeaturesSkip :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool
-projectionFeaturesSkip x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-        Core.projectionField = (Core.Name "skip")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-projectionFeaturesSortOrder :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool
-projectionFeaturesSortOrder x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-        Core.projectionField = (Core.Name "sortOrder")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-projectionFeaturesWithLimit :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ProjectionFeatures
-projectionFeaturesWithLimit original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "limit"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "orderBy"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "orderBy")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "projectDistinct"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "projectDistinct")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "projectAll"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "projectAll")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "projectAs"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "projectAs")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "skip"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "skip")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "sortOrder"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "sortOrder")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-projectionFeaturesWithOrderBy :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ProjectionFeatures
-projectionFeaturesWithOrderBy original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "limit"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "limit")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "orderBy"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "projectDistinct"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "projectDistinct")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "projectAll"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "projectAll")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "projectAs"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "projectAs")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "skip"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "skip")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "sortOrder"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "sortOrder")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-projectionFeaturesWithProjectDistinct :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ProjectionFeatures
-projectionFeaturesWithProjectDistinct original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "limit"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "limit")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "orderBy"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "orderBy")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "projectDistinct"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "projectAll"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "projectAll")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "projectAs"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "projectAs")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "skip"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "skip")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "sortOrder"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "sortOrder")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-projectionFeaturesWithProjectAll :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ProjectionFeatures
-projectionFeaturesWithProjectAll original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "limit"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "limit")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "orderBy"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "orderBy")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "projectDistinct"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "projectDistinct")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "projectAll"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "projectAs"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "projectAs")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "skip"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "skip")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "sortOrder"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "sortOrder")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-projectionFeaturesWithProjectAs :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ProjectionFeatures
-projectionFeaturesWithProjectAs original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "limit"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "limit")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "orderBy"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "orderBy")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "projectDistinct"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "projectDistinct")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "projectAll"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "projectAll")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "projectAs"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "skip"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "skip")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "sortOrder"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "sortOrder")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-projectionFeaturesWithSkip :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ProjectionFeatures
-projectionFeaturesWithSkip original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "limit"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "limit")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "orderBy"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "orderBy")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "projectDistinct"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "projectDistinct")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "projectAll"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "projectAll")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "projectAs"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "projectAs")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "skip"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "sortOrder"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "sortOrder")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-projectionFeaturesWithSortOrder :: Phantoms.TTerm Features.ProjectionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ProjectionFeatures
-projectionFeaturesWithSortOrder original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "limit"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "limit")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "orderBy"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "orderBy")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "projectDistinct"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "projectDistinct")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "projectAll"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "projectAll")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "projectAs"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "projectAs")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "skip"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures"),
-              Core.projectionField = (Core.Name "skip")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "sortOrder"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-quantifierFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.QuantifierFeatures
-quantifierFeatures all any none single =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "all"),
-          Core.fieldTerm = (Phantoms.unTTerm all)},
-        Core.Field {
-          Core.fieldName = (Core.Name "any"),
-          Core.fieldTerm = (Phantoms.unTTerm any)},
-        Core.Field {
-          Core.fieldName = (Core.Name "none"),
-          Core.fieldTerm = (Phantoms.unTTerm none)},
-        Core.Field {
-          Core.fieldName = (Core.Name "single"),
-          Core.fieldTerm = (Phantoms.unTTerm single)}]}))
-
-quantifierFeaturesAll :: Phantoms.TTerm Features.QuantifierFeatures -> Phantoms.TTerm Bool
-quantifierFeaturesAll x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
-        Core.projectionField = (Core.Name "all")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-quantifierFeaturesAny :: Phantoms.TTerm Features.QuantifierFeatures -> Phantoms.TTerm Bool
-quantifierFeaturesAny x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
-        Core.projectionField = (Core.Name "any")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-quantifierFeaturesNone :: Phantoms.TTerm Features.QuantifierFeatures -> Phantoms.TTerm Bool
-quantifierFeaturesNone x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
-        Core.projectionField = (Core.Name "none")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-quantifierFeaturesSingle :: Phantoms.TTerm Features.QuantifierFeatures -> Phantoms.TTerm Bool
-quantifierFeaturesSingle x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
-        Core.projectionField = (Core.Name "single")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-quantifierFeaturesWithAll :: Phantoms.TTerm Features.QuantifierFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.QuantifierFeatures
-quantifierFeaturesWithAll original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "all"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "any"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
-              Core.projectionField = (Core.Name "any")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "none"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
-              Core.projectionField = (Core.Name "none")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "single"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
-              Core.projectionField = (Core.Name "single")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-quantifierFeaturesWithAny :: Phantoms.TTerm Features.QuantifierFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.QuantifierFeatures
-quantifierFeaturesWithAny original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "all"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
-              Core.projectionField = (Core.Name "all")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "any"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "none"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
-              Core.projectionField = (Core.Name "none")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "single"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
-              Core.projectionField = (Core.Name "single")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-quantifierFeaturesWithNone :: Phantoms.TTerm Features.QuantifierFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.QuantifierFeatures
-quantifierFeaturesWithNone original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "all"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
-              Core.projectionField = (Core.Name "all")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "any"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
-              Core.projectionField = (Core.Name "any")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "none"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "single"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
-              Core.projectionField = (Core.Name "single")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-quantifierFeaturesWithSingle :: Phantoms.TTerm Features.QuantifierFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.QuantifierFeatures
-quantifierFeaturesWithSingle original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "all"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
-              Core.projectionField = (Core.Name "all")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "any"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
-              Core.projectionField = (Core.Name "any")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "none"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures"),
-              Core.projectionField = (Core.Name "none")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "single"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-rangeLiteralFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RangeLiteralFeatures
-rangeLiteralFeatures bounds exactRange lowerBound starRange upperBound =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "bounds"),
-          Core.fieldTerm = (Phantoms.unTTerm bounds)},
-        Core.Field {
-          Core.fieldName = (Core.Name "exactRange"),
-          Core.fieldTerm = (Phantoms.unTTerm exactRange)},
-        Core.Field {
-          Core.fieldName = (Core.Name "lowerBound"),
-          Core.fieldTerm = (Phantoms.unTTerm lowerBound)},
-        Core.Field {
-          Core.fieldName = (Core.Name "starRange"),
-          Core.fieldTerm = (Phantoms.unTTerm starRange)},
-        Core.Field {
-          Core.fieldName = (Core.Name "upperBound"),
-          Core.fieldTerm = (Phantoms.unTTerm upperBound)}]}))
-
-rangeLiteralFeaturesBounds :: Phantoms.TTerm Features.RangeLiteralFeatures -> Phantoms.TTerm Bool
-rangeLiteralFeaturesBounds x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-        Core.projectionField = (Core.Name "bounds")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-rangeLiteralFeaturesExactRange :: Phantoms.TTerm Features.RangeLiteralFeatures -> Phantoms.TTerm Bool
-rangeLiteralFeaturesExactRange x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-        Core.projectionField = (Core.Name "exactRange")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-rangeLiteralFeaturesLowerBound :: Phantoms.TTerm Features.RangeLiteralFeatures -> Phantoms.TTerm Bool
-rangeLiteralFeaturesLowerBound x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-        Core.projectionField = (Core.Name "lowerBound")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-rangeLiteralFeaturesStarRange :: Phantoms.TTerm Features.RangeLiteralFeatures -> Phantoms.TTerm Bool
-rangeLiteralFeaturesStarRange x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-        Core.projectionField = (Core.Name "starRange")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-rangeLiteralFeaturesUpperBound :: Phantoms.TTerm Features.RangeLiteralFeatures -> Phantoms.TTerm Bool
-rangeLiteralFeaturesUpperBound x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-        Core.projectionField = (Core.Name "upperBound")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-rangeLiteralFeaturesWithBounds :: Phantoms.TTerm Features.RangeLiteralFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RangeLiteralFeatures
-rangeLiteralFeaturesWithBounds original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "bounds"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "exactRange"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-              Core.projectionField = (Core.Name "exactRange")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "lowerBound"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-              Core.projectionField = (Core.Name "lowerBound")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "starRange"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-              Core.projectionField = (Core.Name "starRange")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "upperBound"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-              Core.projectionField = (Core.Name "upperBound")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-rangeLiteralFeaturesWithExactRange :: Phantoms.TTerm Features.RangeLiteralFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RangeLiteralFeatures
-rangeLiteralFeaturesWithExactRange original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "bounds"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-              Core.projectionField = (Core.Name "bounds")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "exactRange"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "lowerBound"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-              Core.projectionField = (Core.Name "lowerBound")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "starRange"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-              Core.projectionField = (Core.Name "starRange")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "upperBound"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-              Core.projectionField = (Core.Name "upperBound")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-rangeLiteralFeaturesWithLowerBound :: Phantoms.TTerm Features.RangeLiteralFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RangeLiteralFeatures
-rangeLiteralFeaturesWithLowerBound original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "bounds"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-              Core.projectionField = (Core.Name "bounds")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "exactRange"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-              Core.projectionField = (Core.Name "exactRange")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "lowerBound"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "starRange"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-              Core.projectionField = (Core.Name "starRange")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "upperBound"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-              Core.projectionField = (Core.Name "upperBound")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-rangeLiteralFeaturesWithStarRange :: Phantoms.TTerm Features.RangeLiteralFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RangeLiteralFeatures
-rangeLiteralFeaturesWithStarRange original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "bounds"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-              Core.projectionField = (Core.Name "bounds")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "exactRange"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-              Core.projectionField = (Core.Name "exactRange")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "lowerBound"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-              Core.projectionField = (Core.Name "lowerBound")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "starRange"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "upperBound"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-              Core.projectionField = (Core.Name "upperBound")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-rangeLiteralFeaturesWithUpperBound :: Phantoms.TTerm Features.RangeLiteralFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RangeLiteralFeatures
-rangeLiteralFeaturesWithUpperBound original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "bounds"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-              Core.projectionField = (Core.Name "bounds")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "exactRange"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-              Core.projectionField = (Core.Name "exactRange")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "lowerBound"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-              Core.projectionField = (Core.Name "lowerBound")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "starRange"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"),
-              Core.projectionField = (Core.Name "starRange")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "upperBound"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-readingFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ReadingFeatures
-readingFeatures union unionAll unwind =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ReadingFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "union"),
-          Core.fieldTerm = (Phantoms.unTTerm union)},
-        Core.Field {
-          Core.fieldName = (Core.Name "unionAll"),
-          Core.fieldTerm = (Phantoms.unTTerm unionAll)},
-        Core.Field {
-          Core.fieldName = (Core.Name "unwind"),
-          Core.fieldTerm = (Phantoms.unTTerm unwind)}]}))
-
-readingFeaturesUnion :: Phantoms.TTerm Features.ReadingFeatures -> Phantoms.TTerm Bool
-readingFeaturesUnion x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ReadingFeatures"),
-        Core.projectionField = (Core.Name "union")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-readingFeaturesUnionAll :: Phantoms.TTerm Features.ReadingFeatures -> Phantoms.TTerm Bool
-readingFeaturesUnionAll x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ReadingFeatures"),
-        Core.projectionField = (Core.Name "unionAll")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-readingFeaturesUnwind :: Phantoms.TTerm Features.ReadingFeatures -> Phantoms.TTerm Bool
-readingFeaturesUnwind x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ReadingFeatures"),
-        Core.projectionField = (Core.Name "unwind")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-readingFeaturesWithUnion :: Phantoms.TTerm Features.ReadingFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ReadingFeatures
-readingFeaturesWithUnion original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ReadingFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "union"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "unionAll"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ReadingFeatures"),
-              Core.projectionField = (Core.Name "unionAll")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "unwind"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ReadingFeatures"),
-              Core.projectionField = (Core.Name "unwind")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-readingFeaturesWithUnionAll :: Phantoms.TTerm Features.ReadingFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ReadingFeatures
-readingFeaturesWithUnionAll original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ReadingFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "union"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ReadingFeatures"),
-              Core.projectionField = (Core.Name "union")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "unionAll"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "unwind"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ReadingFeatures"),
-              Core.projectionField = (Core.Name "unwind")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-readingFeaturesWithUnwind :: Phantoms.TTerm Features.ReadingFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ReadingFeatures
-readingFeaturesWithUnwind original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.ReadingFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "union"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ReadingFeatures"),
-              Core.projectionField = (Core.Name "union")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "unionAll"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.ReadingFeatures"),
-              Core.projectionField = (Core.Name "unionAll")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "unwind"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-relationshipDirectionFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RelationshipDirectionFeatures
-relationshipDirectionFeatures both left neither right =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "both"),
-          Core.fieldTerm = (Phantoms.unTTerm both)},
-        Core.Field {
-          Core.fieldName = (Core.Name "left"),
-          Core.fieldTerm = (Phantoms.unTTerm left)},
-        Core.Field {
-          Core.fieldName = (Core.Name "neither"),
-          Core.fieldTerm = (Phantoms.unTTerm neither)},
-        Core.Field {
-          Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Phantoms.unTTerm right)}]}))
-
-relationshipDirectionFeaturesBoth :: Phantoms.TTerm Features.RelationshipDirectionFeatures -> Phantoms.TTerm Bool
-relationshipDirectionFeaturesBoth x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
-        Core.projectionField = (Core.Name "both")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-relationshipDirectionFeaturesLeft :: Phantoms.TTerm Features.RelationshipDirectionFeatures -> Phantoms.TTerm Bool
-relationshipDirectionFeaturesLeft x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
-        Core.projectionField = (Core.Name "left")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-relationshipDirectionFeaturesNeither :: Phantoms.TTerm Features.RelationshipDirectionFeatures -> Phantoms.TTerm Bool
-relationshipDirectionFeaturesNeither x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
-        Core.projectionField = (Core.Name "neither")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-relationshipDirectionFeaturesRight :: Phantoms.TTerm Features.RelationshipDirectionFeatures -> Phantoms.TTerm Bool
-relationshipDirectionFeaturesRight x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
-        Core.projectionField = (Core.Name "right")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-relationshipDirectionFeaturesWithBoth :: Phantoms.TTerm Features.RelationshipDirectionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RelationshipDirectionFeatures
-relationshipDirectionFeaturesWithBoth original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "both"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "left"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
-              Core.projectionField = (Core.Name "left")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "neither"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
-              Core.projectionField = (Core.Name "neither")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
-              Core.projectionField = (Core.Name "right")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-relationshipDirectionFeaturesWithLeft :: Phantoms.TTerm Features.RelationshipDirectionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RelationshipDirectionFeatures
-relationshipDirectionFeaturesWithLeft original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "both"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
-              Core.projectionField = (Core.Name "both")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "left"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "neither"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
-              Core.projectionField = (Core.Name "neither")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
-              Core.projectionField = (Core.Name "right")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-relationshipDirectionFeaturesWithNeither :: Phantoms.TTerm Features.RelationshipDirectionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RelationshipDirectionFeatures
-relationshipDirectionFeaturesWithNeither original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "both"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
-              Core.projectionField = (Core.Name "both")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "left"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
-              Core.projectionField = (Core.Name "left")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "neither"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
-              Core.projectionField = (Core.Name "right")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-relationshipDirectionFeaturesWithRight :: Phantoms.TTerm Features.RelationshipDirectionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RelationshipDirectionFeatures
-relationshipDirectionFeaturesWithRight original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "both"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
-              Core.projectionField = (Core.Name "both")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "left"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
-              Core.projectionField = (Core.Name "left")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "neither"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"),
-              Core.projectionField = (Core.Name "neither")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-relationshipPatternFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RelationshipPatternFeatures
-relationshipPatternFeatures multipleTypes variableRelationship wildcardType =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "multipleTypes"),
-          Core.fieldTerm = (Phantoms.unTTerm multipleTypes)},
-        Core.Field {
-          Core.fieldName = (Core.Name "variableRelationship"),
-          Core.fieldTerm = (Phantoms.unTTerm variableRelationship)},
-        Core.Field {
-          Core.fieldName = (Core.Name "wildcardType"),
-          Core.fieldTerm = (Phantoms.unTTerm wildcardType)}]}))
-
-relationshipPatternFeaturesMultipleTypes :: Phantoms.TTerm Features.RelationshipPatternFeatures -> Phantoms.TTerm Bool
-relationshipPatternFeaturesMultipleTypes x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"),
-        Core.projectionField = (Core.Name "multipleTypes")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-relationshipPatternFeaturesVariableRelationship :: Phantoms.TTerm Features.RelationshipPatternFeatures -> Phantoms.TTerm Bool
-relationshipPatternFeaturesVariableRelationship x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"),
-        Core.projectionField = (Core.Name "variableRelationship")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-relationshipPatternFeaturesWildcardType :: Phantoms.TTerm Features.RelationshipPatternFeatures -> Phantoms.TTerm Bool
-relationshipPatternFeaturesWildcardType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"),
-        Core.projectionField = (Core.Name "wildcardType")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-relationshipPatternFeaturesWithMultipleTypes :: Phantoms.TTerm Features.RelationshipPatternFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RelationshipPatternFeatures
-relationshipPatternFeaturesWithMultipleTypes original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "multipleTypes"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "variableRelationship"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"),
-              Core.projectionField = (Core.Name "variableRelationship")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "wildcardType"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"),
-              Core.projectionField = (Core.Name "wildcardType")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-relationshipPatternFeaturesWithVariableRelationship :: Phantoms.TTerm Features.RelationshipPatternFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RelationshipPatternFeatures
-relationshipPatternFeaturesWithVariableRelationship original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "multipleTypes"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"),
-              Core.projectionField = (Core.Name "multipleTypes")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "variableRelationship"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "wildcardType"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"),
-              Core.projectionField = (Core.Name "wildcardType")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-relationshipPatternFeaturesWithWildcardType :: Phantoms.TTerm Features.RelationshipPatternFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RelationshipPatternFeatures
-relationshipPatternFeaturesWithWildcardType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "multipleTypes"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"),
-              Core.projectionField = (Core.Name "multipleTypes")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "variableRelationship"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"),
-              Core.projectionField = (Core.Name "variableRelationship")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "wildcardType"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-removeFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RemoveFeatures
-removeFeatures byLabel byProperty =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RemoveFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "byLabel"),
-          Core.fieldTerm = (Phantoms.unTTerm byLabel)},
-        Core.Field {
-          Core.fieldName = (Core.Name "byProperty"),
-          Core.fieldTerm = (Phantoms.unTTerm byProperty)}]}))
-
-removeFeaturesByLabel :: Phantoms.TTerm Features.RemoveFeatures -> Phantoms.TTerm Bool
-removeFeaturesByLabel x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RemoveFeatures"),
-        Core.projectionField = (Core.Name "byLabel")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-removeFeaturesByProperty :: Phantoms.TTerm Features.RemoveFeatures -> Phantoms.TTerm Bool
-removeFeaturesByProperty x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RemoveFeatures"),
-        Core.projectionField = (Core.Name "byProperty")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-removeFeaturesWithByLabel :: Phantoms.TTerm Features.RemoveFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RemoveFeatures
-removeFeaturesWithByLabel original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RemoveFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "byLabel"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "byProperty"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RemoveFeatures"),
-              Core.projectionField = (Core.Name "byProperty")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-removeFeaturesWithByProperty :: Phantoms.TTerm Features.RemoveFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.RemoveFeatures
-removeFeaturesWithByProperty original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.RemoveFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "byLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.RemoveFeatures"),
-              Core.projectionField = (Core.Name "byLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "byProperty"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-setFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.SetFeatures
-setFeatures propertyEquals variableEquals variablePlusEquals variableWithNodeLabels =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "propertyEquals"),
-          Core.fieldTerm = (Phantoms.unTTerm propertyEquals)},
-        Core.Field {
-          Core.fieldName = (Core.Name "variableEquals"),
-          Core.fieldTerm = (Phantoms.unTTerm variableEquals)},
-        Core.Field {
-          Core.fieldName = (Core.Name "variablePlusEquals"),
-          Core.fieldTerm = (Phantoms.unTTerm variablePlusEquals)},
-        Core.Field {
-          Core.fieldName = (Core.Name "variableWithNodeLabels"),
-          Core.fieldTerm = (Phantoms.unTTerm variableWithNodeLabels)}]}))
-
-setFeaturesPropertyEquals :: Phantoms.TTerm Features.SetFeatures -> Phantoms.TTerm Bool
-setFeaturesPropertyEquals x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
-        Core.projectionField = (Core.Name "propertyEquals")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-setFeaturesVariableEquals :: Phantoms.TTerm Features.SetFeatures -> Phantoms.TTerm Bool
-setFeaturesVariableEquals x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
-        Core.projectionField = (Core.Name "variableEquals")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-setFeaturesVariablePlusEquals :: Phantoms.TTerm Features.SetFeatures -> Phantoms.TTerm Bool
-setFeaturesVariablePlusEquals x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
-        Core.projectionField = (Core.Name "variablePlusEquals")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-setFeaturesVariableWithNodeLabels :: Phantoms.TTerm Features.SetFeatures -> Phantoms.TTerm Bool
-setFeaturesVariableWithNodeLabels x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
-        Core.projectionField = (Core.Name "variableWithNodeLabels")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-setFeaturesWithPropertyEquals :: Phantoms.TTerm Features.SetFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.SetFeatures
-setFeaturesWithPropertyEquals original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "propertyEquals"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "variableEquals"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
-              Core.projectionField = (Core.Name "variableEquals")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "variablePlusEquals"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
-              Core.projectionField = (Core.Name "variablePlusEquals")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "variableWithNodeLabels"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
-              Core.projectionField = (Core.Name "variableWithNodeLabels")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-setFeaturesWithVariableEquals :: Phantoms.TTerm Features.SetFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.SetFeatures
-setFeaturesWithVariableEquals original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "propertyEquals"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
-              Core.projectionField = (Core.Name "propertyEquals")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "variableEquals"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "variablePlusEquals"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
-              Core.projectionField = (Core.Name "variablePlusEquals")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "variableWithNodeLabels"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
-              Core.projectionField = (Core.Name "variableWithNodeLabels")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-setFeaturesWithVariablePlusEquals :: Phantoms.TTerm Features.SetFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.SetFeatures
-setFeaturesWithVariablePlusEquals original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "propertyEquals"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
-              Core.projectionField = (Core.Name "propertyEquals")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "variableEquals"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
-              Core.projectionField = (Core.Name "variableEquals")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "variablePlusEquals"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "variableWithNodeLabels"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
-              Core.projectionField = (Core.Name "variableWithNodeLabels")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-setFeaturesWithVariableWithNodeLabels :: Phantoms.TTerm Features.SetFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.SetFeatures
-setFeaturesWithVariableWithNodeLabels original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "propertyEquals"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
-              Core.projectionField = (Core.Name "propertyEquals")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "variableEquals"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
-              Core.projectionField = (Core.Name "variableEquals")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "variablePlusEquals"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SetFeatures"),
-              Core.projectionField = (Core.Name "variablePlusEquals")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "variableWithNodeLabels"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-stringFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.StringFeatures
-stringFeatures contains endsWith in_ startsWith =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "contains"),
-          Core.fieldTerm = (Phantoms.unTTerm contains)},
-        Core.Field {
-          Core.fieldName = (Core.Name "endsWith"),
-          Core.fieldTerm = (Phantoms.unTTerm endsWith)},
-        Core.Field {
-          Core.fieldName = (Core.Name "in"),
-          Core.fieldTerm = (Phantoms.unTTerm in_)},
-        Core.Field {
-          Core.fieldName = (Core.Name "startsWith"),
-          Core.fieldTerm = (Phantoms.unTTerm startsWith)}]}))
-
-stringFeaturesContains :: Phantoms.TTerm Features.StringFeatures -> Phantoms.TTerm Bool
-stringFeaturesContains x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
-        Core.projectionField = (Core.Name "contains")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-stringFeaturesEndsWith :: Phantoms.TTerm Features.StringFeatures -> Phantoms.TTerm Bool
-stringFeaturesEndsWith x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
-        Core.projectionField = (Core.Name "endsWith")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-stringFeaturesIn :: Phantoms.TTerm Features.StringFeatures -> Phantoms.TTerm Bool
-stringFeaturesIn x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
-        Core.projectionField = (Core.Name "in")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-stringFeaturesStartsWith :: Phantoms.TTerm Features.StringFeatures -> Phantoms.TTerm Bool
-stringFeaturesStartsWith x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
-        Core.projectionField = (Core.Name "startsWith")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-stringFeaturesWithContains :: Phantoms.TTerm Features.StringFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.StringFeatures
-stringFeaturesWithContains original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "contains"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "endsWith"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
-              Core.projectionField = (Core.Name "endsWith")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "in"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
-              Core.projectionField = (Core.Name "in")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "startsWith"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
-              Core.projectionField = (Core.Name "startsWith")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-stringFeaturesWithEndsWith :: Phantoms.TTerm Features.StringFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.StringFeatures
-stringFeaturesWithEndsWith original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "contains"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
-              Core.projectionField = (Core.Name "contains")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "endsWith"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "in"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
-              Core.projectionField = (Core.Name "in")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "startsWith"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
-              Core.projectionField = (Core.Name "startsWith")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-stringFeaturesWithIn :: Phantoms.TTerm Features.StringFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.StringFeatures
-stringFeaturesWithIn original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "contains"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
-              Core.projectionField = (Core.Name "contains")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "endsWith"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
-              Core.projectionField = (Core.Name "endsWith")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "in"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "startsWith"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
-              Core.projectionField = (Core.Name "startsWith")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-stringFeaturesWithStartsWith :: Phantoms.TTerm Features.StringFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.StringFeatures
-stringFeaturesWithStartsWith original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "contains"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
-              Core.projectionField = (Core.Name "contains")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "endsWith"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
-              Core.projectionField = (Core.Name "endsWith")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "in"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.StringFeatures"),
-              Core.projectionField = (Core.Name "in")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "startsWith"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
 updatingFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.UpdatingFeatures
 updatingFeatures create set with =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -26970,4 +26910,64 @@ updatingFeaturesWithWith original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "with"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+vectorFunctionFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.VectorFunctionFeatures
+vectorFunctionFeatures vectorSimilarityCosine vectorSimilarityEuclidean =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "vectorSimilarityCosine"),
+          Core.fieldTerm = (Phantoms.unTTerm vectorSimilarityCosine)},
+        Core.Field {
+          Core.fieldName = (Core.Name "vectorSimilarityEuclidean"),
+          Core.fieldTerm = (Phantoms.unTTerm vectorSimilarityEuclidean)}]}))
+
+vectorFunctionFeaturesVectorSimilarityCosine :: Phantoms.TTerm Features.VectorFunctionFeatures -> Phantoms.TTerm Bool
+vectorFunctionFeaturesVectorSimilarityCosine x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"),
+        Core.projectionField = (Core.Name "vectorSimilarityCosine")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+vectorFunctionFeaturesVectorSimilarityEuclidean :: Phantoms.TTerm Features.VectorFunctionFeatures -> Phantoms.TTerm Bool
+vectorFunctionFeaturesVectorSimilarityEuclidean x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"),
+        Core.projectionField = (Core.Name "vectorSimilarityEuclidean")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+vectorFunctionFeaturesWithVectorSimilarityCosine :: Phantoms.TTerm Features.VectorFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.VectorFunctionFeatures
+vectorFunctionFeaturesWithVectorSimilarityCosine original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "vectorSimilarityCosine"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "vectorSimilarityEuclidean"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"),
+              Core.projectionField = (Core.Name "vectorSimilarityEuclidean")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+vectorFunctionFeaturesWithVectorSimilarityEuclidean :: Phantoms.TTerm Features.VectorFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.VectorFunctionFeatures
+vectorFunctionFeaturesWithVectorSimilarityEuclidean original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "vectorSimilarityCosine"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"),
+              Core.projectionField = (Core.Name "vectorSimilarityCosine")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "vectorSimilarityEuclidean"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))

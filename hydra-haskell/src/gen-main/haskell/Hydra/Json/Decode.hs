@@ -24,6 +24,116 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Decode a JSON value to a float term. Float64/Bigfloat from numbers; Float32 from string.
+decodeFloat :: Core.FloatType -> Model.Value -> Either String Core.Term
+decodeFloat ft value =
+    case ft of
+      Core.FloatTypeBigfloat ->
+        let numResult = expectNumber value
+        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat n))) numResult)
+      Core.FloatTypeFloat32 ->
+        let strResult = expectString value
+        in (Eithers.either (\err -> Left err) (\s ->
+          let parsed = Literals.readFloat32 s
+          in (Maybes.maybe (Left (Strings.cat [
+            "invalid float32: ",
+            s])) (\v -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 v)))) parsed)) strResult)
+      Core.FloatTypeFloat64 ->
+        let numResult = expectNumber value
+        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.bigfloatToFloat64 n)))) numResult)
+
+-- | Decode a JSON value to an integer term. Small ints from numbers; large ints from strings.
+decodeInteger :: Core.IntegerType -> Model.Value -> Either String Core.Term
+decodeInteger it value =
+    case it of
+      Core.IntegerTypeBigint ->
+        let strResult = expectString value
+        in (Eithers.either (\err -> Left err) (\s ->
+          let parsed = Literals.readBigint s
+          in (Maybes.maybe (Left (Strings.cat [
+            "invalid bigint: ",
+            s])) (\v -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueBigint v)))) parsed)) strResult)
+      Core.IntegerTypeInt64 ->
+        let strResult = expectString value
+        in (Eithers.either (\err -> Left err) (\s ->
+          let parsed = Literals.readInt64 s
+          in (Maybes.maybe (Left (Strings.cat [
+            "invalid int64: ",
+            s])) (\v -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 v)))) parsed)) strResult)
+      Core.IntegerTypeUint32 ->
+        let strResult = expectString value
+        in (Eithers.either (\err -> Left err) (\s ->
+          let parsed = Literals.readUint32 s
+          in (Maybes.maybe (Left (Strings.cat [
+            "invalid uint32: ",
+            s])) (\v -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint32 v)))) parsed)) strResult)
+      Core.IntegerTypeUint64 ->
+        let strResult = expectString value
+        in (Eithers.either (\err -> Left err) (\s ->
+          let parsed = Literals.readUint64 s
+          in (Maybes.maybe (Left (Strings.cat [
+            "invalid uint64: ",
+            s])) (\v -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint64 v)))) parsed)) strResult)
+      Core.IntegerTypeInt8 ->
+        let numResult = expectNumber value
+        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt8 (Literals.bigintToInt8 (Literals.bigfloatToBigint n))))) numResult)
+      Core.IntegerTypeInt16 ->
+        let numResult = expectNumber value
+        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt16 (Literals.bigintToInt16 (Literals.bigfloatToBigint n))))) numResult)
+      Core.IntegerTypeInt32 ->
+        let numResult = expectNumber value
+        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Literals.bigintToInt32 (Literals.bigfloatToBigint n))))) numResult)
+      Core.IntegerTypeUint8 ->
+        let numResult = expectNumber value
+        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint8 (Literals.bigintToUint8 (Literals.bigfloatToBigint n))))) numResult)
+      Core.IntegerTypeUint16 ->
+        let numResult = expectNumber value
+        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint16 (Literals.bigintToUint16 (Literals.bigfloatToBigint n))))) numResult)
+
+-- | Decode a JSON value to a literal term
+decodeLiteral :: Core.LiteralType -> Model.Value -> Either String Core.Term
+decodeLiteral lt value =
+    case lt of
+      Core.LiteralTypeBinary ->
+        let strResult = expectString value
+        in (Eithers.map (\s -> Core.TermLiteral (Core.LiteralBinary (Literals.stringToBinary s))) strResult)
+      Core.LiteralTypeBoolean -> case value of
+        Model.ValueBoolean v1 -> Right (Core.TermLiteral (Core.LiteralBoolean v1))
+        _ -> Left "expected boolean"
+      Core.LiteralTypeFloat v0 -> decodeFloat v0 value
+      Core.LiteralTypeInteger v0 -> decodeInteger v0 value
+      Core.LiteralTypeString ->
+        let strResult = expectString value
+        in (Eithers.map (\s -> Core.TermLiteral (Core.LiteralString s)) strResult)
+
+-- | Extract an array from a JSON value
+expectArray :: Model.Value -> Either String [Model.Value]
+expectArray value =
+    case value of
+      Model.ValueArray v0 -> Right v0
+      _ -> Left "expected array"
+
+-- | Extract a number from a JSON value
+expectNumber :: Model.Value -> Either String Double
+expectNumber value =
+    case value of
+      Model.ValueNumber v0 -> Right v0
+      _ -> Left "expected number"
+
+-- | Extract an object from a JSON value
+expectObject :: Model.Value -> Either String (M.Map String Model.Value)
+expectObject value =
+    case value of
+      Model.ValueObject v0 -> Right v0
+      _ -> Left "expected object"
+
+-- | Extract a string from a JSON value
+expectString :: Model.Value -> Either String String
+expectString value =
+    case value of
+      Model.ValueString v0 -> Right v0
+      _ -> Left "expected string"
+
 -- | Decode a JSON value to a Hydra term given a type and type name. Returns Left for type mismatches.
 fromJson :: M.Map Core.Name Core.Type -> Core.Name -> Core.Type -> Model.Value -> Either String Core.Term
 fromJson types tname typ value =
@@ -148,113 +258,3 @@ fromJson types tname typ value =
         _ -> Left (Strings.cat [
           "unsupported type for JSON decoding: ",
           (Core_.type_ typ)])
-
--- | Decode a JSON value to a literal term
-decodeLiteral :: Core.LiteralType -> Model.Value -> Either String Core.Term
-decodeLiteral lt value =
-    case lt of
-      Core.LiteralTypeBinary ->
-        let strResult = expectString value
-        in (Eithers.map (\s -> Core.TermLiteral (Core.LiteralBinary (Literals.stringToBinary s))) strResult)
-      Core.LiteralTypeBoolean -> case value of
-        Model.ValueBoolean v1 -> Right (Core.TermLiteral (Core.LiteralBoolean v1))
-        _ -> Left "expected boolean"
-      Core.LiteralTypeFloat v0 -> decodeFloat v0 value
-      Core.LiteralTypeInteger v0 -> decodeInteger v0 value
-      Core.LiteralTypeString ->
-        let strResult = expectString value
-        in (Eithers.map (\s -> Core.TermLiteral (Core.LiteralString s)) strResult)
-
--- | Decode a JSON value to a float term. Float64/Bigfloat from numbers; Float32 from string.
-decodeFloat :: Core.FloatType -> Model.Value -> Either String Core.Term
-decodeFloat ft value =
-    case ft of
-      Core.FloatTypeBigfloat ->
-        let numResult = expectNumber value
-        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat n))) numResult)
-      Core.FloatTypeFloat32 ->
-        let strResult = expectString value
-        in (Eithers.either (\err -> Left err) (\s ->
-          let parsed = Literals.readFloat32 s
-          in (Maybes.maybe (Left (Strings.cat [
-            "invalid float32: ",
-            s])) (\v -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 v)))) parsed)) strResult)
-      Core.FloatTypeFloat64 ->
-        let numResult = expectNumber value
-        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.bigfloatToFloat64 n)))) numResult)
-
--- | Decode a JSON value to an integer term. Small ints from numbers; large ints from strings.
-decodeInteger :: Core.IntegerType -> Model.Value -> Either String Core.Term
-decodeInteger it value =
-    case it of
-      Core.IntegerTypeBigint ->
-        let strResult = expectString value
-        in (Eithers.either (\err -> Left err) (\s ->
-          let parsed = Literals.readBigint s
-          in (Maybes.maybe (Left (Strings.cat [
-            "invalid bigint: ",
-            s])) (\v -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueBigint v)))) parsed)) strResult)
-      Core.IntegerTypeInt64 ->
-        let strResult = expectString value
-        in (Eithers.either (\err -> Left err) (\s ->
-          let parsed = Literals.readInt64 s
-          in (Maybes.maybe (Left (Strings.cat [
-            "invalid int64: ",
-            s])) (\v -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 v)))) parsed)) strResult)
-      Core.IntegerTypeUint32 ->
-        let strResult = expectString value
-        in (Eithers.either (\err -> Left err) (\s ->
-          let parsed = Literals.readUint32 s
-          in (Maybes.maybe (Left (Strings.cat [
-            "invalid uint32: ",
-            s])) (\v -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint32 v)))) parsed)) strResult)
-      Core.IntegerTypeUint64 ->
-        let strResult = expectString value
-        in (Eithers.either (\err -> Left err) (\s ->
-          let parsed = Literals.readUint64 s
-          in (Maybes.maybe (Left (Strings.cat [
-            "invalid uint64: ",
-            s])) (\v -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint64 v)))) parsed)) strResult)
-      Core.IntegerTypeInt8 ->
-        let numResult = expectNumber value
-        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt8 (Literals.bigintToInt8 (Literals.bigfloatToBigint n))))) numResult)
-      Core.IntegerTypeInt16 ->
-        let numResult = expectNumber value
-        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt16 (Literals.bigintToInt16 (Literals.bigfloatToBigint n))))) numResult)
-      Core.IntegerTypeInt32 ->
-        let numResult = expectNumber value
-        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Literals.bigintToInt32 (Literals.bigfloatToBigint n))))) numResult)
-      Core.IntegerTypeUint8 ->
-        let numResult = expectNumber value
-        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint8 (Literals.bigintToUint8 (Literals.bigfloatToBigint n))))) numResult)
-      Core.IntegerTypeUint16 ->
-        let numResult = expectNumber value
-        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint16 (Literals.bigintToUint16 (Literals.bigfloatToBigint n))))) numResult)
-
--- | Extract a string from a JSON value
-expectString :: Model.Value -> Either String String
-expectString value =
-    case value of
-      Model.ValueString v0 -> Right v0
-      _ -> Left "expected string"
-
--- | Extract an array from a JSON value
-expectArray :: Model.Value -> Either String [Model.Value]
-expectArray value =
-    case value of
-      Model.ValueArray v0 -> Right v0
-      _ -> Left "expected array"
-
--- | Extract an object from a JSON value
-expectObject :: Model.Value -> Either String (M.Map String Model.Value)
-expectObject value =
-    case value of
-      Model.ValueObject v0 -> Right v0
-      _ -> Left "expected object"
-
--- | Extract a number from a JSON value
-expectNumber :: Model.Value -> Either String Double
-expectNumber value =
-    case value of
-      Model.ValueNumber v0 -> Right v0
-      _ -> Left "expected number"

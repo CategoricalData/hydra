@@ -56,6 +56,9 @@ brackets br style e =
 commaSep :: Ast.BlockStyle -> [Ast.Expr] -> Ast.Expr
 commaSep = symbolSep ","
 
+cst :: String -> Ast.Expr
+cst s = Ast.ExprConst (sym s)
+
 curlyBlock :: Ast.BlockStyle -> Ast.Expr -> Ast.Expr
 curlyBlock style e = curlyBracesList Nothing style [
   e]
@@ -69,9 +72,6 @@ curlyBraces =
 curlyBracesList :: Maybe String -> Ast.BlockStyle -> [Ast.Expr] -> Ast.Expr
 curlyBracesList msymb style els =
     Logic.ifElse (Lists.null els) (cst "{}") (brackets curlyBraces style (symbolSep (Maybes.fromMaybe "," msymb) style els))
-
-cst :: String -> Ast.Expr
-cst s = Ast.ExprConst (sym s)
 
 customIndent :: String -> String -> String
 customIndent idt s = Strings.cat (Lists.intersperse "\n" (Lists.map (\line -> Strings.cat2 idt line) (Strings.lines s)))
@@ -445,6 +445,12 @@ spaceSep =
       Ast.opPrecedence = (Ast.Precedence 0),
       Ast.opAssociativity = Ast.AssociativityNone})
 
+squareBrackets :: Ast.Brackets
+squareBrackets =
+    Ast.Brackets {
+      Ast.bracketsOpen = (Ast.Symbol "["),
+      Ast.bracketsClose = (Ast.Symbol "]")}
+
 -- | Like sep, but produces a SeqExpr instead of an OpExpr chain. SeqExpr is treated as structural layout and is not subject to parenthesization.
 structuralSep :: Ast.Op -> [Ast.Expr] -> Ast.Expr
 structuralSep op els =
@@ -462,12 +468,6 @@ structuralSpaceSep =
         Ast.paddingRight = Ast.WsNone},
       Ast.opPrecedence = (Ast.Precedence 0),
       Ast.opAssociativity = Ast.AssociativityNone})
-
-squareBrackets :: Ast.Brackets
-squareBrackets =
-    Ast.Brackets {
-      Ast.bracketsOpen = (Ast.Symbol "["),
-      Ast.bracketsClose = (Ast.Symbol "]")}
 
 -- | Append a suffix string to an expression
 suffix :: String -> Ast.Expr -> Ast.Expr

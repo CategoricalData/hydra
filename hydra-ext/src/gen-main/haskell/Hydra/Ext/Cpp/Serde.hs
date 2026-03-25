@@ -765,6 +765,16 @@ encodeMapEntry me =
         (Serialization.cst "->"),
         (encodeExpression val)])
 
+-- | Convert a member initializer to an expression
+encodeMemInitializer :: Syntax.MemInitializer -> Ast.Expr
+encodeMemInitializer mi =
+
+      let name = Syntax.memInitializerName mi
+          args = Syntax.memInitializerArguments mi
+      in (Serialization.noSep [
+        Serialization.cst name,
+        (Serialization.parens (Serialization.commaSep Serialization.inlineStyle (Lists.map encodeExpression args)))])
+
 -- | Convert a member access operation to an expression
 encodeMemberAccessOperation :: Syntax.MemberAccessOperation -> Ast.Expr
 encodeMemberAccessOperation mao =
@@ -795,16 +805,6 @@ encodeMemberSpecification commas m =
         encodeAccessSpecifier v0,
         (Serialization.cst ":")]
       Syntax.MemberSpecificationMember v0 -> encodeMemberDeclaration commas v0
-
--- | Convert a member initializer to an expression
-encodeMemInitializer :: Syntax.MemInitializer -> Ast.Expr
-encodeMemInitializer mi =
-
-      let name = Syntax.memInitializerName mi
-          args = Syntax.memInitializerArguments mi
-      in (Serialization.noSep [
-        Serialization.cst name,
-        (Serialization.parens (Serialization.commaSep Serialization.inlineStyle (Lists.map encodeExpression args)))])
 
 -- | Convert a modulo operation to an expression
 encodeModuloOperation :: Syntax.ModuloOperation -> Ast.Expr
@@ -1200,14 +1200,6 @@ encodeTernaryExpression te =
         (Serialization.cst ":"),
         (encodeConditionalExpression falseExpr)])
 
--- | Convert a string to a C++ comment
-toCppComments :: String -> Bool -> String
-toCppComments s isMultiline =
-    Logic.ifElse isMultiline (Strings.cat [
-      "/* ",
-      s,
-      " */"]) (Strings.cat2 "// " s)
-
 -- | Convert a type expression to an expression
 encodeTypeExpression :: Syntax.TypeExpression -> Ast.Expr
 encodeTypeExpression t =
@@ -1327,3 +1319,11 @@ encodeWhileStatement ws =
           Serialization.cst "while",
           (Serialization.parens (encodeExpression cond))],
         (encodeStatement body)])
+
+-- | Convert a string to a C++ comment
+toCppComments :: String -> Bool -> String
+toCppComments s isMultiline =
+    Logic.ifElse isMultiline (Strings.cat [
+      "/* ",
+      s,
+      " */"]) (Strings.cat2 "// " s)

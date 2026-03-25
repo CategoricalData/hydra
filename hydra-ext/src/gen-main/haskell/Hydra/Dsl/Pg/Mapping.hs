@@ -67,12 +67,12 @@ annotationSchema vertexLabel edgeLabel vertexId edgeId propertyKey propertyValue
           Core.fieldName = (Core.Name "ignore"),
           Core.fieldTerm = (Phantoms.unTTerm ignore)}]}))
 
-annotationSchemaVertexLabel :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String
-annotationSchemaVertexLabel x =
+annotationSchemaEdgeId :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String
+annotationSchemaEdgeId x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-        Core.projectionField = (Core.Name "vertexLabel")})))),
+        Core.projectionField = (Core.Name "edgeId")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 annotationSchemaEdgeLabel :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String
@@ -83,52 +83,28 @@ annotationSchemaEdgeLabel x =
         Core.projectionField = (Core.Name "edgeLabel")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationSchemaVertexId :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String
-annotationSchemaVertexId x =
+annotationSchemaIgnore :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String
+annotationSchemaIgnore x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-        Core.projectionField = (Core.Name "vertexId")})))),
+        Core.projectionField = (Core.Name "ignore")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationSchemaEdgeId :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String
-annotationSchemaEdgeId x =
+annotationSchemaInEdge :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String
+annotationSchemaInEdge x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-        Core.projectionField = (Core.Name "edgeId")})))),
+        Core.projectionField = (Core.Name "inEdge")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationSchemaPropertyKey :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String
-annotationSchemaPropertyKey x =
+annotationSchemaInEdgeLabel :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String
+annotationSchemaInEdgeLabel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-        Core.projectionField = (Core.Name "propertyKey")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-annotationSchemaPropertyValue :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String
-annotationSchemaPropertyValue x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-        Core.projectionField = (Core.Name "propertyValue")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-annotationSchemaOutVertex :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String
-annotationSchemaOutVertex x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-        Core.projectionField = (Core.Name "outVertex")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-annotationSchemaOutVertexLabel :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String
-annotationSchemaOutVertexLabel x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-        Core.projectionField = (Core.Name "outVertexLabel")})))),
+        Core.projectionField = (Core.Name "inEdgeLabel")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 annotationSchemaInVertex :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String
@@ -163,38 +139,66 @@ annotationSchemaOutEdgeLabel x =
         Core.projectionField = (Core.Name "outEdgeLabel")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationSchemaInEdge :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String
-annotationSchemaInEdge x =
+annotationSchemaOutVertex :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String
+annotationSchemaOutVertex x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-        Core.projectionField = (Core.Name "inEdge")})))),
+        Core.projectionField = (Core.Name "outVertex")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationSchemaInEdgeLabel :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String
-annotationSchemaInEdgeLabel x =
+annotationSchemaOutVertexLabel :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String
+annotationSchemaOutVertexLabel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-        Core.projectionField = (Core.Name "inEdgeLabel")})))),
+        Core.projectionField = (Core.Name "outVertexLabel")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationSchemaIgnore :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String
-annotationSchemaIgnore x =
+annotationSchemaPropertyKey :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String
+annotationSchemaPropertyKey x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-        Core.projectionField = (Core.Name "ignore")})))),
+        Core.projectionField = (Core.Name "propertyKey")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationSchemaWithVertexLabel :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String -> Phantoms.TTerm Mapping.AnnotationSchema
-annotationSchemaWithVertexLabel original newVal =
+annotationSchemaPropertyValue :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String
+annotationSchemaPropertyValue x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+        Core.projectionField = (Core.Name "propertyValue")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+annotationSchemaVertexId :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String
+annotationSchemaVertexId x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+        Core.projectionField = (Core.Name "vertexId")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+annotationSchemaVertexLabel :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String
+annotationSchemaVertexLabel x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+        Core.projectionField = (Core.Name "vertexLabel")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+annotationSchemaWithEdgeId :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String -> Phantoms.TTerm Mapping.AnnotationSchema
+annotationSchemaWithEdgeId original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "vertexLabel"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "vertexLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "edgeLabel"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -211,11 +215,7 @@ annotationSchemaWithVertexLabel original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "edgeId"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "edgeId")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "propertyKey"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -401,8 +401,8 @@ annotationSchemaWithEdgeLabel original newVal =
               Core.projectionField = (Core.Name "ignore")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-annotationSchemaWithVertexId :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String -> Phantoms.TTerm Mapping.AnnotationSchema
-annotationSchemaWithVertexId original newVal =
+annotationSchemaWithIgnore :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String -> Phantoms.TTerm Mapping.AnnotationSchema
+annotationSchemaWithIgnore original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
       Core.recordFields = [
@@ -422,7 +422,11 @@ annotationSchemaWithVertexId original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "vertexId"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "vertexId")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "edgeId"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -502,14 +506,10 @@ annotationSchemaWithVertexId original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ignore"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "ignore")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-annotationSchemaWithEdgeId :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String -> Phantoms.TTerm Mapping.AnnotationSchema
-annotationSchemaWithEdgeId original newVal =
+annotationSchemaWithInEdge :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String -> Phantoms.TTerm Mapping.AnnotationSchema
+annotationSchemaWithInEdge original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
       Core.recordFields = [
@@ -536,7 +536,118 @@ annotationSchemaWithEdgeId original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "edgeId"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "edgeId")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyKey"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "propertyKey")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyValue"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "propertyValue")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "outVertex"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "outVertex")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "outVertexLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "outVertexLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "inVertex"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "inVertex")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "inVertexLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "inVertexLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "outEdge"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "outEdge")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "outEdgeLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "outEdgeLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "inEdge"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "inEdgeLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "inEdgeLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "ignore"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "ignore")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+annotationSchemaWithInEdgeLabel :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String -> Phantoms.TTerm Mapping.AnnotationSchema
+annotationSchemaWithInEdgeLabel original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "vertexLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "vertexLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "edgeLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "edgeLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "vertexId"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "vertexId")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "edgeId"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "edgeId")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "propertyKey"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -602,439 +713,7 @@ annotationSchemaWithEdgeId original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inEdgeLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "inEdgeLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "ignore"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "ignore")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-annotationSchemaWithPropertyKey :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String -> Phantoms.TTerm Mapping.AnnotationSchema
-annotationSchemaWithPropertyKey original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "vertexLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "vertexLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "edgeLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "edgeLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "vertexId"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "vertexId")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "edgeId"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "edgeId")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "propertyKey"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "propertyValue"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "propertyValue")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "outVertex"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "outVertex")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "outVertexLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "outVertexLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "inVertex"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "inVertex")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "inVertexLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "inVertexLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "outEdge"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "outEdge")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "outEdgeLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "outEdgeLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "inEdge"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "inEdge")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "inEdgeLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "inEdgeLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "ignore"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "ignore")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-annotationSchemaWithPropertyValue :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String -> Phantoms.TTerm Mapping.AnnotationSchema
-annotationSchemaWithPropertyValue original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "vertexLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "vertexLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "edgeLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "edgeLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "vertexId"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "vertexId")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "edgeId"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "edgeId")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "propertyKey"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "propertyKey")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "propertyValue"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "outVertex"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "outVertex")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "outVertexLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "outVertexLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "inVertex"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "inVertex")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "inVertexLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "inVertexLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "outEdge"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "outEdge")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "outEdgeLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "outEdgeLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "inEdge"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "inEdge")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "inEdgeLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "inEdgeLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "ignore"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "ignore")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-annotationSchemaWithOutVertex :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String -> Phantoms.TTerm Mapping.AnnotationSchema
-annotationSchemaWithOutVertex original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "vertexLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "vertexLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "edgeLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "edgeLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "vertexId"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "vertexId")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "edgeId"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "edgeId")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "propertyKey"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "propertyKey")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "propertyValue"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "propertyValue")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "outVertex"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "outVertexLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "outVertexLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "inVertex"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "inVertex")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "inVertexLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "inVertexLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "outEdge"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "outEdge")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "outEdgeLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "outEdgeLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "inEdge"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "inEdge")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "inEdgeLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "inEdgeLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "ignore"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "ignore")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-annotationSchemaWithOutVertexLabel :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String -> Phantoms.TTerm Mapping.AnnotationSchema
-annotationSchemaWithOutVertexLabel original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "vertexLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "vertexLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "edgeLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "edgeLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "vertexId"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "vertexId")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "edgeId"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "edgeId")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "propertyKey"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "propertyKey")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "propertyValue"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "propertyValue")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "outVertex"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "outVertex")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "outVertexLabel"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "inVertex"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "inVertex")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "inVertexLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "inVertexLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "outEdge"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "outEdge")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "outEdgeLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "outEdgeLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "inEdge"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "inEdge")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "inEdgeLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "inEdgeLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ignore"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -1471,8 +1150,8 @@ annotationSchemaWithOutEdgeLabel original newVal =
               Core.projectionField = (Core.Name "ignore")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-annotationSchemaWithInEdge :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String -> Phantoms.TTerm Mapping.AnnotationSchema
-annotationSchemaWithInEdge original newVal =
+annotationSchemaWithOutVertex :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String -> Phantoms.TTerm Mapping.AnnotationSchema
+annotationSchemaWithOutVertex original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
       Core.recordFields = [
@@ -1497,6 +1176,430 @@ annotationSchemaWithInEdge original newVal =
               Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
               Core.projectionField = (Core.Name "vertexId")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "edgeId"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "edgeId")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyKey"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "propertyKey")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyValue"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "propertyValue")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "outVertex"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "outVertexLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "outVertexLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "inVertex"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "inVertex")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "inVertexLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "inVertexLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "outEdge"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "outEdge")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "outEdgeLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "outEdgeLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "inEdge"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "inEdge")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "inEdgeLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "inEdgeLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "ignore"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "ignore")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+annotationSchemaWithOutVertexLabel :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String -> Phantoms.TTerm Mapping.AnnotationSchema
+annotationSchemaWithOutVertexLabel original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "vertexLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "vertexLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "edgeLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "edgeLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "vertexId"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "vertexId")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "edgeId"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "edgeId")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyKey"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "propertyKey")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyValue"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "propertyValue")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "outVertex"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "outVertex")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "outVertexLabel"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "inVertex"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "inVertex")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "inVertexLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "inVertexLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "outEdge"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "outEdge")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "outEdgeLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "outEdgeLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "inEdge"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "inEdge")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "inEdgeLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "inEdgeLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "ignore"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "ignore")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+annotationSchemaWithPropertyKey :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String -> Phantoms.TTerm Mapping.AnnotationSchema
+annotationSchemaWithPropertyKey original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "vertexLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "vertexLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "edgeLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "edgeLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "vertexId"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "vertexId")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "edgeId"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "edgeId")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyKey"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyValue"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "propertyValue")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "outVertex"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "outVertex")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "outVertexLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "outVertexLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "inVertex"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "inVertex")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "inVertexLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "inVertexLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "outEdge"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "outEdge")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "outEdgeLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "outEdgeLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "inEdge"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "inEdge")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "inEdgeLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "inEdgeLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "ignore"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "ignore")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+annotationSchemaWithPropertyValue :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String -> Phantoms.TTerm Mapping.AnnotationSchema
+annotationSchemaWithPropertyValue original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "vertexLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "vertexLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "edgeLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "edgeLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "vertexId"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "vertexId")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "edgeId"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "edgeId")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyKey"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "propertyKey")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyValue"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "outVertex"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "outVertex")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "outVertexLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "outVertexLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "inVertex"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "inVertex")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "inVertexLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "inVertexLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "outEdge"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "outEdge")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "outEdgeLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "outEdgeLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "inEdge"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "inEdge")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "inEdgeLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "inEdgeLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "ignore"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "ignore")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+annotationSchemaWithVertexId :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String -> Phantoms.TTerm Mapping.AnnotationSchema
+annotationSchemaWithVertexId original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "vertexLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "vertexLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "edgeLabel"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "edgeLabel")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "vertexId"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "edgeId"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -1562,7 +1665,11 @@ annotationSchemaWithInEdge original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inEdge"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "inEdge")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inEdgeLabel"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -1578,18 +1685,14 @@ annotationSchemaWithInEdge original newVal =
               Core.projectionField = (Core.Name "ignore")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-annotationSchemaWithInEdgeLabel :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String -> Phantoms.TTerm Mapping.AnnotationSchema
-annotationSchemaWithInEdgeLabel original newVal =
+annotationSchemaWithVertexLabel :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String -> Phantoms.TTerm Mapping.AnnotationSchema
+annotationSchemaWithVertexLabel original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "vertexLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "vertexLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "edgeLabel"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -1676,113 +1779,6 @@ annotationSchemaWithInEdgeLabel original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inEdgeLabel"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "ignore"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "ignore")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-annotationSchemaWithIgnore :: Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm String -> Phantoms.TTerm Mapping.AnnotationSchema
-annotationSchemaWithIgnore original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "vertexLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "vertexLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "edgeLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "edgeLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "vertexId"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "vertexId")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "edgeId"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "edgeId")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "propertyKey"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "propertyKey")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "propertyValue"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "propertyValue")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "outVertex"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "outVertex")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "outVertexLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "outVertexLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "inVertex"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "inVertex")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "inVertexLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "inVertexLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "outEdge"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "outEdge")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "outEdgeLabel"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "outEdgeLabel")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "inEdge"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-              Core.projectionField = (Core.Name "inEdge")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "inEdgeLabel"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
@@ -1790,7 +1786,11 @@ annotationSchemaWithIgnore original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ignore"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+              Core.projectionField = (Core.Name "ignore")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeSpec :: Phantoms.TTerm Model.EdgeLabel -> Phantoms.TTerm Mapping.ValueSpec -> Phantoms.TTerm Mapping.ValueSpec -> Phantoms.TTerm Mapping.ValueSpec -> Phantoms.TTerm [Mapping.PropertySpec] -> Phantoms.TTerm Mapping.EdgeSpec
 edgeSpec label id out in_ properties =
@@ -1813,28 +1813,12 @@ edgeSpec label id out in_ properties =
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Phantoms.unTTerm properties)}]}))
 
-edgeSpecLabel :: Phantoms.TTerm Mapping.EdgeSpec -> Phantoms.TTerm Model.EdgeLabel
-edgeSpecLabel x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.pg.mapping.EdgeSpec"),
-        Core.projectionField = (Core.Name "label")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 edgeSpecId :: Phantoms.TTerm Mapping.EdgeSpec -> Phantoms.TTerm Mapping.ValueSpec
 edgeSpecId x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.mapping.EdgeSpec"),
         Core.projectionField = (Core.Name "id")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-edgeSpecOut :: Phantoms.TTerm Mapping.EdgeSpec -> Phantoms.TTerm Mapping.ValueSpec
-edgeSpecOut x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.pg.mapping.EdgeSpec"),
-        Core.projectionField = (Core.Name "out")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeSpecIn :: Phantoms.TTerm Mapping.EdgeSpec -> Phantoms.TTerm Mapping.ValueSpec
@@ -1845,6 +1829,22 @@ edgeSpecIn x =
         Core.projectionField = (Core.Name "in")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
+edgeSpecLabel :: Phantoms.TTerm Mapping.EdgeSpec -> Phantoms.TTerm Model.EdgeLabel
+edgeSpecLabel x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.pg.mapping.EdgeSpec"),
+        Core.projectionField = (Core.Name "label")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+edgeSpecOut :: Phantoms.TTerm Mapping.EdgeSpec -> Phantoms.TTerm Mapping.ValueSpec
+edgeSpecOut x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.pg.mapping.EdgeSpec"),
+        Core.projectionField = (Core.Name "out")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
 edgeSpecProperties :: Phantoms.TTerm Mapping.EdgeSpec -> Phantoms.TTerm [Mapping.PropertySpec]
 edgeSpecProperties x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -1853,21 +1853,21 @@ edgeSpecProperties x =
         Core.projectionField = (Core.Name "properties")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-edgeSpecWithLabel :: Phantoms.TTerm Mapping.EdgeSpec -> Phantoms.TTerm Model.EdgeLabel -> Phantoms.TTerm Mapping.EdgeSpec
-edgeSpecWithLabel original newVal =
+edgeSpecWithId :: Phantoms.TTerm Mapping.EdgeSpec -> Phantoms.TTerm Mapping.ValueSpec -> Phantoms.TTerm Mapping.EdgeSpec
+edgeSpecWithId original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.mapping.EdgeSpec"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "label"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.mapping.EdgeSpec"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "label")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "out"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -1890,8 +1890,8 @@ edgeSpecWithLabel original newVal =
               Core.projectionField = (Core.Name "properties")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-edgeSpecWithId :: Phantoms.TTerm Mapping.EdgeSpec -> Phantoms.TTerm Mapping.ValueSpec -> Phantoms.TTerm Mapping.EdgeSpec
-edgeSpecWithId original newVal =
+edgeSpecWithIn :: Phantoms.TTerm Mapping.EdgeSpec -> Phantoms.TTerm Mapping.ValueSpec -> Phantoms.TTerm Mapping.EdgeSpec
+edgeSpecWithIn original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.mapping.EdgeSpec"),
       Core.recordFields = [
@@ -1904,7 +1904,44 @@ edgeSpecWithId original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.EdgeSpec"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "out"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.EdgeSpec"),
+              Core.projectionField = (Core.Name "out")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "in"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "properties"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.EdgeSpec"),
+              Core.projectionField = (Core.Name "properties")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+edgeSpecWithLabel :: Phantoms.TTerm Mapping.EdgeSpec -> Phantoms.TTerm Model.EdgeLabel -> Phantoms.TTerm Mapping.EdgeSpec
+edgeSpecWithLabel original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.pg.mapping.EdgeSpec"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "label"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.EdgeSpec"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "out"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -1964,43 +2001,6 @@ edgeSpecWithOut original newVal =
               Core.projectionField = (Core.Name "properties")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-edgeSpecWithIn :: Phantoms.TTerm Mapping.EdgeSpec -> Phantoms.TTerm Mapping.ValueSpec -> Phantoms.TTerm Mapping.EdgeSpec
-edgeSpecWithIn original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.pg.mapping.EdgeSpec"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "label"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.EdgeSpec"),
-              Core.projectionField = (Core.Name "label")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.EdgeSpec"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "out"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.EdgeSpec"),
-              Core.projectionField = (Core.Name "out")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "in"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "properties"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.EdgeSpec"),
-              Core.projectionField = (Core.Name "properties")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
 edgeSpecWithProperties :: Phantoms.TTerm Mapping.EdgeSpec -> Phantoms.TTerm [Mapping.PropertySpec] -> Phantoms.TTerm Mapping.EdgeSpec
 edgeSpecWithProperties original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -2038,20 +2038,20 @@ edgeSpecWithProperties original newVal =
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-elementSpecVertex :: Phantoms.TTerm Mapping.VertexSpec -> Phantoms.TTerm Mapping.ElementSpec
-elementSpecVertex x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.pg.mapping.ElementSpec"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "vertex"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
 elementSpecEdge :: Phantoms.TTerm Mapping.EdgeSpec -> Phantoms.TTerm Mapping.ElementSpec
 elementSpecEdge x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.mapping.ElementSpec"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edge"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+elementSpecVertex :: Phantoms.TTerm Mapping.VertexSpec -> Phantoms.TTerm Mapping.ElementSpec
+elementSpecVertex x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.pg.mapping.ElementSpec"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "vertex"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 propertySpec :: Phantoms.TTerm Model.PropertyKey -> Phantoms.TTerm Mapping.ValueSpec -> Phantoms.TTerm Mapping.PropertySpec
@@ -2147,20 +2147,28 @@ schema vertexIdTypes vertexIds edgeIdTypes edgeIds propertyTypes propertyValues 
           Core.fieldName = (Core.Name "defaultEdgeId"),
           Core.fieldTerm = (Phantoms.unTTerm defaultEdgeId)}]}))
 
-schemaVertexIdTypes :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Util.Coder Core.Type t)
-schemaVertexIdTypes x =
+schemaAnnotations :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm Mapping.AnnotationSchema
+schemaAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
-        Core.projectionField = (Core.Name "vertexIdTypes")})))),
+        Core.projectionField = (Core.Name "annotations")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-schemaVertexIds :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Util.Coder Core.Term v)
-schemaVertexIds x =
+schemaDefaultEdgeId :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm v
+schemaDefaultEdgeId x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
-        Core.projectionField = (Core.Name "vertexIds")})))),
+        Core.projectionField = (Core.Name "defaultEdgeId")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+schemaDefaultVertexId :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm v
+schemaDefaultVertexId x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
+        Core.projectionField = (Core.Name "defaultVertexId")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 schemaEdgeIdTypes :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Util.Coder Core.Type t)
@@ -2195,38 +2203,99 @@ schemaPropertyValues x =
         Core.projectionField = (Core.Name "propertyValues")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-schemaAnnotations :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm Mapping.AnnotationSchema
-schemaAnnotations x =
+schemaVertexIdTypes :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Util.Coder Core.Type t)
+schemaVertexIdTypes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
-        Core.projectionField = (Core.Name "annotations")})))),
+        Core.projectionField = (Core.Name "vertexIdTypes")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-schemaDefaultVertexId :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm v
-schemaDefaultVertexId x =
+schemaVertexIds :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Util.Coder Core.Term v)
+schemaVertexIds x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
-        Core.projectionField = (Core.Name "defaultVertexId")})))),
+        Core.projectionField = (Core.Name "vertexIds")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-schemaDefaultEdgeId :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm v
-schemaDefaultEdgeId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
-        Core.projectionField = (Core.Name "defaultEdgeId")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-schemaWithVertexIdTypes :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Util.Coder Core.Type t) -> Phantoms.TTerm (Mapping.Schema s t v)
-schemaWithVertexIdTypes original newVal =
+schemaWithAnnotations :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm (Mapping.Schema s t v)
+schemaWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.mapping.Schema"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "vertexIdTypes"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
+              Core.projectionField = (Core.Name "vertexIdTypes")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "vertexIds"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
+              Core.projectionField = (Core.Name "vertexIds")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "edgeIdTypes"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
+              Core.projectionField = (Core.Name "edgeIdTypes")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "edgeIds"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
+              Core.projectionField = (Core.Name "edgeIds")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyTypes"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
+              Core.projectionField = (Core.Name "propertyTypes")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyValues"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
+              Core.projectionField = (Core.Name "propertyValues")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "annotations"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "defaultVertexId"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
+              Core.projectionField = (Core.Name "defaultVertexId")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "defaultEdgeId"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
+              Core.projectionField = (Core.Name "defaultEdgeId")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+schemaWithDefaultEdgeId :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm v -> Phantoms.TTerm (Mapping.Schema s t v)
+schemaWithDefaultEdgeId original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.pg.mapping.Schema"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "vertexIdTypes"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
+              Core.projectionField = (Core.Name "vertexIdTypes")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "vertexIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -2278,14 +2347,10 @@ schemaWithVertexIdTypes original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultEdgeId"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
-              Core.projectionField = (Core.Name "defaultEdgeId")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-schemaWithVertexIds :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Util.Coder Core.Term v) -> Phantoms.TTerm (Mapping.Schema s t v)
-schemaWithVertexIds original newVal =
+schemaWithDefaultVertexId :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm v -> Phantoms.TTerm (Mapping.Schema s t v)
+schemaWithDefaultVertexId original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.mapping.Schema"),
       Core.recordFields = [
@@ -2298,7 +2363,11 @@ schemaWithVertexIds original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "vertexIds"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
+              Core.projectionField = (Core.Name "vertexIds")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "edgeIdTypes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -2336,11 +2405,7 @@ schemaWithVertexIds original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultVertexId"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
-              Core.projectionField = (Core.Name "defaultVertexId")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "defaultEdgeId"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -2609,148 +2674,14 @@ schemaWithPropertyValues original newVal =
               Core.projectionField = (Core.Name "defaultEdgeId")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-schemaWithAnnotations :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm (Mapping.Schema s t v)
-schemaWithAnnotations original newVal =
+schemaWithVertexIdTypes :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Util.Coder Core.Type t) -> Phantoms.TTerm (Mapping.Schema s t v)
+schemaWithVertexIdTypes original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.mapping.Schema"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "vertexIdTypes"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
-              Core.projectionField = (Core.Name "vertexIdTypes")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "vertexIds"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
-              Core.projectionField = (Core.Name "vertexIds")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "edgeIdTypes"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
-              Core.projectionField = (Core.Name "edgeIdTypes")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "edgeIds"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
-              Core.projectionField = (Core.Name "edgeIds")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "propertyTypes"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
-              Core.projectionField = (Core.Name "propertyTypes")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "propertyValues"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
-              Core.projectionField = (Core.Name "propertyValues")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "annotations"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "defaultVertexId"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
-              Core.projectionField = (Core.Name "defaultVertexId")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "defaultEdgeId"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
-              Core.projectionField = (Core.Name "defaultEdgeId")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-schemaWithDefaultVertexId :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm v -> Phantoms.TTerm (Mapping.Schema s t v)
-schemaWithDefaultVertexId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.pg.mapping.Schema"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "vertexIdTypes"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
-              Core.projectionField = (Core.Name "vertexIdTypes")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "vertexIds"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
-              Core.projectionField = (Core.Name "vertexIds")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "edgeIdTypes"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
-              Core.projectionField = (Core.Name "edgeIdTypes")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "edgeIds"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
-              Core.projectionField = (Core.Name "edgeIds")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "propertyTypes"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
-              Core.projectionField = (Core.Name "propertyTypes")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "propertyValues"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
-              Core.projectionField = (Core.Name "propertyValues")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "annotations"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
-              Core.projectionField = (Core.Name "annotations")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "defaultVertexId"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "defaultEdgeId"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
-              Core.projectionField = (Core.Name "defaultEdgeId")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-schemaWithDefaultEdgeId :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm v -> Phantoms.TTerm (Mapping.Schema s t v)
-schemaWithDefaultEdgeId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.pg.mapping.Schema"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "vertexIdTypes"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
-              Core.projectionField = (Core.Name "vertexIdTypes")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "vertexIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -2802,15 +2733,76 @@ schemaWithDefaultEdgeId original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultEdgeId"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
+              Core.projectionField = (Core.Name "defaultEdgeId")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-valueSpecValue :: Phantoms.TTerm Mapping.ValueSpec
-valueSpecValue =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.pg.mapping.ValueSpec"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "value"),
-        Core.fieldTerm = Core.TermUnit}}))
+schemaWithVertexIds :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Util.Coder Core.Term v) -> Phantoms.TTerm (Mapping.Schema s t v)
+schemaWithVertexIds original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.pg.mapping.Schema"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "vertexIdTypes"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
+              Core.projectionField = (Core.Name "vertexIdTypes")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "vertexIds"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "edgeIdTypes"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
+              Core.projectionField = (Core.Name "edgeIdTypes")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "edgeIds"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
+              Core.projectionField = (Core.Name "edgeIds")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyTypes"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
+              Core.projectionField = (Core.Name "propertyTypes")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyValues"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
+              Core.projectionField = (Core.Name "propertyValues")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "annotations"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
+              Core.projectionField = (Core.Name "annotations")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "defaultVertexId"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
+              Core.projectionField = (Core.Name "defaultVertexId")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "defaultEdgeId"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.Schema"),
+              Core.projectionField = (Core.Name "defaultEdgeId")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 valueSpecPattern :: Phantoms.TTerm String -> Phantoms.TTerm Mapping.ValueSpec
 valueSpecPattern x =
@@ -2819,6 +2811,14 @@ valueSpecPattern x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pattern"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+valueSpecValue :: Phantoms.TTerm Mapping.ValueSpec
+valueSpecValue =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.pg.mapping.ValueSpec"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "value"),
+        Core.fieldTerm = Core.TermUnit}}))
 
 vertexSpec :: Phantoms.TTerm Model.VertexLabel -> Phantoms.TTerm Mapping.ValueSpec -> Phantoms.TTerm [Mapping.PropertySpec] -> Phantoms.TTerm Mapping.VertexSpec
 vertexSpec label id properties =
@@ -2835,20 +2835,20 @@ vertexSpec label id properties =
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Phantoms.unTTerm properties)}]}))
 
-vertexSpecLabel :: Phantoms.TTerm Mapping.VertexSpec -> Phantoms.TTerm Model.VertexLabel
-vertexSpecLabel x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.pg.mapping.VertexSpec"),
-        Core.projectionField = (Core.Name "label")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 vertexSpecId :: Phantoms.TTerm Mapping.VertexSpec -> Phantoms.TTerm Mapping.ValueSpec
 vertexSpecId x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.mapping.VertexSpec"),
         Core.projectionField = (Core.Name "id")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+vertexSpecLabel :: Phantoms.TTerm Mapping.VertexSpec -> Phantoms.TTerm Model.VertexLabel
+vertexSpecLabel x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.pg.mapping.VertexSpec"),
+        Core.projectionField = (Core.Name "label")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexSpecProperties :: Phantoms.TTerm Mapping.VertexSpec -> Phantoms.TTerm [Mapping.PropertySpec]
@@ -2858,29 +2858,6 @@ vertexSpecProperties x =
         Core.projectionTypeName = (Core.Name "hydra.pg.mapping.VertexSpec"),
         Core.projectionField = (Core.Name "properties")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-vertexSpecWithLabel :: Phantoms.TTerm Mapping.VertexSpec -> Phantoms.TTerm Model.VertexLabel -> Phantoms.TTerm Mapping.VertexSpec
-vertexSpecWithLabel original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.pg.mapping.VertexSpec"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "label"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.VertexSpec"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "properties"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.VertexSpec"),
-              Core.projectionField = (Core.Name "properties")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 vertexSpecWithId :: Phantoms.TTerm Mapping.VertexSpec -> Phantoms.TTerm Mapping.ValueSpec -> Phantoms.TTerm Mapping.VertexSpec
 vertexSpecWithId original newVal =
@@ -2897,6 +2874,29 @@ vertexSpecWithId original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "properties"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.VertexSpec"),
+              Core.projectionField = (Core.Name "properties")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+vertexSpecWithLabel :: Phantoms.TTerm Mapping.VertexSpec -> Phantoms.TTerm Model.VertexLabel -> Phantoms.TTerm Mapping.VertexSpec
+vertexSpecWithLabel original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.pg.mapping.VertexSpec"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "label"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.pg.mapping.VertexSpec"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {

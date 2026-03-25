@@ -18,10 +18,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Convert a Hydra module to a map of JSON Schema documents
-moduleToJsonSchema :: t0 -> t1 -> t2 -> t3 -> t4 -> t5
-moduleToJsonSchema opts mod defs cx g = moduleToJsonSchema opts mod defs cx g
-
 -- | Construct JSON Schema documents from type definitions
 constructModule :: t0 -> t1 -> t2 -> t3 -> t4 -> t5
 constructModule cx g opts mod typeDefs = constructModule cx g opts mod typeDefs
@@ -58,6 +54,10 @@ isRequiredField ft =
       in case (Rewriting.deannotateType typ) of
         Core.TypeMaybe _ -> False
         _ -> True
+
+-- | Convert a Hydra module to a map of JSON Schema documents
+moduleToJsonSchema :: t0 -> t1 -> t2 -> t3 -> t4 -> t5
+moduleToJsonSchema opts mod defs cx g = moduleToJsonSchema opts mod defs cx g
 
 -- | Create a JSON Schema reference restriction for a named type
 referenceRestriction :: Core.Name -> Schema.Restriction

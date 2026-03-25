@@ -40,6 +40,74 @@ applyInsideTypeLambdasAndAnnotations f term0 =
         Core.typeLambdaBody = (applyInsideTypeLambdasAndAnnotations f (Core.typeLambdaBody v0))})
       _ -> f term0
 
+-- | Strip type annotations from the top levels of a term
+deannotateAndDetypeTerm :: Core.Term -> Core.Term
+deannotateAndDetypeTerm t =
+    case t of
+      Core.TermAnnotated v0 -> deannotateAndDetypeTerm (Core.annotatedTermBody v0)
+      Core.TermTypeApplication v0 -> deannotateAndDetypeTerm (Core.typeApplicationTermBody v0)
+      Core.TermTypeLambda v0 -> deannotateAndDetypeTerm (Core.typeLambdaBody v0)
+      _ -> t
+
+-- | Strip all annotations (including System F type annotations) from the top levels of a term
+deannotateTerm :: Core.Term -> Core.Term
+deannotateTerm t =
+    case t of
+      Core.TermAnnotated v0 -> deannotateTerm (Core.annotatedTermBody v0)
+      _ -> t
+
+-- | Strip all annotations from a term
+deannotateType :: Core.Type -> Core.Type
+deannotateType t =
+    case t of
+      Core.TypeAnnotated v0 -> deannotateType (Core.annotatedTypeBody v0)
+      _ -> t
+
+-- | Strip any top-level type lambdas from a type, extracting the (possibly nested) type body
+deannotateTypeParameters :: Core.Type -> Core.Type
+deannotateTypeParameters t =
+    case (deannotateType t) of
+      Core.TypeForall v0 -> deannotateTypeParameters (Core.forallTypeBody v0)
+      _ -> t
+
+-- | Recursively strip all annotations from a type
+deannotateTypeRecursive :: Core.Type -> Core.Type
+deannotateTypeRecursive typ =
+
+      let strip =
+              \recurse -> \typ ->
+                let rewritten = recurse typ
+                in case rewritten of
+                  Core.TypeAnnotated v0 -> Core.annotatedTypeBody v0
+                  _ -> rewritten
+      in (rewriteType strip typ)
+
+-- | Recursively strip all annotations from a type scheme
+deannotateTypeSchemeRecursive :: Core.TypeScheme -> Core.TypeScheme
+deannotateTypeSchemeRecursive ts =
+
+      let vars = Core.typeSchemeVariables ts
+          typ = Core.typeSchemeType ts
+          constraints = Core.typeSchemeConstraints ts
+      in Core.TypeScheme {
+        Core.typeSchemeVariables = vars,
+        Core.typeSchemeType = (deannotateTypeRecursive typ),
+        Core.typeSchemeConstraints = constraints}
+
+-- | Strip System F type annotations from the top levels of a term, but leave application-specific annotations intact
+detypeTerm :: Core.Term -> Core.Term
+detypeTerm t =
+    case t of
+      Core.TermAnnotated v0 ->
+        let subj = Core.annotatedTermBody v0
+            ann = Core.annotatedTermAnnotation v0
+        in (Core.TermAnnotated (Core.AnnotatedTerm {
+          Core.annotatedTermBody = (detypeTerm subj),
+          Core.annotatedTermAnnotation = ann}))
+      Core.TermTypeApplication v0 -> deannotateAndDetypeTerm (Core.typeApplicationTermBody v0)
+      Core.TermTypeLambda v0 -> deannotateAndDetypeTerm (Core.typeLambdaBody v0)
+      _ -> t
+
 -- | Extend a graph by descending into a lambda body
 extendGraphForLambda :: Graph.Graph -> Core.Lambda -> Graph.Graph
 extendGraphForLambda g lam =
@@ -114,73 +182,18 @@ extendGraphWithBindings bindings g =
         Graph.graphSchemaTypes = (Graph.graphSchemaTypes g),
         Graph.graphTypeVariables = (Graph.graphTypeVariables g)}
 
--- | Strip type annotations from the top levels of a term
-deannotateAndDetypeTerm :: Core.Term -> Core.Term
-deannotateAndDetypeTerm t =
-    case t of
-      Core.TermAnnotated v0 -> deannotateAndDetypeTerm (Core.annotatedTermBody v0)
-      Core.TermTypeApplication v0 -> deannotateAndDetypeTerm (Core.typeApplicationTermBody v0)
-      Core.TermTypeLambda v0 -> deannotateAndDetypeTerm (Core.typeLambdaBody v0)
-      _ -> t
+-- | Convert a forall type to a type scheme
+fTypeToTypeScheme :: Core.Type -> Core.TypeScheme
+fTypeToTypeScheme typ =
 
--- | Strip all annotations (including System F type annotations) from the top levels of a term
-deannotateTerm :: Core.Term -> Core.Term
-deannotateTerm t =
-    case t of
-      Core.TermAnnotated v0 -> deannotateTerm (Core.annotatedTermBody v0)
-      _ -> t
-
--- | Strip all annotations from a term
-deannotateType :: Core.Type -> Core.Type
-deannotateType t =
-    case t of
-      Core.TypeAnnotated v0 -> deannotateType (Core.annotatedTypeBody v0)
-      _ -> t
-
--- | Strip any top-level type lambdas from a type, extracting the (possibly nested) type body
-deannotateTypeParameters :: Core.Type -> Core.Type
-deannotateTypeParameters t =
-    case (deannotateType t) of
-      Core.TypeForall v0 -> deannotateTypeParameters (Core.forallTypeBody v0)
-      _ -> t
-
--- | Recursively strip all annotations from a type
-deannotateTypeRecursive :: Core.Type -> Core.Type
-deannotateTypeRecursive typ =
-
-      let strip =
-              \recurse -> \typ ->
-                let rewritten = recurse typ
-                in case rewritten of
-                  Core.TypeAnnotated v0 -> Core.annotatedTypeBody v0
-                  _ -> rewritten
-      in (rewriteType strip typ)
-
--- | Recursively strip all annotations from a type scheme
-deannotateTypeSchemeRecursive :: Core.TypeScheme -> Core.TypeScheme
-deannotateTypeSchemeRecursive ts =
-
-      let vars = Core.typeSchemeVariables ts
-          typ = Core.typeSchemeType ts
-          constraints = Core.typeSchemeConstraints ts
-      in Core.TypeScheme {
-        Core.typeSchemeVariables = vars,
-        Core.typeSchemeType = (deannotateTypeRecursive typ),
-        Core.typeSchemeConstraints = constraints}
-
--- | Strip System F type annotations from the top levels of a term, but leave application-specific annotations intact
-detypeTerm :: Core.Term -> Core.Term
-detypeTerm t =
-    case t of
-      Core.TermAnnotated v0 ->
-        let subj = Core.annotatedTermBody v0
-            ann = Core.annotatedTermAnnotation v0
-        in (Core.TermAnnotated (Core.AnnotatedTerm {
-          Core.annotatedTermBody = (detypeTerm subj),
-          Core.annotatedTermAnnotation = ann}))
-      Core.TermTypeApplication v0 -> deannotateAndDetypeTerm (Core.typeApplicationTermBody v0)
-      Core.TermTypeLambda v0 -> deannotateAndDetypeTerm (Core.typeLambdaBody v0)
-      _ -> t
+      let gatherForall =
+              \vars -> \typ -> case (deannotateType typ) of
+                Core.TypeForall v0 -> gatherForall (Lists.cons (Core.forallTypeParameter v0) vars) (Core.forallTypeBody v0)
+                _ -> Core.TypeScheme {
+                  Core.typeSchemeVariables = (Lists.reverse vars),
+                  Core.typeSchemeType = typ,
+                  Core.typeSchemeConstraints = Nothing}
+      in (gatherForall [] typ)
 
 -- | Flatten nested let expressions
 flattenLetTerms :: Core.Term -> Core.Term
@@ -284,19 +297,6 @@ foldTermWithGraphAndPath f cx0 val0 term0 =
           result = rewriteAndFoldTermWithGraphAndPath wrapper cx0 val0 term0
       in (Pairs.first result)
 
--- | Convert a forall type to a type scheme
-fTypeToTypeScheme :: Core.Type -> Core.TypeScheme
-fTypeToTypeScheme typ =
-
-      let gatherForall =
-              \vars -> \typ -> case (deannotateType typ) of
-                Core.TypeForall v0 -> gatherForall (Lists.cons (Core.forallTypeParameter v0) vars) (Core.forallTypeBody v0)
-                _ -> Core.TypeScheme {
-                  Core.typeSchemeVariables = (Lists.reverse vars),
-                  Core.typeSchemeType = typ,
-                  Core.typeSchemeConstraints = Nothing}
-      in (gatherForall [] typ)
-
 -- | Get the set of free type variables in a term (including schema names, where they appear in type annotations). In this context, only the type schemes of let bindings can bind type variables; type lambdas do not.
 freeTypeVariablesInTerm :: Core.Term -> S.Set Core.Name
 freeTypeVariablesInTerm term0 =
@@ -360,14 +360,6 @@ freeVariablesInTypeOrdered typ =
                 _ -> Lists.concat (Lists.map (collectVars boundVars) (subtypes t))
       in (Lists.nub (collectVars Sets.empty typ))
 
--- | Find free variables in a type scheme (simple version)
-freeVariablesInTypeSchemeSimple :: Core.TypeScheme -> S.Set Core.Name
-freeVariablesInTypeSchemeSimple ts =
-
-      let vars = Core.typeSchemeVariables ts
-          t = Core.typeSchemeType ts
-      in (Sets.difference (freeVariablesInTypeSimple t) (Sets.fromList vars))
-
 -- | Find free variables in a type scheme
 freeVariablesInTypeScheme :: Core.TypeScheme -> S.Set Core.Name
 freeVariablesInTypeScheme ts =
@@ -375,6 +367,14 @@ freeVariablesInTypeScheme ts =
       let vars = Core.typeSchemeVariables ts
           t = Core.typeSchemeType ts
       in (Sets.difference (freeVariablesInType t) (Sets.fromList vars))
+
+-- | Find free variables in a type scheme (simple version)
+freeVariablesInTypeSchemeSimple :: Core.TypeScheme -> S.Set Core.Name
+freeVariablesInTypeSchemeSimple ts =
+
+      let vars = Core.typeSchemeVariables ts
+          t = Core.typeSchemeType ts
+      in (Sets.difference (freeVariablesInTypeSimple t) (Sets.fromList vars))
 
 -- | Same as freeVariablesInType, but ignores the binding action of lambda types
 freeVariablesInTypeSimple :: Core.Type -> S.Set Core.Name
@@ -1268,32 +1268,6 @@ rewriteTermWithContext f cx0 term0 =
           rewrite = \cx -> \term -> f (forSubterms rewrite) cx term
       in (rewrite cx0 term0)
 
--- | Rewrite a term with the help of a Graph which is updated as we descend into subterms
-rewriteTermWithGraph :: ((Core.Term -> t0) -> Graph.Graph -> Core.Term -> t0) -> Graph.Graph -> Core.Term -> t0
-rewriteTermWithGraph f cx0 term0 =
-
-      let f2 =
-              \recurse -> \cx -> \term ->
-                let recurse1 = \term -> recurse cx term
-                in case term of
-                  Core.TermFunction v0 -> case v0 of
-                    Core.FunctionLambda v1 ->
-                      let cx1 = extendGraphForLambda cx v1
-                          recurse2 = \term -> recurse cx1 term
-                      in (f recurse2 cx1 term)
-                    _ -> f recurse1 cx term
-                  Core.TermLet v0 ->
-                    let cx1 = extendGraphForLet (\_ -> \_ -> Nothing) cx v0
-                        recurse2 = \term -> recurse cx1 term
-                    in (f recurse2 cx1 term)
-                  Core.TermTypeLambda v0 ->
-                    let cx1 = extendGraphForTypeLambda cx v0
-                        recurse2 = \term -> recurse cx1 term
-                    in (f recurse2 cx1 term)
-                  _ -> f recurse1 cx term
-          rewrite = \cx -> \term -> f2 rewrite cx term
-      in (rewrite cx0 term0)
-
 -- | Either-based variant of rewriteTermWithContextM which allows a context (e.g. a TypeContext) to be passed down to all subterms during rewriting
 rewriteTermWithContextM :: ((t0 -> Core.Term -> Either t1 Core.Term) -> t0 -> Core.Term -> Either t1 Core.Term) -> t0 -> Core.Term -> Either t1 Core.Term
 rewriteTermWithContextM f cx0 term0 =
@@ -1387,6 +1361,32 @@ rewriteTermWithContextM f cx0 term0 =
                       Core.wrappedTermTypeName = name,
                       Core.wrappedTermBody = rt}))))
           rewrite = \cx -> \term -> f (forSubterms rewrite) cx term
+      in (rewrite cx0 term0)
+
+-- | Rewrite a term with the help of a Graph which is updated as we descend into subterms
+rewriteTermWithGraph :: ((Core.Term -> t0) -> Graph.Graph -> Core.Term -> t0) -> Graph.Graph -> Core.Term -> t0
+rewriteTermWithGraph f cx0 term0 =
+
+      let f2 =
+              \recurse -> \cx -> \term ->
+                let recurse1 = \term -> recurse cx term
+                in case term of
+                  Core.TermFunction v0 -> case v0 of
+                    Core.FunctionLambda v1 ->
+                      let cx1 = extendGraphForLambda cx v1
+                          recurse2 = \term -> recurse cx1 term
+                      in (f recurse2 cx1 term)
+                    _ -> f recurse1 cx term
+                  Core.TermLet v0 ->
+                    let cx1 = extendGraphForLet (\_ -> \_ -> Nothing) cx v0
+                        recurse2 = \term -> recurse cx1 term
+                    in (f recurse2 cx1 term)
+                  Core.TermTypeLambda v0 ->
+                    let cx1 = extendGraphForTypeLambda cx v0
+                        recurse2 = \term -> recurse cx1 term
+                    in (f recurse2 cx1 term)
+                  _ -> f recurse1 cx term
+          rewrite = \cx -> \term -> f2 rewrite cx term
       in (rewrite cx0 term0)
 
 rewriteType :: ((Core.Type -> Core.Type) -> Core.Type -> Core.Type) -> Core.Type -> Core.Type
@@ -1516,6 +1516,19 @@ simplifyTerm term =
                 in (recurse (forTerm stripped))
       in (rewriteTerm simplify term)
 
+-- | Strip outer type lambda wrappers from a term, preserving type application wrappers and annotations
+stripTypeLambdas :: Core.Term -> Core.Term
+stripTypeLambdas t =
+    case t of
+      Core.TermAnnotated v0 ->
+        let subj = Core.annotatedTermBody v0
+            ann = Core.annotatedTermAnnotation v0
+        in (Core.TermAnnotated (Core.AnnotatedTerm {
+          Core.annotatedTermBody = (stripTypeLambdas subj),
+          Core.annotatedTermAnnotation = ann}))
+      Core.TermTypeLambda v0 -> stripTypeLambdas (Core.typeLambdaBody v0)
+      _ -> t
+
 -- | Substitute type variables in a type
 substituteTypeVariables :: M.Map Core.Name Core.Name -> Core.Type -> Core.Type
 substituteTypeVariables subst typ =
@@ -1592,19 +1605,6 @@ substituteVariables subst term =
                   _ -> recurse term
                 _ -> recurse term
       in (rewriteTerm replace term)
-
--- | Strip outer type lambda wrappers from a term, preserving type application wrappers and annotations
-stripTypeLambdas :: Core.Term -> Core.Term
-stripTypeLambdas t =
-    case t of
-      Core.TermAnnotated v0 ->
-        let subj = Core.annotatedTermBody v0
-            ann = Core.annotatedTermAnnotation v0
-        in (Core.TermAnnotated (Core.AnnotatedTerm {
-          Core.annotatedTermBody = (stripTypeLambdas subj),
-          Core.annotatedTermAnnotation = ann}))
-      Core.TermTypeLambda v0 -> stripTypeLambdas (Core.typeLambdaBody v0)
-      _ -> t
 
 -- | Find the children of a given term
 subterms :: Core.Term -> [Core.Term]

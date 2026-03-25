@@ -42,70 +42,71 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Convert a namespace to a file path (e.g., hydra.core -> hydra/core)
-namespaceToPath :: Module__.Namespace -> String
-namespaceToPath ns = Strings.intercalate "/" (Strings.splitOn "." (Module__.unNamespace ns))
+-- | Build a schema map (Name -> Type) from a graph's schema types
+buildSchemaMap :: Graph.Graph -> M.Map Core.Name Core.Type
+buildSchemaMap g = Maps.map (\ts -> Rewriting.deannotateType (Core.typeSchemeType ts)) (Graph.graphSchemaTypes g)
 
--- | Strip TypeSchemes from term definitions in a module, preserving type definitions. JSON-loaded modules carry inferred TypeSchemes from the original compilation. After adaptation (e.g., bigfloat -> float64), these TypeSchemes become stale and can cause inference errors. Stripping them allows the inference engine to reconstruct correct TypeSchemes from scratch.
-stripModuleTypeSchemes :: Module__.Module -> Module__.Module
-stripModuleTypeSchemes m =
+-- | Decode a single module from a JSON value
+decodeModuleFromJson :: Graph.Graph -> [Module__.Module] -> Bool -> Model.Value -> Either String Module__.Module
+decodeModuleFromJson bsGraph universeModules doStripTypeSchemes jsonVal =
 
-      let stripDef =
-              \d -> case d of
-                Module__.DefinitionTerm v0 -> Module__.DefinitionTerm (Module__.TermDefinition {
-                  Module__.termDefinitionName = (Module__.termDefinitionName v0),
-                  Module__.termDefinitionTerm = (Module__.termDefinitionTerm v0),
-                  Module__.termDefinitionType = Nothing})
-                _ -> d
-      in Module__.Module {
-        Module__.moduleNamespace = (Module__.moduleNamespace m),
-        Module__.moduleDefinitions = (Lists.map stripDef (Module__.moduleDefinitions m)),
-        Module__.moduleTermDependencies = (Module__.moduleTermDependencies m),
-        Module__.moduleTypeDependencies = (Module__.moduleTypeDependencies m),
-        Module__.moduleDescription = (Module__.moduleDescription m)}
+      let graph = modulesToGraph bsGraph universeModules universeModules
+          schemaMap = buildSchemaMap graph
+          modType = Core.TypeVariable (Core.Name "hydra.module.Module")
+      in (Eithers.either (\err -> Left err) (\term -> Eithers.either (\decErr -> Left (Errors.unDecodingError decErr)) (\mod -> Right (Logic.ifElse doStripTypeSchemes (stripModuleTypeSchemes mod) mod)) (Module.module_ graph term)) (Decode.fromJson schemaMap (Core.Name "hydra.module.Module") modType jsonVal))
 
--- | Compute transitive closure of module dependencies
-transitiveDeps :: (Module__.Module -> [Module__.Namespace]) -> M.Map Module__.Namespace Module__.Module -> [Module__.Module] -> S.Set Module__.Namespace
-transitiveDeps getDeps nsMap startMods =
+-- | Escape unescaped control characters inside JSON string literals
+escapeControlCharsInJson :: [Int] -> [Int]
+escapeControlCharsInJson input =
 
-      let initialDeps =
-              Sets.fromList (Lists.concat (Lists.map (\m -> Lists.filter (\dep -> Logic.not (Equality.equal dep (Module__.moduleNamespace m))) (getDeps m)) startMods))
+      let hexDigit = \n -> Logic.ifElse (Equality.lt n 10) (Math.add 48 n) (Math.add 97 (Math.sub n 10))
+          escapeToUnicode =
+                  \b -> [
+                    92,
+                    117,
+                    48,
+                    48,
+                    (hexDigit (Math.div b 16)),
+                    (hexDigit (Math.mod b 16))]
           go =
-                  \pending -> \visited -> Logic.ifElse (Sets.null pending) visited (
-                    let newVisited = Sets.union visited pending
-                        nextDeps =
-                                Sets.fromList (Lists.concat (Lists.map (\nsv -> Maybes.maybe [] (\depMod -> getDeps depMod) (Maps.lookup nsv nsMap)) (Sets.toList pending)))
-                        newPending = Sets.difference nextDeps newVisited
-                    in (go newPending newVisited))
-      in (go initialDeps Sets.empty)
+                  \inStr -> \esc -> \bytes -> Logic.ifElse (Lists.null bytes) [] (
+                    let b = Lists.head bytes
+                        bs = Lists.tail bytes
+                    in (Logic.ifElse esc (Lists.cons b (go inStr False bs)) (Logic.ifElse (Logic.and (Equality.equal b 92) inStr) (Lists.cons b (go inStr True bs)) (Logic.ifElse (Equality.equal b 34) (Lists.cons b (go (Logic.not inStr) False bs)) (Logic.ifElse (Logic.and inStr (Equality.lt b 32)) (Lists.concat2 (escapeToUnicode b) (go inStr False bs)) (Lists.cons b (go inStr False bs)))))))
+      in (go False False input)
 
--- | Compute transitive closure of term dependencies for a set of modules
-moduleTermDepsTransitive :: M.Map Module__.Namespace Module__.Module -> [Module__.Module] -> [Module__.Module]
-moduleTermDepsTransitive nsMap modules =
+-- | Format a primitive for the lexicon
+formatPrimitive :: Graph.Primitive -> String
+formatPrimitive prim =
 
-      let closure =
-              Sets.union (transitiveDeps (\m -> Module__.moduleTermDependencies m) nsMap modules) (Sets.fromList (Lists.map (\m -> Module__.moduleNamespace m) modules))
-      in (Maybes.cat (Lists.map (\n -> Maps.lookup n nsMap) (Sets.toList closure)))
+      let name = Core.unName (Graph.primitiveName prim)
+          typeStr = Core__.typeScheme (Graph.primitiveType prim)
+      in (Strings.cat2 (Strings.cat2 (Strings.cat2 "  " name) " : ") typeStr)
 
--- | Compute transitive closure of type dependencies for a set of modules
-moduleTypeDepsTransitive :: M.Map Module__.Namespace Module__.Module -> [Module__.Module] -> [Module__.Module]
-moduleTypeDepsTransitive nsMap modules =
+-- | Format a term binding for the lexicon
+formatTermBinding :: Core.Binding -> String
+formatTermBinding binding =
 
-      let termMods = moduleTermDepsTransitive nsMap modules
-          typeNamespaces = Sets.toList (transitiveDeps (\m -> Module__.moduleTypeDependencies m) nsMap termMods)
-      in (Maybes.cat (Lists.map (\n -> Maps.lookup n nsMap) typeNamespaces))
+      let name = Core.unName (Core.bindingName binding)
+          typeStr = Maybes.maybe "?" (\scheme -> Core__.typeScheme scheme) (Core.bindingType binding)
+      in (Strings.cat2 (Strings.cat2 (Strings.cat2 "  " name) " : ") typeStr)
 
--- | Build a graph from universe modules and working modules, using an explicit bootstrap graph
-modulesToGraph :: Graph.Graph -> [Module__.Module] -> [Module__.Module] -> Graph.Graph
-modulesToGraph bsGraph universeModules modules =
+-- | Format a type binding for the lexicon
+formatTypeBinding :: Graph.Graph -> Core.Binding -> Either Errors.DecodingError String
+formatTypeBinding graph binding =
+    Eithers.bind (Core_.type_ graph (Core.bindingTerm binding)) (\typ -> Right (Strings.cat2 (Strings.cat2 (Strings.cat2 "  " (Core.unName (Core.bindingName binding))) " = ") (Core__.type_ typ)))
 
-      let universe = Maps.fromList (Lists.map (\m -> (Module__.moduleNamespace m, m)) (Lists.concat2 universeModules modules))
-          schemaModules = moduleTypeDepsTransitive universe modules
-          dataModules = moduleTermDepsTransitive universe modules
+-- | Generate encoder or decoder modules for a list of type modules
+generateCoderModules :: (t0 -> Graph.Graph -> t1 -> Either t2 (Maybe t3)) -> Graph.Graph -> [Module__.Module] -> [t1] -> t0 -> Either t2 [t3]
+generateCoderModules codec bsGraph universeModules typeModules cx =
+
+      let universe = Maps.fromList (Lists.map (\m -> (Module__.moduleNamespace m, m)) (Lists.concat2 universeModules universeModules))
+          schemaModules = moduleTypeDepsTransitive universe universeModules
+          dataModules = moduleTermDepsTransitive universe universeModules
           schemaElements =
                   Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
                     Module__.DefinitionType v0 -> Just (Annotations.typeElement (Module__.typeDefinitionName v0) (Module__.typeDefinitionType v0))
-                    _ -> Nothing) (Module__.moduleDefinitions m))) (Lists.concat2 schemaModules modules))
+                    _ -> Nothing) (Module__.moduleDefinitions m))) (Lists.concat2 schemaModules universeModules))
           dataElements =
                   Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
                     Module__.DefinitionTerm v0 -> Just (Core.Binding {
@@ -116,7 +117,26 @@ modulesToGraph bsGraph universeModules modules =
           schemaGraph = Lexical.elementsToGraph bsGraph Maps.empty schemaElements
           schemaTypes =
                   Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Schemas.schemaGraphToTypingEnvironment Lexical.emptyContext schemaGraph)
-      in (Lexical.elementsToGraph bsGraph schemaTypes dataElements)
+          allElements = Lists.concat2 schemaElements dataElements
+          graph = Lexical.elementsToGraph bsGraph schemaTypes allElements
+      in (Eithers.map (\results -> Maybes.cat results) (Eithers.mapList (\m -> codec cx graph m) typeModules))
+
+-- | Generate the lexicon content from a graph
+generateLexicon :: Graph.Graph -> Either Errors.DecodingError String
+generateLexicon graph =
+
+      let bindings = Lexical.graphToBindings graph
+          primitives = Maps.elems (Graph.graphPrimitives graph)
+          partitioned = Lists.partition (\b -> Annotations.isNativeType b) bindings
+          typeBindings = Pairs.first partitioned
+          termBindings = Pairs.second partitioned
+          sortedPrimitives = Lists.sortOn (\p -> Graph.primitiveName p) primitives
+          sortedTypes = Lists.sortOn (\b -> Core.bindingName b) typeBindings
+          sortedTerms = Lists.sortOn (\b -> Core.bindingName b) termBindings
+      in (Eithers.bind (Eithers.mapList (\b -> formatTypeBinding graph b) sortedTypes) (\typeLines ->
+        let termLines = Lists.map (\b -> formatTermBinding b) sortedTerms
+            primitiveLines = Lists.map (\p -> formatPrimitive p) sortedPrimitives
+        in (Right (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Primitives:\n" (Strings.unlines primitiveLines)) "\nTypes:\n") (Strings.unlines typeLines)) "\nTerms:\n") (Strings.unlines termLines)))))
 
 -- | Pure core of code generation: given a coder, language, flags, bootstrap graph, universe, and modules to generate, produce a list of (filePath, content) pairs.
 generateSourceFiles :: Ord t0 => ((Module__.Module -> [Module__.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (M.Map t0 t1)) -> Coders.Language -> Bool -> Bool -> Bool -> Bool -> Graph.Graph -> [Module__.Module] -> [Module__.Module] -> Context.Context -> Either (Context.InContext Errors.Error) [(t0, t1)])
@@ -200,81 +220,28 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
                         Module__.moduleDescription = (Module__.moduleDescription m)}
               allBindings = Lexical.graphToBindings g1
               refreshedMods = Lists.map (\m -> refreshModule allBindings m) termModulesToGenerate
+              dedupDefs = \defs -> Maps.elems (Maps.fromList (Lists.map (\d -> (Module__.termDefinitionName d, d)) defs))
+              dedupedDefLists = Lists.map dedupDefs defLists
           in (Eithers.map (\xs -> Lists.concat xs) (Eithers.mapList (\p ->
             let mod = Pairs.first p
                 defs = Pairs.second p
-            in (Eithers.map (\m -> Maps.toList m) (printDefinitions mod (Lists.map (\d -> Module__.DefinitionTerm d) defs) cx g1))) (Lists.zip refreshedMods defLists))))))) (\termFiles -> Right (Lists.concat2 schemaFiles termFiles))))
+            in (Eithers.map (\m -> Maps.toList m) (printDefinitions mod (Lists.map (\d -> Module__.DefinitionTerm d) defs) cx g1))) (Lists.zip refreshedMods dedupedDefLists))))))) (\termFiles -> Right (Lists.concat2 schemaFiles termFiles))))
 
--- | Format a term binding for the lexicon
-formatTermBinding :: Core.Binding -> String
-formatTermBinding binding =
+-- | Perform type inference and generate the lexicon for a set of modules
+inferAndGenerateLexicon :: Context.Context -> Graph.Graph -> [Module__.Module] -> Either String String
+inferAndGenerateLexicon cx bsGraph kernelModules =
 
-      let name = Core.unName (Core.bindingName binding)
-          typeStr = Maybes.maybe "?" (\scheme -> Core__.typeScheme scheme) (Core.bindingType binding)
-      in (Strings.cat2 (Strings.cat2 (Strings.cat2 "  " name) " : ") typeStr)
-
--- | Format a primitive for the lexicon
-formatPrimitive :: Graph.Primitive -> String
-formatPrimitive prim =
-
-      let name = Core.unName (Graph.primitiveName prim)
-          typeStr = Core__.typeScheme (Graph.primitiveType prim)
-      in (Strings.cat2 (Strings.cat2 (Strings.cat2 "  " name) " : ") typeStr)
-
--- | Format a type binding for the lexicon
-formatTypeBinding :: Graph.Graph -> Core.Binding -> Either Errors.DecodingError String
-formatTypeBinding graph binding =
-    Eithers.bind (Core_.type_ graph (Core.bindingTerm binding)) (\typ -> Right (Strings.cat2 (Strings.cat2 (Strings.cat2 "  " (Core.unName (Core.bindingName binding))) " = ") (Core__.type_ typ)))
-
--- | Build a schema map (Name -> Type) from a graph's schema types
-buildSchemaMap :: Graph.Graph -> M.Map Core.Name Core.Type
-buildSchemaMap g = Maps.map (\ts -> Rewriting.deannotateType (Core.typeSchemeType ts)) (Graph.graphSchemaTypes g)
-
--- | Convert a generated Module into a Source module
-moduleToSourceModule :: Module__.Module -> Module__.Module
-moduleToSourceModule m =
-
-      let sourceNs =
-              Module__.Namespace (Strings.cat2 "hydra.sources." (Strings.intercalate "." (Lists.drop 1 (Strings.splitOn "." (Module__.unNamespace (Module__.moduleNamespace m))))))
-          modTypeNs = Module__.Namespace "hydra.module"
-          moduleDef =
-                  Module__.DefinitionTerm (Module__.TermDefinition {
-                    Module__.termDefinitionName = (Core.Name (Strings.cat2 (Module__.unNamespace sourceNs) ".module_")),
-                    Module__.termDefinitionTerm = (Module_.module_ m),
-                    Module__.termDefinitionType = Nothing})
-      in Module__.Module {
-        Module__.moduleNamespace = sourceNs,
-        Module__.moduleDefinitions = [
-          moduleDef],
-        Module__.moduleTermDependencies = [
-          modTypeNs],
-        Module__.moduleTypeDependencies = [
-          modTypeNs],
-        Module__.moduleDescription = (Just (Strings.cat2 "Source module for " (Module__.unNamespace (Module__.moduleNamespace m))))}
-
--- | Generate the lexicon content from a graph
-generateLexicon :: Graph.Graph -> Either Errors.DecodingError String
-generateLexicon graph =
-
-      let bindings = Lexical.graphToBindings graph
-          primitives = Maps.elems (Graph.graphPrimitives graph)
-          partitioned = Lists.partition (\b -> Annotations.isNativeType b) bindings
-          typeBindings = Pairs.first partitioned
-          termBindings = Pairs.second partitioned
-          sortedPrimitives = Lists.sortOn (\p -> Graph.primitiveName p) primitives
-          sortedTypes = Lists.sortOn (\b -> Core.bindingName b) typeBindings
-          sortedTerms = Lists.sortOn (\b -> Core.bindingName b) termBindings
-      in (Eithers.bind (Eithers.mapList (\b -> formatTypeBinding graph b) sortedTypes) (\typeLines ->
-        let termLines = Lists.map (\b -> formatTermBinding b) sortedTerms
-            primitiveLines = Lists.map (\p -> formatPrimitive p) sortedPrimitives
-        in (Right (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Primitives:\n" (Strings.unlines primitiveLines)) "\nTypes:\n") (Strings.unlines typeLines)) "\nTerms:\n") (Strings.unlines termLines)))))
-
--- | Convert a Module to a JSON string
-moduleToJson :: Module__.Module -> Either String String
-moduleToJson m =
-
-      let term = Module_.module_ m
-      in (Eithers.map (\json -> Writer.printJson json) (Encode.toJson term))
+      let g0 = modulesToGraph bsGraph kernelModules kernelModules
+          dataElements =
+                  Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
+                    Module__.DefinitionTerm v0 -> Just (Core.Binding {
+                      Core.bindingName = (Module__.termDefinitionName v0),
+                      Core.bindingTerm = (Module__.termDefinitionTerm v0),
+                      Core.bindingType = (Module__.termDefinitionType v0)})
+                    _ -> Nothing) (Module__.moduleDefinitions m))) kernelModules)
+      in (Eithers.bind (Eithers.bimap (\ic -> Errors_.error (Context.inContextObject ic)) (\x -> x) (Inference.inferGraphTypes cx dataElements g0)) (\inferResultWithCx ->
+        let g1 = Pairs.first (Pairs.first inferResultWithCx)
+        in (Eithers.bimap Errors.unDecodingError (\x -> x) (generateLexicon g1))))
 
 -- | Perform type inference on modules and reconstruct with inferred types
 inferModules :: Context.Context -> Graph.Graph -> [Module__.Module] -> [Module__.Module] -> Either (Context.InContext Errors.Error) [Module__.Module]
@@ -317,17 +284,62 @@ inferModules cx bsGraph universeMods targetMods =
                       Module__.moduleDescription = (Module__.moduleDescription m)})
         in (Right (Lists.map refreshModule targetMods))))
 
--- | Generate encoder or decoder modules for a list of type modules
-generateCoderModules :: (t0 -> Graph.Graph -> t1 -> Either t2 (Maybe t3)) -> Graph.Graph -> [Module__.Module] -> [t1] -> t0 -> Either t2 [t3]
-generateCoderModules codec bsGraph universeModules typeModules cx =
+-- | Compute transitive closure of term dependencies for a set of modules
+moduleTermDepsTransitive :: M.Map Module__.Namespace Module__.Module -> [Module__.Module] -> [Module__.Module]
+moduleTermDepsTransitive nsMap modules =
 
-      let universe = Maps.fromList (Lists.map (\m -> (Module__.moduleNamespace m, m)) (Lists.concat2 universeModules universeModules))
-          schemaModules = moduleTypeDepsTransitive universe universeModules
-          dataModules = moduleTermDepsTransitive universe universeModules
+      let closure =
+              Sets.union (transitiveDeps (\m -> Module__.moduleTermDependencies m) nsMap modules) (Sets.fromList (Lists.map (\m -> Module__.moduleNamespace m) modules))
+      in (Maybes.cat (Lists.map (\n -> Maps.lookup n nsMap) (Sets.toList closure)))
+
+-- | Convert a Module to a JSON string
+moduleToJson :: Module__.Module -> Either String String
+moduleToJson m =
+
+      let term = Module_.module_ m
+      in (Eithers.map (\json -> Writer.printJson json) (Encode.toJson term))
+
+-- | Convert a generated Module into a Source module
+moduleToSourceModule :: Module__.Module -> Module__.Module
+moduleToSourceModule m =
+
+      let sourceNs =
+              Module__.Namespace (Strings.cat2 "hydra.sources." (Strings.intercalate "." (Lists.drop 1 (Strings.splitOn "." (Module__.unNamespace (Module__.moduleNamespace m))))))
+          modTypeNs = Module__.Namespace "hydra.module"
+          moduleDef =
+                  Module__.DefinitionTerm (Module__.TermDefinition {
+                    Module__.termDefinitionName = (Core.Name (Strings.cat2 (Module__.unNamespace sourceNs) ".module_")),
+                    Module__.termDefinitionTerm = (Module_.module_ m),
+                    Module__.termDefinitionType = Nothing})
+      in Module__.Module {
+        Module__.moduleNamespace = sourceNs,
+        Module__.moduleDefinitions = [
+          moduleDef],
+        Module__.moduleTermDependencies = [
+          modTypeNs],
+        Module__.moduleTypeDependencies = [
+          modTypeNs],
+        Module__.moduleDescription = (Just (Strings.cat2 "Source module for " (Module__.unNamespace (Module__.moduleNamespace m))))}
+
+-- | Compute transitive closure of type dependencies for a set of modules
+moduleTypeDepsTransitive :: M.Map Module__.Namespace Module__.Module -> [Module__.Module] -> [Module__.Module]
+moduleTypeDepsTransitive nsMap modules =
+
+      let termMods = moduleTermDepsTransitive nsMap modules
+          typeNamespaces = Sets.toList (transitiveDeps (\m -> Module__.moduleTypeDependencies m) nsMap termMods)
+      in (Maybes.cat (Lists.map (\n -> Maps.lookup n nsMap) typeNamespaces))
+
+-- | Build a graph from universe modules and working modules, using an explicit bootstrap graph
+modulesToGraph :: Graph.Graph -> [Module__.Module] -> [Module__.Module] -> Graph.Graph
+modulesToGraph bsGraph universeModules modules =
+
+      let universe = Maps.fromList (Lists.map (\m -> (Module__.moduleNamespace m, m)) (Lists.concat2 universeModules modules))
+          schemaModules = moduleTypeDepsTransitive universe modules
+          dataModules = moduleTermDepsTransitive universe modules
           schemaElements =
                   Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
                     Module__.DefinitionType v0 -> Just (Annotations.typeElement (Module__.typeDefinitionName v0) (Module__.typeDefinitionType v0))
-                    _ -> Nothing) (Module__.moduleDefinitions m))) (Lists.concat2 schemaModules universeModules))
+                    _ -> Nothing) (Module__.moduleDefinitions m))) (Lists.concat2 schemaModules modules))
           dataElements =
                   Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
                     Module__.DefinitionTerm v0 -> Just (Core.Binding {
@@ -338,51 +350,41 @@ generateCoderModules codec bsGraph universeModules typeModules cx =
           schemaGraph = Lexical.elementsToGraph bsGraph Maps.empty schemaElements
           schemaTypes =
                   Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Schemas.schemaGraphToTypingEnvironment Lexical.emptyContext schemaGraph)
-          allElements = Lists.concat2 schemaElements dataElements
-          graph = Lexical.elementsToGraph bsGraph schemaTypes allElements
-      in (Eithers.map (\results -> Maybes.cat results) (Eithers.mapList (\m -> codec cx graph m) typeModules))
+      in (Lexical.elementsToGraph bsGraph schemaTypes dataElements)
 
--- | Perform type inference and generate the lexicon for a set of modules
-inferAndGenerateLexicon :: Context.Context -> Graph.Graph -> [Module__.Module] -> Either String String
-inferAndGenerateLexicon cx bsGraph kernelModules =
+-- | Convert a namespace to a file path (e.g., hydra.core -> hydra/core)
+namespaceToPath :: Module__.Namespace -> String
+namespaceToPath ns = Strings.intercalate "/" (Strings.splitOn "." (Module__.unNamespace ns))
 
-      let g0 = modulesToGraph bsGraph kernelModules kernelModules
-          dataElements =
-                  Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
-                    Module__.DefinitionTerm v0 -> Just (Core.Binding {
-                      Core.bindingName = (Module__.termDefinitionName v0),
-                      Core.bindingTerm = (Module__.termDefinitionTerm v0),
-                      Core.bindingType = (Module__.termDefinitionType v0)})
-                    _ -> Nothing) (Module__.moduleDefinitions m))) kernelModules)
-      in (Eithers.bind (Eithers.bimap (\ic -> Errors_.error (Context.inContextObject ic)) (\x -> x) (Inference.inferGraphTypes cx dataElements g0)) (\inferResultWithCx ->
-        let g1 = Pairs.first (Pairs.first inferResultWithCx)
-        in (Eithers.bimap Errors.unDecodingError (\x -> x) (generateLexicon g1))))
+-- | Strip TypeSchemes from term definitions in a module, preserving type definitions. JSON-loaded modules carry inferred TypeSchemes from the original compilation. After adaptation (e.g., bigfloat -> float64), these TypeSchemes become stale and can cause inference errors. Stripping them allows the inference engine to reconstruct correct TypeSchemes from scratch.
+stripModuleTypeSchemes :: Module__.Module -> Module__.Module
+stripModuleTypeSchemes m =
 
--- | Escape unescaped control characters inside JSON string literals
-escapeControlCharsInJson :: [Int] -> [Int]
-escapeControlCharsInJson input =
+      let stripDef =
+              \d -> case d of
+                Module__.DefinitionTerm v0 -> Module__.DefinitionTerm (Module__.TermDefinition {
+                  Module__.termDefinitionName = (Module__.termDefinitionName v0),
+                  Module__.termDefinitionTerm = (Module__.termDefinitionTerm v0),
+                  Module__.termDefinitionType = Nothing})
+                _ -> d
+      in Module__.Module {
+        Module__.moduleNamespace = (Module__.moduleNamespace m),
+        Module__.moduleDefinitions = (Lists.map stripDef (Module__.moduleDefinitions m)),
+        Module__.moduleTermDependencies = (Module__.moduleTermDependencies m),
+        Module__.moduleTypeDependencies = (Module__.moduleTypeDependencies m),
+        Module__.moduleDescription = (Module__.moduleDescription m)}
 
-      let hexDigit = \n -> Logic.ifElse (Equality.lt n 10) (Math.add 48 n) (Math.add 97 (Math.sub n 10))
-          escapeToUnicode =
-                  \b -> [
-                    92,
-                    117,
-                    48,
-                    48,
-                    (hexDigit (Math.div b 16)),
-                    (hexDigit (Math.mod b 16))]
+-- | Compute transitive closure of module dependencies
+transitiveDeps :: (Module__.Module -> [Module__.Namespace]) -> M.Map Module__.Namespace Module__.Module -> [Module__.Module] -> S.Set Module__.Namespace
+transitiveDeps getDeps nsMap startMods =
+
+      let initialDeps =
+              Sets.fromList (Lists.concat (Lists.map (\m -> Lists.filter (\dep -> Logic.not (Equality.equal dep (Module__.moduleNamespace m))) (getDeps m)) startMods))
           go =
-                  \inStr -> \esc -> \bytes -> Logic.ifElse (Lists.null bytes) [] (
-                    let b = Lists.head bytes
-                        bs = Lists.tail bytes
-                    in (Logic.ifElse esc (Lists.cons b (go inStr False bs)) (Logic.ifElse (Logic.and (Equality.equal b 92) inStr) (Lists.cons b (go inStr True bs)) (Logic.ifElse (Equality.equal b 34) (Lists.cons b (go (Logic.not inStr) False bs)) (Logic.ifElse (Logic.and inStr (Equality.lt b 32)) (Lists.concat2 (escapeToUnicode b) (go inStr False bs)) (Lists.cons b (go inStr False bs)))))))
-      in (go False False input)
-
--- | Decode a single module from a JSON value
-decodeModuleFromJson :: Graph.Graph -> [Module__.Module] -> Bool -> Model.Value -> Either String Module__.Module
-decodeModuleFromJson bsGraph universeModules doStripTypeSchemes jsonVal =
-
-      let graph = modulesToGraph bsGraph universeModules universeModules
-          schemaMap = buildSchemaMap graph
-          modType = Core.TypeVariable (Core.Name "hydra.module.Module")
-      in (Eithers.either (\err -> Left err) (\term -> Eithers.either (\decErr -> Left (Errors.unDecodingError decErr)) (\mod -> Right (Logic.ifElse doStripTypeSchemes (stripModuleTypeSchemes mod) mod)) (Module.module_ graph term)) (Decode.fromJson schemaMap (Core.Name "hydra.module.Module") modType jsonVal))
+                  \pending -> \visited -> Logic.ifElse (Sets.null pending) visited (
+                    let newVisited = Sets.union visited pending
+                        nextDeps =
+                                Sets.fromList (Lists.concat (Lists.map (\nsv -> Maybes.maybe [] (\depMod -> getDeps depMod) (Maps.lookup nsv nsMap)) (Sets.toList pending)))
+                        newPending = Sets.difference nextDeps newVisited
+                    in (go newPending newVisited))
+      in (go initialDeps Sets.empty)

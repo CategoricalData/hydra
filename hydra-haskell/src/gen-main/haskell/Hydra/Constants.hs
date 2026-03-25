@@ -44,6 +44,10 @@ key_exclude = Core.Name "exclude"
 key_firstClassType :: Core.Name
 key_firstClassType = Core.Name "firstClassType"
 
+-- | A counter for generating fresh type variable names
+key_freshTypeVariableCount :: Core.Name
+key_freshTypeVariableCount = Core.Name "freshTypeVariableCount"
+
 -- | Annotation key for maximum length constraints
 key_maxLength :: Core.Name
 key_maxLength = Core.Name "maxLength"
@@ -59,10 +63,6 @@ key_preserveFieldName = Core.Name "preserveFieldName"
 -- | Annotation key for type information
 key_type :: Core.Name
 key_type = Core.Name "type"
-
--- | A counter for generating fresh type variable names
-key_freshTypeVariableCount :: Core.Name
-key_freshTypeVariableCount = Core.Name "freshTypeVariableCount"
 
 -- | The maximum value of a 32-bit integer
 maxInt32 :: Int
