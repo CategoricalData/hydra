@@ -582,7 +582,7 @@
 (defun hydra-run-validate-core-term-test (path tc)
   (if (boundp 'hydra_validate_core_term)
       (hydra-run-simple-test path (cdr (assq :output tc))
-        (lambda () (funcall (funcall hydra_validate_core_term hydra--test-graph) (cdr (assq :input tc)))))
+        (lambda () (funcall (funcall (funcall hydra_validate_core_term (cdr (assq :typed tc))) hydra--test-graph) (cdr (assq :input tc)))))
     (list 0 0 1)))
 
 (defun hydra-run-eta-expansion-test (path tc)

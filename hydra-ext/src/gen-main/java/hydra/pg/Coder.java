@@ -212,12 +212,12 @@ public interface Coder {
       hydra.core.Term deannot = hydra.Rewriting.deannotateTerm(term);
       hydra.util.Lazy<hydra.core.Term> unwrapped = new hydra.util.Lazy<>(() -> (deannot).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
-        public hydra.util.Adapter<T4, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>> otherwise(hydra.core.Term instance) {
+        public hydra.core.Term otherwise(hydra.core.Term instance) {
           return deannot;
         }
 
         @Override
-        public hydra.util.Adapter<T4, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>> visit(hydra.core.Term.Maybe mt) {
+        public hydra.core.Term visit(hydra.core.Term.Maybe mt) {
           return hydra.lib.maybes.FromMaybe.applyLazy(
             () -> deannot,
             (mt).value);
@@ -225,7 +225,7 @@ public interface Coder {
       }));
       hydra.core.Record rec = unwrapped.get().accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
-        public hydra.util.Adapter<T4, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>> visit(hydra.core.Term.Record r) {
+        public hydra.core.Record visit(hydra.core.Term.Record r) {
           return (r).value;
         }
       });
@@ -491,12 +491,12 @@ public interface Coder {
     hydra.util.Lazy<hydra.core.Type> ftyp = new hydra.util.Lazy<>(() -> hydra.Rewriting.deannotateType(((java.util.function.Function<hydra.util.Adapter<hydra.core.FieldType, T0, hydra.core.Field, T1>, hydra.core.FieldType>) ((java.util.function.Function<hydra.util.Adapter<hydra.core.FieldType, T0, hydra.core.Field, T1>, hydra.core.FieldType>) ((java.util.function.Function<hydra.util.Adapter<hydra.core.FieldType, T0, hydra.core.Field, T1>, hydra.core.FieldType>) ((java.util.function.Function<hydra.util.Adapter<hydra.core.FieldType, T0, hydra.core.Field, T1>, hydra.core.FieldType>) (projected -> projected.source))))).apply(adapter).type));
     Boolean isMaybe = ftyp.get().accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<T1>> otherwise(hydra.core.Type instance) {
+      public Boolean otherwise(hydra.core.Type instance) {
         return false;
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<T1>> visit(hydra.core.Type.Maybe ignored) {
+      public Boolean visit(hydra.core.Type.Maybe ignored) {
         return true;
       }
     });
@@ -549,12 +549,12 @@ public interface Coder {
         (java.util.function.Function<hydra.core.FieldType, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.util.Pair<hydra.pg.model.Direction, hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.model.EdgeLabel, hydra.util.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>>>>>>) (field -> {
           hydra.util.Lazy<hydra.core.Name> key = new hydra.util.Lazy<>(() -> new hydra.core.Name((dir).accept(new hydra.pg.model.Direction.PartialVisitor<>() {
             @Override
-            public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.Pair<hydra.pg.model.Direction, hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.model.EdgeLabel, hydra.util.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>>>>> visit(hydra.pg.model.Direction.Out ignored) {
+            public String visit(hydra.pg.model.Direction.Out ignored) {
               return ((java.util.function.Function<hydra.pg.mapping.Schema<T0, T1, T2>, hydra.pg.mapping.AnnotationSchema>) ((java.util.function.Function<hydra.pg.mapping.Schema<T0, T1, T2>, hydra.pg.mapping.AnnotationSchema>) ((java.util.function.Function<hydra.pg.mapping.Schema<T0, T1, T2>, hydra.pg.mapping.AnnotationSchema>) (projected -> projected.annotations)))).apply(schema).outEdgeLabel;
             }
 
             @Override
-            public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.Pair<hydra.pg.model.Direction, hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.model.EdgeLabel, hydra.util.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>>>>> visit(hydra.pg.model.Direction.In ignored) {
+            public String visit(hydra.pg.model.Direction.In ignored) {
               return ((java.util.function.Function<hydra.pg.mapping.Schema<T0, T1, T2>, hydra.pg.mapping.AnnotationSchema>) ((java.util.function.Function<hydra.pg.mapping.Schema<T0, T1, T2>, hydra.pg.mapping.AnnotationSchema>) ((java.util.function.Function<hydra.pg.mapping.Schema<T0, T1, T2>, hydra.pg.mapping.AnnotationSchema>) (projected -> projected.annotations)))).apply(schema).inEdgeLabel;
             }
           })));
@@ -707,7 +707,7 @@ public interface Coder {
           hydra.core.Name ignoreKey = new hydra.core.Name(annots.get().ignore);
           hydra.util.ConsList<hydra.core.Name> specialKeys = (kind).accept(new hydra.pg.model.ElementKind.PartialVisitor<>() {
             @Override
-            public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>> visit(hydra.pg.model.ElementKind.Vertex ignored) {
+            public hydra.util.ConsList<hydra.core.Name> visit(hydra.pg.model.ElementKind.Vertex ignored) {
               return hydra.util.ConsList.of(
                 new hydra.core.Name(annots.get().vertexId),
                 new hydra.core.Name(annots.get().outEdgeLabel),
@@ -715,7 +715,7 @@ public interface Coder {
             }
 
             @Override
-            public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>> visit(hydra.pg.model.ElementKind.Edge ignored) {
+            public hydra.util.ConsList<hydra.core.Name> visit(hydra.pg.model.ElementKind.Edge ignored) {
               return hydra.util.ConsList.of(
                 new hydra.core.Name(annots.get().edgeId),
                 new hydra.core.Name(annots.get().outVertex),
@@ -906,12 +906,12 @@ public interface Coder {
       hydra.core.Term deannot = hydra.Rewriting.deannotateTerm(term);
       hydra.util.Lazy<hydra.core.Term> unwrapped = new hydra.util.Lazy<>(() -> (deannot).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
-        public hydra.util.Adapter<T4, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>> otherwise(hydra.core.Term instance) {
+        public hydra.core.Term otherwise(hydra.core.Term instance) {
           return deannot;
         }
 
         @Override
-        public hydra.util.Adapter<T4, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>> visit(hydra.core.Term.Maybe mt) {
+        public hydra.core.Term visit(hydra.core.Term.Maybe mt) {
           return hydra.lib.maybes.FromMaybe.applyLazy(
             () -> deannot,
             (mt).value);
@@ -919,7 +919,7 @@ public interface Coder {
       }));
       hydra.core.Record rec = unwrapped.get().accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
-        public hydra.util.Adapter<T4, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>> visit(hydra.core.Term.Record r) {
+        public hydra.core.Record visit(hydra.core.Term.Record r) {
           return (r).value;
         }
       });
@@ -947,7 +947,7 @@ public interface Coder {
                     (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.pg.model.ElementTree<T3>>>>) (fterm -> hydra.lib.eithers.Map.apply(
                       (java.util.function.Function<hydra.pg.model.ElementTree<T3>, hydra.util.ConsList<hydra.pg.model.ElementTree<T3>>>) (tree -> ((java.util.function.Function<hydra.pg.model.Element, hydra.util.ConsList<hydra.pg.model.ElementTree<T3>>>) (v1 -> ((java.util.function.Function<hydra.pg.model.Element<T3>, hydra.util.ConsList<hydra.pg.model.ElementTree<T3>>>) ((java.util.function.Function<hydra.pg.model.Element<T3>, hydra.util.ConsList<hydra.pg.model.ElementTree<T3>>>) (u -> (u).accept(new hydra.pg.model.Element.PartialVisitor<>() {
                         @Override
-                        public hydra.util.Adapter<T4, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>> visit(hydra.pg.model.Element.Vertex<T3> vtx) {
+                        public hydra.util.ConsList<hydra.pg.model.ElementTree<T3>> visit(hydra.pg.model.Element.Vertex<T3> vtx) {
                           return hydra.util.ConsList.of((hydra.pg.model.ElementTree<T3>) (new hydra.pg.model.ElementTree<T3>(hydra.pg.Coder.<T1, T2, T3>vertexCoder_edge(
                             eaDir.get(),
                             eaLabel.get(),
@@ -957,7 +957,7 @@ public interface Coder {
                         }
 
                         @Override
-                        public hydra.util.Adapter<T4, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>> visit(hydra.pg.model.Element.Edge<T3> edg) {
+                        public hydra.util.ConsList<hydra.pg.model.ElementTree<T3>> visit(hydra.pg.model.Element.Edge<T3> edg) {
                           return hydra.util.ConsList.of((hydra.pg.model.ElementTree<T3>) (new hydra.pg.model.ElementTree<T3>((hydra.pg.model.Element<T3>) (new hydra.pg.model.Element.Edge(hydra.pg.Coder.<T3>vertexCoder_fixedEdge(
                             eaDir.get(),
                             (edg).value,

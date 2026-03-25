@@ -1250,7 +1250,7 @@
 (defun run-validate-core-term-test (path tc)
   (if (boundp 'hydra_validate_core_term)
     (run-simple-test path (a :output tc)
-      (lambda () (funcall (funcall (symbol-value 'hydra_validate_core_term) (get-test-graph)) (a :input tc))))
+      (lambda () (funcall (funcall (funcall (symbol-value 'hydra_validate_core_term) (a :typed tc)) (get-test-graph)) (a :input tc))))
     (list 0 0 1)))
 
 ;; ==========================================================================

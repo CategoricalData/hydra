@@ -53,9 +53,9 @@ HYDRA_SCALA_DIR="$HYDRA_ROOT_DIR/hydra-scala"
 cd "$HYDRA_EXT_DIR"
 
 RTS_FLAGS="+RTS -K256M -A32M -RTS"
-TOTAL_STEPS=6
+TOTAL_STEPS=3
 if [ "$QUICK_MODE" = true ]; then
-    TOTAL_STEPS=5
+    TOTAL_STEPS=2
 fi
 
 echo "Step 1/$TOTAL_STEPS: Building hydra-ext..."
@@ -63,35 +63,21 @@ echo ""
 stack build
 
 echo ""
-echo "Step 2/$TOTAL_STEPS: Regenerating Haskell ext-main modules..."
-echo ""
-stack exec update-haskell-ext-main -- $RTS_FLAGS
-
-echo ""
-echo "Step 3/$TOTAL_STEPS: Rebuilding hydra-ext with generated code..."
-echo ""
-stack build
-
-echo ""
-echo "Step 4/$TOTAL_STEPS: Generating Scala source modules..."
+echo "Step 2/$TOTAL_STEPS: Generating Scala source modules..."
 echo ""
 stack exec update-scala -- $RTS_FLAGS
-
-echo ""
-echo "Step 5/$TOTAL_STEPS: Post-processing generated Scala..."
-echo ""
 python3 "$HYDRA_SCALA_DIR/bin/break-long-lines.py"
 
 if [ "$QUICK_MODE" = false ]; then
     echo ""
-    echo "Step 6/$TOTAL_STEPS: Compiling Scala..."
+    echo "Step 3/$TOTAL_STEPS: Compiling Scala..."
     echo ""
     cd "$HYDRA_SCALA_DIR"
     sbt compile
     cd "$HYDRA_EXT_DIR"
 else
     echo ""
-    echo "Step 6/$TOTAL_STEPS: Skipped (--quick mode)"
+    echo "Step 3/$TOTAL_STEPS: Skipped (--quick mode)"
 fi
 
 echo ""

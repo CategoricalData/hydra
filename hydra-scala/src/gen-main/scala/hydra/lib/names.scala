@@ -6,32 +6,6 @@ import hydra.module.*
 
 lazy val chars: hydra.module.Namespace = "hydra.lib.chars"
 
-lazy val eithers: hydra.module.Namespace = "hydra.lib.eithers"
-
-lazy val equality: hydra.module.Namespace = "hydra.lib.equality"
-
-lazy val lists: hydra.module.Namespace = "hydra.lib.lists"
-
-lazy val literals: hydra.module.Namespace = "hydra.lib.literals"
-
-lazy val logic: hydra.module.Namespace = "hydra.lib.logic"
-
-lazy val maps: hydra.module.Namespace = "hydra.lib.maps"
-
-lazy val math: hydra.module.Namespace = "hydra.lib.math"
-
-lazy val maybes: hydra.module.Namespace = "hydra.lib.maybes"
-
-lazy val pairs: hydra.module.Namespace = "hydra.lib.pairs"
-
-lazy val regex: hydra.module.Namespace = "hydra.lib.regex"
-
-lazy val sets: hydra.module.Namespace = "hydra.lib.sets"
-
-lazy val strings: hydra.module.Namespace = "hydra.lib.strings"
-
-lazy val typeclass: hydra.module.Namespace = "hydra.typeclass"
-
 lazy val charsIsAlphaNum: hydra.core.Name = "hydra.lib.chars.isAlphaNum"
 
 lazy val charsIsLower: hydra.core.Name = "hydra.lib.chars.isLower"
@@ -44,9 +18,11 @@ lazy val charsToLower: hydra.core.Name = "hydra.lib.chars.toLower"
 
 lazy val charsToUpper: hydra.core.Name = "hydra.lib.chars.toUpper"
 
-lazy val eithersBind: hydra.core.Name = "hydra.lib.eithers.bind"
+lazy val eithers: hydra.module.Namespace = "hydra.lib.eithers"
 
 lazy val eithersBimap: hydra.core.Name = "hydra.lib.eithers.bimap"
+
+lazy val eithersBind: hydra.core.Name = "hydra.lib.eithers.bind"
 
 lazy val eithersEither: hydra.core.Name = "hydra.lib.eithers.either"
 
@@ -74,6 +50,8 @@ lazy val eithersPartitionEithers: hydra.core.Name = "hydra.lib.eithers.partition
 
 lazy val eithersRights: hydra.core.Name = "hydra.lib.eithers.rights"
 
+lazy val equality: hydra.module.Namespace = "hydra.lib.equality"
+
 lazy val equalityCompare: hydra.core.Name = "hydra.lib.equality.compare"
 
 lazy val equalityEqual: hydra.core.Name = "hydra.lib.equality.equal"
@@ -91,6 +69,8 @@ lazy val equalityLte: hydra.core.Name = "hydra.lib.equality.lte"
 lazy val equalityMax: hydra.core.Name = "hydra.lib.equality.max"
 
 lazy val equalityMin: hydra.core.Name = "hydra.lib.equality.min"
+
+lazy val lists: hydra.module.Namespace = "hydra.lib.lists"
 
 lazy val listsApply: hydra.core.Name = "hydra.lib.lists.apply"
 
@@ -166,6 +146,8 @@ lazy val listsZip: hydra.core.Name = "hydra.lib.lists.zip"
 
 lazy val listsZipWith: hydra.core.Name = "hydra.lib.lists.zipWith"
 
+lazy val literals: hydra.module.Namespace = "hydra.lib.literals"
+
 lazy val literalsBigfloatToBigint: hydra.core.Name = "hydra.lib.literals.bigfloatToBigint"
 
 lazy val literalsBigfloatToFloat32: hydra.core.Name = "hydra.lib.literals.bigfloatToFloat32"
@@ -174,21 +156,21 @@ lazy val literalsBigfloatToFloat64: hydra.core.Name = "hydra.lib.literals.bigflo
 
 lazy val literalsBigintToBigfloat: hydra.core.Name = "hydra.lib.literals.bigintToBigfloat"
 
-lazy val literalsBigintToInt8: hydra.core.Name = "hydra.lib.literals.bigintToInt8"
-
 lazy val literalsBigintToInt16: hydra.core.Name = "hydra.lib.literals.bigintToInt16"
 
 lazy val literalsBigintToInt32: hydra.core.Name = "hydra.lib.literals.bigintToInt32"
 
 lazy val literalsBigintToInt64: hydra.core.Name = "hydra.lib.literals.bigintToInt64"
 
-lazy val literalsBigintToUint8: hydra.core.Name = "hydra.lib.literals.bigintToUint8"
+lazy val literalsBigintToInt8: hydra.core.Name = "hydra.lib.literals.bigintToInt8"
 
 lazy val literalsBigintToUint16: hydra.core.Name = "hydra.lib.literals.bigintToUint16"
 
 lazy val literalsBigintToUint32: hydra.core.Name = "hydra.lib.literals.bigintToUint32"
 
 lazy val literalsBigintToUint64: hydra.core.Name = "hydra.lib.literals.bigintToUint64"
+
+lazy val literalsBigintToUint8: hydra.core.Name = "hydra.lib.literals.bigintToUint8"
 
 lazy val literalsBinaryToBytes: hydra.core.Name = "hydra.lib.literals.binaryToBytes"
 
@@ -198,13 +180,13 @@ lazy val literalsFloat32ToBigfloat: hydra.core.Name = "hydra.lib.literals.float3
 
 lazy val literalsFloat64ToBigfloat: hydra.core.Name = "hydra.lib.literals.float64ToBigfloat"
 
-lazy val literalsInt8ToBigint: hydra.core.Name = "hydra.lib.literals.int8ToBigint"
-
 lazy val literalsInt16ToBigint: hydra.core.Name = "hydra.lib.literals.int16ToBigint"
 
 lazy val literalsInt32ToBigint: hydra.core.Name = "hydra.lib.literals.int32ToBigint"
 
 lazy val literalsInt64ToBigint: hydra.core.Name = "hydra.lib.literals.int64ToBigint"
+
+lazy val literalsInt8ToBigint: hydra.core.Name = "hydra.lib.literals.int8ToBigint"
 
 lazy val literalsReadBigfloat: hydra.core.Name = "hydra.lib.literals.readBigfloat"
 
@@ -216,23 +198,23 @@ lazy val literalsReadFloat32: hydra.core.Name = "hydra.lib.literals.readFloat32"
 
 lazy val literalsReadFloat64: hydra.core.Name = "hydra.lib.literals.readFloat64"
 
-lazy val literalsReadInt8: hydra.core.Name = "hydra.lib.literals.readInt8"
-
 lazy val literalsReadInt16: hydra.core.Name = "hydra.lib.literals.readInt16"
 
 lazy val literalsReadInt32: hydra.core.Name = "hydra.lib.literals.readInt32"
 
 lazy val literalsReadInt64: hydra.core.Name = "hydra.lib.literals.readInt64"
 
-lazy val literalsReadString: hydra.core.Name = "hydra.lib.literals.readString"
+lazy val literalsReadInt8: hydra.core.Name = "hydra.lib.literals.readInt8"
 
-lazy val literalsReadUint8: hydra.core.Name = "hydra.lib.literals.readUint8"
+lazy val literalsReadString: hydra.core.Name = "hydra.lib.literals.readString"
 
 lazy val literalsReadUint16: hydra.core.Name = "hydra.lib.literals.readUint16"
 
 lazy val literalsReadUint32: hydra.core.Name = "hydra.lib.literals.readUint32"
 
 lazy val literalsReadUint64: hydra.core.Name = "hydra.lib.literals.readUint64"
+
+lazy val literalsReadUint8: hydra.core.Name = "hydra.lib.literals.readUint8"
 
 lazy val literalsShowBigfloat: hydra.core.Name = "hydra.lib.literals.showBigfloat"
 
@@ -244,15 +226,15 @@ lazy val literalsShowFloat32: hydra.core.Name = "hydra.lib.literals.showFloat32"
 
 lazy val literalsShowFloat64: hydra.core.Name = "hydra.lib.literals.showFloat64"
 
-lazy val literalsShowInt8: hydra.core.Name = "hydra.lib.literals.showInt8"
-
 lazy val literalsShowInt16: hydra.core.Name = "hydra.lib.literals.showInt16"
 
 lazy val literalsShowInt32: hydra.core.Name = "hydra.lib.literals.showInt32"
 
 lazy val literalsShowInt64: hydra.core.Name = "hydra.lib.literals.showInt64"
 
-lazy val literalsShowUint8: hydra.core.Name = "hydra.lib.literals.showUint8"
+lazy val literalsShowInt8: hydra.core.Name = "hydra.lib.literals.showInt8"
+
+lazy val literalsShowString: hydra.core.Name = "hydra.lib.literals.showString"
 
 lazy val literalsShowUint16: hydra.core.Name = "hydra.lib.literals.showUint16"
 
@@ -260,17 +242,19 @@ lazy val literalsShowUint32: hydra.core.Name = "hydra.lib.literals.showUint32"
 
 lazy val literalsShowUint64: hydra.core.Name = "hydra.lib.literals.showUint64"
 
-lazy val literalsShowString: hydra.core.Name = "hydra.lib.literals.showString"
+lazy val literalsShowUint8: hydra.core.Name = "hydra.lib.literals.showUint8"
 
 lazy val literalsStringToBinary: hydra.core.Name = "hydra.lib.literals.stringToBinary"
-
-lazy val literalsUint8ToBigint: hydra.core.Name = "hydra.lib.literals.uint8ToBigint"
 
 lazy val literalsUint16ToBigint: hydra.core.Name = "hydra.lib.literals.uint16ToBigint"
 
 lazy val literalsUint32ToBigint: hydra.core.Name = "hydra.lib.literals.uint32ToBigint"
 
 lazy val literalsUint64ToBigint: hydra.core.Name = "hydra.lib.literals.uint64ToBigint"
+
+lazy val literalsUint8ToBigint: hydra.core.Name = "hydra.lib.literals.uint8ToBigint"
+
+lazy val logic: hydra.module.Namespace = "hydra.lib.logic"
 
 lazy val logicAnd: hydra.core.Name = "hydra.lib.logic.and"
 
@@ -279,6 +263,8 @@ lazy val logicIfElse: hydra.core.Name = "hydra.lib.logic.ifElse"
 lazy val logicNot: hydra.core.Name = "hydra.lib.logic.not"
 
 lazy val logicOr: hydra.core.Name = "hydra.lib.logic.or"
+
+lazy val maps: hydra.module.Namespace = "hydra.lib.maps"
 
 lazy val mapsAlter: hydra.core.Name = "hydra.lib.maps.alter"
 
@@ -319,6 +305,8 @@ lazy val mapsSize: hydra.core.Name = "hydra.lib.maps.size"
 lazy val mapsToList: hydra.core.Name = "hydra.lib.maps.toList"
 
 lazy val mapsUnion: hydra.core.Name = "hydra.lib.maps.union"
+
+lazy val math: hydra.module.Namespace = "hydra.lib.math"
 
 lazy val mathAbs: hydra.core.Name = "hydra.lib.math.abs"
 
@@ -406,6 +394,8 @@ lazy val mathTanh: hydra.core.Name = "hydra.lib.math.tanh"
 
 lazy val mathTruncate: hydra.core.Name = "hydra.lib.math.truncate"
 
+lazy val maybes: hydra.module.Namespace = "hydra.lib.maybes"
+
 lazy val maybesApply: hydra.core.Name = "hydra.lib.maybes.apply"
 
 lazy val maybesBind: hydra.core.Name = "hydra.lib.maybes.bind"
@@ -434,11 +424,29 @@ lazy val maybesPure: hydra.core.Name = "hydra.lib.maybes.pure"
 
 lazy val maybesToList: hydra.core.Name = "hydra.lib.maybes.toList"
 
+lazy val pairs: hydra.module.Namespace = "hydra.lib.pairs"
+
 lazy val pairsBimap: hydra.core.Name = "hydra.lib.pairs.bimap"
 
 lazy val pairsFirst: hydra.core.Name = "hydra.lib.pairs.first"
 
 lazy val pairsSecond: hydra.core.Name = "hydra.lib.pairs.second"
+
+lazy val regex: hydra.module.Namespace = "hydra.lib.regex"
+
+lazy val regexFind: hydra.core.Name = "hydra.lib.regex.find"
+
+lazy val regexFindAll: hydra.core.Name = "hydra.lib.regex.findAll"
+
+lazy val regexMatches: hydra.core.Name = "hydra.lib.regex.matches"
+
+lazy val regexReplace: hydra.core.Name = "hydra.lib.regex.replace"
+
+lazy val regexReplaceAll: hydra.core.Name = "hydra.lib.regex.replaceAll"
+
+lazy val regexSplit: hydra.core.Name = "hydra.lib.regex.split"
+
+lazy val sets: hydra.module.Namespace = "hydra.lib.sets"
 
 lazy val setsDelete: hydra.core.Name = "hydra.lib.sets.delete"
 
@@ -468,17 +476,7 @@ lazy val setsUnion: hydra.core.Name = "hydra.lib.sets.union"
 
 lazy val setsUnions: hydra.core.Name = "hydra.lib.sets.unions"
 
-lazy val regexFind: hydra.core.Name = "hydra.lib.regex.find"
-
-lazy val regexFindAll: hydra.core.Name = "hydra.lib.regex.findAll"
-
-lazy val regexMatches: hydra.core.Name = "hydra.lib.regex.matches"
-
-lazy val regexReplace: hydra.core.Name = "hydra.lib.regex.replace"
-
-lazy val regexReplaceAll: hydra.core.Name = "hydra.lib.regex.replaceAll"
-
-lazy val regexSplit: hydra.core.Name = "hydra.lib.regex.split"
+lazy val strings: hydra.module.Namespace = "hydra.lib.strings"
 
 lazy val stringsCat: hydra.core.Name = "hydra.lib.strings.cat"
 
@@ -490,11 +488,11 @@ lazy val stringsFromList: hydra.core.Name = "hydra.lib.strings.fromList"
 
 lazy val stringsIntercalate: hydra.core.Name = "hydra.lib.strings.intercalate"
 
-lazy val stringsNull: hydra.core.Name = "hydra.lib.strings.null"
-
 lazy val stringsLength: hydra.core.Name = "hydra.lib.strings.length"
 
 lazy val stringsLines: hydra.core.Name = "hydra.lib.strings.lines"
+
+lazy val stringsNull: hydra.core.Name = "hydra.lib.strings.null"
 
 lazy val stringsSplitOn: hydra.core.Name = "hydra.lib.strings.splitOn"
 
@@ -505,6 +503,8 @@ lazy val stringsToLower: hydra.core.Name = "hydra.lib.strings.toLower"
 lazy val stringsToUpper: hydra.core.Name = "hydra.lib.strings.toUpper"
 
 lazy val stringsUnlines: hydra.core.Name = "hydra.lib.strings.unlines"
+
+lazy val typeclass: hydra.module.Namespace = "hydra.typeclass"
 
 lazy val typeclassEq: hydra.core.Name = "hydra.typeclass.Eq"
 

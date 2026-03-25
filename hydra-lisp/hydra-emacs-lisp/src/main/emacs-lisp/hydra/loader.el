@@ -474,7 +474,7 @@
 (dolist (f '("lib/chars.el" "lib/eithers.el" "lib/equality.el"
              "lib/lists.el" "lib/literals.el" "lib/logic.el"
              "lib/maps.el" "lib/math.el" "lib/maybes.el"
-             "lib/pairs.el" "lib/sets.el" "lib/strings.el"))
+             "lib/pairs.el" "lib/regex.el" "lib/sets.el" "lib/strings.el"))
   (load (expand-file-name f hydra-loader-dir) nil t))
 
 (defun hydra-load-prims-and-libraries ()

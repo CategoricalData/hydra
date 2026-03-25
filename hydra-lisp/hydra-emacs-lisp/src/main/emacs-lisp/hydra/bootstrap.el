@@ -332,7 +332,7 @@ Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the 
            (all-ns (append main-ns eval-ns))
            (all-mods (bootstrap-load-modules-from-json bootstrap-json-dir all-ns))
            (total-bindings (cl-reduce #'+ (mapcar (lambda (m)
-                                                    (length (cdr (assoc :elements m))))
+                                                    (length (cdr (assoc :definitions m))))
                                                   all-mods))))
       (princ (format "  Loaded %d modules (%d bindings).\n" (length all-mods) total-bindings))
 

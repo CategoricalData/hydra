@@ -222,7 +222,45 @@ def propagate_type(typ: hydra.core.Type, term: hydra.core.Term):
             return _hoist_set_type_ann_body_1(f)
 
         case hydra.core.TermLet(value=lt):
-            return set_type_ann(propagate_type_rebuild_let(term, lt.bindings, propagate_type(typ, lt.body)))
+            @lru_cache(1)
+            def propagated_bindings() -> frozenlist[hydra.core.Binding]:
+                return hydra.lib.lists.map((lambda b: hydra.lib.maybes.maybe((lambda : b), (lambda ts: hydra.core.Binding(b.name, propagate_type(ts.type, b.term), b.type)), b.type)), lt.bindings)
+            return set_type_ann(propagate_type_rebuild_let(term, propagated_bindings(), propagate_type(typ, lt.body)))
+
+        case hydra.core.TermApplication(value=app):
+            fun = app.function
+            arg = app.argument
+            @lru_cache(1)
+            def annotated_fun():
+                def _hoist_annotated_fun_1(v1):
+                    match v1:
+                        case hydra.core.EliminationUnion(value=cs):
+                            @lru_cache(1)
+                            def dom() -> hydra.core.Type:
+                                return hydra.schemas.nominal_application(cs.type_name, ())
+                            @lru_cache(1)
+                            def ft() -> hydra.core.Type:
+                                return cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(dom(), typ)))
+                            return hydra.annotations.set_term_annotation(hydra.constants.key_type, Just(hydra.encode.core.type(ft())), fun)
+
+                        case _:
+                            return fun
+                def _hoist_annotated_fun_2(v1):
+                    match v1:
+                        case hydra.core.FunctionElimination(value=elim):
+                            return _hoist_annotated_fun_1(elim)
+
+                        case _:
+                            return fun
+                def _hoist_annotated_fun_3(v1):
+                    match v1:
+                        case hydra.core.TermFunction(value=fn):
+                            return _hoist_annotated_fun_2(fn)
+
+                        case _:
+                            return fun
+                return _hoist_annotated_fun_3(hydra.rewriting.deannotate_term(fun))
+            return set_type_ann(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(annotated_fun(), arg))))
 
         case _:
             return set_type_ann(term)
@@ -1046,7 +1084,7 @@ def inner_class_ref(aliases: hydra.ext.java.environment.Aliases, name: hydra.cor
 
 def insert_branch_var(name: hydra.core.Name, env: hydra.ext.java.environment.JavaEnvironment) -> hydra.ext.java.environment.JavaEnvironment:
     aliases = env.aliases
-    return hydra.ext.java.environment.JavaEnvironment(hydra.ext.java.environment.Aliases(aliases.current_namespace, aliases.packages, hydra.lib.sets.insert(name, aliases.branch_vars), aliases.recursive_vars, aliases.in_scope_type_params, aliases.polymorphic_locals, aliases.in_scope_java_vars, aliases.var_renames, aliases.lambda_vars, aliases.type_var_subst, aliases.trusted_type_vars, aliases.method_codomain, aliases.thunked_vars), env.graph)
+    return hydra.ext.java.environment.JavaEnvironment(hydra.ext.java.environment.Aliases(aliases.current_namespace, aliases.packages, hydra.lib.sets.insert(name, aliases.branch_vars), aliases.recursive_vars, aliases.in_scope_type_params, aliases.polymorphic_locals, aliases.in_scope_java_vars, aliases.var_renames, aliases.lambda_vars, aliases.type_var_subst, aliases.trusted_type_vars, Nothing(), aliases.thunked_vars), env.graph)
 
 def with_lambda(env: hydra.ext.java.environment.JavaEnvironment, lam: hydra.core.Lambda, k: Callable[[hydra.ext.java.environment.JavaEnvironment], T0]) -> T0:
     return hydra.schemas.with_lambda_context((lambda x1: java_env_get_graph(x1)), (lambda x1, x2: java_env_set_graph(x1, x2)), env, lam, (lambda env1: (aliases := env1.aliases, aliases2 := hydra.ext.java.environment.Aliases(aliases.current_namespace, aliases.packages, aliases.branch_vars, aliases.recursive_vars, aliases.in_scope_type_params, aliases.polymorphic_locals, aliases.in_scope_java_vars, aliases.var_renames, hydra.lib.sets.insert(lam.parameter, aliases.lambda_vars), aliases.type_var_subst, aliases.trusted_type_vars, aliases.method_codomain, aliases.thunked_vars), env2 := hydra.ext.java.environment.JavaEnvironment(aliases2, env1.graph), k(env2))[3]))

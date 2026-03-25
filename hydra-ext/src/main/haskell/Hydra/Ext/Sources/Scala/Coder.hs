@@ -903,8 +903,15 @@ encodeCase = def "encodeCase" $
           "safeName">: Strings.fromList (Lists.map ("c" ~> Logic.ifElse (Equality.equal (var "c") (int32 39)) (int32 95) (var "c")) (Strings.toList (var "rawName")))] $
           Strings.cat2 (string "_") (var "safeName"))])],
     "v">: Core.name (Strings.cat (list [string "v_", var "shortTypeName", string "_", Core.unName (var "fname"), var "lamParamSuffix"])),
+    -- Check if variant is truly parameterless (domain is Unit) vs parameterized but unused
+    "domainIsUnit">: cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "fterm") (Just true) [
+      _Term_function>>: ("fn" ~> cases _Function (var "fn") (Just true) [
+        _Function_lambda>>: ("lam" ~>
+          Maybes.maybe true ("dom" ~> Equality.equal (var "dom") (Core.typeUnit)) (Core.lambdaDomain $ var "lam"))])],
     "patArgs">: Logic.ifElse (var "isUnit")
-      (emptyList)
+      (Logic.ifElse (var "domainIsUnit")
+        (emptyList)
+        (list [inject _Pat _Pat_wildcard unit]))
       (list [ScalaUtilsSource.svar @@ var "v"]),
     "pat">: inject _Pat _Pat_extract (record _Pat_Extract [
       _Pat_Extract_fun>>: ScalaUtilsSource.sname @@ (ScalaUtilsSource.qualifyUnionFieldName @@ string "MATCHED." @@ var "sn" @@ var "fname"),

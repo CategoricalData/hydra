@@ -164,10 +164,10 @@
         (flush)
         (let [is-native-type (r 'hydra_annotations_is_native_type)
               type-mods (vec (filter (fn [mod]
-                                       (some #(is-native-type %) (:elements mod)))
+                                       (some #(is-native-type %) (:definitions mod)))
                                      all-mods))
               term-mods (vec (remove (fn [mod]
-                                       (some #(is-native-type %) (:elements mod)))
+                                       (some #(is-native-type %) (:definitions mod)))
                                      all-mods))]
           (println (str "  Type modules: " (count type-mods) ", Term modules: " (count term-mods)))
           (println)
@@ -180,10 +180,10 @@
                 schema-mods (timed "schemaModDeps"
                               #(((r 'hydra_code_generation_module_type_deps_transitive) namespace-map) all-mods))
                 schema-elements (vec (filter #(is-native-type %)
-                                      (mapcat :elements (concat schema-mods type-mods))))
+                                      (mapcat :definitions (concat schema-mods type-mods))))
                 data-mods (timed "dataModDeps"
                             #(((r 'hydra_code_generation_module_term_deps_transitive) namespace-map) all-mods))
-                data-elements (vec (mapcat :elements data-mods))
+                data-elements (vec (mapcat :definitions data-mods))
                 schema-graph (timed "schemaGraph"
                                #((((r 'hydra_lexical_elements_to_graph) bs-graph) {}) schema-elements))
                 schema-types (let [result (((r 'hydra_schemas_schema_graph_to_typing_environment)
@@ -229,8 +229,8 @@
                                                     (((r 'hydra_lib_lists_find)
                                                        (fn [b] (((r 'hydra_lib_equality_equal) (:name b)) (:name e))))
                                                      all-bindings))
-                                                  (:elements mod)))
-                            refreshed-mod (assoc mod :elements refreshed-els)
+                                                  (:definitions mod)))
+                            refreshed-mod (assoc mod :definitions refreshed-els)
                             ns-str (let [ns (:namespace mod)]
                                      (if (string? ns) ns (:value ns)))
                             t0 (System/currentTimeMillis)

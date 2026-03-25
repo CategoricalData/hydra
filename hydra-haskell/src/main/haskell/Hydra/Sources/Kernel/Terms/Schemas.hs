@@ -306,12 +306,16 @@ fieldTypes = define "fieldTypes" $
     _Type_record>>: "rt" ~> right (var "toMap" @@ var "rt"),
     _Type_union>>: "rt" ~> right (var "toMap" @@ var "rt"),
     _Type_variable>>: "name" ~>
-      Eithers.bind (Lexical.requireElement @@ var "cx" @@ var "graph" @@ var "name") (
-        "el" ~>
-        Eithers.bind (Ctx.withContext (var "cx")
-          (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")
-            (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el")))) (
-          "decodedType" ~> fieldTypes @@ var "cx" @@ var "graph" @@ var "decodedType"))]
+      -- Try graphSchemaTypes first (type definitions), then fall back to graphBoundTerms (legacy)
+      Maybes.maybe
+        (Eithers.bind (Lexical.requireElement @@ var "cx" @@ var "graph" @@ var "name") (
+          "el" ~>
+          Eithers.bind (Ctx.withContext (var "cx")
+            (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")
+              (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el")))) (
+            "decodedType" ~> fieldTypes @@ var "cx" @@ var "graph" @@ var "decodedType")))
+        ("ts" ~> fieldTypes @@ var "cx" @@ var "graph" @@ Core.typeSchemeType (var "ts"))
+        (Maps.lookup (var "name") (Graph.graphSchemaTypes $ var "graph"))]
   @@ (Rewriting.deannotateType @@ var "t")
 
 findFieldType :: TBinding (Context -> Name -> [FieldType] -> Either (InContext Error) Type)

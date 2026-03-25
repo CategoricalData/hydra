@@ -5,9 +5,8 @@ r"""A utility for converting a BNF grammar to a Hydra module."""
 from __future__ import annotations
 from collections.abc import Callable
 from functools import lru_cache
-from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing, frozenlist
+from hydra.dsl.python import FrozenDict, Just, Maybe, frozenlist
 from typing import TypeVar, cast
-import hydra.annotations
 import hydra.core
 import hydra.formatting
 import hydra.grammar
@@ -219,11 +218,6 @@ def make_elements(omit_trivial: bool, ns: hydra.module.Namespace, lname: str, pa
         return hydra.lib.logic.if_else(is_nontrivial(is_record, pats), (lambda : hydra.lib.lists.cons((lname, construct(fields())), els())), (lambda : for_pat(hydra.lib.lists.head(min_pats()))))
     return for_pat(pat)
 
-def replace_placeholders(el_name: T0, typ: T1) -> T1:
-    r"""Replace Placeholder names in a type with the actual element name (no-op since types no longer carry names)."""
-
-    return typ
-
 def wrap_type(t: hydra.core.Type) -> hydra.core.Type:
     r"""Wrap a type in a placeholder name, unless it is already a wrapper, record, or union type."""
 
@@ -256,6 +250,11 @@ def grammar_to_module(ns: hydra.module.Namespace, grammar: hydra.grammar.Grammar
     def element_pairs() -> frozenlist[tuple[str, hydra.core.Type]]:
         return hydra.lib.lists.concat(hydra.lib.lists.zip_with((lambda v1, v2: make_elements(False, ns, v1, v2)), capitalized_names(), patterns()))
     @lru_cache(1)
-    def elements() -> frozenlist[hydra.core.Binding]:
-        return hydra.lib.lists.map((lambda pair: (lname := hydra.lib.pairs.first(pair), el_name := to_name(ns, lname), typ := replace_placeholders(el_name, wrap_type(hydra.lib.pairs.second(pair))), hydra.annotations.type_element(el_name, typ))[3]), element_pairs())
-    return hydra.module.Module(ns, hydra.lib.lists.map((lambda b: cast(hydra.module.Definition, hydra.module.DefinitionTerm(hydra.module.TermDefinition(b.name, b.term, Nothing())))), elements()), (), (), desc)
+    def type_defs() -> frozenlist[hydra.module.Definition]:
+        return hydra.lib.lists.map((lambda pair: (lname := hydra.lib.pairs.first(pair), el_name := to_name(ns, lname), typ := wrap_type(hydra.lib.pairs.second(pair)), cast(hydra.module.Definition, hydra.module.DefinitionType(hydra.module.TypeDefinition(el_name, typ))))[3]), element_pairs())
+    return hydra.module.Module(ns, type_defs(), (), (), desc)
+
+def replace_placeholders(el_name: T0, typ: T1) -> T1:
+    r"""Replace Placeholder names in a type with the actual element name (no-op since types no longer carry names)."""
+
+    return typ

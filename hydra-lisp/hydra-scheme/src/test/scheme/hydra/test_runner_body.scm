@@ -1494,9 +1494,10 @@
 (define (run-validate-core-term-test path tc)
   (guard (exn (#t (list 0 0 1)))  ;; skip if validate module not loaded
     (let* ((graph (get-test-graph))
+           (typed (cdr (assq 'typed tc)))
            (input (cdr (assq 'input tc)))
            (expected (cdr (assq 'output tc)))
-           (result (hydra_validate_core_term graph input)))
+           (result (hydra_validate_core_term typed graph input)))
       (if (equal? result expected) (list 1 0 0)
           (begin (display (string-append "FAIL: " path "\n")) (list 0 1 0))))))
 

@@ -1248,7 +1248,7 @@
 (defn- run-validate-core-term-test [path tc]
   (if (resolve 'hydra_validate_core_term)
     (run-simple-test path (:output tc)
-      (fn [] ((resolve 'hydra_validate_core_term) (get-test-graph) (:input tc))))
+      (fn [] ((resolve 'hydra_validate_core_term) (:typed tc) @test-graph (:input tc))))
     [0 0 1]))
 
 ;; ---- Test case dispatcher ----

@@ -43,7 +43,7 @@
 (dolist (f '("lib/chars.lisp" "lib/eithers.lisp" "lib/equality.lisp"
              "lib/lists.lisp" "lib/literals.lisp" "lib/logic.lisp"
              "lib/maps.lisp" "lib/math.lisp" "lib/maybes.lisp"
-             "lib/pairs.lisp" "lib/sets.lisp" "lib/strings.lisp"))
+             "lib/pairs.lisp" "lib/regex.lisp" "lib/sets.lisp" "lib/strings.lisp"))
   (load (merge-pathnames f *hydra-loader-dir*)))
 
 ;; Note: prims.lisp and lib/libraries.lisp must be loaded AFTER gen-main

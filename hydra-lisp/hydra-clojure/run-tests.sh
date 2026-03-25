@@ -17,7 +17,7 @@ START_SEC=$(python3 -c 'import time; print(time.monotonic())')
 
 # Run tests, capturing stdout while letting stderr (namespace warnings) pass through
 EXIT_CODE=0
-OUTPUT=$(clojure -M -m run-tests 2>/dev/null | tee /dev/stderr) || EXIT_CODE=$?
+OUTPUT=$(clojure -M -m run-tests 2>&1 | tee /dev/stderr) || EXIT_CODE=$?
 
 END_SEC=$(python3 -c 'import time; print(time.monotonic())')
 

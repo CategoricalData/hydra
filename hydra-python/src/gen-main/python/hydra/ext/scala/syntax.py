@@ -315,8 +315,12 @@ class DataNew(Node["Data_New"]):
 class DataNewAnonymous(Node["Data_NewAnonymous"]):
     ...
 
-class DataPlaceholder(Node["Data_Placeholder"]):
-    ...
+class DataPlaceholder:
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, DataPlaceholder)
+    def __hash__(self):
+        return hash("DataPlaceholder")
 
 class DataEta(Node["Data_Eta"]):
     ...
@@ -733,8 +737,6 @@ class Data_NewAnonymous:
 
     TYPE_ = hydra.core.Name("hydra.ext.scala.syntax.Data_NewAnonymous")
     TEMPL = hydra.core.Name("templ")
-
-Data_Placeholder: TypeAlias = "None"
 
 @dataclass(frozen=True)
 class Data_Eta:

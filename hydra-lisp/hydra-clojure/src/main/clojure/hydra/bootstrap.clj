@@ -182,7 +182,7 @@
               all-kernel-ns (into (vec main-ns) eval-ns)
               main-mods (load-mods false json-dir all-kernel-ns)
               step-time (- (System/currentTimeMillis) step-start)
-              total-bindings (reduce + 0 (map #(count (:elements %)) main-mods))]
+              total-bindings (reduce + 0 (map #(count (:definitions %)) main-mods))]
           (println (str "  Loaded " (count main-mods) " modules (" total-bindings " bindings)."))
           (println (str "  Time: " (format-time step-time)))
           (println)

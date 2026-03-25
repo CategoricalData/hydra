@@ -154,5 +154,5 @@
   "Filter modules to only those containing type-defining bindings."
   [modules]
   (filterv (fn [m]
-             (some (r 'hydra_annotations_is_native_type) (:elements m)))
+             (some (r 'hydra_annotations_is_native_type) (:definitions m)))
            modules))

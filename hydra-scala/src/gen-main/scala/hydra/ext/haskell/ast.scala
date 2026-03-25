@@ -22,7 +22,9 @@ case class RecordConstructor(name: hydra.ext.haskell.ast.Name, fields: Seq[hydra
 
 case class ConstructorWithComments(body: hydra.ext.haskell.ast.Constructor, comments: Option[scala.Predef.String])
 
-case class DataDeclaration(keyword: hydra.ext.haskell.ast.DataOrNewtype, context: Seq[hydra.ext.haskell.ast.Assertion], head: hydra.ext.haskell.ast.DeclarationHead, constructors: Seq[hydra.ext.haskell.ast.ConstructorWithComments], deriving: Seq[hydra.ext.haskell.ast.Deriving])
+case class DataDeclaration(keyword: hydra.ext.haskell.ast.DataOrNewtype, context: Seq[hydra.ext.haskell.ast.Assertion],
+   head: hydra.ext.haskell.ast.DeclarationHead, constructors: Seq[hydra.ext.haskell.ast.ConstructorWithComments],
+   deriving: Seq[hydra.ext.haskell.ast.Deriving])
 
 enum DataOrNewtype :
    case data extends DataOrNewtype
@@ -97,7 +99,8 @@ case class FieldWithComments(field: hydra.ext.haskell.ast.Field, comments: Optio
 
 case class FieldUpdate(name: hydra.ext.haskell.ast.Name, value: hydra.ext.haskell.ast.Expression)
 
-case class Import(qualified: Boolean, module: hydra.ext.haskell.ast.ModuleName, as: Option[hydra.ext.haskell.ast.ModuleName], spec: Option[hydra.ext.haskell.ast.SpecImport])
+case class Import(qualified: Boolean, module: hydra.ext.haskell.ast.ModuleName, as: Option[hydra.ext.haskell.ast.ModuleName],
+   spec: Option[hydra.ext.haskell.ast.SpecImport])
 
 enum SpecImport :
    case list(value: Seq[hydra.ext.haskell.ast.ImportExportSpec]) extends SpecImport
@@ -107,7 +110,8 @@ enum ImportModifier :
    case pattern extends ImportModifier
    case `type` extends ImportModifier
 
-case class ImportExportSpec(modifier: Option[hydra.ext.haskell.ast.ImportModifier], name: hydra.ext.haskell.ast.Name, subspec: Option[hydra.ext.haskell.ast.SubspecImportExportSpec])
+case class ImportExportSpec(modifier: Option[hydra.ext.haskell.ast.ImportModifier], name: hydra.ext.haskell.ast.Name,
+   subspec: Option[hydra.ext.haskell.ast.SubspecImportExportSpec])
 
 enum SubspecImportExportSpec :
    case all extends SubspecImportExportSpec
@@ -127,7 +131,8 @@ enum LocalBinding :
 
 type LocalBindings = Seq[hydra.ext.haskell.ast.LocalBinding]
 
-case class Module(head: Option[hydra.ext.haskell.ast.ModuleHead], imports: Seq[hydra.ext.haskell.ast.Import], declarations: Seq[hydra.ext.haskell.ast.DeclarationWithComments])
+case class Module(head: Option[hydra.ext.haskell.ast.ModuleHead], imports: Seq[hydra.ext.haskell.ast.Import],
+   declarations: Seq[hydra.ext.haskell.ast.DeclarationWithComments])
 
 case class ModuleHead(comments: Option[scala.Predef.String], name: hydra.ext.haskell.ast.ModuleName, exports: Seq[hydra.ext.haskell.ast.Export])
 
@@ -199,6 +204,7 @@ case class TypedBinding(typeSignature: hydra.ext.haskell.ast.TypeSignature, valu
 enum ValueBinding :
    case simple(value: hydra.ext.haskell.ast.SimpleValueBinding) extends ValueBinding
 
-case class SimpleValueBinding(pattern: hydra.ext.haskell.ast.Pattern, rhs: hydra.ext.haskell.ast.RightHandSide, localBindings: Option[hydra.ext.haskell.ast.LocalBindings])
+case class SimpleValueBinding(pattern: hydra.ext.haskell.ast.Pattern, rhs: hydra.ext.haskell.ast.RightHandSide,
+   localBindings: Option[hydra.ext.haskell.ast.LocalBindings])
 
 type Variable = hydra.ext.haskell.ast.Name
