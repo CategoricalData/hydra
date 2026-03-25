@@ -173,7 +173,7 @@ def javaConditionalAndExpressionToJavaExpression(cae: hydra.ext.java.syntax.Cond
   hydra.ext.java.syntax.Expression.assignment(hydra.ext.java.syntax.AssignmentExpression.conditional(hydra.ext.java.syntax.ConditionalExpression.simple(Seq(cae))))
 
 def javaConstructorCall(ci: hydra.ext.java.syntax.ClassOrInterfaceTypeToInstantiate)(args: Seq[hydra.ext.java.syntax.Expression])(mbody: Option[hydra.ext.java.syntax.ClassBody]): hydra.ext.java.syntax.Expression =
-  hydra.ext.java.syntax.Expression.assignment(hydra.ext.java.syntax.AssignmentExpression.conditional(hydra.ext.java.syntax.ConditionalExpression.simple(Seq(Seq(Seq(Seq(Seq(hydra.ext.java.syntax.EqualityExpression.unary(hydra.ext.java.syntax.RelationalExpression.simple(hydra.ext.java.syntax.ShiftExpression.unary(hydra.ext.java.syntax.AdditiveExpression.unary(hydra.ext.java.syntax.MultiplicativeExpression.unary(hydra.ext.java.syntax.UnaryExpression.other(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.postfix(hydra.ext.java.syntax.PostfixExpression.primary(hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArrayExpression.classInstance(hydra.ext.java.syntax.ClassInstanceCreationExpression(None,
+  hydra.ext.java.syntax.Expression.assignment(hydra.ext.java.syntax.AssignmentExpression.conditional(hydra.ext.java.syntax.ConditionalExpression.simple(Seq(Seq(Seq(Seq(Seq(hydra.ext.java.syntax.EqualityExpression.unary(hydra.ext.java.syntax.RelationalExpression.simple(hydra.ext.java.syntax.ShiftExpression.unary(hydra.ext.java.syntax.AdditiveExpression.unary(hydra.ext.java.syntax.MultiplicativeExpression.unary(hydra.ext.java.syntax.UnaryExpression.other(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.postfix(hydra.ext.java.syntax.PostfixExpression.primary(hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArray.classInstance(hydra.ext.java.syntax.ClassInstanceCreationExpression(None,
      hydra.ext.java.syntax.UnqualifiedClassInstanceCreationExpression(Seq(), ci, args, mbody))))))))))))))))))))
 
 def javaConstructorName(id: hydra.ext.java.syntax.Identifier)(targs: Option[hydra.ext.java.syntax.TypeArgumentsOrDiamond]): hydra.ext.java.syntax.ClassOrInterfaceTypeToInstantiate =
@@ -208,7 +208,7 @@ def javaExpressionNameToJavaExpression(en: hydra.ext.java.syntax.ExpressionName)
 
 def javaExpressionToJavaPrimary(e: hydra.ext.java.syntax.Expression): hydra.ext.java.syntax.Primary =
   {
-  lazy val fallback: hydra.ext.java.syntax.Primary = hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArrayExpression.parens(e))
+  lazy val fallback: hydra.ext.java.syntax.Primary = hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArray.parens(e))
   e match
     case hydra.ext.java.syntax.Expression.assignment(v_Expression_assignment_ae) => v_Expression_assignment_ae match
       case hydra.ext.java.syntax.AssignmentExpression.conditional(v_AssignmentExpression_conditional_ce) => v_AssignmentExpression_conditional_ce match
@@ -250,10 +250,10 @@ def javaExpressionToJavaPrimary(e: hydra.ext.java.syntax.Expression): hydra.ext.
 }
 
 def javaExpressionToJavaUnaryExpression(e: hydra.ext.java.syntax.Expression): hydra.ext.java.syntax.UnaryExpression =
-  hydra.ext.java.syntax.UnaryExpression.other(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.postfix(hydra.ext.java.syntax.PostfixExpression.primary(hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArrayExpression.parens(e)))))
+  hydra.ext.java.syntax.UnaryExpression.other(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.postfix(hydra.ext.java.syntax.PostfixExpression.primary(hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArray.parens(e)))))
 
 def javaFieldAccessToJavaExpression(fa: hydra.ext.java.syntax.FieldAccess): hydra.ext.java.syntax.Expression =
-  hydra.ext.java.syntax.Expression.assignment(hydra.ext.java.syntax.AssignmentExpression.conditional(hydra.ext.java.syntax.ConditionalExpression.simple(Seq(Seq(Seq(Seq(Seq(hydra.ext.java.syntax.EqualityExpression.unary(hydra.ext.java.syntax.RelationalExpression.simple(hydra.ext.java.syntax.ShiftExpression.unary(hydra.ext.java.syntax.AdditiveExpression.unary(hydra.ext.java.syntax.MultiplicativeExpression.unary(hydra.ext.java.syntax.UnaryExpression.other(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.postfix(hydra.ext.java.syntax.PostfixExpression.primary(hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArrayExpression.fieldAccess(fa))))))))))))))))))
+  hydra.ext.java.syntax.Expression.assignment(hydra.ext.java.syntax.AssignmentExpression.conditional(hydra.ext.java.syntax.ConditionalExpression.simple(Seq(Seq(Seq(Seq(Seq(hydra.ext.java.syntax.EqualityExpression.unary(hydra.ext.java.syntax.RelationalExpression.simple(hydra.ext.java.syntax.ShiftExpression.unary(hydra.ext.java.syntax.AdditiveExpression.unary(hydra.ext.java.syntax.MultiplicativeExpression.unary(hydra.ext.java.syntax.UnaryExpression.other(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.postfix(hydra.ext.java.syntax.PostfixExpression.primary(hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArray.fieldAccess(fa))))))))))))))))))
 
 def javaIdentifier(s: scala.Predef.String): hydra.ext.java.syntax.Identifier = hydra.ext.java.utils.sanitizeJavaName(s)
 
@@ -294,16 +294,16 @@ def javaLambdaFromBlock(v: hydra.core.Name)(block: hydra.ext.java.syntax.Block):
      hydra.ext.java.syntax.LambdaBody.block(block)))
 
 def javaLiteralToJavaExpression(lit: hydra.ext.java.syntax.Literal): hydra.ext.java.syntax.Expression =
-  hydra.ext.java.syntax.Expression.assignment(hydra.ext.java.syntax.AssignmentExpression.conditional(hydra.ext.java.syntax.ConditionalExpression.simple(Seq(Seq(Seq(Seq(Seq(hydra.ext.java.syntax.EqualityExpression.unary(hydra.ext.java.syntax.RelationalExpression.simple(hydra.ext.java.syntax.ShiftExpression.unary(hydra.ext.java.syntax.AdditiveExpression.unary(hydra.ext.java.syntax.MultiplicativeExpression.unary(hydra.ext.java.syntax.UnaryExpression.other(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.postfix(hydra.ext.java.syntax.PostfixExpression.primary(hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArrayExpression.literal(lit))))))))))))))))))
+  hydra.ext.java.syntax.Expression.assignment(hydra.ext.java.syntax.AssignmentExpression.conditional(hydra.ext.java.syntax.ConditionalExpression.simple(Seq(Seq(Seq(Seq(Seq(hydra.ext.java.syntax.EqualityExpression.unary(hydra.ext.java.syntax.RelationalExpression.simple(hydra.ext.java.syntax.ShiftExpression.unary(hydra.ext.java.syntax.AdditiveExpression.unary(hydra.ext.java.syntax.MultiplicativeExpression.unary(hydra.ext.java.syntax.UnaryExpression.other(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.postfix(hydra.ext.java.syntax.PostfixExpression.primary(hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArray.literal(lit))))))))))))))))))
 
 def javaLiteralToJavaMultiplicativeExpression(lit: hydra.ext.java.syntax.Literal): hydra.ext.java.syntax.MultiplicativeExpression =
-  hydra.ext.java.syntax.MultiplicativeExpression.unary(hydra.ext.java.syntax.UnaryExpression.other(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.postfix(hydra.ext.java.syntax.PostfixExpression.primary(hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArrayExpression.literal(lit))))))
+  hydra.ext.java.syntax.MultiplicativeExpression.unary(hydra.ext.java.syntax.UnaryExpression.other(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.postfix(hydra.ext.java.syntax.PostfixExpression.primary(hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArray.literal(lit))))))
 
 def javaLiteralToJavaPrimary(lit: hydra.ext.java.syntax.Literal): hydra.ext.java.syntax.Primary =
-  hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArrayExpression.literal(lit))
+  hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArray.literal(lit))
 
 def javaLiteralToJavaRelationalExpression(lit: hydra.ext.java.syntax.Literal): hydra.ext.java.syntax.RelationalExpression =
-  hydra.ext.java.syntax.RelationalExpression.simple(hydra.ext.java.syntax.ShiftExpression.unary(hydra.ext.java.syntax.AdditiveExpression.unary(hydra.ext.java.syntax.MultiplicativeExpression.unary(hydra.ext.java.syntax.UnaryExpression.other(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.postfix(hydra.ext.java.syntax.PostfixExpression.primary(hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArrayExpression.literal(lit)))))))))
+  hydra.ext.java.syntax.RelationalExpression.simple(hydra.ext.java.syntax.ShiftExpression.unary(hydra.ext.java.syntax.AdditiveExpression.unary(hydra.ext.java.syntax.MultiplicativeExpression.unary(hydra.ext.java.syntax.UnaryExpression.other(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.postfix(hydra.ext.java.syntax.PostfixExpression.primary(hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArray.literal(lit)))))))))
 
 def javaMemberField(mods: Seq[hydra.ext.java.syntax.FieldModifier])(jt: hydra.ext.java.syntax.Type)(v: hydra.ext.java.syntax.VariableDeclarator): hydra.ext.java.syntax.ClassBodyDeclaration =
   hydra.ext.java.syntax.ClassBodyDeclaration.classMember(hydra.ext.java.syntax.ClassMemberDeclaration.field(hydra.ext.java.syntax.FieldDeclaration(mods,
@@ -319,13 +319,13 @@ def javaMethodHeader(tparams: Seq[hydra.ext.java.syntax.TypeParameter])(methodNa
   hydra.ext.java.syntax.MethodHeader(tparams, result, hydra.ext.java.syntax.MethodDeclarator(methodName, None, params), None)
 
 def javaMethodInvocationToJavaExpression(mi: hydra.ext.java.syntax.MethodInvocation): hydra.ext.java.syntax.Expression =
-  hydra.ext.java.syntax.Expression.assignment(hydra.ext.java.syntax.AssignmentExpression.conditional(hydra.ext.java.syntax.ConditionalExpression.simple(Seq(Seq(Seq(Seq(Seq(hydra.ext.java.syntax.EqualityExpression.unary(hydra.ext.java.syntax.RelationalExpression.simple(hydra.ext.java.syntax.ShiftExpression.unary(hydra.ext.java.syntax.AdditiveExpression.unary(hydra.ext.java.syntax.MultiplicativeExpression.unary(hydra.ext.java.syntax.UnaryExpression.other(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.postfix(hydra.ext.java.syntax.PostfixExpression.primary(hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArrayExpression.methodInvocation(mi))))))))))))))))))
+  hydra.ext.java.syntax.Expression.assignment(hydra.ext.java.syntax.AssignmentExpression.conditional(hydra.ext.java.syntax.ConditionalExpression.simple(Seq(Seq(Seq(Seq(Seq(hydra.ext.java.syntax.EqualityExpression.unary(hydra.ext.java.syntax.RelationalExpression.simple(hydra.ext.java.syntax.ShiftExpression.unary(hydra.ext.java.syntax.AdditiveExpression.unary(hydra.ext.java.syntax.MultiplicativeExpression.unary(hydra.ext.java.syntax.UnaryExpression.other(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.postfix(hydra.ext.java.syntax.PostfixExpression.primary(hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArray.methodInvocation(mi))))))))))))))))))
 
 def javaMethodInvocationToJavaPostfixExpression(mi: hydra.ext.java.syntax.MethodInvocation): hydra.ext.java.syntax.PostfixExpression =
-  hydra.ext.java.syntax.PostfixExpression.primary(hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArrayExpression.methodInvocation(mi)))
+  hydra.ext.java.syntax.PostfixExpression.primary(hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArray.methodInvocation(mi)))
 
 def javaMethodInvocationToJavaPrimary(mi: hydra.ext.java.syntax.MethodInvocation): hydra.ext.java.syntax.Primary =
-  hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArrayExpression.methodInvocation(mi))
+  hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArray.methodInvocation(mi))
 
 def javaMethodInvocationToJavaStatement(mi: hydra.ext.java.syntax.MethodInvocation): hydra.ext.java.syntax.Statement =
   hydra.ext.java.syntax.Statement.withoutTrailing(hydra.ext.java.syntax.StatementWithoutTrailingSubstatement.expression(hydra.ext.java.syntax.StatementExpression.methodInvocation(mi)))
@@ -389,7 +389,7 @@ def javaRelationalExpressionToJavaExpression(re: hydra.ext.java.syntax.Relationa
   hydra.ext.java.utils.javaEqualityExpressionToJavaExpression(hydra.ext.java.syntax.EqualityExpression.unary(re))
 
 def javaRelationalExpressionToJavaUnaryExpression(re: hydra.ext.java.syntax.RelationalExpression): hydra.ext.java.syntax.UnaryExpression =
-  hydra.ext.java.syntax.UnaryExpression.other(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.postfix(hydra.ext.java.syntax.PostfixExpression.primary(hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArrayExpression.parens(hydra.ext.java.syntax.Expression.assignment(hydra.ext.java.syntax.AssignmentExpression.conditional(hydra.ext.java.syntax.ConditionalExpression.simple(Seq(Seq(Seq(Seq(Seq(hydra.ext.java.syntax.EqualityExpression.unary(re))))))))))))))
+  hydra.ext.java.syntax.UnaryExpression.other(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.postfix(hydra.ext.java.syntax.PostfixExpression.primary(hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArray.parens(hydra.ext.java.syntax.Expression.assignment(hydra.ext.java.syntax.AssignmentExpression.conditional(hydra.ext.java.syntax.ConditionalExpression.simple(Seq(Seq(Seq(Seq(Seq(hydra.ext.java.syntax.EqualityExpression.unary(re))))))))))))))
 
 def javaReturnStatement(mex: Option[hydra.ext.java.syntax.Expression]): hydra.ext.java.syntax.Statement =
   hydra.ext.java.syntax.Statement.withoutTrailing(hydra.ext.java.syntax.StatementWithoutTrailingSubstatement.`return`(mex))
@@ -402,7 +402,7 @@ def javaString(s: scala.Predef.String): hydra.ext.java.syntax.Literal = hydra.ex
 def javaStringMultiplicativeExpression(s: scala.Predef.String): hydra.ext.java.syntax.MultiplicativeExpression =
   hydra.ext.java.utils.javaLiteralToJavaMultiplicativeExpression(hydra.ext.java.utils.javaString(s))
 
-lazy val javaThis: hydra.ext.java.syntax.Expression = hydra.ext.java.syntax.Expression.assignment(hydra.ext.java.syntax.AssignmentExpression.conditional(hydra.ext.java.syntax.ConditionalExpression.simple(Seq(Seq(Seq(Seq(Seq(hydra.ext.java.syntax.EqualityExpression.unary(hydra.ext.java.syntax.RelationalExpression.simple(hydra.ext.java.syntax.ShiftExpression.unary(hydra.ext.java.syntax.AdditiveExpression.unary(hydra.ext.java.syntax.MultiplicativeExpression.unary(hydra.ext.java.syntax.UnaryExpression.other(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.postfix(hydra.ext.java.syntax.PostfixExpression.primary(hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArrayExpression.`this`)))))))))))))))))
+lazy val javaThis: hydra.ext.java.syntax.Expression = hydra.ext.java.syntax.Expression.assignment(hydra.ext.java.syntax.AssignmentExpression.conditional(hydra.ext.java.syntax.ConditionalExpression.simple(Seq(Seq(Seq(Seq(Seq(hydra.ext.java.syntax.EqualityExpression.unary(hydra.ext.java.syntax.RelationalExpression.simple(hydra.ext.java.syntax.ShiftExpression.unary(hydra.ext.java.syntax.AdditiveExpression.unary(hydra.ext.java.syntax.MultiplicativeExpression.unary(hydra.ext.java.syntax.UnaryExpression.other(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.postfix(hydra.ext.java.syntax.PostfixExpression.primary(hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArray.`this`)))))))))))))))))
 
 def javaThrowIllegalArgumentException(args: Seq[hydra.ext.java.syntax.Expression]): hydra.ext.java.syntax.Statement =
   hydra.ext.java.utils.javaThrowStatement(hydra.ext.java.utils.javaConstructorCall(hydra.ext.java.utils.javaConstructorName("IllegalArgumentException")(None))(args)(None))
@@ -584,7 +584,7 @@ def toAcceptMethod(`abstract`: Boolean)(vtparams: Seq[hydra.ext.java.syntax.Type
 def toAssignStmt(fname: hydra.core.Name): hydra.ext.java.syntax.Statement =
   {
   lazy val id: hydra.ext.java.syntax.Identifier = hydra.ext.java.utils.fieldNameToJavaIdentifier(fname)
-  lazy val lhs: hydra.ext.java.syntax.LeftHandSide = hydra.ext.java.syntax.LeftHandSide.fieldAccess(hydra.ext.java.syntax.FieldAccess(hydra.ext.java.syntax.FieldAccess_Qualifier.primary(hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArrayExpression.`this`)),
+  lazy val lhs: hydra.ext.java.syntax.LeftHandSide = hydra.ext.java.syntax.LeftHandSide.fieldAccess(hydra.ext.java.syntax.FieldAccess(hydra.ext.java.syntax.FieldAccess_Qualifier.primary(hydra.ext.java.syntax.Primary.noNewArray(hydra.ext.java.syntax.PrimaryNoNewArray.`this`)),
      id))
   lazy val rhs: hydra.ext.java.syntax.Expression = hydra.ext.java.utils.fieldNameToJavaExpression(fname)
   hydra.ext.java.utils.javaAssignmentStatement(lhs)(rhs)
