@@ -128,11 +128,14 @@ def deconflict_variant_name(is_qualified: bool, env: hydra.ext.python.environmen
     def candidate_hydra_name() -> hydra.core.Name:
         return hydra.core.Name(hydra.lib.strings.cat2(union_name.value, hydra.formatting.capitalize(fname.value)))
     @lru_cache(1)
-    def elements() -> frozenlist[hydra.core.Binding]:
-        return hydra.lexical.graph_to_bindings(g)
+    def term_collision() -> bool:
+        return hydra.lib.maps.member(candidate_hydra_name(), g.bound_terms)
+    @lru_cache(1)
+    def type_collision() -> bool:
+        return hydra.lib.maps.member(candidate_hydra_name(), g.schema_types)
     @lru_cache(1)
     def collision() -> bool:
-        return hydra.lib.maybes.is_just(hydra.lib.lists.find((lambda b: hydra.lib.equality.equal(b.name.value, candidate_hydra_name().value)), elements()))
+        return hydra.lib.logic.or_(term_collision(), type_collision())
     return hydra.lib.logic.if_else(collision(), (lambda : hydra.ext.python.syntax.Name(hydra.lib.strings.cat2(hydra.ext.python.names.variant_name(is_qualified, env, union_name, fname).value, "_"))), (lambda : hydra.ext.python.names.variant_name(is_qualified, env, union_name, fname)))
 
 def deduplicate_case_variables(cases_: frozenlist[hydra.core.Field]) -> frozenlist[hydra.core.Field]:

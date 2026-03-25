@@ -1289,9 +1289,10 @@ deconflictVariantName = def "deconflictVariantName" $
   "isQualified" ~> "env" ~> "unionName" ~> "fname" ~> "g" ~>
     -- Compute the Hydra Name that the variant would correspond to
     "candidateHydraName" <~ (wrap _Name $ Strings.cat2 (Core.unName $ var "unionName") (Formatting.capitalize @@ (Core.unName $ var "fname"))) $
-    -- Check if this name exists as an element in the graph
-    "elements" <~ (Lexical.graphToBindings @@ var "g") $
-    "collision" <~ (Maybes.isJust $ Lists.find ("b" ~> Core.equalName_ (Core.bindingName $ var "b") (var "candidateHydraName")) (var "elements")) $
+    -- Check if this name exists as a term binding or a schema type in the graph
+    "termCollision" <~ (Maps.member (var "candidateHydraName") (Graph.graphBoundTerms (var "g"))) $
+    "typeCollision" <~ (Maps.member (var "candidateHydraName") (Graph.graphSchemaTypes (var "g"))) $
+    "collision" <~ (Logic.or (var "termCollision") (var "typeCollision")) $
     Logic.ifElse (var "collision")
       -- Collision: append '_' to the Python name
       (PyDsl.name $ Strings.cat2 (PyDsl.unName $ PyNames.variantName @@ var "isQualified" @@ var "env" @@ var "unionName" @@ var "fname") (string "_"))

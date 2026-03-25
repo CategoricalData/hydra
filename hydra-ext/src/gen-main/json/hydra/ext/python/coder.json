@@ -10909,117 +10909,125 @@
                                                 "let": {
                                                   "bindings": [
                                                     {
-                                                      "name": "elements",
+                                                      "name": "termCollision",
                                                       "term": {
                                                         "application": {
-                                                          "argument": {"variable": "g"},
-                                                          "function": {"variable": "hydra.lexical.graphToBindings"}}},
+                                                          "argument": {
+                                                            "application": {
+                                                              "argument": {"variable": "g"},
+                                                              "function": {
+                                                                "function": {
+                                                                  "elimination": {"record": {"field": "boundTerms", "typeName": "hydra.graph.Graph"}}}}}},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {"variable": "candidateHydraName"},
+                                                              "function": {
+                                                                "typeApplication": {
+                                                                  "body": {
+                                                                    "typeApplication": {
+                                                                      "body": {"function": {"primitive": "hydra.lib.maps.member"}},
+                                                                      "type": {"variable": "hydra.core.Name"}}},
+                                                                  "type": {"variable": "hydra.core.Term"}}}}}}},
                                                       "type": [
                                                         {
                                                           "constraints": null,
-                                                          "type": {"list": {"variable": "hydra.core.Binding"}},
+                                                          "type": {"literal": {"boolean": {}}},
                                                           "variables": []}]}],
                                                   "body": {
                                                     "let": {
                                                       "bindings": [
                                                         {
-                                                          "name": "collision",
+                                                          "name": "typeCollision",
                                                           "term": {
                                                             "application": {
                                                               "argument": {
                                                                 "application": {
-                                                                  "argument": {"variable": "elements"},
+                                                                  "argument": {"variable": "g"},
                                                                   "function": {
-                                                                    "application": {
-                                                                      "argument": {
-                                                                        "function": {
-                                                                          "lambda": {
-                                                                            "body": {
-                                                                              "application": {
-                                                                                "argument": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "candidateHydraName"},
-                                                                                    "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "argument": {
-                                                                                      "application": {
-                                                                                        "argument": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "b"},
-                                                                                            "function": {
-                                                                                              "function": {
-                                                                                                "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}}}},
-                                                                                        "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
-                                                                                    "function": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
-                                                                                        "type": {"literal": {"string": {}}}}}}}}},
-                                                                            "domain": [{"variable": "hydra.core.Binding"}],
-                                                                            "parameter": "b"}}},
-                                                                      "function": {
-                                                                        "typeApplication": {
-                                                                          "body": {"function": {"primitive": "hydra.lib.lists.find"}},
-                                                                          "type": {"variable": "hydra.core.Binding"}}}}}}},
+                                                                    "function": {
+                                                                      "elimination": {"record": {"field": "schemaTypes", "typeName": "hydra.graph.Graph"}}}}}},
                                                               "function": {
-                                                                "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.maybes.isJust"}},
-                                                                  "type": {"variable": "hydra.core.Binding"}}}}},
+                                                                "application": {
+                                                                  "argument": {"variable": "candidateHydraName"},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "typeApplication": {
+                                                                          "body": {"function": {"primitive": "hydra.lib.maps.member"}},
+                                                                          "type": {"variable": "hydra.core.Name"}}},
+                                                                      "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                           "type": [
                                                             {
                                                               "constraints": null,
                                                               "type": {"literal": {"boolean": {}}},
                                                               "variables": []}]}],
                                                       "body": {
-                                                        "application": {
-                                                          "argument": {
-                                                            "application": {
-                                                              "argument": {"variable": "fname"},
-                                                              "function": {
+                                                        "let": {
+                                                          "bindings": [
+                                                            {
+                                                              "name": "collision",
+                                                              "term": {
                                                                 "application": {
-                                                                  "argument": {"variable": "unionName"},
+                                                                  "argument": {"variable": "typeCollision"},
                                                                   "function": {
                                                                     "application": {
-                                                                      "argument": {"variable": "env"},
-                                                                      "function": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "isQualified"},
-                                                                          "function": {"variable": "hydra.ext.python.names.variantName"}}}}}}}}},
-                                                          "function": {
+                                                                      "argument": {"variable": "termCollision"},
+                                                                      "function": {"function": {"primitive": "hydra.lib.logic.or"}}}}}},
+                                                              "type": [
+                                                                {
+                                                                  "constraints": null,
+                                                                  "type": {"literal": {"boolean": {}}},
+                                                                  "variables": []}]}],
+                                                          "body": {
                                                             "application": {
                                                               "argument": {
-                                                                "wrap": {
-                                                                  "body": {
+                                                                "application": {
+                                                                  "argument": {"variable": "fname"},
+                                                                  "function": {
                                                                     "application": {
-                                                                      "argument": {"literal": {"string": "_"}},
+                                                                      "argument": {"variable": "unionName"},
                                                                       "function": {
                                                                         "application": {
-                                                                          "argument": {
+                                                                          "argument": {"variable": "env"},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "isQualified"},
+                                                                              "function": {"variable": "hydra.ext.python.names.variantName"}}}}}}}}},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "wrap": {
+                                                                      "body": {
+                                                                        "application": {
+                                                                          "argument": {"literal": {"string": "_"}},
+                                                                          "function": {
                                                                             "application": {
                                                                               "argument": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "fname"},
-                                                                                  "function": {
+                                                                                  "argument": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "unionName"},
+                                                                                      "argument": {"variable": "fname"},
                                                                                       "function": {
                                                                                         "application": {
-                                                                                          "argument": {"variable": "env"},
+                                                                                          "argument": {"variable": "unionName"},
                                                                                           "function": {
                                                                                             "application": {
-                                                                                              "argument": {"variable": "isQualified"},
-                                                                                              "function": {"variable": "hydra.ext.python.names.variantName"}}}}}}}}},
-                                                                              "function": {
-                                                                                "function": {"elimination": {"wrap": "hydra.ext.python.syntax.Name"}}}}},
-                                                                          "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                                  "typeName": "hydra.ext.python.syntax.Name"}},
-                                                              "function": {
-                                                                "application": {
-                                                                  "argument": {"variable": "collision"},
+                                                                                              "argument": {"variable": "env"},
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "isQualified"},
+                                                                                                  "function": {"variable": "hydra.ext.python.names.variantName"}}}}}}}}},
+                                                                                  "function": {
+                                                                                    "function": {"elimination": {"wrap": "hydra.ext.python.syntax.Name"}}}}},
+                                                                              "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                                                      "typeName": "hydra.ext.python.syntax.Name"}},
                                                                   "function": {
-                                                                    "typeApplication": {
-                                                                      "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
-                                                                      "type": {"variable": "hydra.ext.python.syntax.Name"}}}}}}}}}}}}}}},
+                                                                    "application": {
+                                                                      "argument": {"variable": "collision"},
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                          "type": {"variable": "hydra.ext.python.syntax.Name"}}}}}}}}}}}}}}}}},
                                           "domain": [{"variable": "hydra.graph.Graph"}],
                                           "parameter": "g"}}},
                                     "domain": [{"variable": "hydra.core.Name"}],

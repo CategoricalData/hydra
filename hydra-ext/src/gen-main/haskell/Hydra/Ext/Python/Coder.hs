@@ -115,9 +115,9 @@ deconflictVariantName :: Bool -> Environment.PythonEnvironment -> Core.Name -> C
 deconflictVariantName isQualified env unionName fname g =
 
       let candidateHydraName = Core.Name (Strings.cat2 (Core.unName unionName) (Formatting.capitalize (Core.unName fname)))
-          elements = Lexical.graphToBindings g
-          collision =
-                  Maybes.isJust (Lists.find (\b -> Equality.equal (Core.unName (Core.bindingName b)) (Core.unName candidateHydraName)) elements)
+          termCollision = Maps.member candidateHydraName (Graph.graphBoundTerms g)
+          typeCollision = Maps.member candidateHydraName (Graph.graphSchemaTypes g)
+          collision = Logic.or termCollision typeCollision
       in (Logic.ifElse collision (Syntax.Name (Strings.cat2 (Syntax.unName (Names.variantName isQualified env unionName fname)) "_")) (Names.variantName isQualified env unionName fname))
 
 -- | Rewrite case statements to avoid variable name collisions

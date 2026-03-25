@@ -1080,8 +1080,8 @@ def write_postfix_expression(e: hydra.ext.java.syntax.PostfixExpression) -> hydr
 
 def write_primary(p: hydra.ext.java.syntax.Primary) -> hydra.ast.Expr:
     match p:
-        case hydra.ext.java.syntax.PrimaryNoNewArray(value=n):
-            return write_primary_no_new_array_expression_expression(n)
+        case hydra.ext.java.syntax.PrimaryNoNewArray_(value=n):
+            return write_primary_no_new_array(n)
 
         case hydra.ext.java.syntax.PrimaryArrayCreation(value=a):
             return write_array_creation_expression(a)
@@ -1089,36 +1089,36 @@ def write_primary(p: hydra.ext.java.syntax.Primary) -> hydra.ast.Expr:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def write_primary_no_new_array_expression_expression(p: hydra.ext.java.syntax.PrimaryNoNewArrayExpression) -> hydra.ast.Expr:
+def write_primary_no_new_array(p: hydra.ext.java.syntax.PrimaryNoNewArray) -> hydra.ast.Expr:
     match p:
-        case hydra.ext.java.syntax.PrimaryNoNewArrayExpressionLiteral(value=l):
+        case hydra.ext.java.syntax.PrimaryNoNewArrayLiteral(value=l):
             return write_literal(l)
 
-        case hydra.ext.java.syntax.PrimaryNoNewArrayExpressionClassLiteral(value=cl):
+        case hydra.ext.java.syntax.PrimaryNoNewArrayClassLiteral(value=cl):
             return write_class_literal(cl)
 
-        case hydra.ext.java.syntax.PrimaryNoNewArrayExpressionThis():
+        case hydra.ext.java.syntax.PrimaryNoNewArrayThis():
             return hydra.serialization.cst("this")
 
-        case hydra.ext.java.syntax.PrimaryNoNewArrayExpressionDotThis(value=n):
+        case hydra.ext.java.syntax.PrimaryNoNewArrayDotThis(value=n):
             return hydra.serialization.dot_sep((write_type_name(n), hydra.serialization.cst("this")))
 
-        case hydra.ext.java.syntax.PrimaryNoNewArrayExpressionParens(value=e):
+        case hydra.ext.java.syntax.PrimaryNoNewArrayParens(value=e):
             return hydra.serialization.paren_list(False, (write_expression(e),))
 
-        case hydra.ext.java.syntax.PrimaryNoNewArrayExpressionClassInstance(value=ci):
+        case hydra.ext.java.syntax.PrimaryNoNewArrayClassInstance(value=ci):
             return write_class_instance_creation_expression(ci)
 
-        case hydra.ext.java.syntax.PrimaryNoNewArrayExpressionFieldAccess(value=fa):
+        case hydra.ext.java.syntax.PrimaryNoNewArrayFieldAccess(value=fa):
             return write_field_access(fa)
 
-        case hydra.ext.java.syntax.PrimaryNoNewArrayExpressionArrayAccess(value=aa):
+        case hydra.ext.java.syntax.PrimaryNoNewArrayArrayAccess(value=aa):
             return write_array_access(aa)
 
-        case hydra.ext.java.syntax.PrimaryNoNewArrayExpressionMethodInvocation(value=mi):
+        case hydra.ext.java.syntax.PrimaryNoNewArrayMethodInvocation(value=mi):
             return write_method_invocation(mi)
 
-        case hydra.ext.java.syntax.PrimaryNoNewArrayExpressionMethodReference(value=mr):
+        case hydra.ext.java.syntax.PrimaryNoNewArrayMethodReference(value=mr):
             return write_method_reference(mr)
 
         case _:

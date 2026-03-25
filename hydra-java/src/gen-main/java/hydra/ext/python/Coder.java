@@ -79,14 +79,17 @@ public interface Coder {
     hydra.core.Name candidateHydraName = new hydra.core.Name(hydra.lib.strings.Cat2.apply(
       (unionName).value,
       hydra.Formatting.capitalize((fname).value)));
-    hydra.util.ConsList<hydra.core.Binding> elements = hydra.Lexical.graphToBindings(g);
-    hydra.util.Lazy<Boolean> collision = new hydra.util.Lazy<>(() -> hydra.lib.maybes.IsJust.apply(hydra.lib.lists.Find.apply(
-      (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.equality.Equal.apply(
-        (b).name.value,
-        (candidateHydraName).value)),
-      elements)));
+    hydra.util.Lazy<Boolean> termCollision = new hydra.util.Lazy<>(() -> hydra.lib.maps.Member.apply(
+      candidateHydraName,
+      (g).boundTerms));
+    hydra.util.Lazy<Boolean> typeCollision = new hydra.util.Lazy<>(() -> hydra.lib.maps.Member.apply(
+      candidateHydraName,
+      (g).schemaTypes));
+    Boolean collision = hydra.lib.logic.Or.apply(
+      termCollision.get(),
+      typeCollision.get());
     return hydra.lib.logic.IfElse.lazy(
-      collision.get(),
+      collision,
       () -> new hydra.ext.python.syntax.Name(hydra.lib.strings.Cat2.apply(
         hydra.ext.python.Names.variantName(
           isQualified,
