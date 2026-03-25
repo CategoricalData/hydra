@@ -32,70 +32,11 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-lispSymbol :: String -> Syntax.Symbol
-lispSymbol name = Syntax.Symbol name
-
-lispKeyword :: String -> Syntax.Expression
-lispKeyword name =
-    Syntax.ExpressionLiteral (Syntax.LiteralKeyword (Syntax.Keyword {
-      Syntax.keywordName = name,
-      Syntax.keywordNamespace = Nothing}))
-
-lispVar :: String -> Syntax.Expression
-lispVar name =
-    Syntax.ExpressionVariable (Syntax.VariableReference {
-      Syntax.variableReferenceName = (Syntax.Symbol name),
-      Syntax.variableReferenceFunctionNamespace = False})
-
-lispApp :: Syntax.Expression -> [Syntax.Expression] -> Syntax.Expression
-lispApp fun args =
-    Syntax.ExpressionApplication (Syntax.Application {
-      Syntax.applicationFunction = fun,
-      Syntax.applicationArguments = args})
-
-lispLambdaExpr :: [String] -> Syntax.Expression -> Syntax.Expression
-lispLambdaExpr params body =
-    Syntax.ExpressionLambda (Syntax.Lambda {
-      Syntax.lambdaName = Nothing,
-      Syntax.lambdaParams = (Lists.map (\p -> Syntax.Symbol p) params),
-      Syntax.lambdaRestParam = Nothing,
-      Syntax.lambdaBody = [
-        body]})
-
-lispNamedLambdaExpr :: String -> [String] -> Syntax.Expression -> Syntax.Expression
-lispNamedLambdaExpr name params body =
-    Syntax.ExpressionLambda (Syntax.Lambda {
-      Syntax.lambdaName = (Just (Syntax.Symbol name)),
-      Syntax.lambdaParams = (Lists.map (\p -> Syntax.Symbol p) params),
-      Syntax.lambdaRestParam = Nothing,
-      Syntax.lambdaBody = [
-        body]})
-
-lispLitExpr :: Syntax.Literal -> Syntax.Expression
-lispLitExpr lit = Syntax.ExpressionLiteral lit
-
-lispListExpr :: [Syntax.Expression] -> Syntax.Expression
-lispListExpr elements =
-    Syntax.ExpressionList (Syntax.ListLiteral {
-      Syntax.listLiteralElements = elements,
-      Syntax.listLiteralQuoted = False})
-
-lispNilExpr :: Syntax.Expression
-lispNilExpr = Syntax.ExpressionLiteral Syntax.LiteralNil
-
-lispTopForm :: Syntax.TopLevelForm -> Syntax.TopLevelFormWithComments
-lispTopForm form =
-    Syntax.TopLevelFormWithComments {
-      Syntax.topLevelFormWithCommentsDoc = Nothing,
-      Syntax.topLevelFormWithCommentsComment = Nothing,
-      Syntax.topLevelFormWithCommentsForm = form}
-
-lispTopFormWithComments :: Maybe String -> Syntax.TopLevelForm -> Syntax.TopLevelFormWithComments
-lispTopFormWithComments mdoc form =
-    Syntax.TopLevelFormWithComments {
-      Syntax.topLevelFormWithCommentsDoc = (Maybes.map (\d -> Syntax.Docstring d) mdoc),
-      Syntax.topLevelFormWithCommentsComment = Nothing,
-      Syntax.topLevelFormWithCommentsForm = form}
+dialectCadr :: Syntax.Dialect -> String
+dialectCadr d =
+    case d of
+      Syntax.DialectClojure -> "second"
+      _ -> "cadr"
 
 dialectCar :: Syntax.Dialect -> String
 dialectCar d =
@@ -103,11 +44,11 @@ dialectCar d =
       Syntax.DialectClojure -> "first"
       _ -> "car"
 
-dialectCadr :: Syntax.Dialect -> String
-dialectCadr d =
+dialectConstructorPrefix :: Syntax.Dialect -> String
+dialectConstructorPrefix d =
     case d of
-      Syntax.DialectClojure -> "second"
-      _ -> "cadr"
+      Syntax.DialectClojure -> "->"
+      _ -> "make-"
 
 dialectEqual :: Syntax.Dialect -> String
 dialectEqual d =
@@ -116,276 +57,6 @@ dialectEqual d =
       Syntax.DialectCommonLisp -> "equal"
       Syntax.DialectEmacsLisp -> "equal"
       _ -> "equal?"
-
-dialectConstructorPrefix :: Syntax.Dialect -> String
-dialectConstructorPrefix d =
-    case d of
-      Syntax.DialectClojure -> "->"
-      _ -> "make-"
-
-qualifiedSnakeName :: Core.Name -> String
-qualifiedSnakeName name =
-
-      let raw = Core.unName name
-          parts = Strings.splitOn "." raw
-          snakeParts = Lists.map (\p -> Formatting.convertCaseCamelOrUnderscoreToLowerSnake p) parts
-          joined = Strings.intercalate "_" snakeParts
-      in (Formatting.sanitizeWithUnderscores Language.lispReservedWords joined)
-
-qualifiedTypeName :: Core.Name -> String
-qualifiedTypeName name = Formatting.capitalize (Names.localNameOf name)
-
-encodeLiteral :: Core.Literal -> Syntax.Expression
-encodeLiteral lit =
-    case lit of
-      Core.LiteralBoolean v0 -> Syntax.ExpressionLiteral (Syntax.LiteralBoolean v0)
-      Core.LiteralString v0 -> Syntax.ExpressionLiteral (Syntax.LiteralString v0)
-      Core.LiteralFloat v0 -> case v0 of
-        Core.FloatValueFloat32 v1 -> Syntax.ExpressionLiteral (Syntax.LiteralFloat (Syntax.FloatLiteral {
-          Syntax.floatLiteralValue = (Literals.float32ToBigfloat v1),
-          Syntax.floatLiteralPrecision = Nothing}))
-        Core.FloatValueFloat64 v1 -> Syntax.ExpressionLiteral (Syntax.LiteralFloat (Syntax.FloatLiteral {
-          Syntax.floatLiteralValue = (Literals.float64ToBigfloat v1),
-          Syntax.floatLiteralPrecision = Nothing}))
-        Core.FloatValueBigfloat v1 -> Syntax.ExpressionLiteral (Syntax.LiteralFloat (Syntax.FloatLiteral {
-          Syntax.floatLiteralValue = v1,
-          Syntax.floatLiteralPrecision = Nothing}))
-      Core.LiteralInteger v0 -> case v0 of
-        Core.IntegerValueInt8 v1 -> Syntax.ExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteral {
-          Syntax.integerLiteralValue = (Literals.int8ToBigint v1),
-          Syntax.integerLiteralBigint = False}))
-        Core.IntegerValueInt16 v1 -> Syntax.ExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteral {
-          Syntax.integerLiteralValue = (Literals.int16ToBigint v1),
-          Syntax.integerLiteralBigint = False}))
-        Core.IntegerValueInt32 v1 -> Syntax.ExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteral {
-          Syntax.integerLiteralValue = (Literals.int32ToBigint v1),
-          Syntax.integerLiteralBigint = False}))
-        Core.IntegerValueInt64 v1 -> Syntax.ExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteral {
-          Syntax.integerLiteralValue = (Literals.int64ToBigint v1),
-          Syntax.integerLiteralBigint = False}))
-        Core.IntegerValueUint8 v1 -> Syntax.ExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteral {
-          Syntax.integerLiteralValue = (Literals.uint8ToBigint v1),
-          Syntax.integerLiteralBigint = False}))
-        Core.IntegerValueUint16 v1 -> Syntax.ExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteral {
-          Syntax.integerLiteralValue = (Literals.uint16ToBigint v1),
-          Syntax.integerLiteralBigint = False}))
-        Core.IntegerValueUint32 v1 -> Syntax.ExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteral {
-          Syntax.integerLiteralValue = (Literals.uint32ToBigint v1),
-          Syntax.integerLiteralBigint = False}))
-        Core.IntegerValueUint64 v1 -> Syntax.ExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteral {
-          Syntax.integerLiteralValue = (Literals.uint64ToBigint v1),
-          Syntax.integerLiteralBigint = False}))
-        Core.IntegerValueBigint v1 -> Syntax.ExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteral {
-          Syntax.integerLiteralValue = v1,
-          Syntax.integerLiteralBigint = True}))
-      Core.LiteralBinary v0 ->
-        let byteValues = Literals.binaryToBytes v0
-        in (Syntax.ExpressionVector (Syntax.VectorLiteral {
-          Syntax.vectorLiteralElements = (Lists.map (\bv -> Syntax.ExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteral {
-            Syntax.integerLiteralValue = (Literals.int32ToBigint bv),
-            Syntax.integerLiteralBigint = False}))) byteValues)}))
-
-encodeType :: t0 -> t1 -> Core.Type -> Either t2 Syntax.TypeSpecifier
-encodeType cx g t =
-
-      let typ = Rewriting.deannotateType t
-      in case typ of
-        Core.TypeAnnotated v0 -> encodeType cx g (Core.annotatedTypeBody v0)
-        Core.TypeApplication v0 -> encodeType cx g (Core.applicationTypeFunction v0)
-        Core.TypeUnit -> Right Syntax.TypeSpecifierUnit
-        Core.TypeLiteral v0 -> Right (case v0 of
-          Core.LiteralTypeBinary -> Syntax.TypeSpecifierNamed (Syntax.Symbol "ByteArray")
-          Core.LiteralTypeBoolean -> Syntax.TypeSpecifierNamed (Syntax.Symbol "Boolean")
-          Core.LiteralTypeFloat _ -> Syntax.TypeSpecifierNamed (Syntax.Symbol "Float")
-          Core.LiteralTypeInteger _ -> Syntax.TypeSpecifierNamed (Syntax.Symbol "Integer")
-          Core.LiteralTypeString -> Syntax.TypeSpecifierNamed (Syntax.Symbol "String"))
-        Core.TypeList v0 -> Eithers.map (\enc -> Syntax.TypeSpecifierList enc) (encodeType cx g v0)
-        Core.TypeSet v0 -> Eithers.map (\enc -> Syntax.TypeSpecifierSet enc) (encodeType cx g v0)
-        Core.TypeMap _ -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol "Map"))
-        Core.TypeMaybe v0 -> Eithers.map (\enc -> Syntax.TypeSpecifierMaybe enc) (encodeType cx g v0)
-        Core.TypeEither _ -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol "Either"))
-        Core.TypePair _ -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol "Pair"))
-        Core.TypeFunction _ -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol "Function"))
-        Core.TypeRecord _ -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol "Record"))
-        Core.TypeUnion _ -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol "Union"))
-        Core.TypeWrap _ -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol "Wrapper"))
-        Core.TypeVariable v0 -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol (Core.unName v0)))
-        Core.TypeForall v0 -> encodeType cx g (Core.forallTypeBody v0)
-        _ -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol "Any"))
-
-encodeTerm :: Syntax.Dialect -> t0 -> t1 -> Core.Term -> Either t2 Syntax.Expression
-encodeTerm dialect cx g term =
-    case term of
-      Core.TermAnnotated v0 -> encodeTerm dialect cx g (Core.annotatedTermBody v0)
-      Core.TermApplication v0 ->
-        let rawFun = Core.applicationFunction v0
-            rawArg = Core.applicationArgument v0
-        in (encodeApplication dialect cx g rawFun rawArg)
-      Core.TermEither v0 -> Eithers.either (\l -> Eithers.bind (encodeTerm dialect cx g l) (\sl -> Right (lispApp (lispVar "list") [
-        lispKeyword "left",
-        sl]))) (\r -> Eithers.bind (encodeTerm dialect cx g r) (\sr -> Right (lispApp (lispVar "list") [
-        lispKeyword "right",
-        sr]))) v0
-      Core.TermFunction v0 -> encodeFunction dialect cx g v0
-      Core.TermLet v0 ->
-        let bindings = Core.letBindings v0
-            body = Core.letBody v0
-        in (encodeLetAsNative dialect cx g bindings body)
-      Core.TermList v0 -> Eithers.bind (Eithers.mapList (encodeTerm dialect cx g) v0) (\sels -> Right (lispListExpr sels))
-      Core.TermLiteral v0 -> Right (encodeLiteral v0)
-      Core.TermMap v0 -> Eithers.bind (Eithers.mapList (\entry -> Eithers.bind (encodeTerm dialect cx g (Pairs.first entry)) (\k -> Eithers.bind (encodeTerm dialect cx g (Pairs.second entry)) (\v -> Right (Syntax.MapEntry {
-        Syntax.mapEntryKey = k,
-        Syntax.mapEntryValue = v})))) (Maps.toList v0)) (\pairs -> Right (Syntax.ExpressionMap (Syntax.MapLiteral {
-        Syntax.mapLiteralEntries = pairs})))
-      Core.TermMaybe v0 -> Maybes.cases v0 (Right (lispApp (lispVar "list") [
-        lispKeyword "nothing"])) (\val -> Eithers.bind (encodeTerm dialect cx g val) (\sval -> Right (lispApp (lispVar "list") [
-        lispKeyword "just",
-        sval])))
-      Core.TermPair v0 -> Eithers.bind (encodeTerm dialect cx g (Pairs.first v0)) (\f -> Eithers.bind (encodeTerm dialect cx g (Pairs.second v0)) (\s -> Right (lispListExpr [
-        f,
-        s])))
-      Core.TermRecord v0 ->
-        let rname = Core.recordTypeName v0
-            fields = Core.recordFields v0
-        in (Eithers.bind (Eithers.mapList (\f -> encodeTerm dialect cx g (Core.fieldTerm f)) fields) (\sfields ->
-          let constructorName = Strings.cat2 (dialectConstructorPrefix dialect) (qualifiedSnakeName rname)
-          in (Right (lispApp (lispVar constructorName) sfields))))
-      Core.TermSet v0 -> Eithers.bind (Eithers.mapList (encodeTerm dialect cx g) (Sets.toList v0)) (\sels -> Right (Syntax.ExpressionSet (Syntax.SetLiteral {
-        Syntax.setLiteralElements = sels})))
-      Core.TermUnion v0 ->
-        let tname = Names.localNameOf (Core.injectionTypeName v0)
-            field = Core.injectionField v0
-            fname = Core.unName (Core.fieldName field)
-            fterm = Core.fieldTerm field
-            dterm = Rewriting.deannotateTerm fterm
-            isUnit =
-                    case dterm of
-                      Core.TermUnit -> True
-                      Core.TermRecord v1 -> Lists.null (Core.recordFields v1)
-                      _ -> False
-        in (Logic.ifElse isUnit (Right (lispApp (lispVar "list") [
-          lispKeyword (Formatting.convertCaseCamelToLowerSnake fname),
-          lispNilExpr])) (Eithers.bind (encodeTerm dialect cx g fterm) (\sval -> Right (lispApp (lispVar "list") [
-          lispKeyword (Formatting.convertCaseCamelToLowerSnake fname),
-          sval]))))
-      Core.TermUnit -> Right lispNilExpr
-      Core.TermVariable v0 -> Right (lispVar (Formatting.convertCaseCamelOrUnderscoreToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName v0))))
-      Core.TermTypeApplication v0 -> encodeTerm dialect cx g (Core.typeApplicationTermBody v0)
-      Core.TermTypeLambda v0 -> encodeTerm dialect cx g (Core.typeLambdaBody v0)
-      Core.TermWrap v0 -> encodeTerm dialect cx g (Core.wrappedTermBody v0)
-
-encodeFunction :: Syntax.Dialect -> t0 -> t1 -> Core.Function -> Either t2 Syntax.Expression
-encodeFunction dialect cx g fun =
-    case fun of
-      Core.FunctionLambda v0 ->
-        let param =
-                Formatting.convertCaseCamelOrUnderscoreToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName (Core.lambdaParameter v0)))
-        in (Eithers.bind (encodeTerm dialect cx g (Core.lambdaBody v0)) (\body -> Right (lispLambdaExpr [
-          param] body)))
-      Core.FunctionPrimitive v0 -> Right (lispVar (Formatting.convertCaseCamelOrUnderscoreToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName v0))))
-      Core.FunctionElimination v0 -> encodeElimination dialect cx g v0 Nothing
-
-encodeLetAsLambdaApp :: Syntax.Dialect -> t0 -> t1 -> [Core.Binding] -> Core.Term -> Either t2 Syntax.Expression
-encodeLetAsLambdaApp dialect cx g bindings body =
-    Eithers.bind (encodeTerm dialect cx g body) (\bodyExpr -> Eithers.foldl (\acc -> \b ->
-      let bname =
-              Formatting.convertCaseCamelOrUnderscoreToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName (Core.bindingName b)))
-      in (Eithers.bind (encodeTerm dialect cx g (Core.bindingTerm b)) (\bval -> Right (lispApp (lispLambdaExpr [
-        bname] acc) [
-        bval])))) bodyExpr (Lists.reverse bindings))
-
-encodeLetAsNative :: Syntax.Dialect -> t0 -> t1 -> [Core.Binding] -> Core.Term -> Either t2 Syntax.Expression
-encodeLetAsNative dialect cx g bindings body =
-
-      let isClojureTop =
-              case dialect of
-                Syntax.DialectClojure -> True
-                _ -> False
-      in (Eithers.bind (encodeTerm dialect cx g body) (\bodyExpr ->
-        let sortedBindings =
-                Logic.ifElse True (
-                  let allNames = Sets.fromList (Lists.map (\b -> Core.bindingName b) bindings)
-                      adjList =
-                              Lists.map (\b -> (Core.bindingName b, (Sets.toList (Sets.intersection allNames (Rewriting.freeVariablesInTerm (Core.bindingTerm b)))))) bindings
-                      sortResult = Sorting.topologicalSort adjList
-                      nameToBinding = Maps.fromList (Lists.map (\b -> (Core.bindingName b, b)) bindings)
-                  in (Eithers.either (\_ -> bindings) (\sorted -> Lists.map (\name -> Maybes.fromMaybe (Lists.head bindings) (Maps.lookup name nameToBinding)) sorted) sortResult)) bindings
-        in (Eithers.bind (Eithers.mapList (\b ->
-          let bname =
-                  Formatting.convertCaseCamelOrUnderscoreToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName (Core.bindingName b)))
-              isSelfRef = Sets.member (Core.bindingName b) (Rewriting.freeVariablesInTerm (Core.bindingTerm b))
-              isLambda =
-                      case (Rewriting.deannotateTerm (Core.bindingTerm b)) of
-                        Core.TermFunction v0 -> case v0 of
-                          Core.FunctionLambda _ -> True
-                          _ -> False
-                        _ -> False
-          in (Eithers.bind (encodeTerm dialect cx g (Core.bindingTerm b)) (\bval ->
-            let isClojure =
-                    case dialect of
-                      Syntax.DialectClojure -> True
-                      _ -> False
-                wrappedVal =
-                        Logic.ifElse isClojure (Logic.ifElse isSelfRef (Logic.ifElse isLambda (case bval of
-                          Syntax.ExpressionLambda v0 -> Syntax.ExpressionLambda (Syntax.Lambda {
-                            Syntax.lambdaName = (Just (Syntax.Symbol bname)),
-                            Syntax.lambdaParams = (Syntax.lambdaParams v0),
-                            Syntax.lambdaRestParam = (Syntax.lambdaRestParam v0),
-                            Syntax.lambdaBody = (Syntax.lambdaBody v0)})
-                          _ -> bval) (lispNamedLambdaExpr bname [
-                          "_arg"] (lispApp bval [
-                          lispVar "_arg"]))) bval) (Logic.ifElse (Logic.and isSelfRef (Logic.not isLambda)) (lispLambdaExpr [
-                          "_arg"] (lispApp bval [
-                          lispVar "_arg"])) bval)
-            in (Right (bname, wrappedVal))))) sortedBindings) (\encodedBindings ->
-          let allBindingNames = Sets.fromList (Lists.map (\b -> Core.bindingName b) bindings)
-              hasCrossRefs =
-                      Lists.foldl (\acc -> \b -> Logic.or acc (Logic.not (Sets.null (Sets.intersection allBindingNames (Rewriting.freeVariablesInTerm (Core.bindingTerm b)))))) False bindings
-              hasSelfRef =
-                      Lists.foldl (\acc -> \b -> Logic.or acc (Sets.member (Core.bindingName b) (Rewriting.freeVariablesInTerm (Core.bindingTerm b)))) False bindings
-              isRecursive = hasSelfRef
-              letKind =
-                      Logic.ifElse isRecursive Syntax.LetKindRecursive (Logic.ifElse (Lists.null (Lists.tail bindings)) Syntax.LetKindParallel Syntax.LetKindSequential)
-              lispBindings =
-                      Lists.map (\eb -> Syntax.LetBindingSimple (Syntax.SimpleBinding {
-                        Syntax.simpleBindingName = (Syntax.Symbol (Pairs.first eb)),
-                        Syntax.simpleBindingValue = (Pairs.second eb)})) encodedBindings
-          in (Right (Syntax.ExpressionLet (Syntax.LetExpression {
-            Syntax.letExpressionKind = letKind,
-            Syntax.letExpressionBindings = lispBindings,
-            Syntax.letExpressionBody = [
-              bodyExpr]})))))))
-
-isPrimitiveRef :: String -> Core.Term -> Bool
-isPrimitiveRef primName term =
-    case term of
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionPrimitive v1 -> Equality.equal (Core.unName v1) primName
-        _ -> False
-      Core.TermVariable v0 -> Equality.equal (Core.unName v0) primName
-      Core.TermAnnotated v0 -> isPrimitiveRef primName (Core.annotatedTermBody v0)
-      Core.TermTypeApplication v0 -> isPrimitiveRef primName (Core.typeApplicationTermBody v0)
-      Core.TermTypeLambda v0 -> isPrimitiveRef primName (Core.typeLambdaBody v0)
-      _ -> False
-
-wrapInThunk :: Syntax.Expression -> Syntax.Expression
-wrapInThunk expr =
-    Syntax.ExpressionLambda (Syntax.Lambda {
-      Syntax.lambdaName = Nothing,
-      Syntax.lambdaParams = [],
-      Syntax.lambdaRestParam = Nothing,
-      Syntax.lambdaBody = [
-        expr]})
-
-isLazy2ArgPrimitive :: Core.Name -> Bool
-isLazy2ArgPrimitive name =
-    Logic.or (Equality.equal name (Core.Name "hydra.lib.eithers.fromLeft")) (Logic.or (Equality.equal name (Core.Name "hydra.lib.eithers.fromRight")) (Equality.equal name (Core.Name "hydra.lib.maybes.fromMaybe")))
-
-isLazy3ArgPrimitive :: Core.Name -> Bool
-isLazy3ArgPrimitive name = Equality.equal name (Core.Name "hydra.lib.maybes.maybe")
-
-isCasesPrimitive :: Core.Name -> Bool
-isCasesPrimitive name = Equality.equal name (Core.Name "hydra.lib.maybes.cases")
 
 encodeApplication :: Syntax.Dialect -> t0 -> t1 -> Core.Term -> Core.Term -> Either t2 Syntax.Expression
 encodeApplication dialect cx g rawFun rawArg =
@@ -477,6 +148,249 @@ encodeFieldDef ft =
         Syntax.fieldDefinitionName = (Syntax.Symbol (Formatting.convertCaseCamelToLowerSnake fname)),
         Syntax.fieldDefinitionDefaultValue = Nothing}
 
+encodeFunction :: Syntax.Dialect -> t0 -> t1 -> Core.Function -> Either t2 Syntax.Expression
+encodeFunction dialect cx g fun =
+    case fun of
+      Core.FunctionLambda v0 ->
+        let param =
+                Formatting.convertCaseCamelOrUnderscoreToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName (Core.lambdaParameter v0)))
+        in (Eithers.bind (encodeTerm dialect cx g (Core.lambdaBody v0)) (\body -> Right (lispLambdaExpr [
+          param] body)))
+      Core.FunctionPrimitive v0 -> Right (lispVar (Formatting.convertCaseCamelOrUnderscoreToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName v0))))
+      Core.FunctionElimination v0 -> encodeElimination dialect cx g v0 Nothing
+
+encodeLetAsLambdaApp :: Syntax.Dialect -> t0 -> t1 -> [Core.Binding] -> Core.Term -> Either t2 Syntax.Expression
+encodeLetAsLambdaApp dialect cx g bindings body =
+    Eithers.bind (encodeTerm dialect cx g body) (\bodyExpr -> Eithers.foldl (\acc -> \b ->
+      let bname =
+              Formatting.convertCaseCamelOrUnderscoreToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName (Core.bindingName b)))
+      in (Eithers.bind (encodeTerm dialect cx g (Core.bindingTerm b)) (\bval -> Right (lispApp (lispLambdaExpr [
+        bname] acc) [
+        bval])))) bodyExpr (Lists.reverse bindings))
+
+encodeLetAsNative :: Syntax.Dialect -> t0 -> t1 -> [Core.Binding] -> Core.Term -> Either t2 Syntax.Expression
+encodeLetAsNative dialect cx g bindings body =
+
+      let isClojureTop =
+              case dialect of
+                Syntax.DialectClojure -> True
+                _ -> False
+      in (Eithers.bind (encodeTerm dialect cx g body) (\bodyExpr ->
+        let sortedBindings =
+                Logic.ifElse True (
+                  let allNames = Sets.fromList (Lists.map (\b -> Core.bindingName b) bindings)
+                      adjList =
+                              Lists.map (\b -> (Core.bindingName b, (Sets.toList (Sets.intersection allNames (Rewriting.freeVariablesInTerm (Core.bindingTerm b)))))) bindings
+                      sortResult = Sorting.topologicalSort adjList
+                      nameToBinding = Maps.fromList (Lists.map (\b -> (Core.bindingName b, b)) bindings)
+                  in (Eithers.either (\_ -> bindings) (\sorted -> Lists.map (\name -> Maybes.fromMaybe (Lists.head bindings) (Maps.lookup name nameToBinding)) sorted) sortResult)) bindings
+        in (Eithers.bind (Eithers.mapList (\b ->
+          let bname =
+                  Formatting.convertCaseCamelOrUnderscoreToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName (Core.bindingName b)))
+              isSelfRef = Sets.member (Core.bindingName b) (Rewriting.freeVariablesInTerm (Core.bindingTerm b))
+              isLambda =
+                      case (Rewriting.deannotateTerm (Core.bindingTerm b)) of
+                        Core.TermFunction v0 -> case v0 of
+                          Core.FunctionLambda _ -> True
+                          _ -> False
+                        _ -> False
+          in (Eithers.bind (encodeTerm dialect cx g (Core.bindingTerm b)) (\bval ->
+            let isClojure =
+                    case dialect of
+                      Syntax.DialectClojure -> True
+                      _ -> False
+                wrappedVal =
+                        Logic.ifElse isClojure (Logic.ifElse isSelfRef (Logic.ifElse isLambda (case bval of
+                          Syntax.ExpressionLambda v0 -> Syntax.ExpressionLambda (Syntax.Lambda {
+                            Syntax.lambdaName = (Just (Syntax.Symbol bname)),
+                            Syntax.lambdaParams = (Syntax.lambdaParams v0),
+                            Syntax.lambdaRestParam = (Syntax.lambdaRestParam v0),
+                            Syntax.lambdaBody = (Syntax.lambdaBody v0)})
+                          _ -> bval) (lispNamedLambdaExpr bname [
+                          "_arg"] (lispApp bval [
+                          lispVar "_arg"]))) bval) (Logic.ifElse (Logic.and isSelfRef (Logic.not isLambda)) (lispLambdaExpr [
+                          "_arg"] (lispApp bval [
+                          lispVar "_arg"])) bval)
+            in (Right (bname, wrappedVal))))) sortedBindings) (\encodedBindings ->
+          let allBindingNames = Sets.fromList (Lists.map (\b -> Core.bindingName b) bindings)
+              hasCrossRefs =
+                      Lists.foldl (\acc -> \b -> Logic.or acc (Logic.not (Sets.null (Sets.intersection allBindingNames (Rewriting.freeVariablesInTerm (Core.bindingTerm b)))))) False bindings
+              hasSelfRef =
+                      Lists.foldl (\acc -> \b -> Logic.or acc (Sets.member (Core.bindingName b) (Rewriting.freeVariablesInTerm (Core.bindingTerm b)))) False bindings
+              isRecursive = hasSelfRef
+              letKind =
+                      Logic.ifElse isRecursive Syntax.LetKindRecursive (Logic.ifElse (Lists.null (Lists.tail bindings)) Syntax.LetKindParallel Syntax.LetKindSequential)
+              lispBindings =
+                      Lists.map (\eb -> Syntax.LetBindingSimple (Syntax.SimpleBinding {
+                        Syntax.simpleBindingName = (Syntax.Symbol (Pairs.first eb)),
+                        Syntax.simpleBindingValue = (Pairs.second eb)})) encodedBindings
+          in (Right (Syntax.ExpressionLet (Syntax.LetExpression {
+            Syntax.letExpressionKind = letKind,
+            Syntax.letExpressionBindings = lispBindings,
+            Syntax.letExpressionBody = [
+              bodyExpr]})))))))
+
+encodeLiteral :: Core.Literal -> Syntax.Expression
+encodeLiteral lit =
+    case lit of
+      Core.LiteralBoolean v0 -> Syntax.ExpressionLiteral (Syntax.LiteralBoolean v0)
+      Core.LiteralString v0 -> Syntax.ExpressionLiteral (Syntax.LiteralString v0)
+      Core.LiteralFloat v0 -> case v0 of
+        Core.FloatValueFloat32 v1 -> Syntax.ExpressionLiteral (Syntax.LiteralFloat (Syntax.FloatLiteral {
+          Syntax.floatLiteralValue = (Literals.float32ToBigfloat v1),
+          Syntax.floatLiteralPrecision = Nothing}))
+        Core.FloatValueFloat64 v1 -> Syntax.ExpressionLiteral (Syntax.LiteralFloat (Syntax.FloatLiteral {
+          Syntax.floatLiteralValue = (Literals.float64ToBigfloat v1),
+          Syntax.floatLiteralPrecision = Nothing}))
+        Core.FloatValueBigfloat v1 -> Syntax.ExpressionLiteral (Syntax.LiteralFloat (Syntax.FloatLiteral {
+          Syntax.floatLiteralValue = v1,
+          Syntax.floatLiteralPrecision = Nothing}))
+      Core.LiteralInteger v0 -> case v0 of
+        Core.IntegerValueInt8 v1 -> Syntax.ExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteral {
+          Syntax.integerLiteralValue = (Literals.int8ToBigint v1),
+          Syntax.integerLiteralBigint = False}))
+        Core.IntegerValueInt16 v1 -> Syntax.ExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteral {
+          Syntax.integerLiteralValue = (Literals.int16ToBigint v1),
+          Syntax.integerLiteralBigint = False}))
+        Core.IntegerValueInt32 v1 -> Syntax.ExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteral {
+          Syntax.integerLiteralValue = (Literals.int32ToBigint v1),
+          Syntax.integerLiteralBigint = False}))
+        Core.IntegerValueInt64 v1 -> Syntax.ExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteral {
+          Syntax.integerLiteralValue = (Literals.int64ToBigint v1),
+          Syntax.integerLiteralBigint = False}))
+        Core.IntegerValueUint8 v1 -> Syntax.ExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteral {
+          Syntax.integerLiteralValue = (Literals.uint8ToBigint v1),
+          Syntax.integerLiteralBigint = False}))
+        Core.IntegerValueUint16 v1 -> Syntax.ExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteral {
+          Syntax.integerLiteralValue = (Literals.uint16ToBigint v1),
+          Syntax.integerLiteralBigint = False}))
+        Core.IntegerValueUint32 v1 -> Syntax.ExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteral {
+          Syntax.integerLiteralValue = (Literals.uint32ToBigint v1),
+          Syntax.integerLiteralBigint = False}))
+        Core.IntegerValueUint64 v1 -> Syntax.ExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteral {
+          Syntax.integerLiteralValue = (Literals.uint64ToBigint v1),
+          Syntax.integerLiteralBigint = False}))
+        Core.IntegerValueBigint v1 -> Syntax.ExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteral {
+          Syntax.integerLiteralValue = v1,
+          Syntax.integerLiteralBigint = True}))
+      Core.LiteralBinary v0 ->
+        let byteValues = Literals.binaryToBytes v0
+        in (Syntax.ExpressionVector (Syntax.VectorLiteral {
+          Syntax.vectorLiteralElements = (Lists.map (\bv -> Syntax.ExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteral {
+            Syntax.integerLiteralValue = (Literals.int32ToBigint bv),
+            Syntax.integerLiteralBigint = False}))) byteValues)}))
+
+encodeTerm :: Syntax.Dialect -> t0 -> t1 -> Core.Term -> Either t2 Syntax.Expression
+encodeTerm dialect cx g term =
+    case term of
+      Core.TermAnnotated v0 -> encodeTerm dialect cx g (Core.annotatedTermBody v0)
+      Core.TermApplication v0 ->
+        let rawFun = Core.applicationFunction v0
+            rawArg = Core.applicationArgument v0
+        in (encodeApplication dialect cx g rawFun rawArg)
+      Core.TermEither v0 -> Eithers.either (\l -> Eithers.bind (encodeTerm dialect cx g l) (\sl -> Right (lispApp (lispVar "list") [
+        lispKeyword "left",
+        sl]))) (\r -> Eithers.bind (encodeTerm dialect cx g r) (\sr -> Right (lispApp (lispVar "list") [
+        lispKeyword "right",
+        sr]))) v0
+      Core.TermFunction v0 -> encodeFunction dialect cx g v0
+      Core.TermLet v0 ->
+        let bindings = Core.letBindings v0
+            body = Core.letBody v0
+        in (encodeLetAsNative dialect cx g bindings body)
+      Core.TermList v0 -> Eithers.bind (Eithers.mapList (encodeTerm dialect cx g) v0) (\sels -> Right (lispListExpr sels))
+      Core.TermLiteral v0 -> Right (encodeLiteral v0)
+      Core.TermMap v0 -> Eithers.bind (Eithers.mapList (\entry -> Eithers.bind (encodeTerm dialect cx g (Pairs.first entry)) (\k -> Eithers.bind (encodeTerm dialect cx g (Pairs.second entry)) (\v -> Right (Syntax.MapEntry {
+        Syntax.mapEntryKey = k,
+        Syntax.mapEntryValue = v})))) (Maps.toList v0)) (\pairs -> Right (Syntax.ExpressionMap (Syntax.MapLiteral {
+        Syntax.mapLiteralEntries = pairs})))
+      Core.TermMaybe v0 -> Maybes.cases v0 (Right (lispApp (lispVar "list") [
+        lispKeyword "nothing"])) (\val -> Eithers.bind (encodeTerm dialect cx g val) (\sval -> Right (lispApp (lispVar "list") [
+        lispKeyword "just",
+        sval])))
+      Core.TermPair v0 -> Eithers.bind (encodeTerm dialect cx g (Pairs.first v0)) (\f -> Eithers.bind (encodeTerm dialect cx g (Pairs.second v0)) (\s -> Right (lispListExpr [
+        f,
+        s])))
+      Core.TermRecord v0 ->
+        let rname = Core.recordTypeName v0
+            fields = Core.recordFields v0
+        in (Eithers.bind (Eithers.mapList (\f -> encodeTerm dialect cx g (Core.fieldTerm f)) fields) (\sfields ->
+          let constructorName = Strings.cat2 (dialectConstructorPrefix dialect) (qualifiedSnakeName rname)
+          in (Right (lispApp (lispVar constructorName) sfields))))
+      Core.TermSet v0 -> Eithers.bind (Eithers.mapList (encodeTerm dialect cx g) (Sets.toList v0)) (\sels -> Right (Syntax.ExpressionSet (Syntax.SetLiteral {
+        Syntax.setLiteralElements = sels})))
+      Core.TermUnion v0 ->
+        let tname = Names.localNameOf (Core.injectionTypeName v0)
+            field = Core.injectionField v0
+            fname = Core.unName (Core.fieldName field)
+            fterm = Core.fieldTerm field
+            dterm = Rewriting.deannotateTerm fterm
+            isUnit =
+                    case dterm of
+                      Core.TermUnit -> True
+                      Core.TermRecord v1 -> Lists.null (Core.recordFields v1)
+                      _ -> False
+        in (Logic.ifElse isUnit (Right (lispApp (lispVar "list") [
+          lispKeyword (Formatting.convertCaseCamelToLowerSnake fname),
+          lispNilExpr])) (Eithers.bind (encodeTerm dialect cx g fterm) (\sval -> Right (lispApp (lispVar "list") [
+          lispKeyword (Formatting.convertCaseCamelToLowerSnake fname),
+          sval]))))
+      Core.TermUnit -> Right lispNilExpr
+      Core.TermVariable v0 -> Right (lispVar (Formatting.convertCaseCamelOrUnderscoreToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName v0))))
+      Core.TermTypeApplication v0 -> encodeTerm dialect cx g (Core.typeApplicationTermBody v0)
+      Core.TermTypeLambda v0 -> encodeTerm dialect cx g (Core.typeLambdaBody v0)
+      Core.TermWrap v0 -> encodeTerm dialect cx g (Core.wrappedTermBody v0)
+
+encodeTermDefinition :: Syntax.Dialect -> t0 -> t1 -> Module.TermDefinition -> Either t2 Syntax.TopLevelFormWithComments
+encodeTermDefinition dialect cx g tdef =
+
+      let name = Module.termDefinitionName tdef
+          term = Module.termDefinitionTerm tdef
+          lname = qualifiedSnakeName name
+          dterm = Rewriting.deannotateTerm term
+      in case dterm of
+        Core.TermFunction v0 -> case v0 of
+          Core.FunctionLambda _ -> Eithers.bind (encodeTerm dialect cx g term) (\sterm -> Right (lispTopForm (Syntax.TopLevelFormVariable (Syntax.VariableDefinition {
+            Syntax.variableDefinitionName = (Syntax.Symbol lname),
+            Syntax.variableDefinitionValue = sterm,
+            Syntax.variableDefinitionDoc = Nothing}))))
+          _ -> Eithers.bind (encodeTerm dialect cx g term) (\sterm -> Right (lispTopForm (Syntax.TopLevelFormVariable (Syntax.VariableDefinition {
+            Syntax.variableDefinitionName = (Syntax.Symbol lname),
+            Syntax.variableDefinitionValue = sterm,
+            Syntax.variableDefinitionDoc = Nothing}))))
+        _ -> Eithers.bind (encodeTerm dialect cx g term) (\sterm -> Right (lispTopForm (Syntax.TopLevelFormVariable (Syntax.VariableDefinition {
+          Syntax.variableDefinitionName = (Syntax.Symbol lname),
+          Syntax.variableDefinitionValue = sterm,
+          Syntax.variableDefinitionDoc = Nothing}))))
+
+encodeType :: t0 -> t1 -> Core.Type -> Either t2 Syntax.TypeSpecifier
+encodeType cx g t =
+
+      let typ = Rewriting.deannotateType t
+      in case typ of
+        Core.TypeAnnotated v0 -> encodeType cx g (Core.annotatedTypeBody v0)
+        Core.TypeApplication v0 -> encodeType cx g (Core.applicationTypeFunction v0)
+        Core.TypeUnit -> Right Syntax.TypeSpecifierUnit
+        Core.TypeLiteral v0 -> Right (case v0 of
+          Core.LiteralTypeBinary -> Syntax.TypeSpecifierNamed (Syntax.Symbol "ByteArray")
+          Core.LiteralTypeBoolean -> Syntax.TypeSpecifierNamed (Syntax.Symbol "Boolean")
+          Core.LiteralTypeFloat _ -> Syntax.TypeSpecifierNamed (Syntax.Symbol "Float")
+          Core.LiteralTypeInteger _ -> Syntax.TypeSpecifierNamed (Syntax.Symbol "Integer")
+          Core.LiteralTypeString -> Syntax.TypeSpecifierNamed (Syntax.Symbol "String"))
+        Core.TypeList v0 -> Eithers.map (\enc -> Syntax.TypeSpecifierList enc) (encodeType cx g v0)
+        Core.TypeSet v0 -> Eithers.map (\enc -> Syntax.TypeSpecifierSet enc) (encodeType cx g v0)
+        Core.TypeMap _ -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol "Map"))
+        Core.TypeMaybe v0 -> Eithers.map (\enc -> Syntax.TypeSpecifierMaybe enc) (encodeType cx g v0)
+        Core.TypeEither _ -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol "Either"))
+        Core.TypePair _ -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol "Pair"))
+        Core.TypeFunction _ -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol "Function"))
+        Core.TypeRecord _ -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol "Record"))
+        Core.TypeUnion _ -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol "Union"))
+        Core.TypeWrap _ -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol "Wrapper"))
+        Core.TypeVariable v0 -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol (Core.unName v0)))
+        Core.TypeForall v0 -> encodeType cx g (Core.forallTypeBody v0)
+        _ -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol "Any"))
+
 encodeTypeBody :: String -> Core.Type -> Core.Type -> Either t0 Syntax.TopLevelFormWithComments
 encodeTypeBody lname origTyp typ =
     case typ of
@@ -519,35 +433,92 @@ encodeTypeDefinition cx g tdef =
           dtyp = Rewriting.deannotateType typ
       in (encodeTypeBody lname typ dtyp)
 
-encodeTermDefinition :: Syntax.Dialect -> t0 -> t1 -> Module.TermDefinition -> Either t2 Syntax.TopLevelFormWithComments
-encodeTermDefinition dialect cx g tdef =
+isCasesPrimitive :: Core.Name -> Bool
+isCasesPrimitive name = Equality.equal name (Core.Name "hydra.lib.maybes.cases")
 
-      let name = Module.termDefinitionName tdef
-          term = Module.termDefinitionTerm tdef
-          lname = qualifiedSnakeName name
-          dterm = Rewriting.deannotateTerm term
-      in case dterm of
-        Core.TermFunction v0 -> case v0 of
-          Core.FunctionLambda _ -> Eithers.bind (encodeTerm dialect cx g term) (\sterm -> Right (lispTopForm (Syntax.TopLevelFormVariable (Syntax.VariableDefinition {
-            Syntax.variableDefinitionName = (Syntax.Symbol lname),
-            Syntax.variableDefinitionValue = sterm,
-            Syntax.variableDefinitionDoc = Nothing}))))
-          _ -> Eithers.bind (encodeTerm dialect cx g term) (\sterm -> Right (lispTopForm (Syntax.TopLevelFormVariable (Syntax.VariableDefinition {
-            Syntax.variableDefinitionName = (Syntax.Symbol lname),
-            Syntax.variableDefinitionValue = sterm,
-            Syntax.variableDefinitionDoc = Nothing}))))
-        _ -> Eithers.bind (encodeTerm dialect cx g term) (\sterm -> Right (lispTopForm (Syntax.TopLevelFormVariable (Syntax.VariableDefinition {
-          Syntax.variableDefinitionName = (Syntax.Symbol lname),
-          Syntax.variableDefinitionValue = sterm,
-          Syntax.variableDefinitionDoc = Nothing}))))
+isLazy2ArgPrimitive :: Core.Name -> Bool
+isLazy2ArgPrimitive name =
+    Logic.or (Equality.equal name (Core.Name "hydra.lib.eithers.fromLeft")) (Logic.or (Equality.equal name (Core.Name "hydra.lib.eithers.fromRight")) (Equality.equal name (Core.Name "hydra.lib.maybes.fromMaybe")))
 
-moduleImports :: Module.Namespace -> [Module.Definition] -> [Syntax.ImportDeclaration]
-moduleImports focusNs defs =
+isLazy3ArgPrimitive :: Core.Name -> Bool
+isLazy3ArgPrimitive name = Equality.equal name (Core.Name "hydra.lib.maybes.maybe")
 
-      let depNss = Sets.toList (Sets.delete focusNs (Schemas.definitionDependencyNamespaces defs))
-      in (Lists.map (\ns -> Syntax.ImportDeclaration {
-        Syntax.importDeclarationModule = (Syntax.NamespaceName (Module.unNamespace ns)),
-        Syntax.importDeclarationSpec = Syntax.ImportSpecAll}) depNss)
+isPrimitiveRef :: String -> Core.Term -> Bool
+isPrimitiveRef primName term =
+    case term of
+      Core.TermFunction v0 -> case v0 of
+        Core.FunctionPrimitive v1 -> Equality.equal (Core.unName v1) primName
+        _ -> False
+      Core.TermVariable v0 -> Equality.equal (Core.unName v0) primName
+      Core.TermAnnotated v0 -> isPrimitiveRef primName (Core.annotatedTermBody v0)
+      Core.TermTypeApplication v0 -> isPrimitiveRef primName (Core.typeApplicationTermBody v0)
+      Core.TermTypeLambda v0 -> isPrimitiveRef primName (Core.typeLambdaBody v0)
+      _ -> False
+
+lispApp :: Syntax.Expression -> [Syntax.Expression] -> Syntax.Expression
+lispApp fun args =
+    Syntax.ExpressionApplication (Syntax.Application {
+      Syntax.applicationFunction = fun,
+      Syntax.applicationArguments = args})
+
+lispKeyword :: String -> Syntax.Expression
+lispKeyword name =
+    Syntax.ExpressionLiteral (Syntax.LiteralKeyword (Syntax.Keyword {
+      Syntax.keywordName = name,
+      Syntax.keywordNamespace = Nothing}))
+
+lispLambdaExpr :: [String] -> Syntax.Expression -> Syntax.Expression
+lispLambdaExpr params body =
+    Syntax.ExpressionLambda (Syntax.Lambda {
+      Syntax.lambdaName = Nothing,
+      Syntax.lambdaParams = (Lists.map (\p -> Syntax.Symbol p) params),
+      Syntax.lambdaRestParam = Nothing,
+      Syntax.lambdaBody = [
+        body]})
+
+lispListExpr :: [Syntax.Expression] -> Syntax.Expression
+lispListExpr elements =
+    Syntax.ExpressionList (Syntax.ListLiteral {
+      Syntax.listLiteralElements = elements,
+      Syntax.listLiteralQuoted = False})
+
+lispLitExpr :: Syntax.Literal -> Syntax.Expression
+lispLitExpr lit = Syntax.ExpressionLiteral lit
+
+lispNamedLambdaExpr :: String -> [String] -> Syntax.Expression -> Syntax.Expression
+lispNamedLambdaExpr name params body =
+    Syntax.ExpressionLambda (Syntax.Lambda {
+      Syntax.lambdaName = (Just (Syntax.Symbol name)),
+      Syntax.lambdaParams = (Lists.map (\p -> Syntax.Symbol p) params),
+      Syntax.lambdaRestParam = Nothing,
+      Syntax.lambdaBody = [
+        body]})
+
+lispNilExpr :: Syntax.Expression
+lispNilExpr = Syntax.ExpressionLiteral Syntax.LiteralNil
+
+lispSymbol :: String -> Syntax.Symbol
+lispSymbol name = Syntax.Symbol name
+
+lispTopForm :: Syntax.TopLevelForm -> Syntax.TopLevelFormWithComments
+lispTopForm form =
+    Syntax.TopLevelFormWithComments {
+      Syntax.topLevelFormWithCommentsDoc = Nothing,
+      Syntax.topLevelFormWithCommentsComment = Nothing,
+      Syntax.topLevelFormWithCommentsForm = form}
+
+lispTopFormWithComments :: Maybe String -> Syntax.TopLevelForm -> Syntax.TopLevelFormWithComments
+lispTopFormWithComments mdoc form =
+    Syntax.TopLevelFormWithComments {
+      Syntax.topLevelFormWithCommentsDoc = (Maybes.map (\d -> Syntax.Docstring d) mdoc),
+      Syntax.topLevelFormWithCommentsComment = Nothing,
+      Syntax.topLevelFormWithCommentsForm = form}
+
+lispVar :: String -> Syntax.Expression
+lispVar name =
+    Syntax.ExpressionVariable (Syntax.VariableReference {
+      Syntax.variableReferenceName = (Syntax.Symbol name),
+      Syntax.variableReferenceFunctionNamespace = False})
 
 moduleExports :: [Syntax.TopLevelFormWithComments] -> [Syntax.ExportDeclaration]
 moduleExports forms =
@@ -578,6 +549,14 @@ moduleExports forms =
         Syntax.ExportDeclaration {
           Syntax.exportDeclarationSymbols = symbols}])
 
+moduleImports :: Module.Namespace -> [Module.Definition] -> [Syntax.ImportDeclaration]
+moduleImports focusNs defs =
+
+      let depNss = Sets.toList (Sets.delete focusNs (Schemas.definitionDependencyNamespaces defs))
+      in (Lists.map (\ns -> Syntax.ImportDeclaration {
+        Syntax.importDeclarationModule = (Syntax.NamespaceName (Module.unNamespace ns)),
+        Syntax.importDeclarationSpec = Syntax.ImportSpecAll}) depNss)
+
 moduleToLisp :: Syntax.Dialect -> Module.Module -> [Module.Definition] -> t0 -> t1 -> Either t2 Syntax.Program
 moduleToLisp dialect mod defs0 cx g =
 
@@ -600,3 +579,24 @@ moduleToLisp dialect mod defs0 cx g =
           Syntax.programImports = imports,
           Syntax.programExports = exports,
           Syntax.programForms = allItems})))))
+
+qualifiedSnakeName :: Core.Name -> String
+qualifiedSnakeName name =
+
+      let raw = Core.unName name
+          parts = Strings.splitOn "." raw
+          snakeParts = Lists.map (\p -> Formatting.convertCaseCamelOrUnderscoreToLowerSnake p) parts
+          joined = Strings.intercalate "_" snakeParts
+      in (Formatting.sanitizeWithUnderscores Language.lispReservedWords joined)
+
+qualifiedTypeName :: Core.Name -> String
+qualifiedTypeName name = Formatting.capitalize (Names.localNameOf name)
+
+wrapInThunk :: Syntax.Expression -> Syntax.Expression
+wrapInThunk expr =
+    Syntax.ExpressionLambda (Syntax.Lambda {
+      Syntax.lambdaName = Nothing,
+      Syntax.lambdaParams = [],
+      Syntax.lambdaRestParam = Nothing,
+      Syntax.lambdaBody = [
+        expr]})

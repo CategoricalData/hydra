@@ -21,10 +21,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | A placeholder for reading terms from their serialized form. Not implemented.
-readTerm :: String -> Maybe Core.Term
-readTerm s = Just (Core.TermLiteral (Core.LiteralString s))
-
 -- | Show a binding as a string
 binding :: Core.Binding -> String
 binding el =
@@ -230,6 +226,10 @@ literalType lt =
       Core.LiteralTypeFloat v0 -> floatType v0
       Core.LiteralTypeInteger v0 -> integerType v0
       Core.LiteralTypeString -> "string"
+
+-- | A placeholder for reading terms from their serialized form. Not implemented.
+readTerm :: String -> Maybe Core.Term
+readTerm s = Just (Core.TermLiteral (Core.LiteralString s))
 
 -- | Show a term as a string
 term :: Core.Term -> String

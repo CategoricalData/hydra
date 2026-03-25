@@ -110,18 +110,6 @@ expr x =
           Core.fieldName = (Core.Name "seq"),
           Core.fieldTerm = (seqExpr v0)}})
 
-indentedExpression :: Ast.IndentedExpression -> Core.Term
-indentedExpression x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ast.IndentedExpression"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "style"),
-          Core.fieldTerm = (indentStyle (Ast.indentedExpressionStyle x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "expr"),
-          Core.fieldTerm = (expr (Ast.indentedExpressionExpr x))}]})
-
 indentStyle :: Ast.IndentStyle -> Core.Term
 indentStyle x =
     case x of
@@ -135,6 +123,18 @@ indentStyle x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "subsequentLines"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralString v0))}})
+
+indentedExpression :: Ast.IndentedExpression -> Core.Term
+indentedExpression x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ast.IndentedExpression"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "style"),
+          Core.fieldTerm = (indentStyle (Ast.indentedExpressionStyle x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "expr"),
+          Core.fieldTerm = (expr (Ast.indentedExpressionExpr x))}]})
 
 op :: Ast.Op -> Core.Term
 op x =

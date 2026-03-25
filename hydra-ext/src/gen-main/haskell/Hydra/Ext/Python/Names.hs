@@ -27,10 +27,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Whether to use __future__ annotations for forward references
-useFutureAnnotations :: Bool
-useFutureAnnotations = True
-
 -- | Generate a constant name for a field definition
 encodeConstantForFieldName :: t0 -> t1 -> Core.Name -> Syntax.Name
 encodeConstantForFieldName env tname fname =
@@ -98,10 +94,9 @@ termVariableReference = variableReference Util.CaseConventionLowerSnake False
 typeVariableReference :: Environment.PythonEnvironment -> Core.Name -> Syntax.Expression
 typeVariableReference = variableReference Util.CaseConventionPascal False
 
--- | Generate a variant name from type name and field name
-variantName :: Bool -> Environment.PythonEnvironment -> Core.Name -> Core.Name -> Syntax.Name
-variantName isQualified env tname fname =
-    encodeName isQualified Util.CaseConventionPascal env (Core.Name (Strings.cat2 (Core.unName tname) (Formatting.capitalize (Core.unName fname))))
+-- | Whether to use __future__ annotations for forward references
+useFutureAnnotations :: Bool
+useFutureAnnotations = True
 
 -- | Reference a variable as a Python expression
 variableReference :: Util.CaseConvention -> Bool -> Environment.PythonEnvironment -> Core.Name -> Syntax.Expression
@@ -158,3 +153,8 @@ variableReference conv quoted env name =
                               Syntax.stringQuoteStyle = Syntax.QuoteStyleDouble})))},
                           Syntax.powerRhs = Nothing}))}}}}}},
             Syntax.comparisonRhs = []})]])) unquoted)
+
+-- | Generate a variant name from type name and field name
+variantName :: Bool -> Environment.PythonEnvironment -> Core.Name -> Core.Name -> Syntax.Name
+variantName isQualified env tname fname =
+    encodeName isQualified Util.CaseConventionPascal env (Core.Name (Strings.cat2 (Core.unName tname) (Formatting.capitalize (Core.unName fname))))

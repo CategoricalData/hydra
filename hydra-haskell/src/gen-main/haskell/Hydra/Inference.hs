@@ -906,13 +906,13 @@ inferTypeOfTerm fcx cx term desc =
         Core.TermVariable v0 -> inferTypeOfVariable fcx2 cx v0
         Core.TermWrap v0 -> inferTypeOfWrappedTerm fcx2 cx v0
 
--- | Infer the type of a type abstraction (Either version)
-inferTypeOfTypeLambda :: Context.Context -> Graph.Graph -> Core.TypeLambda -> Either (Context.InContext Errors.Error) Typing_.InferenceResult
-inferTypeOfTypeLambda fcx cx ta = inferTypeOfTerm fcx cx (Core.typeLambdaBody ta) "type abstraction"
-
 -- | Infer the type of a type application (Either version)
 inferTypeOfTypeApplication :: Context.Context -> Graph.Graph -> Core.TypeApplicationTerm -> Either (Context.InContext Errors.Error) Typing_.InferenceResult
 inferTypeOfTypeApplication fcx cx tt = inferTypeOfTerm fcx cx (Core.typeApplicationTermBody tt) "type application term"
+
+-- | Infer the type of a type abstraction (Either version)
+inferTypeOfTypeLambda :: Context.Context -> Graph.Graph -> Core.TypeLambda -> Either (Context.InContext Errors.Error) Typing_.InferenceResult
+inferTypeOfTypeLambda fcx cx ta = inferTypeOfTerm fcx cx (Core.typeLambdaBody ta) "type abstraction"
 
 -- | The trivial inference rule for the unit term
 inferTypeOfUnit :: Context.Context -> Typing_.InferenceResult

@@ -589,6 +589,14 @@ primitive name type_ implementation =
           Core.fieldName = (Core.Name "implementation"),
           Core.fieldTerm = (Phantoms.unTTerm implementation)}]}))
 
+primitiveImplementation :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm (Context.Context -> Graph.Graph -> [Core.Term] -> Either (Context.InContext Errors.Error) Core.Term)
+primitiveImplementation x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
+        Core.projectionField = (Core.Name "implementation")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
 primitiveName :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm Core.Name
 primitiveName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -605,13 +613,28 @@ primitiveType x =
         Core.projectionField = (Core.Name "type")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-primitiveImplementation :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm (Context.Context -> Graph.Graph -> [Core.Term] -> Either (Context.InContext Errors.Error) Core.Term)
-primitiveImplementation x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
-        Core.projectionField = (Core.Name "implementation")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+primitiveWithImplementation :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm (Context.Context -> Graph.Graph -> [Core.Term] -> Either (Context.InContext Errors.Error) Core.Term) -> Phantoms.TTerm Graph.Primitive
+primitiveWithImplementation original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.graph.Primitive"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "implementation"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
 primitiveWithName :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Graph.Primitive
 primitiveWithName original newVal =
@@ -659,29 +682,6 @@ primitiveWithType original newVal =
               Core.projectionField = (Core.Name "implementation")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-primitiveWithImplementation :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm (Context.Context -> Graph.Graph -> [Core.Term] -> Either (Context.InContext Errors.Error) Core.Term) -> Phantoms.TTerm Graph.Primitive
-primitiveWithImplementation original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.graph.Primitive"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "implementation"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
 termCoder :: Phantoms.TTerm Core.Type -> Phantoms.TTerm (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) a) -> Phantoms.TTerm (Context.Context -> a -> Either (Context.InContext Errors.Error) Core.Term) -> Phantoms.TTerm (Graph.TermCoder a)
 termCoder type_ encode decode =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -697,12 +697,12 @@ termCoder type_ encode decode =
           Core.fieldName = (Core.Name "decode"),
           Core.fieldTerm = (Phantoms.unTTerm decode)}]}))
 
-termCoderType :: Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm Core.Type
-termCoderType x =
+termCoderDecode :: Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm (Context.Context -> a -> Either (Context.InContext Errors.Error) Core.Term)
+termCoderDecode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.graph.TermCoder"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "decode")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 termCoderEncode :: Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) a)
@@ -713,22 +713,26 @@ termCoderEncode x =
         Core.projectionField = (Core.Name "encode")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-termCoderDecode :: Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm (Context.Context -> a -> Either (Context.InContext Errors.Error) Core.Term)
-termCoderDecode x =
+termCoderType :: Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm Core.Type
+termCoderType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.graph.TermCoder"),
-        Core.projectionField = (Core.Name "decode")})))),
+        Core.projectionField = (Core.Name "type")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-termCoderWithType :: Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm Core.Type -> Phantoms.TTerm (Graph.TermCoder a)
-termCoderWithType original newVal =
+termCoderWithDecode :: Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm (Context.Context -> a -> Either (Context.InContext Errors.Error) Core.Term) -> Phantoms.TTerm (Graph.TermCoder a)
+termCoderWithDecode original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.graph.TermCoder"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.graph.TermCoder"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "encode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -738,11 +742,7 @@ termCoderWithType original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "decode"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.graph.TermCoder"),
-              Core.projectionField = (Core.Name "decode")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
 termCoderWithEncode :: Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) a) -> Phantoms.TTerm (Graph.TermCoder a)
 termCoderWithEncode original newVal =
@@ -767,18 +767,14 @@ termCoderWithEncode original newVal =
               Core.projectionField = (Core.Name "decode")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-termCoderWithDecode :: Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm (Context.Context -> a -> Either (Context.InContext Errors.Error) Core.Term) -> Phantoms.TTerm (Graph.TermCoder a)
-termCoderWithDecode original newVal =
+termCoderWithType :: Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm Core.Type -> Phantoms.TTerm (Graph.TermCoder a)
+termCoderWithType original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.graph.TermCoder"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.graph.TermCoder"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "encode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -788,4 +784,8 @@ termCoderWithDecode original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "decode"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.graph.TermCoder"),
+              Core.projectionField = (Core.Name "decode")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))

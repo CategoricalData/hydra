@@ -27,14 +27,6 @@ closed isClosed ignoredProperties =
           Core.fieldName = (Core.Name "ignoredProperties"),
           Core.fieldTerm = (Phantoms.unTTerm ignoredProperties)}]}))
 
-closedIsClosed :: Phantoms.TTerm Model.Closed -> Phantoms.TTerm Bool
-closedIsClosed x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.Closed"),
-        Core.projectionField = (Core.Name "isClosed")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 closedIgnoredProperties :: Phantoms.TTerm Model.Closed -> Phantoms.TTerm (Maybe (S.Set Syntax.Property))
 closedIgnoredProperties x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -43,21 +35,13 @@ closedIgnoredProperties x =
         Core.projectionField = (Core.Name "ignoredProperties")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-closedWithIsClosed :: Phantoms.TTerm Model.Closed -> Phantoms.TTerm Bool -> Phantoms.TTerm Model.Closed
-closedWithIsClosed original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.Closed"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "isClosed"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "ignoredProperties"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.Closed"),
-              Core.projectionField = (Core.Name "ignoredProperties")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+closedIsClosed :: Phantoms.TTerm Model.Closed -> Phantoms.TTerm Bool
+closedIsClosed x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.Closed"),
+        Core.projectionField = (Core.Name "isClosed")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 closedWithIgnoredProperties :: Phantoms.TTerm Model.Closed -> Phantoms.TTerm (Maybe (S.Set Syntax.Property)) -> Phantoms.TTerm Model.Closed
 closedWithIgnoredProperties original newVal =
@@ -75,6 +59,22 @@ closedWithIgnoredProperties original newVal =
           Core.fieldName = (Core.Name "ignoredProperties"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+closedWithIsClosed :: Phantoms.TTerm Model.Closed -> Phantoms.TTerm Bool -> Phantoms.TTerm Model.Closed
+closedWithIsClosed original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.Closed"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "isClosed"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "ignoredProperties"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.Closed"),
+              Core.projectionField = (Core.Name "ignoredProperties")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 commonConstraintAnd :: Phantoms.TTerm (S.Set (Model.Reference Model.Shape)) -> Phantoms.TTerm Model.CommonConstraint
 commonConstraintAnd x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
@@ -83,20 +83,20 @@ commonConstraintAnd x =
         Core.fieldName = (Core.Name "and"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-commonConstraintClosed :: Phantoms.TTerm Model.Closed -> Phantoms.TTerm Model.CommonConstraint
-commonConstraintClosed x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.CommonConstraint"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "closed"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
 commonConstraintClass :: Phantoms.TTerm (S.Set Syntax.RdfsClass) -> Phantoms.TTerm Model.CommonConstraint
 commonConstraintClass x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.CommonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "class"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+commonConstraintClosed :: Phantoms.TTerm Model.Closed -> Phantoms.TTerm Model.CommonConstraint
+commonConstraintClosed x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.CommonConstraint"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "closed"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 commonConstraintDatatype :: Phantoms.TTerm Syntax.Iri -> Phantoms.TTerm Model.CommonConstraint
@@ -147,30 +147,6 @@ commonConstraintLanguageIn x =
         Core.fieldName = (Core.Name "languageIn"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-commonConstraintNodeKind :: Phantoms.TTerm Model.NodeKind -> Phantoms.TTerm Model.CommonConstraint
-commonConstraintNodeKind x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.CommonConstraint"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "nodeKind"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
-commonConstraintNode :: Phantoms.TTerm (S.Set (Model.Reference Model.NodeShape)) -> Phantoms.TTerm Model.CommonConstraint
-commonConstraintNode x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.CommonConstraint"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "node"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
-commonConstraintNot :: Phantoms.TTerm (S.Set (Model.Reference Model.Shape)) -> Phantoms.TTerm Model.CommonConstraint
-commonConstraintNot x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.CommonConstraint"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "not"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
 commonConstraintMaxExclusive :: Phantoms.TTerm Syntax.Literal -> Phantoms.TTerm Model.CommonConstraint
 commonConstraintMaxExclusive x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
@@ -219,6 +195,38 @@ commonConstraintMinLength x =
         Core.fieldName = (Core.Name "minLength"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
+commonConstraintNode :: Phantoms.TTerm (S.Set (Model.Reference Model.NodeShape)) -> Phantoms.TTerm Model.CommonConstraint
+commonConstraintNode x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.CommonConstraint"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "node"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+commonConstraintNodeKind :: Phantoms.TTerm Model.NodeKind -> Phantoms.TTerm Model.CommonConstraint
+commonConstraintNodeKind x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.CommonConstraint"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "nodeKind"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+commonConstraintNot :: Phantoms.TTerm (S.Set (Model.Reference Model.Shape)) -> Phantoms.TTerm Model.CommonConstraint
+commonConstraintNot x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.CommonConstraint"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "not"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+commonConstraintOr :: Phantoms.TTerm (S.Set (Model.Reference Model.Shape)) -> Phantoms.TTerm Model.CommonConstraint
+commonConstraintOr x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.CommonConstraint"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "or"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
 commonConstraintPattern :: Phantoms.TTerm Model.Pattern -> Phantoms.TTerm Model.CommonConstraint
 commonConstraintPattern x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
@@ -233,14 +241,6 @@ commonConstraintProperty x =
       Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.CommonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "property"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
-commonConstraintOr :: Phantoms.TTerm (S.Set (Model.Reference Model.Shape)) -> Phantoms.TTerm Model.CommonConstraint
-commonConstraintOr x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.CommonConstraint"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "or"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 commonConstraintXone :: Phantoms.TTerm (S.Set (Model.Reference Model.Shape)) -> Phantoms.TTerm Model.CommonConstraint
@@ -877,22 +877,6 @@ nodeKindBlankNode =
         Core.fieldName = (Core.Name "blankNode"),
         Core.fieldTerm = Core.TermUnit}}))
 
-nodeKindIri :: Phantoms.TTerm Model.NodeKind
-nodeKindIri =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.NodeKind"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "iri"),
-        Core.fieldTerm = Core.TermUnit}}))
-
-nodeKindLiteral :: Phantoms.TTerm Model.NodeKind
-nodeKindLiteral =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.NodeKind"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "literal"),
-        Core.fieldTerm = Core.TermUnit}}))
-
 nodeKindBlankNodeOrIri :: Phantoms.TTerm Model.NodeKind
 nodeKindBlankNodeOrIri =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
@@ -909,12 +893,28 @@ nodeKindBlankNodeOrLiteral =
         Core.fieldName = (Core.Name "blankNodeOrLiteral"),
         Core.fieldTerm = Core.TermUnit}}))
 
+nodeKindIri :: Phantoms.TTerm Model.NodeKind
+nodeKindIri =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.NodeKind"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "iri"),
+        Core.fieldTerm = Core.TermUnit}}))
+
 nodeKindIriOrLiteral :: Phantoms.TTerm Model.NodeKind
 nodeKindIriOrLiteral =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.NodeKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "iriOrLiteral"),
+        Core.fieldTerm = Core.TermUnit}}))
+
+nodeKindLiteral :: Phantoms.TTerm Model.NodeKind
+nodeKindLiteral =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.NodeKind"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "literal"),
         Core.fieldTerm = Core.TermUnit}}))
 
 nodeShape :: Phantoms.TTerm Model.CommonProperties -> Phantoms.TTerm Model.NodeShape
@@ -955,14 +955,6 @@ pattern regex flags =
           Core.fieldName = (Core.Name "flags"),
           Core.fieldTerm = (Phantoms.unTTerm flags)}]}))
 
-patternRegex :: Phantoms.TTerm Model.Pattern -> Phantoms.TTerm String
-patternRegex x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.Pattern"),
-        Core.projectionField = (Core.Name "regex")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 patternFlags :: Phantoms.TTerm Model.Pattern -> Phantoms.TTerm (Maybe String)
 patternFlags x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -971,21 +963,13 @@ patternFlags x =
         Core.projectionField = (Core.Name "flags")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-patternWithRegex :: Phantoms.TTerm Model.Pattern -> Phantoms.TTerm String -> Phantoms.TTerm Model.Pattern
-patternWithRegex original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.Pattern"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "regex"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "flags"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.Pattern"),
-              Core.projectionField = (Core.Name "flags")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+patternRegex :: Phantoms.TTerm Model.Pattern -> Phantoms.TTerm String
+patternRegex x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.Pattern"),
+        Core.projectionField = (Core.Name "regex")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 patternWithFlags :: Phantoms.TTerm Model.Pattern -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Model.Pattern
 patternWithFlags original newVal =
@@ -1002,6 +986,22 @@ patternWithFlags original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "flags"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+patternWithRegex :: Phantoms.TTerm Model.Pattern -> Phantoms.TTerm String -> Phantoms.TTerm Model.Pattern
+patternWithRegex original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.Pattern"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "regex"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "flags"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.Pattern"),
+              Core.projectionField = (Core.Name "flags")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyShape :: Phantoms.TTerm Model.CommonProperties -> Phantoms.TTerm (S.Set Model.PropertyShapeConstraint) -> Phantoms.TTerm (Maybe Syntax.Node) -> Phantoms.TTerm Syntax.LangStrings -> Phantoms.TTerm Syntax.LangStrings -> Phantoms.TTerm (Maybe Integer) -> Phantoms.TTerm Syntax.Iri -> Phantoms.TTerm Model.PropertyShape
 propertyShape common constraints defaultValue description name order path =
@@ -1037,6 +1037,54 @@ propertyShapeCommon x =
         Core.projectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.PropertyShape"),
         Core.projectionField = (Core.Name "common")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+propertyShapeConstraintLessThan :: Phantoms.TTerm (S.Set Syntax.Property) -> Phantoms.TTerm Model.PropertyShapeConstraint
+propertyShapeConstraintLessThan x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.PropertyShapeConstraint"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "lessThan"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+propertyShapeConstraintLessThanOrEquals :: Phantoms.TTerm (S.Set Syntax.Property) -> Phantoms.TTerm Model.PropertyShapeConstraint
+propertyShapeConstraintLessThanOrEquals x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.PropertyShapeConstraint"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "lessThanOrEquals"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+propertyShapeConstraintMaxCount :: Phantoms.TTerm Integer -> Phantoms.TTerm Model.PropertyShapeConstraint
+propertyShapeConstraintMaxCount x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.PropertyShapeConstraint"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "maxCount"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+propertyShapeConstraintMinCount :: Phantoms.TTerm Integer -> Phantoms.TTerm Model.PropertyShapeConstraint
+propertyShapeConstraintMinCount x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.PropertyShapeConstraint"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "minCount"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+propertyShapeConstraintQualifiedValueShape :: Phantoms.TTerm Model.QualifiedValueShape -> Phantoms.TTerm Model.PropertyShapeConstraint
+propertyShapeConstraintQualifiedValueShape x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.PropertyShapeConstraint"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "qualifiedValueShape"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+propertyShapeConstraintUniqueLang :: Phantoms.TTerm Bool -> Phantoms.TTerm Model.PropertyShapeConstraint
+propertyShapeConstraintUniqueLang x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.PropertyShapeConstraint"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "uniqueLang"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 propertyShapeConstraints :: Phantoms.TTerm Model.PropertyShape -> Phantoms.TTerm (S.Set Model.PropertyShapeConstraint)
 propertyShapeConstraints x =
@@ -1443,54 +1491,6 @@ propertyShapeWithPath original newVal =
           Core.fieldName = (Core.Name "path"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-propertyShapeConstraintLessThan :: Phantoms.TTerm (S.Set Syntax.Property) -> Phantoms.TTerm Model.PropertyShapeConstraint
-propertyShapeConstraintLessThan x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.PropertyShapeConstraint"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "lessThan"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
-propertyShapeConstraintLessThanOrEquals :: Phantoms.TTerm (S.Set Syntax.Property) -> Phantoms.TTerm Model.PropertyShapeConstraint
-propertyShapeConstraintLessThanOrEquals x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.PropertyShapeConstraint"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "lessThanOrEquals"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
-propertyShapeConstraintMaxCount :: Phantoms.TTerm Integer -> Phantoms.TTerm Model.PropertyShapeConstraint
-propertyShapeConstraintMaxCount x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.PropertyShapeConstraint"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "maxCount"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
-propertyShapeConstraintMinCount :: Phantoms.TTerm Integer -> Phantoms.TTerm Model.PropertyShapeConstraint
-propertyShapeConstraintMinCount x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.PropertyShapeConstraint"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "minCount"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
-propertyShapeConstraintUniqueLang :: Phantoms.TTerm Bool -> Phantoms.TTerm Model.PropertyShapeConstraint
-propertyShapeConstraintUniqueLang x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.PropertyShapeConstraint"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "uniqueLang"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
-propertyShapeConstraintQualifiedValueShape :: Phantoms.TTerm Model.QualifiedValueShape -> Phantoms.TTerm Model.PropertyShapeConstraint
-propertyShapeConstraintQualifiedValueShape x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.PropertyShapeConstraint"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "qualifiedValueShape"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
 qualifiedValueShape :: Phantoms.TTerm (Model.Reference Model.Shape) -> Phantoms.TTerm Integer -> Phantoms.TTerm Integer -> Phantoms.TTerm (Maybe Bool) -> Phantoms.TTerm Model.QualifiedValueShape
 qualifiedValueShape qualifiedValueShape qualifiedMaxCount qualifiedMinCount qualifiedValueShapesDisjoint =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -1509,14 +1509,6 @@ qualifiedValueShape qualifiedValueShape qualifiedMaxCount qualifiedMinCount qual
           Core.fieldName = (Core.Name "qualifiedValueShapesDisjoint"),
           Core.fieldTerm = (Phantoms.unTTerm qualifiedValueShapesDisjoint)}]}))
 
-qualifiedValueShapeQualifiedValueShape :: Phantoms.TTerm Model.QualifiedValueShape -> Phantoms.TTerm (Model.Reference Model.Shape)
-qualifiedValueShapeQualifiedValueShape x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.QualifiedValueShape"),
-        Core.projectionField = (Core.Name "qualifiedValueShape")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 qualifiedValueShapeQualifiedMaxCount :: Phantoms.TTerm Model.QualifiedValueShape -> Phantoms.TTerm Integer
 qualifiedValueShapeQualifiedMaxCount x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -1533,6 +1525,14 @@ qualifiedValueShapeQualifiedMinCount x =
         Core.projectionField = (Core.Name "qualifiedMinCount")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
+qualifiedValueShapeQualifiedValueShape :: Phantoms.TTerm Model.QualifiedValueShape -> Phantoms.TTerm (Model.Reference Model.Shape)
+qualifiedValueShapeQualifiedValueShape x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.QualifiedValueShape"),
+        Core.projectionField = (Core.Name "qualifiedValueShape")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
 qualifiedValueShapeQualifiedValueShapesDisjoint :: Phantoms.TTerm Model.QualifiedValueShape -> Phantoms.TTerm (Maybe Bool)
 qualifiedValueShapeQualifiedValueShapesDisjoint x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -1540,36 +1540,6 @@ qualifiedValueShapeQualifiedValueShapesDisjoint x =
         Core.projectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.QualifiedValueShape"),
         Core.projectionField = (Core.Name "qualifiedValueShapesDisjoint")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-qualifiedValueShapeWithQualifiedValueShape :: Phantoms.TTerm Model.QualifiedValueShape -> Phantoms.TTerm (Model.Reference Model.Shape) -> Phantoms.TTerm Model.QualifiedValueShape
-qualifiedValueShapeWithQualifiedValueShape original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.QualifiedValueShape"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "qualifiedValueShape"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "qualifiedMaxCount"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.QualifiedValueShape"),
-              Core.projectionField = (Core.Name "qualifiedMaxCount")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "qualifiedMinCount"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.QualifiedValueShape"),
-              Core.projectionField = (Core.Name "qualifiedMinCount")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "qualifiedValueShapesDisjoint"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.QualifiedValueShape"),
-              Core.projectionField = (Core.Name "qualifiedValueShapesDisjoint")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 qualifiedValueShapeWithQualifiedMaxCount :: Phantoms.TTerm Model.QualifiedValueShape -> Phantoms.TTerm Integer -> Phantoms.TTerm Model.QualifiedValueShape
 qualifiedValueShapeWithQualifiedMaxCount original newVal =
@@ -1631,6 +1601,36 @@ qualifiedValueShapeWithQualifiedMinCount original newVal =
               Core.projectionField = (Core.Name "qualifiedValueShapesDisjoint")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
+qualifiedValueShapeWithQualifiedValueShape :: Phantoms.TTerm Model.QualifiedValueShape -> Phantoms.TTerm (Model.Reference Model.Shape) -> Phantoms.TTerm Model.QualifiedValueShape
+qualifiedValueShapeWithQualifiedValueShape original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.QualifiedValueShape"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "qualifiedValueShape"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "qualifiedMaxCount"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.QualifiedValueShape"),
+              Core.projectionField = (Core.Name "qualifiedMaxCount")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "qualifiedMinCount"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.QualifiedValueShape"),
+              Core.projectionField = (Core.Name "qualifiedMinCount")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "qualifiedValueShapesDisjoint"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.QualifiedValueShape"),
+              Core.projectionField = (Core.Name "qualifiedValueShapesDisjoint")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 qualifiedValueShapeWithQualifiedValueShapesDisjoint :: Phantoms.TTerm Model.QualifiedValueShape -> Phantoms.TTerm (Maybe Bool) -> Phantoms.TTerm Model.QualifiedValueShape
 qualifiedValueShapeWithQualifiedValueShapesDisjoint original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -1661,14 +1661,6 @@ qualifiedValueShapeWithQualifiedValueShapesDisjoint original newVal =
           Core.fieldName = (Core.Name "qualifiedValueShapesDisjoint"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-referenceNamed :: Phantoms.TTerm Syntax.Iri -> Phantoms.TTerm (Model.Reference a)
-referenceNamed x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.Reference"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "named"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
 referenceAnonymous :: Phantoms.TTerm a -> Phantoms.TTerm (Model.Reference a)
 referenceAnonymous x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
@@ -1685,6 +1677,14 @@ referenceDefinition x =
         Core.fieldName = (Core.Name "definition"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
+referenceNamed :: Phantoms.TTerm Syntax.Iri -> Phantoms.TTerm (Model.Reference a)
+referenceNamed x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.Reference"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "named"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
 severityInfo :: Phantoms.TTerm Model.Severity
 severityInfo =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
@@ -1693,20 +1693,20 @@ severityInfo =
         Core.fieldName = (Core.Name "info"),
         Core.fieldTerm = Core.TermUnit}}))
 
-severityWarning :: Phantoms.TTerm Model.Severity
-severityWarning =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.Severity"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "warning"),
-        Core.fieldTerm = Core.TermUnit}}))
-
 severityViolation :: Phantoms.TTerm Model.Severity
 severityViolation =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.Severity"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "violation"),
+        Core.fieldTerm = Core.TermUnit}}))
+
+severityWarning :: Phantoms.TTerm Model.Severity
+severityWarning =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.org.w3.shacl.model.Severity"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "warning"),
         Core.fieldTerm = Core.TermUnit}}))
 
 shapeNode :: Phantoms.TTerm Model.NodeShape -> Phantoms.TTerm Model.Shape

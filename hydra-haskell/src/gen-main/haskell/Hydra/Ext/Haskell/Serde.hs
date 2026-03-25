@@ -88,6 +88,21 @@ classAssertionToExpr clsAsrt =
       in (Serialization.spaceSep (Lists.cons (nameToExpr name) [
         Serialization.commaSep Serialization.halfBlockStyle (Lists.map typeToExpr types)]))
 
+-- | Convert a record construction expression to an AST expression
+constructRecordExpressionToExpr :: Syntax.ConstructRecordExpression -> Ast.Expr
+constructRecordExpressionToExpr constructRecord =
+
+      let name = Syntax.constructRecordExpressionName constructRecord
+          updates = Syntax.constructRecordExpressionFields constructRecord
+          fromUpdate =
+                  \update ->
+                    let fn = Syntax.fieldUpdateName update
+                        val = Syntax.fieldUpdateValue update
+                    in (Serialization.ifx Operators.defineOp (nameToExpr fn) (expressionToExpr val))
+          body = Serialization.commaSep Serialization.halfBlockStyle (Lists.map fromUpdate updates)
+      in (Serialization.spaceSep (Lists.cons (nameToExpr name) [
+        Serialization.brackets Serialization.curlyBraces Serialization.halfBlockStyle body]))
+
 -- | Convert a data constructor to an AST expression
 constructorToExpr :: Syntax.Constructor -> Ast.Expr
 constructorToExpr cons =
@@ -200,21 +215,6 @@ expressionToExpr expr =
       Syntax.ExpressionParens v0 -> Serialization.parenthesize (expressionToExpr v0)
       Syntax.ExpressionTuple v0 -> Serialization.parenList False (Lists.map expressionToExpr v0)
       Syntax.ExpressionVariable v0 -> nameToExpr v0
-
--- | Convert a record construction expression to an AST expression
-constructRecordExpressionToExpr :: Syntax.ConstructRecordExpression -> Ast.Expr
-constructRecordExpressionToExpr constructRecord =
-
-      let name = Syntax.constructRecordExpressionName constructRecord
-          updates = Syntax.constructRecordExpressionFields constructRecord
-          fromUpdate =
-                  \update ->
-                    let fn = Syntax.fieldUpdateName update
-                        val = Syntax.fieldUpdateValue update
-                    in (Serialization.ifx Operators.defineOp (nameToExpr fn) (expressionToExpr val))
-          body = Serialization.commaSep Serialization.halfBlockStyle (Lists.map fromUpdate updates)
-      in (Serialization.spaceSep (Lists.cons (nameToExpr name) [
-        Serialization.brackets Serialization.curlyBraces Serialization.halfBlockStyle body]))
 
 -- | Convert a field declaration to an AST expression
 fieldToExpr :: Syntax.Field -> Ast.Expr
@@ -381,6 +381,14 @@ rightHandSideToExpr rhs = expressionToExpr (Syntax.unRightHandSide rhs)
 statementToExpr :: Syntax.Statement -> Ast.Expr
 statementToExpr stmt = expressionToExpr (Syntax.unStatement stmt)
 
+-- | Convert a string to Haddock documentation comments
+toHaskellComments :: String -> String
+toHaskellComments c = Strings.intercalate "\n" (Lists.map (\s -> Strings.cat2 "-- | " s) (Strings.lines c))
+
+-- | Convert a string to simple line comments
+toSimpleComments :: String -> String
+toSimpleComments c = Strings.intercalate "\n" (Lists.map (\s -> Strings.cat2 "-- " s) (Strings.lines c))
+
 -- | Convert a type signature to an AST expression
 typeSignatureToExpr :: Syntax.TypeSignature -> Ast.Expr
 typeSignatureToExpr typeSig =
@@ -450,14 +458,6 @@ valueBindingToExpr vb =
 -- | Convert a type variable to an AST expression
 variableToExpr :: Syntax.Variable -> Ast.Expr
 variableToExpr variable = nameToExpr (Syntax.unVariable variable)
-
--- | Convert a string to Haddock documentation comments
-toHaskellComments :: String -> String
-toHaskellComments c = Strings.intercalate "\n" (Lists.map (\s -> Strings.cat2 "-- | " s) (Strings.lines c))
-
--- | Convert a string to simple line comments
-toSimpleComments :: String -> String
-toSimpleComments c = Strings.intercalate "\n" (Lists.map (\s -> Strings.cat2 "-- " s) (Strings.lines c))
 
 -- | Write a qualified name as a string
 writeQualifiedName :: Syntax.QualifiedName -> String

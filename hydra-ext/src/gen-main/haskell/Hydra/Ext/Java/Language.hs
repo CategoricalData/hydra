@@ -16,10 +16,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | The maximum supported length of a tuple in Hydra-Java. Note: if this constant is changed, also change Tuples.java correspondingly
-javaMaxTupleLength :: Int
-javaMaxTupleLength = 9
-
 -- | Language constraints for Java
 javaLanguage :: Coders.Language
 javaLanguage =
@@ -102,6 +98,10 @@ javaLanguage =
           Variants.TypeVariantVoid,
           Variants.TypeVariantWrap]
     typePredicate = \_ -> True
+
+-- | The maximum supported length of a tuple in Hydra-Java. Note: if this constant is changed, also change Tuples.java correspondingly
+javaMaxTupleLength :: Int
+javaMaxTupleLength = 9
 
 -- | A set of reserved words in Java
 reservedWords :: S.Set String

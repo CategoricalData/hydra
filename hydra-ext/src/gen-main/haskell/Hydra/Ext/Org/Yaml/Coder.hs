@@ -29,14 +29,54 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Create a YAML coder for a given type
-yamlCoder :: Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (Util.Coder Core.Term Model.Node)
-yamlCoder typ cx g =
+-- | Decode a YAML value to a record term
+decodeRecord :: Core.Name -> [(Core.FieldType, (Util.Coder Core.Term Model.Node))] -> Context.Context -> Model.Node -> Either (Context.InContext Errors.Error) Core.Term
+decodeRecord tname coders cx n =
 
-      let mkTermCoder = \t -> termCoder t cx g
-      in (Eithers.bind (Eithers.bimap (\_s -> Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError _s)),
-        Context.inContextContext = cx}) (\_x -> _x) (Adapt.simpleLanguageAdapter Language.yamlLanguage cx g typ)) (\adapter -> Eithers.bind (mkTermCoder (Util.adapterTarget adapter)) (\coder -> Right (Adapt.composeCoders (Util.adapterCoder adapter) coder))))
+      let decodeObjectBody =
+              \m ->
+                let decodeField =
+                        \coder ->
+                          let ft = Pairs.first coder
+                              coder_ = Pairs.second coder
+                              fname = Core.fieldTypeName ft
+                              defaultValue = Model.NodeScalar Model.ScalarNull
+                              yamlValue = Maybes.fromMaybe defaultValue (Maps.lookup (Model.NodeScalar (Model.ScalarStr (Core.unName fname))) m)
+                          in (Eithers.bind (Util.coderDecode coder_ cx yamlValue) (\v -> Right (Core.Field {
+                            Core.fieldName = fname,
+                            Core.fieldTerm = v})))
+                in (Eithers.bind (Eithers.mapList decodeField coders) (\fields -> Right (Core.TermRecord (Core.Record {
+                  Core.recordTypeName = tname,
+                  Core.recordFields = fields}))))
+      in case n of
+        Model.NodeMapping v0 -> decodeObjectBody v0
+        _ -> Left (Context.InContext {
+          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "expected mapping")),
+          Context.inContextContext = cx})
+
+-- | Encode a record term to YAML
+encodeRecord :: [(Core.FieldType, (Util.Coder Core.Term Model.Node))] -> Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Model.Node
+encodeRecord coders cx graph term =
+
+      let stripped = Rewriting.deannotateTerm term
+          isMaybeNothing =
+                  \ft -> \fvalue -> case (Core.fieldTypeType ft) of
+                    Core.TypeMaybe _ -> case fvalue of
+                      Core.TermMaybe v1 -> Maybes.isNothing v1
+                      _ -> False
+                    _ -> False
+          encodeField =
+                  \coderAndField ->
+                    let ftAndCoder = Pairs.first coderAndField
+                        field = Pairs.second coderAndField
+                        ft = Pairs.first ftAndCoder
+                        coder_ = Pairs.second ftAndCoder
+                        fname = Core.fieldName field
+                        fvalue = Core.fieldTerm field
+                    in (Logic.ifElse (isMaybeNothing ft fvalue) (Right Nothing) (Eithers.bind (Util.coderEncode coder_ cx fvalue) (\encoded -> Right (Just (Model.NodeScalar (Model.ScalarStr (Core.unName fname)), encoded)))))
+      in (Eithers.bind (Core_.termRecord cx graph stripped) (\record ->
+        let fields = Core.recordFields record
+        in (Eithers.bind (Eithers.mapList encodeField (Lists.zip coders fields)) (\maybeFields -> Right (Model.NodeMapping (Maps.fromList (Maybes.cat maybeFields)))))))
 
 -- | Create a YAML coder for literal types
 literalYamlCoder :: Core.LiteralType -> Either t0 (Util.Coder Core.Literal Model.Scalar)
@@ -94,55 +134,6 @@ recordCoder tname rt cx g =
       in (Eithers.bind (Eithers.mapList getCoder rt) (\coders -> Right (Util.Coder {
         Util.coderEncode = (\cx -> \term -> encodeRecord coders cx g term),
         Util.coderDecode = (\cx -> \val -> decodeRecord tname coders cx val)})))
-
--- | Encode a record term to YAML
-encodeRecord :: [(Core.FieldType, (Util.Coder Core.Term Model.Node))] -> Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Model.Node
-encodeRecord coders cx graph term =
-
-      let stripped = Rewriting.deannotateTerm term
-          isMaybeNothing =
-                  \ft -> \fvalue -> case (Core.fieldTypeType ft) of
-                    Core.TypeMaybe _ -> case fvalue of
-                      Core.TermMaybe v1 -> Maybes.isNothing v1
-                      _ -> False
-                    _ -> False
-          encodeField =
-                  \coderAndField ->
-                    let ftAndCoder = Pairs.first coderAndField
-                        field = Pairs.second coderAndField
-                        ft = Pairs.first ftAndCoder
-                        coder_ = Pairs.second ftAndCoder
-                        fname = Core.fieldName field
-                        fvalue = Core.fieldTerm field
-                    in (Logic.ifElse (isMaybeNothing ft fvalue) (Right Nothing) (Eithers.bind (Util.coderEncode coder_ cx fvalue) (\encoded -> Right (Just (Model.NodeScalar (Model.ScalarStr (Core.unName fname)), encoded)))))
-      in (Eithers.bind (Core_.termRecord cx graph stripped) (\record ->
-        let fields = Core.recordFields record
-        in (Eithers.bind (Eithers.mapList encodeField (Lists.zip coders fields)) (\maybeFields -> Right (Model.NodeMapping (Maps.fromList (Maybes.cat maybeFields)))))))
-
--- | Decode a YAML value to a record term
-decodeRecord :: Core.Name -> [(Core.FieldType, (Util.Coder Core.Term Model.Node))] -> Context.Context -> Model.Node -> Either (Context.InContext Errors.Error) Core.Term
-decodeRecord tname coders cx n =
-
-      let decodeObjectBody =
-              \m ->
-                let decodeField =
-                        \coder ->
-                          let ft = Pairs.first coder
-                              coder_ = Pairs.second coder
-                              fname = Core.fieldTypeName ft
-                              defaultValue = Model.NodeScalar Model.ScalarNull
-                              yamlValue = Maybes.fromMaybe defaultValue (Maps.lookup (Model.NodeScalar (Model.ScalarStr (Core.unName fname))) m)
-                          in (Eithers.bind (Util.coderDecode coder_ cx yamlValue) (\v -> Right (Core.Field {
-                            Core.fieldName = fname,
-                            Core.fieldTerm = v})))
-                in (Eithers.bind (Eithers.mapList decodeField coders) (\fields -> Right (Core.TermRecord (Core.Record {
-                  Core.recordTypeName = tname,
-                  Core.recordFields = fields}))))
-      in case n of
-        Model.NodeMapping v0 -> decodeObjectBody v0
-        _ -> Left (Context.InContext {
-          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "expected mapping")),
-          Context.inContextContext = cx})
 
 -- | Create a YAML coder for term types
 termCoder :: Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (Util.Coder Core.Term Model.Node)
@@ -263,3 +254,12 @@ unitCoder =
           _ -> Left (Context.InContext {
             Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "expected null")),
             Context.inContextContext = cx})
+
+-- | Create a YAML coder for a given type
+yamlCoder :: Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (Util.Coder Core.Term Model.Node)
+yamlCoder typ cx g =
+
+      let mkTermCoder = \t -> termCoder t cx g
+      in (Eithers.bind (Eithers.bimap (\_s -> Context.InContext {
+        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError _s)),
+        Context.inContextContext = cx}) (\_x -> _x) (Adapt.simpleLanguageAdapter Language.yamlLanguage cx g typ)) (\adapter -> Eithers.bind (mkTermCoder (Util.adapterTarget adapter)) (\coder -> Right (Adapt.composeCoders (Util.adapterCoder adapter) coder))))

@@ -39,19 +39,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Attempt to adapt a floating-point type using the given language constraints
-adaptFloatType :: Coders.LanguageConstraints -> Core.FloatType -> Maybe Core.FloatType
-adaptFloatType constraints ft =
-
-      let supported = Sets.member ft (Coders.languageConstraintsFloatTypes constraints)
-          alt = adaptFloatType constraints
-          forUnsupported =
-                  \ft -> case ft of
-                    Core.FloatTypeBigfloat -> alt Core.FloatTypeFloat64
-                    Core.FloatTypeFloat32 -> alt Core.FloatTypeFloat64
-                    Core.FloatTypeFloat64 -> alt Core.FloatTypeBigfloat
-      in (Logic.ifElse supported (Just ft) (forUnsupported ft))
-
 -- | Adapt a graph and its schema to the given language constraints. The doExpand flag controls eta expansion of partial applications. Adaptation is type-preserving: binding-level TypeSchemes are adapted (not stripped). Note: case statement hoisting is done separately, prior to adaptation. The els0 parameter provides the original ordered bindings. Returns both the adapted graph and the ordered adapted bindings.
 adaptDataGraph :: Coders.LanguageConstraints -> Bool -> [Core.Binding] -> Context.Context -> Graph.Graph -> Either String (Graph.Graph, [Core.Binding])
 adaptDataGraph constraints doExpand els0 cx graph0 =
@@ -94,6 +81,19 @@ adaptDataGraph constraints doExpand els0 cx graph0 =
                           Graph.graphSchemaTypes = adaptedSchemaTypes,
                           Graph.graphTypeVariables = (Graph.graphTypeVariables (Lexical.buildGraph els1 Maps.empty prims1))}
             in (Right (adaptedGraph, els1))))))))))
+
+-- | Attempt to adapt a floating-point type using the given language constraints
+adaptFloatType :: Coders.LanguageConstraints -> Core.FloatType -> Maybe Core.FloatType
+adaptFloatType constraints ft =
+
+      let supported = Sets.member ft (Coders.languageConstraintsFloatTypes constraints)
+          alt = adaptFloatType constraints
+          forUnsupported =
+                  \ft -> case ft of
+                    Core.FloatTypeBigfloat -> alt Core.FloatTypeFloat64
+                    Core.FloatTypeFloat32 -> alt Core.FloatTypeFloat64
+                    Core.FloatTypeFloat64 -> alt Core.FloatTypeBigfloat
+      in (Logic.ifElse supported (Just ft) (forUnsupported ft))
 
 -- | Adapt a schema graph to the given language constraints
 adaptGraphSchema :: Ord t0 => (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> M.Map t0 Core.Type -> Either String (M.Map t0 Core.Type))
@@ -448,6 +448,10 @@ prepareLiteralType at =
           _ -> v), msgs))
       _ -> prepareSame at
 
+-- | Return a value unchanged with identity transform and no messages
+prepareSame :: Ord t2 => (t0 -> (t0, ((t1 -> t1), (S.Set t2))))
+prepareSame x = (x, ((\y -> y), Sets.empty))
+
 -- | Prepare a type, substituting unsupported literal types
 prepareType :: t0 -> Core.Type -> (Core.Type, ((Core.Term -> Core.Term), (S.Set String)))
 prepareType cx typ =
@@ -461,10 +465,6 @@ prepareType cx typ =
           Core.TermLiteral v1 -> Core.TermLiteral (rep v1)
           _ -> v), msgs))
       _ -> prepareSame typ
-
--- | Return a value unchanged with identity transform and no messages
-prepareSame :: Ord t2 => (t0 -> (t0, ((t1 -> t1), (S.Set t2))))
-prepareSame x = (x, ((\y -> y), Sets.empty))
 
 -- | Normalize a term by pushing TermTypeApplication inward past TermApplication and TermFunction (Lambda). This corrects structures produced by poly-let hoisting and eta expansion, where type applications from inference end up wrapping term applications or lambda abstractions instead of being directly on the polymorphic variable.
 pushTypeAppsInward :: Core.Term -> Core.Term

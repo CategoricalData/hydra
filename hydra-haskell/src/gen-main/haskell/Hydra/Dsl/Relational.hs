@@ -20,12 +20,6 @@ columnName x =
       Core.wrappedTermTypeName = (Core.Name "hydra.relational.ColumnName"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-unColumnName :: Phantoms.TTerm Relational.ColumnName -> Phantoms.TTerm String
-unColumnName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.relational.ColumnName")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 columnSchema :: Phantoms.TTerm Relational.ColumnName -> Phantoms.TTerm t -> Phantoms.TTerm (Relational.ColumnSchema t)
 columnSchema name domain =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -38,14 +32,6 @@ columnSchema name domain =
           Core.fieldName = (Core.Name "domain"),
           Core.fieldTerm = (Phantoms.unTTerm domain)}]}))
 
-columnSchemaName :: Phantoms.TTerm (Relational.ColumnSchema t) -> Phantoms.TTerm Relational.ColumnName
-columnSchemaName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.relational.ColumnSchema"),
-        Core.projectionField = (Core.Name "name")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 columnSchemaDomain :: Phantoms.TTerm (Relational.ColumnSchema t) -> Phantoms.TTerm t
 columnSchemaDomain x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -54,21 +40,13 @@ columnSchemaDomain x =
         Core.projectionField = (Core.Name "domain")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-columnSchemaWithName :: Phantoms.TTerm (Relational.ColumnSchema t) -> Phantoms.TTerm Relational.ColumnName -> Phantoms.TTerm (Relational.ColumnSchema t)
-columnSchemaWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.relational.ColumnSchema"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "domain"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.relational.ColumnSchema"),
-              Core.projectionField = (Core.Name "domain")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+columnSchemaName :: Phantoms.TTerm (Relational.ColumnSchema t) -> Phantoms.TTerm Relational.ColumnName
+columnSchemaName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.relational.ColumnSchema"),
+        Core.projectionField = (Core.Name "name")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 columnSchemaWithDomain :: Phantoms.TTerm (Relational.ColumnSchema t) -> Phantoms.TTerm t -> Phantoms.TTerm (Relational.ColumnSchema t)
 columnSchemaWithDomain original newVal =
@@ -85,6 +63,22 @@ columnSchemaWithDomain original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "domain"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+columnSchemaWithName :: Phantoms.TTerm (Relational.ColumnSchema t) -> Phantoms.TTerm Relational.ColumnName -> Phantoms.TTerm (Relational.ColumnSchema t)
+columnSchemaWithName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.relational.ColumnSchema"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "domain"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.relational.ColumnSchema"),
+              Core.projectionField = (Core.Name "domain")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 foreignKey :: Phantoms.TTerm Relational.RelationName -> Phantoms.TTerm (M.Map Relational.ColumnName Relational.ColumnName) -> Phantoms.TTerm Relational.ForeignKey
 foreignKey foreignRelation keys =
@@ -152,35 +146,17 @@ primaryKey x =
       Core.wrappedTermTypeName = (Core.Name "hydra.relational.PrimaryKey"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-unPrimaryKey :: Phantoms.TTerm Relational.PrimaryKey -> Phantoms.TTerm [Relational.ColumnName]
-unPrimaryKey x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.relational.PrimaryKey")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 relation :: Phantoms.TTerm [Relational.Row v] -> Phantoms.TTerm (Relational.Relation v)
 relation x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.relational.Relation"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-unRelation :: Phantoms.TTerm (Relational.Relation v) -> Phantoms.TTerm [Relational.Row v]
-unRelation x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.relational.Relation")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 relationName :: Phantoms.TTerm String -> Phantoms.TTerm Relational.RelationName
 relationName x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.relational.RelationName"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unRelationName :: Phantoms.TTerm Relational.RelationName -> Phantoms.TTerm String
-unRelationName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.relational.RelationName")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 relationSchema :: Phantoms.TTerm Relational.RelationName -> Phantoms.TTerm [Relational.ColumnSchema t] -> Phantoms.TTerm [Relational.PrimaryKey] -> Phantoms.TTerm [Relational.ForeignKey] -> Phantoms.TTerm (Relational.RelationSchema t)
 relationSchema name columns primaryKeys foreignKeys =
@@ -200,28 +176,12 @@ relationSchema name columns primaryKeys foreignKeys =
           Core.fieldName = (Core.Name "foreignKeys"),
           Core.fieldTerm = (Phantoms.unTTerm foreignKeys)}]}))
 
-relationSchemaName :: Phantoms.TTerm (Relational.RelationSchema t) -> Phantoms.TTerm Relational.RelationName
-relationSchemaName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
-        Core.projectionField = (Core.Name "name")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 relationSchemaColumns :: Phantoms.TTerm (Relational.RelationSchema t) -> Phantoms.TTerm [Relational.ColumnSchema t]
 relationSchemaColumns x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
         Core.projectionField = (Core.Name "columns")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-relationSchemaPrimaryKeys :: Phantoms.TTerm (Relational.RelationSchema t) -> Phantoms.TTerm [Relational.PrimaryKey]
-relationSchemaPrimaryKeys x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
-        Core.projectionField = (Core.Name "primaryKeys")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 relationSchemaForeignKeys :: Phantoms.TTerm (Relational.RelationSchema t) -> Phantoms.TTerm [Relational.ForeignKey]
@@ -232,35 +192,21 @@ relationSchemaForeignKeys x =
         Core.projectionField = (Core.Name "foreignKeys")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-relationSchemaWithName :: Phantoms.TTerm (Relational.RelationSchema t) -> Phantoms.TTerm Relational.RelationName -> Phantoms.TTerm (Relational.RelationSchema t)
-relationSchemaWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.relational.RelationSchema"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "columns"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
-              Core.projectionField = (Core.Name "columns")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "primaryKeys"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
-              Core.projectionField = (Core.Name "primaryKeys")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "foreignKeys"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
-              Core.projectionField = (Core.Name "foreignKeys")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+relationSchemaName :: Phantoms.TTerm (Relational.RelationSchema t) -> Phantoms.TTerm Relational.RelationName
+relationSchemaName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
+        Core.projectionField = (Core.Name "name")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+relationSchemaPrimaryKeys :: Phantoms.TTerm (Relational.RelationSchema t) -> Phantoms.TTerm [Relational.PrimaryKey]
+relationSchemaPrimaryKeys x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
+        Core.projectionField = (Core.Name "primaryKeys")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 relationSchemaWithColumns :: Phantoms.TTerm (Relational.RelationSchema t) -> Phantoms.TTerm [Relational.ColumnSchema t] -> Phantoms.TTerm (Relational.RelationSchema t)
 relationSchemaWithColumns original newVal =
@@ -277,6 +223,66 @@ relationSchemaWithColumns original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "columns"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "primaryKeys"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
+              Core.projectionField = (Core.Name "primaryKeys")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "foreignKeys"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
+              Core.projectionField = (Core.Name "foreignKeys")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+relationSchemaWithForeignKeys :: Phantoms.TTerm (Relational.RelationSchema t) -> Phantoms.TTerm [Relational.ForeignKey] -> Phantoms.TTerm (Relational.RelationSchema t)
+relationSchemaWithForeignKeys original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.relational.RelationSchema"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "columns"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
+              Core.projectionField = (Core.Name "columns")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "primaryKeys"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
+              Core.projectionField = (Core.Name "primaryKeys")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "foreignKeys"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+relationSchemaWithName :: Phantoms.TTerm (Relational.RelationSchema t) -> Phantoms.TTerm Relational.RelationName -> Phantoms.TTerm (Relational.RelationSchema t)
+relationSchemaWithName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.relational.RelationSchema"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "columns"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
+              Core.projectionField = (Core.Name "columns")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "primaryKeys"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -322,53 +328,47 @@ relationSchemaWithPrimaryKeys original newVal =
               Core.projectionField = (Core.Name "foreignKeys")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-relationSchemaWithForeignKeys :: Phantoms.TTerm (Relational.RelationSchema t) -> Phantoms.TTerm [Relational.ForeignKey] -> Phantoms.TTerm (Relational.RelationSchema t)
-relationSchemaWithForeignKeys original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.relational.RelationSchema"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "columns"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
-              Core.projectionField = (Core.Name "columns")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "primaryKeys"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
-              Core.projectionField = (Core.Name "primaryKeys")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "foreignKeys"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
 relationship :: Phantoms.TTerm (S.Set (M.Map Relational.ColumnName v)) -> Phantoms.TTerm (Relational.Relationship v)
 relationship x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.relational.Relationship"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-unRelationship :: Phantoms.TTerm (Relational.Relationship v) -> Phantoms.TTerm (S.Set (M.Map Relational.ColumnName v))
-unRelationship x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.relational.Relationship")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 row :: Phantoms.TTerm [v] -> Phantoms.TTerm (Relational.Row v)
 row x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.relational.Row"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+unColumnName :: Phantoms.TTerm Relational.ColumnName -> Phantoms.TTerm String
+unColumnName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.relational.ColumnName")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unPrimaryKey :: Phantoms.TTerm Relational.PrimaryKey -> Phantoms.TTerm [Relational.ColumnName]
+unPrimaryKey x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.relational.PrimaryKey")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unRelation :: Phantoms.TTerm (Relational.Relation v) -> Phantoms.TTerm [Relational.Row v]
+unRelation x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.relational.Relation")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unRelationName :: Phantoms.TTerm Relational.RelationName -> Phantoms.TTerm String
+unRelationName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.relational.RelationName")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unRelationship :: Phantoms.TTerm (Relational.Relationship v) -> Phantoms.TTerm (S.Set (M.Map Relational.ColumnName v))
+unRelationship x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.relational.Relationship")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unRow :: Phantoms.TTerm (Relational.Row v) -> Phantoms.TTerm [v]
 unRow x =

@@ -23,15 +23,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Aggregate a list of key-value pairs into a map where each key maps to a list of values
-aggregateMap :: Ord t0 => ([(t0, t1)] -> M.Map t0 [t1])
-aggregateMap pairs =
-    Lists.foldl (\m -> \p ->
-      let k = Pairs.first p
-          v = Pairs.second p
-          existing = Maps.lookup k m
-      in (Maps.insert k (Maybes.maybe (Lists.pure v) (\vs -> Lists.cons v vs) existing) m)) Maps.empty pairs
-
 -- | Convert a property graph adjacent edge to a GraphSON adjacent edge
 adjacentEdgeToGraphson :: (t0 -> Either t1 Syntax.Value) -> Model_.AdjacentEdge t0 -> Either t1 (Syntax.EdgeLabel, Syntax.AdjacentEdge)
 adjacentEdgeToGraphson encodeValue edge =
@@ -44,6 +35,15 @@ adjacentEdgeToGraphson encodeValue edge =
         Syntax.adjacentEdgeId = gid,
         Syntax.adjacentEdgeVertexId = gv,
         Syntax.adjacentEdgeProperties = (Maps.fromList propPairs)})))))
+
+-- | Aggregate a list of key-value pairs into a map where each key maps to a list of values
+aggregateMap :: Ord t0 => ([(t0, t1)] -> M.Map t0 [t1])
+aggregateMap pairs =
+    Lists.foldl (\m -> \p ->
+      let k = Pairs.first p
+          v = Pairs.second p
+          existing = Maps.lookup k m
+      in (Maps.insert k (Maybes.maybe (Lists.pure v) (\vs -> Lists.cons v vs) existing) m)) Maps.empty pairs
 
 -- | Convert a property graph edge property to a GraphSON property
 edgePropertyToGraphson :: (t0 -> Either t1 t2) -> (Model_.PropertyKey, t0) -> Either t1 (Syntax.PropertyKey, t2)

@@ -75,20 +75,20 @@ hydraSchemaSpecWithTypeName original newVal =
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-schemaSpecHydra :: Phantoms.TTerm Workflow.HydraSchemaSpec -> Phantoms.TTerm Workflow.SchemaSpec
-schemaSpecHydra x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.workflow.SchemaSpec"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "hydra"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
 schemaSpecFile :: Phantoms.TTerm String -> Phantoms.TTerm Workflow.SchemaSpec
 schemaSpecFile x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.ext.workflow.SchemaSpec"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "file"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+schemaSpecHydra :: Phantoms.TTerm Workflow.HydraSchemaSpec -> Phantoms.TTerm Workflow.SchemaSpec
+schemaSpecHydra x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.workflow.SchemaSpec"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "hydra"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 schemaSpecProvided :: Phantoms.TTerm Workflow.SchemaSpec
@@ -117,6 +117,14 @@ transformWorkflow name schemaSpec srcDir destDir =
           Core.fieldName = (Core.Name "destDir"),
           Core.fieldTerm = (Phantoms.unTTerm destDir)}]}))
 
+transformWorkflowDestDir :: Phantoms.TTerm Workflow.TransformWorkflow -> Phantoms.TTerm String
+transformWorkflowDestDir x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.workflow.TransformWorkflow"),
+        Core.projectionField = (Core.Name "destDir")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
 transformWorkflowName :: Phantoms.TTerm Workflow.TransformWorkflow -> Phantoms.TTerm String
 transformWorkflowName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -141,13 +149,35 @@ transformWorkflowSrcDir x =
         Core.projectionField = (Core.Name "srcDir")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-transformWorkflowDestDir :: Phantoms.TTerm Workflow.TransformWorkflow -> Phantoms.TTerm String
-transformWorkflowDestDir x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.workflow.TransformWorkflow"),
-        Core.projectionField = (Core.Name "destDir")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+transformWorkflowWithDestDir :: Phantoms.TTerm Workflow.TransformWorkflow -> Phantoms.TTerm String -> Phantoms.TTerm Workflow.TransformWorkflow
+transformWorkflowWithDestDir original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.workflow.TransformWorkflow"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.workflow.TransformWorkflow"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "schemaSpec"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.workflow.TransformWorkflow"),
+              Core.projectionField = (Core.Name "schemaSpec")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "srcDir"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.workflow.TransformWorkflow"),
+              Core.projectionField = (Core.Name "srcDir")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "destDir"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
 transformWorkflowWithName :: Phantoms.TTerm Workflow.TransformWorkflow -> Phantoms.TTerm String -> Phantoms.TTerm Workflow.TransformWorkflow
 transformWorkflowWithName original newVal =
@@ -238,33 +268,3 @@ transformWorkflowWithSrcDir original newVal =
               Core.projectionTypeName = (Core.Name "hydra.ext.workflow.TransformWorkflow"),
               Core.projectionField = (Core.Name "destDir")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-transformWorkflowWithDestDir :: Phantoms.TTerm Workflow.TransformWorkflow -> Phantoms.TTerm String -> Phantoms.TTerm Workflow.TransformWorkflow
-transformWorkflowWithDestDir original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.workflow.TransformWorkflow"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.workflow.TransformWorkflow"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "schemaSpec"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.workflow.TransformWorkflow"),
-              Core.projectionField = (Core.Name "schemaSpec")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "srcDir"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.workflow.TransformWorkflow"),
-              Core.projectionField = (Core.Name "srcDir")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "destDir"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))

@@ -26,14 +26,6 @@ arrayType elementType containsNull =
           Core.fieldName = (Core.Name "containsNull"),
           Core.fieldTerm = (Phantoms.unTTerm containsNull)}]}))
 
-arrayTypeElementType :: Phantoms.TTerm Parquet.ArrayType -> Phantoms.TTerm Parquet.DataType
-arrayTypeElementType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.io.delta.parquet.ArrayType"),
-        Core.projectionField = (Core.Name "elementType")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 arrayTypeContainsNull :: Phantoms.TTerm Parquet.ArrayType -> Phantoms.TTerm Bool
 arrayTypeContainsNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -42,21 +34,13 @@ arrayTypeContainsNull x =
         Core.projectionField = (Core.Name "containsNull")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-arrayTypeWithElementType :: Phantoms.TTerm Parquet.ArrayType -> Phantoms.TTerm Parquet.DataType -> Phantoms.TTerm Parquet.ArrayType
-arrayTypeWithElementType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.io.delta.parquet.ArrayType"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "elementType"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "containsNull"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.io.delta.parquet.ArrayType"),
-              Core.projectionField = (Core.Name "containsNull")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+arrayTypeElementType :: Phantoms.TTerm Parquet.ArrayType -> Phantoms.TTerm Parquet.DataType
+arrayTypeElementType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.io.delta.parquet.ArrayType"),
+        Core.projectionField = (Core.Name "elementType")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 arrayTypeWithContainsNull :: Phantoms.TTerm Parquet.ArrayType -> Phantoms.TTerm Bool -> Phantoms.TTerm Parquet.ArrayType
 arrayTypeWithContainsNull original newVal =
@@ -73,6 +57,22 @@ arrayTypeWithContainsNull original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "containsNull"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+arrayTypeWithElementType :: Phantoms.TTerm Parquet.ArrayType -> Phantoms.TTerm Parquet.DataType -> Phantoms.TTerm Parquet.ArrayType
+arrayTypeWithElementType original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.io.delta.parquet.ArrayType"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "elementType"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "containsNull"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.io.delta.parquet.ArrayType"),
+              Core.projectionField = (Core.Name "containsNull")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 basePrimitiveTypeBinary :: Phantoms.TTerm Parquet.BasePrimitiveType
 basePrimitiveTypeBinary =
@@ -285,20 +285,20 @@ mapTypeKeyType x =
         Core.projectionField = (Core.Name "keyType")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-mapTypeValueType :: Phantoms.TTerm Parquet.MapType -> Phantoms.TTerm Parquet.DataType
-mapTypeValueType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.io.delta.parquet.MapType"),
-        Core.projectionField = (Core.Name "valueType")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 mapTypeValueContainsNull :: Phantoms.TTerm Parquet.MapType -> Phantoms.TTerm Bool
 mapTypeValueContainsNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.ext.io.delta.parquet.MapType"),
         Core.projectionField = (Core.Name "valueContainsNull")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+mapTypeValueType :: Phantoms.TTerm Parquet.MapType -> Phantoms.TTerm Parquet.DataType
+mapTypeValueType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.io.delta.parquet.MapType"),
+        Core.projectionField = (Core.Name "valueType")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 mapTypeWithKeyType :: Phantoms.TTerm Parquet.MapType -> Phantoms.TTerm Parquet.DataType -> Phantoms.TTerm Parquet.MapType
@@ -316,29 +316,6 @@ mapTypeWithKeyType original newVal =
               Core.projectionTypeName = (Core.Name "hydra.ext.io.delta.parquet.MapType"),
               Core.projectionField = (Core.Name "valueType")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "valueContainsNull"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.io.delta.parquet.MapType"),
-              Core.projectionField = (Core.Name "valueContainsNull")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-mapTypeWithValueType :: Phantoms.TTerm Parquet.MapType -> Phantoms.TTerm Parquet.DataType -> Phantoms.TTerm Parquet.MapType
-mapTypeWithValueType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.io.delta.parquet.MapType"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "keyType"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.io.delta.parquet.MapType"),
-              Core.projectionField = (Core.Name "keyType")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "valueType"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "valueContainsNull"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -370,6 +347,29 @@ mapTypeWithValueContainsNull original newVal =
           Core.fieldName = (Core.Name "valueContainsNull"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+mapTypeWithValueType :: Phantoms.TTerm Parquet.MapType -> Phantoms.TTerm Parquet.DataType -> Phantoms.TTerm Parquet.MapType
+mapTypeWithValueType original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.io.delta.parquet.MapType"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "keyType"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.io.delta.parquet.MapType"),
+              Core.projectionField = (Core.Name "keyType")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "valueType"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "valueContainsNull"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.io.delta.parquet.MapType"),
+              Core.projectionField = (Core.Name "valueContainsNull")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 structField :: Phantoms.TTerm String -> Phantoms.TTerm Parquet.DataType -> Phantoms.TTerm Bool -> Phantoms.TTerm Parquet.StructField
 structField name dataType nullable =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -385,20 +385,20 @@ structField name dataType nullable =
           Core.fieldName = (Core.Name "nullable"),
           Core.fieldTerm = (Phantoms.unTTerm nullable)}]}))
 
-structFieldName :: Phantoms.TTerm Parquet.StructField -> Phantoms.TTerm String
-structFieldName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.io.delta.parquet.StructField"),
-        Core.projectionField = (Core.Name "name")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 structFieldDataType :: Phantoms.TTerm Parquet.StructField -> Phantoms.TTerm Parquet.DataType
 structFieldDataType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.ext.io.delta.parquet.StructField"),
         Core.projectionField = (Core.Name "dataType")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+structFieldName :: Phantoms.TTerm Parquet.StructField -> Phantoms.TTerm String
+structFieldName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.io.delta.parquet.StructField"),
+        Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 structFieldNullable :: Phantoms.TTerm Parquet.StructField -> Phantoms.TTerm Bool
@@ -408,29 +408,6 @@ structFieldNullable x =
         Core.projectionTypeName = (Core.Name "hydra.ext.io.delta.parquet.StructField"),
         Core.projectionField = (Core.Name "nullable")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-structFieldWithName :: Phantoms.TTerm Parquet.StructField -> Phantoms.TTerm String -> Phantoms.TTerm Parquet.StructField
-structFieldWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.io.delta.parquet.StructField"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "dataType"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.io.delta.parquet.StructField"),
-              Core.projectionField = (Core.Name "dataType")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "nullable"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.io.delta.parquet.StructField"),
-              Core.projectionField = (Core.Name "nullable")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 structFieldWithDataType :: Phantoms.TTerm Parquet.StructField -> Phantoms.TTerm Parquet.DataType -> Phantoms.TTerm Parquet.StructField
 structFieldWithDataType original newVal =
@@ -447,6 +424,29 @@ structFieldWithDataType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "dataType"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "nullable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.io.delta.parquet.StructField"),
+              Core.projectionField = (Core.Name "nullable")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+structFieldWithName :: Phantoms.TTerm Parquet.StructField -> Phantoms.TTerm String -> Phantoms.TTerm Parquet.StructField
+structFieldWithName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.io.delta.parquet.StructField"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "dataType"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.io.delta.parquet.StructField"),
+              Core.projectionField = (Core.Name "dataType")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "nullable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {

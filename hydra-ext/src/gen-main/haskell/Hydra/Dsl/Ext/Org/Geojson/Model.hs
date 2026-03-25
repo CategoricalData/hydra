@@ -21,12 +21,6 @@ boundingBox x =
       Core.wrappedTermTypeName = (Core.Name "hydra.ext.org.geojson.model.BoundingBox"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-unBoundingBox :: Phantoms.TTerm Model.BoundingBox -> Phantoms.TTerm [Model.CoordinateRange]
-unBoundingBox x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.geojson.model.BoundingBox")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 coordinateRange :: Phantoms.TTerm Double -> Phantoms.TTerm Double -> Phantoms.TTerm Model.CoordinateRange
 coordinateRange min max =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -39,14 +33,6 @@ coordinateRange min max =
           Core.fieldName = (Core.Name "max"),
           Core.fieldTerm = (Phantoms.unTTerm max)}]}))
 
-coordinateRangeMin :: Phantoms.TTerm Model.CoordinateRange -> Phantoms.TTerm Double
-coordinateRangeMin x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.CoordinateRange"),
-        Core.projectionField = (Core.Name "min")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 coordinateRangeMax :: Phantoms.TTerm Model.CoordinateRange -> Phantoms.TTerm Double
 coordinateRangeMax x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -55,21 +41,13 @@ coordinateRangeMax x =
         Core.projectionField = (Core.Name "max")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-coordinateRangeWithMin :: Phantoms.TTerm Model.CoordinateRange -> Phantoms.TTerm Double -> Phantoms.TTerm Model.CoordinateRange
-coordinateRangeWithMin original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.CoordinateRange"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "min"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "max"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.CoordinateRange"),
-              Core.projectionField = (Core.Name "max")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+coordinateRangeMin :: Phantoms.TTerm Model.CoordinateRange -> Phantoms.TTerm Double
+coordinateRangeMin x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.CoordinateRange"),
+        Core.projectionField = (Core.Name "min")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 coordinateRangeWithMax :: Phantoms.TTerm Model.CoordinateRange -> Phantoms.TTerm Double -> Phantoms.TTerm Model.CoordinateRange
 coordinateRangeWithMax original newVal =
@@ -86,6 +64,22 @@ coordinateRangeWithMax original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "max"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+coordinateRangeWithMin :: Phantoms.TTerm Model.CoordinateRange -> Phantoms.TTerm Double -> Phantoms.TTerm Model.CoordinateRange
+coordinateRangeWithMin original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.CoordinateRange"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "min"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "max"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.CoordinateRange"),
+              Core.projectionField = (Core.Name "max")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 feature :: Phantoms.TTerm (Maybe Model.Geometry) -> Phantoms.TTerm (Maybe (M.Map String Model_.Value)) -> Phantoms.TTerm (Maybe Model.Id) -> Phantoms.TTerm (Maybe Model.BoundingBox) -> Phantoms.TTerm Model.Feature
 feature geometry properties id bbox =
@@ -105,20 +99,80 @@ feature geometry properties id bbox =
           Core.fieldName = (Core.Name "bbox"),
           Core.fieldTerm = (Phantoms.unTTerm bbox)}]}))
 
+featureBbox :: Phantoms.TTerm Model.Feature -> Phantoms.TTerm (Maybe Model.BoundingBox)
+featureBbox x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Feature"),
+        Core.projectionField = (Core.Name "bbox")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+featureCollection :: Phantoms.TTerm [Model.Feature] -> Phantoms.TTerm (Maybe Model.BoundingBox) -> Phantoms.TTerm Model.FeatureCollection
+featureCollection features bbox =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.FeatureCollection"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "features"),
+          Core.fieldTerm = (Phantoms.unTTerm features)},
+        Core.Field {
+          Core.fieldName = (Core.Name "bbox"),
+          Core.fieldTerm = (Phantoms.unTTerm bbox)}]}))
+
+featureCollectionBbox :: Phantoms.TTerm Model.FeatureCollection -> Phantoms.TTerm (Maybe Model.BoundingBox)
+featureCollectionBbox x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.FeatureCollection"),
+        Core.projectionField = (Core.Name "bbox")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+featureCollectionFeatures :: Phantoms.TTerm Model.FeatureCollection -> Phantoms.TTerm [Model.Feature]
+featureCollectionFeatures x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.FeatureCollection"),
+        Core.projectionField = (Core.Name "features")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+featureCollectionWithBbox :: Phantoms.TTerm Model.FeatureCollection -> Phantoms.TTerm (Maybe Model.BoundingBox) -> Phantoms.TTerm Model.FeatureCollection
+featureCollectionWithBbox original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.FeatureCollection"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "features"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.FeatureCollection"),
+              Core.projectionField = (Core.Name "features")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "bbox"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+featureCollectionWithFeatures :: Phantoms.TTerm Model.FeatureCollection -> Phantoms.TTerm [Model.Feature] -> Phantoms.TTerm Model.FeatureCollection
+featureCollectionWithFeatures original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.FeatureCollection"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "features"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "bbox"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.FeatureCollection"),
+              Core.projectionField = (Core.Name "bbox")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 featureGeometry :: Phantoms.TTerm Model.Feature -> Phantoms.TTerm (Maybe Model.Geometry)
 featureGeometry x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Feature"),
         Core.projectionField = (Core.Name "geometry")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-featureProperties :: Phantoms.TTerm Model.Feature -> Phantoms.TTerm (Maybe (M.Map String Model_.Value))
-featureProperties x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Feature"),
-        Core.projectionField = (Core.Name "properties")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 featureId :: Phantoms.TTerm Model.Feature -> Phantoms.TTerm (Maybe Model.Id)
@@ -129,22 +183,26 @@ featureId x =
         Core.projectionField = (Core.Name "id")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-featureBbox :: Phantoms.TTerm Model.Feature -> Phantoms.TTerm (Maybe Model.BoundingBox)
-featureBbox x =
+featureProperties :: Phantoms.TTerm Model.Feature -> Phantoms.TTerm (Maybe (M.Map String Model_.Value))
+featureProperties x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Feature"),
-        Core.projectionField = (Core.Name "bbox")})))),
+        Core.projectionField = (Core.Name "properties")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-featureWithGeometry :: Phantoms.TTerm Model.Feature -> Phantoms.TTerm (Maybe Model.Geometry) -> Phantoms.TTerm Model.Feature
-featureWithGeometry original newVal =
+featureWithBbox :: Phantoms.TTerm Model.Feature -> Phantoms.TTerm (Maybe Model.BoundingBox) -> Phantoms.TTerm Model.Feature
+featureWithBbox original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.Feature"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "geometry"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Feature"),
+              Core.projectionField = (Core.Name "geometry")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -161,27 +219,23 @@ featureWithGeometry original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "bbox"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Feature"),
-              Core.projectionField = (Core.Name "bbox")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-featureWithProperties :: Phantoms.TTerm Model.Feature -> Phantoms.TTerm (Maybe (M.Map String Model_.Value)) -> Phantoms.TTerm Model.Feature
-featureWithProperties original newVal =
+featureWithGeometry :: Phantoms.TTerm Model.Feature -> Phantoms.TTerm (Maybe Model.Geometry) -> Phantoms.TTerm Model.Feature
+featureWithGeometry original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.Feature"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "geometry"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Feature"),
-              Core.projectionField = (Core.Name "geometry")})))),
+              Core.projectionField = (Core.Name "properties")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "properties"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -227,8 +281,8 @@ featureWithId original newVal =
               Core.projectionField = (Core.Name "bbox")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-featureWithBbox :: Phantoms.TTerm Model.Feature -> Phantoms.TTerm (Maybe Model.BoundingBox) -> Phantoms.TTerm Model.Feature
-featureWithBbox original newVal =
+featureWithProperties :: Phantoms.TTerm Model.Feature -> Phantoms.TTerm (Maybe (M.Map String Model_.Value)) -> Phantoms.TTerm Model.Feature
+featureWithProperties original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.Feature"),
       Core.recordFields = [
@@ -241,11 +295,7 @@ featureWithBbox original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Feature"),
-              Core.projectionField = (Core.Name "properties")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -255,67 +305,11 @@ featureWithBbox original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "bbox"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-featureCollection :: Phantoms.TTerm [Model.Feature] -> Phantoms.TTerm (Maybe Model.BoundingBox) -> Phantoms.TTerm Model.FeatureCollection
-featureCollection features bbox =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.FeatureCollection"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "features"),
-          Core.fieldTerm = (Phantoms.unTTerm features)},
-        Core.Field {
-          Core.fieldName = (Core.Name "bbox"),
-          Core.fieldTerm = (Phantoms.unTTerm bbox)}]}))
-
-featureCollectionFeatures :: Phantoms.TTerm Model.FeatureCollection -> Phantoms.TTerm [Model.Feature]
-featureCollectionFeatures x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.FeatureCollection"),
-        Core.projectionField = (Core.Name "features")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-featureCollectionBbox :: Phantoms.TTerm Model.FeatureCollection -> Phantoms.TTerm (Maybe Model.BoundingBox)
-featureCollectionBbox x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.FeatureCollection"),
-        Core.projectionField = (Core.Name "bbox")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-featureCollectionWithFeatures :: Phantoms.TTerm Model.FeatureCollection -> Phantoms.TTerm [Model.Feature] -> Phantoms.TTerm Model.FeatureCollection
-featureCollectionWithFeatures original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.FeatureCollection"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "features"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "bbox"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.FeatureCollection"),
+              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Feature"),
               Core.projectionField = (Core.Name "bbox")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-featureCollectionWithBbox :: Phantoms.TTerm Model.FeatureCollection -> Phantoms.TTerm (Maybe Model.BoundingBox) -> Phantoms.TTerm Model.FeatureCollection
-featureCollectionWithBbox original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.FeatureCollection"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "features"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.FeatureCollection"),
-              Core.projectionField = (Core.Name "features")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "bbox"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
 geometryCollection :: Phantoms.TTerm [Model.Geometry] -> Phantoms.TTerm (Maybe Model.BoundingBox) -> Phantoms.TTerm Model.GeometryCollection
 geometryCollection geometries bbox =
@@ -329,14 +323,6 @@ geometryCollection geometries bbox =
           Core.fieldName = (Core.Name "bbox"),
           Core.fieldTerm = (Phantoms.unTTerm bbox)}]}))
 
-geometryCollectionGeometries :: Phantoms.TTerm Model.GeometryCollection -> Phantoms.TTerm [Model.Geometry]
-geometryCollectionGeometries x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.GeometryCollection"),
-        Core.projectionField = (Core.Name "geometries")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 geometryCollectionBbox :: Phantoms.TTerm Model.GeometryCollection -> Phantoms.TTerm (Maybe Model.BoundingBox)
 geometryCollectionBbox x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -345,21 +331,13 @@ geometryCollectionBbox x =
         Core.projectionField = (Core.Name "bbox")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-geometryCollectionWithGeometries :: Phantoms.TTerm Model.GeometryCollection -> Phantoms.TTerm [Model.Geometry] -> Phantoms.TTerm Model.GeometryCollection
-geometryCollectionWithGeometries original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.GeometryCollection"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "geometries"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "bbox"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.GeometryCollection"),
-              Core.projectionField = (Core.Name "bbox")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+geometryCollectionGeometries :: Phantoms.TTerm Model.GeometryCollection -> Phantoms.TTerm [Model.Geometry]
+geometryCollectionGeometries x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.GeometryCollection"),
+        Core.projectionField = (Core.Name "geometries")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 geometryCollectionWithBbox :: Phantoms.TTerm Model.GeometryCollection -> Phantoms.TTerm (Maybe Model.BoundingBox) -> Phantoms.TTerm Model.GeometryCollection
 geometryCollectionWithBbox original newVal =
@@ -377,20 +355,28 @@ geometryCollectionWithBbox original newVal =
           Core.fieldName = (Core.Name "bbox"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-geometryPoint :: Phantoms.TTerm Model.Point -> Phantoms.TTerm Model.Geometry
-geometryPoint x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Geometry"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "point"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+geometryCollectionWithGeometries :: Phantoms.TTerm Model.GeometryCollection -> Phantoms.TTerm [Model.Geometry] -> Phantoms.TTerm Model.GeometryCollection
+geometryCollectionWithGeometries original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.GeometryCollection"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "geometries"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "bbox"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.GeometryCollection"),
+              Core.projectionField = (Core.Name "bbox")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-geometryMultiPoint :: Phantoms.TTerm Model.MultiPoint -> Phantoms.TTerm Model.Geometry
-geometryMultiPoint x =
+geometryGeometryCollection :: Phantoms.TTerm Model.GeometryCollection -> Phantoms.TTerm Model.Geometry
+geometryGeometryCollection x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Geometry"),
       Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "multiPoint"),
+        Core.fieldName = (Core.Name "geometryCollection"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 geometryLineString :: Phantoms.TTerm Model.LineString -> Phantoms.TTerm Model.Geometry
@@ -409,12 +395,12 @@ geometryMultiLineString x =
         Core.fieldName = (Core.Name "multiLineString"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-geometryPolygon :: Phantoms.TTerm Model.Polygon -> Phantoms.TTerm Model.Geometry
-geometryPolygon x =
+geometryMultiPoint :: Phantoms.TTerm Model.MultiPoint -> Phantoms.TTerm Model.Geometry
+geometryMultiPoint x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Geometry"),
       Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "polygon"),
+        Core.fieldName = (Core.Name "multiPoint"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 geometryMultiPolygon :: Phantoms.TTerm Model.MultiPolygon -> Phantoms.TTerm Model.Geometry
@@ -425,12 +411,20 @@ geometryMultiPolygon x =
         Core.fieldName = (Core.Name "multiPolygon"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-geometryGeometryCollection :: Phantoms.TTerm Model.GeometryCollection -> Phantoms.TTerm Model.Geometry
-geometryGeometryCollection x =
+geometryPoint :: Phantoms.TTerm Model.Point -> Phantoms.TTerm Model.Geometry
+geometryPoint x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Geometry"),
       Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "geometryCollection"),
+        Core.fieldName = (Core.Name "point"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+geometryPolygon :: Phantoms.TTerm Model.Polygon -> Phantoms.TTerm Model.Geometry
+geometryPolygon x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Geometry"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "polygon"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 idNumber :: Phantoms.TTerm Double -> Phantoms.TTerm Model.Id
@@ -461,14 +455,6 @@ lineString coordinates bbox =
           Core.fieldName = (Core.Name "bbox"),
           Core.fieldTerm = (Phantoms.unTTerm bbox)}]}))
 
-lineStringCoordinates :: Phantoms.TTerm Model.LineString -> Phantoms.TTerm [Model.Position]
-lineStringCoordinates x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.LineString"),
-        Core.projectionField = (Core.Name "coordinates")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 lineStringBbox :: Phantoms.TTerm Model.LineString -> Phantoms.TTerm (Maybe Model.BoundingBox)
 lineStringBbox x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -477,21 +463,13 @@ lineStringBbox x =
         Core.projectionField = (Core.Name "bbox")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-lineStringWithCoordinates :: Phantoms.TTerm Model.LineString -> Phantoms.TTerm [Model.Position] -> Phantoms.TTerm Model.LineString
-lineStringWithCoordinates original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.LineString"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "coordinates"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "bbox"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.LineString"),
-              Core.projectionField = (Core.Name "bbox")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+lineStringCoordinates :: Phantoms.TTerm Model.LineString -> Phantoms.TTerm [Model.Position]
+lineStringCoordinates x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.LineString"),
+        Core.projectionField = (Core.Name "coordinates")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 lineStringWithBbox :: Phantoms.TTerm Model.LineString -> Phantoms.TTerm (Maybe Model.BoundingBox) -> Phantoms.TTerm Model.LineString
 lineStringWithBbox original newVal =
@@ -509,6 +487,22 @@ lineStringWithBbox original newVal =
           Core.fieldName = (Core.Name "bbox"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+lineStringWithCoordinates :: Phantoms.TTerm Model.LineString -> Phantoms.TTerm [Model.Position] -> Phantoms.TTerm Model.LineString
+lineStringWithCoordinates original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.LineString"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "coordinates"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "bbox"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.LineString"),
+              Core.projectionField = (Core.Name "bbox")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 multiLineString :: Phantoms.TTerm [Model.LineString] -> Phantoms.TTerm (Maybe Model.BoundingBox) -> Phantoms.TTerm Model.MultiLineString
 multiLineString coordinates bbox =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -521,14 +515,6 @@ multiLineString coordinates bbox =
           Core.fieldName = (Core.Name "bbox"),
           Core.fieldTerm = (Phantoms.unTTerm bbox)}]}))
 
-multiLineStringCoordinates :: Phantoms.TTerm Model.MultiLineString -> Phantoms.TTerm [Model.LineString]
-multiLineStringCoordinates x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.MultiLineString"),
-        Core.projectionField = (Core.Name "coordinates")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 multiLineStringBbox :: Phantoms.TTerm Model.MultiLineString -> Phantoms.TTerm (Maybe Model.BoundingBox)
 multiLineStringBbox x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -537,21 +523,13 @@ multiLineStringBbox x =
         Core.projectionField = (Core.Name "bbox")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-multiLineStringWithCoordinates :: Phantoms.TTerm Model.MultiLineString -> Phantoms.TTerm [Model.LineString] -> Phantoms.TTerm Model.MultiLineString
-multiLineStringWithCoordinates original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.MultiLineString"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "coordinates"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "bbox"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.MultiLineString"),
-              Core.projectionField = (Core.Name "bbox")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+multiLineStringCoordinates :: Phantoms.TTerm Model.MultiLineString -> Phantoms.TTerm [Model.LineString]
+multiLineStringCoordinates x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.MultiLineString"),
+        Core.projectionField = (Core.Name "coordinates")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 multiLineStringWithBbox :: Phantoms.TTerm Model.MultiLineString -> Phantoms.TTerm (Maybe Model.BoundingBox) -> Phantoms.TTerm Model.MultiLineString
 multiLineStringWithBbox original newVal =
@@ -569,6 +547,22 @@ multiLineStringWithBbox original newVal =
           Core.fieldName = (Core.Name "bbox"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+multiLineStringWithCoordinates :: Phantoms.TTerm Model.MultiLineString -> Phantoms.TTerm [Model.LineString] -> Phantoms.TTerm Model.MultiLineString
+multiLineStringWithCoordinates original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.MultiLineString"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "coordinates"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "bbox"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.MultiLineString"),
+              Core.projectionField = (Core.Name "bbox")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 multiPoint :: Phantoms.TTerm [Model.Point] -> Phantoms.TTerm (Maybe Model.BoundingBox) -> Phantoms.TTerm Model.MultiPoint
 multiPoint coordinates bbox =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -581,14 +575,6 @@ multiPoint coordinates bbox =
           Core.fieldName = (Core.Name "bbox"),
           Core.fieldTerm = (Phantoms.unTTerm bbox)}]}))
 
-multiPointCoordinates :: Phantoms.TTerm Model.MultiPoint -> Phantoms.TTerm [Model.Point]
-multiPointCoordinates x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.MultiPoint"),
-        Core.projectionField = (Core.Name "coordinates")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 multiPointBbox :: Phantoms.TTerm Model.MultiPoint -> Phantoms.TTerm (Maybe Model.BoundingBox)
 multiPointBbox x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -597,21 +583,13 @@ multiPointBbox x =
         Core.projectionField = (Core.Name "bbox")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-multiPointWithCoordinates :: Phantoms.TTerm Model.MultiPoint -> Phantoms.TTerm [Model.Point] -> Phantoms.TTerm Model.MultiPoint
-multiPointWithCoordinates original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.MultiPoint"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "coordinates"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "bbox"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.MultiPoint"),
-              Core.projectionField = (Core.Name "bbox")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+multiPointCoordinates :: Phantoms.TTerm Model.MultiPoint -> Phantoms.TTerm [Model.Point]
+multiPointCoordinates x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.MultiPoint"),
+        Core.projectionField = (Core.Name "coordinates")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 multiPointWithBbox :: Phantoms.TTerm Model.MultiPoint -> Phantoms.TTerm (Maybe Model.BoundingBox) -> Phantoms.TTerm Model.MultiPoint
 multiPointWithBbox original newVal =
@@ -629,6 +607,22 @@ multiPointWithBbox original newVal =
           Core.fieldName = (Core.Name "bbox"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+multiPointWithCoordinates :: Phantoms.TTerm Model.MultiPoint -> Phantoms.TTerm [Model.Point] -> Phantoms.TTerm Model.MultiPoint
+multiPointWithCoordinates original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.MultiPoint"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "coordinates"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "bbox"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.MultiPoint"),
+              Core.projectionField = (Core.Name "bbox")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 multiPolygon :: Phantoms.TTerm [Model.Polygon] -> Phantoms.TTerm (Maybe Model.BoundingBox) -> Phantoms.TTerm Model.MultiPolygon
 multiPolygon coordinates bbox =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -641,14 +635,6 @@ multiPolygon coordinates bbox =
           Core.fieldName = (Core.Name "bbox"),
           Core.fieldTerm = (Phantoms.unTTerm bbox)}]}))
 
-multiPolygonCoordinates :: Phantoms.TTerm Model.MultiPolygon -> Phantoms.TTerm [Model.Polygon]
-multiPolygonCoordinates x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.MultiPolygon"),
-        Core.projectionField = (Core.Name "coordinates")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 multiPolygonBbox :: Phantoms.TTerm Model.MultiPolygon -> Phantoms.TTerm (Maybe Model.BoundingBox)
 multiPolygonBbox x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -657,21 +643,13 @@ multiPolygonBbox x =
         Core.projectionField = (Core.Name "bbox")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-multiPolygonWithCoordinates :: Phantoms.TTerm Model.MultiPolygon -> Phantoms.TTerm [Model.Polygon] -> Phantoms.TTerm Model.MultiPolygon
-multiPolygonWithCoordinates original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.MultiPolygon"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "coordinates"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "bbox"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.MultiPolygon"),
-              Core.projectionField = (Core.Name "bbox")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+multiPolygonCoordinates :: Phantoms.TTerm Model.MultiPolygon -> Phantoms.TTerm [Model.Polygon]
+multiPolygonCoordinates x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.MultiPolygon"),
+        Core.projectionField = (Core.Name "coordinates")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 multiPolygonWithBbox :: Phantoms.TTerm Model.MultiPolygon -> Phantoms.TTerm (Maybe Model.BoundingBox) -> Phantoms.TTerm Model.MultiPolygon
 multiPolygonWithBbox original newVal =
@@ -689,13 +667,21 @@ multiPolygonWithBbox original newVal =
           Core.fieldName = (Core.Name "bbox"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-objectGeometry :: Phantoms.TTerm Model.Geometry -> Phantoms.TTerm Model.Object
-objectGeometry x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Object"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "geometry"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+multiPolygonWithCoordinates :: Phantoms.TTerm Model.MultiPolygon -> Phantoms.TTerm [Model.Polygon] -> Phantoms.TTerm Model.MultiPolygon
+multiPolygonWithCoordinates original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.MultiPolygon"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "coordinates"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "bbox"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.MultiPolygon"),
+              Core.projectionField = (Core.Name "bbox")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 objectFeature :: Phantoms.TTerm Model.Feature -> Phantoms.TTerm Model.Object
 objectFeature x =
@@ -713,6 +699,14 @@ objectFeatureCollection x =
         Core.fieldName = (Core.Name "featureCollection"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
+objectGeometry :: Phantoms.TTerm Model.Geometry -> Phantoms.TTerm Model.Object
+objectGeometry x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Object"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "geometry"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
 point :: Phantoms.TTerm Model.Position -> Phantoms.TTerm (Maybe Model.BoundingBox) -> Phantoms.TTerm Model.Point
 point coordinates bbox =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -725,14 +719,6 @@ point coordinates bbox =
           Core.fieldName = (Core.Name "bbox"),
           Core.fieldTerm = (Phantoms.unTTerm bbox)}]}))
 
-pointCoordinates :: Phantoms.TTerm Model.Point -> Phantoms.TTerm Model.Position
-pointCoordinates x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Point"),
-        Core.projectionField = (Core.Name "coordinates")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 pointBbox :: Phantoms.TTerm Model.Point -> Phantoms.TTerm (Maybe Model.BoundingBox)
 pointBbox x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -741,21 +727,13 @@ pointBbox x =
         Core.projectionField = (Core.Name "bbox")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-pointWithCoordinates :: Phantoms.TTerm Model.Point -> Phantoms.TTerm Model.Position -> Phantoms.TTerm Model.Point
-pointWithCoordinates original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.Point"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "coordinates"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "bbox"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Point"),
-              Core.projectionField = (Core.Name "bbox")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+pointCoordinates :: Phantoms.TTerm Model.Point -> Phantoms.TTerm Model.Position
+pointCoordinates x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Point"),
+        Core.projectionField = (Core.Name "coordinates")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pointWithBbox :: Phantoms.TTerm Model.Point -> Phantoms.TTerm (Maybe Model.BoundingBox) -> Phantoms.TTerm Model.Point
 pointWithBbox original newVal =
@@ -773,6 +751,22 @@ pointWithBbox original newVal =
           Core.fieldName = (Core.Name "bbox"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+pointWithCoordinates :: Phantoms.TTerm Model.Point -> Phantoms.TTerm Model.Position -> Phantoms.TTerm Model.Point
+pointWithCoordinates original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.Point"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "coordinates"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "bbox"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Point"),
+              Core.projectionField = (Core.Name "bbox")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 polygon :: Phantoms.TTerm [Model.Position] -> Phantoms.TTerm (Maybe Model.BoundingBox) -> Phantoms.TTerm Model.Polygon
 polygon coordinates bbox =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -785,14 +779,6 @@ polygon coordinates bbox =
           Core.fieldName = (Core.Name "bbox"),
           Core.fieldTerm = (Phantoms.unTTerm bbox)}]}))
 
-polygonCoordinates :: Phantoms.TTerm Model.Polygon -> Phantoms.TTerm [Model.Position]
-polygonCoordinates x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Polygon"),
-        Core.projectionField = (Core.Name "coordinates")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 polygonBbox :: Phantoms.TTerm Model.Polygon -> Phantoms.TTerm (Maybe Model.BoundingBox)
 polygonBbox x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -801,21 +787,13 @@ polygonBbox x =
         Core.projectionField = (Core.Name "bbox")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-polygonWithCoordinates :: Phantoms.TTerm Model.Polygon -> Phantoms.TTerm [Model.Position] -> Phantoms.TTerm Model.Polygon
-polygonWithCoordinates original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.Polygon"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "coordinates"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "bbox"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Polygon"),
-              Core.projectionField = (Core.Name "bbox")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+polygonCoordinates :: Phantoms.TTerm Model.Polygon -> Phantoms.TTerm [Model.Position]
+polygonCoordinates x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Polygon"),
+        Core.projectionField = (Core.Name "coordinates")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 polygonWithBbox :: Phantoms.TTerm Model.Polygon -> Phantoms.TTerm (Maybe Model.BoundingBox) -> Phantoms.TTerm Model.Polygon
 polygonWithBbox original newVal =
@@ -833,6 +811,22 @@ polygonWithBbox original newVal =
           Core.fieldName = (Core.Name "bbox"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+polygonWithCoordinates :: Phantoms.TTerm Model.Polygon -> Phantoms.TTerm [Model.Position] -> Phantoms.TTerm Model.Polygon
+polygonWithCoordinates original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.Polygon"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "coordinates"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "bbox"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Polygon"),
+              Core.projectionField = (Core.Name "bbox")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 position :: Phantoms.TTerm Double -> Phantoms.TTerm Double -> Phantoms.TTerm (Maybe Double) -> Phantoms.TTerm Model.Position
 position latitude longitude altitude =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -847,6 +841,14 @@ position latitude longitude altitude =
         Core.Field {
           Core.fieldName = (Core.Name "altitude"),
           Core.fieldTerm = (Phantoms.unTTerm altitude)}]}))
+
+positionAltitude :: Phantoms.TTerm Model.Position -> Phantoms.TTerm (Maybe Double)
+positionAltitude x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Position"),
+        Core.projectionField = (Core.Name "altitude")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 positionLatitude :: Phantoms.TTerm Model.Position -> Phantoms.TTerm Double
 positionLatitude x =
@@ -864,13 +866,28 @@ positionLongitude x =
         Core.projectionField = (Core.Name "longitude")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-positionAltitude :: Phantoms.TTerm Model.Position -> Phantoms.TTerm (Maybe Double)
-positionAltitude x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Position"),
-        Core.projectionField = (Core.Name "altitude")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+positionWithAltitude :: Phantoms.TTerm Model.Position -> Phantoms.TTerm (Maybe Double) -> Phantoms.TTerm Model.Position
+positionWithAltitude original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.Position"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "latitude"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Position"),
+              Core.projectionField = (Core.Name "latitude")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "longitude"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Position"),
+              Core.projectionField = (Core.Name "longitude")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "altitude"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
 positionWithLatitude :: Phantoms.TTerm Model.Position -> Phantoms.TTerm Double -> Phantoms.TTerm Model.Position
 positionWithLatitude original newVal =
@@ -918,25 +935,8 @@ positionWithLongitude original newVal =
               Core.projectionField = (Core.Name "altitude")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-positionWithAltitude :: Phantoms.TTerm Model.Position -> Phantoms.TTerm (Maybe Double) -> Phantoms.TTerm Model.Position
-positionWithAltitude original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.org.geojson.model.Position"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "latitude"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Position"),
-              Core.projectionField = (Core.Name "latitude")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "longitude"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.org.geojson.model.Position"),
-              Core.projectionField = (Core.Name "longitude")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "altitude"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+unBoundingBox :: Phantoms.TTerm Model.BoundingBox -> Phantoms.TTerm [Model.CoordinateRange]
+unBoundingBox x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.org.geojson.model.BoundingBox")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))

@@ -33,126 +33,93 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-standardDerives :: [String]
-standardDerives =
-    [
-      "Clone",
-      "Debug",
-      "PartialEq",
-      "Eq",
-      "PartialOrd",
-      "Ord"]
+encodeElimination :: Context.Context -> t0 -> Core.Elimination -> Maybe Core.Term -> Either (Context.InContext Errors.Error) Syntax.Expression
+encodeElimination cx g elim marg =
+    case elim of
+      Core.EliminationRecord v0 ->
+        let fname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.projectionField v0))
+        in (Maybes.cases marg (Right (rustClosure [
+          "v"] (Syntax.ExpressionFieldAccess (Syntax.FieldAccessExpr {
+          Syntax.fieldAccessExprObject = (rustExprPath "v"),
+          Syntax.fieldAccessExprField = fname})))) (\arg -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Syntax.ExpressionFieldAccess (Syntax.FieldAccessExpr {
+          Syntax.fieldAccessExprObject = sarg,
+          Syntax.fieldAccessExprField = fname})))))
+      Core.EliminationUnion v0 ->
+        let tname = Formatting.capitalize (Names.localNameOf (Core.caseStatementTypeName v0))
+            caseFields = Core.caseStatementCases v0
+            defCase = Core.caseStatementDefault v0
+        in (Eithers.bind (Eithers.mapList (\cf ->
+          let cfname = Formatting.capitalize (Core.unName (Core.fieldName cf))
+              cfterm = Core.fieldTerm cf
+          in (Eithers.bind (encodeTerm cx g (Core.TermApplication (Core.Application {
+            Core.applicationFunction = cfterm,
+            Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))) (\armBody -> Right (Syntax.MatchArm {
+            Syntax.matchArmPattern = (Syntax.PatternTupleStruct (Syntax.TupleStructPattern {
+              Syntax.tupleStructPatternPath = Syntax.ExprPath {
+                Syntax.exprPathGlobal = False,
+                Syntax.exprPathSegments = [
+                  Syntax.PathSegment {
+                    Syntax.pathSegmentName = (Strings.cat2 (Strings.cat2 tname "::") cfname),
+                    Syntax.pathSegmentArguments = Syntax.GenericArgumentsNone}]},
+              Syntax.tupleStructPatternElements = [
+                Syntax.PatternIdentifier (Syntax.IdentifierPattern {
+                  Syntax.identifierPatternName = "v",
+                  Syntax.identifierPatternMutable = False,
+                  Syntax.identifierPatternAtPattern = Nothing})]})),
+            Syntax.matchArmGuard = Nothing,
+            Syntax.matchArmBody = armBody})))) caseFields) (\arms -> Eithers.bind (Maybes.cases defCase (Right arms) (\dt -> Eithers.bind (encodeTerm cx g (Core.TermApplication (Core.Application {
+          Core.applicationFunction = dt,
+          Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))) (\defBody -> Right (Lists.concat2 arms [
+          Syntax.MatchArm {
+            Syntax.matchArmPattern = Syntax.PatternWildcard,
+            Syntax.matchArmGuard = Nothing,
+            Syntax.matchArmBody = defBody}])))) (\allArms -> Maybes.cases marg (Right (rustClosure [
+          "v"] (Syntax.ExpressionMatch (Syntax.MatchExpr {
+          Syntax.matchExprScrutinee = (rustExprPath "v"),
+          Syntax.matchExprArms = allArms})))) (\arg -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Syntax.ExpressionMatch (Syntax.MatchExpr {
+          Syntax.matchExprScrutinee = sarg,
+          Syntax.matchExprArms = allArms})))))))
+      Core.EliminationWrap _ -> Maybes.cases marg (Right (rustClosure [
+        "v"] (Syntax.ExpressionTupleIndex (Syntax.TupleIndexExpr {
+        Syntax.tupleIndexExprTuple = (rustExprPath "v"),
+        Syntax.tupleIndexExprIndex = 0})))) (\arg -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Syntax.ExpressionTupleIndex (Syntax.TupleIndexExpr {
+        Syntax.tupleIndexExprTuple = sarg,
+        Syntax.tupleIndexExprIndex = 0}))))
 
-rustPath :: String -> Syntax.Type
-rustPath name =
-    Syntax.TypePath_ (Syntax.TypePath {
-      Syntax.typePathGlobal = False,
-      Syntax.typePathSegments = [
-        Syntax.PathSegment {
-          Syntax.pathSegmentName = name,
-          Syntax.pathSegmentArguments = Syntax.GenericArgumentsNone}]})
+encodeEnumVariant :: Context.Context -> t0 -> Core.FieldType -> Either (Context.InContext Errors.Error) Syntax.EnumVariant
+encodeEnumVariant cx g ft =
 
-rustPathSegmented :: [String] -> Syntax.Type
-rustPathSegmented segs =
-    Syntax.TypePath_ (Syntax.TypePath {
-      Syntax.typePathGlobal = False,
-      Syntax.typePathSegments = (Lists.map (\s -> Syntax.PathSegment {
-        Syntax.pathSegmentName = s,
-        Syntax.pathSegmentArguments = Syntax.GenericArgumentsNone}) segs)})
+      let fname = Core.unName (Core.fieldTypeName ft)
+          ftyp = Core.fieldTypeType ft
+          dtyp = Rewriting.deannotateType ftyp
+          isUnit =
+                  case dtyp of
+                    Core.TypeUnit -> True
+                    Core.TypeRecord v0 -> Lists.null v0
+                    _ -> False
+      in (Logic.ifElse isUnit (Right (Syntax.EnumVariant {
+        Syntax.enumVariantName = (Formatting.capitalize fname),
+        Syntax.enumVariantBody = Syntax.EnumVariantBodyUnit,
+        Syntax.enumVariantDoc = Nothing})) (case dtyp of
+        Core.TypeRecord v0 -> Eithers.bind (Eithers.mapList (encodeStructField cx g) v0) (\sfields -> Right (Syntax.EnumVariant {
+          Syntax.enumVariantName = (Formatting.capitalize fname),
+          Syntax.enumVariantBody = (Syntax.EnumVariantBodyStruct sfields),
+          Syntax.enumVariantDoc = Nothing}))
+        _ -> Eithers.bind (encodeType cx g ftyp) (\sftyp -> Right (Syntax.EnumVariant {
+          Syntax.enumVariantName = (Formatting.capitalize fname),
+          Syntax.enumVariantBody = (Syntax.EnumVariantBodyTuple [
+            sftyp]),
+          Syntax.enumVariantDoc = Nothing}))))
 
-rustApply1 :: String -> Syntax.Type -> Syntax.Type
-rustApply1 name arg =
-    Syntax.TypePath_ (Syntax.TypePath {
-      Syntax.typePathGlobal = False,
-      Syntax.typePathSegments = [
-        Syntax.PathSegment {
-          Syntax.pathSegmentName = name,
-          Syntax.pathSegmentArguments = (Syntax.GenericArgumentsAngleBracketed (Syntax.AngleBracketedArgs {
-            Syntax.angleBracketedArgsArgs = [
-              Syntax.GenericArgType arg]}))}]})
-
-rustApply2 :: String -> Syntax.Type -> Syntax.Type -> Syntax.Type
-rustApply2 name arg1 arg2 =
-    Syntax.TypePath_ (Syntax.TypePath {
-      Syntax.typePathGlobal = False,
-      Syntax.typePathSegments = [
-        Syntax.PathSegment {
-          Syntax.pathSegmentName = name,
-          Syntax.pathSegmentArguments = (Syntax.GenericArgumentsAngleBracketed (Syntax.AngleBracketedArgs {
-            Syntax.angleBracketedArgsArgs = [
-              Syntax.GenericArgType arg1,
-              (Syntax.GenericArgType arg2)]}))}]})
-
-rustUnit :: Syntax.Type
-rustUnit = Syntax.TypeUnit
-
-rustExprPath :: String -> Syntax.Expression
-rustExprPath name =
-    Syntax.ExpressionPath (Syntax.ExprPath {
-      Syntax.exprPathGlobal = False,
-      Syntax.exprPathSegments = [
-        Syntax.PathSegment {
-          Syntax.pathSegmentName = name,
-          Syntax.pathSegmentArguments = Syntax.GenericArgumentsNone}]})
-
-rustCall :: Syntax.Expression -> [Syntax.Expression] -> Syntax.Expression
-rustCall fun args =
-    Syntax.ExpressionCall (Syntax.CallExpr {
-      Syntax.callExprFunction = fun,
-      Syntax.callExprArgs = args})
-
-rustBlock :: [Syntax.Statement] -> Syntax.Expression -> Syntax.Expression
-rustBlock stmts expr =
-    Syntax.ExpressionBlock (Syntax.Block {
-      Syntax.blockStatements = stmts,
-      Syntax.blockExpression = (Just expr)})
-
-rustLetStmt :: String -> Syntax.Expression -> Syntax.Statement
-rustLetStmt name expr =
-    Syntax.StatementLet (Syntax.LetStatement {
-      Syntax.letStatementPattern = (Syntax.PatternIdentifier (Syntax.IdentifierPattern {
-        Syntax.identifierPatternName = name,
-        Syntax.identifierPatternMutable = False,
-        Syntax.identifierPatternAtPattern = Nothing})),
-      Syntax.letStatementMutable = False,
-      Syntax.letStatementType = Nothing,
-      Syntax.letStatementInit = (Just expr)})
-
-rustClosure :: [String] -> Syntax.Expression -> Syntax.Expression
-rustClosure params body =
-    Syntax.ExpressionClosure (Syntax.ClosureExpr {
-      Syntax.closureExprMove = False,
-      Syntax.closureExprParams = (Lists.map (\p -> Syntax.ClosureParam {
-        Syntax.closureParamPattern = (Syntax.PatternIdentifier (Syntax.IdentifierPattern {
-          Syntax.identifierPatternName = p,
-          Syntax.identifierPatternMutable = False,
-          Syntax.identifierPatternAtPattern = Nothing})),
-        Syntax.closureParamType = Nothing}) params),
-      Syntax.closureExprReturnType = Nothing,
-      Syntax.closureExprBody = body})
-
-encodeLiteralType :: Core.LiteralType -> Syntax.Type
-encodeLiteralType lt =
-    case lt of
-      Core.LiteralTypeBinary -> rustApply1 "Vec" (rustPath "u8")
-      Core.LiteralTypeBoolean -> rustPath "bool"
-      Core.LiteralTypeFloat v0 -> case v0 of
-        Core.FloatTypeBigfloat -> rustPath "f64"
-        Core.FloatTypeFloat32 -> rustPath "f32"
-        Core.FloatTypeFloat64 -> rustPath "f64"
-      Core.LiteralTypeInteger v0 -> case v0 of
-        Core.IntegerTypeBigint -> rustPathSegmented [
-          "num",
-          "BigInt"]
-        Core.IntegerTypeInt8 -> rustPath "i8"
-        Core.IntegerTypeInt16 -> rustPath "i16"
-        Core.IntegerTypeInt32 -> rustPath "i32"
-        Core.IntegerTypeInt64 -> rustPath "i64"
-        Core.IntegerTypeUint8 -> rustPath "u8"
-        Core.IntegerTypeUint16 -> rustPath "u16"
-        Core.IntegerTypeUint32 -> rustPath "u32"
-        Core.IntegerTypeUint64 -> rustPath "u64"
-      Core.LiteralTypeString -> rustPath "String"
+encodeFunction :: Context.Context -> t0 -> Core.Function -> Either (Context.InContext Errors.Error) Syntax.Expression
+encodeFunction cx g fun =
+    case fun of
+      Core.FunctionLambda v0 ->
+        let param = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.lambdaParameter v0))
+        in (Eithers.bind (encodeTerm cx g (Core.lambdaBody v0)) (\body -> Right (rustClosure [
+          param] body)))
+      Core.FunctionPrimitive v0 -> Right (rustExprPath (Core.unName v0))
+      Core.FunctionElimination v0 -> encodeElimination cx g v0 Nothing
 
 encodeLiteral :: Core.Literal -> Syntax.Expression
 encodeLiteral lit =
@@ -198,45 +165,39 @@ encodeLiteral lit =
           Syntax.integerLiteralValue = v1,
           Syntax.integerLiteralSuffix = Nothing}))
 
-encodeType :: Context.Context -> t0 -> Core.Type -> Either (Context.InContext Errors.Error) Syntax.Type
-encodeType cx g t =
+encodeLiteralType :: Core.LiteralType -> Syntax.Type
+encodeLiteralType lt =
+    case lt of
+      Core.LiteralTypeBinary -> rustApply1 "Vec" (rustPath "u8")
+      Core.LiteralTypeBoolean -> rustPath "bool"
+      Core.LiteralTypeFloat v0 -> case v0 of
+        Core.FloatTypeBigfloat -> rustPath "f64"
+        Core.FloatTypeFloat32 -> rustPath "f32"
+        Core.FloatTypeFloat64 -> rustPath "f64"
+      Core.LiteralTypeInteger v0 -> case v0 of
+        Core.IntegerTypeBigint -> rustPathSegmented [
+          "num",
+          "BigInt"]
+        Core.IntegerTypeInt8 -> rustPath "i8"
+        Core.IntegerTypeInt16 -> rustPath "i16"
+        Core.IntegerTypeInt32 -> rustPath "i32"
+        Core.IntegerTypeInt64 -> rustPath "i64"
+        Core.IntegerTypeUint8 -> rustPath "u8"
+        Core.IntegerTypeUint16 -> rustPath "u16"
+        Core.IntegerTypeUint32 -> rustPath "u32"
+        Core.IntegerTypeUint64 -> rustPath "u64"
+      Core.LiteralTypeString -> rustPath "String"
 
-      let typ = Rewriting.deannotateType t
-      in case typ of
-        Core.TypeAnnotated v0 -> encodeType cx g (Core.annotatedTypeBody v0)
-        Core.TypeApplication v0 -> encodeType cx g (Core.applicationTypeFunction v0)
-        Core.TypeUnit -> Right rustUnit
-        Core.TypeVoid -> Right rustUnit
-        Core.TypeLiteral v0 -> Right (encodeLiteralType v0)
-        Core.TypeList v0 -> Eithers.map (\enc -> rustApply1 "Vec" enc) (encodeType cx g v0)
-        Core.TypeSet v0 -> Eithers.map (\enc -> rustApply1 "BTreeSet" enc) (encodeType cx g v0)
-        Core.TypeMap v0 -> Eithers.bind (encodeType cx g (Core.mapTypeKeys v0)) (\kt -> Eithers.bind (encodeType cx g (Core.mapTypeValues v0)) (\vt -> Right (rustApply2 "BTreeMap" kt vt)))
-        Core.TypeMaybe v0 -> Eithers.map (\enc -> rustApply1 "Option" enc) (encodeType cx g v0)
-        Core.TypeEither v0 -> Eithers.bind (encodeType cx g (Core.eitherTypeLeft v0)) (\lt -> Eithers.bind (encodeType cx g (Core.eitherTypeRight v0)) (\rt -> Right (rustApply2 "Either" lt rt)))
-        Core.TypePair v0 -> Eithers.bind (encodeType cx g (Core.pairTypeFirst v0)) (\ft -> Eithers.bind (encodeType cx g (Core.pairTypeSecond v0)) (\st -> Right (Syntax.TypeTuple [
-          ft,
-          st])))
-        Core.TypeFunction v0 -> Eithers.bind (encodeType cx g (Core.functionTypeDomain v0)) (\dom -> Eithers.bind (encodeType cx g (Core.functionTypeCodomain v0)) (\cod -> Right (rustApply1 "Box" (Syntax.TypeDynTrait [
-          Syntax.TypeParamBoundTrait (Syntax.TypePath {
-            Syntax.typePathGlobal = False,
-            Syntax.typePathSegments = [
-              Syntax.PathSegment {
-                Syntax.pathSegmentName = "Fn",
-                Syntax.pathSegmentArguments = (Syntax.GenericArgumentsParenthesized (Syntax.ParenthesizedArgs {
-                  Syntax.parenthesizedArgsInputs = [
-                    dom],
-                  Syntax.parenthesizedArgsOutput = (Just cod)}))}]})]))))
-        Core.TypeRecord _ -> Left (Context.InContext {
-          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected anonymous record type")),
-          Context.inContextContext = cx})
-        Core.TypeUnion _ -> Left (Context.InContext {
-          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected anonymous union type")),
-          Context.inContextContext = cx})
-        Core.TypeWrap _ -> Left (Context.InContext {
-          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected anonymous wrap type")),
-          Context.inContextContext = cx})
-        Core.TypeVariable v0 -> Right (rustPath (Formatting.capitalize (Core.unName v0)))
-        Core.TypeForall v0 -> encodeType cx g (Core.forallTypeBody v0)
+encodeStructField :: Context.Context -> t0 -> Core.FieldType -> Either (Context.InContext Errors.Error) Syntax.StructField
+encodeStructField cx g ft =
+
+      let fname = Core.unName (Core.fieldTypeName ft)
+          ftyp = Core.fieldTypeType ft
+      in (Eithers.bind (encodeType cx g ftyp) (\sftyp -> Right (Syntax.StructField {
+        Syntax.structFieldName = (Formatting.convertCaseCamelToLowerSnake (Formatting.sanitizeWithUnderscores Language.rustReservedWords fname)),
+        Syntax.structFieldType = sftyp,
+        Syntax.structFieldPublic = True,
+        Syntax.structFieldDoc = Nothing})))
 
 encodeTerm :: Context.Context -> t0 -> Core.Term -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeTerm cx g term =
@@ -307,104 +268,70 @@ encodeTerm cx g term =
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected term variant")),
         Context.inContextContext = cx})
 
-encodeFunction :: Context.Context -> t0 -> Core.Function -> Either (Context.InContext Errors.Error) Syntax.Expression
-encodeFunction cx g fun =
-    case fun of
-      Core.FunctionLambda v0 ->
-        let param = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.lambdaParameter v0))
-        in (Eithers.bind (encodeTerm cx g (Core.lambdaBody v0)) (\body -> Right (rustClosure [
-          param] body)))
-      Core.FunctionPrimitive v0 -> Right (rustExprPath (Core.unName v0))
-      Core.FunctionElimination v0 -> encodeElimination cx g v0 Nothing
+encodeTermDefinition :: Context.Context -> t0 -> Module.TermDefinition -> Either (Context.InContext Errors.Error) Syntax.ItemWithComments
+encodeTermDefinition cx g tdef =
 
-encodeElimination :: Context.Context -> t0 -> Core.Elimination -> Maybe Core.Term -> Either (Context.InContext Errors.Error) Syntax.Expression
-encodeElimination cx g elim marg =
-    case elim of
-      Core.EliminationRecord v0 ->
-        let fname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.projectionField v0))
-        in (Maybes.cases marg (Right (rustClosure [
-          "v"] (Syntax.ExpressionFieldAccess (Syntax.FieldAccessExpr {
-          Syntax.fieldAccessExprObject = (rustExprPath "v"),
-          Syntax.fieldAccessExprField = fname})))) (\arg -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Syntax.ExpressionFieldAccess (Syntax.FieldAccessExpr {
-          Syntax.fieldAccessExprObject = sarg,
-          Syntax.fieldAccessExprField = fname})))))
-      Core.EliminationUnion v0 ->
-        let tname = Formatting.capitalize (Names.localNameOf (Core.caseStatementTypeName v0))
-            caseFields = Core.caseStatementCases v0
-            defCase = Core.caseStatementDefault v0
-        in (Eithers.bind (Eithers.mapList (\cf ->
-          let cfname = Formatting.capitalize (Core.unName (Core.fieldName cf))
-              cfterm = Core.fieldTerm cf
-          in (Eithers.bind (encodeTerm cx g (Core.TermApplication (Core.Application {
-            Core.applicationFunction = cfterm,
-            Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))) (\armBody -> Right (Syntax.MatchArm {
-            Syntax.matchArmPattern = (Syntax.PatternTupleStruct (Syntax.TupleStructPattern {
-              Syntax.tupleStructPatternPath = Syntax.ExprPath {
-                Syntax.exprPathGlobal = False,
-                Syntax.exprPathSegments = [
-                  Syntax.PathSegment {
-                    Syntax.pathSegmentName = (Strings.cat2 (Strings.cat2 tname "::") cfname),
-                    Syntax.pathSegmentArguments = Syntax.GenericArgumentsNone}]},
-              Syntax.tupleStructPatternElements = [
-                Syntax.PatternIdentifier (Syntax.IdentifierPattern {
-                  Syntax.identifierPatternName = "v",
-                  Syntax.identifierPatternMutable = False,
-                  Syntax.identifierPatternAtPattern = Nothing})]})),
-            Syntax.matchArmGuard = Nothing,
-            Syntax.matchArmBody = armBody})))) caseFields) (\arms -> Eithers.bind (Maybes.cases defCase (Right arms) (\dt -> Eithers.bind (encodeTerm cx g (Core.TermApplication (Core.Application {
-          Core.applicationFunction = dt,
-          Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))) (\defBody -> Right (Lists.concat2 arms [
-          Syntax.MatchArm {
-            Syntax.matchArmPattern = Syntax.PatternWildcard,
-            Syntax.matchArmGuard = Nothing,
-            Syntax.matchArmBody = defBody}])))) (\allArms -> Maybes.cases marg (Right (rustClosure [
-          "v"] (Syntax.ExpressionMatch (Syntax.MatchExpr {
-          Syntax.matchExprScrutinee = (rustExprPath "v"),
-          Syntax.matchExprArms = allArms})))) (\arg -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Syntax.ExpressionMatch (Syntax.MatchExpr {
-          Syntax.matchExprScrutinee = sarg,
-          Syntax.matchExprArms = allArms})))))))
-      Core.EliminationWrap _ -> Maybes.cases marg (Right (rustClosure [
-        "v"] (Syntax.ExpressionTupleIndex (Syntax.TupleIndexExpr {
-        Syntax.tupleIndexExprTuple = (rustExprPath "v"),
-        Syntax.tupleIndexExprIndex = 0})))) (\arg -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Syntax.ExpressionTupleIndex (Syntax.TupleIndexExpr {
-        Syntax.tupleIndexExprTuple = sarg,
-        Syntax.tupleIndexExprIndex = 0}))))
+      let name = Module.termDefinitionName tdef
+          term = Module.termDefinitionTerm tdef
+          lname = Formatting.convertCaseCamelToLowerSnake (Names.localNameOf name)
+          typ = Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeType (Module.termDefinitionType tdef)
+      in (Eithers.bind (encodeTerm cx g term) (\body -> Eithers.bind (encodeType cx g typ) (\retType -> Right (Syntax.ItemWithComments {
+        Syntax.itemWithCommentsDoc = Nothing,
+        Syntax.itemWithCommentsVisibility = Syntax.VisibilityPublic,
+        Syntax.itemWithCommentsItem = (Syntax.ItemFn (Syntax.FnDef {
+          Syntax.fnDefName = lname,
+          Syntax.fnDefGenerics = [],
+          Syntax.fnDefWhereClause = Nothing,
+          Syntax.fnDefParams = [],
+          Syntax.fnDefReturnType = (Just retType),
+          Syntax.fnDefBody = Syntax.Block {
+            Syntax.blockStatements = [],
+            Syntax.blockExpression = (Just body)},
+          Syntax.fnDefPublic = True,
+          Syntax.fnDefAsync = False,
+          Syntax.fnDefConst = False,
+          Syntax.fnDefUnsafe = False,
+          Syntax.fnDefDoc = Nothing}))}))))
 
-encodeStructField :: Context.Context -> t0 -> Core.FieldType -> Either (Context.InContext Errors.Error) Syntax.StructField
-encodeStructField cx g ft =
+encodeType :: Context.Context -> t0 -> Core.Type -> Either (Context.InContext Errors.Error) Syntax.Type
+encodeType cx g t =
 
-      let fname = Core.unName (Core.fieldTypeName ft)
-          ftyp = Core.fieldTypeType ft
-      in (Eithers.bind (encodeType cx g ftyp) (\sftyp -> Right (Syntax.StructField {
-        Syntax.structFieldName = (Formatting.convertCaseCamelToLowerSnake (Formatting.sanitizeWithUnderscores Language.rustReservedWords fname)),
-        Syntax.structFieldType = sftyp,
-        Syntax.structFieldPublic = True,
-        Syntax.structFieldDoc = Nothing})))
-
-encodeEnumVariant :: Context.Context -> t0 -> Core.FieldType -> Either (Context.InContext Errors.Error) Syntax.EnumVariant
-encodeEnumVariant cx g ft =
-
-      let fname = Core.unName (Core.fieldTypeName ft)
-          ftyp = Core.fieldTypeType ft
-          dtyp = Rewriting.deannotateType ftyp
-          isUnit =
-                  case dtyp of
-                    Core.TypeUnit -> True
-                    Core.TypeRecord v0 -> Lists.null v0
-                    _ -> False
-      in (Logic.ifElse isUnit (Right (Syntax.EnumVariant {
-        Syntax.enumVariantName = (Formatting.capitalize fname),
-        Syntax.enumVariantBody = Syntax.EnumVariantBodyUnit,
-        Syntax.enumVariantDoc = Nothing})) (case dtyp of
-        Core.TypeRecord v0 -> Eithers.bind (Eithers.mapList (encodeStructField cx g) v0) (\sfields -> Right (Syntax.EnumVariant {
-          Syntax.enumVariantName = (Formatting.capitalize fname),
-          Syntax.enumVariantBody = (Syntax.EnumVariantBodyStruct sfields),
-          Syntax.enumVariantDoc = Nothing}))
-        _ -> Eithers.bind (encodeType cx g ftyp) (\sftyp -> Right (Syntax.EnumVariant {
-          Syntax.enumVariantName = (Formatting.capitalize fname),
-          Syntax.enumVariantBody = (Syntax.EnumVariantBodyTuple [
-            sftyp]),
-          Syntax.enumVariantDoc = Nothing}))))
+      let typ = Rewriting.deannotateType t
+      in case typ of
+        Core.TypeAnnotated v0 -> encodeType cx g (Core.annotatedTypeBody v0)
+        Core.TypeApplication v0 -> encodeType cx g (Core.applicationTypeFunction v0)
+        Core.TypeUnit -> Right rustUnit
+        Core.TypeVoid -> Right rustUnit
+        Core.TypeLiteral v0 -> Right (encodeLiteralType v0)
+        Core.TypeList v0 -> Eithers.map (\enc -> rustApply1 "Vec" enc) (encodeType cx g v0)
+        Core.TypeSet v0 -> Eithers.map (\enc -> rustApply1 "BTreeSet" enc) (encodeType cx g v0)
+        Core.TypeMap v0 -> Eithers.bind (encodeType cx g (Core.mapTypeKeys v0)) (\kt -> Eithers.bind (encodeType cx g (Core.mapTypeValues v0)) (\vt -> Right (rustApply2 "BTreeMap" kt vt)))
+        Core.TypeMaybe v0 -> Eithers.map (\enc -> rustApply1 "Option" enc) (encodeType cx g v0)
+        Core.TypeEither v0 -> Eithers.bind (encodeType cx g (Core.eitherTypeLeft v0)) (\lt -> Eithers.bind (encodeType cx g (Core.eitherTypeRight v0)) (\rt -> Right (rustApply2 "Either" lt rt)))
+        Core.TypePair v0 -> Eithers.bind (encodeType cx g (Core.pairTypeFirst v0)) (\ft -> Eithers.bind (encodeType cx g (Core.pairTypeSecond v0)) (\st -> Right (Syntax.TypeTuple [
+          ft,
+          st])))
+        Core.TypeFunction v0 -> Eithers.bind (encodeType cx g (Core.functionTypeDomain v0)) (\dom -> Eithers.bind (encodeType cx g (Core.functionTypeCodomain v0)) (\cod -> Right (rustApply1 "Box" (Syntax.TypeDynTrait [
+          Syntax.TypeParamBoundTrait (Syntax.TypePath {
+            Syntax.typePathGlobal = False,
+            Syntax.typePathSegments = [
+              Syntax.PathSegment {
+                Syntax.pathSegmentName = "Fn",
+                Syntax.pathSegmentArguments = (Syntax.GenericArgumentsParenthesized (Syntax.ParenthesizedArgs {
+                  Syntax.parenthesizedArgsInputs = [
+                    dom],
+                  Syntax.parenthesizedArgsOutput = (Just cod)}))}]})]))))
+        Core.TypeRecord _ -> Left (Context.InContext {
+          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected anonymous record type")),
+          Context.inContextContext = cx})
+        Core.TypeUnion _ -> Left (Context.InContext {
+          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected anonymous union type")),
+          Context.inContextContext = cx})
+        Core.TypeWrap _ -> Left (Context.InContext {
+          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected anonymous wrap type")),
+          Context.inContextContext = cx})
+        Core.TypeVariable v0 -> Right (rustPath (Formatting.capitalize (Core.unName v0)))
+        Core.TypeForall v0 -> encodeType cx g (Core.forallTypeBody v0)
 
 encodeTypeDefinition :: Context.Context -> t0 -> Module.TypeDefinition -> Either (Context.InContext Errors.Error) Syntax.ItemWithComments
 encodeTypeDefinition cx g tdef =
@@ -457,31 +384,6 @@ encodeTypeDefinition cx g tdef =
         Syntax.itemWithCommentsVisibility = Syntax.VisibilityPublic,
         Syntax.itemWithCommentsItem = item})))
 
-encodeTermDefinition :: Context.Context -> t0 -> Module.TermDefinition -> Either (Context.InContext Errors.Error) Syntax.ItemWithComments
-encodeTermDefinition cx g tdef =
-
-      let name = Module.termDefinitionName tdef
-          term = Module.termDefinitionTerm tdef
-          lname = Formatting.convertCaseCamelToLowerSnake (Names.localNameOf name)
-          typ = Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeType (Module.termDefinitionType tdef)
-      in (Eithers.bind (encodeTerm cx g term) (\body -> Eithers.bind (encodeType cx g typ) (\retType -> Right (Syntax.ItemWithComments {
-        Syntax.itemWithCommentsDoc = Nothing,
-        Syntax.itemWithCommentsVisibility = Syntax.VisibilityPublic,
-        Syntax.itemWithCommentsItem = (Syntax.ItemFn (Syntax.FnDef {
-          Syntax.fnDefName = lname,
-          Syntax.fnDefGenerics = [],
-          Syntax.fnDefWhereClause = Nothing,
-          Syntax.fnDefParams = [],
-          Syntax.fnDefReturnType = (Just retType),
-          Syntax.fnDefBody = Syntax.Block {
-            Syntax.blockStatements = [],
-            Syntax.blockExpression = (Just body)},
-          Syntax.fnDefPublic = True,
-          Syntax.fnDefAsync = False,
-          Syntax.fnDefConst = False,
-          Syntax.fnDefUnsafe = False,
-          Syntax.fnDefDoc = Nothing}))}))))
-
 moduleToRust :: Module.Module -> [Module.Definition] -> Context.Context -> t0 -> Either (Context.InContext Errors.Error) (M.Map String String)
 moduleToRust mod defs cx g =
 
@@ -495,3 +397,101 @@ moduleToRust mod defs cx g =
             code = Serialization.printExpr (Serialization.parenthesize (Serde.crateToExpr crate))
             filePath = Names.namespaceToFilePath Util.CaseConventionLowerSnake (Module.FileExtension "rs") (Module.moduleNamespace mod)
         in (Right (Maps.singleton filePath code)))))
+
+rustApply1 :: String -> Syntax.Type -> Syntax.Type
+rustApply1 name arg =
+    Syntax.TypePath_ (Syntax.TypePath {
+      Syntax.typePathGlobal = False,
+      Syntax.typePathSegments = [
+        Syntax.PathSegment {
+          Syntax.pathSegmentName = name,
+          Syntax.pathSegmentArguments = (Syntax.GenericArgumentsAngleBracketed (Syntax.AngleBracketedArgs {
+            Syntax.angleBracketedArgsArgs = [
+              Syntax.GenericArgType arg]}))}]})
+
+rustApply2 :: String -> Syntax.Type -> Syntax.Type -> Syntax.Type
+rustApply2 name arg1 arg2 =
+    Syntax.TypePath_ (Syntax.TypePath {
+      Syntax.typePathGlobal = False,
+      Syntax.typePathSegments = [
+        Syntax.PathSegment {
+          Syntax.pathSegmentName = name,
+          Syntax.pathSegmentArguments = (Syntax.GenericArgumentsAngleBracketed (Syntax.AngleBracketedArgs {
+            Syntax.angleBracketedArgsArgs = [
+              Syntax.GenericArgType arg1,
+              (Syntax.GenericArgType arg2)]}))}]})
+
+rustBlock :: [Syntax.Statement] -> Syntax.Expression -> Syntax.Expression
+rustBlock stmts expr =
+    Syntax.ExpressionBlock (Syntax.Block {
+      Syntax.blockStatements = stmts,
+      Syntax.blockExpression = (Just expr)})
+
+rustCall :: Syntax.Expression -> [Syntax.Expression] -> Syntax.Expression
+rustCall fun args =
+    Syntax.ExpressionCall (Syntax.CallExpr {
+      Syntax.callExprFunction = fun,
+      Syntax.callExprArgs = args})
+
+rustClosure :: [String] -> Syntax.Expression -> Syntax.Expression
+rustClosure params body =
+    Syntax.ExpressionClosure (Syntax.ClosureExpr {
+      Syntax.closureExprMove = False,
+      Syntax.closureExprParams = (Lists.map (\p -> Syntax.ClosureParam {
+        Syntax.closureParamPattern = (Syntax.PatternIdentifier (Syntax.IdentifierPattern {
+          Syntax.identifierPatternName = p,
+          Syntax.identifierPatternMutable = False,
+          Syntax.identifierPatternAtPattern = Nothing})),
+        Syntax.closureParamType = Nothing}) params),
+      Syntax.closureExprReturnType = Nothing,
+      Syntax.closureExprBody = body})
+
+rustExprPath :: String -> Syntax.Expression
+rustExprPath name =
+    Syntax.ExpressionPath (Syntax.ExprPath {
+      Syntax.exprPathGlobal = False,
+      Syntax.exprPathSegments = [
+        Syntax.PathSegment {
+          Syntax.pathSegmentName = name,
+          Syntax.pathSegmentArguments = Syntax.GenericArgumentsNone}]})
+
+rustLetStmt :: String -> Syntax.Expression -> Syntax.Statement
+rustLetStmt name expr =
+    Syntax.StatementLet (Syntax.LetStatement {
+      Syntax.letStatementPattern = (Syntax.PatternIdentifier (Syntax.IdentifierPattern {
+        Syntax.identifierPatternName = name,
+        Syntax.identifierPatternMutable = False,
+        Syntax.identifierPatternAtPattern = Nothing})),
+      Syntax.letStatementMutable = False,
+      Syntax.letStatementType = Nothing,
+      Syntax.letStatementInit = (Just expr)})
+
+rustPath :: String -> Syntax.Type
+rustPath name =
+    Syntax.TypePath_ (Syntax.TypePath {
+      Syntax.typePathGlobal = False,
+      Syntax.typePathSegments = [
+        Syntax.PathSegment {
+          Syntax.pathSegmentName = name,
+          Syntax.pathSegmentArguments = Syntax.GenericArgumentsNone}]})
+
+rustPathSegmented :: [String] -> Syntax.Type
+rustPathSegmented segs =
+    Syntax.TypePath_ (Syntax.TypePath {
+      Syntax.typePathGlobal = False,
+      Syntax.typePathSegments = (Lists.map (\s -> Syntax.PathSegment {
+        Syntax.pathSegmentName = s,
+        Syntax.pathSegmentArguments = Syntax.GenericArgumentsNone}) segs)})
+
+rustUnit :: Syntax.Type
+rustUnit = Syntax.TypeUnit
+
+standardDerives :: [String]
+standardDerives =
+    [
+      "Clone",
+      "Debug",
+      "PartialEq",
+      "Eq",
+      "PartialOrd",
+      "Ord"]

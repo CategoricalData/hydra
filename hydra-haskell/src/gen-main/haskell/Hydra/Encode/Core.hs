@@ -108,18 +108,6 @@ eitherType x =
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (type_ (Core.eitherTypeRight x))}]})
 
-pairType :: Core.PairType -> Core.Term
-pairType x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.core.PairType"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "first"),
-          Core.fieldTerm = (type_ (Core.pairTypeFirst x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "second"),
-          Core.fieldTerm = (type_ (Core.pairTypeSecond x))}]})
-
 elimination :: Core.Elimination -> Core.Term
 elimination x =
     case x of
@@ -456,6 +444,18 @@ name x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
       Core.wrappedTermBody = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Core.unName x))})
+
+pairType :: Core.PairType -> Core.Term
+pairType x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.core.PairType"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "first"),
+          Core.fieldTerm = (type_ (Core.pairTypeFirst x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "second"),
+          Core.fieldTerm = (type_ (Core.pairTypeSecond x))}]})
 
 projection :: Core.Projection -> Core.Term
 projection x =

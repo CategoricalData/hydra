@@ -53,20 +53,20 @@ enumDefinitionName x =
         Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-enumDefinitionValues :: Phantoms.TTerm Proto3.EnumDefinition -> Phantoms.TTerm [Proto3.EnumValue]
-enumDefinitionValues x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.EnumDefinition"),
-        Core.projectionField = (Core.Name "values")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 enumDefinitionOptions :: Phantoms.TTerm Proto3.EnumDefinition -> Phantoms.TTerm [Proto3.Option]
 enumDefinitionOptions x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.EnumDefinition"),
         Core.projectionField = (Core.Name "options")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+enumDefinitionValues :: Phantoms.TTerm Proto3.EnumDefinition -> Phantoms.TTerm [Proto3.EnumValue]
+enumDefinitionValues x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.EnumDefinition"),
+        Core.projectionField = (Core.Name "values")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 enumDefinitionWithName :: Phantoms.TTerm Proto3.EnumDefinition -> Phantoms.TTerm Proto3.TypeName -> Phantoms.TTerm Proto3.EnumDefinition
@@ -84,29 +84,6 @@ enumDefinitionWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.EnumDefinition"),
               Core.projectionField = (Core.Name "values")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "options"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.EnumDefinition"),
-              Core.projectionField = (Core.Name "options")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-enumDefinitionWithValues :: Phantoms.TTerm Proto3.EnumDefinition -> Phantoms.TTerm [Proto3.EnumValue] -> Phantoms.TTerm Proto3.EnumDefinition
-enumDefinitionWithValues original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.protobuf.proto3.EnumDefinition"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.EnumDefinition"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "values"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -138,6 +115,29 @@ enumDefinitionWithOptions original newVal =
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+enumDefinitionWithValues :: Phantoms.TTerm Proto3.EnumDefinition -> Phantoms.TTerm [Proto3.EnumValue] -> Phantoms.TTerm Proto3.EnumDefinition
+enumDefinitionWithValues original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.protobuf.proto3.EnumDefinition"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.EnumDefinition"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "values"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "options"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.EnumDefinition"),
+              Core.projectionField = (Core.Name "options")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 enumValue :: Phantoms.TTerm Proto3.EnumValueName -> Phantoms.TTerm Int -> Phantoms.TTerm [Proto3.Option] -> Phantoms.TTerm Proto3.EnumValue
 enumValue name number options =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -160,6 +160,12 @@ enumValueName x =
         Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.EnumValue"),
         Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+enumValueName_ :: Phantoms.TTerm String -> Phantoms.TTerm Proto3.EnumValueName
+enumValueName_ x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.protobuf.proto3.EnumValueName"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
 enumValueNumber :: Phantoms.TTerm Proto3.EnumValue -> Phantoms.TTerm Int
 enumValueNumber x =
@@ -246,18 +252,6 @@ enumValueWithOptions original newVal =
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-enumValueName_ :: Phantoms.TTerm String -> Phantoms.TTerm Proto3.EnumValueName
-enumValueName_ x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.protobuf.proto3.EnumValueName"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unEnumValueName :: Phantoms.TTerm Proto3.EnumValueName -> Phantoms.TTerm String
-unEnumValueName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.protobuf.proto3.EnumValueName")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 field :: Phantoms.TTerm Proto3.FieldName -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Proto3.FieldType -> Phantoms.TTerm Int -> Phantoms.TTerm [Proto3.Option] -> Phantoms.TTerm Proto3.Field
 field name jsonName type_ number options =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -279,14 +273,6 @@ field name jsonName type_ number options =
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Phantoms.unTTerm options)}]}))
 
-fieldName :: Phantoms.TTerm Proto3.Field -> Phantoms.TTerm Proto3.FieldName
-fieldName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.Field"),
-        Core.projectionField = (Core.Name "name")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 fieldJsonName :: Phantoms.TTerm Proto3.Field -> Phantoms.TTerm (Maybe String)
 fieldJsonName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -295,13 +281,19 @@ fieldJsonName x =
         Core.projectionField = (Core.Name "jsonName")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-fieldType :: Phantoms.TTerm Proto3.Field -> Phantoms.TTerm Proto3.FieldType
-fieldType x =
+fieldName :: Phantoms.TTerm Proto3.Field -> Phantoms.TTerm Proto3.FieldName
+fieldName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.Field"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+fieldName_ :: Phantoms.TTerm String -> Phantoms.TTerm Proto3.FieldName
+fieldName_ x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.protobuf.proto3.FieldName"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
 fieldNumber :: Phantoms.TTerm Proto3.Field -> Phantoms.TTerm Int
 fieldNumber x =
@@ -319,42 +311,45 @@ fieldOptions x =
         Core.projectionField = (Core.Name "options")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-fieldWithName :: Phantoms.TTerm Proto3.Field -> Phantoms.TTerm Proto3.FieldName -> Phantoms.TTerm Proto3.Field
-fieldWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.protobuf.proto3.Field"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "jsonName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.Field"),
-              Core.projectionField = (Core.Name "jsonName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.Field"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "number"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.Field"),
-              Core.projectionField = (Core.Name "number")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "options"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.Field"),
-              Core.projectionField = (Core.Name "options")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+fieldType :: Phantoms.TTerm Proto3.Field -> Phantoms.TTerm Proto3.FieldType
+fieldType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.Field"),
+        Core.projectionField = (Core.Name "type")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+fieldTypeMap :: Phantoms.TTerm Proto3.MapType -> Phantoms.TTerm Proto3.FieldType
+fieldTypeMap x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.FieldType"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "map"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+fieldTypeOneof :: Phantoms.TTerm [Proto3.Field] -> Phantoms.TTerm Proto3.FieldType
+fieldTypeOneof x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.FieldType"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "oneof"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+fieldTypeRepeated :: Phantoms.TTerm Proto3.SimpleType -> Phantoms.TTerm Proto3.FieldType
+fieldTypeRepeated x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.FieldType"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "repeated"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+fieldTypeSimple :: Phantoms.TTerm Proto3.SimpleType -> Phantoms.TTerm Proto3.FieldType
+fieldTypeSimple x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.FieldType"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "simple"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 fieldWithJsonName :: Phantoms.TTerm Proto3.Field -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Proto3.Field
 fieldWithJsonName original newVal =
@@ -393,18 +388,14 @@ fieldWithJsonName original newVal =
               Core.projectionField = (Core.Name "options")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-fieldWithType :: Phantoms.TTerm Proto3.Field -> Phantoms.TTerm Proto3.FieldType -> Phantoms.TTerm Proto3.Field
-fieldWithType original newVal =
+fieldWithName :: Phantoms.TTerm Proto3.Field -> Phantoms.TTerm Proto3.FieldName -> Phantoms.TTerm Proto3.Field
+fieldWithName original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.ext.protobuf.proto3.Field"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.Field"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "jsonName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -414,7 +405,11 @@ fieldWithType original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.Field"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "number"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -504,61 +499,48 @@ fieldWithOptions original newVal =
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-fieldName_ :: Phantoms.TTerm String -> Phantoms.TTerm Proto3.FieldName
-fieldName_ x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.protobuf.proto3.FieldName"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unFieldName :: Phantoms.TTerm Proto3.FieldName -> Phantoms.TTerm String
-unFieldName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.protobuf.proto3.FieldName")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-fieldTypeMap :: Phantoms.TTerm Proto3.MapType -> Phantoms.TTerm Proto3.FieldType
-fieldTypeMap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.FieldType"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "map"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
-fieldTypeOneof :: Phantoms.TTerm [Proto3.Field] -> Phantoms.TTerm Proto3.FieldType
-fieldTypeOneof x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.FieldType"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "oneof"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
-fieldTypeRepeated :: Phantoms.TTerm Proto3.SimpleType -> Phantoms.TTerm Proto3.FieldType
-fieldTypeRepeated x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.FieldType"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "repeated"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
-fieldTypeSimple :: Phantoms.TTerm Proto3.SimpleType -> Phantoms.TTerm Proto3.FieldType
-fieldTypeSimple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.FieldType"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "simple"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+fieldWithType :: Phantoms.TTerm Proto3.Field -> Phantoms.TTerm Proto3.FieldType -> Phantoms.TTerm Proto3.Field
+fieldWithType original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.protobuf.proto3.Field"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.Field"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "jsonName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.Field"),
+              Core.projectionField = (Core.Name "jsonName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "number"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.Field"),
+              Core.projectionField = (Core.Name "number")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "options"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.Field"),
+              Core.projectionField = (Core.Name "options")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fileReference :: Phantoms.TTerm String -> Phantoms.TTerm Proto3.FileReference
 fileReference x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.ext.protobuf.proto3.FileReference"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unFileReference :: Phantoms.TTerm Proto3.FileReference -> Phantoms.TTerm String
-unFileReference x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.protobuf.proto3.FileReference")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 mapType :: Phantoms.TTerm Proto3.SimpleType -> Phantoms.TTerm Proto3.SimpleType -> Phantoms.TTerm Proto3.MapType
 mapType keys values =
@@ -635,20 +617,20 @@ messageDefinition name fields options =
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Phantoms.unTTerm options)}]}))
 
-messageDefinitionName :: Phantoms.TTerm Proto3.MessageDefinition -> Phantoms.TTerm Proto3.TypeName
-messageDefinitionName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.MessageDefinition"),
-        Core.projectionField = (Core.Name "name")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 messageDefinitionFields :: Phantoms.TTerm Proto3.MessageDefinition -> Phantoms.TTerm [Proto3.Field]
 messageDefinitionFields x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.MessageDefinition"),
         Core.projectionField = (Core.Name "fields")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+messageDefinitionName :: Phantoms.TTerm Proto3.MessageDefinition -> Phantoms.TTerm Proto3.TypeName
+messageDefinitionName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.MessageDefinition"),
+        Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 messageDefinitionOptions :: Phantoms.TTerm Proto3.MessageDefinition -> Phantoms.TTerm [Proto3.Option]
@@ -658,29 +640,6 @@ messageDefinitionOptions x =
         Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.MessageDefinition"),
         Core.projectionField = (Core.Name "options")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-messageDefinitionWithName :: Phantoms.TTerm Proto3.MessageDefinition -> Phantoms.TTerm Proto3.TypeName -> Phantoms.TTerm Proto3.MessageDefinition
-messageDefinitionWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.protobuf.proto3.MessageDefinition"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "fields"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.MessageDefinition"),
-              Core.projectionField = (Core.Name "fields")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "options"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.MessageDefinition"),
-              Core.projectionField = (Core.Name "options")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 messageDefinitionWithFields :: Phantoms.TTerm Proto3.MessageDefinition -> Phantoms.TTerm [Proto3.Field] -> Phantoms.TTerm Proto3.MessageDefinition
 messageDefinitionWithFields original newVal =
@@ -697,6 +656,29 @@ messageDefinitionWithFields original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "fields"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "options"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.MessageDefinition"),
+              Core.projectionField = (Core.Name "options")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+messageDefinitionWithName :: Phantoms.TTerm Proto3.MessageDefinition -> Phantoms.TTerm Proto3.TypeName -> Phantoms.TTerm Proto3.MessageDefinition
+messageDefinitionWithName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.protobuf.proto3.MessageDefinition"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "fields"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.MessageDefinition"),
+              Core.projectionField = (Core.Name "fields")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -794,12 +776,6 @@ packageName x =
       Core.wrappedTermTypeName = (Core.Name "hydra.ext.protobuf.proto3.PackageName"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-unPackageName :: Phantoms.TTerm Proto3.PackageName -> Phantoms.TTerm String
-unPackageName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.protobuf.proto3.PackageName")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 protoFile :: Phantoms.TTerm Proto3.PackageName -> Phantoms.TTerm [Proto3.FileReference] -> Phantoms.TTerm [Proto3.Definition] -> Phantoms.TTerm [Proto3.Option] -> Phantoms.TTerm Proto3.ProtoFile
 protoFile package imports types options =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -818,28 +794,12 @@ protoFile package imports types options =
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Phantoms.unTTerm options)}]}))
 
-protoFilePackage :: Phantoms.TTerm Proto3.ProtoFile -> Phantoms.TTerm Proto3.PackageName
-protoFilePackage x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.ProtoFile"),
-        Core.projectionField = (Core.Name "package")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 protoFileImports :: Phantoms.TTerm Proto3.ProtoFile -> Phantoms.TTerm [Proto3.FileReference]
 protoFileImports x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.ProtoFile"),
         Core.projectionField = (Core.Name "imports")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-protoFileTypes :: Phantoms.TTerm Proto3.ProtoFile -> Phantoms.TTerm [Proto3.Definition]
-protoFileTypes x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.ProtoFile"),
-        Core.projectionField = (Core.Name "types")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 protoFileOptions :: Phantoms.TTerm Proto3.ProtoFile -> Phantoms.TTerm [Proto3.Option]
@@ -850,35 +810,21 @@ protoFileOptions x =
         Core.projectionField = (Core.Name "options")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-protoFileWithPackage :: Phantoms.TTerm Proto3.ProtoFile -> Phantoms.TTerm Proto3.PackageName -> Phantoms.TTerm Proto3.ProtoFile
-protoFileWithPackage original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.protobuf.proto3.ProtoFile"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "package"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "imports"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.ProtoFile"),
-              Core.projectionField = (Core.Name "imports")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "types"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.ProtoFile"),
-              Core.projectionField = (Core.Name "types")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "options"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.ProtoFile"),
-              Core.projectionField = (Core.Name "options")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+protoFilePackage :: Phantoms.TTerm Proto3.ProtoFile -> Phantoms.TTerm Proto3.PackageName
+protoFilePackage x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.ProtoFile"),
+        Core.projectionField = (Core.Name "package")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+protoFileTypes :: Phantoms.TTerm Proto3.ProtoFile -> Phantoms.TTerm [Proto3.Definition]
+protoFileTypes x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.ProtoFile"),
+        Core.projectionField = (Core.Name "types")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 protoFileWithImports :: Phantoms.TTerm Proto3.ProtoFile -> Phantoms.TTerm [Proto3.FileReference] -> Phantoms.TTerm Proto3.ProtoFile
 protoFileWithImports original newVal =
@@ -895,6 +841,66 @@ protoFileWithImports original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "imports"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "types"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.ProtoFile"),
+              Core.projectionField = (Core.Name "types")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "options"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.ProtoFile"),
+              Core.projectionField = (Core.Name "options")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+protoFileWithOptions :: Phantoms.TTerm Proto3.ProtoFile -> Phantoms.TTerm [Proto3.Option] -> Phantoms.TTerm Proto3.ProtoFile
+protoFileWithOptions original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.protobuf.proto3.ProtoFile"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "package"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.ProtoFile"),
+              Core.projectionField = (Core.Name "package")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "imports"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.ProtoFile"),
+              Core.projectionField = (Core.Name "imports")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "types"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.ProtoFile"),
+              Core.projectionField = (Core.Name "types")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "options"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+protoFileWithPackage :: Phantoms.TTerm Proto3.ProtoFile -> Phantoms.TTerm Proto3.PackageName -> Phantoms.TTerm Proto3.ProtoFile
+protoFileWithPackage original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.protobuf.proto3.ProtoFile"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "package"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "imports"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.ProtoFile"),
+              Core.projectionField = (Core.Name "imports")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "types"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -939,36 +945,6 @@ protoFileWithTypes original newVal =
               Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.ProtoFile"),
               Core.projectionField = (Core.Name "options")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-protoFileWithOptions :: Phantoms.TTerm Proto3.ProtoFile -> Phantoms.TTerm [Proto3.Option] -> Phantoms.TTerm Proto3.ProtoFile
-protoFileWithOptions original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.protobuf.proto3.ProtoFile"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "package"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.ProtoFile"),
-              Core.projectionField = (Core.Name "package")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "imports"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.ProtoFile"),
-              Core.projectionField = (Core.Name "imports")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "types"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.proto3.ProtoFile"),
-              Core.projectionField = (Core.Name "types")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "options"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
 scalarTypeBool :: Phantoms.TTerm Proto3.ScalarType
 scalarTypeBool =
@@ -1112,17 +1088,41 @@ typeName x =
       Core.wrappedTermTypeName = (Core.Name "hydra.ext.protobuf.proto3.TypeName"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-unTypeName :: Phantoms.TTerm Proto3.TypeName -> Phantoms.TTerm String
-unTypeName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.protobuf.proto3.TypeName")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 typeReference :: Phantoms.TTerm String -> Phantoms.TTerm Proto3.TypeReference
 typeReference x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.ext.protobuf.proto3.TypeReference"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+
+unEnumValueName :: Phantoms.TTerm Proto3.EnumValueName -> Phantoms.TTerm String
+unEnumValueName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.protobuf.proto3.EnumValueName")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unFieldName :: Phantoms.TTerm Proto3.FieldName -> Phantoms.TTerm String
+unFieldName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.protobuf.proto3.FieldName")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unFileReference :: Phantoms.TTerm Proto3.FileReference -> Phantoms.TTerm String
+unFileReference x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.protobuf.proto3.FileReference")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unPackageName :: Phantoms.TTerm Proto3.PackageName -> Phantoms.TTerm String
+unPackageName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.protobuf.proto3.PackageName")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unTypeName :: Phantoms.TTerm Proto3.TypeName -> Phantoms.TTerm String
+unTypeName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.protobuf.proto3.TypeName")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unTypeReference :: Phantoms.TTerm Proto3.TypeReference -> Phantoms.TTerm String
 unTypeReference x =

@@ -193,7 +193,7 @@ data Data =
   DataForYield Data_ForYield |
   DataNew Data_New |
   DataNewAnonymous Data_NewAnonymous |
-  DataPlaceholder Data_Placeholder |
+  DataPlaceholder  |
   DataEta Data_Eta |
   DataRepeated Data_Repeated |
   DataParam Data_Param
@@ -720,10 +720,6 @@ data Data_NewAnonymous =
 _Data_NewAnonymous = Core.Name "hydra.ext.scala.syntax.Data_NewAnonymous"
 
 _Data_NewAnonymous_templ = Core.Name "templ"
-
-type Data_Placeholder = ()
-
-_Data_Placeholder = Core.Name "hydra.ext.scala.syntax.Data_Placeholder"
 
 data Data_Eta =
   Data_Eta {

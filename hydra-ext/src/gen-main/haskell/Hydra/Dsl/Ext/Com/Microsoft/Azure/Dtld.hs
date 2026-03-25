@@ -47,28 +47,12 @@ command type_ name id comment description displayName commandType request respon
           Core.fieldName = (Core.Name "response"),
           Core.fieldTerm = (Phantoms.unTTerm response)}]}))
 
-commandType :: Phantoms.TTerm Dtld.Command -> Phantoms.TTerm Dtld.Iri
-commandType x =
+commandCommandType :: Phantoms.TTerm Dtld.Command -> Phantoms.TTerm (Maybe Dtld.CommandType)
+commandCommandType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
-        Core.projectionField = (Core.Name "type")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-commandName :: Phantoms.TTerm Dtld.Command -> Phantoms.TTerm String
-commandName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
-        Core.projectionField = (Core.Name "name")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-commandId :: Phantoms.TTerm Dtld.Command -> Phantoms.TTerm (Maybe Dtld.Dtmi)
-commandId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
-        Core.projectionField = (Core.Name "id")})))),
+        Core.projectionField = (Core.Name "commandType")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 commandComment :: Phantoms.TTerm Dtld.Command -> Phantoms.TTerm (Maybe String)
@@ -95,13 +79,357 @@ commandDisplayName x =
         Core.projectionField = (Core.Name "displayName")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-commandCommandType :: Phantoms.TTerm Dtld.Command -> Phantoms.TTerm (Maybe Dtld.CommandType)
-commandCommandType x =
+commandId :: Phantoms.TTerm Dtld.Command -> Phantoms.TTerm (Maybe Dtld.Dtmi)
+commandId x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
-        Core.projectionField = (Core.Name "commandType")})))),
+        Core.projectionField = (Core.Name "id")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+commandName :: Phantoms.TTerm Dtld.Command -> Phantoms.TTerm String
+commandName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
+        Core.projectionField = (Core.Name "name")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+commandPayload :: Phantoms.TTerm String -> Phantoms.TTerm Dtld.Schema -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.CommandPayload
+commandPayload name schema id comment description displayName =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm name)},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Phantoms.unTTerm schema)},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Phantoms.unTTerm id)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Phantoms.unTTerm comment)},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Phantoms.unTTerm description)},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Phantoms.unTTerm displayName)}]}))
+
+commandPayloadComment :: Phantoms.TTerm Dtld.CommandPayload -> Phantoms.TTerm (Maybe String)
+commandPayloadComment x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+        Core.projectionField = (Core.Name "comment")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+commandPayloadDescription :: Phantoms.TTerm Dtld.CommandPayload -> Phantoms.TTerm (Maybe String)
+commandPayloadDescription x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+        Core.projectionField = (Core.Name "description")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+commandPayloadDisplayName :: Phantoms.TTerm Dtld.CommandPayload -> Phantoms.TTerm (Maybe String)
+commandPayloadDisplayName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+        Core.projectionField = (Core.Name "displayName")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+commandPayloadId :: Phantoms.TTerm Dtld.CommandPayload -> Phantoms.TTerm (Maybe Dtld.Dtmi)
+commandPayloadId x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+        Core.projectionField = (Core.Name "id")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+commandPayloadName :: Phantoms.TTerm Dtld.CommandPayload -> Phantoms.TTerm String
+commandPayloadName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+        Core.projectionField = (Core.Name "name")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+commandPayloadSchema :: Phantoms.TTerm Dtld.CommandPayload -> Phantoms.TTerm Dtld.Schema
+commandPayloadSchema x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+        Core.projectionField = (Core.Name "schema")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+commandPayloadWithComment :: Phantoms.TTerm Dtld.CommandPayload -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.CommandPayload
+commandPayloadWithComment original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "schema")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+commandPayloadWithDescription :: Phantoms.TTerm Dtld.CommandPayload -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.CommandPayload
+commandPayloadWithDescription original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "schema")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+commandPayloadWithDisplayName :: Phantoms.TTerm Dtld.CommandPayload -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.CommandPayload
+commandPayloadWithDisplayName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "schema")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+commandPayloadWithId :: Phantoms.TTerm Dtld.CommandPayload -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.CommandPayload
+commandPayloadWithId original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "schema")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+commandPayloadWithName :: Phantoms.TTerm Dtld.CommandPayload -> Phantoms.TTerm String -> Phantoms.TTerm Dtld.CommandPayload
+commandPayloadWithName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "schema")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+commandPayloadWithSchema :: Phantoms.TTerm Dtld.CommandPayload -> Phantoms.TTerm Dtld.Schema -> Phantoms.TTerm Dtld.CommandPayload
+commandPayloadWithSchema original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 commandRequest :: Phantoms.TTerm Dtld.Command -> Phantoms.TTerm (Maybe Dtld.CommandPayload)
 commandRequest x =
@@ -119,14 +447,42 @@ commandResponse x =
         Core.projectionField = (Core.Name "response")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-commandWithType :: Phantoms.TTerm Dtld.Command -> Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm Dtld.Command
-commandWithType original newVal =
+commandType :: Phantoms.TTerm Dtld.Command -> Phantoms.TTerm Dtld.Iri
+commandType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
+        Core.projectionField = (Core.Name "type")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+commandTypeAsynchronous :: Phantoms.TTerm Dtld.CommandType
+commandTypeAsynchronous =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandType"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "asynchronous"),
+        Core.fieldTerm = Core.TermUnit}}))
+
+commandTypeSynchronous :: Phantoms.TTerm Dtld.CommandType
+commandTypeSynchronous =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandType"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "synchronous"),
+        Core.fieldTerm = Core.TermUnit}}))
+
+commandWithCommandType :: Phantoms.TTerm Dtld.Command -> Phantoms.TTerm (Maybe Dtld.CommandType) -> Phantoms.TTerm Dtld.Command
+commandWithCommandType original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -164,141 +520,7 @@ commandWithType original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "commandType"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
-              Core.projectionField = (Core.Name "commandType")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "request"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
-              Core.projectionField = (Core.Name "request")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "response"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
-              Core.projectionField = (Core.Name "response")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-commandWithName :: Phantoms.TTerm Dtld.Command -> Phantoms.TTerm String -> Phantoms.TTerm Dtld.Command
-commandWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "commandType"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
-              Core.projectionField = (Core.Name "commandType")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "request"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
-              Core.projectionField = (Core.Name "request")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "response"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
-              Core.projectionField = (Core.Name "response")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-commandWithId :: Phantoms.TTerm Dtld.Command -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.Command
-commandWithId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "commandType"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
-              Core.projectionField = (Core.Name "commandType")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "request"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -509,8 +731,8 @@ commandWithDisplayName original newVal =
               Core.projectionField = (Core.Name "response")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-commandWithCommandType :: Phantoms.TTerm Dtld.Command -> Phantoms.TTerm (Maybe Dtld.CommandType) -> Phantoms.TTerm Dtld.Command
-commandWithCommandType original newVal =
+commandWithId :: Phantoms.TTerm Dtld.Command -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.Command
+commandWithId original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
       Core.recordFields = [
@@ -528,6 +750,67 @@ commandWithCommandType original newVal =
               Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
               Core.projectionField = (Core.Name "name")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "commandType"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
+              Core.projectionField = (Core.Name "commandType")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "request"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
+              Core.projectionField = (Core.Name "request")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "response"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
+              Core.projectionField = (Core.Name "response")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+commandWithName :: Phantoms.TTerm Dtld.Command -> Phantoms.TTerm String -> Phantoms.TTerm Dtld.Command
+commandWithName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -558,7 +841,11 @@ commandWithCommandType original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "commandType"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
+              Core.projectionField = (Core.Name "commandType")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "request"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -704,357 +991,70 @@ commandWithResponse original newVal =
           Core.fieldName = (Core.Name "response"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-commandPayload :: Phantoms.TTerm String -> Phantoms.TTerm Dtld.Schema -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.CommandPayload
-commandPayload name schema id comment description displayName =
+commandWithType :: Phantoms.TTerm Dtld.Command -> Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm Dtld.Command
+commandWithType original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
       Core.recordFields = [
         Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm name)},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Phantoms.unTTerm schema)},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm id)},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Phantoms.unTTerm comment)},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Phantoms.unTTerm description)},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Phantoms.unTTerm displayName)}]}))
-
-commandPayloadName :: Phantoms.TTerm Dtld.CommandPayload -> Phantoms.TTerm String
-commandPayloadName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-        Core.projectionField = (Core.Name "name")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-commandPayloadSchema :: Phantoms.TTerm Dtld.CommandPayload -> Phantoms.TTerm Dtld.Schema
-commandPayloadSchema x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-        Core.projectionField = (Core.Name "schema")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-commandPayloadId :: Phantoms.TTerm Dtld.CommandPayload -> Phantoms.TTerm (Maybe Dtld.Dtmi)
-commandPayloadId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-        Core.projectionField = (Core.Name "id")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-commandPayloadComment :: Phantoms.TTerm Dtld.CommandPayload -> Phantoms.TTerm (Maybe String)
-commandPayloadComment x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-        Core.projectionField = (Core.Name "comment")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-commandPayloadDescription :: Phantoms.TTerm Dtld.CommandPayload -> Phantoms.TTerm (Maybe String)
-commandPayloadDescription x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-        Core.projectionField = (Core.Name "description")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-commandPayloadDisplayName :: Phantoms.TTerm Dtld.CommandPayload -> Phantoms.TTerm (Maybe String)
-commandPayloadDisplayName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-        Core.projectionField = (Core.Name "displayName")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-commandPayloadWithName :: Phantoms.TTerm Dtld.CommandPayload -> Phantoms.TTerm String -> Phantoms.TTerm Dtld.CommandPayload
-commandPayloadWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
+          Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
-          Core.fieldName = (Core.Name "schema"),
+          Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-              Core.projectionField = (Core.Name "schema")})))),
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
+              Core.projectionField = (Core.Name "name")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
               Core.projectionField = (Core.Name "id")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "comment"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
               Core.projectionField = (Core.Name "comment")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
               Core.projectionField = (Core.Name "description")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
               Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "commandType"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
+              Core.projectionField = (Core.Name "commandType")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "request"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
+              Core.projectionField = (Core.Name "request")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "response"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"),
+              Core.projectionField = (Core.Name "response")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-commandPayloadWithSchema :: Phantoms.TTerm Dtld.CommandPayload -> Phantoms.TTerm Dtld.Schema -> Phantoms.TTerm Dtld.CommandPayload
-commandPayloadWithSchema original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-commandPayloadWithId :: Phantoms.TTerm Dtld.CommandPayload -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.CommandPayload
-commandPayloadWithId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-              Core.projectionField = (Core.Name "schema")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-commandPayloadWithComment :: Phantoms.TTerm Dtld.CommandPayload -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.CommandPayload
-commandPayloadWithComment original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-              Core.projectionField = (Core.Name "schema")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-commandPayloadWithDescription :: Phantoms.TTerm Dtld.CommandPayload -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.CommandPayload
-commandPayloadWithDescription original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-              Core.projectionField = (Core.Name "schema")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-commandPayloadWithDisplayName :: Phantoms.TTerm Dtld.CommandPayload -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.CommandPayload
-commandPayloadWithDisplayName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-              Core.projectionField = (Core.Name "schema")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-commandTypeSynchronous :: Phantoms.TTerm Dtld.CommandType
-commandTypeSynchronous =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandType"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "synchronous"),
-        Core.fieldTerm = Core.TermUnit}}))
-
-commandTypeAsynchronous :: Phantoms.TTerm Dtld.CommandType
-commandTypeAsynchronous =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandType"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "asynchronous"),
-        Core.fieldTerm = Core.TermUnit}}))
 
 component :: Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm String -> Phantoms.TTerm Dtld.Interface -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.Component
 component type_ name schema id comment description displayName =
@@ -1083,38 +1083,6 @@ component type_ name schema id comment description displayName =
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Phantoms.unTTerm displayName)}]}))
 
-componentType :: Phantoms.TTerm Dtld.Component -> Phantoms.TTerm Dtld.Iri
-componentType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-        Core.projectionField = (Core.Name "type")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-componentName :: Phantoms.TTerm Dtld.Component -> Phantoms.TTerm String
-componentName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-        Core.projectionField = (Core.Name "name")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-componentSchema :: Phantoms.TTerm Dtld.Component -> Phantoms.TTerm Dtld.Interface
-componentSchema x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-        Core.projectionField = (Core.Name "schema")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-componentId :: Phantoms.TTerm Dtld.Component -> Phantoms.TTerm (Maybe Dtld.Dtmi)
-componentId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-        Core.projectionField = (Core.Name "id")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 componentComment :: Phantoms.TTerm Dtld.Component -> Phantoms.TTerm (Maybe String)
 componentComment x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -1139,209 +1107,37 @@ componentDisplayName x =
         Core.projectionField = (Core.Name "displayName")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-componentWithType :: Phantoms.TTerm Dtld.Component -> Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm Dtld.Component
-componentWithType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-              Core.projectionField = (Core.Name "schema")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+componentId :: Phantoms.TTerm Dtld.Component -> Phantoms.TTerm (Maybe Dtld.Dtmi)
+componentId x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+        Core.projectionField = (Core.Name "id")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-componentWithName :: Phantoms.TTerm Dtld.Component -> Phantoms.TTerm String -> Phantoms.TTerm Dtld.Component
-componentWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-              Core.projectionField = (Core.Name "schema")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+componentName :: Phantoms.TTerm Dtld.Component -> Phantoms.TTerm String
+componentName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+        Core.projectionField = (Core.Name "name")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-componentWithSchema :: Phantoms.TTerm Dtld.Component -> Phantoms.TTerm Dtld.Interface -> Phantoms.TTerm Dtld.Component
-componentWithSchema original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+componentSchema :: Phantoms.TTerm Dtld.Component -> Phantoms.TTerm Dtld.Interface
+componentSchema x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+        Core.projectionField = (Core.Name "schema")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-componentWithId :: Phantoms.TTerm Dtld.Component -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.Component
-componentWithId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-              Core.projectionField = (Core.Name "schema")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+componentType :: Phantoms.TTerm Dtld.Component -> Phantoms.TTerm Dtld.Iri
+componentType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+        Core.projectionField = (Core.Name "type")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 componentWithComment :: Phantoms.TTerm Dtld.Component -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.Component
 componentWithComment original newVal =
@@ -1496,17 +1292,215 @@ componentWithDisplayName original newVal =
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+componentWithId :: Phantoms.TTerm Dtld.Component -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.Component
+componentWithId original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+              Core.projectionField = (Core.Name "schema")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+componentWithName :: Phantoms.TTerm Dtld.Component -> Phantoms.TTerm String -> Phantoms.TTerm Dtld.Component
+componentWithName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+              Core.projectionField = (Core.Name "schema")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+componentWithSchema :: Phantoms.TTerm Dtld.Component -> Phantoms.TTerm Dtld.Interface -> Phantoms.TTerm Dtld.Component
+componentWithSchema original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+componentWithType :: Phantoms.TTerm Dtld.Component -> Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm Dtld.Component
+componentWithType original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+              Core.projectionField = (Core.Name "schema")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 dtmi :: Phantoms.TTerm String -> Phantoms.TTerm Dtld.Dtmi
 dtmi x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Dtmi"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-unDtmi :: Phantoms.TTerm Dtld.Dtmi -> Phantoms.TTerm String
-unDtmi x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.com.microsoft.azure.dtld.Dtmi")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 enumValue :: Phantoms.TTerm String -> Phantoms.TTerm Dtld.IntegerOrString -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.EnumValue
 enumValue name enumValue id comment description displayName =
@@ -1532,30 +1526,6 @@ enumValue name enumValue id comment description displayName =
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Phantoms.unTTerm displayName)}]}))
 
-enumValueName :: Phantoms.TTerm Dtld.EnumValue -> Phantoms.TTerm String
-enumValueName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
-        Core.projectionField = (Core.Name "name")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-enumValueEnumValue :: Phantoms.TTerm Dtld.EnumValue -> Phantoms.TTerm Dtld.IntegerOrString
-enumValueEnumValue x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
-        Core.projectionField = (Core.Name "enumValue")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-enumValueId :: Phantoms.TTerm Dtld.EnumValue -> Phantoms.TTerm (Maybe Dtld.Dtmi)
-enumValueId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
-        Core.projectionField = (Core.Name "id")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 enumValueComment :: Phantoms.TTerm Dtld.EnumValue -> Phantoms.TTerm (Maybe String)
 enumValueComment x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -1580,137 +1550,29 @@ enumValueDisplayName x =
         Core.projectionField = (Core.Name "displayName")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-enumValueWithName :: Phantoms.TTerm Dtld.EnumValue -> Phantoms.TTerm String -> Phantoms.TTerm Dtld.EnumValue
-enumValueWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "enumValue"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
-              Core.projectionField = (Core.Name "enumValue")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+enumValueEnumValue :: Phantoms.TTerm Dtld.EnumValue -> Phantoms.TTerm Dtld.IntegerOrString
+enumValueEnumValue x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
+        Core.projectionField = (Core.Name "enumValue")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-enumValueWithEnumValue :: Phantoms.TTerm Dtld.EnumValue -> Phantoms.TTerm Dtld.IntegerOrString -> Phantoms.TTerm Dtld.EnumValue
-enumValueWithEnumValue original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "enumValue"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+enumValueId :: Phantoms.TTerm Dtld.EnumValue -> Phantoms.TTerm (Maybe Dtld.Dtmi)
+enumValueId x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
+        Core.projectionField = (Core.Name "id")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-enumValueWithId :: Phantoms.TTerm Dtld.EnumValue -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.EnumValue
-enumValueWithId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "enumValue"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
-              Core.projectionField = (Core.Name "enumValue")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+enumValueName :: Phantoms.TTerm Dtld.EnumValue -> Phantoms.TTerm String
+enumValueName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
+        Core.projectionField = (Core.Name "name")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 enumValueWithComment :: Phantoms.TTerm Dtld.EnumValue -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.EnumValue
 enumValueWithComment original newVal =
@@ -1844,6 +1706,138 @@ enumValueWithDisplayName original newVal =
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+enumValueWithEnumValue :: Phantoms.TTerm Dtld.EnumValue -> Phantoms.TTerm Dtld.IntegerOrString -> Phantoms.TTerm Dtld.EnumValue
+enumValueWithEnumValue original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "enumValue"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+enumValueWithId :: Phantoms.TTerm Dtld.EnumValue -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.EnumValue
+enumValueWithId original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "enumValue"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
+              Core.projectionField = (Core.Name "enumValue")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+enumValueWithName :: Phantoms.TTerm Dtld.EnumValue -> Phantoms.TTerm String -> Phantoms.TTerm Dtld.EnumValue
+enumValueWithName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "enumValue"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
+              Core.projectionField = (Core.Name "enumValue")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 field :: Phantoms.TTerm String -> Phantoms.TTerm Dtld.Schema -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.Field
 field name schema id comment description displayName =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -1867,30 +1861,6 @@ field name schema id comment description displayName =
         Core.Field {
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Phantoms.unTTerm displayName)}]}))
-
-fieldName :: Phantoms.TTerm Dtld.Field -> Phantoms.TTerm String
-fieldName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
-        Core.projectionField = (Core.Name "name")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-fieldSchema :: Phantoms.TTerm Dtld.Field -> Phantoms.TTerm Dtld.Schema
-fieldSchema x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
-        Core.projectionField = (Core.Name "schema")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-fieldId :: Phantoms.TTerm Dtld.Field -> Phantoms.TTerm (Maybe Dtld.Dtmi)
-fieldId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
-        Core.projectionField = (Core.Name "id")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fieldComment :: Phantoms.TTerm Dtld.Field -> Phantoms.TTerm (Maybe String)
 fieldComment x =
@@ -1916,137 +1886,29 @@ fieldDisplayName x =
         Core.projectionField = (Core.Name "displayName")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-fieldWithName :: Phantoms.TTerm Dtld.Field -> Phantoms.TTerm String -> Phantoms.TTerm Dtld.Field
-fieldWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
-              Core.projectionField = (Core.Name "schema")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+fieldId :: Phantoms.TTerm Dtld.Field -> Phantoms.TTerm (Maybe Dtld.Dtmi)
+fieldId x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
+        Core.projectionField = (Core.Name "id")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-fieldWithSchema :: Phantoms.TTerm Dtld.Field -> Phantoms.TTerm Dtld.Schema -> Phantoms.TTerm Dtld.Field
-fieldWithSchema original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+fieldName :: Phantoms.TTerm Dtld.Field -> Phantoms.TTerm String
+fieldName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
+        Core.projectionField = (Core.Name "name")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-fieldWithId :: Phantoms.TTerm Dtld.Field -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.Field
-fieldWithId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
-              Core.projectionField = (Core.Name "schema")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+fieldSchema :: Phantoms.TTerm Dtld.Field -> Phantoms.TTerm Dtld.Schema
+fieldSchema x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
+        Core.projectionField = (Core.Name "schema")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fieldWithComment :: Phantoms.TTerm Dtld.Field -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.Field
 fieldWithComment original newVal =
@@ -2180,6 +2042,138 @@ fieldWithDisplayName original newVal =
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+fieldWithId :: Phantoms.TTerm Dtld.Field -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.Field
+fieldWithId original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
+              Core.projectionField = (Core.Name "schema")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+fieldWithName :: Phantoms.TTerm Dtld.Field -> Phantoms.TTerm String -> Phantoms.TTerm Dtld.Field
+fieldWithName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
+              Core.projectionField = (Core.Name "schema")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+fieldWithSchema :: Phantoms.TTerm Dtld.Field -> Phantoms.TTerm Dtld.Schema -> Phantoms.TTerm Dtld.Field
+fieldWithSchema original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 integerOrStringInteger :: Phantoms.TTerm Int -> Phantoms.TTerm Dtld.IntegerOrString
 integerOrStringInteger x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
@@ -2229,30 +2223,6 @@ interface id type_ context comment contents description displayName extends sche
           Core.fieldName = (Core.Name "schemas"),
           Core.fieldTerm = (Phantoms.unTTerm schemas)}]}))
 
-interfaceId :: Phantoms.TTerm Dtld.Interface -> Phantoms.TTerm Dtld.Dtmi
-interfaceId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-        Core.projectionField = (Core.Name "id")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-interfaceType :: Phantoms.TTerm Dtld.Interface -> Phantoms.TTerm Dtld.Iri
-interfaceType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-        Core.projectionField = (Core.Name "type")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-interfaceContext :: Phantoms.TTerm Dtld.Interface -> Phantoms.TTerm Dtld.Iri
-interfaceContext x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-        Core.projectionField = (Core.Name "context")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 interfaceComment :: Phantoms.TTerm Dtld.Interface -> Phantoms.TTerm (Maybe String)
 interfaceComment x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -2267,6 +2237,14 @@ interfaceContents x =
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
         Core.projectionField = (Core.Name "contents")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+interfaceContext :: Phantoms.TTerm Dtld.Interface -> Phantoms.TTerm Dtld.Iri
+interfaceContext x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+        Core.projectionField = (Core.Name "context")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 interfaceDescription :: Phantoms.TTerm Dtld.Interface -> Phantoms.TTerm (Maybe String)
@@ -2293,6 +2271,14 @@ interfaceExtends x =
         Core.projectionField = (Core.Name "extends")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
+interfaceId :: Phantoms.TTerm Dtld.Interface -> Phantoms.TTerm Dtld.Dtmi
+interfaceId x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+        Core.projectionField = (Core.Name "id")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
 interfaceSchemas :: Phantoms.TTerm Dtld.Interface -> Phantoms.TTerm (Maybe (S.Set Dtld.Schema_Interface))
 interfaceSchemas x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -2301,200 +2287,13 @@ interfaceSchemas x =
         Core.projectionField = (Core.Name "schemas")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-interfaceWithId :: Phantoms.TTerm Dtld.Interface -> Phantoms.TTerm Dtld.Dtmi -> Phantoms.TTerm Dtld.Interface
-interfaceWithId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "context"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-              Core.projectionField = (Core.Name "context")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "contents"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-              Core.projectionField = (Core.Name "contents")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "extends"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-              Core.projectionField = (Core.Name "extends")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "schemas"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-              Core.projectionField = (Core.Name "schemas")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-interfaceWithType :: Phantoms.TTerm Dtld.Interface -> Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm Dtld.Interface
-interfaceWithType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "context"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-              Core.projectionField = (Core.Name "context")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "contents"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-              Core.projectionField = (Core.Name "contents")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "extends"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-              Core.projectionField = (Core.Name "extends")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "schemas"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-              Core.projectionField = (Core.Name "schemas")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-interfaceWithContext :: Phantoms.TTerm Dtld.Interface -> Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm Dtld.Interface
-interfaceWithContext original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "context"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "contents"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-              Core.projectionField = (Core.Name "contents")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "extends"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-              Core.projectionField = (Core.Name "extends")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "schemas"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
-              Core.projectionField = (Core.Name "schemas")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+interfaceType :: Phantoms.TTerm Dtld.Interface -> Phantoms.TTerm Dtld.Iri
+interfaceType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+        Core.projectionField = (Core.Name "type")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 interfaceWithComment :: Phantoms.TTerm Dtld.Interface -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.Interface
 interfaceWithComment original newVal =
@@ -2597,6 +2396,71 @@ interfaceWithContents original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "contents"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "extends"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+              Core.projectionField = (Core.Name "extends")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "schemas"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+              Core.projectionField = (Core.Name "schemas")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+interfaceWithContext :: Phantoms.TTerm Dtld.Interface -> Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm Dtld.Interface
+interfaceWithContext original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "context"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "contents"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+              Core.projectionField = (Core.Name "contents")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -2821,6 +2685,71 @@ interfaceWithExtends original newVal =
               Core.projectionField = (Core.Name "schemas")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
+interfaceWithId :: Phantoms.TTerm Dtld.Interface -> Phantoms.TTerm Dtld.Dtmi -> Phantoms.TTerm Dtld.Interface
+interfaceWithId original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "context"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+              Core.projectionField = (Core.Name "context")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "contents"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+              Core.projectionField = (Core.Name "contents")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "extends"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+              Core.projectionField = (Core.Name "extends")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "schemas"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+              Core.projectionField = (Core.Name "schemas")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 interfaceWithSchemas :: Phantoms.TTerm Dtld.Interface -> Phantoms.TTerm (Maybe (S.Set Dtld.Schema_Interface)) -> Phantoms.TTerm Dtld.Interface
 interfaceWithSchemas original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -2886,6 +2815,71 @@ interfaceWithSchemas original newVal =
           Core.fieldName = (Core.Name "schemas"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+interfaceWithType :: Phantoms.TTerm Dtld.Interface -> Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm Dtld.Interface
+interfaceWithType original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "context"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+              Core.projectionField = (Core.Name "context")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "contents"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+              Core.projectionField = (Core.Name "contents")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "extends"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+              Core.projectionField = (Core.Name "extends")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "schemas"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"),
+              Core.projectionField = (Core.Name "schemas")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 interface_ContentsCommand :: Phantoms.TTerm Dtld.Command -> Phantoms.TTerm Dtld.Interface_Contents
 interface_ContentsCommand x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
@@ -2932,12 +2926,6 @@ iri x =
       Core.wrappedTermTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Iri"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-unIri :: Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm String
-unIri x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.com.microsoft.azure.dtld.Iri")))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 mapKey :: Phantoms.TTerm String -> Phantoms.TTerm Dtld.Schema -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.MapKey
 mapKey name schema id comment description displayName =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -2961,30 +2949,6 @@ mapKey name schema id comment description displayName =
         Core.Field {
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Phantoms.unTTerm displayName)}]}))
-
-mapKeyName :: Phantoms.TTerm Dtld.MapKey -> Phantoms.TTerm String
-mapKeyName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
-        Core.projectionField = (Core.Name "name")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-mapKeySchema :: Phantoms.TTerm Dtld.MapKey -> Phantoms.TTerm Dtld.Schema
-mapKeySchema x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
-        Core.projectionField = (Core.Name "schema")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-mapKeyId :: Phantoms.TTerm Dtld.MapKey -> Phantoms.TTerm (Maybe Dtld.Dtmi)
-mapKeyId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
-        Core.projectionField = (Core.Name "id")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 mapKeyComment :: Phantoms.TTerm Dtld.MapKey -> Phantoms.TTerm (Maybe String)
 mapKeyComment x =
@@ -3010,137 +2974,29 @@ mapKeyDisplayName x =
         Core.projectionField = (Core.Name "displayName")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-mapKeyWithName :: Phantoms.TTerm Dtld.MapKey -> Phantoms.TTerm String -> Phantoms.TTerm Dtld.MapKey
-mapKeyWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
-              Core.projectionField = (Core.Name "schema")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+mapKeyId :: Phantoms.TTerm Dtld.MapKey -> Phantoms.TTerm (Maybe Dtld.Dtmi)
+mapKeyId x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
+        Core.projectionField = (Core.Name "id")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-mapKeyWithSchema :: Phantoms.TTerm Dtld.MapKey -> Phantoms.TTerm Dtld.Schema -> Phantoms.TTerm Dtld.MapKey
-mapKeyWithSchema original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+mapKeyName :: Phantoms.TTerm Dtld.MapKey -> Phantoms.TTerm String
+mapKeyName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
+        Core.projectionField = (Core.Name "name")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-mapKeyWithId :: Phantoms.TTerm Dtld.MapKey -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.MapKey
-mapKeyWithId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
-              Core.projectionField = (Core.Name "schema")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+mapKeySchema :: Phantoms.TTerm Dtld.MapKey -> Phantoms.TTerm Dtld.Schema
+mapKeySchema x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
+        Core.projectionField = (Core.Name "schema")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 mapKeyWithComment :: Phantoms.TTerm Dtld.MapKey -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.MapKey
 mapKeyWithComment original newVal =
@@ -3274,6 +3130,138 @@ mapKeyWithDisplayName original newVal =
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+mapKeyWithId :: Phantoms.TTerm Dtld.MapKey -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.MapKey
+mapKeyWithId original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
+              Core.projectionField = (Core.Name "schema")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+mapKeyWithName :: Phantoms.TTerm Dtld.MapKey -> Phantoms.TTerm String -> Phantoms.TTerm Dtld.MapKey
+mapKeyWithName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
+              Core.projectionField = (Core.Name "schema")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+mapKeyWithSchema :: Phantoms.TTerm Dtld.MapKey -> Phantoms.TTerm Dtld.Schema -> Phantoms.TTerm Dtld.MapKey
+mapKeyWithSchema original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 mapValue :: Phantoms.TTerm String -> Phantoms.TTerm Dtld.Schema -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.MapValue
 mapValue name schema id comment description displayName =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -3297,30 +3285,6 @@ mapValue name schema id comment description displayName =
         Core.Field {
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Phantoms.unTTerm displayName)}]}))
-
-mapValueName :: Phantoms.TTerm Dtld.MapValue -> Phantoms.TTerm String
-mapValueName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
-        Core.projectionField = (Core.Name "name")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-mapValueSchema :: Phantoms.TTerm Dtld.MapValue -> Phantoms.TTerm Dtld.Schema
-mapValueSchema x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
-        Core.projectionField = (Core.Name "schema")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-mapValueId :: Phantoms.TTerm Dtld.MapValue -> Phantoms.TTerm (Maybe Dtld.Dtmi)
-mapValueId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
-        Core.projectionField = (Core.Name "id")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 mapValueComment :: Phantoms.TTerm Dtld.MapValue -> Phantoms.TTerm (Maybe String)
 mapValueComment x =
@@ -3346,137 +3310,29 @@ mapValueDisplayName x =
         Core.projectionField = (Core.Name "displayName")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-mapValueWithName :: Phantoms.TTerm Dtld.MapValue -> Phantoms.TTerm String -> Phantoms.TTerm Dtld.MapValue
-mapValueWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
-              Core.projectionField = (Core.Name "schema")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+mapValueId :: Phantoms.TTerm Dtld.MapValue -> Phantoms.TTerm (Maybe Dtld.Dtmi)
+mapValueId x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
+        Core.projectionField = (Core.Name "id")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-mapValueWithSchema :: Phantoms.TTerm Dtld.MapValue -> Phantoms.TTerm Dtld.Schema -> Phantoms.TTerm Dtld.MapValue
-mapValueWithSchema original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+mapValueName :: Phantoms.TTerm Dtld.MapValue -> Phantoms.TTerm String
+mapValueName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
+        Core.projectionField = (Core.Name "name")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-mapValueWithId :: Phantoms.TTerm Dtld.MapValue -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.MapValue
-mapValueWithId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
-              Core.projectionField = (Core.Name "schema")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+mapValueSchema :: Phantoms.TTerm Dtld.MapValue -> Phantoms.TTerm Dtld.Schema
+mapValueSchema x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
+        Core.projectionField = (Core.Name "schema")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 mapValueWithComment :: Phantoms.TTerm Dtld.MapValue -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.MapValue
 mapValueWithComment original newVal =
@@ -3610,6 +3466,138 @@ mapValueWithDisplayName original newVal =
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+mapValueWithId :: Phantoms.TTerm Dtld.MapValue -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.MapValue
+mapValueWithId original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
+              Core.projectionField = (Core.Name "schema")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+mapValueWithName :: Phantoms.TTerm Dtld.MapValue -> Phantoms.TTerm String -> Phantoms.TTerm Dtld.MapValue
+mapValueWithName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
+              Core.projectionField = (Core.Name "schema")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+mapValueWithSchema :: Phantoms.TTerm Dtld.MapValue -> Phantoms.TTerm Dtld.Schema -> Phantoms.TTerm Dtld.MapValue
+mapValueWithSchema original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 property :: Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm String -> Phantoms.TTerm Dtld.Schema -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe Dtld.Unit) -> Phantoms.TTerm (Maybe Bool) -> Phantoms.TTerm Dtld.Property
 property type_ name schema id comment description displayName unit writable =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -3643,38 +3631,6 @@ property type_ name schema id comment description displayName unit writable =
           Core.fieldName = (Core.Name "writable"),
           Core.fieldTerm = (Phantoms.unTTerm writable)}]}))
 
-propertyType :: Phantoms.TTerm Dtld.Property -> Phantoms.TTerm Dtld.Iri
-propertyType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-        Core.projectionField = (Core.Name "type")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-propertyName :: Phantoms.TTerm Dtld.Property -> Phantoms.TTerm String
-propertyName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-        Core.projectionField = (Core.Name "name")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-propertySchema :: Phantoms.TTerm Dtld.Property -> Phantoms.TTerm Dtld.Schema
-propertySchema x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-        Core.projectionField = (Core.Name "schema")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-propertyId :: Phantoms.TTerm Dtld.Property -> Phantoms.TTerm (Maybe Dtld.Dtmi)
-propertyId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-        Core.projectionField = (Core.Name "id")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 propertyComment :: Phantoms.TTerm Dtld.Property -> Phantoms.TTerm (Maybe String)
 propertyComment x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -3699,6 +3655,38 @@ propertyDisplayName x =
         Core.projectionField = (Core.Name "displayName")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
+propertyId :: Phantoms.TTerm Dtld.Property -> Phantoms.TTerm (Maybe Dtld.Dtmi)
+propertyId x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+        Core.projectionField = (Core.Name "id")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+propertyName :: Phantoms.TTerm Dtld.Property -> Phantoms.TTerm String
+propertyName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+        Core.projectionField = (Core.Name "name")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+propertySchema :: Phantoms.TTerm Dtld.Property -> Phantoms.TTerm Dtld.Schema
+propertySchema x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+        Core.projectionField = (Core.Name "schema")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+propertyType :: Phantoms.TTerm Dtld.Property -> Phantoms.TTerm Dtld.Iri
+propertyType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+        Core.projectionField = (Core.Name "type")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
 propertyUnit :: Phantoms.TTerm Dtld.Property -> Phantoms.TTerm (Maybe Dtld.Unit)
 propertyUnit x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -3706,274 +3694,6 @@ propertyUnit x =
         Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
         Core.projectionField = (Core.Name "unit")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-propertyWritable :: Phantoms.TTerm Dtld.Property -> Phantoms.TTerm (Maybe Bool)
-propertyWritable x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-        Core.projectionField = (Core.Name "writable")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-propertyWithType :: Phantoms.TTerm Dtld.Property -> Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm Dtld.Property
-propertyWithType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "schema")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "unit"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "unit")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "writable"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "writable")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-propertyWithName :: Phantoms.TTerm Dtld.Property -> Phantoms.TTerm String -> Phantoms.TTerm Dtld.Property
-propertyWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "schema")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "unit"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "unit")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "writable"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "writable")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-propertyWithSchema :: Phantoms.TTerm Dtld.Property -> Phantoms.TTerm Dtld.Schema -> Phantoms.TTerm Dtld.Property
-propertyWithSchema original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "unit"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "unit")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "writable"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "writable")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-propertyWithId :: Phantoms.TTerm Dtld.Property -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.Property
-propertyWithId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "schema")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "unit"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "unit")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "writable"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
-              Core.projectionField = (Core.Name "writable")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyWithComment :: Phantoms.TTerm Dtld.Property -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.Property
 propertyWithComment original newVal =
@@ -4170,6 +3890,266 @@ propertyWithDisplayName original newVal =
               Core.projectionField = (Core.Name "writable")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
+propertyWithId :: Phantoms.TTerm Dtld.Property -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.Property
+propertyWithId original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "schema")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "unit"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "unit")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "writable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "writable")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+propertyWithName :: Phantoms.TTerm Dtld.Property -> Phantoms.TTerm String -> Phantoms.TTerm Dtld.Property
+propertyWithName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "schema")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "unit"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "unit")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "writable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "writable")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+propertyWithSchema :: Phantoms.TTerm Dtld.Property -> Phantoms.TTerm Dtld.Schema -> Phantoms.TTerm Dtld.Property
+propertyWithSchema original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "unit"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "unit")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "writable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "writable")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+propertyWithType :: Phantoms.TTerm Dtld.Property -> Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm Dtld.Property
+propertyWithType original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "schema")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "unit"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "unit")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "writable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+              Core.projectionField = (Core.Name "writable")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 propertyWithUnit :: Phantoms.TTerm Dtld.Property -> Phantoms.TTerm (Maybe Dtld.Unit) -> Phantoms.TTerm Dtld.Property
 propertyWithUnit original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -4300,6 +4280,14 @@ propertyWithWritable original newVal =
           Core.fieldName = (Core.Name "writable"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+propertyWritable :: Phantoms.TTerm Dtld.Property -> Phantoms.TTerm (Maybe Bool)
+propertyWritable x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"),
+        Core.projectionField = (Core.Name "writable")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
 relationship :: Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm String -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe Int) -> Phantoms.TTerm (Maybe Int) -> Phantoms.TTerm (Maybe (S.Set Dtld.Property)) -> Phantoms.TTerm (Maybe Dtld.Interface) -> Phantoms.TTerm (Maybe Bool) -> Phantoms.TTerm Dtld.Relationship
 relationship type_ name id comment description displayName maxMultiplicity minMultiplicity properties target writable =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -4339,30 +4327,6 @@ relationship type_ name id comment description displayName maxMultiplicity minMu
           Core.fieldName = (Core.Name "writable"),
           Core.fieldTerm = (Phantoms.unTTerm writable)}]}))
 
-relationshipType :: Phantoms.TTerm Dtld.Relationship -> Phantoms.TTerm Dtld.Iri
-relationshipType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-        Core.projectionField = (Core.Name "type")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-relationshipName :: Phantoms.TTerm Dtld.Relationship -> Phantoms.TTerm String
-relationshipName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-        Core.projectionField = (Core.Name "name")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-relationshipId :: Phantoms.TTerm Dtld.Relationship -> Phantoms.TTerm (Maybe Dtld.Dtmi)
-relationshipId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-        Core.projectionField = (Core.Name "id")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 relationshipComment :: Phantoms.TTerm Dtld.Relationship -> Phantoms.TTerm (Maybe String)
 relationshipComment x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -4387,6 +4351,14 @@ relationshipDisplayName x =
         Core.projectionField = (Core.Name "displayName")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
+relationshipId :: Phantoms.TTerm Dtld.Relationship -> Phantoms.TTerm (Maybe Dtld.Dtmi)
+relationshipId x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+        Core.projectionField = (Core.Name "id")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
 relationshipMaxMultiplicity :: Phantoms.TTerm Dtld.Relationship -> Phantoms.TTerm (Maybe Int)
 relationshipMaxMultiplicity x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -4401,6 +4373,14 @@ relationshipMinMultiplicity x =
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
         Core.projectionField = (Core.Name "minMultiplicity")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+relationshipName :: Phantoms.TTerm Dtld.Relationship -> Phantoms.TTerm String
+relationshipName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+        Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 relationshipProperties :: Phantoms.TTerm Dtld.Relationship -> Phantoms.TTerm (Maybe (S.Set Dtld.Property))
@@ -4419,250 +4399,13 @@ relationshipTarget x =
         Core.projectionField = (Core.Name "target")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-relationshipWritable :: Phantoms.TTerm Dtld.Relationship -> Phantoms.TTerm (Maybe Bool)
-relationshipWritable x =
+relationshipType :: Phantoms.TTerm Dtld.Relationship -> Phantoms.TTerm Dtld.Iri
+relationshipType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-        Core.projectionField = (Core.Name "writable")})))),
+        Core.projectionField = (Core.Name "type")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-relationshipWithType :: Phantoms.TTerm Dtld.Relationship -> Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm Dtld.Relationship
-relationshipWithType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "maxMultiplicity"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "maxMultiplicity")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "minMultiplicity"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "minMultiplicity")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "properties"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "properties")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "target"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "target")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "writable"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "writable")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-relationshipWithName :: Phantoms.TTerm Dtld.Relationship -> Phantoms.TTerm String -> Phantoms.TTerm Dtld.Relationship
-relationshipWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "maxMultiplicity"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "maxMultiplicity")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "minMultiplicity"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "minMultiplicity")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "properties"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "properties")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "target"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "target")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "writable"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "writable")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-relationshipWithId :: Phantoms.TTerm Dtld.Relationship -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.Relationship
-relationshipWithId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "maxMultiplicity"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "maxMultiplicity")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "minMultiplicity"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "minMultiplicity")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "properties"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "properties")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "target"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "target")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "writable"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
-              Core.projectionField = (Core.Name "writable")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 relationshipWithComment :: Phantoms.TTerm Dtld.Relationship -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.Relationship
 relationshipWithComment original newVal =
@@ -4901,6 +4644,85 @@ relationshipWithDisplayName original newVal =
               Core.projectionField = (Core.Name "writable")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
+relationshipWithId :: Phantoms.TTerm Dtld.Relationship -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.Relationship
+relationshipWithId original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "maxMultiplicity"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "maxMultiplicity")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "minMultiplicity"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "minMultiplicity")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "properties"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "properties")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "target"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "target")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "writable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "writable")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 relationshipWithMaxMultiplicity :: Phantoms.TTerm Dtld.Relationship -> Phantoms.TTerm (Maybe Int) -> Phantoms.TTerm Dtld.Relationship
 relationshipWithMaxMultiplicity original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -5037,6 +4859,85 @@ relationshipWithMinMultiplicity original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "minMultiplicity"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "properties"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "properties")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "target"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "target")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "writable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "writable")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+relationshipWithName :: Phantoms.TTerm Dtld.Relationship -> Phantoms.TTerm String -> Phantoms.TTerm Dtld.Relationship
+relationshipWithName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "maxMultiplicity"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "maxMultiplicity")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "minMultiplicity"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "minMultiplicity")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -5217,6 +5118,85 @@ relationshipWithTarget original newVal =
               Core.projectionField = (Core.Name "writable")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
+relationshipWithType :: Phantoms.TTerm Dtld.Relationship -> Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm Dtld.Relationship
+relationshipWithType original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "maxMultiplicity"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "maxMultiplicity")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "minMultiplicity"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "minMultiplicity")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "properties"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "properties")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "target"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "target")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "writable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+              Core.projectionField = (Core.Name "writable")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 relationshipWithWritable :: Phantoms.TTerm Dtld.Relationship -> Phantoms.TTerm (Maybe Bool) -> Phantoms.TTerm Dtld.Relationship
 relationshipWithWritable original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -5296,13 +5276,13 @@ relationshipWithWritable original newVal =
           Core.fieldName = (Core.Name "writable"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-schemaPrimitive :: Phantoms.TTerm Dtld.Schema_Primitive -> Phantoms.TTerm Dtld.Schema
-schemaPrimitive x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "primitive"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+relationshipWritable :: Phantoms.TTerm Dtld.Relationship -> Phantoms.TTerm (Maybe Bool)
+relationshipWritable x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"),
+        Core.projectionField = (Core.Name "writable")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 schemaComplex :: Phantoms.TTerm Dtld.Schema_Complex -> Phantoms.TTerm Dtld.Schema
 schemaComplex x =
@@ -5310,6 +5290,14 @@ schemaComplex x =
       Core.injectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "complex"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+schemaPrimitive :: Phantoms.TTerm Dtld.Schema_Primitive -> Phantoms.TTerm Dtld.Schema
+schemaPrimitive x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "primitive"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 schema_Array :: Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm Dtld.Schema -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.Schema_Array
@@ -5336,30 +5324,6 @@ schema_Array type_ elementSchema id comment description displayName =
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Phantoms.unTTerm displayName)}]}))
 
-schema_ArrayType :: Phantoms.TTerm Dtld.Schema_Array -> Phantoms.TTerm Dtld.Iri
-schema_ArrayType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
-        Core.projectionField = (Core.Name "type")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-schema_ArrayElementSchema :: Phantoms.TTerm Dtld.Schema_Array -> Phantoms.TTerm Dtld.Schema
-schema_ArrayElementSchema x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
-        Core.projectionField = (Core.Name "elementSchema")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-schema_ArrayId :: Phantoms.TTerm Dtld.Schema_Array -> Phantoms.TTerm (Maybe Dtld.Dtmi)
-schema_ArrayId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
-        Core.projectionField = (Core.Name "id")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 schema_ArrayComment :: Phantoms.TTerm Dtld.Schema_Array -> Phantoms.TTerm (Maybe String)
 schema_ArrayComment x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -5384,137 +5348,29 @@ schema_ArrayDisplayName x =
         Core.projectionField = (Core.Name "displayName")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-schema_ArrayWithType :: Phantoms.TTerm Dtld.Schema_Array -> Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm Dtld.Schema_Array
-schema_ArrayWithType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "elementSchema"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
-              Core.projectionField = (Core.Name "elementSchema")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+schema_ArrayElementSchema :: Phantoms.TTerm Dtld.Schema_Array -> Phantoms.TTerm Dtld.Schema
+schema_ArrayElementSchema x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
+        Core.projectionField = (Core.Name "elementSchema")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-schema_ArrayWithElementSchema :: Phantoms.TTerm Dtld.Schema_Array -> Phantoms.TTerm Dtld.Schema -> Phantoms.TTerm Dtld.Schema_Array
-schema_ArrayWithElementSchema original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "elementSchema"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+schema_ArrayId :: Phantoms.TTerm Dtld.Schema_Array -> Phantoms.TTerm (Maybe Dtld.Dtmi)
+schema_ArrayId x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
+        Core.projectionField = (Core.Name "id")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-schema_ArrayWithId :: Phantoms.TTerm Dtld.Schema_Array -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.Schema_Array
-schema_ArrayWithId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "elementSchema"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
-              Core.projectionField = (Core.Name "elementSchema")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+schema_ArrayType :: Phantoms.TTerm Dtld.Schema_Array -> Phantoms.TTerm Dtld.Iri
+schema_ArrayType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
+        Core.projectionField = (Core.Name "type")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 schema_ArrayWithComment :: Phantoms.TTerm Dtld.Schema_Array -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.Schema_Array
 schema_ArrayWithComment original newVal =
@@ -5648,6 +5504,138 @@ schema_ArrayWithDisplayName original newVal =
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+schema_ArrayWithElementSchema :: Phantoms.TTerm Dtld.Schema_Array -> Phantoms.TTerm Dtld.Schema -> Phantoms.TTerm Dtld.Schema_Array
+schema_ArrayWithElementSchema original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "elementSchema"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+schema_ArrayWithId :: Phantoms.TTerm Dtld.Schema_Array -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.Schema_Array
+schema_ArrayWithId original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "elementSchema"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
+              Core.projectionField = (Core.Name "elementSchema")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+schema_ArrayWithType :: Phantoms.TTerm Dtld.Schema_Array -> Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm Dtld.Schema_Array
+schema_ArrayWithType original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "elementSchema"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
+              Core.projectionField = (Core.Name "elementSchema")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 schema_ComplexArray :: Phantoms.TTerm Dtld.Schema_Array -> Phantoms.TTerm Dtld.Schema_Complex
 schema_ComplexArray x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
@@ -5707,38 +5695,6 @@ schema_Enum type_ enumValues valueSchema id comment description displayName =
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Phantoms.unTTerm displayName)}]}))
 
-schema_EnumType :: Phantoms.TTerm Dtld.Schema_Enum -> Phantoms.TTerm Dtld.Iri
-schema_EnumType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-        Core.projectionField = (Core.Name "type")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-schema_EnumEnumValues :: Phantoms.TTerm Dtld.Schema_Enum -> Phantoms.TTerm [Dtld.EnumValue]
-schema_EnumEnumValues x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-        Core.projectionField = (Core.Name "enumValues")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-schema_EnumValueSchema :: Phantoms.TTerm Dtld.Schema_Enum -> Phantoms.TTerm Dtld.IntegerOrString
-schema_EnumValueSchema x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-        Core.projectionField = (Core.Name "valueSchema")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-schema_EnumId :: Phantoms.TTerm Dtld.Schema_Enum -> Phantoms.TTerm (Maybe Dtld.Dtmi)
-schema_EnumId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-        Core.projectionField = (Core.Name "id")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 schema_EnumComment :: Phantoms.TTerm Dtld.Schema_Enum -> Phantoms.TTerm (Maybe String)
 schema_EnumComment x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -5763,209 +5719,37 @@ schema_EnumDisplayName x =
         Core.projectionField = (Core.Name "displayName")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-schema_EnumWithType :: Phantoms.TTerm Dtld.Schema_Enum -> Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm Dtld.Schema_Enum
-schema_EnumWithType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "enumValues"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-              Core.projectionField = (Core.Name "enumValues")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "valueSchema"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-              Core.projectionField = (Core.Name "valueSchema")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+schema_EnumEnumValues :: Phantoms.TTerm Dtld.Schema_Enum -> Phantoms.TTerm [Dtld.EnumValue]
+schema_EnumEnumValues x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+        Core.projectionField = (Core.Name "enumValues")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-schema_EnumWithEnumValues :: Phantoms.TTerm Dtld.Schema_Enum -> Phantoms.TTerm [Dtld.EnumValue] -> Phantoms.TTerm Dtld.Schema_Enum
-schema_EnumWithEnumValues original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "enumValues"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "valueSchema"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-              Core.projectionField = (Core.Name "valueSchema")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+schema_EnumId :: Phantoms.TTerm Dtld.Schema_Enum -> Phantoms.TTerm (Maybe Dtld.Dtmi)
+schema_EnumId x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+        Core.projectionField = (Core.Name "id")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-schema_EnumWithValueSchema :: Phantoms.TTerm Dtld.Schema_Enum -> Phantoms.TTerm Dtld.IntegerOrString -> Phantoms.TTerm Dtld.Schema_Enum
-schema_EnumWithValueSchema original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "enumValues"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-              Core.projectionField = (Core.Name "enumValues")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "valueSchema"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+schema_EnumType :: Phantoms.TTerm Dtld.Schema_Enum -> Phantoms.TTerm Dtld.Iri
+schema_EnumType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+        Core.projectionField = (Core.Name "type")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-schema_EnumWithId :: Phantoms.TTerm Dtld.Schema_Enum -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.Schema_Enum
-schema_EnumWithId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "enumValues"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-              Core.projectionField = (Core.Name "enumValues")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "valueSchema"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-              Core.projectionField = (Core.Name "valueSchema")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+schema_EnumValueSchema :: Phantoms.TTerm Dtld.Schema_Enum -> Phantoms.TTerm Dtld.IntegerOrString
+schema_EnumValueSchema x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+        Core.projectionField = (Core.Name "valueSchema")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 schema_EnumWithComment :: Phantoms.TTerm Dtld.Schema_Enum -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.Schema_Enum
 schema_EnumWithComment original newVal =
@@ -6120,6 +5904,210 @@ schema_EnumWithDisplayName original newVal =
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+schema_EnumWithEnumValues :: Phantoms.TTerm Dtld.Schema_Enum -> Phantoms.TTerm [Dtld.EnumValue] -> Phantoms.TTerm Dtld.Schema_Enum
+schema_EnumWithEnumValues original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "enumValues"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "valueSchema"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+              Core.projectionField = (Core.Name "valueSchema")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+schema_EnumWithId :: Phantoms.TTerm Dtld.Schema_Enum -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.Schema_Enum
+schema_EnumWithId original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "enumValues"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+              Core.projectionField = (Core.Name "enumValues")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "valueSchema"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+              Core.projectionField = (Core.Name "valueSchema")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+schema_EnumWithType :: Phantoms.TTerm Dtld.Schema_Enum -> Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm Dtld.Schema_Enum
+schema_EnumWithType original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "enumValues"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+              Core.projectionField = (Core.Name "enumValues")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "valueSchema"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+              Core.projectionField = (Core.Name "valueSchema")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+schema_EnumWithValueSchema :: Phantoms.TTerm Dtld.Schema_Enum -> Phantoms.TTerm Dtld.IntegerOrString -> Phantoms.TTerm Dtld.Schema_Enum
+schema_EnumWithValueSchema original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "enumValues"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+              Core.projectionField = (Core.Name "enumValues")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "valueSchema"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 schema_Interface :: Phantoms.TTerm Dtld.Dtmi -> Phantoms.TTerm Dtld.Schema_Interface_Type -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.Schema_Interface
 schema_Interface id type_ comment description displayName =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -6140,22 +6128,6 @@ schema_Interface id type_ comment description displayName =
         Core.Field {
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Phantoms.unTTerm displayName)}]}))
-
-schema_InterfaceId :: Phantoms.TTerm Dtld.Schema_Interface -> Phantoms.TTerm Dtld.Dtmi
-schema_InterfaceId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface"),
-        Core.projectionField = (Core.Name "id")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-schema_InterfaceType :: Phantoms.TTerm Dtld.Schema_Interface -> Phantoms.TTerm Dtld.Schema_Interface_Type
-schema_InterfaceType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface"),
-        Core.projectionField = (Core.Name "type")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 schema_InterfaceComment :: Phantoms.TTerm Dtld.Schema_Interface -> Phantoms.TTerm (Maybe String)
 schema_InterfaceComment x =
@@ -6181,79 +6153,21 @@ schema_InterfaceDisplayName x =
         Core.projectionField = (Core.Name "displayName")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-schema_InterfaceWithId :: Phantoms.TTerm Dtld.Schema_Interface -> Phantoms.TTerm Dtld.Dtmi -> Phantoms.TTerm Dtld.Schema_Interface
-schema_InterfaceWithId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+schema_InterfaceId :: Phantoms.TTerm Dtld.Schema_Interface -> Phantoms.TTerm Dtld.Dtmi
+schema_InterfaceId x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface"),
+        Core.projectionField = (Core.Name "id")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-schema_InterfaceWithType :: Phantoms.TTerm Dtld.Schema_Interface -> Phantoms.TTerm Dtld.Schema_Interface_Type -> Phantoms.TTerm Dtld.Schema_Interface
-schema_InterfaceWithType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+schema_InterfaceType :: Phantoms.TTerm Dtld.Schema_Interface -> Phantoms.TTerm Dtld.Schema_Interface_Type
+schema_InterfaceType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface"),
+        Core.projectionField = (Core.Name "type")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 schema_InterfaceWithComment :: Phantoms.TTerm Dtld.Schema_Interface -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.Schema_Interface
 schema_InterfaceWithComment original newVal =
@@ -6366,6 +6280,80 @@ schema_InterfaceWithDisplayName original newVal =
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+schema_InterfaceWithId :: Phantoms.TTerm Dtld.Schema_Interface -> Phantoms.TTerm Dtld.Dtmi -> Phantoms.TTerm Dtld.Schema_Interface
+schema_InterfaceWithId original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+schema_InterfaceWithType :: Phantoms.TTerm Dtld.Schema_Interface -> Phantoms.TTerm Dtld.Schema_Interface_Type -> Phantoms.TTerm Dtld.Schema_Interface
+schema_InterfaceWithType original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 schema_Interface_TypeArray :: Phantoms.TTerm Dtld.Schema_Array -> Phantoms.TTerm Dtld.Schema_Interface_Type
 schema_Interface_TypeArray x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
@@ -6425,38 +6413,6 @@ schema_Map type_ mapKey mapValue id comment description displayName =
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Phantoms.unTTerm displayName)}]}))
 
-schema_MapType :: Phantoms.TTerm Dtld.Schema_Map -> Phantoms.TTerm Dtld.Iri
-schema_MapType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-        Core.projectionField = (Core.Name "type")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-schema_MapMapKey :: Phantoms.TTerm Dtld.Schema_Map -> Phantoms.TTerm Dtld.MapKey
-schema_MapMapKey x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-        Core.projectionField = (Core.Name "mapKey")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-schema_MapMapValue :: Phantoms.TTerm Dtld.Schema_Map -> Phantoms.TTerm Dtld.MapValue
-schema_MapMapValue x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-        Core.projectionField = (Core.Name "mapValue")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-schema_MapId :: Phantoms.TTerm Dtld.Schema_Map -> Phantoms.TTerm (Maybe Dtld.Dtmi)
-schema_MapId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-        Core.projectionField = (Core.Name "id")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 schema_MapComment :: Phantoms.TTerm Dtld.Schema_Map -> Phantoms.TTerm (Maybe String)
 schema_MapComment x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -6481,209 +6437,37 @@ schema_MapDisplayName x =
         Core.projectionField = (Core.Name "displayName")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-schema_MapWithType :: Phantoms.TTerm Dtld.Schema_Map -> Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm Dtld.Schema_Map
-schema_MapWithType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "mapKey"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-              Core.projectionField = (Core.Name "mapKey")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "mapValue"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-              Core.projectionField = (Core.Name "mapValue")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+schema_MapId :: Phantoms.TTerm Dtld.Schema_Map -> Phantoms.TTerm (Maybe Dtld.Dtmi)
+schema_MapId x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+        Core.projectionField = (Core.Name "id")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-schema_MapWithMapKey :: Phantoms.TTerm Dtld.Schema_Map -> Phantoms.TTerm Dtld.MapKey -> Phantoms.TTerm Dtld.Schema_Map
-schema_MapWithMapKey original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "mapKey"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "mapValue"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-              Core.projectionField = (Core.Name "mapValue")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+schema_MapMapKey :: Phantoms.TTerm Dtld.Schema_Map -> Phantoms.TTerm Dtld.MapKey
+schema_MapMapKey x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+        Core.projectionField = (Core.Name "mapKey")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-schema_MapWithMapValue :: Phantoms.TTerm Dtld.Schema_Map -> Phantoms.TTerm Dtld.MapValue -> Phantoms.TTerm Dtld.Schema_Map
-schema_MapWithMapValue original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "mapKey"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-              Core.projectionField = (Core.Name "mapKey")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "mapValue"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+schema_MapMapValue :: Phantoms.TTerm Dtld.Schema_Map -> Phantoms.TTerm Dtld.MapValue
+schema_MapMapValue x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+        Core.projectionField = (Core.Name "mapValue")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-schema_MapWithId :: Phantoms.TTerm Dtld.Schema_Map -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.Schema_Map
-schema_MapWithId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "mapKey"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-              Core.projectionField = (Core.Name "mapKey")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "mapValue"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-              Core.projectionField = (Core.Name "mapValue")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+schema_MapType :: Phantoms.TTerm Dtld.Schema_Map -> Phantoms.TTerm Dtld.Iri
+schema_MapType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+        Core.projectionField = (Core.Name "type")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 schema_MapWithComment :: Phantoms.TTerm Dtld.Schema_Map -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.Schema_Map
 schema_MapWithComment original newVal =
@@ -6838,6 +6622,210 @@ schema_MapWithDisplayName original newVal =
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+schema_MapWithId :: Phantoms.TTerm Dtld.Schema_Map -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.Schema_Map
+schema_MapWithId original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "mapKey"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+              Core.projectionField = (Core.Name "mapKey")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "mapValue"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+              Core.projectionField = (Core.Name "mapValue")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+schema_MapWithMapKey :: Phantoms.TTerm Dtld.Schema_Map -> Phantoms.TTerm Dtld.MapKey -> Phantoms.TTerm Dtld.Schema_Map
+schema_MapWithMapKey original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "mapKey"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "mapValue"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+              Core.projectionField = (Core.Name "mapValue")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+schema_MapWithMapValue :: Phantoms.TTerm Dtld.Schema_Map -> Phantoms.TTerm Dtld.MapValue -> Phantoms.TTerm Dtld.Schema_Map
+schema_MapWithMapValue original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "mapKey"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+              Core.projectionField = (Core.Name "mapKey")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "mapValue"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+schema_MapWithType :: Phantoms.TTerm Dtld.Schema_Map -> Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm Dtld.Schema_Map
+schema_MapWithType original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "mapKey"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+              Core.projectionField = (Core.Name "mapKey")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "mapValue"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+              Core.projectionField = (Core.Name "mapValue")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 schema_Object :: Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm (S.Set Dtld.Field) -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.Schema_Object
 schema_Object type_ fields id comment description displayName =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -6861,30 +6849,6 @@ schema_Object type_ fields id comment description displayName =
         Core.Field {
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Phantoms.unTTerm displayName)}]}))
-
-schema_ObjectType :: Phantoms.TTerm Dtld.Schema_Object -> Phantoms.TTerm Dtld.Iri
-schema_ObjectType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
-        Core.projectionField = (Core.Name "type")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-schema_ObjectFields :: Phantoms.TTerm Dtld.Schema_Object -> Phantoms.TTerm (S.Set Dtld.Field)
-schema_ObjectFields x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
-        Core.projectionField = (Core.Name "fields")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-schema_ObjectId :: Phantoms.TTerm Dtld.Schema_Object -> Phantoms.TTerm (Maybe Dtld.Dtmi)
-schema_ObjectId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
-        Core.projectionField = (Core.Name "id")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 schema_ObjectComment :: Phantoms.TTerm Dtld.Schema_Object -> Phantoms.TTerm (Maybe String)
 schema_ObjectComment x =
@@ -6910,137 +6874,29 @@ schema_ObjectDisplayName x =
         Core.projectionField = (Core.Name "displayName")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-schema_ObjectWithType :: Phantoms.TTerm Dtld.Schema_Object -> Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm Dtld.Schema_Object
-schema_ObjectWithType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "fields"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
-              Core.projectionField = (Core.Name "fields")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+schema_ObjectFields :: Phantoms.TTerm Dtld.Schema_Object -> Phantoms.TTerm (S.Set Dtld.Field)
+schema_ObjectFields x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
+        Core.projectionField = (Core.Name "fields")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-schema_ObjectWithFields :: Phantoms.TTerm Dtld.Schema_Object -> Phantoms.TTerm (S.Set Dtld.Field) -> Phantoms.TTerm Dtld.Schema_Object
-schema_ObjectWithFields original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "fields"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+schema_ObjectId :: Phantoms.TTerm Dtld.Schema_Object -> Phantoms.TTerm (Maybe Dtld.Dtmi)
+schema_ObjectId x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
+        Core.projectionField = (Core.Name "id")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-schema_ObjectWithId :: Phantoms.TTerm Dtld.Schema_Object -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.Schema_Object
-schema_ObjectWithId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "fields"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
-              Core.projectionField = (Core.Name "fields")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+schema_ObjectType :: Phantoms.TTerm Dtld.Schema_Object -> Phantoms.TTerm Dtld.Iri
+schema_ObjectType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
+        Core.projectionField = (Core.Name "type")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 schema_ObjectWithComment :: Phantoms.TTerm Dtld.Schema_Object -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.Schema_Object
 schema_ObjectWithComment original newVal =
@@ -7174,6 +7030,138 @@ schema_ObjectWithDisplayName original newVal =
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
+schema_ObjectWithFields :: Phantoms.TTerm Dtld.Schema_Object -> Phantoms.TTerm (S.Set Dtld.Field) -> Phantoms.TTerm Dtld.Schema_Object
+schema_ObjectWithFields original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "fields"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+schema_ObjectWithId :: Phantoms.TTerm Dtld.Schema_Object -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.Schema_Object
+schema_ObjectWithId original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "fields"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
+              Core.projectionField = (Core.Name "fields")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+schema_ObjectWithType :: Phantoms.TTerm Dtld.Schema_Object -> Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm Dtld.Schema_Object
+schema_ObjectWithType original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "fields"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
+              Core.projectionField = (Core.Name "fields")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 schema_PrimitiveBoolean :: Phantoms.TTerm Dtld.Schema_Primitive
 schema_PrimitiveBoolean =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
@@ -7284,38 +7272,6 @@ telemetry type_ name schema id comment description displayName unit =
           Core.fieldName = (Core.Name "unit"),
           Core.fieldTerm = (Phantoms.unTTerm unit)}]}))
 
-telemetryType :: Phantoms.TTerm Dtld.Telemetry -> Phantoms.TTerm Dtld.Iri
-telemetryType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-        Core.projectionField = (Core.Name "type")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-telemetryName :: Phantoms.TTerm Dtld.Telemetry -> Phantoms.TTerm String
-telemetryName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-        Core.projectionField = (Core.Name "name")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-telemetrySchema :: Phantoms.TTerm Dtld.Telemetry -> Phantoms.TTerm Dtld.Schema
-telemetrySchema x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-        Core.projectionField = (Core.Name "schema")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-telemetryId :: Phantoms.TTerm Dtld.Telemetry -> Phantoms.TTerm (Maybe Dtld.Dtmi)
-telemetryId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-        Core.projectionField = (Core.Name "id")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 telemetryComment :: Phantoms.TTerm Dtld.Telemetry -> Phantoms.TTerm (Maybe String)
 telemetryComment x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -7340,6 +7296,38 @@ telemetryDisplayName x =
         Core.projectionField = (Core.Name "displayName")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
+telemetryId :: Phantoms.TTerm Dtld.Telemetry -> Phantoms.TTerm (Maybe Dtld.Dtmi)
+telemetryId x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+        Core.projectionField = (Core.Name "id")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+telemetryName :: Phantoms.TTerm Dtld.Telemetry -> Phantoms.TTerm String
+telemetryName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+        Core.projectionField = (Core.Name "name")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+telemetrySchema :: Phantoms.TTerm Dtld.Telemetry -> Phantoms.TTerm Dtld.Schema
+telemetrySchema x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+        Core.projectionField = (Core.Name "schema")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+telemetryType :: Phantoms.TTerm Dtld.Telemetry -> Phantoms.TTerm Dtld.Iri
+telemetryType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+        Core.projectionField = (Core.Name "type")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
 telemetryUnit :: Phantoms.TTerm Dtld.Telemetry -> Phantoms.TTerm (Maybe Dtld.Unit)
 telemetryUnit x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -7347,238 +7335,6 @@ telemetryUnit x =
         Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
         Core.projectionField = (Core.Name "unit")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-telemetryWithType :: Phantoms.TTerm Dtld.Telemetry -> Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm Dtld.Telemetry
-telemetryWithType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "schema")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "unit"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "unit")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-telemetryWithName :: Phantoms.TTerm Dtld.Telemetry -> Phantoms.TTerm String -> Phantoms.TTerm Dtld.Telemetry
-telemetryWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "schema")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "unit"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "unit")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-telemetryWithSchema :: Phantoms.TTerm Dtld.Telemetry -> Phantoms.TTerm Dtld.Schema -> Phantoms.TTerm Dtld.Telemetry
-telemetryWithSchema original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "id")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "unit"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "unit")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-telemetryWithId :: Phantoms.TTerm Dtld.Telemetry -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.Telemetry
-telemetryWithId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "type")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "name")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "schema"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "schema")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "comment")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "description")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "displayName"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "displayName")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "unit"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
-              Core.projectionField = (Core.Name "unit")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 telemetryWithComment :: Phantoms.TTerm Dtld.Telemetry -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Dtld.Telemetry
 telemetryWithComment original newVal =
@@ -7754,6 +7510,238 @@ telemetryWithDisplayName original newVal =
               Core.projectionField = (Core.Name "unit")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
+telemetryWithId :: Phantoms.TTerm Dtld.Telemetry -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm Dtld.Telemetry
+telemetryWithId original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "schema")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "unit"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "unit")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+telemetryWithName :: Phantoms.TTerm Dtld.Telemetry -> Phantoms.TTerm String -> Phantoms.TTerm Dtld.Telemetry
+telemetryWithName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "schema")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "unit"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "unit")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+telemetryWithSchema :: Phantoms.TTerm Dtld.Telemetry -> Phantoms.TTerm Dtld.Schema -> Phantoms.TTerm Dtld.Telemetry
+telemetryWithSchema original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "unit"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "unit")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+telemetryWithType :: Phantoms.TTerm Dtld.Telemetry -> Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm Dtld.Telemetry
+telemetryWithType original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "schema"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "schema")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "id")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "comment")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "displayName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "displayName")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "unit"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"),
+              Core.projectionField = (Core.Name "unit")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
 telemetryWithUnit :: Phantoms.TTerm Dtld.Telemetry -> Phantoms.TTerm (Maybe Dtld.Unit) -> Phantoms.TTerm Dtld.Telemetry
 telemetryWithUnit original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -7812,14 +7800,26 @@ telemetryWithUnit original newVal =
           Core.fieldName = (Core.Name "unit"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-unit :: Phantoms.TTerm () -> Phantoms.TTerm Dtld.Unit
-unit x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Unit"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+unDtmi :: Phantoms.TTerm Dtld.Dtmi -> Phantoms.TTerm String
+unDtmi x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.com.microsoft.azure.dtld.Dtmi")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unIri :: Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm String
+unIri x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.com.microsoft.azure.dtld.Iri")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unUnit :: Phantoms.TTerm Dtld.Unit -> Phantoms.TTerm ()
 unUnit x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.ext.com.microsoft.azure.dtld.Unit")))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+unit :: Phantoms.TTerm () -> Phantoms.TTerm Dtld.Unit
+unit x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Unit"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))

@@ -28,6 +28,27 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Collect forall type variable names from a type
+collectForallVars :: Core.Type -> [Core.Name]
+collectForallVars typ =
+    case typ of
+      Core.TypeAnnotated v0 -> collectForallVars (Core.annotatedTypeBody v0)
+      Core.TypeForall v0 -> Lists.cons (Core.forallTypeParameter v0) (collectForallVars (Core.forallTypeBody v0))
+      _ -> []
+
+-- | Deduplicate bindings by appending underscore suffixes to duplicate names
+deduplicateBindings :: [Core.Binding] -> [Core.Binding]
+deduplicateBindings bindings =
+    Lists.foldl (\acc -> \b ->
+      let n = Core.unName (Core.bindingName b)
+          usedNames = Lists.map (\a -> Core.unName (Core.bindingName a)) acc
+          uniqueName = findUniqueName n usedNames
+      in (Lists.concat2 acc [
+        Core.Binding {
+          Core.bindingName = (Core.Name uniqueName),
+          Core.bindingTerm = (Core.bindingTerm b),
+          Core.bindingType = (Core.bindingType b)}])) [] bindings
+
 -- | Generate a binding name for a DSL function from a type name
 dslBindingName :: Core.Name -> Core.Name
 dslBindingName n =
@@ -88,10 +109,37 @@ dslNamespace ns =
         "hydra.dsl.",
         (Module.unNamespace ns)])))
 
+-- | Build a TypeScheme with TTerm-wrapped parameter and result types
+dslTypeScheme :: Core.Type -> [Core.Type] -> Core.Type -> Core.TypeScheme
+dslTypeScheme origType paramTypes resultType =
+
+      let typeVars = collectForallVars origType
+          wrappedResult =
+                  Core.TypeApplication (Core.ApplicationType {
+                    Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
+                    Core.applicationTypeArgument = resultType})
+          funType =
+                  Lists.foldr (\paramType -> \acc -> Core.TypeFunction (Core.FunctionType {
+                    Core.functionTypeDomain = (Core.TypeApplication (Core.ApplicationType {
+                      Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
+                      Core.applicationTypeArgument = paramType})),
+                    Core.functionTypeCodomain = acc})) wrappedResult paramTypes
+      in Core.TypeScheme {
+        Core.typeSchemeVariables = typeVars,
+        Core.typeSchemeType = funType,
+        Core.typeSchemeConstraints = Nothing}
+
 -- | Filter bindings to only DSL-eligible type definitions
 filterTypeBindings :: t0 -> t1 -> [Core.Binding] -> Either t2 [Core.Binding]
 filterTypeBindings cx graph bindings =
     Eithers.map Maybes.cat (Eithers.mapList (isDslEligibleBinding cx graph) (Lists.filter Annotations.isNativeType bindings))
+
+-- | Find a unique name by appending underscores
+findUniqueName :: String -> [String] -> String
+findUniqueName candidate usedNames =
+    Logic.ifElse (Lists.null (Lists.filter (Equality.equal candidate) usedNames)) candidate (findUniqueName (Strings.cat [
+      candidate,
+      "_"]) usedNames)
 
 -- | Generate all DSL bindings for a type binding
 generateBindingsForType :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Errors.DecodingError) [Core.Binding]
@@ -496,60 +544,12 @@ generateWrappedTypeAccessors origType typeName innerType =
           Core.bindingTerm = unwrapBody,
           Core.bindingType = (Just unwrapTs)}]
 
--- | Deduplicate bindings by appending underscore suffixes to duplicate names
-deduplicateBindings :: [Core.Binding] -> [Core.Binding]
-deduplicateBindings bindings =
-    Lists.foldl (\acc -> \b ->
-      let n = Core.unName (Core.bindingName b)
-          usedNames = Lists.map (\a -> Core.unName (Core.bindingName a)) acc
-          uniqueName = findUniqueName n usedNames
-      in (Lists.concat2 acc [
-        Core.Binding {
-          Core.bindingName = (Core.Name uniqueName),
-          Core.bindingTerm = (Core.bindingTerm b),
-          Core.bindingType = (Core.bindingType b)}])) [] bindings
-
--- | Find a unique name by appending underscores
-findUniqueName :: String -> [String] -> String
-findUniqueName candidate usedNames =
-    Logic.ifElse (Lists.null (Lists.filter (Equality.equal candidate) usedNames)) candidate (findUniqueName (Strings.cat [
-      candidate,
-      "_"]) usedNames)
-
 -- | Check if a binding is eligible for DSL generation
 isDslEligibleBinding :: t0 -> t1 -> Core.Binding -> Either t2 (Maybe Core.Binding)
 isDslEligibleBinding cx graph b =
 
       let ns = Names.namespaceOf (Core.bindingName b)
       in (Logic.ifElse (Equality.equal (Maybes.maybe "" Module.unNamespace ns) "hydra.phantoms") (Right Nothing) (Right (Just b)))
-
--- | Build a TypeScheme with TTerm-wrapped parameter and result types
-dslTypeScheme :: Core.Type -> [Core.Type] -> Core.Type -> Core.TypeScheme
-dslTypeScheme origType paramTypes resultType =
-
-      let typeVars = collectForallVars origType
-          wrappedResult =
-                  Core.TypeApplication (Core.ApplicationType {
-                    Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
-                    Core.applicationTypeArgument = resultType})
-          funType =
-                  Lists.foldr (\paramType -> \acc -> Core.TypeFunction (Core.FunctionType {
-                    Core.functionTypeDomain = (Core.TypeApplication (Core.ApplicationType {
-                      Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
-                      Core.applicationTypeArgument = paramType})),
-                    Core.functionTypeCodomain = acc})) wrappedResult paramTypes
-      in Core.TypeScheme {
-        Core.typeSchemeVariables = typeVars,
-        Core.typeSchemeType = funType,
-        Core.typeSchemeConstraints = Nothing}
-
--- | Collect forall type variable names from a type
-collectForallVars :: Core.Type -> [Core.Name]
-collectForallVars typ =
-    case typ of
-      Core.TypeAnnotated v0 -> collectForallVars (Core.annotatedTypeBody v0)
-      Core.TypeForall v0 -> Lists.cons (Core.forallTypeParameter v0) (collectForallVars (Core.forallTypeBody v0))
-      _ -> []
 
 -- | Build the nominal result type with type applications for forall variables
 nominalResultType :: Core.Name -> Core.Type -> Core.Type

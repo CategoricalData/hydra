@@ -54,19 +54,6 @@ failOnFlag cx flag msg =
       Context.inContextObject = (Errors.ErrorOther (Errors.OtherError msg)),
       Context.inContextContext = cx})) (Right ()))
 
--- | Get the debug ID from context (Either version)
-getDebugId :: Context.Context -> Either (Context.InContext Errors.Error) (Maybe String)
-getDebugId cx =
-    Maybes.maybe (Right Nothing) (\term -> Eithers.map Maybes.pure (Core___.string cx (Graph.Graph {
-      Graph.graphBoundTerms = Maps.empty,
-      Graph.graphBoundTypes = Maps.empty,
-      Graph.graphClassConstraints = Maps.empty,
-      Graph.graphLambdaVariables = Sets.empty,
-      Graph.graphMetadata = Maps.empty,
-      Graph.graphPrimitives = Maps.empty,
-      Graph.graphSchemaTypes = Maps.empty,
-      Graph.graphTypeVariables = Sets.empty}) term)) (getAttr Constants.key_debugId cx)
-
 -- | Get an attribute from a context (pure version)
 getAttr :: Core.Name -> Context.Context -> Maybe Core.Term
 getAttr key cx = Maps.lookup key (Context.contextOther cx)
@@ -85,6 +72,19 @@ getCount key cx =
           _ -> 0
         _ -> 0
       _ -> 0) (Maps.lookup key (Context.contextOther cx))
+
+-- | Get the debug ID from context (Either version)
+getDebugId :: Context.Context -> Either (Context.InContext Errors.Error) (Maybe String)
+getDebugId cx =
+    Maybes.maybe (Right Nothing) (\term -> Eithers.map Maybes.pure (Core___.string cx (Graph.Graph {
+      Graph.graphBoundTerms = Maps.empty,
+      Graph.graphBoundTypes = Maps.empty,
+      Graph.graphClassConstraints = Maps.empty,
+      Graph.graphLambdaVariables = Sets.empty,
+      Graph.graphMetadata = Maps.empty,
+      Graph.graphPrimitives = Maps.empty,
+      Graph.graphSchemaTypes = Maps.empty,
+      Graph.graphTypeVariables = Sets.empty}) term)) (getAttr Constants.key_debugId cx)
 
 -- | Get description from annotations map (Either version)
 getDescription :: Context.Context -> Graph.Graph -> M.Map Core.Name Core.Term -> Either (Context.InContext Errors.Error) (Maybe String)
@@ -136,17 +136,6 @@ getTypeClasses cx graph term =
 getTypeDescription :: Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Errors.Error) (Maybe String)
 getTypeDescription cx graph typ = getDescription cx graph (typeAnnotationInternal typ)
 
--- | For a typed term, decide whether a coder should encode it as a native type expression, or as a Hydra type expression.
-isNativeType :: Core.Binding -> Bool
-isNativeType el =
-
-      let isFlaggedAsFirstClassType =
-              Maybes.fromMaybe False (Maybes.map (\_ -> True) (getTermAnnotation Constants.key_firstClassType (Core.bindingTerm el)))
-      in (Maybes.maybe False (\ts -> Logic.and (Equality.equal ts (Core.TypeScheme {
-        Core.typeSchemeVariables = [],
-        Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-        Core.typeSchemeConstraints = Nothing})) (Logic.not isFlaggedAsFirstClassType)) (Core.bindingType el))
-
 -- | Check if annotations contain description
 hasDescription :: M.Map Core.Name t0 -> Bool
 hasDescription anns = Maybes.isJust (Maps.lookup Constants.key_description anns)
@@ -169,6 +158,17 @@ hasFlag cx flag =
 -- | Check if type has description
 hasTypeDescription :: Core.Type -> Bool
 hasTypeDescription typ = hasDescription (typeAnnotationInternal typ)
+
+-- | For a typed term, decide whether a coder should encode it as a native type expression, or as a Hydra type expression.
+isNativeType :: Core.Binding -> Bool
+isNativeType el =
+
+      let isFlaggedAsFirstClassType =
+              Maybes.fromMaybe False (Maybes.map (\_ -> True) (getTermAnnotation Constants.key_firstClassType (Core.bindingTerm el)))
+      in (Maybes.maybe False (\ts -> Logic.and (Equality.equal ts (Core.TypeScheme {
+        Core.typeSchemeVariables = [],
+        Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+        Core.typeSchemeConstraints = Nothing})) (Logic.not isFlaggedAsFirstClassType)) (Core.bindingType el))
 
 -- | Return a zero-indexed counter for the given key and updated context (pure version)
 nextCount :: Core.Name -> Context.Context -> (Int, Context.Context)

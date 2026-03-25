@@ -104,16 +104,6 @@ expr cx raw =
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)
 
-indentedExpression :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.IndentedExpression
-indentedExpression cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->
-        let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "style" indentStyle fieldMap cx) (\field_style -> Eithers.bind (Helpers.requireField "expr" expr fieldMap cx) (\field_expr -> Right (Ast.IndentedExpression {
-          Ast.indentedExpressionStyle = field_style,
-          Ast.indentedExpressionExpr = field_expr}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
-
 indentStyle :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.IndentStyle
 indentStyle cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
@@ -138,6 +128,16 @@ indentStyle cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)
+
+indentedExpression :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.IndentedExpression
+indentedExpression cx raw =
+    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+      Core.TermRecord v0 ->
+        let fieldMap = Helpers.toFieldMap v0
+        in (Eithers.bind (Helpers.requireField "style" indentStyle fieldMap cx) (\field_style -> Eithers.bind (Helpers.requireField "expr" expr fieldMap cx) (\field_expr -> Right (Ast.IndentedExpression {
+          Ast.indentedExpressionStyle = field_style,
+          Ast.indentedExpressionExpr = field_expr}))))
+      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
 
 op :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.Op
 op cx raw =

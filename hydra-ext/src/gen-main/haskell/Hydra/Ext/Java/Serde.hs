@@ -22,8 +22,24 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+escapeJavaChar :: Int -> String
+escapeJavaChar c =
+    Logic.ifElse (Equality.equal c 34) "\\\"" (Logic.ifElse (Equality.equal c 92) "\\\\" (Logic.ifElse (Equality.equal c 10) "\\n" (Logic.ifElse (Equality.equal c 13) "\\r" (Logic.ifElse (Equality.equal c 9) "\\t" (Logic.ifElse (Equality.equal c 8) "\\b" (Logic.ifElse (Equality.equal c 12) "\\f" (Logic.ifElse (Logic.and (Equality.gte c 32) (Equality.lt c 127)) (Strings.fromList [
+      c]) (javaUnicodeEscape c))))))))
+
+escapeJavaString :: String -> String
+escapeJavaString s = Strings.cat (Lists.map (\c -> escapeJavaChar c) (Strings.toList s))
+
 hexDigit :: Int -> Int
 hexDigit n = Logic.ifElse (Equality.lt n 10) (Math.add n 48) (Math.add (Math.sub n 10) 65)
+
+javaUnicodeEscape :: Int -> String
+javaUnicodeEscape n =
+    Logic.ifElse (Equality.gt n 65535) (
+      let n_ = Math.sub n 65536
+          hi = Math.add 55296 (Math.div n_ 1024)
+          lo = Math.add 56320 (Math.mod n_ 1024)
+      in (Strings.cat2 (Strings.cat2 "\\u" (padHex4 hi)) (Strings.cat2 "\\u" (padHex4 lo)))) (Strings.cat2 "\\u" (padHex4 n))
 
 padHex4 :: Int -> String
 padHex4 n =
@@ -40,21 +56,20 @@ padHex4 n =
         (hexDigit d1),
         (hexDigit d0)])
 
-javaUnicodeEscape :: Int -> String
-javaUnicodeEscape n =
-    Logic.ifElse (Equality.gt n 65535) (
-      let n_ = Math.sub n 65536
-          hi = Math.add 55296 (Math.div n_ 1024)
-          lo = Math.add 56320 (Math.mod n_ 1024)
-      in (Strings.cat2 (Strings.cat2 "\\u" (padHex4 hi)) (Strings.cat2 "\\u" (padHex4 lo)))) (Strings.cat2 "\\u" (padHex4 n))
+-- | Sanitize a string for use in a Java comment
+sanitizeJavaComment :: String -> String
+sanitizeJavaComment s = Strings.intercalate "&gt;" (Strings.splitOn ">" (Strings.intercalate "&lt;" (Strings.splitOn "<" s)))
 
-escapeJavaChar :: Int -> String
-escapeJavaChar c =
-    Logic.ifElse (Equality.equal c 34) "\\\"" (Logic.ifElse (Equality.equal c 92) "\\\\" (Logic.ifElse (Equality.equal c 10) "\\n" (Logic.ifElse (Equality.equal c 13) "\\r" (Logic.ifElse (Equality.equal c 9) "\\t" (Logic.ifElse (Equality.equal c 8) "\\b" (Logic.ifElse (Equality.equal c 12) "\\f" (Logic.ifElse (Logic.and (Equality.gte c 32) (Equality.lt c 127)) (Strings.fromList [
-      c]) (javaUnicodeEscape c))))))))
+-- | Create a single-line Java comment
+singleLineComment :: String -> Ast.Expr
+singleLineComment c = Serialization.cst (Strings.cat2 "// " (sanitizeJavaComment c))
 
-escapeJavaString :: String -> String
-escapeJavaString s = Strings.cat (Lists.map (\c -> escapeJavaChar c) (Strings.toList s))
+-- | Wrap an expression with optional Javadoc comments
+withComments :: Maybe String -> Ast.Expr -> Ast.Expr
+withComments mc expr =
+    Maybes.maybe expr (\c -> Serialization.newlineSep [
+      Serialization.cst (Strings.cat2 "/**\n" (Strings.cat2 (Strings.intercalate "\n" (Lists.map (\l -> Strings.cat2 " * " l) (Strings.lines (sanitizeJavaComment c)))) "\n */")),
+      expr]) mc
 
 writeAdditionalBound :: Syntax.AdditionalBound -> Ast.Expr
 writeAdditionalBound ab =
@@ -199,16 +214,6 @@ writeCastExpression_NotPlusMinus npm =
         writeCastExpression_RefAndBounds rb,
         (writeUnaryExpression ex)])
 
-writeCastExpression_RefAndBounds :: Syntax.CastExpression_RefAndBounds -> Ast.Expr
-writeCastExpression_RefAndBounds rab =
-
-      let rt = Syntax.castExpression_RefAndBoundsType rab
-          adds = Syntax.castExpression_RefAndBoundsBounds rab
-      in (Serialization.parenList False [
-        Serialization.spaceSep (Maybes.cat [
-          Just (writeReferenceType rt),
-          (Logic.ifElse (Lists.null adds) Nothing (Just (Serialization.spaceSep (Lists.map writeAdditionalBound adds))))])])
-
 writeCastExpression_Primitive :: Syntax.CastExpression_Primitive -> Ast.Expr
 writeCastExpression_Primitive cp =
 
@@ -218,6 +223,16 @@ writeCastExpression_Primitive cp =
         Serialization.parenList False [
           writePrimitiveTypeWithAnnotations pt],
         (writeUnaryExpression ex)])
+
+writeCastExpression_RefAndBounds :: Syntax.CastExpression_RefAndBounds -> Ast.Expr
+writeCastExpression_RefAndBounds rab =
+
+      let rt = Syntax.castExpression_RefAndBoundsType rab
+          adds = Syntax.castExpression_RefAndBoundsBounds rab
+      in (Serialization.parenList False [
+        Serialization.spaceSep (Maybes.cat [
+          Just (writeReferenceType rt),
+          (Logic.ifElse (Lists.null adds) Nothing (Just (Serialization.spaceSep (Lists.map writeAdditionalBound adds))))])])
 
 writeClassBody :: Syntax.ClassBody -> Ast.Expr
 writeClassBody cb =
@@ -550,6 +565,9 @@ writeFormalParameter_Simple fps =
 writeIdentifier :: Syntax.Identifier -> Ast.Expr
 writeIdentifier id = Serialization.cst (Syntax.unIdentifier id)
 
+writeIfThenElseStatement :: t0 -> Ast.Expr
+writeIfThenElseStatement _ = Serialization.cst "STUB:IfThenElseStatement"
+
 writeIfThenStatement :: Syntax.IfThenStatement -> Ast.Expr
 writeIfThenStatement its =
 
@@ -560,9 +578,6 @@ writeIfThenStatement its =
         (Serialization.parenList False [
           writeExpression cond]),
         (Serialization.curlyBlock Serialization.fullBlockStyle (writeStatement thn))])
-
-writeIfThenElseStatement :: t0 -> Ast.Expr
-writeIfThenElseStatement _ = Serialization.cst "STUB:IfThenElseStatement"
 
 writeImportDeclaration :: Syntax.ImportDeclaration -> Ast.Expr
 writeImportDeclaration imp =
@@ -693,6 +708,12 @@ writeLiteral l =
           ci]) (javaUnicodeEscape ci))))))) "'")))
       Syntax.LiteralString v0 -> writeStringLiteral v0
 
+writeLocalName :: Syntax.LocalVariableType -> Ast.Expr
+writeLocalName t =
+    case t of
+      Syntax.LocalVariableTypeType v0 -> writeUnannType v0
+      Syntax.LocalVariableTypeVar -> Serialization.cst "var"
+
 writeLocalVariableDeclaration :: Syntax.LocalVariableDeclaration -> Ast.Expr
 writeLocalVariableDeclaration lvd =
 
@@ -707,12 +728,6 @@ writeLocalVariableDeclaration lvd =
 writeLocalVariableDeclarationStatement :: Syntax.LocalVariableDeclarationStatement -> Ast.Expr
 writeLocalVariableDeclarationStatement lvds =
     Serialization.withSemi (writeLocalVariableDeclaration (Syntax.unLocalVariableDeclarationStatement lvds))
-
-writeLocalName :: Syntax.LocalVariableType -> Ast.Expr
-writeLocalName t =
-    case t of
-      Syntax.LocalVariableTypeType v0 -> writeUnannType v0
-      Syntax.LocalVariableTypeVar -> Serialization.cst "var"
 
 writeMarkerAnnotation :: Syntax.MarkerAnnotation -> Ast.Expr
 writeMarkerAnnotation ma = Serialization.prefix "@" (writeTypeName (Syntax.unMarkerAnnotation ma))
@@ -894,14 +909,14 @@ writePackageDeclaration pd =
           Serialization.cst "package",
           (Serialization.cst (Strings.intercalate "." (Lists.map (\id -> Syntax.unIdentifier id) ids)))]))])))
 
+writePackageModifier :: Syntax.PackageModifier -> Ast.Expr
+writePackageModifier pm = writeAnnotation (Syntax.unPackageModifier pm)
+
 writePackageName :: Syntax.PackageName -> Ast.Expr
 writePackageName pn = Serialization.dotSep (Lists.map writeIdentifier (Syntax.unPackageName pn))
 
 writePackageOrTypeName :: Syntax.PackageOrTypeName -> Ast.Expr
 writePackageOrTypeName potn = Serialization.dotSep (Lists.map writeIdentifier (Syntax.unPackageOrTypeName potn))
-
-writePackageModifier :: Syntax.PackageModifier -> Ast.Expr
-writePackageModifier pm = writeAnnotation (Syntax.unPackageModifier pm)
 
 writePostDecrementExpression :: t0 -> Ast.Expr
 writePostDecrementExpression _ = Serialization.cst "STUB:PostDecrementExpression"
@@ -1285,18 +1300,3 @@ writeWildcardBounds b =
       Syntax.WildcardBoundsSuper v0 -> Serialization.spaceSep [
         Serialization.cst "super",
         (writeReferenceType v0)]
-
--- | Sanitize a string for use in a Java comment
-sanitizeJavaComment :: String -> String
-sanitizeJavaComment s = Strings.intercalate "&gt;" (Strings.splitOn ">" (Strings.intercalate "&lt;" (Strings.splitOn "<" s)))
-
--- | Create a single-line Java comment
-singleLineComment :: String -> Ast.Expr
-singleLineComment c = Serialization.cst (Strings.cat2 "// " (sanitizeJavaComment c))
-
--- | Wrap an expression with optional Javadoc comments
-withComments :: Maybe String -> Ast.Expr -> Ast.Expr
-withComments mc expr =
-    Maybes.maybe expr (\c -> Serialization.newlineSep [
-      Serialization.cst (Strings.cat2 "/**\n" (Strings.cat2 (Strings.intercalate "\n" (Lists.map (\l -> Strings.cat2 " * " l) (Strings.lines (sanitizeJavaComment c)))) "\n */")),
-      expr]) mc

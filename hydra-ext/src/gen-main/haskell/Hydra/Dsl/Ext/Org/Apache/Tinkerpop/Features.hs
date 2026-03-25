@@ -4748,20 +4748,20 @@ vertexPropertyFeaturesDataTypeFeatures x =
         Core.projectionField = (Core.Name "dataTypeFeatures")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-vertexPropertyFeaturesPropertyFeatures :: Phantoms.TTerm Features.VertexPropertyFeatures -> Phantoms.TTerm Features.PropertyFeatures
-vertexPropertyFeaturesPropertyFeatures x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.ext.org.apache.tinkerpop.features.VertexPropertyFeatures"),
-        Core.projectionField = (Core.Name "propertyFeatures")})))),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 vertexPropertyFeaturesElementFeatures :: Phantoms.TTerm Features.VertexPropertyFeatures -> Phantoms.TTerm Features.ElementFeatures
 vertexPropertyFeaturesElementFeatures x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.ext.org.apache.tinkerpop.features.VertexPropertyFeatures"),
         Core.projectionField = (Core.Name "elementFeatures")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+vertexPropertyFeaturesPropertyFeatures :: Phantoms.TTerm Features.VertexPropertyFeatures -> Phantoms.TTerm Features.PropertyFeatures
+vertexPropertyFeaturesPropertyFeatures x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.org.apache.tinkerpop.features.VertexPropertyFeatures"),
+        Core.projectionField = (Core.Name "propertyFeatures")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexPropertyFeaturesSupportsRemove :: Phantoms.TTerm Features.VertexPropertyFeatures -> Phantoms.TTerm Bool
@@ -4802,36 +4802,6 @@ vertexPropertyFeaturesWithDataTypeFeatures original newVal =
               Core.projectionField = (Core.Name "supportsRemove")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-vertexPropertyFeaturesWithPropertyFeatures :: Phantoms.TTerm Features.VertexPropertyFeatures -> Phantoms.TTerm Features.PropertyFeatures -> Phantoms.TTerm Features.VertexPropertyFeatures
-vertexPropertyFeaturesWithPropertyFeatures original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.ext.org.apache.tinkerpop.features.VertexPropertyFeatures"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "dataTypeFeatures"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.org.apache.tinkerpop.features.VertexPropertyFeatures"),
-              Core.projectionField = (Core.Name "dataTypeFeatures")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "propertyFeatures"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "elementFeatures"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.org.apache.tinkerpop.features.VertexPropertyFeatures"),
-              Core.projectionField = (Core.Name "elementFeatures")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "supportsRemove"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.ext.org.apache.tinkerpop.features.VertexPropertyFeatures"),
-              Core.projectionField = (Core.Name "supportsRemove")})))),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
 vertexPropertyFeaturesWithElementFeatures :: Phantoms.TTerm Features.VertexPropertyFeatures -> Phantoms.TTerm Features.ElementFeatures -> Phantoms.TTerm Features.VertexPropertyFeatures
 vertexPropertyFeaturesWithElementFeatures original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -4854,6 +4824,36 @@ vertexPropertyFeaturesWithElementFeatures original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "elementFeatures"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "supportsRemove"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.org.apache.tinkerpop.features.VertexPropertyFeatures"),
+              Core.projectionField = (Core.Name "supportsRemove")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+vertexPropertyFeaturesWithPropertyFeatures :: Phantoms.TTerm Features.VertexPropertyFeatures -> Phantoms.TTerm Features.PropertyFeatures -> Phantoms.TTerm Features.VertexPropertyFeatures
+vertexPropertyFeaturesWithPropertyFeatures original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.org.apache.tinkerpop.features.VertexPropertyFeatures"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "dataTypeFeatures"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.org.apache.tinkerpop.features.VertexPropertyFeatures"),
+              Core.projectionField = (Core.Name "dataTypeFeatures")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyFeatures"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "elementFeatures"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.org.apache.tinkerpop.features.VertexPropertyFeatures"),
+              Core.projectionField = (Core.Name "elementFeatures")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsRemove"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {

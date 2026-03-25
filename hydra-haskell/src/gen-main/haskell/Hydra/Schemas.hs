@@ -120,6 +120,14 @@ elementsWithDependencies cx graph original =
           allDepNames = Lists.nub (Lists.concat2 (Lists.map Core.bindingName original) (Lists.concat (Lists.map depNames original)))
       in (Eithers.mapList (\name -> Lexical.requireElement cx graph name) allDepNames)
 
+-- | Test whether a given System F type is polymorphic (i.e., a forall type)
+fTypeIsPolymorphic :: Core.Type -> Bool
+fTypeIsPolymorphic typ =
+    case typ of
+      Core.TypeAnnotated v0 -> fTypeIsPolymorphic (Core.annotatedTypeBody v0)
+      Core.TypeForall _ -> True
+      _ -> False
+
 fieldMap :: [Core.Field] -> M.Map Core.Name Core.Term
 fieldMap fields =
 
@@ -181,14 +189,6 @@ freshNames n cx =
                     cx1 = Pairs.second result
                 in (Lists.concat2 names (Lists.pure name), cx1)
       in (Lists.foldl go ([], cx) (Lists.replicate n ()))
-
--- | Test whether a given System F type is polymorphic (i.e., a forall type)
-fTypeIsPolymorphic :: Core.Type -> Bool
-fTypeIsPolymorphic typ =
-    case typ of
-      Core.TypeAnnotated v0 -> fTypeIsPolymorphic (Core.annotatedTypeBody v0)
-      Core.TypeForall _ -> True
-      _ -> False
 
 -- | Fully strip a type of forall quantifiers, normalizing bound variable names for alpha-equivalence comparison
 fullyStripAndNormalizeType :: Core.Type -> Core.Type
@@ -286,6 +286,15 @@ isEnumType typ =
       Core.TypeUnion v0 -> isEnumRowType v0
       _ -> False
 
+isNominalType :: Core.Type -> Bool
+isNominalType typ =
+    case (Rewriting.deannotateType typ) of
+      Core.TypeRecord _ -> True
+      Core.TypeUnion _ -> True
+      Core.TypeWrap _ -> True
+      Core.TypeForall v0 -> isNominalType (Core.forallTypeBody v0)
+      _ -> False
+
 -- | Check if an element is serializable (no function types in dependencies) (Either version)
 isSerializable :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Errors.Error) Bool
 isSerializable cx graph el =
@@ -295,14 +304,6 @@ isSerializable cx graph el =
       in (Eithers.map (\deps ->
         let allVariants = Sets.fromList (Lists.concat (Lists.map variants (Maps.elems deps)))
         in (Logic.not (Sets.member Variants.TypeVariantFunction allVariants))) (typeDependencies cx graph False Equality.identity (Core.bindingName el)))
-
--- | Check if a type is serializable (no function types in the type itself)
-isSerializableType :: Core.Type -> Bool
-isSerializableType typ =
-
-      let allVariants =
-              Sets.fromList (Lists.map Reflect.typeVariant (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> Lists.cons t m) [] typ))
-      in (Logic.not (Sets.member Variants.TypeVariantFunction allVariants))
 
 -- | Check if a type (by name) is serializable, resolving all type dependencies (Either version)
 isSerializableByName :: Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Errors.Error) Bool
@@ -314,14 +315,13 @@ isSerializableByName cx graph name =
         let allVariants = Sets.fromList (Lists.concat (Lists.map variants (Maps.elems deps)))
         in (Logic.not (Sets.member Variants.TypeVariantFunction allVariants))) (typeDependencies cx graph False Equality.identity name))
 
-isNominalType :: Core.Type -> Bool
-isNominalType typ =
-    case (Rewriting.deannotateType typ) of
-      Core.TypeRecord _ -> True
-      Core.TypeUnion _ -> True
-      Core.TypeWrap _ -> True
-      Core.TypeForall v0 -> isNominalType (Core.forallTypeBody v0)
-      _ -> False
+-- | Check if a type is serializable (no function types in the type itself)
+isSerializableType :: Core.Type -> Bool
+isSerializableType typ =
+
+      let allVariants =
+              Sets.fromList (Lists.map Reflect.typeVariant (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> Lists.cons t m) [] typ))
+      in (Logic.not (Sets.member Variants.TypeVariantFunction allVariants))
 
 -- | Check whether a type is a type (always true for non-encoded types)
 isType :: Core.Type -> Bool

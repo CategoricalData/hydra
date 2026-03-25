@@ -33,39 +33,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Construct an error result with a context and message
-err :: Context.Context -> String -> Either (Context.InContext Errors.Error) t0
-err cx msg =
-    Left (Context.InContext {
-      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError msg)),
-      Context.inContextContext = cx})
-
--- | Construct an error for unexpected input, given expected and found descriptions
-unexpectedE :: Context.Context -> String -> String -> Either (Context.InContext Errors.Error) t0
-unexpectedE cx expected found =
-    err cx (Strings.cat [
-      "Expected ",
-      expected,
-      ", found: ",
-      found])
-
--- | Encode a module's type elements as a SHACL ShapesGraph
-shaclCoder :: Module.Module -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (Model.ShapesGraph, Context.Context)
-shaclCoder mod cx g =
-
-      let typeEls =
-              Maybes.cat (Lists.map (\d -> case d of
-                Module.DefinitionType v0 -> Just (Annotations.typeElement (Module.typeDefinitionName v0) (Module.typeDefinitionType v0))
-                _ -> Nothing) (Module.moduleDefinitions mod))
-          toShape =
-                  \el -> Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
-                    Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
-                    Context.inContextContext = cx}) (\_t -> _t) (Core_.type_ g (Core.bindingTerm el))) (\_typ -> Eithers.map (\_cp -> Model.Definition {
-                    Model.definitionIri = (elementIri el),
-                    Model.definitionTarget = (Model.ShapeNode (Model.NodeShape {
-                      Model.nodeShapeCommon = _cp}))}) (encodeType (Core.bindingName el) _typ cx))
-      in (Eithers.map (\_shapes -> (Model.ShapesGraph (Sets.fromList _shapes), cx)) (Eithers.mapList toShape typeEls))
-
 -- | Construct CommonProperties from a list of constraints, using defaults for other fields
 common :: [Model.CommonConstraint] -> Model.CommonProperties
 common constraints =
@@ -129,6 +96,32 @@ encodeFieldType rname order ft cx =
                         Model.propertyShapeOrder = order,
                         Model.propertyShapePath = iri}}) (encodeType rname t cx)
       in (forType (Just 1) (Just 1) ftype)
+
+-- | Encode a list of terms as RDF list structure
+encodeList :: Syntax.Resource -> [Core.Term] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) ([Syntax.Description], Context.Context)
+encodeList subj terms cx0 g =
+    Logic.ifElse (Lists.null terms) (Right ([
+      Syntax.Description {
+        Syntax.descriptionSubject = (Syntax.NodeIri (Syntax.Iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil")),
+        Syntax.descriptionGraph = (Syntax.Graph Sets.empty)}], cx0)) (
+      let pair1 = Utils.nextBlankNode cx0
+          node1 = Pairs.first pair1
+          cx1 = Pairs.second pair1
+      in (Eithers.bind (encodeTerm node1 (Lists.head terms) cx1 g) (\_r1 ->
+        let fdescs = Pairs.first _r1
+            cx2 = Pairs.second _r1
+            firstTriples = Lists.concat2 (Utils.triplesOf fdescs) (Utils.forObjects subj (Utils.rdfIri "first") (Utils.subjectsOf fdescs))
+            pair2 = Utils.nextBlankNode cx2
+            next = Pairs.first pair2
+            cx3 = Pairs.second pair2
+        in (Eithers.map (\_r2 ->
+          let rdescs = Pairs.first _r2
+              cx4 = Pairs.second _r2
+              restTriples = Lists.concat2 (Utils.triplesOf rdescs) (Utils.forObjects subj (Utils.rdfIri "rest") (Utils.subjectsOf rdescs))
+          in ([
+            Syntax.Description {
+              Syntax.descriptionSubject = (Utils.resourceToNode subj),
+              Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList (Lists.concat2 firstTriples restTriples)))}], cx4)) (encodeList next (Lists.tail terms) cx3 g)))))
 
 -- | Encode a LiteralType as SHACL CommonProperties with an XSD datatype constraint
 encodeLiteralType :: Core.LiteralType -> Model.CommonProperties
@@ -199,37 +192,6 @@ encodeTerm subject term cx g =
             Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList (Pairs.first _r)))})], (Pairs.second _r))) (encodeField rname subject field cx g))
       _ -> unexpectedE cx "RDF-compatible term" "unsupported term variant"
 
--- | Encode a list of terms as RDF list structure
-encodeList :: Syntax.Resource -> [Core.Term] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) ([Syntax.Description], Context.Context)
-encodeList subj terms cx0 g =
-    Logic.ifElse (Lists.null terms) (Right ([
-      Syntax.Description {
-        Syntax.descriptionSubject = (Syntax.NodeIri (Syntax.Iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil")),
-        Syntax.descriptionGraph = (Syntax.Graph Sets.empty)}], cx0)) (
-      let pair1 = Utils.nextBlankNode cx0
-          node1 = Pairs.first pair1
-          cx1 = Pairs.second pair1
-      in (Eithers.bind (encodeTerm node1 (Lists.head terms) cx1 g) (\_r1 ->
-        let fdescs = Pairs.first _r1
-            cx2 = Pairs.second _r1
-            firstTriples = Lists.concat2 (Utils.triplesOf fdescs) (Utils.forObjects subj (Utils.rdfIri "first") (Utils.subjectsOf fdescs))
-            pair2 = Utils.nextBlankNode cx2
-            next = Pairs.first pair2
-            cx3 = Pairs.second pair2
-        in (Eithers.map (\_r2 ->
-          let rdescs = Pairs.first _r2
-              cx4 = Pairs.second _r2
-              restTriples = Lists.concat2 (Utils.triplesOf rdescs) (Utils.forObjects subj (Utils.rdfIri "rest") (Utils.subjectsOf rdescs))
-          in ([
-            Syntax.Description {
-              Syntax.descriptionSubject = (Utils.resourceToNode subj),
-              Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList (Lists.concat2 firstTriples restTriples)))}], cx4)) (encodeList next (Lists.tail terms) cx3 g)))))
-
--- | Fold over a list, accumulating results and threading context through each step
-foldAccumResult :: (t0 -> t1 -> Either t2 (t3, t0)) -> t0 -> [t1] -> Either t2 ([t3], t0)
-foldAccumResult f cx xs =
-    Logic.ifElse (Lists.null xs) (Right ([], cx)) (Eithers.bind (f cx (Lists.head xs)) (\_r -> Eithers.map (\_rest -> (Lists.cons (Pairs.first _r) (Pairs.first _rest), (Pairs.second _rest))) (foldAccumResult f (Pairs.second _r) (Lists.tail xs))))
-
 -- | Encode a Hydra type as SHACL CommonProperties
 encodeType :: Core.Name -> Core.Type -> Context.Context -> Either (Context.InContext Errors.Error) Model.CommonProperties
 encodeType tname typ cx =
@@ -255,6 +217,18 @@ encodeType tname typ cx =
             Model.ReferenceNamed (Utils.nameToIri v0)])])
         _ -> unexpectedE cx "type" "unsupported type variant"
 
+-- | Construct an error result with a context and message
+err :: Context.Context -> String -> Either (Context.InContext Errors.Error) t0
+err cx msg =
+    Left (Context.InContext {
+      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError msg)),
+      Context.inContextContext = cx})
+
+-- | Fold over a list, accumulating results and threading context through each step
+foldAccumResult :: (t0 -> t1 -> Either t2 (t3, t0)) -> t0 -> [t1] -> Either t2 ([t3], t0)
+foldAccumResult f cx xs =
+    Logic.ifElse (Lists.null xs) (Right ([], cx)) (Eithers.bind (f cx (Lists.head xs)) (\_r -> Eithers.map (\_rest -> (Lists.cons (Pairs.first _r) (Pairs.first _rest), (Pairs.second _rest))) (foldAccumResult f (Pairs.second _r) (Lists.tail xs))))
+
 -- | Construct a SHACL node shape from a list of common constraints
 node :: [Model.CommonConstraint] -> Model.Shape
 node constraints = Model.ShapeNode (Model.NodeShape {
@@ -271,6 +245,32 @@ property iri =
       Model.propertyShapeName = (Syntax.LangStrings Maps.empty),
       Model.propertyShapeOrder = Nothing,
       Model.propertyShapePath = iri}
+
+-- | Encode a module's type elements as a SHACL ShapesGraph
+shaclCoder :: Module.Module -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (Model.ShapesGraph, Context.Context)
+shaclCoder mod cx g =
+
+      let typeEls =
+              Maybes.cat (Lists.map (\d -> case d of
+                Module.DefinitionType v0 -> Just (Annotations.typeElement (Module.typeDefinitionName v0) (Module.typeDefinitionType v0))
+                _ -> Nothing) (Module.moduleDefinitions mod))
+          toShape =
+                  \el -> Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
+                    Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
+                    Context.inContextContext = cx}) (\_t -> _t) (Core_.type_ g (Core.bindingTerm el))) (\_typ -> Eithers.map (\_cp -> Model.Definition {
+                    Model.definitionIri = (elementIri el),
+                    Model.definitionTarget = (Model.ShapeNode (Model.NodeShape {
+                      Model.nodeShapeCommon = _cp}))}) (encodeType (Core.bindingName el) _typ cx))
+      in (Eithers.map (\_shapes -> (Model.ShapesGraph (Sets.fromList _shapes), cx)) (Eithers.mapList toShape typeEls))
+
+-- | Construct an error for unexpected input, given expected and found descriptions
+unexpectedE :: Context.Context -> String -> String -> Either (Context.InContext Errors.Error) t0
+unexpectedE cx expected found =
+    err cx (Strings.cat [
+      "Expected ",
+      expected,
+      ", found: ",
+      found])
 
 -- | Add an rdf:type triple to an RDF Description
 withType :: Core.Name -> Syntax.Description -> Syntax.Description

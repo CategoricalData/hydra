@@ -1301,10 +1301,6 @@ decodeTypeNamed ename typ =
             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
             Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "unsupported type variant"))}))))})))}))
 
--- | Generate a decoder for the unit type
-decodeUnitType :: Core.Term
-decodeUnitType = Core.TermVariable (Core.Name "hydra.extract.helpers.decodeUnit")
-
 -- | Generate a decoder for a union type
 decodeUnionType :: [Core.FieldType] -> Core.Term
 decodeUnionType rt = decodeUnionTypeNamed (Core.Name "unknown") rt
@@ -1429,6 +1425,10 @@ decodeUnionTypeNamed ename rt =
                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))})))
+
+-- | Generate a decoder for the unit type
+decodeUnitType :: Core.Term
+decodeUnitType = Core.TermVariable (Core.Name "hydra.extract.helpers.decodeUnit")
 
 -- | Generate a decoder for a wrapped type
 decodeWrappedType :: Core.Type -> Core.Term

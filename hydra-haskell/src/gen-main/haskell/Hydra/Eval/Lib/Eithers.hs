@@ -22,17 +22,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Interpreter-friendly bind for Either terms.
-bind :: Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
-bind cx g eitherTerm funTerm =
-    case eitherTerm of
-      Core.TermEither v0 -> Right (Eithers.either (\val -> Core.TermEither (Left val)) (\val -> Core.TermApplication (Core.Application {
-        Core.applicationFunction = funTerm,
-        Core.applicationArgument = val})) v0)
-      _ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "either value") " but found ") (Core__.term eitherTerm)))),
-        Context.inContextContext = cx})
-
 -- | Interpreter-friendly bimap for Either terms.
 bimap :: Context.Context -> t0 -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 bimap cx g leftFun rightFun eitherTerm =
@@ -42,6 +31,17 @@ bimap cx g leftFun rightFun eitherTerm =
         Core.applicationArgument = val})))) (\val -> Core.TermEither (Right (Core.TermApplication (Core.Application {
         Core.applicationFunction = rightFun,
         Core.applicationArgument = val})))) v0)
+      _ -> Left (Context.InContext {
+        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "either value") " but found ") (Core__.term eitherTerm)))),
+        Context.inContextContext = cx})
+
+-- | Interpreter-friendly bind for Either terms.
+bind :: Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
+bind cx g eitherTerm funTerm =
+    case eitherTerm of
+      Core.TermEither v0 -> Right (Eithers.either (\val -> Core.TermEither (Left val)) (\val -> Core.TermApplication (Core.Application {
+        Core.applicationFunction = funTerm,
+        Core.applicationArgument = val})) v0)
       _ -> Left (Context.InContext {
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "either value") " but found ") (Core__.term eitherTerm)))),
         Context.inContextContext = cx})

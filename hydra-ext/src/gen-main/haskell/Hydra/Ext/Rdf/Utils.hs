@@ -26,10 +26,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | The key used for tracking blank node counters
-key_rdfBlankNodeCounter :: Core.Name
-key_rdfBlankNodeCounter = Core.Name "rdfBlankNodeCounter"
-
 -- | Convert a list of descriptions to an RDF graph
 descriptionsToGraph :: [Syntax.Description] -> Syntax.Graph
 descriptionsToGraph ds = Syntax.Graph (Sets.fromList (triplesOf ds))
@@ -41,13 +37,13 @@ emptyDescription node =
       Syntax.descriptionSubject = node,
       Syntax.descriptionGraph = emptyRdfGraph}
 
--- | An empty RDF graph
-emptyRdfGraph :: Syntax.Graph
-emptyRdfGraph = Syntax.Graph Sets.empty
-
 -- | An empty LangStrings value
 emptyLangStrings :: Syntax.LangStrings
 emptyLangStrings = Syntax.LangStrings Maps.empty
+
+-- | An empty RDF graph
+emptyRdfGraph :: Syntax.Graph
+emptyRdfGraph = Syntax.Graph Sets.empty
 
 -- | Encode a Hydra literal as an RDF literal
 encodeLiteral :: Core.Literal -> Syntax.Literal
@@ -131,6 +127,10 @@ iri ns local = Syntax.Iri (Strings.cat2 ns local)
 -- | Construct a key IRI from a local name
 keyIri :: String -> Syntax.Iri
 keyIri local = iri "urn:key:" local
+
+-- | The key used for tracking blank node counters
+key_rdfBlankNodeCounter :: Core.Name
+key_rdfBlankNodeCounter = Core.Name "rdfBlankNodeCounter"
 
 -- | Merge a list of RDF graphs into a single graph
 mergeGraphs :: [Syntax.Graph] -> Syntax.Graph

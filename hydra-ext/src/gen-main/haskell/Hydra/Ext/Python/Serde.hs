@@ -230,6 +230,19 @@ encodeClosedPattern cp =
 encodeComparison :: Syntax.Comparison -> Ast.Expr
 encodeComparison cmp = encodeBitwiseOr (Syntax.comparisonLhs cmp)
 
+-- | Serialize a compound (multi-line) Python statement
+encodeCompoundStatement :: Syntax.CompoundStatement -> Ast.Expr
+encodeCompoundStatement cs =
+    case cs of
+      Syntax.CompoundStatementFunction v0 -> encodeFunctionDefinition v0
+      Syntax.CompoundStatementIf _ -> Serialization.cst "if ..."
+      Syntax.CompoundStatementClassDef v0 -> encodeClassDefinition v0
+      Syntax.CompoundStatementWith _ -> Serialization.cst "with ..."
+      Syntax.CompoundStatementFor _ -> Serialization.cst "for ..."
+      Syntax.CompoundStatementTry _ -> Serialization.cst "try ..."
+      Syntax.CompoundStatementWhile v0 -> encodeWhileStatement v0
+      Syntax.CompoundStatementMatch v0 -> encodeMatchStatement v0
+
 -- | Serialize a conditional expression (ternary)
 encodeConditional :: Syntax.Conditional -> Ast.Expr
 encodeConditional c =
@@ -243,19 +256,6 @@ encodeConditional c =
         (encodeDisjunction cond),
         (Serialization.cst "else"),
         (encodeExpression elseExpr)])
-
--- | Serialize a compound (multi-line) Python statement
-encodeCompoundStatement :: Syntax.CompoundStatement -> Ast.Expr
-encodeCompoundStatement cs =
-    case cs of
-      Syntax.CompoundStatementFunction v0 -> encodeFunctionDefinition v0
-      Syntax.CompoundStatementIf _ -> Serialization.cst "if ..."
-      Syntax.CompoundStatementClassDef v0 -> encodeClassDefinition v0
-      Syntax.CompoundStatementWith _ -> Serialization.cst "with ..."
-      Syntax.CompoundStatementFor _ -> Serialization.cst "for ..."
-      Syntax.CompoundStatementTry _ -> Serialization.cst "try ..."
-      Syntax.CompoundStatementWhile v0 -> encodeWhileStatement v0
-      Syntax.CompoundStatementMatch v0 -> encodeMatchStatement v0
 
 -- | Serialize a conjunction (and expression)
 encodeConjunction :: Syntax.Conjunction -> Ast.Expr
@@ -565,16 +565,16 @@ encodeModule mod =
 encodeName :: Syntax.Name -> Ast.Expr
 encodeName n = Serialization.cst (Syntax.unName n)
 
+-- | Serialize a name or attribute
+encodeNameOrAttribute :: Syntax.NameOrAttribute -> Ast.Expr
+encodeNameOrAttribute noa = Serialization.dotSep (Lists.map encodeName (Syntax.unNameOrAttribute noa))
+
 -- | Serialize a named expression
 encodeNamedExpression :: Syntax.NamedExpression -> Ast.Expr
 encodeNamedExpression ne =
     case ne of
       Syntax.NamedExpressionSimple v0 -> encodeExpression v0
       Syntax.NamedExpressionAssignment v0 -> encodeAssignmentExpression v0
-
--- | Serialize a name or attribute
-encodeNameOrAttribute :: Syntax.NameOrAttribute -> Ast.Expr
-encodeNameOrAttribute noa = Serialization.dotSep (Lists.map encodeName (Syntax.unNameOrAttribute noa))
 
 -- | Serialize a Python number literal
 encodeNumber :: Syntax.Number -> Ast.Expr
@@ -863,17 +863,15 @@ encodeSubjectExpression se =
 encodeSum :: Syntax.Sum -> Ast.Expr
 encodeSum s = encodeTerm (Syntax.sumRhs s)
 
--- | Serialize a term expression
-encodeTerm :: Syntax.Term -> Ast.Expr
-encodeTerm t = encodeFactor (Syntax.termRhs t)
-
--- | Serialize a target with star atom
-encodeTargetWithStarAtom :: Syntax.TargetWithStarAtom -> Ast.Expr
-encodeTargetWithStarAtom t =
-    case t of
-      Syntax.TargetWithStarAtomAtom v0 -> encodeStarAtom v0
-      Syntax.TargetWithStarAtomProject v0 -> encodeTPrimaryAndName v0
-      Syntax.TargetWithStarAtomSlices _ -> Serialization.cst "..."
+-- | Serialize a target-side primary expression
+encodeTPrimary :: Syntax.TPrimary -> Ast.Expr
+encodeTPrimary tp =
+    case tp of
+      Syntax.TPrimaryAtom v0 -> encodeAtom v0
+      Syntax.TPrimaryPrimaryAndName v0 -> encodeTPrimaryAndName v0
+      Syntax.TPrimaryPrimaryAndSlices _ -> Serialization.cst "..."
+      Syntax.TPrimaryPrimaryAndGenexp _ -> Serialization.cst "..."
+      Syntax.TPrimaryPrimaryAndArguments _ -> Serialization.cst "..."
 
 -- | Serialize a TPrimaryAndName as primary.name
 encodeTPrimaryAndName :: Syntax.TPrimaryAndName -> Ast.Expr
@@ -886,15 +884,17 @@ encodeTPrimaryAndName pn =
         (Serialization.cst "."),
         (encodeName name_)])
 
--- | Serialize a target-side primary expression
-encodeTPrimary :: Syntax.TPrimary -> Ast.Expr
-encodeTPrimary tp =
-    case tp of
-      Syntax.TPrimaryAtom v0 -> encodeAtom v0
-      Syntax.TPrimaryPrimaryAndName v0 -> encodeTPrimaryAndName v0
-      Syntax.TPrimaryPrimaryAndSlices _ -> Serialization.cst "..."
-      Syntax.TPrimaryPrimaryAndGenexp _ -> Serialization.cst "..."
-      Syntax.TPrimaryPrimaryAndArguments _ -> Serialization.cst "..."
+-- | Serialize a target with star atom
+encodeTargetWithStarAtom :: Syntax.TargetWithStarAtom -> Ast.Expr
+encodeTargetWithStarAtom t =
+    case t of
+      Syntax.TargetWithStarAtomAtom v0 -> encodeStarAtom v0
+      Syntax.TargetWithStarAtomProject v0 -> encodeTPrimaryAndName v0
+      Syntax.TargetWithStarAtomSlices _ -> Serialization.cst "..."
+
+-- | Serialize a term expression
+encodeTerm :: Syntax.Term -> Ast.Expr
+encodeTerm t = encodeFactor (Syntax.termRhs t)
 
 -- | Serialize a Python tuple
 encodeTuple :: Syntax.Tuple -> Ast.Expr
