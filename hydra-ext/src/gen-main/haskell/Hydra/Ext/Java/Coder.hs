@@ -2381,7 +2381,33 @@ propagateType typ term =
               Core.TypeFunction v2 -> propagateType_propagateIntoLambda (Core.functionTypeCodomain v2) annotated
               _ -> annotated
           _ -> setTypeAnn term
-        Core.TermLet v0 -> setTypeAnn (propagateType_rebuildLet term (Core.letBindings v0) (propagateType typ (Core.letBody v0)))
+        Core.TermLet v0 ->
+          let propagatedBindings =
+                  Lists.map (\b -> Maybes.maybe b (\ts -> Core.Binding {
+                    Core.bindingName = (Core.bindingName b),
+                    Core.bindingTerm = (propagateType (Core.typeSchemeType ts) (Core.bindingTerm b)),
+                    Core.bindingType = (Core.bindingType b)}) (Core.bindingType b)) (Core.letBindings v0)
+          in (setTypeAnn (propagateType_rebuildLet term propagatedBindings (propagateType typ (Core.letBody v0))))
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+              annotatedFun =
+                      case (Rewriting.deannotateTerm fun) of
+                        Core.TermFunction v1 -> case v1 of
+                          Core.FunctionElimination v2 -> case v2 of
+                            Core.EliminationUnion v3 ->
+                              let dom = Schemas.nominalApplication (Core.caseStatementTypeName v3) []
+                                  ft =
+                                          Core.TypeFunction (Core.FunctionType {
+                                            Core.functionTypeDomain = dom,
+                                            Core.functionTypeCodomain = typ})
+                              in (Annotations.setTermAnnotation Constants.key_type (Just (Core__.type_ ft)) fun)
+                            _ -> fun
+                          _ -> fun
+                        _ -> fun
+          in (setTypeAnn (Core.TermApplication (Core.Application {
+            Core.applicationFunction = annotatedFun,
+            Core.applicationArgument = arg})))
         _ -> setTypeAnn term
 
 propagateType_propagateIntoLambda :: Core.Type -> Core.Term -> Core.Term

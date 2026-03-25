@@ -20,7 +20,6 @@ import hydra.pg.model
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
 T2 = TypeVar("T2")
-T3 = TypeVar("T3")
 
 def check_all(checks: frozenlist[Maybe[T0]]) -> Maybe[T0]:
     @lru_cache(1)
@@ -115,11 +114,37 @@ def validate_vertex(check_value: Callable[[T0, T1], Maybe[str]], show_value: Cal
     return check_all((check_label(), check_id(), check_properties()))
 
 def validate_element(check_value: Callable[[T0, T1], Maybe[str]], show_value: Callable[[T1], str], label_for_vertex_id: Maybe[Callable[[T1], Maybe[hydra.pg.model.VertexLabel]]], typ: hydra.pg.model.ElementType[T0], el: hydra.pg.model.Element[T1]):
-    def _hoist_hydra_pg_validation_validate_element_1(check_value: Callable[[T2, T3], Maybe[str]], show_value: Callable[[T3], str], vt: hydra.pg.model.VertexType[T2], v1: hydra.pg.model.Element):
-        return (lambda e: Just(prepend("Edge instead of vertex", show_value(e.id))))(v1.value) if isinstance(v1, hydra.pg.model.ElementEdge) else (lambda vertex: validate_vertex(check_value, show_value, vt, vertex))(v1.value) if isinstance(v1, hydra.pg.model.ElementVertex) else hydra.dsl.python.unsupported("no matching case in inline union elimination")
-    def _hoist_hydra_pg_validation_validate_element_2(check_value: Callable[[T2, T3], Maybe[str]], et: hydra.pg.model.EdgeType[T2], label_for_vertex_id: Maybe[Callable[[T3], Maybe[hydra.pg.model.VertexLabel]]], show_value: Callable[[T3], str], v1: hydra.pg.model.Element):
-        return (lambda v: Just(prepend("Vertex instead of edge", show_value(v.id))))(v1.value) if isinstance(v1, hydra.pg.model.ElementVertex) else (lambda edge: validate_edge(check_value, show_value, label_for_vertex_id, et, edge))(v1.value) if isinstance(v1, hydra.pg.model.ElementEdge) else hydra.dsl.python.unsupported("no matching case in inline union elimination")
-    return (lambda v1: (lambda vt: _hoist_hydra_pg_validation_validate_element_1(check_value, show_value, vt, el))(v1.value) if isinstance(v1, hydra.pg.model.ElementTypeVertex) else (lambda et: _hoist_hydra_pg_validation_validate_element_2(check_value, et, label_for_vertex_id, show_value, el))(v1.value) if isinstance(v1, hydra.pg.model.ElementTypeEdge) else hydra.dsl.python.unsupported("no matching case in inline union elimination"))(typ)
+    def _hoist_hydra_pg_validation_validate_element_1(check_value, show_value, vt, v1):
+        match v1:
+            case hydra.pg.model.ElementEdge(value=e):
+                return Just(prepend("Edge instead of vertex", show_value(e.id)))
+
+            case hydra.pg.model.ElementVertex(value=vertex):
+                return validate_vertex(check_value, show_value, vt, vertex)
+
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
+    def _hoist_hydra_pg_validation_validate_element_2(check_value, et, label_for_vertex_id, show_value, v1):
+        match v1:
+            case hydra.pg.model.ElementVertex(value=v):
+                return Just(prepend("Vertex instead of edge", show_value(v.id)))
+
+            case hydra.pg.model.ElementEdge(value=edge):
+                return validate_edge(check_value, show_value, label_for_vertex_id, et, edge)
+
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
+    def _hoist_hydra_pg_validation_validate_element_3(check_value, el, label_for_vertex_id, show_value, v1):
+        match v1:
+            case hydra.pg.model.ElementTypeVertex(value=vt):
+                return _hoist_hydra_pg_validation_validate_element_1(check_value, show_value, vt, el)
+
+            case hydra.pg.model.ElementTypeEdge(value=et):
+                return _hoist_hydra_pg_validation_validate_element_2(check_value, et, label_for_vertex_id, show_value, el)
+
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
+    return _hoist_hydra_pg_validation_validate_element_3(check_value, el, label_for_vertex_id, show_value, typ)
 
 def validate_graph(check_value: Callable[[T0, T1], Maybe[str]], show_value: Callable[[T1], str], schema: hydra.pg.model.GraphSchema[T0], graph: hydra.pg.model.Graph[T1]) -> Maybe[str]:
     @lru_cache(1)

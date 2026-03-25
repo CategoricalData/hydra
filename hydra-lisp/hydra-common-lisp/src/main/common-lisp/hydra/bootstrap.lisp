@@ -258,7 +258,7 @@
            (all-ns (append main-ns eval-ns))
            (all-mods (load-modules-from-json *json-dir* all-ns))
            (total-bindings (reduce #'+ (mapcar (lambda (m)
-                                                 (length (cdr (assoc :elements m))))
+                                                 (length (cdr (assoc :definitions m))))
                                                all-mods))))
       (format t "  Loaded ~A modules (~A bindings).~%" (length all-mods) total-bindings)
       (force-output)

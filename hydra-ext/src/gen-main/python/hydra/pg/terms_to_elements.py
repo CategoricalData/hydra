@@ -35,8 +35,8 @@ T3 = TypeVar("T3")
 T4 = TypeVar("T4")
 T5 = TypeVar("T5")
 
-def eval_step(cx: hydra.context.Context, step: str, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], frozenlist[hydra.core.Term]]:
-    def _hoist_hydra_pg_terms_to_elements_eval_step_1(cx: hydra.context.Context, step: str, v1: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], frozenlist[hydra.core.Term]]:
+def eval_step(cx: hydra.context.Context, step: str, term: hydra.core.Term):
+    def _hoist_hydra_pg_terms_to_elements_eval_step_1(cx, step, v1):
         match v1:
             case hydra.core.TermList(value=terms):
                 return hydra.lib.eithers.map((lambda xs: hydra.lib.lists.concat(xs)), hydra.lib.eithers.map_list((lambda v12: eval_step(cx, step, v12)), terms))
@@ -62,22 +62,22 @@ def eval_path(cx: hydra.context.Context, path: frozenlist[str], term: hydra.core
 
     return hydra.lib.logic.if_else(hydra.lib.lists.null(path), (lambda : Right((term,))), (lambda : hydra.lib.eithers.bind(eval_step(cx, hydra.lib.lists.head(path), term), (lambda results: hydra.lib.eithers.map((lambda xs: hydra.lib.lists.concat(xs)), hydra.lib.eithers.map_list((lambda v1: eval_path(cx, hydra.lib.lists.tail(path), v1)), results))))))
 
-def term_to_string(term: hydra.core.Term) -> str:
-    def _hoist_hydra_pg_terms_to_elements_term_to_string_1(term: hydra.core.Term, v1: hydra.core.IntegerValue) -> str:
+def term_to_string(term: hydra.core.Term):
+    def _hoist_hydra_pg_terms_to_elements_term_to_string_1(term, v1):
         match v1:
             case hydra.core.IntegerValueInt32(value=n):
                 return hydra.lib.literals.show_int32(n)
 
             case _:
                 return hydra.show.core.term(term)
-    def _hoist_hydra_pg_terms_to_elements_term_to_string_2(term: hydra.core.Term, v1: hydra.core.FloatValue) -> str:
+    def _hoist_hydra_pg_terms_to_elements_term_to_string_2(term, v1):
         match v1:
             case hydra.core.FloatValueFloat64(value=n):
                 return hydra.lib.literals.show_float64(n)
 
             case _:
                 return hydra.show.core.term(term)
-    def _hoist_hydra_pg_terms_to_elements_term_to_string_3(term: hydra.core.Term, v1: hydra.core.Literal) -> str:
+    def _hoist_hydra_pg_terms_to_elements_term_to_string_3(term, v1):
         match v1:
             case hydra.core.LiteralString(value=s):
                 return s
@@ -123,8 +123,8 @@ def read_injection(cx: hydra.context.Context, g: hydra.graph.Graph, cases: froze
 
     return hydra.lib.eithers.bind(hydra.extract.core.map(cx, (lambda k: hydra.lib.eithers.map((lambda _n: hydra.core.Name(_n)), hydra.extract.core.string(cx, g, k))), (lambda _v: Right(_v)), g, encoded), (lambda mp: (entries := hydra.lib.maps.to_list(mp), hydra.lib.logic.if_else(hydra.lib.lists.null(entries), (lambda : Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("empty injection"))), cx))), (lambda : (f := hydra.lib.lists.head(entries), key := hydra.lib.pairs.first(f), val := hydra.lib.pairs.second(f), matching := hydra.lib.lists.filter((lambda c: hydra.lib.equality.equal(hydra.lib.pairs.first(c), key)), cases), hydra.lib.logic.if_else(hydra.lib.lists.null(matching), (lambda : Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2("unexpected field: ", key.value)))), cx))), (lambda : (lambda : hydra.lib.pairs.second(hydra.lib.lists.head(matching), val)))))[4])))[1]))
 
-def decode_value_spec(cx: hydra.context.Context, g: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.pg.mapping.ValueSpec]:
-    def _hoist_hydra_pg_terms_to_elements_decode_value_spec_1(cx: hydra.context.Context, g: hydra.graph.Graph, term: hydra.core.Term, v1: hydra.core.Literal) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.pg.mapping.ValueSpec]:
+def decode_value_spec(cx: hydra.context.Context, g: hydra.graph.Graph, term: hydra.core.Term):
+    def _hoist_hydra_pg_terms_to_elements_decode_value_spec_1(cx, g, term, v1):
         match v1:
             case hydra.core.LiteralString(value=s):
                 return Right(cast(hydra.pg.mapping.ValueSpec, hydra.pg.mapping.ValueSpecPattern(s)))

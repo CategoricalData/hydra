@@ -212,11 +212,15 @@ def strip_term_types(m):
     bigfloat/float64 conflicts) but preserved on type-defining bindings
     (needed by is_native_type for schema graph construction).
     """
+    from hydra.module import TermDefinition, DefinitionTerm, DefinitionType
     stripped = []
-    for b in m.elements:
-        new_term = remove_types_from_term(b.term)
-        new_type = b.type if is_native_type(b) else Nothing()
-        stripped.append(Binding(b.name, new_term, new_type))
+    for d in m.definitions:
+        if isinstance(d, DefinitionTerm):
+            td = d.value
+            new_term = remove_types_from_term(td.term)
+            stripped.append(DefinitionTerm(TermDefinition(td.name, new_term, Nothing())))
+        else:
+            stripped.append(d)
     return Module(m.namespace, tuple(stripped), m.type_dependencies, m.term_dependencies, m.description)
 
 
@@ -232,7 +236,9 @@ def filter_kernel_modules(modules):
 
 def filter_type_modules(modules):
     """Filter modules to only those containing type-defining bindings."""
-    return [m for m in modules if any(is_native_type(b) for b in m.elements)]
+    from hydra.module import DefinitionType
+    return [m for m in modules if any(
+        isinstance(d, DefinitionType) for d in m.definitions)]
 
 
 def write_java(base_path, universe, mods):

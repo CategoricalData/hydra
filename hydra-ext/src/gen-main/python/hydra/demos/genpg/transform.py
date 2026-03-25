@@ -42,11 +42,11 @@ def decode_cell(col_type: hydra.tabular.ColumnType, mvalue: Maybe[str]) -> Eithe
 
     cname = col_type.name.value
     typ = col_type.type
-    def decode_value(value: str) -> Either[str, Maybe[hydra.core.Term]]:
+    def decode_value(value: str):
         @lru_cache(1)
         def parse_error() -> str:
             return hydra.lib.strings.cat(("Invalid value for column ", cname, ": ", value))
-        def _hoist_parse_error_body_1(v1: hydra.core.FloatType) -> Either[str, Maybe[hydra.core.Term]]:
+        def _hoist_parse_error_body_1(v1):
             match v1:
                 case hydra.core.FloatType.BIGFLOAT:
                     return hydra.lib.maybes.maybe((lambda : Left(parse_error())), (lambda parsed: Right(Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueBigfloat(parsed))))))))), hydra.lib.literals.read_bigfloat(value))
@@ -59,7 +59,7 @@ def decode_cell(col_type: hydra.tabular.ColumnType, mvalue: Maybe[str]) -> Eithe
 
                 case _:
                     return Left(hydra.lib.strings.cat(("Unsupported float type for column ", cname)))
-        def _hoist_parse_error_body_2(v1: hydra.core.IntegerType) -> Either[str, Maybe[hydra.core.Term]]:
+        def _hoist_parse_error_body_2(v1):
             match v1:
                 case hydra.core.IntegerType.INT32:
                     return hydra.lib.maybes.maybe((lambda : Left(parse_error())), (lambda parsed: Right(Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(parsed))))))))), hydra.lib.literals.read_int32(value))
@@ -69,7 +69,7 @@ def decode_cell(col_type: hydra.tabular.ColumnType, mvalue: Maybe[str]) -> Eithe
 
                 case _:
                     return Left(hydra.lib.strings.cat(("Unsupported integer type for column ", cname)))
-        def _hoist_parse_error_body_3(v1: hydra.core.LiteralType) -> Either[str, Maybe[hydra.core.Term]]:
+        def _hoist_parse_error_body_3(v1):
             match v1:
                 case hydra.core.LiteralTypeBoolean():
                     return hydra.lib.maybes.maybe((lambda : Left(parse_error())), (lambda parsed: Right(Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(parsed))))))), hydra.lib.literals.read_boolean(value))
@@ -114,31 +114,41 @@ def decode_table(table_type: hydra.tabular.TableType, table: hydra.tabular.Table
     return hydra.lib.eithers.map((lambda decoded_rows: hydra.tabular.Table(header(), decoded_rows)), hydra.lib.eithers.map_list((lambda row: decode_row(col_types, row)), rows()))
 
 def element_is_edge(el: hydra.pg.model.Element[T0]):
-    r"""Check if an element is an edge."""
+    def _hoist_hydra_demos_genpg_transform_element_is_edge_1(v1):
+        match v1:
+            case hydra.pg.model.ElementEdge():
+                return True
 
-    return (lambda v1: (lambda _: True)(v1.value) if isinstance(v1, hydra.pg.model.ElementEdge) else False)(el)
+            case _:
+                return False
+    return _hoist_hydra_demos_genpg_transform_element_is_edge_1(el)
 
 def element_is_vertex(el: hydra.pg.model.Element[T0]):
-    r"""Check if an element is a vertex."""
+    def _hoist_hydra_demos_genpg_transform_element_is_vertex_1(v1):
+        match v1:
+            case hydra.pg.model.ElementVertex():
+                return True
 
-    return (lambda v1: (lambda _: True)(v1.value) if isinstance(v1, hydra.pg.model.ElementVertex) else False)(el)
+            case _:
+                return False
+    return _hoist_hydra_demos_genpg_transform_element_is_vertex_1(el)
 
-def find_tables_in_term(term: hydra.core.Term) -> frozenset[str]:
-    def _hoist_hydra_demos_genpg_transform_find_tables_in_term_1(names: frozenset[str], v1: hydra.core.Elimination) -> frozenset[str]:
+def find_tables_in_term(term: hydra.core.Term):
+    def _hoist_hydra_demos_genpg_transform_find_tables_in_term_1(names, v1):
         match v1:
             case hydra.core.EliminationRecord(value=proj):
                 return hydra.lib.sets.insert(proj.type_name.value, names)
 
             case _:
                 return names
-    def _hoist_hydra_demos_genpg_transform_find_tables_in_term_2(names: frozenset[str], v1: hydra.core.Function) -> frozenset[str]:
+    def _hoist_hydra_demos_genpg_transform_find_tables_in_term_2(names, v1):
         match v1:
             case hydra.core.FunctionElimination(value=e):
                 return _hoist_hydra_demos_genpg_transform_find_tables_in_term_1(names, e)
 
             case _:
                 return names
-    def _hoist_hydra_demos_genpg_transform_find_tables_in_term_3(names: frozenset[str], v1: hydra.core.Term) -> frozenset[str]:
+    def _hoist_hydra_demos_genpg_transform_find_tables_in_term_3(names, v1):
         match v1:
             case hydra.core.TermFunction(value=f):
                 return _hoist_hydra_demos_genpg_transform_find_tables_in_term_2(names, f)

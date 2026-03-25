@@ -517,12 +517,12 @@ public interface Coder {
     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> typeEls = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.core.Binding>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
         @Override
-        public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.org.w3.shacl.model.ShapesGraph, hydra.context.Context>> otherwise(hydra.module.Definition instance) {
+        public hydra.util.Maybe<hydra.core.Binding> otherwise(hydra.module.Definition instance) {
           return (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing());
         }
 
         @Override
-        public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.org.w3.shacl.model.ShapesGraph, hydra.context.Context>> visit(hydra.module.Definition.Type td) {
+        public hydra.util.Maybe<hydra.core.Binding> visit(hydra.module.Definition.Type td) {
           return hydra.util.Maybe.just(hydra.Annotations.typeElement(
             (td).value.name,
             (td).value.type));
@@ -550,12 +550,12 @@ public interface Coder {
     hydra.ext.org.w3.rdf.syntax.Node subj = (desc).subject;
     hydra.ext.org.w3.rdf.syntax.Resource subjRes = (subj).accept(new hydra.ext.org.w3.rdf.syntax.Node.PartialVisitor<>() {
       @Override
-      public hydra.ext.org.w3.rdf.syntax.Description visit(hydra.ext.org.w3.rdf.syntax.Node.Iri iri) {
+      public hydra.ext.org.w3.rdf.syntax.Resource visit(hydra.ext.org.w3.rdf.syntax.Node.Iri iri) {
         return new hydra.ext.org.w3.rdf.syntax.Resource.Iri((iri).value);
       }
 
       @Override
-      public hydra.ext.org.w3.rdf.syntax.Description visit(hydra.ext.org.w3.rdf.syntax.Node.Bnode bnode) {
+      public hydra.ext.org.w3.rdf.syntax.Resource visit(hydra.ext.org.w3.rdf.syntax.Node.Bnode bnode) {
         return new hydra.ext.org.w3.rdf.syntax.Resource.Bnode((bnode).value);
       }
     });

@@ -890,12 +890,6 @@ def encode_term(cx: hydra.context.Context, g: hydra.graph.Graph, term0: hydra.co
         case hydra.core.TermUnit():
             return Right(cast(hydra.ext.scala.syntax.Data, hydra.ext.scala.syntax.DataLit(cast(hydra.ext.scala.syntax.Lit, hydra.ext.scala.syntax.LitUnit()))))
 
-        case hydra.core.TermTypeApplication(value=ta2):
-            return encode_term(cx, g, ta2.body)
-
-        case hydra.core.TermTypeLambda(value=tl2):
-            return encode_term(cx, hydra.rewriting.extend_graph_for_type_lambda(g, tl2), tl2.body)
-
         case hydra.core.TermLet(value=lt):
             bindings = lt.bindings
             body = lt.body

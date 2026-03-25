@@ -16,7 +16,8 @@ type FileExtension = scala.Predef.String
 
 case class Library(namespace: hydra.module.Namespace, prefix: scala.Predef.String, primitives: Seq[hydra.graph.Primitive])
 
-case class Module(namespace: hydra.module.Namespace, definitions: Seq[hydra.module.Definition], termDependencies: Seq[hydra.module.Namespace], typeDependencies: Seq[hydra.module.Namespace], description: Option[scala.Predef.String])
+case class Module(namespace: hydra.module.Namespace, definitions: Seq[hydra.module.Definition], termDependencies: Seq[hydra.module.Namespace],
+   typeDependencies: Seq[hydra.module.Namespace], description: Option[scala.Predef.String])
 
 type Namespace = scala.Predef.String
 

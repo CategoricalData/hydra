@@ -184,20 +184,20 @@ public interface Model {
               (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, String>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, String>left(new hydra.errors.DecodingError(err))),
               (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
                 @Override
-                public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.EdgeLabel> otherwise(hydra.core.Term instance) {
+                public hydra.util.Either<hydra.errors.DecodingError, String> otherwise(hydra.core.Term instance) {
                   return hydra.util.Either.<hydra.errors.DecodingError, String>left(new hydra.errors.DecodingError("expected literal"));
                 }
 
                 @Override
-                public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.EdgeLabel> visit(hydra.core.Term.Literal v) {
+                public hydra.util.Either<hydra.errors.DecodingError, String> visit(hydra.core.Term.Literal v) {
                   return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
                     @Override
-                    public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.EdgeLabel> otherwise(hydra.core.Literal instance) {
+                    public hydra.util.Either<hydra.errors.DecodingError, String> otherwise(hydra.core.Literal instance) {
                       return hydra.util.Either.<hydra.errors.DecodingError, String>left(new hydra.errors.DecodingError("expected string literal"));
                     }
 
                     @Override
-                    public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.EdgeLabel> visit(hydra.core.Literal.String_ s) {
+                    public hydra.util.Either<hydra.errors.DecodingError, String> visit(hydra.core.Literal.String_ s) {
                       return hydra.util.Either.<hydra.errors.DecodingError, String>right((s).value);
                     }
                   });
@@ -726,20 +726,20 @@ public interface Model {
               (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, String>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, String>left(new hydra.errors.DecodingError(err))),
               (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
                 @Override
-                public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.PropertyKey> otherwise(hydra.core.Term instance) {
+                public hydra.util.Either<hydra.errors.DecodingError, String> otherwise(hydra.core.Term instance) {
                   return hydra.util.Either.<hydra.errors.DecodingError, String>left(new hydra.errors.DecodingError("expected literal"));
                 }
 
                 @Override
-                public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.PropertyKey> visit(hydra.core.Term.Literal v) {
+                public hydra.util.Either<hydra.errors.DecodingError, String> visit(hydra.core.Term.Literal v) {
                   return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
                     @Override
-                    public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.PropertyKey> otherwise(hydra.core.Literal instance) {
+                    public hydra.util.Either<hydra.errors.DecodingError, String> otherwise(hydra.core.Literal instance) {
                       return hydra.util.Either.<hydra.errors.DecodingError, String>left(new hydra.errors.DecodingError("expected string literal"));
                     }
 
                     @Override
-                    public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.PropertyKey> visit(hydra.core.Literal.String_ s) {
+                    public hydra.util.Either<hydra.errors.DecodingError, String> visit(hydra.core.Literal.String_ s) {
                       return hydra.util.Either.<hydra.errors.DecodingError, String>right((s).value);
                     }
                   });
@@ -788,20 +788,20 @@ public interface Model {
                     (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, Boolean>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, Boolean>left(new hydra.errors.DecodingError(err))),
                     (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, Boolean>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
                       @Override
-                      public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.PropertyType<T0>> otherwise(hydra.core.Term instance) {
+                      public hydra.util.Either<hydra.errors.DecodingError, Boolean> otherwise(hydra.core.Term instance) {
                         return hydra.util.Either.<hydra.errors.DecodingError, Boolean>left(new hydra.errors.DecodingError("expected literal"));
                       }
 
                       @Override
-                      public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.PropertyType<T0>> visit(hydra.core.Term.Literal v) {
+                      public hydra.util.Either<hydra.errors.DecodingError, Boolean> visit(hydra.core.Term.Literal v) {
                         return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
                           @Override
-                          public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.PropertyType<T0>> otherwise(hydra.core.Literal instance) {
+                          public hydra.util.Either<hydra.errors.DecodingError, Boolean> otherwise(hydra.core.Literal instance) {
                             return hydra.util.Either.<hydra.errors.DecodingError, Boolean>left(new hydra.errors.DecodingError("expected boolean literal"));
                           }
 
                           @Override
-                          public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.PropertyType<T0>> visit(hydra.core.Literal.Boolean_ b) {
+                          public hydra.util.Either<hydra.errors.DecodingError, Boolean> visit(hydra.core.Literal.Boolean_ b) {
                             return hydra.util.Either.<hydra.errors.DecodingError, Boolean>right((b).value);
                           }
                         });
@@ -883,20 +883,20 @@ public interface Model {
               (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, String>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, String>left(new hydra.errors.DecodingError(err))),
               (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
                 @Override
-                public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.VertexLabel> otherwise(hydra.core.Term instance) {
+                public hydra.util.Either<hydra.errors.DecodingError, String> otherwise(hydra.core.Term instance) {
                   return hydra.util.Either.<hydra.errors.DecodingError, String>left(new hydra.errors.DecodingError("expected literal"));
                 }
 
                 @Override
-                public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.VertexLabel> visit(hydra.core.Term.Literal v) {
+                public hydra.util.Either<hydra.errors.DecodingError, String> visit(hydra.core.Term.Literal v) {
                   return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
                     @Override
-                    public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.VertexLabel> otherwise(hydra.core.Literal instance) {
+                    public hydra.util.Either<hydra.errors.DecodingError, String> otherwise(hydra.core.Literal instance) {
                       return hydra.util.Either.<hydra.errors.DecodingError, String>left(new hydra.errors.DecodingError("expected string literal"));
                     }
 
                     @Override
-                    public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.VertexLabel> visit(hydra.core.Literal.String_ s) {
+                    public hydra.util.Either<hydra.errors.DecodingError, String> visit(hydra.core.Literal.String_ s) {
                       return hydra.util.Either.<hydra.errors.DecodingError, String>right((s).value);
                     }
                   });

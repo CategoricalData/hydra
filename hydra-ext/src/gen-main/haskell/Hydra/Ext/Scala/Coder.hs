@@ -125,7 +125,12 @@ encodeCase cx g ftypes sn f =
                     "_",
                     (Core.unName fname),
                     lamParamSuffix])
-          patArgs = Logic.ifElse isUnit [] [
+          domainIsUnit = case (Rewriting.deannotateAndDetypeTerm fterm) of
+                Core.TermFunction v0 -> case v0 of
+                  Core.FunctionLambda v1 -> Maybes.maybe True (\dom -> Equality.equal dom Core.TypeUnit) (Core.lambdaDomain v1)
+                  _ -> True
+                _ -> True
+          patArgs = Logic.ifElse isUnit (Logic.ifElse domainIsUnit [] [Syntax.PatWildcard]) [
                 Utils.svar v]
           pat =
                   Syntax.PatExtract (Syntax.Pat_Extract {

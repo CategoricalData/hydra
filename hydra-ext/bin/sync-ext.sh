@@ -73,6 +73,9 @@ echo "Step 3/5: Generating Haskell ext modules..."
 echo ""
 stack exec update-haskell-ext-main -- $RTS_FLAGS
 
+# Clean up empty generated files (produced for modules with no DSL output)
+find src/gen-main/haskell -name "*.hs" -empty -delete 2>/dev/null
+
 echo ""
 echo "Step 4/5: Rebuilding..."
 echo ""

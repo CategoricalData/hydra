@@ -15,11 +15,14 @@ def duplicateBindingError(e: hydra.error.core.DuplicateBindingError): scala.Pred
 
 def duplicateFieldError(e: hydra.error.core.DuplicateFieldError): scala.Predef.String = hydra.lib.strings.cat(Seq("duplicate field: ", (e.name)))
 
-def duplicateRecordTypeFieldNamesError(e: hydra.error.core.DuplicateRecordTypeFieldNamesError): scala.Predef.String = hydra.lib.strings.cat(Seq("duplicate field in record type: ", (e.name)))
+def duplicateRecordTypeFieldNamesError(e: hydra.error.core.DuplicateRecordTypeFieldNamesError): scala.Predef.String = hydra.lib.strings.cat(Seq("duplicate field in record type: ",
+   (e.name)))
 
-def duplicateUnionTypeFieldNamesError(e: hydra.error.core.DuplicateUnionTypeFieldNamesError): scala.Predef.String = hydra.lib.strings.cat(Seq("duplicate field in union type: ", (e.name)))
+def duplicateUnionTypeFieldNamesError(e: hydra.error.core.DuplicateUnionTypeFieldNamesError): scala.Predef.String = hydra.lib.strings.cat(Seq("duplicate field in union type: ",
+   (e.name)))
 
-def emptyCaseStatementError(e: hydra.error.core.EmptyCaseStatementError): scala.Predef.String = hydra.lib.strings.cat(Seq("empty case statement for type: ", (e.typeName)))
+def emptyCaseStatementError(e: hydra.error.core.EmptyCaseStatementError): scala.Predef.String = hydra.lib.strings.cat(Seq("empty case statement for type: ",
+   (e.typeName)))
 
 def emptyLetBindingsError[T0](e: T0): scala.Predef.String = "let expression with no bindings"
 
@@ -33,11 +36,14 @@ def emptyTypeNameInTermError[T0](e: T0): scala.Predef.String = "term with empty 
 
 def emptyUnionTypeError[T0](e: T0): scala.Predef.String = "union type with no alternatives (use TypeVoid instead)"
 
-def invalidForallParameterNameError(e: hydra.error.core.InvalidForallParameterNameError): scala.Predef.String = hydra.lib.strings.cat(Seq("invalid forall parameter name: ", (e.name)))
+def invalidForallParameterNameError(e: hydra.error.core.InvalidForallParameterNameError): scala.Predef.String = hydra.lib.strings.cat(Seq("invalid forall parameter name: ",
+   (e.name)))
 
-def invalidLambdaParameterNameError(e: hydra.error.core.InvalidLambdaParameterNameError): scala.Predef.String = hydra.lib.strings.cat(Seq("invalid lambda parameter name: ", (e.name)))
+def invalidLambdaParameterNameError(e: hydra.error.core.InvalidLambdaParameterNameError): scala.Predef.String = hydra.lib.strings.cat(Seq("invalid lambda parameter name: ",
+   (e.name)))
 
-def invalidLetBindingNameError(e: hydra.error.core.InvalidLetBindingNameError): scala.Predef.String = hydra.lib.strings.cat(Seq("invalid let binding name: ", (e.name)))
+def invalidLetBindingNameError(e: hydra.error.core.InvalidLetBindingNameError): scala.Predef.String = hydra.lib.strings.cat(Seq("invalid let binding name: ",
+   (e.name)))
 
 def invalidTermError(e: hydra.error.core.InvalidTermError): scala.Predef.String =
   hydra.lib.strings.cat2("invalid term: ")(e match
@@ -81,9 +87,11 @@ def invalidTypeError(e: hydra.error.core.InvalidTypeError): scala.Predef.String 
   case hydra.error.core.InvalidTypeError.undefinedTypeVariable(v_InvalidTypeError_undefinedTypeVariable_v1) => hydra.show.error.core.undefinedTypeVariableError(v_InvalidTypeError_undefinedTypeVariable_v1)
   case hydra.error.core.InvalidTypeError.voidInNonBottomPosition(v_InvalidTypeError_voidInNonBottomPosition_v1) => hydra.show.error.core.voidInNonBottomPositionError(v_InvalidTypeError_voidInNonBottomPosition_v1))
 
-def invalidTypeLambdaParameterNameError(e: hydra.error.core.InvalidTypeLambdaParameterNameError): scala.Predef.String = hydra.lib.strings.cat(Seq("invalid type lambda parameter name: ", (e.name)))
+def invalidTypeLambdaParameterNameError(e: hydra.error.core.InvalidTypeLambdaParameterNameError): scala.Predef.String = hydra.lib.strings.cat(Seq("invalid type lambda parameter name: ",
+   (e.name)))
 
-def invalidTypeSchemeVariableNameError(e: hydra.error.core.InvalidTypeSchemeVariableNameError): scala.Predef.String = hydra.lib.strings.cat(Seq("invalid type scheme variable name: ", (e.name)))
+def invalidTypeSchemeVariableNameError(e: hydra.error.core.InvalidTypeSchemeVariableNameError): scala.Predef.String = hydra.lib.strings.cat(Seq("invalid type scheme variable name: ",
+   (e.name)))
 
 def nestedTermAnnotationError[T0](e: T0): scala.Predef.String = "nested term annotations should be merged"
 
@@ -95,17 +103,22 @@ def nonComparableMapKeyTypeError(e: hydra.error.core.NonComparableMapKeyTypeErro
 def nonComparableSetElementTypeError(e: hydra.error.core.NonComparableSetElementTypeError): scala.Predef.String =
   hydra.lib.strings.cat(Seq("set element type contains a function type: ", hydra.show.core.`type`(e.elementType)))
 
-def redundantWrapUnwrapError(e: hydra.error.core.RedundantWrapUnwrapError): scala.Predef.String = hydra.lib.strings.cat(Seq("redundant wrap/unwrap for type: ", (e.typeName)))
+def redundantWrapUnwrapError(e: hydra.error.core.RedundantWrapUnwrapError): scala.Predef.String = hydra.lib.strings.cat(Seq("redundant wrap/unwrap for type: ",
+   (e.typeName)))
 
 def selfApplicationError(e: hydra.error.core.SelfApplicationError): scala.Predef.String = hydra.lib.strings.cat(Seq("self-application of variable: ", (e.name)))
 
-def singleVariantUnionError(e: hydra.error.core.SingleVariantUnionError): scala.Predef.String = hydra.lib.strings.cat(Seq("union type with single variant: ", (e.fieldName)))
+def singleVariantUnionError(e: hydra.error.core.SingleVariantUnionError): scala.Predef.String = hydra.lib.strings.cat(Seq("union type with single variant: ",
+   (e.fieldName)))
 
-def termVariableShadowingError(e: hydra.error.core.TermVariableShadowingError): scala.Predef.String = hydra.lib.strings.cat(Seq("variable shadowing: ", (e.name)))
+def termVariableShadowingError(e: hydra.error.core.TermVariableShadowingError): scala.Predef.String = hydra.lib.strings.cat(Seq("variable shadowing: ",
+   (e.name)))
 
-def typeVariableShadowingInForallError(e: hydra.error.core.TypeVariableShadowingInForallError): scala.Predef.String = hydra.lib.strings.cat(Seq("type variable shadowing in forall: ", (e.name)))
+def typeVariableShadowingInForallError(e: hydra.error.core.TypeVariableShadowingInForallError): scala.Predef.String = hydra.lib.strings.cat(Seq("type variable shadowing in forall: ",
+   (e.name)))
 
-def typeVariableShadowingInTypeLambdaError(e: hydra.error.core.TypeVariableShadowingInTypeLambdaError): scala.Predef.String = hydra.lib.strings.cat(Seq("type variable shadowing in type lambda: ", (e.name)))
+def typeVariableShadowingInTypeLambdaError(e: hydra.error.core.TypeVariableShadowingInTypeLambdaError): scala.Predef.String = hydra.lib.strings.cat(Seq("type variable shadowing in type lambda: ",
+   (e.name)))
 
 def undefinedFieldError(e: hydra.error.core.UndefinedFieldError): scala.Predef.String =
   {
@@ -114,13 +127,17 @@ def undefinedFieldError(e: hydra.error.core.UndefinedFieldError): scala.Predef.S
   hydra.lib.strings.cat(Seq("no such field \"", fname, "\" in type \"", tname, "\""))
 }
 
-def undefinedTermVariableError(e: hydra.error.core.UndefinedTermVariableError): scala.Predef.String = hydra.lib.strings.cat(Seq("undefined term variable: ", (e.name)))
+def undefinedTermVariableError(e: hydra.error.core.UndefinedTermVariableError): scala.Predef.String = hydra.lib.strings.cat(Seq("undefined term variable: ",
+   (e.name)))
 
-def undefinedTypeVariableError(e: hydra.error.core.UndefinedTypeVariableError): scala.Predef.String = hydra.lib.strings.cat(Seq("undefined type variable: ", (e.name)))
+def undefinedTypeVariableError(e: hydra.error.core.UndefinedTypeVariableError): scala.Predef.String = hydra.lib.strings.cat(Seq("undefined type variable: ",
+   (e.name)))
 
-def undefinedTypeVariableInBindingTypeError(e: hydra.error.core.UndefinedTypeVariableInBindingTypeError): scala.Predef.String = hydra.lib.strings.cat(Seq("undefined type variable in binding type: ", (e.name)))
+def undefinedTypeVariableInBindingTypeError(e: hydra.error.core.UndefinedTypeVariableInBindingTypeError): scala.Predef.String = hydra.lib.strings.cat(Seq("undefined type variable in binding type: ",
+   (e.name)))
 
-def undefinedTypeVariableInLambdaDomainError(e: hydra.error.core.UndefinedTypeVariableInLambdaDomainError): scala.Predef.String = hydra.lib.strings.cat(Seq("undefined type variable in lambda domain: ", (e.name)))
+def undefinedTypeVariableInLambdaDomainError(e: hydra.error.core.UndefinedTypeVariableInLambdaDomainError): scala.Predef.String = hydra.lib.strings.cat(Seq("undefined type variable in lambda domain: ",
+   (e.name)))
 
 def undefinedTypeVariableInTypeApplicationError(e: hydra.error.core.UndefinedTypeVariableInTypeApplicationError): scala.Predef.String =
   hydra.lib.strings.cat(Seq("undefined type variable in type application: ", (e.name)))
@@ -143,6 +160,7 @@ def unknownPrimitiveNameError(e: hydra.error.core.UnknownPrimitiveNameError): sc
 
 def unnecessaryIdentityApplicationError[T0](e: T0): scala.Predef.String = "unnecessary application of identity lambda"
 
-def untypedTermVariableError(e: hydra.error.core.UntypedTermVariableError): scala.Predef.String = hydra.lib.strings.cat(Seq("untyped term variable: ", (e.name)))
+def untypedTermVariableError(e: hydra.error.core.UntypedTermVariableError): scala.Predef.String = hydra.lib.strings.cat(Seq("untyped term variable: ",
+   (e.name)))
 
 def voidInNonBottomPositionError[T0](e: T0): scala.Predef.String = "TypeVoid in a position where no value can be constructed"

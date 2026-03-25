@@ -6674,7 +6674,7 @@ public interface Coder {
     hydra.ext.java.environment.Aliases aliases = (env).aliases;
     return new hydra.ext.java.environment.JavaEnvironment(new hydra.ext.java.environment.Aliases((aliases).currentNamespace, (aliases).packages, hydra.lib.sets.Insert.apply(
       name,
-      (aliases).branchVars), (aliases).recursiveVars, (aliases).inScopeTypeParams, (aliases).polymorphicLocals, (aliases).inScopeJavaVars, (aliases).varRenames, (aliases).lambdaVars, (aliases).typeVarSubst, (aliases).trustedTypeVars, (aliases).methodCodomain, (aliases).thunkedVars), (env).graph);
+      (aliases).branchVars), (aliases).recursiveVars, (aliases).inScopeTypeParams, (aliases).polymorphicLocals, (aliases).inScopeJavaVars, (aliases).varRenames, (aliases).lambdaVars, (aliases).typeVarSubst, (aliases).trustedTypeVars, (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), (aliases).thunkedVars), (env).graph);
   }
 
   static hydra.util.ConsList<hydra.ext.java.syntax.InterfaceType> interfaceTypes(Boolean isSer, hydra.ext.java.environment.Aliases aliases, hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> tparams, hydra.core.Name elName) {
@@ -7247,12 +7247,65 @@ public interface Coder {
 
       @Override
       public hydra.core.Term visit(hydra.core.Term.Let lt) {
+        hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> propagatedBindings = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+          (java.util.function.Function<hydra.core.Binding, hydra.core.Binding>) (b -> hydra.lib.maybes.Maybe.applyLazy(
+            () -> b,
+            (java.util.function.Function<hydra.core.TypeScheme, hydra.core.Binding>) (ts -> new hydra.core.Binding((b).name, hydra.ext.java.Coder.propagateType(
+              (ts).type,
+              (b).term), (b).type)),
+            (b).type)),
+          (lt).value.bindings));
         return (setTypeAnn).apply(hydra.ext.java.Coder.propagateType_rebuildLet(
           term,
-          (lt).value.bindings,
+          propagatedBindings.get(),
           hydra.ext.java.Coder.propagateType(
             typ,
             (lt).value.body)));
+      }
+
+      @Override
+      public hydra.core.Term visit(hydra.core.Term.Application app) {
+        hydra.core.Term fun = (app).value.function;
+        hydra.util.Lazy<hydra.core.Term> annotatedFun = new hydra.util.Lazy<>(() -> hydra.Rewriting.deannotateTerm(fun).accept(new hydra.core.Term.PartialVisitor<>() {
+          @Override
+          public hydra.core.Term otherwise(hydra.core.Term instance) {
+            return fun;
+          }
+
+          @Override
+          public hydra.core.Term visit(hydra.core.Term.Function fn) {
+            return (fn).value.accept(new hydra.core.Function.PartialVisitor<>() {
+              @Override
+              public hydra.core.Term otherwise(hydra.core.Function instance) {
+                return fun;
+              }
+
+              @Override
+              public hydra.core.Term visit(hydra.core.Function.Elimination elim) {
+                return (elim).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
+                  @Override
+                  public hydra.core.Term otherwise(hydra.core.Elimination instance) {
+                    return fun;
+                  }
+
+                  @Override
+                  public hydra.core.Term visit(hydra.core.Elimination.Union cs) {
+                    hydra.util.Lazy<hydra.core.Type> dom = new hydra.util.Lazy<>(() -> hydra.Schemas.nominalApplication(
+                      (cs).value.typeName,
+                      (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty())));
+                    hydra.core.Type ft = new hydra.core.Type.Function(new hydra.core.FunctionType(dom.get(), typ));
+                    return hydra.Annotations.setTermAnnotation(
+                      hydra.Constants.key_type(),
+                      hydra.util.Maybe.just(hydra.encode.Core.type(ft)),
+                      fun);
+                  }
+                });
+              }
+            });
+          }
+        }));
+        hydra.core.Term arg = (app).value.argument;
+        return (setTypeAnn).apply(new hydra.core.Term.Application(new hydra.core.Application(annotatedFun.get(), arg)));
       }
     });
   }

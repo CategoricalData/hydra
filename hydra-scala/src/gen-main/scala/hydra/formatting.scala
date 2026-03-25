@@ -28,7 +28,8 @@ def convertCase(from: hydra.util.CaseConvention)(to: hydra.util.CaseConvention)(
     lazy val byCaps: Seq[scala.Predef.String] = {
       def splitOnUppercase(acc: Seq[Seq[Int]])(c: Int): Seq[Seq[Int]] =
         hydra.lib.lists.concat2[Seq[Int]](hydra.lib.logic.ifElse[Seq[Seq[Int]]](hydra.lib.chars.isUpper(c))(Seq(Seq()))(Seq()))(hydra.lib.lists.cons[Seq[Int]](hydra.lib.lists.cons[Int](c)(hydra.lib.lists.head[Seq[Int]](acc)))(hydra.lib.lists.tail[Seq[Int]](acc)))
-      hydra.lib.lists.map[Seq[Int], scala.Predef.String](hydra.lib.strings.fromList)(hydra.lib.lists.foldl[Seq[Seq[Int]], Int](splitOnUppercase)(Seq(Seq()))(hydra.lib.lists.reverse[Int](hydra.lib.strings.toList(hydra.formatting.decapitalize(original)))))
+      hydra.lib.lists.map[Seq[Int], scala.Predef.String](hydra.lib.strings.fromList)(hydra.lib.lists.foldl[Seq[Seq[Int]],
+         Int](splitOnUppercase)(Seq(Seq()))(hydra.lib.lists.reverse[Int](hydra.lib.strings.toList(hydra.formatting.decapitalize(original)))))
     }
     lazy val byUnderscores: Seq[scala.Predef.String] = hydra.lib.strings.splitOn("_")(original)
     from match
@@ -38,12 +39,16 @@ def convertCase(from: hydra.util.CaseConvention)(to: hydra.util.CaseConvention)(
       case hydra.util.CaseConvention.upperSnake => byUnderscores
   }
   to match
-    case hydra.util.CaseConvention.camel => hydra.formatting.decapitalize(hydra.lib.strings.cat(hydra.lib.lists.map[scala.Predef.String, scala.Predef.String]((`arg_`: scala.Predef.String) =>
+    case hydra.util.CaseConvention.camel => hydra.formatting.decapitalize(hydra.lib.strings.cat(hydra.lib.lists.map[scala.Predef.String,
+       scala.Predef.String]((`arg_`: scala.Predef.String) =>
       hydra.formatting.capitalize(hydra.lib.strings.toLower(`arg_`)))(parts)))
-    case hydra.util.CaseConvention.pascal => hydra.lib.strings.cat(hydra.lib.lists.map[scala.Predef.String, scala.Predef.String]((`arg_`: scala.Predef.String) =>
+    case hydra.util.CaseConvention.pascal => hydra.lib.strings.cat(hydra.lib.lists.map[scala.Predef.String,
+       scala.Predef.String]((`arg_`: scala.Predef.String) =>
       hydra.formatting.capitalize(hydra.lib.strings.toLower(`arg_`)))(parts))
-    case hydra.util.CaseConvention.lowerSnake => hydra.lib.strings.intercalate("_")(hydra.lib.lists.map[scala.Predef.String, scala.Predef.String](hydra.lib.strings.toLower)(parts))
-    case hydra.util.CaseConvention.upperSnake => hydra.lib.strings.intercalate("_")(hydra.lib.lists.map[scala.Predef.String, scala.Predef.String](hydra.lib.strings.toUpper)(parts))
+    case hydra.util.CaseConvention.lowerSnake => hydra.lib.strings.intercalate("_")(hydra.lib.lists.map[scala.Predef.String,
+       scala.Predef.String](hydra.lib.strings.toLower)(parts))
+    case hydra.util.CaseConvention.upperSnake => hydra.lib.strings.intercalate("_")(hydra.lib.lists.map[scala.Predef.String,
+       scala.Predef.String](hydra.lib.strings.toUpper)(parts))
 }
 
 def convertCaseCamelOrUnderscoreToLowerSnake(s: scala.Predef.String): scala.Predef.String =
@@ -91,9 +96,12 @@ def nonAlnumToUnderscores(input: scala.Predef.String): scala.Predef.String =
     {
     lazy val s: Seq[Int] = hydra.lib.pairs.first[Seq[Int], Boolean](p)
     lazy val b: Boolean = hydra.lib.pairs.second[Seq[Int], Boolean](p)
-    hydra.lib.logic.ifElse[Tuple2[Seq[Int], Boolean]](isAlnum(c))(Tuple2(hydra.lib.lists.cons[Int](c)(s), false))(hydra.lib.logic.ifElse[Tuple2[Seq[Int], Boolean]](b)(Tuple2(s, true))(Tuple2(hydra.lib.lists.cons[Int](95)(s), true)))
+    hydra.lib.logic.ifElse[Tuple2[Seq[Int], Boolean]](isAlnum(c))(Tuple2(hydra.lib.lists.cons[Int](c)(s),
+       false))(hydra.lib.logic.ifElse[Tuple2[Seq[Int], Boolean]](b)(Tuple2(s, true))(Tuple2(hydra.lib.lists.cons[Int](95)(s),
+       true)))
   }
-  lazy val result: Tuple2[Seq[Int], Boolean] = hydra.lib.lists.foldl[Tuple2[Seq[Int], Boolean], Int](replace)(Tuple2(Seq(), false))(hydra.lib.strings.toList(input))
+  lazy val result: Tuple2[Seq[Int], Boolean] = hydra.lib.lists.foldl[Tuple2[Seq[Int], Boolean], Int](replace)(Tuple2(Seq(),
+     false))(hydra.lib.strings.toList(input))
   hydra.lib.strings.fromList(hydra.lib.lists.reverse[Int](hydra.lib.pairs.first[Seq[Int], Boolean](result)))
 }
 
@@ -108,10 +116,19 @@ def stripLeadingAndTrailingWhitespace(s: scala.Predef.String): scala.Predef.Stri
 
 def withCharacterAliases(original: scala.Predef.String): scala.Predef.String =
   {
-  lazy val aliases: Map[Int, scala.Predef.String] = hydra.lib.maps.fromList[Int, scala.Predef.String](Seq(Tuple2(32, "sp"), Tuple2(33, "excl"), Tuple2(34, "quot"), Tuple2(35, "num"), Tuple2(36, "dollar"), Tuple2(37, "percnt"), Tuple2(38, "amp"), Tuple2(39, "apos"), Tuple2(40, "lpar"), Tuple2(41, "rpar"), Tuple2(42, "ast"), Tuple2(43, "plus"), Tuple2(44, "comma"), Tuple2(45, "minus"), Tuple2(46, "period"), Tuple2(47, "sol"), Tuple2(58, "colon"), Tuple2(59, "semi"), Tuple2(60, "lt"), Tuple2(61, "equals"), Tuple2(62, "gt"), Tuple2(63, "quest"), Tuple2(64, "commat"), Tuple2(91, "lsqb"), Tuple2(92, "bsol"), Tuple2(93, "rsqb"), Tuple2(94, "circ"), Tuple2(95, "lowbar"), Tuple2(96, "grave"), Tuple2(123, "lcub"), Tuple2(124, "verbar"), Tuple2(125, "rcub"), Tuple2(126, "tilde")))
+  lazy val aliases: Map[Int, scala.Predef.String] = hydra.lib.maps.fromList[Int, scala.Predef.String](Seq(Tuple2(32,
+     "sp"), Tuple2(33, "excl"), Tuple2(34, "quot"), Tuple2(35, "num"), Tuple2(36, "dollar"), Tuple2(37,
+     "percnt"), Tuple2(38, "amp"), Tuple2(39, "apos"), Tuple2(40, "lpar"), Tuple2(41, "rpar"), Tuple2(42,
+     "ast"), Tuple2(43, "plus"), Tuple2(44, "comma"), Tuple2(45, "minus"), Tuple2(46, "period"), Tuple2(47,
+     "sol"), Tuple2(58, "colon"), Tuple2(59, "semi"), Tuple2(60, "lt"), Tuple2(61, "equals"), Tuple2(62,
+     "gt"), Tuple2(63, "quest"), Tuple2(64, "commat"), Tuple2(91, "lsqb"), Tuple2(92, "bsol"), Tuple2(93,
+     "rsqb"), Tuple2(94, "circ"), Tuple2(95, "lowbar"), Tuple2(96, "grave"), Tuple2(123, "lcub"), Tuple2(124,
+     "verbar"), Tuple2(125, "rcub"), Tuple2(126, "tilde")))
   def alias(c: Int): Seq[Int] =
-    hydra.lib.maybes.fromMaybe[Seq[Int]](hydra.lib.lists.pure[Int](c))(hydra.lib.maybes.map[scala.Predef.String, Seq[Int]](hydra.lib.strings.toList)(hydra.lib.maps.lookup[Int, scala.Predef.String](c)(aliases)))
-  hydra.lib.strings.fromList(hydra.lib.lists.filter[Int](hydra.lib.chars.isAlphaNum)(hydra.lib.lists.concat[Int](hydra.lib.lists.map[Int, Seq[Int]](alias)(hydra.lib.strings.toList(original)))))
+    hydra.lib.maybes.fromMaybe[Seq[Int]](hydra.lib.lists.pure[Int](c))(hydra.lib.maybes.map[scala.Predef.String,
+       Seq[Int]](hydra.lib.strings.toList)(hydra.lib.maps.lookup[Int, scala.Predef.String](c)(aliases)))
+  hydra.lib.strings.fromList(hydra.lib.lists.filter[Int](hydra.lib.chars.isAlphaNum)(hydra.lib.lists.concat[Int](hydra.lib.lists.map[Int,
+     Seq[Int]](alias)(hydra.lib.strings.toList(original)))))
 }
 
 def wrapLine(maxlen: Int)(input: scala.Predef.String): scala.Predef.String =

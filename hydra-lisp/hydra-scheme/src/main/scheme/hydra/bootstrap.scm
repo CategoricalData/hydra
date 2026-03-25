@@ -522,7 +522,7 @@
            (all-ns (append main-ns eval-ns))
            (all-mods (load-modules-from-json *json-dir* all-ns))
            (total-bindings (apply + (map (lambda (m)
-                                           (let ((els (hydra_module_module-elements m)))
+                                           (let ((els (hydra_module_module-definitions m)))
                                              (if (list? els) (length els) 0)))
                                          all-mods))))
       (display (string-append "  Loaded " (number->string (length all-mods))

@@ -18,6 +18,8 @@ lazy val key_exclude: hydra.core.Name = "exclude"
 
 lazy val key_firstClassType: hydra.core.Name = "firstClassType"
 
+lazy val key_freshTypeVariableCount: hydra.core.Name = "freshTypeVariableCount"
+
 lazy val key_maxLength: hydra.core.Name = "maxLength"
 
 lazy val key_minLength: hydra.core.Name = "minLength"
@@ -25,8 +27,6 @@ lazy val key_minLength: hydra.core.Name = "minLength"
 lazy val key_preserveFieldName: hydra.core.Name = "preserveFieldName"
 
 lazy val key_type: hydra.core.Name = "type"
-
-lazy val key_freshTypeVariableCount: hydra.core.Name = "freshTypeVariableCount"
 
 lazy val maxInt32: Int = 2147483647
 

@@ -71,8 +71,7 @@ object Generation:
       else
         val jsonValue = parseJsonFile(filePath)
         val mod = decodeModuleFromJson(bsGraph, schemaMap, jsonValue)
-        val typedBindings = mod.elements.count(_.`type`.isDefined)
-        println(s"  Loaded: $ns (${mod.elements.size} bindings, $typedBindings typed)")
+        println(s"  Loaded: $ns (${mod.definitions.size} definitions)")
         Seq(mod)
     }
 

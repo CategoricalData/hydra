@@ -96,8 +96,8 @@ import java.io.File
   val allKernelNamespaces = mainNamespaces ++ evalLibNamespaces
   val mainMods = Generation.loadModulesFromJson(jDir, schemaMap, allKernelNamespaces)
   var stepTime = System.currentTimeMillis() - stepStart
-  val totalBindings = mainMods.map(_.elements.size).sum
-  println(s"  Loaded ${mainMods.size} modules ($totalBindings bindings).")
+  val totalDefs = mainMods.map(_.definitions.size).sum
+  println(s"  Loaded ${mainMods.size} modules ($totalDefs definitions).")
   println(s"  Time: ${Generation.formatTime(stepTime)}")
   println()
 

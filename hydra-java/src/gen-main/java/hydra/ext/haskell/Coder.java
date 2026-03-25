@@ -146,7 +146,9 @@ public interface Coder {
       hydra.core.Name fn = (field).name;
       hydra.core.Term fun_ = (field).term;
       hydra.util.Lazy<hydra.ext.haskell.syntax.Name> hname = new hydra.util.Lazy<>(() -> hydra.ext.haskell.Utils.unionFieldReference(
-        hydra.lib.sets.FromList.apply(hydra.lib.maps.Keys.apply((g).boundTerms)),
+        hydra.lib.sets.Union.apply(
+          hydra.lib.sets.FromList.apply(hydra.lib.maps.Keys.apply((g).boundTerms)),
+          hydra.lib.sets.FromList.apply(hydra.lib.maps.Keys.apply((g).schemaTypes))),
         namespaces,
         dn,
         fn));
@@ -699,7 +701,9 @@ public interface Coder {
         hydra.core.Name fn = (field).name;
         hydra.core.Name sname = (injection).value.typeName;
         hydra.util.Lazy<hydra.ext.haskell.syntax.Expression> lhs = new hydra.util.Lazy<>(() -> new hydra.ext.haskell.syntax.Expression.Variable(hydra.ext.haskell.Utils.unionFieldReference(
-          hydra.lib.sets.FromList.apply(hydra.lib.maps.Keys.apply((g).boundTerms)),
+          hydra.lib.sets.Union.apply(
+            hydra.lib.sets.FromList.apply(hydra.lib.maps.Keys.apply((g).boundTerms)),
+            hydra.lib.sets.FromList.apply(hydra.lib.maps.Keys.apply((g).schemaTypes))),
           namespaces,
           sname,
           fn)));
@@ -1243,7 +1247,7 @@ public interface Coder {
       }
     })));
     hydra.core.Term term = (def).term;
-    hydra.core.TypeScheme typ = (def).type;
+    hydra.util.Maybe<hydra.core.TypeScheme> typ = (def).type;
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.util.Maybe<String>, java.util.function.Function<hydra.ext.haskell.syntax.Name, java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.util.Maybe<hydra.ext.haskell.syntax.LocalBindings>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.DeclarationWithComments>>>>>> toDecl = new java.util.concurrent.atomic.AtomicReference<>();
     toDecl.set((java.util.function.Function<hydra.util.Maybe<String>, java.util.function.Function<hydra.ext.haskell.syntax.Name, java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.util.Maybe<hydra.ext.haskell.syntax.LocalBindings>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.DeclarationWithComments>>>>>) (comments -> (java.util.function.Function<hydra.ext.haskell.syntax.Name, java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.util.Maybe<hydra.ext.haskell.syntax.LocalBindings>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.DeclarationWithComments>>>>) (hname_ -> (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.util.Maybe<hydra.ext.haskell.syntax.LocalBindings>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.DeclarationWithComments>>>) (term_ -> (java.util.function.Function<hydra.util.Maybe<hydra.ext.haskell.syntax.LocalBindings>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.DeclarationWithComments>>) (bindings -> hydra.Rewriting.deannotateTerm(term_).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
@@ -1256,8 +1260,11 @@ public interface Coder {
             cx,
             g),
           (java.util.function.Function<hydra.ext.haskell.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.DeclarationWithComments>>) (hterm -> {
-            hydra.util.Maybe<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>> schemeConstraints = (typ).constraints;
-            hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.util.PersistentSet<hydra.classes.TypeClass>>> schemeClasses = new hydra.util.Lazy<>(() -> hydra.ext.haskell.Coder.typeSchemeConstraintsToClassMap(schemeConstraints));
+            hydra.util.Lazy<hydra.util.Maybe<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>> schemeConstraints = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+              () -> (hydra.util.Maybe<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()),
+              (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Maybe<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>>) (ts -> (ts).constraints),
+              typ));
+            hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.util.PersistentSet<hydra.classes.TypeClass>>> schemeClasses = new hydra.util.Lazy<>(() -> hydra.ext.haskell.Coder.typeSchemeConstraintsToClassMap(schemeConstraints.get()));
             hydra.ext.haskell.syntax.ValueBinding vb = hydra.ext.haskell.Utils.simpleValueBinding(
               hname_,
               hterm,
@@ -1271,11 +1278,15 @@ public interface Coder {
                 hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.util.PersistentSet<hydra.classes.TypeClass>>> combinedClasses = new hydra.util.Lazy<>(() -> hydra.lib.maps.Union.apply(
                   schemeClasses.get(),
                   explicitClasses));
+                hydra.util.Lazy<hydra.core.Type> schemeType = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+                  () -> new hydra.core.Type.Unit(),
+                  (java.util.function.Function<hydra.core.TypeScheme, hydra.core.Type>) (ts -> (ts).type),
+                  typ));
                 return hydra.lib.eithers.Bind.apply(
                   hydra.ext.haskell.Coder.encodeTypeWithClassAssertions(
                     namespaces,
                     combinedClasses.get(),
-                    (typ).type,
+                    schemeType.get(),
                     cx,
                     g),
                   (java.util.function.Function<hydra.ext.haskell.syntax.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.DeclarationWithComments>>) (htype -> {
@@ -1296,7 +1307,7 @@ public interface Coder {
         hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> terms = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
           projected -> projected.term,
           lbindings));
-        java.util.function.Function<hydra.ext.haskell.syntax.Name, java.util.function.Function<hydra.ext.haskell.syntax.Expression, hydra.ext.haskell.syntax.LocalBinding>> toBinding = (java.util.function.Function<hydra.ext.haskell.syntax.Name, java.util.function.Function<hydra.ext.haskell.syntax.Expression, hydra.ext.haskell.syntax.LocalBinding>>) (hname_ -> (java.util.function.Function<hydra.ext.haskell.syntax.Expression, hydra.ext.haskell.syntax.LocalBinding>) (hterm_ -> new hydra.ext.haskell.syntax.LocalBinding.Value(hydra.ext.haskell.Utils.simpleValueBinding(
+        java.util.function.Function<hydra.ext.haskell.syntax.Name, java.util.function.Function<hydra.ext.haskell.syntax.Expression, hydra.ext.haskell.syntax.LocalBinding>> toTermDefinition = (java.util.function.Function<hydra.ext.haskell.syntax.Name, java.util.function.Function<hydra.ext.haskell.syntax.Expression, hydra.ext.haskell.syntax.LocalBinding>>) (hname_ -> (java.util.function.Function<hydra.ext.haskell.syntax.Expression, hydra.ext.haskell.syntax.LocalBinding>) (hterm_ -> new hydra.ext.haskell.syntax.LocalBinding.Value(hydra.ext.haskell.Utils.simpleValueBinding(
           hname_,
           hterm_,
           (hydra.util.Maybe<hydra.ext.haskell.syntax.LocalBindings>) (hydra.util.Maybe.<hydra.ext.haskell.syntax.LocalBindings>nothing())))));
@@ -1311,7 +1322,7 @@ public interface Coder {
             terms.get()),
           (java.util.function.Function<hydra.util.ConsList<hydra.ext.haskell.syntax.Expression>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.DeclarationWithComments>>) (hterms -> {
             hydra.util.Lazy<hydra.util.ConsList<hydra.ext.haskell.syntax.LocalBinding>> hbindings = new hydra.util.Lazy<>(() -> hydra.lib.lists.ZipWith.apply(
-              toBinding,
+              toTermDefinition,
               hnames.get(),
               hterms));
             hydra.util.Lazy<hydra.util.ConsList<hydra.ext.haskell.syntax.LocalBinding>> prevBindings = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(

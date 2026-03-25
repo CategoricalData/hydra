@@ -125,10 +125,14 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
 
     sys.setrecursionlimit(old_limit)
 
+    from hydra.module import DefinitionTerm
+    from hydra.core import Binding
     bindings = {}
     for mod in term_mods:
-        for binding in mod.elements:
-            bindings[binding.name] = binding
+        for d in mod.definitions:
+            if isinstance(d, DefinitionTerm):
+                td = d.value
+                bindings[td.name] = Binding(td.name, td.term, td.type)
 
     return bindings
 
@@ -668,7 +672,7 @@ def run_validate_core_term_test(test_case: hydra.testing.ValidateCoreTermTestCas
     """Execute a validate core term test."""
     import hydra.validate.core
     graph = get_test_graph()
-    result = hydra.validate.core.term(graph, test_case.input)
+    result = hydra.validate.core.term(test_case.typed, graph, test_case.input)
     assert result == test_case.output, (
         f"Validate core term failed:\n"
         f"  Expected: {test_case.output}\n"
