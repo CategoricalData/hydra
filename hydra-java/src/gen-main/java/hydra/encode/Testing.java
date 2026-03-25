@@ -14,26 +14,24 @@ public interface Testing {
       new hydra.core.Field(new hydra.core.Name("result"), hydra.encode.Core.term((x).result)))));
   }
 
-  static hydra.core.Term evaluationStyle(hydra.testing.EvaluationStyle v1) {
-    return (v1).accept(new hydra.testing.EvaluationStyle.PartialVisitor<>() {
-      @Override
-      public hydra.core.Term visit(hydra.testing.EvaluationStyle.Eager y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.EvaluationStyle"), new hydra.core.Field(new hydra.core.Name("eager"), new hydra.core.Term.Unit())));
-      }
-
-      @Override
-      public hydra.core.Term visit(hydra.testing.EvaluationStyle.Lazy y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.EvaluationStyle"), new hydra.core.Field(new hydra.core.Name("lazy"), new hydra.core.Term.Unit())));
-      }
-    });
-  }
-
   static hydra.core.Term caseConversionTestCase(hydra.testing.CaseConversionTestCase x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.CaseConversionTestCase"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("fromConvention"), hydra.encode.Util.caseConvention((x).fromConvention)),
       new hydra.core.Field(new hydra.core.Name("toConvention"), hydra.encode.Util.caseConvention((x).toConvention)),
       new hydra.core.Field(new hydra.core.Name("fromString"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).fromString))),
       new hydra.core.Field(new hydra.core.Name("toString"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).toString))))));
+  }
+
+  static hydra.core.Term deannotateTermTestCase(hydra.testing.DeannotateTermTestCase x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.DeannotateTermTestCase"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.term((x).input)),
+      new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.term((x).output)))));
+  }
+
+  static hydra.core.Term deannotateTypeTestCase(hydra.testing.DeannotateTypeTestCase x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.DeannotateTypeTestCase"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.type((x).input)),
+      new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.type((x).output)))));
   }
 
   static hydra.core.Term delegatedEvaluationTestCase(hydra.testing.DelegatedEvaluationTestCase x) {
@@ -48,16 +46,25 @@ public interface Testing {
       new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.term((x).output)))));
   }
 
-  static hydra.core.Term deannotateTermTestCase(hydra.testing.DeannotateTermTestCase x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.DeannotateTermTestCase"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.term((x).input)),
-      new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.term((x).output)))));
+  static hydra.core.Term evaluationStyle(hydra.testing.EvaluationStyle v1) {
+    return (v1).accept(new hydra.testing.EvaluationStyle.PartialVisitor<>() {
+      @Override
+      public hydra.core.Term visit(hydra.testing.EvaluationStyle.Eager y) {
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.EvaluationStyle"), new hydra.core.Field(new hydra.core.Name("eager"), new hydra.core.Term.Unit())));
+      }
+
+      @Override
+      public hydra.core.Term visit(hydra.testing.EvaluationStyle.Lazy y) {
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.EvaluationStyle"), new hydra.core.Field(new hydra.core.Name("lazy"), new hydra.core.Term.Unit())));
+      }
+    });
   }
 
-  static hydra.core.Term deannotateTypeTestCase(hydra.testing.DeannotateTypeTestCase x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.DeannotateTypeTestCase"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.type((x).input)),
-      new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.type((x).output)))));
+  static hydra.core.Term evaluationTestCase(hydra.testing.EvaluationTestCase x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.EvaluationTestCase"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("evaluationStyle"), hydra.encode.Testing.evaluationStyle((x).evaluationStyle)),
+      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.term((x).input)),
+      new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.term((x).output)))));
   }
 
   static hydra.core.Term flattenLetTermsTestCase(hydra.testing.FlattenLetTermsTestCase x) {
@@ -101,6 +108,24 @@ public interface Testing {
         (x).output))))));
   }
 
+  static hydra.core.Term hoistCaseStatementsTestCase(hydra.testing.HoistCaseStatementsTestCase x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.HoistCaseStatementsTestCase"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.term((x).input)),
+      new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.term((x).output)))));
+  }
+
+  static hydra.core.Term hoistLetBindingsTestCase(hydra.testing.HoistLetBindingsTestCase x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.HoistLetBindingsTestCase"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.let((x).input)),
+      new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.let((x).output)))));
+  }
+
+  static hydra.core.Term hoistPolymorphicLetBindingsTestCase(hydra.testing.HoistPolymorphicLetBindingsTestCase x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.HoistPolymorphicLetBindingsTestCase"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.let((x).input)),
+      new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.let((x).output)))));
+  }
+
   static hydra.core.Term hoistPredicate(hydra.testing.HoistPredicate v1) {
     return (v1).accept(new hydra.testing.HoistPredicate.PartialVisitor<>() {
       @Override
@@ -125,71 +150,9 @@ public interface Testing {
     });
   }
 
-  static hydra.core.Term hoistLetBindingsTestCase(hydra.testing.HoistLetBindingsTestCase x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.HoistLetBindingsTestCase"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.let((x).input)),
-      new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.let((x).output)))));
-  }
-
-  static hydra.core.Term hoistPolymorphicLetBindingsTestCase(hydra.testing.HoistPolymorphicLetBindingsTestCase x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.HoistPolymorphicLetBindingsTestCase"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.let((x).input)),
-      new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.let((x).output)))));
-  }
-
   static hydra.core.Term hoistSubtermsTestCase(hydra.testing.HoistSubtermsTestCase x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.HoistSubtermsTestCase"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("predicate"), hydra.encode.Testing.hoistPredicate((x).predicate)),
-      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.term((x).input)),
-      new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.term((x).output)))));
-  }
-
-  static hydra.core.Term hoistCaseStatementsTestCase(hydra.testing.HoistCaseStatementsTestCase x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.HoistCaseStatementsTestCase"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.term((x).input)),
-      new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.term((x).output)))));
-  }
-
-  static hydra.core.Term termRewriter(hydra.testing.TermRewriter v1) {
-    return (v1).accept(new hydra.testing.TermRewriter.PartialVisitor<>() {
-      @Override
-      public hydra.core.Term visit(hydra.testing.TermRewriter.ReplaceFooWithBar y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TermRewriter"), new hydra.core.Field(new hydra.core.Name("replaceFooWithBar"), new hydra.core.Term.Unit())));
-      }
-
-      @Override
-      public hydra.core.Term visit(hydra.testing.TermRewriter.ReplaceInt32WithInt64 y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TermRewriter"), new hydra.core.Field(new hydra.core.Name("replaceInt32WithInt64"), new hydra.core.Term.Unit())));
-      }
-    });
-  }
-
-  static hydra.core.Term rewriteTermTestCase(hydra.testing.RewriteTermTestCase x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.RewriteTermTestCase"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.term((x).input)),
-      new hydra.core.Field(new hydra.core.Name("rewriter"), hydra.encode.Testing.termRewriter((x).rewriter)),
-      new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.term((x).output)))));
-  }
-
-  static hydra.core.Term typeRewriter(hydra.testing.TypeRewriter v1) {
-    return (v1).accept(new hydra.testing.TypeRewriter.PartialVisitor<>() {
-      @Override
-      public hydra.core.Term visit(hydra.testing.TypeRewriter.ReplaceStringWithInt32 y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TypeRewriter"), new hydra.core.Field(new hydra.core.Name("replaceStringWithInt32"), new hydra.core.Term.Unit())));
-      }
-    });
-  }
-
-  static hydra.core.Term rewriteTypeTestCase(hydra.testing.RewriteTypeTestCase x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.RewriteTypeTestCase"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.type((x).input)),
-      new hydra.core.Field(new hydra.core.Name("rewriter"), hydra.encode.Testing.typeRewriter((x).rewriter)),
-      new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.type((x).output)))));
-  }
-
-  static hydra.core.Term evaluationTestCase(hydra.testing.EvaluationTestCase x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.EvaluationTestCase"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("evaluationStyle"), hydra.encode.Testing.evaluationStyle((x).evaluationStyle)),
       new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.term((x).input)),
       new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.term((x).output)))));
   }
@@ -202,6 +165,18 @@ public interface Testing {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.InferenceTestCase"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.term((x).input)),
       new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.typeScheme((x).output)))));
+  }
+
+  static hydra.core.Term joinTypesTestCase(hydra.testing.JoinTypesTestCase x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.JoinTypesTestCase"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("left"), hydra.encode.Core.type((x).left)),
+      new hydra.core.Field(new hydra.core.Name("right"), hydra.encode.Core.type((x).right)),
+      new hydra.core.Field(new hydra.core.Name("expected"), new hydra.core.Term.Either(hydra.lib.eithers.Bimap.apply(
+        (java.util.function.Function<java.lang.Void, hydra.core.Term>) (ignored -> new hydra.core.Term.Unit()),
+        (java.util.function.Function<hydra.util.ConsList<hydra.typing.TypeConstraint>, hydra.core.Term>) (xs -> new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+          hydra.encode.Typing::typeConstraint,
+          xs))),
+        (x).expected))))));
   }
 
   static hydra.core.Term jsonDecodeTestCase(hydra.testing.JsonDecodeTestCase x) {
@@ -235,16 +210,22 @@ public interface Testing {
       new hydra.core.Field(new hydra.core.Name("term"), hydra.encode.Core.term((x).term)))));
   }
 
+  static hydra.core.Term jsonWriterTestCase(hydra.testing.WriterTestCase<hydra.json.model.Value> v1) {
+    return hydra.encode.Testing.writerTestCase(
+      hydra.encode.json.Model::value,
+      v1);
+  }
+
   static hydra.core.Term liftLambdaAboveLetTestCase(hydra.testing.LiftLambdaAboveLetTestCase x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.LiftLambdaAboveLetTestCase"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.term((x).input)),
       new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.term((x).output)))));
   }
 
-  static hydra.core.Term jsonWriterTestCase(hydra.testing.WriterTestCase<hydra.json.model.Value> v1) {
-    return hydra.encode.Testing.writerTestCase(
-      hydra.encode.json.Model::value,
-      v1);
+  static hydra.core.Term normalizeTypeVariablesTestCase(hydra.testing.NormalizeTypeVariablesTestCase x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.NormalizeTypeVariablesTestCase"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.term((x).input)),
+      new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.term((x).output)))));
   }
 
   static <T0> hydra.core.Term parserTestCase(java.util.function.Function<T0, hydra.core.Term> a, hydra.testing.ParserTestCase<T0> x) {
@@ -255,8 +236,60 @@ public interface Testing {
         ((java.util.function.Function<hydra.testing.ParserTestCase<T0>, hydra.parsing.ParseResult<T0>>) (projected -> projected.output)).apply(x))))));
   }
 
+  static hydra.core.Term rewriteTermTestCase(hydra.testing.RewriteTermTestCase x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.RewriteTermTestCase"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.term((x).input)),
+      new hydra.core.Field(new hydra.core.Name("rewriter"), hydra.encode.Testing.termRewriter((x).rewriter)),
+      new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.term((x).output)))));
+  }
+
+  static hydra.core.Term rewriteTypeTestCase(hydra.testing.RewriteTypeTestCase x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.RewriteTypeTestCase"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.type((x).input)),
+      new hydra.core.Field(new hydra.core.Name("rewriter"), hydra.encode.Testing.typeRewriter((x).rewriter)),
+      new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.type((x).output)))));
+  }
+
+  static hydra.core.Term serializationTestCase(hydra.testing.SerializationTestCase x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.SerializationTestCase"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Ast.expr((x).input)),
+      new hydra.core.Field(new hydra.core.Name("output"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).output))))));
+  }
+
+  static hydra.core.Term simplifyTermTestCase(hydra.testing.SimplifyTermTestCase x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.SimplifyTermTestCase"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.term((x).input)),
+      new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.term((x).output)))));
+  }
+
+  static hydra.core.Term substInTypeTestCase(hydra.testing.SubstInTypeTestCase x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.SubstInTypeTestCase"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("substitution"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Type>, hydra.core.Term>) (p -> new hydra.core.Term.Pair(hydra.lib.pairs.Bimap.apply(
+          hydra.encode.Core::name,
+          hydra.encode.Core::type,
+          p))),
+        (x).substitution))),
+      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.type((x).input)),
+      new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.type((x).output)))));
+  }
+
   static hydra.core.Term tag(hydra.testing.Tag x) {
     return new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra.testing.Tag"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).value))));
+  }
+
+  static hydra.core.Term termRewriter(hydra.testing.TermRewriter v1) {
+    return (v1).accept(new hydra.testing.TermRewriter.PartialVisitor<>() {
+      @Override
+      public hydra.core.Term visit(hydra.testing.TermRewriter.ReplaceFooWithBar y) {
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TermRewriter"), new hydra.core.Field(new hydra.core.Name("replaceFooWithBar"), new hydra.core.Term.Unit())));
+      }
+
+      @Override
+      public hydra.core.Term visit(hydra.testing.TermRewriter.ReplaceInt32WithInt64 y) {
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TermRewriter"), new hydra.core.Field(new hydra.core.Name("replaceInt32WithInt64"), new hydra.core.Term.Unit())));
+      }
+    });
   }
 
   static hydra.core.Term testCase(hydra.testing.TestCase v1) {
@@ -484,17 +517,6 @@ public interface Testing {
         (x).cases))))));
   }
 
-  static hydra.core.Term typeCheckingTestCase(hydra.testing.TypeCheckingTestCase x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.TypeCheckingTestCase"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.term((x).input)),
-      new hydra.core.Field(new hydra.core.Name("outputTerm"), hydra.encode.Core.term((x).outputTerm)),
-      new hydra.core.Field(new hydra.core.Name("outputType"), hydra.encode.Core.type((x).outputType)))));
-  }
-
-  static hydra.core.Term typeCheckingFailureTestCase(hydra.testing.TypeCheckingFailureTestCase x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.TypeCheckingFailureTestCase"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.term((x).input)))));
-  }
-
   static hydra.core.Term topologicalSortBindingsTestCase(hydra.testing.TopologicalSortBindingsTestCase x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.TopologicalSortBindingsTestCase"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("bindings"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
@@ -509,6 +531,23 @@ public interface Testing {
             hydra.encode.Core::name,
             hydra.encode.Core::term,
             p))),
+          xs2))),
+        (x).expected))))));
+  }
+
+  static hydra.core.Term topologicalSortSCCTestCase(hydra.testing.TopologicalSortSCCTestCase x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.TopologicalSortSCCTestCase"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("adjacencyList"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>, hydra.core.Term>) (p -> new hydra.core.Term.Pair(hydra.lib.pairs.Bimap.apply(
+          (java.util.function.Function<Integer, hydra.core.Term>) (x2 -> new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(x2)))),
+          (java.util.function.Function<hydra.util.ConsList<Integer>, hydra.core.Term>) (xs2 -> new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+            (java.util.function.Function<Integer, hydra.core.Term>) (x2 -> new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(x2)))),
+            xs2))),
+          p))),
+        (x).adjacencyList))),
+      new hydra.core.Field(new hydra.core.Name("expected"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.util.ConsList<Integer>, hydra.core.Term>) (xs2 -> new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+          (java.util.function.Function<Integer, hydra.core.Term>) (x2 -> new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(x2)))),
           xs2))),
         (x).expected))))));
   }
@@ -535,39 +574,15 @@ public interface Testing {
         (x).expected))))));
   }
 
-  static hydra.core.Term topologicalSortSCCTestCase(hydra.testing.TopologicalSortSCCTestCase x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.TopologicalSortSCCTestCase"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("adjacencyList"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>, hydra.core.Term>) (p -> new hydra.core.Term.Pair(hydra.lib.pairs.Bimap.apply(
-          (java.util.function.Function<Integer, hydra.core.Term>) (x2 -> new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(x2)))),
-          (java.util.function.Function<hydra.util.ConsList<Integer>, hydra.core.Term>) (xs2 -> new hydra.core.Term.List(hydra.lib.lists.Map.apply(
-            (java.util.function.Function<Integer, hydra.core.Term>) (x2 -> new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(x2)))),
-            xs2))),
-          p))),
-        (x).adjacencyList))),
-      new hydra.core.Field(new hydra.core.Name("expected"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.util.ConsList<Integer>, hydra.core.Term>) (xs2 -> new hydra.core.Term.List(hydra.lib.lists.Map.apply(
-          (java.util.function.Function<Integer, hydra.core.Term>) (x2 -> new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(x2)))),
-          xs2))),
-        (x).expected))))));
+  static hydra.core.Term typeCheckingFailureTestCase(hydra.testing.TypeCheckingFailureTestCase x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.TypeCheckingFailureTestCase"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.term((x).input)))));
   }
 
-  static hydra.core.Term serializationTestCase(hydra.testing.SerializationTestCase x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.SerializationTestCase"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Ast.expr((x).input)),
-      new hydra.core.Field(new hydra.core.Name("output"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).output))))));
-  }
-
-  static hydra.core.Term simplifyTermTestCase(hydra.testing.SimplifyTermTestCase x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.SimplifyTermTestCase"), hydra.util.ConsList.of(
+  static hydra.core.Term typeCheckingTestCase(hydra.testing.TypeCheckingTestCase x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.TypeCheckingTestCase"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.term((x).input)),
-      new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.term((x).output)))));
-  }
-
-  static hydra.core.Term normalizeTypeVariablesTestCase(hydra.testing.NormalizeTypeVariablesTestCase x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.NormalizeTypeVariablesTestCase"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.term((x).input)),
-      new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.term((x).output)))));
+      new hydra.core.Field(new hydra.core.Name("outputTerm"), hydra.encode.Core.term((x).outputTerm)),
+      new hydra.core.Field(new hydra.core.Name("outputType"), hydra.encode.Core.type((x).outputType)))));
   }
 
   static hydra.core.Term typeReductionTestCase(hydra.testing.TypeReductionTestCase x) {
@@ -576,35 +591,13 @@ public interface Testing {
       new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.type((x).output)))));
   }
 
-  static <T0> hydra.core.Term writerTestCase(java.util.function.Function<T0, hydra.core.Term> a, hydra.testing.WriterTestCase<T0> x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.WriterTestCase"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("input"), (a).apply(((java.util.function.Function<hydra.testing.WriterTestCase<T0>, T0>) (projected -> projected.input)).apply(x))),
-      new hydra.core.Field(new hydra.core.Name("output"), new hydra.core.Term.Literal(new hydra.core.Literal.String_(((java.util.function.Function<hydra.testing.WriterTestCase<T0>, String>) (projected -> projected.output)).apply(x)))))));
-  }
-
-  static hydra.core.Term substInTypeTestCase(hydra.testing.SubstInTypeTestCase x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.SubstInTypeTestCase"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("substitution"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Type>, hydra.core.Term>) (p -> new hydra.core.Term.Pair(hydra.lib.pairs.Bimap.apply(
-          hydra.encode.Core::name,
-          hydra.encode.Core::type,
-          p))),
-        (x).substitution))),
-      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.type((x).input)),
-      new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.type((x).output)))));
-  }
-
-  static hydra.core.Term variableOccursInTypeTestCase(hydra.testing.VariableOccursInTypeTestCase x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.VariableOccursInTypeTestCase"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("variable"), hydra.encode.Core.name((x).variable)),
-      new hydra.core.Field(new hydra.core.Name("type"), hydra.encode.Core.type((x).type)),
-      new hydra.core.Field(new hydra.core.Name("expected"), new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_((x).expected))))));
-  }
-
-  static hydra.core.Term unshadowVariablesTestCase(hydra.testing.UnshadowVariablesTestCase x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.UnshadowVariablesTestCase"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.term((x).input)),
-      new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.term((x).output)))));
+  static hydra.core.Term typeRewriter(hydra.testing.TypeRewriter v1) {
+    return (v1).accept(new hydra.testing.TypeRewriter.PartialVisitor<>() {
+      @Override
+      public hydra.core.Term visit(hydra.testing.TypeRewriter.ReplaceStringWithInt32 y) {
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TypeRewriter"), new hydra.core.Field(new hydra.core.Name("replaceStringWithInt32"), new hydra.core.Term.Unit())));
+      }
+    });
   }
 
   static hydra.core.Term unifyTypesTestCase(hydra.testing.UnifyTypesTestCase x) {
@@ -620,16 +613,10 @@ public interface Testing {
         (x).expected))))));
   }
 
-  static hydra.core.Term joinTypesTestCase(hydra.testing.JoinTypesTestCase x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.JoinTypesTestCase"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("left"), hydra.encode.Core.type((x).left)),
-      new hydra.core.Field(new hydra.core.Name("right"), hydra.encode.Core.type((x).right)),
-      new hydra.core.Field(new hydra.core.Name("expected"), new hydra.core.Term.Either(hydra.lib.eithers.Bimap.apply(
-        (java.util.function.Function<java.lang.Void, hydra.core.Term>) (ignored -> new hydra.core.Term.Unit()),
-        (java.util.function.Function<hydra.util.ConsList<hydra.typing.TypeConstraint>, hydra.core.Term>) (xs -> new hydra.core.Term.List(hydra.lib.lists.Map.apply(
-          hydra.encode.Typing::typeConstraint,
-          xs))),
-        (x).expected))))));
+  static hydra.core.Term unshadowVariablesTestCase(hydra.testing.UnshadowVariablesTestCase x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.UnshadowVariablesTestCase"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.term((x).input)),
+      new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.Core.term((x).output)))));
   }
 
   static hydra.core.Term validateCoreTermTestCase(hydra.testing.ValidateCoreTermTestCase x) {
@@ -639,5 +626,18 @@ public interface Testing {
       new hydra.core.Field(new hydra.core.Name("output"), new hydra.core.Term.Maybe(hydra.lib.maybes.Map.apply(
         hydra.encode.error.Core::invalidTermError,
         (x).output))))));
+  }
+
+  static hydra.core.Term variableOccursInTypeTestCase(hydra.testing.VariableOccursInTypeTestCase x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.VariableOccursInTypeTestCase"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("variable"), hydra.encode.Core.name((x).variable)),
+      new hydra.core.Field(new hydra.core.Name("type"), hydra.encode.Core.type((x).type)),
+      new hydra.core.Field(new hydra.core.Name("expected"), new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_((x).expected))))));
+  }
+
+  static <T0> hydra.core.Term writerTestCase(java.util.function.Function<T0, hydra.core.Term> a, hydra.testing.WriterTestCase<T0> x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.WriterTestCase"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("input"), (a).apply(((java.util.function.Function<hydra.testing.WriterTestCase<T0>, T0>) (projected -> projected.input)).apply(x))),
+      new hydra.core.Field(new hydra.core.Name("output"), new hydra.core.Term.Literal(new hydra.core.Literal.String_(((java.util.function.Function<hydra.testing.WriterTestCase<T0>, String>) (projected -> projected.output)).apply(x)))))));
   }
 }

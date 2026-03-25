@@ -15,24 +15,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-arrowOp :: Ast.Op
-arrowOp = Serialization.op "->" (Math.negate 1) Ast.AssociativityRight
-
-gtOp :: Ast.Op
-gtOp = Serialization.op ">" 4 Ast.AssociativityNone
-
-plusOp :: Ast.Op
-plusOp = Serialization.op "+" 6 Ast.AssociativityBoth
-
-multOp :: Ast.Op
-multOp = Serialization.op "*" 7 Ast.AssociativityBoth
-
-lambdaOp :: Ast.Op
-lambdaOp = Serialization.op "->" (Math.negate 1) Ast.AssociativityRight
-
-caseOp :: Ast.Op
-caseOp = Serialization.op "->" 0 Ast.AssociativityNone
-
 -- | Test cases for AST serialization
 allTests :: Testing.TestGroup
 allTests =
@@ -191,3 +173,21 @@ allTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
+
+arrowOp :: Ast.Op
+arrowOp = Serialization.op "->" (Math.negate 1) Ast.AssociativityRight
+
+caseOp :: Ast.Op
+caseOp = Serialization.op "->" 0 Ast.AssociativityNone
+
+gtOp :: Ast.Op
+gtOp = Serialization.op ">" 4 Ast.AssociativityNone
+
+lambdaOp :: Ast.Op
+lambdaOp = Serialization.op "->" (Math.negate 1) Ast.AssociativityRight
+
+multOp :: Ast.Op
+multOp = Serialization.op "*" 7 Ast.AssociativityBoth
+
+plusOp :: Ast.Op
+plusOp = Serialization.op "+" 6 Ast.AssociativityBoth

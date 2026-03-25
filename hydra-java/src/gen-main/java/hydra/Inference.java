@@ -1554,20 +1554,20 @@ public interface Inference {
     });
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.typing.InferenceResult> inferTypeOfTypeLambda(hydra.context.Context fcx, hydra.graph.Graph cx, hydra.core.TypeLambda ta) {
-    return hydra.Inference.inferTypeOfTerm(
-      fcx,
-      cx,
-      (ta).body,
-      "type abstraction");
-  }
-
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.typing.InferenceResult> inferTypeOfTypeApplication(hydra.context.Context fcx, hydra.graph.Graph cx, hydra.core.TypeApplicationTerm tt) {
     return hydra.Inference.inferTypeOfTerm(
       fcx,
       cx,
       (tt).body,
       "type application term");
+  }
+
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.typing.InferenceResult> inferTypeOfTypeLambda(hydra.context.Context fcx, hydra.graph.Graph cx, hydra.core.TypeLambda ta) {
+    return hydra.Inference.inferTypeOfTerm(
+      fcx,
+      cx,
+      (ta).body,
+      "type abstraction");
   }
 
   static hydra.typing.InferenceResult inferTypeOfUnit(hydra.context.Context fcx) {

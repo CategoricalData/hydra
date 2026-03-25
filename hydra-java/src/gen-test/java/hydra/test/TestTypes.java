@@ -6,6 +6,78 @@ package hydra.test;
  * Type definitions for the test suite
  */
 public interface TestTypes {
+  static hydra.core.Type compareStringsType() {
+    return new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())));
+  }
+
+  static hydra.core.Type concatType() {
+    return new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())))));
+  }
+
+  static hydra.core.Type eitherStringOrInt8Type() {
+    return new hydra.core.Type.Union(hydra.util.ConsList.of(
+      new hydra.core.FieldType(new hydra.core.Name("left"), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())),
+      new hydra.core.FieldType(new hydra.core.Name("right"), new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int8())))));
+  }
+
+  static hydra.core.Name eitherStringOrInt8TypeName() {
+    return new hydra.core.Name("EitherStringOrInt8");
+  }
+
+  static hydra.core.Type exampleProjectionType() {
+    return new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(hydra.test.TestTypes.testTypePersonName()), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())));
+  }
+
+  static hydra.core.Type listOfInt16sType() {
+    return new hydra.core.Type.List(new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int16())));
+  }
+
+  static hydra.core.Type listOfInt8sType() {
+    return new hydra.core.Type.List(new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int8())));
+  }
+
+  static hydra.core.Type listOfListsOfStringsType() {
+    return new hydra.core.Type.List(new hydra.core.Type.List(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())));
+  }
+
+  static hydra.core.Type listOfSetOfStringsType() {
+    return new hydra.core.Type.List(new hydra.core.Type.Set(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())));
+  }
+
+  static hydra.core.Type listOfStringsType() {
+    return new hydra.core.Type.List(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()));
+  }
+
+  static hydra.core.Type mapOfStringsToIntsType() {
+    return new hydra.core.Type.Map(new hydra.core.MapType(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()), new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int32()))));
+  }
+
+  static hydra.core.Type optionalInt16Type() {
+    return new hydra.core.Type.Maybe(new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int16())));
+  }
+
+  static hydra.core.Type optionalInt8Type() {
+    return new hydra.core.Type.Maybe(new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int8())));
+  }
+
+  static hydra.core.Type optionalStringType() {
+    return new hydra.core.Type.Maybe(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()));
+  }
+
+  static hydra.core.Type setOfStringsType() {
+    return new hydra.core.Type.Set(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()));
+  }
+
+  static hydra.core.Name stringOrIntName() {
+    return new hydra.core.Name("StringOrInt");
+  }
+
+  static hydra.core.Type stringOrIntType() {
+    return new hydra.core.Type.Union(hydra.util.ConsList.of(
+      new hydra.core.FieldType(new hydra.core.Name("left"), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())),
+      new hydra.core.FieldType(new hydra.core.Name("right"), new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int32())))));
+  }
+
   static hydra.core.Type testTypeBuddyListA() {
     return new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("a"), new hydra.core.Type.Record(hydra.util.ConsList.of(
       new hydra.core.FieldType(new hydra.core.Name("head"), new hydra.core.Type.Variable(new hydra.core.Name("a"))),
@@ -105,6 +177,10 @@ public interface TestTypes {
 
   static hydra.core.Name testTypeListName() {
     return new hydra.core.Name("List");
+  }
+
+  static hydra.core.Name testTypeName() {
+    return new hydra.core.Name("Test");
   }
 
   static hydra.core.Type testTypeNumber() {
@@ -221,81 +297,5 @@ public interface TestTypes {
 
   static hydra.core.Name testTypeUnitName() {
     return new hydra.core.Name("Unit");
-  }
-
-  static hydra.core.Type concatType() {
-    return new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())))));
-  }
-
-  static hydra.core.Type compareStringsType() {
-    return new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())));
-  }
-
-  static hydra.core.Name eitherStringOrInt8TypeName() {
-    return new hydra.core.Name("EitherStringOrInt8");
-  }
-
-  static hydra.core.Type eitherStringOrInt8Type() {
-    return new hydra.core.Type.Union(hydra.util.ConsList.of(
-      new hydra.core.FieldType(new hydra.core.Name("left"), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())),
-      new hydra.core.FieldType(new hydra.core.Name("right"), new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int8())))));
-  }
-
-  static hydra.core.Type exampleProjectionType() {
-    return new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(hydra.test.TestTypes.testTypePersonName()), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())));
-  }
-
-  static hydra.core.Type listOfInt8sType() {
-    return new hydra.core.Type.List(new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int8())));
-  }
-
-  static hydra.core.Type listOfInt16sType() {
-    return new hydra.core.Type.List(new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int16())));
-  }
-
-  static hydra.core.Type listOfListsOfStringsType() {
-    return new hydra.core.Type.List(new hydra.core.Type.List(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())));
-  }
-
-  static hydra.core.Type listOfSetOfStringsType() {
-    return new hydra.core.Type.List(new hydra.core.Type.Set(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())));
-  }
-
-  static hydra.core.Type listOfStringsType() {
-    return new hydra.core.Type.List(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()));
-  }
-
-  static hydra.core.Type mapOfStringsToIntsType() {
-    return new hydra.core.Type.Map(new hydra.core.MapType(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()), new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int32()))));
-  }
-
-  static hydra.core.Type optionalInt8Type() {
-    return new hydra.core.Type.Maybe(new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int8())));
-  }
-
-  static hydra.core.Type optionalInt16Type() {
-    return new hydra.core.Type.Maybe(new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int16())));
-  }
-
-  static hydra.core.Type optionalStringType() {
-    return new hydra.core.Type.Maybe(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()));
-  }
-
-  static hydra.core.Type setOfStringsType() {
-    return new hydra.core.Type.Set(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()));
-  }
-
-  static hydra.core.Name stringOrIntName() {
-    return new hydra.core.Name("StringOrInt");
-  }
-
-  static hydra.core.Type stringOrIntType() {
-    return new hydra.core.Type.Union(hydra.util.ConsList.of(
-      new hydra.core.FieldType(new hydra.core.Name("left"), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())),
-      new hydra.core.FieldType(new hydra.core.Name("right"), new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int32())))));
-  }
-
-  static hydra.core.Name testTypeName() {
-    return new hydra.core.Name("Test");
   }
 }

@@ -6,6 +6,14 @@ package hydra.test;
  * A module defining the graph used in the test suite.
  */
 public interface TestGraph {
+  static hydra.module.Namespace testNamespace() {
+    return new hydra.module.Namespace("testGraph");
+  }
+
+  static hydra.module.Namespace testSchemaNamespace() {
+    return new hydra.module.Namespace("testSchemaGraph");
+  }
+
   static hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> testTerms() {
     return hydra.lib.maps.FromList.apply(hydra.util.ConsList.of((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Term>(new hydra.core.Name("testDataArthur"), hydra.test.TestTerms.testDataArthur())))));
   }
@@ -34,13 +42,5 @@ public interface TestGraph {
       (hydra.util.Pair<hydra.core.Name, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Type>(hydra.test.TestTypes.testTypeUnionMonomorphicName(), hydra.test.TestTypes.testTypeUnionMonomorphic()))),
       (hydra.util.Pair<hydra.core.Name, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Type>(hydra.test.TestTypes.testTypeUnionPolymorphicRecursiveName(), hydra.test.TestTypes.testTypeUnionPolymorphicRecursive()))),
       (hydra.util.Pair<hydra.core.Name, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Type>(hydra.test.TestTypes.testTypeUnitName(), hydra.test.TestTypes.testTypeUnit())))));
-  }
-
-  static hydra.module.Namespace testNamespace() {
-    return new hydra.module.Namespace("testGraph");
-  }
-
-  static hydra.module.Namespace testSchemaNamespace() {
-    return new hydra.module.Namespace("testSchemaGraph");
   }
 }

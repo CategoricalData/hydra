@@ -38,6 +38,10 @@ public interface Constants {
     return new hydra.core.Name("firstClassType");
   }
 
+  static hydra.core.Name key_freshTypeVariableCount() {
+    return new hydra.core.Name("freshTypeVariableCount");
+  }
+
   static hydra.core.Name key_maxLength() {
     return new hydra.core.Name("maxLength");
   }
@@ -52,10 +56,6 @@ public interface Constants {
 
   static hydra.core.Name key_type() {
     return new hydra.core.Name("type");
-  }
-
-  static hydra.core.Name key_freshTypeVariableCount() {
-    return new hydra.core.Name("freshTypeVariableCount");
   }
 
   static Integer maxInt32() {

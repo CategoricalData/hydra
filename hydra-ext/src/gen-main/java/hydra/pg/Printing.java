@@ -59,12 +59,12 @@ public interface Printing {
         hydra.pg.Printing.<T0>printLazyGraph_edges(lg)))));
   }
 
-  static <T0> hydra.util.ConsList<hydra.pg.model.Vertex<T0>> printLazyGraph_vertices(hydra.pg.model.LazyGraph<T0> lg) {
-    return ((java.util.function.Function<hydra.pg.model.LazyGraph<T0>, hydra.util.ConsList<hydra.pg.model.Vertex<T0>>>) (projected -> projected.vertices)).apply(lg);
-  }
-
   static <T0> hydra.util.ConsList<hydra.pg.model.Edge<T0>> printLazyGraph_edges(hydra.pg.model.LazyGraph<T0> lg) {
     return ((java.util.function.Function<hydra.pg.model.LazyGraph<T0>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>) (projected -> projected.edges)).apply(lg);
+  }
+
+  static <T0> hydra.util.ConsList<hydra.pg.model.Vertex<T0>> printLazyGraph_vertices(hydra.pg.model.LazyGraph<T0> lg) {
+    return ((java.util.function.Function<hydra.pg.model.LazyGraph<T0>, hydra.util.ConsList<hydra.pg.model.Vertex<T0>>>) (projected -> projected.vertices)).apply(lg);
   }
 
   static <T0> String printProperty(java.util.function.Function<T0, String> printValue, hydra.pg.model.PropertyKey key, T0 value) {

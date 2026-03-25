@@ -622,7 +622,7 @@
                                                 "let": {
                                                   "bindings": [
                                                     {
-                                                      "name": "elements",
+                                                      "name": "typeDefs",
                                                       "term": {
                                                         "application": {
                                                           "argument": {"variable": "elementPairs"},
@@ -677,39 +677,31 @@
                                                                                       "application": {
                                                                                         "argument": {
                                                                                           "application": {
-                                                                                            "argument": {
-                                                                                              "application": {
-                                                                                                "argument": {"variable": "pair"},
-                                                                                                "function": {
-                                                                                                  "typeApplication": {
-                                                                                                    "body": {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
-                                                                                                        "type": {"literal": {"string": {}}}}},
-                                                                                                    "type": {"variable": "hydra.core.Type"}}}}},
-                                                                                            "function": {"variable": "hydra.grammars.wrapType"}}},
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "elName"},
+                                                                                            "argument": {"variable": "pair"},
                                                                                             "function": {
                                                                                               "typeApplication": {
                                                                                                 "body": {
                                                                                                   "typeApplication": {
-                                                                                                    "body": {"variable": "hydra.grammars.replacePlaceholders"},
-                                                                                                    "type": {"variable": "hydra.core.Name"}}},
-                                                                                                "type": {"variable": "hydra.core.Type"}}}}}}},
+                                                                                                    "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                    "type": {"literal": {"string": {}}}}},
+                                                                                                "type": {"variable": "hydra.core.Type"}}}}},
+                                                                                        "function": {"variable": "hydra.grammars.wrapType"}}},
                                                                                     "type": [
                                                                                       {
                                                                                         "constraints": null,
                                                                                         "type": {"variable": "hydra.core.Type"},
                                                                                         "variables": []}]}],
                                                                                 "body": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "typ"},
-                                                                                    "function": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "elName"},
-                                                                                        "function": {"variable": "hydra.annotations.typeElement"}}}}}}}}}}},
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "type",
+                                                                                      "term": {
+                                                                                        "record": {
+                                                                                          "fields": [
+                                                                                            {"name": "name", "term": {"variable": "elName"}},
+                                                                                            {"name": "type", "term": {"variable": "typ"}}],
+                                                                                          "typeName": "hydra.module.TypeDefinition"}}},
+                                                                                    "typeName": "hydra.module.Definition"}}}}}}}},
                                                                     "domain": [
                                                                       {
                                                                         "pair": {
@@ -725,66 +717,17 @@
                                                                         "pair": {
                                                                           "first": {"literal": {"string": {}}},
                                                                           "second": {"variable": "hydra.core.Type"}}}}},
-                                                                  "type": {"variable": "hydra.core.Binding"}}}}}}},
+                                                                  "type": {"variable": "hydra.module.Definition"}}}}}}},
                                                       "type": [
                                                         {
                                                           "constraints": null,
-                                                          "type": {"list": {"variable": "hydra.core.Binding"}},
+                                                          "type": {"list": {"variable": "hydra.module.Definition"}},
                                                           "variables": []}]}],
                                                   "body": {
                                                     "record": {
                                                       "fields": [
                                                         {"name": "namespace", "term": {"variable": "ns"}},
-                                                        {
-                                                          "name": "definitions",
-                                                          "term": {
-                                                            "application": {
-                                                              "argument": {"variable": "elements"},
-                                                              "function": {
-                                                                "application": {
-                                                                  "argument": {
-                                                                    "function": {
-                                                                      "lambda": {
-                                                                        "body": {
-                                                                          "union": {
-                                                                            "field": {
-                                                                              "name": "term",
-                                                                              "term": {
-                                                                                "record": {
-                                                                                  "fields": [
-                                                                                    {
-                                                                                      "name": "name",
-                                                                                      "term": {
-                                                                                        "application": {
-                                                                                          "argument": {"variable": "b"},
-                                                                                          "function": {
-                                                                                            "function": {
-                                                                                              "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}}}}},
-                                                                                    {
-                                                                                      "name": "term",
-                                                                                      "term": {
-                                                                                        "application": {
-                                                                                          "argument": {"variable": "b"},
-                                                                                          "function": {
-                                                                                            "function": {
-                                                                                              "elimination": {"record": {"field": "term", "typeName": "hydra.core.Binding"}}}}}}},
-                                                                                    {
-                                                                                      "name": "type",
-                                                                                      "term": {
-                                                                                        "typeApplication": {
-                                                                                          "body": {"maybe": null},
-                                                                                          "type": {"variable": "hydra.core.TypeScheme"}}}}],
-                                                                                  "typeName": "hydra.module.TermDefinition"}}},
-                                                                            "typeName": "hydra.module.Definition"}},
-                                                                        "domain": [{"variable": "hydra.core.Binding"}],
-                                                                        "parameter": "b"}}},
-                                                                  "function": {
-                                                                    "typeApplication": {
-                                                                      "body": {
-                                                                        "typeApplication": {
-                                                                          "body": {"function": {"primitive": "hydra.lib.lists.map"}},
-                                                                          "type": {"variable": "hydra.core.Binding"}}},
-                                                                      "type": {"variable": "hydra.module.Definition"}}}}}}}},
+                                                        {"name": "definitions", "term": {"variable": "typeDefs"}},
                                                         {
                                                           "name": "termDependencies",
                                                           "term": {

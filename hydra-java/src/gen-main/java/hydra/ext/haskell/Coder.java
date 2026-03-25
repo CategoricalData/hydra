@@ -6,18 +6,6 @@ package hydra.ext.haskell;
  * Functions for encoding Hydra modules as Haskell modules
  */
 public interface Coder {
-  static Boolean includeTypeDefinitions() {
-    return false;
-  }
-
-  static Boolean useCoreImport() {
-    return true;
-  }
-
-  static hydra.core.Name keyHaskellVar() {
-    return new hydra.core.Name("haskellVar");
-  }
-
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.Type> adaptTypeToHaskellAndEncode(hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName> namespaces, hydra.core.Type typ, hydra.context.Context cx, T0 g) {
     java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.Type>> enc = (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.Type>>) (t -> hydra.ext.haskell.Coder.<T0>encodeType(
       namespaces,
@@ -1013,10 +1001,6 @@ public interface Coder {
     });
   }
 
-  static <T1> hydra.util.Either<T1, hydra.ext.haskell.syntax.Type> encodeType_ref(java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>, java.util.function.Function<hydra.core.Name, hydra.ext.haskell.syntax.Name>> hydra_ext_haskell_utils_elementReference2, hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName> namespaces, hydra.core.Name name) {
-    return hydra.util.Either.<T1, hydra.ext.haskell.syntax.Type>right(new hydra.ext.haskell.syntax.Type.Variable((hydra_ext_haskell_utils_elementReference2).apply(namespaces).apply(name)));
-  }
-
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.Type> encodeTypeWithClassAssertions(hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName> namespaces, hydra.util.PersistentMap<hydra.core.Name, hydra.util.PersistentSet<hydra.classes.TypeClass>> explicitClasses, hydra.core.Type typ, hydra.context.Context cx, T0 g) {
     hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.util.PersistentSet<hydra.classes.TypeClass>>> classes = new hydra.util.Lazy<>(() -> hydra.lib.maps.Union.apply(
       explicitClasses,
@@ -1065,6 +1049,18 @@ public interface Coder {
         })).get())));
   }
 
+  static <T1, T2> hydra.util.PersistentSet<T2> encodeTypeWithClassAssertions_clsSet(hydra.util.Pair<T1, hydra.util.PersistentSet<T2>> mapEntry) {
+    return hydra.lib.pairs.Second.apply(mapEntry);
+  }
+
+  static <T1, T2> T1 encodeTypeWithClassAssertions_name(hydra.util.Pair<T1, hydra.util.PersistentSet<T2>> mapEntry) {
+    return hydra.lib.pairs.First.apply(mapEntry);
+  }
+
+  static <T1, T2, T3> hydra.util.Pair<T1, T3> encodeTypeWithClassAssertions_toPair(hydra.util.Pair<T1, hydra.util.PersistentSet<T2>> mapEntry, T3 c) {
+    return (hydra.util.Pair<T1, T3>) ((hydra.util.Pair<T1, T3>) (new hydra.util.Pair<T1, T3>(hydra.ext.haskell.Coder.<T1, T2>encodeTypeWithClassAssertions_name(mapEntry), c)));
+  }
+
   static <T1, T2> hydra.util.ConsList<hydra.util.Pair<T1, T2>> encodeTypeWithClassAssertions_toPairs(hydra.util.Pair<T1, hydra.util.PersistentSet<T2>> mapEntry) {
     return hydra.lib.lists.Map.apply(
       (java.util.function.Function<T2, hydra.util.Pair<T1, T2>>) (v1 -> hydra.ext.haskell.Coder.<T1, T2, T2>encodeTypeWithClassAssertions_toPair(
@@ -1073,16 +1069,8 @@ public interface Coder {
       hydra.lib.sets.ToList.apply(hydra.ext.haskell.Coder.<T1, T2>encodeTypeWithClassAssertions_clsSet(mapEntry)));
   }
 
-  static <T1, T2> T1 encodeTypeWithClassAssertions_name(hydra.util.Pair<T1, hydra.util.PersistentSet<T2>> mapEntry) {
-    return hydra.lib.pairs.First.apply(mapEntry);
-  }
-
-  static <T1, T2> hydra.util.PersistentSet<T2> encodeTypeWithClassAssertions_clsSet(hydra.util.Pair<T1, hydra.util.PersistentSet<T2>> mapEntry) {
-    return hydra.lib.pairs.Second.apply(mapEntry);
-  }
-
-  static <T1, T2, T3> hydra.util.Pair<T1, T3> encodeTypeWithClassAssertions_toPair(hydra.util.Pair<T1, hydra.util.PersistentSet<T2>> mapEntry, T3 c) {
-    return (hydra.util.Pair<T1, T3>) ((hydra.util.Pair<T1, T3>) (new hydra.util.Pair<T1, T3>(hydra.ext.haskell.Coder.<T1, T2>encodeTypeWithClassAssertions_name(mapEntry), c)));
+  static <T1> hydra.util.Either<T1, hydra.ext.haskell.syntax.Type> encodeType_ref(java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>, java.util.function.Function<hydra.core.Name, hydra.ext.haskell.syntax.Name>> hydra_ext_haskell_utils_elementReference2, hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName> namespaces, hydra.core.Name name) {
+    return hydra.util.Either.<T1, hydra.ext.haskell.syntax.Type>right(new hydra.ext.haskell.syntax.Type.Variable((hydra_ext_haskell_utils_elementReference2).apply(namespaces).apply(name)));
   }
 
   static hydra.util.PersistentSet<hydra.core.Name> findOrdVariables(hydra.core.Type typ) {
@@ -1137,18 +1125,12 @@ public interface Coder {
     return (hydra.util.Pair<T0, hydra.util.PersistentSet<hydra.classes.TypeClass>>) ((hydra.util.Pair<T0, hydra.util.PersistentSet<hydra.classes.TypeClass>>) (new hydra.util.Pair<T0, hydra.util.PersistentSet<hydra.classes.TypeClass>>(name, hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(new hydra.classes.TypeClass.Ordering())))));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.Module> moduleToHaskellModule(hydra.module.Module mod, hydra.util.ConsList<hydra.module.Definition> defs, hydra.context.Context cx, hydra.graph.Graph g) {
-    return hydra.lib.eithers.Bind.apply(
-      hydra.ext.haskell.Utils.namespacesForModule(
-        mod,
-        cx,
-        g),
-      (java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.Module>>) (namespaces -> hydra.ext.haskell.Coder.constructModule(
-        namespaces,
-        mod,
-        defs,
-        cx,
-        g)));
+  static Boolean includeTypeDefinitions() {
+    return false;
+  }
+
+  static hydra.core.Name keyHaskellVar() {
+    return new hydra.core.Name("haskellVar");
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<String, String>> moduleToHaskell(hydra.module.Module mod, hydra.util.ConsList<hydra.module.Definition> defs, hydra.context.Context cx, hydra.graph.Graph g) {
@@ -1168,6 +1150,20 @@ public interface Coder {
           filepath,
           s));
       }));
+  }
+
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.Module> moduleToHaskellModule(hydra.module.Module mod, hydra.util.ConsList<hydra.module.Definition> defs, hydra.context.Context cx, hydra.graph.Graph g) {
+    return hydra.lib.eithers.Bind.apply(
+      hydra.ext.haskell.Utils.namespacesForModule(
+        mod,
+        cx,
+        g),
+      (java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.Module>>) (namespaces -> hydra.ext.haskell.Coder.constructModule(
+        namespaces,
+        mod,
+        defs,
+        cx,
+        g)));
   }
 
   static hydra.util.ConsList<hydra.ext.haskell.syntax.DeclarationWithComments> nameDecls(hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName> namespaces, hydra.core.Name name, hydra.core.Type typ) {
@@ -1664,5 +1660,9 @@ public interface Coder {
           hydra.lib.sets.ToList.apply((meta).classes))))),
         constraints)),
       maybeConstraints);
+  }
+
+  static Boolean useCoreImport() {
+    return true;
   }
 }

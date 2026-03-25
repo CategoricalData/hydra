@@ -81,12 +81,6 @@ public interface Ast {
     });
   }
 
-  static hydra.core.Term indentedExpression(hydra.ast.IndentedExpression x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.IndentedExpression"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("style"), hydra.encode.Ast.indentStyle((x).style)),
-      new hydra.core.Field(new hydra.core.Name("expr"), hydra.encode.Ast.expr((x).expr)))));
-  }
-
   static hydra.core.Term indentStyle(hydra.ast.IndentStyle v1) {
     return (v1).accept(new hydra.ast.IndentStyle.PartialVisitor<>() {
       @Override
@@ -99,6 +93,12 @@ public interface Ast {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.IndentStyle"), new hydra.core.Field(new hydra.core.Name("subsequentLines"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((y).value)))));
       }
     });
+  }
+
+  static hydra.core.Term indentedExpression(hydra.ast.IndentedExpression x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.IndentedExpression"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("style"), hydra.encode.Ast.indentStyle((x).style)),
+      new hydra.core.Field(new hydra.core.Name("expr"), hydra.encode.Ast.expr((x).expr)))));
   }
 
   static hydra.core.Term op(hydra.ast.Op x) {

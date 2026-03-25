@@ -23,14 +23,6 @@ public interface Sorting {
       pairs);
   }
 
-  static <T0, T1> T0 adjacencyListToMap_k(hydra.util.Pair<T0, hydra.util.ConsList<T1>> p) {
-    return hydra.lib.pairs.First.apply(p);
-  }
-
-  static <T0, T1> hydra.util.ConsList<T1> adjacencyListToMap_vs(hydra.util.Pair<T0, hydra.util.ConsList<T1>> p) {
-    return hydra.lib.pairs.Second.apply(p);
-  }
-
   static <T0, T1> hydra.util.ConsList<T1> adjacencyListToMap_existing(T0 k, hydra.util.PersistentMap<T0, hydra.util.ConsList<T1>> mp) {
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> (hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>empty()),
@@ -38,6 +30,14 @@ public interface Sorting {
       hydra.lib.maps.Lookup.apply(
         k,
         mp));
+  }
+
+  static <T0, T1> T0 adjacencyListToMap_k(hydra.util.Pair<T0, hydra.util.ConsList<T1>> p) {
+    return hydra.lib.pairs.First.apply(p);
+  }
+
+  static <T0, T1> hydra.util.ConsList<T1> adjacencyListToMap_vs(hydra.util.Pair<T0, hydra.util.ConsList<T1>> p) {
+    return hydra.lib.pairs.Second.apply(p);
   }
 
   static <T0> hydra.util.Pair<hydra.util.PersistentMap<Integer, hydra.util.ConsList<Integer>>, java.util.function.Function<Integer, T0>> adjacencyListsToGraph(hydra.util.ConsList<hydra.util.Pair<T0, hydra.util.ConsList<T0>>> edges0) {
@@ -57,18 +57,32 @@ public interface Sorting {
       v1)))));
   }
 
-  static <T0> hydra.util.ConsList<hydra.util.Pair<T0, hydra.util.ConsList<T0>>> adjacencyListsToGraph_sortedEdges(hydra.util.ConsList<hydra.util.Pair<T0, hydra.util.ConsList<T0>>> edges0) {
-    return hydra.lib.lists.SortOn.apply(
-      (java.util.function.Function<hydra.util.Pair<T0, hydra.util.ConsList<T0>>, T0>) ((java.util.function.Function<hydra.util.Pair<T0, hydra.util.ConsList<T0>>, T0>) (hydra.lib.pairs.First::apply)),
-      edges0);
-  }
-
   static <T0> hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.Pair<T0, hydra.util.ConsList<T0>>>> adjacencyListsToGraph_indexedEdges(hydra.util.ConsList<hydra.util.Pair<T0, hydra.util.ConsList<T0>>> sortedEdges) {
     return hydra.lib.lists.Zip.apply(
       hydra.lib.math.Range.apply(
         0,
         hydra.lib.lists.Length.apply(sortedEdges)),
       sortedEdges);
+  }
+
+  static <T0> T0 adjacencyListsToGraph_k(hydra.util.Pair<T0, hydra.util.ConsList<T0>> kNeighbors) {
+    return hydra.lib.pairs.First.apply(kNeighbors);
+  }
+
+  static <T0> T0 adjacencyListsToGraph_k2(hydra.util.Pair<T0, hydra.util.ConsList<T0>> kNeighbors) {
+    return hydra.lib.pairs.First.apply(kNeighbors);
+  }
+
+  static <T0> hydra.util.Pair<T0, hydra.util.ConsList<T0>> adjacencyListsToGraph_kNeighbors(hydra.util.Pair<Integer, hydra.util.Pair<T0, hydra.util.ConsList<T0>>> vkNeighbors) {
+    return hydra.lib.pairs.Second.apply(vkNeighbors);
+  }
+
+  static <T0> hydra.util.Pair<T0, hydra.util.ConsList<T0>> adjacencyListsToGraph_kNeighbors2(hydra.util.Pair<Integer, hydra.util.Pair<T0, hydra.util.ConsList<T0>>> vkNeighbors) {
+    return hydra.lib.pairs.Second.apply(vkNeighbors);
+  }
+
+  static <T0> hydra.util.Pair<T0, hydra.util.ConsList<T0>> adjacencyListsToGraph_kNeighbors3(hydra.util.Pair<Integer, hydra.util.Pair<T0, hydra.util.ConsList<T0>>> vkNeighbors) {
+    return hydra.lib.pairs.Second.apply(vkNeighbors);
   }
 
   static <T0> hydra.util.PersistentMap<T0, Integer> adjacencyListsToGraph_keyToVertex(hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.Pair<T0, hydra.util.ConsList<T0>>>> indexedEdges) {
@@ -78,6 +92,16 @@ public interface Sorting {
         return (hydra.util.Pair<T0, Integer>) ((hydra.util.Pair<T0, Integer>) (new hydra.util.Pair<T0, Integer>(hydra.Sorting.<T0>adjacencyListsToGraph_k2(hydra.Sorting.<T0>adjacencyListsToGraph_kNeighbors3(vkNeighbors)), v.get())));
       }),
       indexedEdges));
+  }
+
+  static <T0> hydra.util.ConsList<T0> adjacencyListsToGraph_neighbors(hydra.util.Pair<T0, hydra.util.ConsList<T0>> kNeighbors) {
+    return hydra.lib.pairs.Second.apply(kNeighbors);
+  }
+
+  static <T0> hydra.util.ConsList<hydra.util.Pair<T0, hydra.util.ConsList<T0>>> adjacencyListsToGraph_sortedEdges(hydra.util.ConsList<hydra.util.Pair<T0, hydra.util.ConsList<T0>>> edges0) {
+    return hydra.lib.lists.SortOn.apply(
+      (java.util.function.Function<hydra.util.Pair<T0, hydra.util.ConsList<T0>>, T0>) ((java.util.function.Function<hydra.util.Pair<T0, hydra.util.ConsList<T0>>, T0>) (hydra.lib.pairs.First::apply)),
+      edges0);
   }
 
   static <T0> hydra.util.PersistentMap<Integer, T0> adjacencyListsToGraph_vertexMap(hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.Pair<T0, hydra.util.ConsList<T0>>>> indexedEdges) {
@@ -95,30 +119,6 @@ public interface Sorting {
       vertexMap));
   }
 
-  static <T0> hydra.util.Pair<T0, hydra.util.ConsList<T0>> adjacencyListsToGraph_kNeighbors(hydra.util.Pair<Integer, hydra.util.Pair<T0, hydra.util.ConsList<T0>>> vkNeighbors) {
-    return hydra.lib.pairs.Second.apply(vkNeighbors);
-  }
-
-  static <T0> hydra.util.ConsList<T0> adjacencyListsToGraph_neighbors(hydra.util.Pair<T0, hydra.util.ConsList<T0>> kNeighbors) {
-    return hydra.lib.pairs.Second.apply(kNeighbors);
-  }
-
-  static <T0> hydra.util.Pair<T0, hydra.util.ConsList<T0>> adjacencyListsToGraph_kNeighbors2(hydra.util.Pair<Integer, hydra.util.Pair<T0, hydra.util.ConsList<T0>>> vkNeighbors) {
-    return hydra.lib.pairs.Second.apply(vkNeighbors);
-  }
-
-  static <T0> T0 adjacencyListsToGraph_k(hydra.util.Pair<T0, hydra.util.ConsList<T0>> kNeighbors) {
-    return hydra.lib.pairs.First.apply(kNeighbors);
-  }
-
-  static <T0> hydra.util.Pair<T0, hydra.util.ConsList<T0>> adjacencyListsToGraph_kNeighbors3(hydra.util.Pair<Integer, hydra.util.Pair<T0, hydra.util.ConsList<T0>>> vkNeighbors) {
-    return hydra.lib.pairs.Second.apply(vkNeighbors);
-  }
-
-  static <T0> T0 adjacencyListsToGraph_k2(hydra.util.Pair<T0, hydra.util.ConsList<T0>> kNeighbors) {
-    return hydra.lib.pairs.First.apply(kNeighbors);
-  }
-
   static <T0, T1> hydra.topology.OrderingIsomorphism<T1> createOrderingIsomorphism(hydra.util.ConsList<T0> sourceOrd, hydra.util.ConsList<T0> targetOrd) {
     return (hydra.topology.OrderingIsomorphism<T1>) (new hydra.topology.OrderingIsomorphism<T1>((java.util.function.Function<hydra.util.ConsList<T1>, hydra.util.ConsList<T1>>) (v1 -> hydra.Sorting.<T0, T1>createOrderingIsomorphism_sourceToTargetMapping(
       sourceOrd,
@@ -127,6 +127,18 @@ public interface Sorting {
       sourceOrd,
       targetOrd,
       v1))));
+  }
+
+  static <T0, T2> hydra.util.PersistentMap<T0, T2> createOrderingIsomorphism_mp(hydra.util.ConsList<T2> els, hydra.util.ConsList<T0> targetOrd) {
+    return hydra.lib.maps.FromList.apply(hydra.lib.lists.Zip.apply(
+      targetOrd,
+      els));
+  }
+
+  static <T0, T2> hydra.util.PersistentMap<T0, T2> createOrderingIsomorphism_mp2(hydra.util.ConsList<T2> els, hydra.util.ConsList<T0> sourceOrd) {
+    return hydra.lib.maps.FromList.apply(hydra.lib.lists.Zip.apply(
+      sourceOrd,
+      els));
   }
 
   static <T0, T2> hydra.util.ConsList<T2> createOrderingIsomorphism_sourceToTargetMapping(hydra.util.ConsList<T0> sourceOrd, hydra.util.ConsList<T0> targetOrd, hydra.util.ConsList<T2> els) {
@@ -149,23 +161,17 @@ public interface Sorting {
       sourceOrd));
   }
 
-  static <T0, T2> hydra.util.PersistentMap<T0, T2> createOrderingIsomorphism_mp(hydra.util.ConsList<T2> els, hydra.util.ConsList<T0> targetOrd) {
-    return hydra.lib.maps.FromList.apply(hydra.lib.lists.Zip.apply(
-      targetOrd,
-      els));
-  }
-
-  static <T0, T2> hydra.util.PersistentMap<T0, T2> createOrderingIsomorphism_mp2(hydra.util.ConsList<T2> els, hydra.util.ConsList<T0> sourceOrd) {
-    return hydra.lib.maps.FromList.apply(hydra.lib.lists.Zip.apply(
-      sourceOrd,
-      els));
-  }
-
   static <T0> hydra.util.PersistentSet<T0> findReachableNodes(java.util.function.Function<T0, hydra.util.PersistentSet<T0>> adj, T0 root) {
     return hydra.Sorting.<T0>findReachableNodes_visit(
       adj,
       hydra.lib.sets.Singleton.apply(root),
       root);
+  }
+
+  static <T0> hydra.util.PersistentSet<T0> findReachableNodes_toVisit(java.util.function.Function<T0, hydra.util.PersistentSet<T0>> adj, T0 node, hydra.util.PersistentSet<T0> visited) {
+    return hydra.lib.sets.Difference.apply(
+      (adj).apply(node),
+      visited);
   }
 
   static <T0> hydra.util.PersistentSet<T0> findReachableNodes_visit(java.util.function.Function<T0, hydra.util.PersistentSet<T0>> adj, hydra.util.PersistentSet<T0> visited, T0 node) {
@@ -185,12 +191,6 @@ public interface Sorting {
           n))),
         visited,
         hydra.lib.sets.ToList.apply(toVisit.get())));
-  }
-
-  static <T0> hydra.util.PersistentSet<T0> findReachableNodes_toVisit(java.util.function.Function<T0, hydra.util.PersistentSet<T0>> adj, T0 node, hydra.util.PersistentSet<T0> visited) {
-    return hydra.lib.sets.Difference.apply(
-      (adj).apply(node),
-      visited);
   }
 
   static hydra.topology.TarjanState initialState() {
@@ -234,12 +234,6 @@ public interface Sorting {
     return hydra.Sorting.<T0, T0>adjacencyListToMap(edges);
   }
 
-  static <T0, T1> hydra.util.PersistentMap<T0, hydra.util.PersistentSet<T1>> propagateTags_tagMap(hydra.util.ConsList<hydra.util.Pair<T0, hydra.util.ConsList<T1>>> nodeTags) {
-    return hydra.lib.maps.Map.apply(
-      (java.util.function.Function<hydra.util.ConsList<T1>, hydra.util.PersistentSet<T1>>) (hydra.lib.sets.FromList::apply),
-      hydra.Sorting.<T0, T1>adjacencyListToMap(nodeTags));
-  }
-
   static <T0, T1> hydra.util.ConsList<T0> propagateTags_allNodes(hydra.util.ConsList<hydra.util.Pair<T0, hydra.util.ConsList<T0>>> edges, hydra.util.ConsList<hydra.util.Pair<T0, hydra.util.ConsList<T1>>> nodeTags) {
     return hydra.lib.sets.ToList.apply(hydra.lib.sets.FromList.apply(hydra.lib.lists.Concat2.apply(
       hydra.lib.lists.Map.apply(
@@ -272,6 +266,12 @@ public interface Sorting {
           n,
           adjMap)))),
       node);
+  }
+
+  static <T0, T1> hydra.util.PersistentMap<T0, hydra.util.PersistentSet<T1>> propagateTags_tagMap(hydra.util.ConsList<hydra.util.Pair<T0, hydra.util.ConsList<T1>>> nodeTags) {
+    return hydra.lib.maps.Map.apply(
+      (java.util.function.Function<hydra.util.ConsList<T1>, hydra.util.PersistentSet<T1>>) (hydra.lib.sets.FromList::apply),
+      hydra.Sorting.<T0, T1>adjacencyListToMap(nodeTags));
   }
 
   static hydra.topology.TarjanState strongConnect(hydra.util.PersistentMap<Integer, hydra.util.ConsList<Integer>> graph, Integer v, hydra.topology.TarjanState st) {
@@ -406,20 +406,6 @@ public interface Sorting {
       () -> hydra.util.Either.<hydra.util.ConsList<hydra.util.ConsList<T0>>, hydra.util.ConsList<T0>>left(withCycles.get()));
   }
 
-  static <T0> hydra.util.ConsList<hydra.util.ConsList<T0>> topologicalSort_sccs(hydra.util.ConsList<hydra.util.Pair<T0, hydra.util.ConsList<T0>>> pairs) {
-    return hydra.Sorting.<T0>topologicalSortComponents(pairs);
-  }
-
-  static <T1> Boolean topologicalSort_isCycle(hydra.util.ConsList<T1> scc) {
-    return hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply(hydra.lib.lists.Tail.apply(scc)));
-  }
-
-  static <T0> hydra.util.ConsList<hydra.util.ConsList<T0>> topologicalSort_withCycles(hydra.util.ConsList<hydra.util.ConsList<T0>> sccs) {
-    return hydra.lib.lists.Filter.apply(
-      p0 -> hydra.Sorting.<T0>topologicalSort_isCycle(p0),
-      sccs);
-  }
-
   static <T0> hydra.util.ConsList<hydra.util.ConsList<T0>> topologicalSortComponents(hydra.util.ConsList<hydra.util.Pair<T0, hydra.util.ConsList<T0>>> pairs) {
     hydra.util.Lazy<hydra.util.Pair<hydra.util.PersistentMap<Integer, hydra.util.ConsList<Integer>>, java.util.function.Function<Integer, T0>>> graphResult = new hydra.util.Lazy<>(() -> hydra.Sorting.<T0>topologicalSortComponents_graphResult(pairs));
     hydra.util.Lazy<hydra.util.PersistentMap<Integer, hydra.util.ConsList<Integer>>> g = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(graphResult.get()));
@@ -449,6 +435,10 @@ public interface Sorting {
         nodes)));
   }
 
+  static <T1> hydra.util.ConsList<hydra.util.ConsList<T1>> topologicalSortNodes_comps(hydra.util.ConsList<hydra.util.Pair<T1, hydra.util.ConsList<T1>>> pairs) {
+    return hydra.Sorting.<T1>topologicalSortComponents(pairs);
+  }
+
   static <T0, T1> hydra.util.PersistentMap<T1, T0> topologicalSortNodes_nodesByKey(java.util.function.Function<T0, T1> getKey, hydra.util.ConsList<T0> nodes) {
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
       (java.util.function.Function<T0, hydra.util.Pair<T1, T0>>) (n -> (hydra.util.Pair<T1, T0>) ((hydra.util.Pair<T1, T0>) (new hydra.util.Pair<T1, T0>((getKey).apply(n), n)))),
@@ -461,7 +451,17 @@ public interface Sorting {
       nodes);
   }
 
-  static <T1> hydra.util.ConsList<hydra.util.ConsList<T1>> topologicalSortNodes_comps(hydra.util.ConsList<hydra.util.Pair<T1, hydra.util.ConsList<T1>>> pairs) {
-    return hydra.Sorting.<T1>topologicalSortComponents(pairs);
+  static <T1> Boolean topologicalSort_isCycle(hydra.util.ConsList<T1> scc) {
+    return hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply(hydra.lib.lists.Tail.apply(scc)));
+  }
+
+  static <T0> hydra.util.ConsList<hydra.util.ConsList<T0>> topologicalSort_sccs(hydra.util.ConsList<hydra.util.Pair<T0, hydra.util.ConsList<T0>>> pairs) {
+    return hydra.Sorting.<T0>topologicalSortComponents(pairs);
+  }
+
+  static <T0> hydra.util.ConsList<hydra.util.ConsList<T0>> topologicalSort_withCycles(hydra.util.ConsList<hydra.util.ConsList<T0>> sccs) {
+    return hydra.lib.lists.Filter.apply(
+      p0 -> hydra.Sorting.<T0>topologicalSort_isCycle(p0),
+      sccs);
   }
 }

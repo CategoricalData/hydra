@@ -2051,10 +2051,39 @@ propagateType = def "propagateType" $
                   @@ (Core.functionTypeCodomain (var "ft"))
                   @@ var "annotated"]],
       _Term_let>>: lambda "lt" $
+        -- Propagate into let binding values using each binding's type scheme
+        "propagatedBindings" <~ Lists.map
+          ("b" ~>
+            optCases (Core.bindingType $ var "b")
+              (var "b")
+              ("ts" ~> Core.binding
+                (Core.bindingName $ var "b")
+                (propagateType @@ (Core.typeSchemeType $ var "ts") @@ (Core.bindingTerm $ var "b"))
+                (Core.bindingType $ var "b")))
+          (Core.letBindings (var "lt")) $
         var "setTypeAnn" @@
           (propagateType_rebuildLet @@ var "term"
-            @@ (Core.letBindings (var "lt"))
-            @@ (propagateType @@ var "typ" @@ Core.letBody (var "lt")))]
+            @@ (var "propagatedBindings")
+            @@ (propagateType @@ var "typ" @@ Core.letBody (var "lt"))),
+      -- Propagate into application: annotate union case elimination LHS with function type
+      _Term_application>>: lambda "app" $
+        "fun" <~ Core.applicationFunction (var "app") $
+        "arg" <~ Core.applicationArgument (var "app") $
+        "annotatedFun" <~ (cases _Term (Rewriting.deannotateTerm @@ var "fun")
+          (Just $ var "fun") [
+          _Term_function>>: lambda "fn" $
+            cases _Function (var "fn")
+              (Just $ var "fun") [
+              _Function_elimination>>: lambda "elim" $
+                cases _Elimination (var "elim")
+                  (Just $ var "fun") [
+                  _Elimination_union>>: lambda "cs" $
+                    "dom" <~ (Schemas.nominalApplication @@ (Core.caseStatementTypeName (var "cs"))
+                      @@ list ([] :: [TTerm Type])) $
+                    "ft" <~ inject _Type _Type_function (Core.functionType (var "dom") (var "typ")) $
+                    Annotations.setTermAnnotation @@ asTerm Constants.key_type
+                      @@ just (Phantoms.encoderFor _Type @@ var "ft") @@ var "fun"]]]) $
+        var "setTypeAnn" @@ Core.termApplication (Core.application (var "annotatedFun") (var "arg"))]
 
 -- | Propagate the codomain type into a lambda's body, traversing through annotations
 propagateType_propagateIntoLambda :: TBinding (Type -> Term -> Term)
@@ -4320,9 +4349,7 @@ encodeElimination = def "encodeElimination" $
           (lambda "jarg" $
             "prim" <~ (JavaUtilsSource.javaExpressionToJavaPrimary @@ var "jarg") $
             "consId" <~ (innerClassRef @@ var "aliases" @@ var "tname" @@ asTerm JavaNamesSource.partialVisitorName) $
-            -- Use methodCodomain when available (cleared in inner lambdas)
-            "effectiveCod" <~ Maybes.maybe (var "cod") ("mc" ~> var "mc")
-              (project JavaHelpers._Aliases JavaHelpers._Aliases_methodCodomain @@ var "aliases") $
+            "effectiveCod" <~ (var "cod") $
             "jcod" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "effectiveCod" @@ var "cx" @@ var "g") $
             "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jcod" @@ var "cx") $
             "domArgs" <<~ (domTypeArgs @@ var "aliases" @@ var "dom" @@ var "cx" @@ var "g") $

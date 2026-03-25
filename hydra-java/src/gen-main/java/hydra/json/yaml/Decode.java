@@ -6,6 +6,18 @@ package hydra.json.yaml;
  * YAML-to-JSON decoding. Converts YAML Nodes to JSON Values (may fail for non-JSON YAML), and YAML Nodes to Hydra Terms via JSON.
  */
 public interface Decode {
+  static hydra.util.Either<String, hydra.core.Term> fromYaml(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> types, hydra.core.Name tname, hydra.core.Type typ, hydra.ext.org.yaml.model.Node node) {
+    hydra.util.Either<String, hydra.json.model.Value> jsonResult = hydra.json.yaml.Decode.yamlToJson(node);
+    return hydra.lib.eithers.Either.apply(
+      (java.util.function.Function<String, hydra.util.Either<String, hydra.core.Term>>) (err -> hydra.util.Either.<String, hydra.core.Term>left(err)),
+      (java.util.function.Function<hydra.json.model.Value, hydra.util.Either<String, hydra.core.Term>>) (json -> hydra.json.Decode.fromJson(
+        types,
+        tname,
+        typ,
+        json)),
+      jsonResult);
+  }
+
   static hydra.util.Either<String, hydra.json.model.Value> yamlToJson(hydra.ext.org.yaml.model.Node node) {
     return (node).accept(new hydra.ext.org.yaml.model.Node.PartialVisitor<>() {
       @Override
@@ -92,17 +104,5 @@ public interface Decode {
           results.get());
       }
     });
-  }
-
-  static hydra.util.Either<String, hydra.core.Term> fromYaml(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> types, hydra.core.Name tname, hydra.core.Type typ, hydra.ext.org.yaml.model.Node node) {
-    hydra.util.Either<String, hydra.json.model.Value> jsonResult = hydra.json.yaml.Decode.yamlToJson(node);
-    return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<String, hydra.core.Term>>) (err -> hydra.util.Either.<String, hydra.core.Term>left(err)),
-      (java.util.function.Function<hydra.json.model.Value, hydra.util.Either<String, hydra.core.Term>>) (json -> hydra.json.Decode.fromJson(
-        types,
-        tname,
-        typ,
-        json)),
-      jsonResult);
   }
 }

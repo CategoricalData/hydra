@@ -185,9 +185,7 @@
             {
               "name": "newAnonymous",
               "type": {"variable": "hydra.ext.scala.syntax.Data_NewAnonymous"}},
-            {
-              "name": "placeholder",
-              "type": {"variable": "hydra.ext.scala.syntax.Data_Placeholder"}},
+            {"name": "placeholder", "type": {"unit": {}}},
             {
               "name": "eta",
               "type": {"variable": "hydra.ext.scala.syntax.Data_Eta"}},
@@ -543,10 +541,6 @@
             {
               "name": "templ",
               "type": {"variable": "hydra.ext.scala.syntax.Template"}}]}}},
-    {
-      "type": {
-        "name": "hydra.ext.scala.syntax.Data_Placeholder",
-        "type": {"unit": {}}}},
     {
       "type": {
         "name": "hydra.ext.scala.syntax.Data_Eta",

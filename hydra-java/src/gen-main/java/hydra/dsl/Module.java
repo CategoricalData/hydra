@@ -18,10 +18,6 @@ public interface Module {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra.module.FileExtension"), (x).value)));
   }
 
-  static hydra.phantoms.TTerm<String> unFileExtension(hydra.phantoms.TTerm<hydra.module.FileExtension> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Wrap(new hydra.core.Name("hydra.module.FileExtension")))), (x).value)));
-  }
-
   static hydra.phantoms.TTerm<hydra.module.Library> library(hydra.phantoms.TTerm<hydra.module.Namespace> namespace, hydra.phantoms.TTerm<String> prefix, hydra.phantoms.TTerm<hydra.util.ConsList<hydra.graph.Primitive>> primitives) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.module.Library"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("namespace"), (namespace).value),
@@ -71,12 +67,16 @@ public interface Module {
       new hydra.core.Field(new hydra.core.Name("description"), (description).value)))));
   }
 
-  static hydra.phantoms.TTerm<hydra.module.Namespace> moduleNamespace(hydra.phantoms.TTerm<hydra.module.Module> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("namespace"))))), (x).value)));
-  }
-
   static hydra.phantoms.TTerm<hydra.util.ConsList<hydra.module.Definition>> moduleDefinitions(hydra.phantoms.TTerm<hydra.module.Module> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("definitions"))))), (x).value)));
+  }
+
+  static hydra.phantoms.TTerm<hydra.util.Maybe<String>> moduleDescription(hydra.phantoms.TTerm<hydra.module.Module> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("description"))))), (x).value)));
+  }
+
+  static hydra.phantoms.TTerm<hydra.module.Namespace> moduleNamespace(hydra.phantoms.TTerm<hydra.module.Module> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("namespace"))))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.util.ConsList<hydra.module.Namespace>> moduleTermDependencies(hydra.phantoms.TTerm<hydra.module.Module> x) {
@@ -87,23 +87,28 @@ public interface Module {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("typeDependencies"))))), (x).value)));
   }
 
-  static hydra.phantoms.TTerm<hydra.util.Maybe<String>> moduleDescription(hydra.phantoms.TTerm<hydra.module.Module> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("description"))))), (x).value)));
+  static hydra.phantoms.TTerm<hydra.module.Module> moduleWithDefinitions(hydra.phantoms.TTerm<hydra.module.Module> original, hydra.phantoms.TTerm<hydra.util.ConsList<hydra.module.Definition>> newVal) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.module.Module"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("namespace"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("namespace"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("definitions"), (newVal).value),
+      new hydra.core.Field(new hydra.core.Name("termDependencies"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("termDependencies"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("typeDependencies"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("typeDependencies"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("description"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("description"))))), (original).value)))))));
+  }
+
+  static hydra.phantoms.TTerm<hydra.module.Module> moduleWithDescription(hydra.phantoms.TTerm<hydra.module.Module> original, hydra.phantoms.TTerm<hydra.util.Maybe<String>> newVal) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.module.Module"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("namespace"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("namespace"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("definitions"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("definitions"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("termDependencies"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("termDependencies"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("typeDependencies"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("typeDependencies"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("description"), (newVal).value)))));
   }
 
   static hydra.phantoms.TTerm<hydra.module.Module> moduleWithNamespace(hydra.phantoms.TTerm<hydra.module.Module> original, hydra.phantoms.TTerm<hydra.module.Namespace> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.module.Module"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("namespace"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("definitions"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("definitions"))))), (original).value))),
-      new hydra.core.Field(new hydra.core.Name("termDependencies"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("termDependencies"))))), (original).value))),
-      new hydra.core.Field(new hydra.core.Name("typeDependencies"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("typeDependencies"))))), (original).value))),
-      new hydra.core.Field(new hydra.core.Name("description"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("description"))))), (original).value)))))));
-  }
-
-  static hydra.phantoms.TTerm<hydra.module.Module> moduleWithDefinitions(hydra.phantoms.TTerm<hydra.module.Module> original, hydra.phantoms.TTerm<hydra.util.ConsList<hydra.module.Definition>> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.module.Module"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("namespace"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("namespace"))))), (original).value))),
-      new hydra.core.Field(new hydra.core.Name("definitions"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("termDependencies"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("termDependencies"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("typeDependencies"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("typeDependencies"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("description"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("description"))))), (original).value)))))));
@@ -127,21 +132,8 @@ public interface Module {
       new hydra.core.Field(new hydra.core.Name("description"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("description"))))), (original).value)))))));
   }
 
-  static hydra.phantoms.TTerm<hydra.module.Module> moduleWithDescription(hydra.phantoms.TTerm<hydra.module.Module> original, hydra.phantoms.TTerm<hydra.util.Maybe<String>> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.module.Module"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("namespace"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("namespace"))))), (original).value))),
-      new hydra.core.Field(new hydra.core.Name("definitions"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("definitions"))))), (original).value))),
-      new hydra.core.Field(new hydra.core.Name("termDependencies"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("termDependencies"))))), (original).value))),
-      new hydra.core.Field(new hydra.core.Name("typeDependencies"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.Module"), new hydra.core.Name("typeDependencies"))))), (original).value))),
-      new hydra.core.Field(new hydra.core.Name("description"), (newVal).value)))));
-  }
-
   static hydra.phantoms.TTerm<hydra.module.Namespace> namespace(hydra.phantoms.TTerm<String> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra.module.Namespace"), (x).value)));
-  }
-
-  static hydra.phantoms.TTerm<String> unNamespace(hydra.phantoms.TTerm<hydra.module.Namespace> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Wrap(new hydra.core.Name("hydra.module.Namespace")))), (x).value)));
   }
 
   static <N> hydra.phantoms.TTerm<hydra.module.Namespaces<N>> namespaces(hydra.phantoms.TTerm<hydra.util.Pair<hydra.module.Namespace, N>> focus, hydra.phantoms.TTerm<hydra.util.PersistentMap<hydra.module.Namespace, N>> mapping) {
@@ -176,24 +168,24 @@ public interface Module {
       new hydra.core.Field(new hydra.core.Name("local"), (local).value)))));
   }
 
-  static hydra.phantoms.TTerm<hydra.util.Maybe<hydra.module.Namespace>> qualifiedNameNamespace(hydra.phantoms.TTerm<hydra.module.QualifiedName> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.QualifiedName"), new hydra.core.Name("namespace"))))), (x).value)));
-  }
-
   static hydra.phantoms.TTerm<String> qualifiedNameLocal(hydra.phantoms.TTerm<hydra.module.QualifiedName> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.QualifiedName"), new hydra.core.Name("local"))))), (x).value)));
   }
 
-  static hydra.phantoms.TTerm<hydra.module.QualifiedName> qualifiedNameWithNamespace(hydra.phantoms.TTerm<hydra.module.QualifiedName> original, hydra.phantoms.TTerm<hydra.util.Maybe<hydra.module.Namespace>> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.module.QualifiedName"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("namespace"), (newVal).value),
-      new hydra.core.Field(new hydra.core.Name("local"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.QualifiedName"), new hydra.core.Name("local"))))), (original).value)))))));
+  static hydra.phantoms.TTerm<hydra.util.Maybe<hydra.module.Namespace>> qualifiedNameNamespace(hydra.phantoms.TTerm<hydra.module.QualifiedName> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.QualifiedName"), new hydra.core.Name("namespace"))))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.module.QualifiedName> qualifiedNameWithLocal(hydra.phantoms.TTerm<hydra.module.QualifiedName> original, hydra.phantoms.TTerm<String> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.module.QualifiedName"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("namespace"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.QualifiedName"), new hydra.core.Name("namespace"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("local"), (newVal).value)))));
+  }
+
+  static hydra.phantoms.TTerm<hydra.module.QualifiedName> qualifiedNameWithNamespace(hydra.phantoms.TTerm<hydra.module.QualifiedName> original, hydra.phantoms.TTerm<hydra.util.Maybe<hydra.module.Namespace>> newVal) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.module.QualifiedName"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("namespace"), (newVal).value),
+      new hydra.core.Field(new hydra.core.Name("local"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.QualifiedName"), new hydra.core.Name("local"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.module.TermDefinition> termDefinition(hydra.phantoms.TTerm<hydra.core.Name> name, hydra.phantoms.TTerm<hydra.core.Term> term, hydra.phantoms.TTerm<hydra.util.Maybe<hydra.core.TypeScheme>> type) {
@@ -260,5 +252,13 @@ public interface Module {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.module.TypeDefinition"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("name"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.module.TypeDefinition"), new hydra.core.Name("name"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("type"), (newVal).value)))));
+  }
+
+  static hydra.phantoms.TTerm<String> unFileExtension(hydra.phantoms.TTerm<hydra.module.FileExtension> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Wrap(new hydra.core.Name("hydra.module.FileExtension")))), (x).value)));
+  }
+
+  static hydra.phantoms.TTerm<String> unNamespace(hydra.phantoms.TTerm<hydra.module.Namespace> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Wrap(new hydra.core.Name("hydra.module.Namespace")))), (x).value)));
   }
 }

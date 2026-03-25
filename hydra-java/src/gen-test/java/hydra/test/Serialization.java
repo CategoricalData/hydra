@@ -6,48 +6,6 @@ package hydra.test;
  * Test cases for AST serialization
  */
 public interface Serialization {
-  static hydra.ast.Op arrowOp() {
-    return hydra.Serialization.op(
-      "->",
-      hydra.lib.math.Negate.apply(1),
-      new hydra.ast.Associativity.Right());
-  }
-
-  static hydra.ast.Op gtOp() {
-    return hydra.Serialization.op(
-      ">",
-      4,
-      new hydra.ast.Associativity.None());
-  }
-
-  static hydra.ast.Op plusOp() {
-    return hydra.Serialization.op(
-      "+",
-      6,
-      new hydra.ast.Associativity.Both());
-  }
-
-  static hydra.ast.Op multOp() {
-    return hydra.Serialization.op(
-      "*",
-      7,
-      new hydra.ast.Associativity.Both());
-  }
-
-  static hydra.ast.Op lambdaOp() {
-    return hydra.Serialization.op(
-      "->",
-      hydra.lib.math.Negate.apply(1),
-      new hydra.ast.Associativity.Right());
-  }
-
-  static hydra.ast.Op caseOp() {
-    return hydra.Serialization.op(
-      "->",
-      0,
-      new hydra.ast.Associativity.None());
-  }
-
   static hydra.testing.TestGroup allTests() {
     return new hydra.testing.TestGroup("serialization", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), hydra.util.ConsList.of(
       new hydra.testing.TestGroup("associativity", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.TestGroup>) (hydra.util.ConsList.<hydra.testing.TestGroup>empty()), hydra.util.ConsList.of(new hydra.testing.TestCaseWithMetadata("right-associative operator", new hydra.testing.TestCase.Serialization(new hydra.testing.SerializationTestCase(hydra.Serialization.ifx(
@@ -190,5 +148,47 @@ public interface Serialization {
             hydra.Serialization.cst("x"),
             hydra.Serialization.cst("y")),
           hydra.Serialization.cst("z")), "x * y * z")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty()))))), (hydra.util.ConsList<hydra.testing.TestCaseWithMetadata>) (hydra.util.ConsList.<hydra.testing.TestCaseWithMetadata>empty()));
+  }
+
+  static hydra.ast.Op arrowOp() {
+    return hydra.Serialization.op(
+      "->",
+      hydra.lib.math.Negate.apply(1),
+      new hydra.ast.Associativity.Right());
+  }
+
+  static hydra.ast.Op caseOp() {
+    return hydra.Serialization.op(
+      "->",
+      0,
+      new hydra.ast.Associativity.None());
+  }
+
+  static hydra.ast.Op gtOp() {
+    return hydra.Serialization.op(
+      ">",
+      4,
+      new hydra.ast.Associativity.None());
+  }
+
+  static hydra.ast.Op lambdaOp() {
+    return hydra.Serialization.op(
+      "->",
+      hydra.lib.math.Negate.apply(1),
+      new hydra.ast.Associativity.Right());
+  }
+
+  static hydra.ast.Op multOp() {
+    return hydra.Serialization.op(
+      "*",
+      7,
+      new hydra.ast.Associativity.Both());
+  }
+
+  static hydra.ast.Op plusOp() {
+    return hydra.Serialization.op(
+      "+",
+      6,
+      new hydra.ast.Associativity.Both());
   }
 }

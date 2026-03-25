@@ -69,9 +69,7 @@ public interface Grammars {
         hydra.core.Name elName = hydra.Grammars.toName(
           ns,
           lname.get());
-        hydra.util.Lazy<hydra.core.Type> typ = new hydra.util.Lazy<>(() -> hydra.Grammars.replacePlaceholders(
-          elName,
-          hydra.Grammars.wrapType(hydra.lib.pairs.Second.apply(pair))));
+        hydra.util.Lazy<hydra.core.Type> typ = new hydra.util.Lazy<>(() -> hydra.Grammars.wrapType(hydra.lib.pairs.Second.apply(pair)));
         return new hydra.module.Definition.Type(new hydra.module.TypeDefinition(elName, typ.get()));
       }),
       elementPairs.get()));

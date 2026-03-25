@@ -716,10 +716,6 @@ public interface Decoding {
     });
   }
 
-  static hydra.core.Term decodeUnitType() {
-    return new hydra.core.Term.Variable(new hydra.core.Name("hydra.extract.helpers.decodeUnit"));
-  }
-
   static hydra.core.Term decodeUnionType(hydra.util.ConsList<hydra.core.FieldType> rt) {
     return hydra.Decoding.decodeUnionTypeNamed(
       new hydra.core.Name("unknown"),
@@ -738,6 +734,10 @@ public interface Decoding {
       new hydra.core.Term.Literal(new hydra.core.Literal.String_("no such field ")),
       new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Wrap(new hydra.core.Name("hydra.core.Name")))), new hydra.core.Term.Variable(new hydra.core.Name("fname")))),
       new hydra.core.Term.Literal(new hydra.core.Literal.String_(" in union")))))))))))), new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("f"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("f")), new hydra.core.Term.Variable(new hydra.core.Name("fterm"))))))))), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.maps.lookup"))), new hydra.core.Term.Variable(new hydra.core.Name("fname")))), new hydra.core.Term.Variable(new hydra.core.Name("variantMap"))))))))))))))))), new hydra.core.Term.Variable(new hydra.core.Name("stripped"))))))))), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lexical.stripAndDereferenceTermEither")), new hydra.core.Term.Variable(new hydra.core.Name("cx")))), new hydra.core.Term.Variable(new hydra.core.Name("raw"))))))))))));
+  }
+
+  static hydra.core.Term decodeUnitType() {
+    return new hydra.core.Term.Variable(new hydra.core.Name("hydra.extract.helpers.decodeUnit"));
   }
 
   static hydra.core.Term decodeWrappedType(hydra.core.Type wt) {

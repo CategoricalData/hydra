@@ -6,24 +6,14 @@ package hydra.test;
  * Shared utility functions for test code generation codecs
  */
 public interface Utils {
-  static hydra.util.Either<String, hydra.testing.TestGroup> inferTestGroupTerms(hydra.graph.Graph g, hydra.testing.TestGroup tg) {
-    hydra.util.ConsList<hydra.testing.TestCaseWithMetadata> cases_ = (tg).cases;
-    hydra.util.Maybe<String> desc = (tg).description;
-    String name_ = (tg).name;
-    hydra.util.ConsList<hydra.testing.TestGroup> subgroups = (tg).subgroups;
-    return hydra.lib.eithers.Bind.apply(
-      hydra.lib.eithers.MapList.apply(
-        (java.util.function.Function<hydra.testing.TestGroup, hydra.util.Either<String, hydra.testing.TestGroup>>) (sg -> hydra.test.Utils.inferTestGroupTerms(
-          g,
-          sg)),
-        subgroups),
-      (java.util.function.Function<hydra.util.ConsList<hydra.testing.TestGroup>, hydra.util.Either<String, hydra.testing.TestGroup>>) (inferredSubgroups -> hydra.lib.eithers.Map.apply(
-        (java.util.function.Function<hydra.util.ConsList<hydra.testing.TestCaseWithMetadata>, hydra.testing.TestGroup>) (inferredCases -> new hydra.testing.TestGroup(name_, desc, inferredSubgroups, inferredCases)),
-        hydra.lib.eithers.MapList.apply(
-          (java.util.function.Function<hydra.testing.TestCaseWithMetadata, hydra.util.Either<String, hydra.testing.TestCaseWithMetadata>>) (tc -> hydra.test.Utils.inferTestCase(
-            g,
-            tc)),
-          cases_))));
+  static hydra.util.Either<String, hydra.core.Term> inferTerm(hydra.graph.Graph g, hydra.core.Term term) {
+    return hydra.lib.eithers.Bimap.apply(
+      (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (ic -> hydra.show.Errors.error(((java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, hydra.errors.Error_>) (projected -> projected.object)).apply(ic))),
+      (java.util.function.Function<hydra.typing.InferenceResult, hydra.core.Term>) (x -> (x).term),
+      hydra.Inference.inferInGraphContext(
+        hydra.Lexical.emptyContext(),
+        g,
+        term));
   }
 
   static hydra.util.Either<String, hydra.testing.TestCaseWithMetadata> inferTestCase(hydra.graph.Graph g, hydra.testing.TestCaseWithMetadata tcm) {
@@ -56,13 +46,23 @@ public interface Utils {
       }));
   }
 
-  static hydra.util.Either<String, hydra.core.Term> inferTerm(hydra.graph.Graph g, hydra.core.Term term) {
-    return hydra.lib.eithers.Bimap.apply(
-      (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (ic -> hydra.show.Errors.error(((java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, hydra.errors.Error_>) (projected -> projected.object)).apply(ic))),
-      (java.util.function.Function<hydra.typing.InferenceResult, hydra.core.Term>) (x -> (x).term),
-      hydra.Inference.inferInGraphContext(
-        hydra.Lexical.emptyContext(),
-        g,
-        term));
+  static hydra.util.Either<String, hydra.testing.TestGroup> inferTestGroupTerms(hydra.graph.Graph g, hydra.testing.TestGroup tg) {
+    hydra.util.ConsList<hydra.testing.TestCaseWithMetadata> cases_ = (tg).cases;
+    hydra.util.Maybe<String> desc = (tg).description;
+    String name_ = (tg).name;
+    hydra.util.ConsList<hydra.testing.TestGroup> subgroups = (tg).subgroups;
+    return hydra.lib.eithers.Bind.apply(
+      hydra.lib.eithers.MapList.apply(
+        (java.util.function.Function<hydra.testing.TestGroup, hydra.util.Either<String, hydra.testing.TestGroup>>) (sg -> hydra.test.Utils.inferTestGroupTerms(
+          g,
+          sg)),
+        subgroups),
+      (java.util.function.Function<hydra.util.ConsList<hydra.testing.TestGroup>, hydra.util.Either<String, hydra.testing.TestGroup>>) (inferredSubgroups -> hydra.lib.eithers.Map.apply(
+        (java.util.function.Function<hydra.util.ConsList<hydra.testing.TestCaseWithMetadata>, hydra.testing.TestGroup>) (inferredCases -> new hydra.testing.TestGroup(name_, desc, inferredSubgroups, inferredCases)),
+        hydra.lib.eithers.MapList.apply(
+          (java.util.function.Function<hydra.testing.TestCaseWithMetadata, hydra.util.Either<String, hydra.testing.TestCaseWithMetadata>>) (tc -> hydra.test.Utils.inferTestCase(
+            g,
+            tc)),
+          cases_))));
   }
 }

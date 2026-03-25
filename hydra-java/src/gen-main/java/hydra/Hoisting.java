@@ -282,6 +282,14 @@ public interface Hoisting {
       (let0).bindings)), (let0).body);
   }
 
+  static <T1, T3> hydra.util.Pair<hydra.util.ConsList<T3>, T1> hoistLetBindingsWithPredicate_emptyBindingsAndNames(hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, T1> bindingsAndNames) {
+    return (hydra.util.Pair<hydra.util.ConsList<T3>, T1>) ((hydra.util.Pair<hydra.util.ConsList<T3>, T1>) (new hydra.util.Pair<hydra.util.ConsList<T3>, T1>((hydra.util.ConsList<T3>) (hydra.util.ConsList.<T3>empty()), hydra.lib.pairs.Second.apply(bindingsAndNames))));
+  }
+
+  static <T0> hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.PersistentSet<hydra.core.Name>> hoistLetBindingsWithPredicate_init(hydra.core.Binding b) {
+    return (hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.PersistentSet<hydra.core.Name>>) ((hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.PersistentSet<hydra.core.Name>>) (new hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.PersistentSet<hydra.core.Name>>((hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty()), hydra.lib.sets.Singleton.apply((b).name))));
+  }
+
   static <T0, T1, T2> hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, hydra.util.PersistentSet<hydra.core.Name>>, hydra.core.Term> hoistLetBindingsWithPredicate_rewrite(java.util.function.Function<String, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.Pair<hydra.util.ConsList<hydra.util.Pair<hydra.core.Binding, hydra.core.Term>>, hydra.util.PersistentSet<hydra.core.Name>>, java.util.function.Function<hydra.util.Pair<hydra.core.Binding, hydra.util.ConsList<hydra.core.Name>>, hydra.util.Pair<hydra.util.ConsList<hydra.util.Pair<hydra.core.Binding, hydra.core.Term>>, hydra.util.PersistentSet<hydra.core.Name>>>>>> hoistOne, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, hydra.typing.TermSubst>>>> hydra_hoisting_augmentBindingsWithNewFreeVars2, java.util.function.Function<hydra.core.Binding, Boolean> hydra_hoisting_bindingIsPolymorphic2, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, Integer>> hydra_hoisting_countVarOccurrences2, java.util.function.Function<hydra.core.Term, hydra.util.PersistentSet<hydra.core.Name>> hydra_rewriting_freeVariablesInTerm2, java.util.function.Function<hydra.core.TypeScheme, hydra.core.Type> hydra_rewriting_typeSchemeToFType2, java.util.function.Function<hydra.core.Type, Boolean> hydra_schemas_fTypeIsPolymorphic2, java.util.function.Function<hydra.typing.TermSubst, java.util.function.Function<hydra.core.Binding, hydra.core.Binding>> hydra_substitution_substituteInBinding2, java.util.function.Function<hydra.typing.TermSubst, java.util.function.Function<hydra.core.Term, hydra.core.Term>> hydra_substitution_substituteInTerm2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, Boolean>> shouldHoistBinding, String prefix, java.util.function.Function<hydra.util.Pair<hydra.util.ConsList<T0>, T1>, java.util.function.Function<T2, hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, hydra.util.PersistentSet<hydra.core.Name>>, hydra.core.Term>>> recurse, hydra.graph.Graph cx, hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, T1> bindingsAndNames, T2 term) {
     hydra.util.Lazy<hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, hydra.util.PersistentSet<hydra.core.Name>>, hydra.core.Term>> result = new hydra.util.Lazy<>(() -> (recurse).apply(hydra.Hoisting.<T1, T0>hoistLetBindingsWithPredicate_emptyBindingsAndNames(bindingsAndNames)).apply(term));
     hydra.util.Lazy<hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, hydra.util.PersistentSet<hydra.core.Name>>> newBindingsAndNames = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(result.get()));
@@ -454,14 +462,6 @@ public interface Hoisting {
     });
   }
 
-  static <T0> hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.PersistentSet<hydra.core.Name>> hoistLetBindingsWithPredicate_init(hydra.core.Binding b) {
-    return (hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.PersistentSet<hydra.core.Name>>) ((hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.PersistentSet<hydra.core.Name>>) (new hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.PersistentSet<hydra.core.Name>>((hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty()), hydra.lib.sets.Singleton.apply((b).name))));
-  }
-
-  static <T1, T3> hydra.util.Pair<hydra.util.ConsList<T3>, T1> hoistLetBindingsWithPredicate_emptyBindingsAndNames(hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, T1> bindingsAndNames) {
-    return (hydra.util.Pair<hydra.util.ConsList<T3>, T1>) ((hydra.util.Pair<hydra.util.ConsList<T3>, T1>) (new hydra.util.Pair<hydra.util.ConsList<T3>, T1>((hydra.util.ConsList<T3>) (hydra.util.ConsList.<T3>empty()), hydra.lib.pairs.Second.apply(bindingsAndNames))));
-  }
-
   static hydra.core.Let hoistPolymorphicLetBindings(java.util.function.Function<hydra.core.Binding, Boolean> isParentBinding, hydra.core.Let let0) {
     hydra.util.Lazy<hydra.graph.Graph> emptyCx = new hydra.util.Lazy<>(() -> new hydra.graph.Graph((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeVariableMetadata>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.graph.Primitive>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.graph.Primitive>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.graph.Primitive>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())));
     return hydra.Hoisting.hoistLetBindingsWithPredicate(
@@ -604,6 +604,10 @@ public interface Hoisting {
       term0));
   }
 
+  static <T1> T1 hoistSubterms_newCounter(hydra.util.Pair<T1, hydra.core.Term> recursed) {
+    return hydra.lib.pairs.First.apply(recursed);
+  }
+
   static <T0> hydra.util.Pair<T0, hydra.core.Term> hoistSubterms_processLetTerm(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>>>>> processImmediateSubterm, hydra.graph.Graph cx, T0 counter, hydra.util.ConsList<hydra.accessors.TermAccessor> path, hydra.core.Let lt) {
     hydra.util.ConsList<hydra.core.Binding> bindings = (lt).bindings;
     hydra.core.Term body = (lt).body;
@@ -647,6 +651,10 @@ public interface Hoisting {
     return (hydra.util.Pair<T0, hydra.core.Term>) ((hydra.util.Pair<T0, hydra.core.Term>) (new hydra.util.Pair<T0, hydra.core.Term>(counter, new hydra.core.Term.Let(new hydra.core.Let(newBindings.get(), newBody.get())))));
   }
 
+  static <T0, T1> hydra.util.Pair<T1, hydra.core.Term> hoistSubterms_recursed(T0 counter, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>> recurse, hydra.core.Term term) {
+    return (recurse).apply(counter).apply(term);
+  }
+
   static <T0, T1> hydra.util.Pair<T1, hydra.core.Term> hoistSubterms_rewrite(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>>>>> processImmediateSubterm, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>> recurse, hydra.util.ConsList<hydra.accessors.TermAccessor> path, hydra.graph.Graph cx, T0 counter, hydra.core.Term term) {
     return (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
@@ -680,14 +688,6 @@ public interface Hoisting {
         });
       }
     });
-  }
-
-  static <T0, T1> hydra.util.Pair<T1, hydra.core.Term> hoistSubterms_recursed(T0 counter, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>> recurse, hydra.core.Term term) {
-    return (recurse).apply(counter).apply(term);
-  }
-
-  static <T1> T1 hoistSubterms_newCounter(hydra.util.Pair<T1, hydra.core.Term> recursed) {
-    return hydra.lib.pairs.First.apply(recursed);
   }
 
   static Boolean isApplicationFunction(hydra.accessors.TermAccessor acc) {

@@ -6,83 +6,6 @@ package hydra.ext.java;
  * Java serializer: converts Java AST to concrete syntax
  */
 public interface Serde {
-  static Integer hexDigit(Integer n) {
-    return hydra.lib.logic.IfElse.lazy(
-      hydra.lib.equality.Lt.apply(
-        n,
-        10),
-      () -> hydra.lib.math.Add.apply(
-        n,
-        48),
-      () -> hydra.lib.math.Add.apply(
-        hydra.lib.math.Sub.apply(
-          n,
-          10),
-        65));
-  }
-
-  static String padHex4(Integer n) {
-    Integer r3 = hydra.lib.math.Mod.apply(
-      n,
-      4096);
-    Integer r2 = hydra.lib.math.Mod.apply(
-      r3,
-      256);
-    Integer d0 = hydra.lib.math.Mod.apply(
-      r2,
-      16);
-    Integer d1 = hydra.lib.math.Div.apply(
-      r2,
-      16);
-    Integer d2 = hydra.lib.math.Div.apply(
-      r3,
-      256);
-    Integer d3 = hydra.lib.math.Div.apply(
-      n,
-      4096);
-    return hydra.lib.strings.FromList.apply(hydra.util.ConsList.of(
-      hydra.ext.java.Serde.hexDigit(d3),
-      hydra.ext.java.Serde.hexDigit(d2),
-      hydra.ext.java.Serde.hexDigit(d1),
-      hydra.ext.java.Serde.hexDigit(d0)));
-  }
-
-  static String javaUnicodeEscape(Integer n) {
-    return hydra.lib.logic.IfElse.lazy(
-      hydra.lib.equality.Gt.apply(
-        n,
-        65535),
-      () -> ((java.util.function.Supplier<String>) (() -> {
-        Integer n_ = hydra.lib.math.Sub.apply(
-          n,
-          65536);
-        return ((java.util.function.Supplier<String>) (() -> {
-          Integer hi = hydra.lib.math.Add.apply(
-            55296,
-            hydra.lib.math.Div.apply(
-              n_,
-              1024));
-          return ((java.util.function.Supplier<String>) (() -> {
-            Integer lo = hydra.lib.math.Add.apply(
-              56320,
-              hydra.lib.math.Mod.apply(
-                n_,
-                1024));
-            return hydra.lib.strings.Cat2.apply(
-              hydra.lib.strings.Cat2.apply(
-                "\\u",
-                hydra.ext.java.Serde.padHex4(hi)),
-              hydra.lib.strings.Cat2.apply(
-                "\\u",
-                hydra.ext.java.Serde.padHex4(lo)));
-          })).get();
-        })).get();
-      })).get(),
-      () -> hydra.lib.strings.Cat2.apply(
-        "\\u",
-        hydra.ext.java.Serde.padHex4(n)));
-  }
-
   static String escapeJavaChar(Integer c) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Equal.apply(
@@ -135,6 +58,120 @@ public interface Serde {
     return hydra.lib.strings.Cat.apply(hydra.lib.lists.Map.apply(
       (java.util.function.Function<Integer, String>) (c -> hydra.ext.java.Serde.escapeJavaChar(c)),
       hydra.lib.strings.ToList.apply(s)));
+  }
+
+  static Integer hexDigit(Integer n) {
+    return hydra.lib.logic.IfElse.lazy(
+      hydra.lib.equality.Lt.apply(
+        n,
+        10),
+      () -> hydra.lib.math.Add.apply(
+        n,
+        48),
+      () -> hydra.lib.math.Add.apply(
+        hydra.lib.math.Sub.apply(
+          n,
+          10),
+        65));
+  }
+
+  static String javaUnicodeEscape(Integer n) {
+    return hydra.lib.logic.IfElse.lazy(
+      hydra.lib.equality.Gt.apply(
+        n,
+        65535),
+      () -> ((java.util.function.Supplier<String>) (() -> {
+        Integer n_ = hydra.lib.math.Sub.apply(
+          n,
+          65536);
+        return ((java.util.function.Supplier<String>) (() -> {
+          Integer hi = hydra.lib.math.Add.apply(
+            55296,
+            hydra.lib.math.Div.apply(
+              n_,
+              1024));
+          return ((java.util.function.Supplier<String>) (() -> {
+            Integer lo = hydra.lib.math.Add.apply(
+              56320,
+              hydra.lib.math.Mod.apply(
+                n_,
+                1024));
+            return hydra.lib.strings.Cat2.apply(
+              hydra.lib.strings.Cat2.apply(
+                "\\u",
+                hydra.ext.java.Serde.padHex4(hi)),
+              hydra.lib.strings.Cat2.apply(
+                "\\u",
+                hydra.ext.java.Serde.padHex4(lo)));
+          })).get();
+        })).get();
+      })).get(),
+      () -> hydra.lib.strings.Cat2.apply(
+        "\\u",
+        hydra.ext.java.Serde.padHex4(n)));
+  }
+
+  static String padHex4(Integer n) {
+    Integer r3 = hydra.lib.math.Mod.apply(
+      n,
+      4096);
+    Integer r2 = hydra.lib.math.Mod.apply(
+      r3,
+      256);
+    Integer d0 = hydra.lib.math.Mod.apply(
+      r2,
+      16);
+    Integer d1 = hydra.lib.math.Div.apply(
+      r2,
+      16);
+    Integer d2 = hydra.lib.math.Div.apply(
+      r3,
+      256);
+    Integer d3 = hydra.lib.math.Div.apply(
+      n,
+      4096);
+    return hydra.lib.strings.FromList.apply(hydra.util.ConsList.of(
+      hydra.ext.java.Serde.hexDigit(d3),
+      hydra.ext.java.Serde.hexDigit(d2),
+      hydra.ext.java.Serde.hexDigit(d1),
+      hydra.ext.java.Serde.hexDigit(d0)));
+  }
+
+  static String sanitizeJavaComment(String s) {
+    return hydra.lib.strings.Intercalate.apply(
+      "&gt;",
+      hydra.lib.strings.SplitOn.apply(
+        ">",
+        hydra.lib.strings.Intercalate.apply(
+          "&lt;",
+          hydra.lib.strings.SplitOn.apply(
+            "<",
+            s))));
+  }
+
+  static hydra.ast.Expr singleLineComment(String c) {
+    return hydra.Serialization.cst(hydra.lib.strings.Cat2.apply(
+      "// ",
+      hydra.ext.java.Serde.sanitizeJavaComment(c)));
+  }
+
+  static hydra.ast.Expr withComments(hydra.util.Maybe<String> mc, hydra.ast.Expr expr) {
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> expr,
+      (java.util.function.Function<String, hydra.ast.Expr>) (c -> hydra.Serialization.newlineSep(hydra.util.ConsList.of(
+        hydra.Serialization.cst(hydra.lib.strings.Cat2.apply(
+          "/**\n",
+          hydra.lib.strings.Cat2.apply(
+            hydra.lib.strings.Intercalate.apply(
+              "\n",
+              hydra.lib.lists.Map.apply(
+                (java.util.function.Function<String, String>) (l -> hydra.lib.strings.Cat2.apply(
+                  " * ",
+                  l)),
+                hydra.lib.strings.Lines.apply(hydra.ext.java.Serde.sanitizeJavaComment(c)))),
+            "\n */"))),
+        expr))),
+      mc);
   }
 
   static hydra.ast.Expr writeAdditionalBound(hydra.ext.java.syntax.AdditionalBound ab) {
@@ -441,6 +478,16 @@ public interface Serde {
       hydra.ext.java.Serde.writeUnaryExpression(ex)));
   }
 
+  static hydra.ast.Expr writeCastExpression_Primitive(hydra.ext.java.syntax.CastExpression_Primitive cp) {
+    hydra.ext.java.syntax.UnaryExpression ex = (cp).expression;
+    hydra.ext.java.syntax.PrimitiveTypeWithAnnotations pt = (cp).type;
+    return hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+      hydra.Serialization.parenList(
+        false,
+        hydra.util.ConsList.of(hydra.ext.java.Serde.writePrimitiveTypeWithAnnotations(pt))),
+      hydra.ext.java.Serde.writeUnaryExpression(ex)));
+  }
+
   static hydra.ast.Expr writeCastExpression_RefAndBounds(hydra.ext.java.syntax.CastExpression_RefAndBounds rab) {
     hydra.util.ConsList<hydra.ext.java.syntax.AdditionalBound> adds = (rab).bounds;
     hydra.ext.java.syntax.ReferenceType rt = (rab).type;
@@ -454,16 +501,6 @@ public interface Serde {
           () -> hydra.util.Maybe.just(hydra.Serialization.spaceSep(hydra.lib.lists.Map.apply(
             hydra.ext.java.Serde::writeAdditionalBound,
             adds)))))))));
-  }
-
-  static hydra.ast.Expr writeCastExpression_Primitive(hydra.ext.java.syntax.CastExpression_Primitive cp) {
-    hydra.ext.java.syntax.UnaryExpression ex = (cp).expression;
-    hydra.ext.java.syntax.PrimitiveTypeWithAnnotations pt = (cp).type;
-    return hydra.Serialization.spaceSep(hydra.util.ConsList.of(
-      hydra.Serialization.parenList(
-        false,
-        hydra.util.ConsList.of(hydra.ext.java.Serde.writePrimitiveTypeWithAnnotations(pt))),
-      hydra.ext.java.Serde.writeUnaryExpression(ex)));
   }
 
   static hydra.ast.Expr writeClassBody(hydra.ext.java.syntax.ClassBody cb) {
@@ -1136,6 +1173,10 @@ public interface Serde {
     return hydra.Serialization.cst((id).value);
   }
 
+  static <T0> hydra.ast.Expr writeIfThenElseStatement(T0 ignored) {
+    return hydra.Serialization.cst("STUB:IfThenElseStatement");
+  }
+
   static hydra.ast.Expr writeIfThenStatement(hydra.ext.java.syntax.IfThenStatement its) {
     hydra.ext.java.syntax.Expression cond = (its).expression;
     hydra.ext.java.syntax.Statement thn = (its).statement;
@@ -1147,10 +1188,6 @@ public interface Serde {
       hydra.Serialization.curlyBlock(
         hydra.Serialization.fullBlockStyle(),
         hydra.ext.java.Serde.writeStatement(thn))));
-  }
-
-  static <T0> hydra.ast.Expr writeIfThenElseStatement(T0 ignored) {
-    return hydra.Serialization.cst("STUB:IfThenElseStatement");
   }
 
   static hydra.ast.Expr writeImportDeclaration(hydra.ext.java.syntax.ImportDeclaration imp) {
@@ -1520,6 +1557,20 @@ public interface Serde {
     });
   }
 
+  static hydra.ast.Expr writeLocalName(hydra.ext.java.syntax.LocalVariableType t) {
+    return (t).accept(new hydra.ext.java.syntax.LocalVariableType.PartialVisitor<>() {
+      @Override
+      public hydra.ast.Expr visit(hydra.ext.java.syntax.LocalVariableType.Type ut) {
+        return hydra.ext.java.Serde.writeUnannType((ut).value);
+      }
+
+      @Override
+      public hydra.ast.Expr visit(hydra.ext.java.syntax.LocalVariableType.Var ignored) {
+        return hydra.Serialization.cst("var");
+      }
+    });
+  }
+
   static hydra.ast.Expr writeLocalVariableDeclaration(hydra.ext.java.syntax.LocalVariableDeclaration lvd) {
     hydra.util.ConsList<hydra.ext.java.syntax.VariableDeclarator> decls = (lvd).declarators;
     hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> mods = (lvd).modifiers;
@@ -1541,20 +1592,6 @@ public interface Serde {
 
   static hydra.ast.Expr writeLocalVariableDeclarationStatement(hydra.ext.java.syntax.LocalVariableDeclarationStatement lvds) {
     return hydra.Serialization.withSemi(hydra.ext.java.Serde.writeLocalVariableDeclaration((lvds).value));
-  }
-
-  static hydra.ast.Expr writeLocalName(hydra.ext.java.syntax.LocalVariableType t) {
-    return (t).accept(new hydra.ext.java.syntax.LocalVariableType.PartialVisitor<>() {
-      @Override
-      public hydra.ast.Expr visit(hydra.ext.java.syntax.LocalVariableType.Type ut) {
-        return hydra.ext.java.Serde.writeUnannType((ut).value);
-      }
-
-      @Override
-      public hydra.ast.Expr visit(hydra.ext.java.syntax.LocalVariableType.Var ignored) {
-        return hydra.Serialization.cst("var");
-      }
-    });
   }
 
   static hydra.ast.Expr writeMarkerAnnotation(hydra.ext.java.syntax.MarkerAnnotation ma) {
@@ -1924,6 +1961,10 @@ public interface Serde {
             ids))))))))));
   }
 
+  static hydra.ast.Expr writePackageModifier(hydra.ext.java.syntax.PackageModifier pm) {
+    return hydra.ext.java.Serde.writeAnnotation((pm).value);
+  }
+
   static hydra.ast.Expr writePackageName(hydra.ext.java.syntax.PackageName pn) {
     return hydra.Serialization.dotSep(hydra.lib.lists.Map.apply(
       hydra.ext.java.Serde::writeIdentifier,
@@ -1934,10 +1975,6 @@ public interface Serde {
     return hydra.Serialization.dotSep(hydra.lib.lists.Map.apply(
       hydra.ext.java.Serde::writeIdentifier,
       (potn).value));
-  }
-
-  static hydra.ast.Expr writePackageModifier(hydra.ext.java.syntax.PackageModifier pm) {
-    return hydra.ext.java.Serde.writeAnnotation((pm).value);
   }
 
   static <T0> hydra.ast.Expr writePostDecrementExpression(T0 ignored) {
@@ -2762,42 +2799,5 @@ public interface Serde {
           hydra.ext.java.Serde.writeReferenceType((rt).value)));
       }
     });
-  }
-
-  static String sanitizeJavaComment(String s) {
-    return hydra.lib.strings.Intercalate.apply(
-      "&gt;",
-      hydra.lib.strings.SplitOn.apply(
-        ">",
-        hydra.lib.strings.Intercalate.apply(
-          "&lt;",
-          hydra.lib.strings.SplitOn.apply(
-            "<",
-            s))));
-  }
-
-  static hydra.ast.Expr singleLineComment(String c) {
-    return hydra.Serialization.cst(hydra.lib.strings.Cat2.apply(
-      "// ",
-      hydra.ext.java.Serde.sanitizeJavaComment(c)));
-  }
-
-  static hydra.ast.Expr withComments(hydra.util.Maybe<String> mc, hydra.ast.Expr expr) {
-    return hydra.lib.maybes.Maybe.applyLazy(
-      () -> expr,
-      (java.util.function.Function<String, hydra.ast.Expr>) (c -> hydra.Serialization.newlineSep(hydra.util.ConsList.of(
-        hydra.Serialization.cst(hydra.lib.strings.Cat2.apply(
-          "/**\n",
-          hydra.lib.strings.Cat2.apply(
-            hydra.lib.strings.Intercalate.apply(
-              "\n",
-              hydra.lib.lists.Map.apply(
-                (java.util.function.Function<String, String>) (l -> hydra.lib.strings.Cat2.apply(
-                  " * ",
-                  l)),
-                hydra.lib.strings.Lines.apply(hydra.ext.java.Serde.sanitizeJavaComment(c)))),
-            "\n */"))),
-        expr))),
-      mc);
   }
 }

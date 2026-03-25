@@ -75,6 +75,10 @@ public interface Serialization {
       v2);
   }
 
+  static hydra.ast.Expr cst(String s) {
+    return new hydra.ast.Expr.Const(hydra.Serialization.sym(s));
+  }
+
   static hydra.ast.Expr curlyBlock(hydra.ast.BlockStyle style, hydra.ast.Expr e) {
     return hydra.Serialization.curlyBracesList(
       (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()),
@@ -99,10 +103,6 @@ public interface Serialization {
             msymb),
           style,
           els)));
-  }
-
-  static hydra.ast.Expr cst(String s) {
-    return new hydra.ast.Expr.Const(hydra.Serialization.sym(s));
   }
 
   static String customIndent(String idt, String s) {
@@ -761,6 +761,10 @@ public interface Serialization {
       v1);
   }
 
+  static hydra.ast.Brackets squareBrackets() {
+    return new hydra.ast.Brackets(new hydra.ast.Symbol("["), new hydra.ast.Symbol("]"));
+  }
+
   static hydra.ast.Expr structuralSep(hydra.ast.Op op, hydra.util.ConsList<hydra.ast.Expr> els) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(els),
@@ -777,10 +781,6 @@ public interface Serialization {
     return hydra.Serialization.structuralSep(
       new hydra.ast.Op(hydra.Serialization.sym(""), new hydra.ast.Padding(new hydra.ast.Ws.Space(), new hydra.ast.Ws.None()), new hydra.ast.Precedence(0), new hydra.ast.Associativity.None()),
       v1);
-  }
-
-  static hydra.ast.Brackets squareBrackets() {
-    return new hydra.ast.Brackets(new hydra.ast.Symbol("["), new hydra.ast.Symbol("]"));
   }
 
   static hydra.ast.Expr suffix(String s, hydra.ast.Expr expr) {

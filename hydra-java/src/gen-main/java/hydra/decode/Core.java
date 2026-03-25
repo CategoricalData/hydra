@@ -295,42 +295,6 @@ public interface Core {
         raw));
   }
 
-  static hydra.util.Either<hydra.errors.DecodingError, hydra.core.PairType> pairType(hydra.graph.Graph cx, hydra.core.Term raw) {
-    return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.core.PairType>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.core.PairType>left(new hydra.errors.DecodingError(err))),
-      (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.PairType>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
-        @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.core.PairType> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.errors.DecodingError, hydra.core.PairType>left(new hydra.errors.DecodingError("expected record"));
-        }
-
-        @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.core.PairType> visit(hydra.core.Term.Record record) {
-          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Helpers.toFieldMap((record).value);
-          return hydra.lib.eithers.Bind.apply(
-            hydra.extract.Helpers.requireField(
-              "first",
-              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Type>>>) (p0 -> p1 -> hydra.decode.Core.type(
-                p0,
-                p1)),
-              fieldMap,
-              cx),
-            (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.errors.DecodingError, hydra.core.PairType>>) (field_first -> hydra.lib.eithers.Bind.apply(
-              hydra.extract.Helpers.requireField(
-                "second",
-                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Type>>>) (p0 -> p1 -> hydra.decode.Core.type(
-                  p0,
-                  p1)),
-                fieldMap,
-                cx),
-              (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.errors.DecodingError, hydra.core.PairType>>) (field_second -> hydra.util.Either.<hydra.errors.DecodingError, hydra.core.PairType>right(new hydra.core.PairType(field_first, field_second))))));
-        }
-      })),
-      hydra.Lexical.stripAndDereferenceTermEither(
-        cx,
-        raw));
-  }
-
   static hydra.util.Either<hydra.errors.DecodingError, hydra.core.Elimination> elimination(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Elimination>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.core.Elimination>left(new hydra.errors.DecodingError(err))),
@@ -1585,6 +1549,42 @@ public interface Core {
               hydra.Lexical.stripAndDereferenceTermEither(
                 cx,
                 (wrappedTerm).value.body)));
+        }
+      })),
+      hydra.Lexical.stripAndDereferenceTermEither(
+        cx,
+        raw));
+  }
+
+  static hydra.util.Either<hydra.errors.DecodingError, hydra.core.PairType> pairType(hydra.graph.Graph cx, hydra.core.Term raw) {
+    return hydra.lib.eithers.Either.apply(
+      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.core.PairType>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.core.PairType>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.PairType>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
+        @Override
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.core.PairType> otherwise(hydra.core.Term instance) {
+          return hydra.util.Either.<hydra.errors.DecodingError, hydra.core.PairType>left(new hydra.errors.DecodingError("expected record"));
+        }
+
+        @Override
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.core.PairType> visit(hydra.core.Term.Record record) {
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Helpers.toFieldMap((record).value);
+          return hydra.lib.eithers.Bind.apply(
+            hydra.extract.Helpers.requireField(
+              "first",
+              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Type>>>) (p0 -> p1 -> hydra.decode.Core.type(
+                p0,
+                p1)),
+              fieldMap,
+              cx),
+            (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.errors.DecodingError, hydra.core.PairType>>) (field_first -> hydra.lib.eithers.Bind.apply(
+              hydra.extract.Helpers.requireField(
+                "second",
+                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Type>>>) (p0 -> p1 -> hydra.decode.Core.type(
+                  p0,
+                  p1)),
+                fieldMap,
+                cx),
+              (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.errors.DecodingError, hydra.core.PairType>>) (field_second -> hydra.util.Either.<hydra.errors.DecodingError, hydra.core.PairType>right(new hydra.core.PairType(field_first, field_second))))));
         }
       })),
       hydra.Lexical.stripAndDereferenceTermEither(

@@ -6,10 +6,6 @@ package hydra.ext.rdf;
  * Utility functions for working with RDF graphs and descriptions
  */
 public interface Utils {
-  static hydra.core.Name key_rdfBlankNodeCounter() {
-    return new hydra.core.Name("rdfBlankNodeCounter");
-  }
-
   static hydra.ext.org.w3.rdf.syntax.Graph descriptionsToGraph(hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description> ds) {
     return new hydra.ext.org.w3.rdf.syntax.Graph(hydra.lib.sets.FromList.apply(hydra.ext.rdf.Utils.triplesOf(ds)));
   }
@@ -18,12 +14,12 @@ public interface Utils {
     return new hydra.ext.org.w3.rdf.syntax.Description(node, hydra.ext.rdf.Utils.emptyRdfGraph());
   }
 
-  static hydra.ext.org.w3.rdf.syntax.Graph emptyRdfGraph() {
-    return new hydra.ext.org.w3.rdf.syntax.Graph((hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Triple>) (hydra.lib.sets.Empty.<hydra.ext.org.w3.rdf.syntax.Triple>apply()));
-  }
-
   static hydra.ext.org.w3.rdf.syntax.LangStrings emptyLangStrings() {
     return new hydra.ext.org.w3.rdf.syntax.LangStrings((hydra.util.PersistentMap<hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.LanguageTag>, String>) ((hydra.util.PersistentMap<hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.LanguageTag>, String>) (hydra.lib.maps.Empty.<hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.LanguageTag>, String>apply())));
+  }
+
+  static hydra.ext.org.w3.rdf.syntax.Graph emptyRdfGraph() {
+    return new hydra.ext.org.w3.rdf.syntax.Graph((hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Triple>) (hydra.lib.sets.Empty.<hydra.ext.org.w3.rdf.syntax.Triple>apply()));
   }
 
   static hydra.ext.org.w3.rdf.syntax.Literal encodeLiteral(hydra.core.Literal lit) {
@@ -134,6 +130,10 @@ public interface Utils {
     return hydra.ext.rdf.Utils.iri(
       "urn:key:",
       local);
+  }
+
+  static hydra.core.Name key_rdfBlankNodeCounter() {
+    return new hydra.core.Name("rdfBlankNodeCounter");
   }
 
   static hydra.ext.org.w3.rdf.syntax.Graph mergeGraphs(hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Graph> graphs) {

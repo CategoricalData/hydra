@@ -351,18 +351,6 @@ public interface Serde {
     return hydra.ext.python.Serde.encodeBitwiseOr((cmp).lhs);
   }
 
-  static hydra.ast.Expr encodeConditional(hydra.ext.python.syntax.Conditional c) {
-    hydra.ext.python.syntax.Disjunction body = (c).body;
-    hydra.ext.python.syntax.Disjunction cond = (c).if_;
-    hydra.ext.python.syntax.Expression elseExpr = (c).else_;
-    return hydra.Serialization.spaceSep(hydra.util.ConsList.of(
-      hydra.ext.python.Serde.encodeDisjunction(body),
-      hydra.Serialization.cst("if"),
-      hydra.ext.python.Serde.encodeDisjunction(cond),
-      hydra.Serialization.cst("else"),
-      hydra.ext.python.Serde.encodeExpression(elseExpr)));
-  }
-
   static hydra.ast.Expr encodeCompoundStatement(hydra.ext.python.syntax.CompoundStatement cs) {
     return (cs).accept(new hydra.ext.python.syntax.CompoundStatement.PartialVisitor<>() {
       @Override
@@ -405,6 +393,18 @@ public interface Serde {
         return hydra.ext.python.Serde.encodeMatchStatement((m).value);
       }
     });
+  }
+
+  static hydra.ast.Expr encodeConditional(hydra.ext.python.syntax.Conditional c) {
+    hydra.ext.python.syntax.Disjunction body = (c).body;
+    hydra.ext.python.syntax.Disjunction cond = (c).if_;
+    hydra.ext.python.syntax.Expression elseExpr = (c).else_;
+    return hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+      hydra.ext.python.Serde.encodeDisjunction(body),
+      hydra.Serialization.cst("if"),
+      hydra.ext.python.Serde.encodeDisjunction(cond),
+      hydra.Serialization.cst("else"),
+      hydra.ext.python.Serde.encodeExpression(elseExpr)));
   }
 
   static hydra.ast.Expr encodeConjunction(hydra.ext.python.syntax.Conjunction c) {
@@ -850,6 +850,12 @@ public interface Serde {
     return hydra.Serialization.cst((n).value);
   }
 
+  static hydra.ast.Expr encodeNameOrAttribute(hydra.ext.python.syntax.NameOrAttribute noa) {
+    return hydra.Serialization.dotSep(hydra.lib.lists.Map.apply(
+      hydra.ext.python.Serde::encodeName,
+      (noa).value));
+  }
+
   static hydra.ast.Expr encodeNamedExpression(hydra.ext.python.syntax.NamedExpression ne) {
     return (ne).accept(new hydra.ext.python.syntax.NamedExpression.PartialVisitor<>() {
       @Override
@@ -862,12 +868,6 @@ public interface Serde {
         return hydra.ext.python.Serde.encodeAssignmentExpression((ae).value);
       }
     });
-  }
-
-  static hydra.ast.Expr encodeNameOrAttribute(hydra.ext.python.syntax.NameOrAttribute noa) {
-    return hydra.Serialization.dotSep(hydra.lib.lists.Map.apply(
-      hydra.ext.python.Serde::encodeName,
-      (noa).value));
   }
 
   static hydra.ast.Expr encodeNumber(hydra.ext.python.syntax.Number_ num) {
@@ -1393,38 +1393,6 @@ public interface Serde {
     return hydra.ext.python.Serde.encodeTerm((s).rhs);
   }
 
-  static hydra.ast.Expr encodeTerm(hydra.ext.python.syntax.Term t) {
-    return hydra.ext.python.Serde.encodeFactor((t).rhs);
-  }
-
-  static hydra.ast.Expr encodeTargetWithStarAtom(hydra.ext.python.syntax.TargetWithStarAtom t) {
-    return (t).accept(new hydra.ext.python.syntax.TargetWithStarAtom.PartialVisitor<>() {
-      @Override
-      public hydra.ast.Expr visit(hydra.ext.python.syntax.TargetWithStarAtom.Atom a) {
-        return hydra.ext.python.Serde.encodeStarAtom((a).value);
-      }
-
-      @Override
-      public hydra.ast.Expr visit(hydra.ext.python.syntax.TargetWithStarAtom.Project pn) {
-        return hydra.ext.python.Serde.encodeTPrimaryAndName((pn).value);
-      }
-
-      @Override
-      public hydra.ast.Expr visit(hydra.ext.python.syntax.TargetWithStarAtom.Slices ignored) {
-        return hydra.Serialization.cst("...");
-      }
-    });
-  }
-
-  static hydra.ast.Expr encodeTPrimaryAndName(hydra.ext.python.syntax.TPrimaryAndName pn) {
-    hydra.ext.python.syntax.Name name_ = (pn).name;
-    hydra.ext.python.syntax.TPrimary prim = (pn).primary;
-    return hydra.Serialization.noSep(hydra.util.ConsList.of(
-      hydra.ext.python.Serde.encodeTPrimary(prim),
-      hydra.Serialization.cst("."),
-      hydra.ext.python.Serde.encodeName(name_)));
-  }
-
   static hydra.ast.Expr encodeTPrimary(hydra.ext.python.syntax.TPrimary tp) {
     return (tp).accept(new hydra.ext.python.syntax.TPrimary.PartialVisitor<>() {
       @Override
@@ -1452,6 +1420,38 @@ public interface Serde {
         return hydra.Serialization.cst("...");
       }
     });
+  }
+
+  static hydra.ast.Expr encodeTPrimaryAndName(hydra.ext.python.syntax.TPrimaryAndName pn) {
+    hydra.ext.python.syntax.Name name_ = (pn).name;
+    hydra.ext.python.syntax.TPrimary prim = (pn).primary;
+    return hydra.Serialization.noSep(hydra.util.ConsList.of(
+      hydra.ext.python.Serde.encodeTPrimary(prim),
+      hydra.Serialization.cst("."),
+      hydra.ext.python.Serde.encodeName(name_)));
+  }
+
+  static hydra.ast.Expr encodeTargetWithStarAtom(hydra.ext.python.syntax.TargetWithStarAtom t) {
+    return (t).accept(new hydra.ext.python.syntax.TargetWithStarAtom.PartialVisitor<>() {
+      @Override
+      public hydra.ast.Expr visit(hydra.ext.python.syntax.TargetWithStarAtom.Atom a) {
+        return hydra.ext.python.Serde.encodeStarAtom((a).value);
+      }
+
+      @Override
+      public hydra.ast.Expr visit(hydra.ext.python.syntax.TargetWithStarAtom.Project pn) {
+        return hydra.ext.python.Serde.encodeTPrimaryAndName((pn).value);
+      }
+
+      @Override
+      public hydra.ast.Expr visit(hydra.ext.python.syntax.TargetWithStarAtom.Slices ignored) {
+        return hydra.Serialization.cst("...");
+      }
+    });
+  }
+
+  static hydra.ast.Expr encodeTerm(hydra.ext.python.syntax.Term t) {
+    return hydra.ext.python.Serde.encodeFactor((t).rhs);
   }
 
   static hydra.ast.Expr encodeTuple(hydra.ext.python.syntax.Tuple t) {

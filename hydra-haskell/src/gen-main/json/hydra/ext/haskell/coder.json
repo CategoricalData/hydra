@@ -11344,50 +11344,21 @@
                                                                                                                         "application": {
                                                                                                                           "argument": {
                                                                                                                             "application": {
-                                                                                                                              "argument": {
-                                                                                                                                "application": {
-                                                                                                                                  "argument": {"variable": "g"},
-                                                                                                                                  "function": {
-                                                                                                                                    "function": {
-                                                                                                                                      "elimination": {"record": {"field": "schemaTypes", "typeName": "hydra.graph.Graph"}}}}}},
+                                                                                                                              "argument": {"variable": "g"},
                                                                                                                               "function": {
-                                                                                                                                "typeApplication": {
-                                                                                                                                  "body": {
-                                                                                                                                    "typeApplication": {
-                                                                                                                                      "body": {"function": {"primitive": "hydra.lib.maps.keys"}},
-                                                                                                                                      "type": {"variable": "hydra.core.Name"}}},
-                                                                                                                                  "type": {"variable": "hydra.core.TypeScheme"}}}}},
+                                                                                                                                "function": {
+                                                                                                                                  "elimination": {"record": {"field": "boundTerms", "typeName": "hydra.graph.Graph"}}}}}},
                                                                                                                           "function": {
                                                                                                                             "typeApplication": {
-                                                                                                                              "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
-                                                                                                                              "type": {"variable": "hydra.core.Name"}}}}},
+                                                                                                                              "body": {
+                                                                                                                                "typeApplication": {
+                                                                                                                                  "body": {"function": {"primitive": "hydra.lib.maps.keys"}},
+                                                                                                                                  "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                              "type": {"variable": "hydra.core.Term"}}}}},
                                                                                                                       "function": {
-                                                                                                                        "application": {
-                                                                                                                          "argument": {
-                                                                                                                            "application": {
-                                                                                                                              "argument": {
-                                                                                                                                "application": {
-                                                                                                                                  "argument": {
-                                                                                                                                    "application": {
-                                                                                                                                      "argument": {"variable": "g"},
-                                                                                                                                      "function": {
-                                                                                                                                        "function": {
-                                                                                                                                          "elimination": {"record": {"field": "boundTerms", "typeName": "hydra.graph.Graph"}}}}}},
-                                                                                                                                  "function": {
-                                                                                                                                    "typeApplication": {
-                                                                                                                                      "body": {
-                                                                                                                                        "typeApplication": {
-                                                                                                                                          "body": {"function": {"primitive": "hydra.lib.maps.keys"}},
-                                                                                                                                          "type": {"variable": "hydra.core.Name"}}},
-                                                                                                                                      "type": {"variable": "hydra.core.Term"}}}}},
-                                                                                                                              "function": {
-                                                                                                                                "typeApplication": {
-                                                                                                                                  "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
-                                                                                                                                  "type": {"variable": "hydra.core.Name"}}}}},
-                                                                                                                          "function": {
-                                                                                                                            "typeApplication": {
-                                                                                                                              "body": {"function": {"primitive": "hydra.lib.sets.union"}},
-                                                                                                                              "type": {"variable": "hydra.core.Name"}}}}}}},
+                                                                                                                        "typeApplication": {
+                                                                                                                          "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                                                                                                                          "type": {"variable": "hydra.core.Name"}}}}},
                                                                                                                   "function": {"variable": "unionCons"}}}}},
                                                                                                           "function": {
                                                                                                             "typeApplication": {

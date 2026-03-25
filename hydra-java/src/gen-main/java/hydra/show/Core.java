@@ -6,10 +6,6 @@ package hydra.show;
  * String representations of hydra.core types
  */
 public interface Core {
-  static hydra.util.Maybe<hydra.core.Term> readTerm(String s) {
-    return hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.String_(s)));
-  }
-
   static String binding(hydra.core.Binding el) {
     String name = (el).name.value;
     hydra.core.Term t = (el).term;
@@ -395,6 +391,10 @@ public interface Core {
         return "string";
       }
     });
+  }
+
+  static hydra.util.Maybe<hydra.core.Term> readTerm(String s) {
+    return hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.String_(s)));
   }
 
   static String term(hydra.core.Term t) {

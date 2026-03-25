@@ -13,6 +13,30 @@ public interface Utils {
       hydra.pg.graphson.Utils.<T0>elementsToVerticesWithAdjacentEdges_vertexMap0(hydra.pg.graphson.Utils.<T0>elementsToVerticesWithAdjacentEdges_vertices(partitioned.get()))));
   }
 
+  static <T0> hydra.pg.model.AdjacentEdge<T0> elementsToVerticesWithAdjacentEdges_adjEdgeIn(T0 edgeId, hydra.pg.model.EdgeLabel label, T0 outV, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T0> props) {
+    return (hydra.pg.model.AdjacentEdge<T0>) (new hydra.pg.model.AdjacentEdge<T0>(label, edgeId, outV, props));
+  }
+
+  static <T0> hydra.pg.model.AdjacentEdge<T0> elementsToVerticesWithAdjacentEdges_adjEdgeOut(T0 edgeId, T0 inV, hydra.pg.model.EdgeLabel label, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T0> props) {
+    return (hydra.pg.model.AdjacentEdge<T0>) (new hydra.pg.model.AdjacentEdge<T0>(label, edgeId, inV, props));
+  }
+
+  static <T0> T0 elementsToVerticesWithAdjacentEdges_edgeId(hydra.pg.model.Edge<T0> edge) {
+    return ((java.util.function.Function<hydra.pg.model.Edge<T0>, T0>) (projected -> projected.id)).apply(edge);
+  }
+
+  static <T0> hydra.util.ConsList<hydra.pg.model.Edge<T0>> elementsToVerticesWithAdjacentEdges_edges(hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>> partitioned) {
+    return hydra.lib.lists.Reverse.apply(hydra.lib.pairs.Second.apply(partitioned));
+  }
+
+  static <T0> T0 elementsToVerticesWithAdjacentEdges_inV(hydra.pg.model.Edge<T0> edge) {
+    return ((java.util.function.Function<hydra.pg.model.Edge<T0>, T0>) (projected -> projected.in)).apply(edge);
+  }
+
+  static <T0> T0 elementsToVerticesWithAdjacentEdges_outV(hydra.pg.model.Edge<T0> edge) {
+    return ((java.util.function.Function<hydra.pg.model.Edge<T0>, T0>) (projected -> projected.out)).apply(edge);
+  }
+
   static <T0> hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>> elementsToVerticesWithAdjacentEdges_partitioned(hydra.util.ConsList<hydra.pg.model.Element<T0>> els) {
     return hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>, java.util.function.Function<hydra.pg.model.Element<T0>, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>>>) (acc -> (java.util.function.Function<hydra.pg.model.Element<T0>, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>>) (el -> ((java.util.function.Function<hydra.pg.model.Element, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>>) (v1 -> ((java.util.function.Function<hydra.pg.model.Element<T0>, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>>) ((java.util.function.Function<hydra.pg.model.Element<T0>, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>>) (u -> (u).accept(new hydra.pg.model.Element.PartialVisitor<>() {
@@ -34,12 +58,8 @@ public interface Utils {
       els);
   }
 
-  static <T0> hydra.util.ConsList<hydra.pg.model.Vertex<T0>> elementsToVerticesWithAdjacentEdges_vertices(hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>> partitioned) {
-    return hydra.lib.lists.Reverse.apply(hydra.lib.pairs.First.apply(partitioned));
-  }
-
-  static <T0> hydra.util.ConsList<hydra.pg.model.Edge<T0>> elementsToVerticesWithAdjacentEdges_edges(hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>> partitioned) {
-    return hydra.lib.lists.Reverse.apply(hydra.lib.pairs.Second.apply(partitioned));
+  static <T0> hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T0> elementsToVerticesWithAdjacentEdges_props(hydra.pg.model.Edge<T0> edge) {
+    return ((java.util.function.Function<hydra.pg.model.Edge<T0>, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T0>>) (projected -> projected.properties)).apply(edge);
   }
 
   static <T0> hydra.util.PersistentMap<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>> elementsToVerticesWithAdjacentEdges_vertexMap0(hydra.util.ConsList<hydra.pg.model.Vertex<T0>> vertices) {
@@ -84,28 +104,8 @@ public interface Utils {
       edges);
   }
 
-  static <T0> T0 elementsToVerticesWithAdjacentEdges_edgeId(hydra.pg.model.Edge<T0> edge) {
-    return ((java.util.function.Function<hydra.pg.model.Edge<T0>, T0>) (projected -> projected.id)).apply(edge);
-  }
-
-  static <T0> T0 elementsToVerticesWithAdjacentEdges_outV(hydra.pg.model.Edge<T0> edge) {
-    return ((java.util.function.Function<hydra.pg.model.Edge<T0>, T0>) (projected -> projected.out)).apply(edge);
-  }
-
-  static <T0> T0 elementsToVerticesWithAdjacentEdges_inV(hydra.pg.model.Edge<T0> edge) {
-    return ((java.util.function.Function<hydra.pg.model.Edge<T0>, T0>) (projected -> projected.in)).apply(edge);
-  }
-
-  static <T0> hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T0> elementsToVerticesWithAdjacentEdges_props(hydra.pg.model.Edge<T0> edge) {
-    return ((java.util.function.Function<hydra.pg.model.Edge<T0>, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T0>>) (projected -> projected.properties)).apply(edge);
-  }
-
-  static <T0> hydra.pg.model.AdjacentEdge<T0> elementsToVerticesWithAdjacentEdges_adjEdgeOut(T0 edgeId, T0 inV, hydra.pg.model.EdgeLabel label, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T0> props) {
-    return (hydra.pg.model.AdjacentEdge<T0>) (new hydra.pg.model.AdjacentEdge<T0>(label, edgeId, inV, props));
-  }
-
-  static <T0> hydra.pg.model.AdjacentEdge<T0> elementsToVerticesWithAdjacentEdges_adjEdgeIn(T0 edgeId, hydra.pg.model.EdgeLabel label, T0 outV, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T0> props) {
-    return (hydra.pg.model.AdjacentEdge<T0>) (new hydra.pg.model.AdjacentEdge<T0>(label, edgeId, outV, props));
+  static <T0> hydra.util.ConsList<hydra.pg.model.Vertex<T0>> elementsToVerticesWithAdjacentEdges_vertices(hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>> partitioned) {
+    return hydra.lib.lists.Reverse.apply(hydra.lib.pairs.First.apply(partitioned));
   }
 
   static <T0> hydra.util.PersistentMap<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>> elementsToVerticesWithAdjacentEdges_vmap1(hydra.pg.model.AdjacentEdge<T0> adjEdgeOut, T0 outV, hydra.util.PersistentMap<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>> vmap) {

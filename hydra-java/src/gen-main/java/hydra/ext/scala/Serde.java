@@ -31,6 +31,77 @@ public interface Serde {
       hydra.ext.scala.Serde.writeTerm(term)));
   }
 
+  static hydra.ast.Expr writeData_FunctionData(hydra.ext.scala.syntax.Data_FunctionData ft) {
+    return (ft).accept(new hydra.ext.scala.syntax.Data_FunctionData.PartialVisitor<>() {
+      @Override
+      public hydra.ast.Expr visit(hydra.ext.scala.syntax.Data_FunctionData.Function f) {
+        hydra.ext.scala.syntax.Data body = (f).value.body;
+        hydra.ast.Expr bodyExpr = hydra.ext.scala.Serde.writeTerm(body);
+        Integer bodyLen = hydra.Serialization.expressionLength(bodyExpr);
+        hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param> params = (f).value.params;
+        return hydra.lib.logic.IfElse.lazy(
+          hydra.lib.equality.Gt.apply(
+            bodyLen,
+            60),
+          () -> hydra.Serialization.noSep(hydra.util.ConsList.of(
+            hydra.Serialization.parenList(
+              false,
+              hydra.lib.lists.Map.apply(
+                hydra.ext.scala.Serde::writeData_Param,
+                params)),
+            hydra.Serialization.cst(" =>\n  "),
+            bodyExpr)),
+          () -> hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+            hydra.Serialization.parenList(
+              false,
+              hydra.lib.lists.Map.apply(
+                hydra.ext.scala.Serde::writeData_Param,
+                params)),
+            hydra.Serialization.cst("=>"),
+            bodyExpr)));
+      }
+    });
+  }
+
+  static hydra.ast.Expr writeData_Name(hydra.ext.scala.syntax.Data_Name dn) {
+    return hydra.Serialization.cst((dn).value.value);
+  }
+
+  static hydra.ast.Expr writeData_Param(hydra.ext.scala.syntax.Data_Param dp) {
+    hydra.ext.scala.syntax.Name name = (dp).name;
+    hydra.util.Maybe<hydra.ext.scala.syntax.Type> stype = (dp).decltpe;
+    return hydra.Serialization.noSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+      hydra.lib.maybes.Pure.apply(hydra.ext.scala.Serde.writeName(name)),
+      hydra.lib.maybes.Map.apply(
+        (java.util.function.Function<hydra.ext.scala.syntax.Type, hydra.ast.Expr>) (t -> hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+          hydra.Serialization.cst(":"),
+          hydra.ext.scala.Serde.writeType(t)))),
+        stype))));
+  }
+
+  static hydra.ast.Expr writeData_Ref(hydra.ext.scala.syntax.Data_Ref ref) {
+    return (ref).accept(new hydra.ext.scala.syntax.Data_Ref.PartialVisitor<>() {
+      @Override
+      public hydra.ast.Expr visit(hydra.ext.scala.syntax.Data_Ref.Name name) {
+        return hydra.ext.scala.Serde.writeData_Name((name).value);
+      }
+
+      @Override
+      public hydra.ast.Expr visit(hydra.ext.scala.syntax.Data_Ref.Select sel) {
+        return hydra.ext.scala.Serde.writeData_Select((sel).value);
+      }
+    });
+  }
+
+  static hydra.ast.Expr writeData_Select(hydra.ext.scala.syntax.Data_Select sel) {
+    hydra.ext.scala.syntax.Data arg = (sel).qual;
+    hydra.ext.scala.syntax.Data_Name name = (sel).name;
+    return hydra.Serialization.ifx(
+      hydra.ext.scala.Serde.dotOp(),
+      hydra.ext.scala.Serde.writeTerm(arg),
+      hydra.ext.scala.Serde.writeTerm(new hydra.ext.scala.syntax.Data.Ref(new hydra.ext.scala.syntax.Data_Ref.Name(name))));
+  }
+
   static hydra.ast.Expr writeDefn(hydra.ext.scala.syntax.Defn def) {
     return (def).accept(new hydra.ext.scala.syntax.Defn.PartialVisitor<>() {
       @Override
@@ -315,6 +386,10 @@ public interface Serde {
         forImportees.get()))));
   }
 
+  static hydra.ast.Expr writeInit(hydra.ext.scala.syntax.Init init) {
+    return hydra.ext.scala.Serde.writeType((init).tpe);
+  }
+
   static hydra.ast.Expr writeLit(hydra.ext.scala.syntax.Lit lit) {
     return (lit).accept(new hydra.ext.scala.syntax.Lit.PartialVisitor<>() {
       @Override
@@ -380,6 +455,55 @@ public interface Serde {
           hydra.lib.strings.Cat2.apply(
             hydra.ext.java.Serde.escapeJavaString((s).value),
             "\"")));
+      }
+    });
+  }
+
+  static hydra.ast.Expr writeMod(hydra.ext.scala.syntax.Mod m) {
+    return (m).accept(new hydra.ext.scala.syntax.Mod.PartialVisitor<>() {
+      @Override
+      public hydra.ast.Expr visit(hydra.ext.scala.syntax.Mod.Case ignored) {
+        return hydra.Serialization.cst("case");
+      }
+
+      @Override
+      public hydra.ast.Expr visit(hydra.ext.scala.syntax.Mod.Sealed ignored) {
+        return hydra.Serialization.cst("sealed");
+      }
+
+      @Override
+      public hydra.ast.Expr visit(hydra.ext.scala.syntax.Mod.Abstract ignored) {
+        return hydra.Serialization.cst("abstract");
+      }
+
+      @Override
+      public hydra.ast.Expr visit(hydra.ext.scala.syntax.Mod.Final ignored) {
+        return hydra.Serialization.cst("final");
+      }
+
+      @Override
+      public hydra.ast.Expr visit(hydra.ext.scala.syntax.Mod.Override_ ignored) {
+        return hydra.Serialization.cst("override");
+      }
+
+      @Override
+      public hydra.ast.Expr visit(hydra.ext.scala.syntax.Mod.Implicit ignored) {
+        return hydra.Serialization.cst("implicit");
+      }
+
+      @Override
+      public hydra.ast.Expr visit(hydra.ext.scala.syntax.Mod.Lazy ignored) {
+        return hydra.Serialization.cst("lazy");
+      }
+
+      @Override
+      public hydra.ast.Expr visit(hydra.ext.scala.syntax.Mod.Private ignored) {
+        return hydra.Serialization.cst("private");
+      }
+
+      @Override
+      public hydra.ast.Expr visit(hydra.ext.scala.syntax.Mod.Protected ignored) {
+        return hydra.Serialization.cst("protected");
       }
     });
   }
@@ -528,77 +652,6 @@ public interface Serde {
     });
   }
 
-  static hydra.ast.Expr writeData_FunctionData(hydra.ext.scala.syntax.Data_FunctionData ft) {
-    return (ft).accept(new hydra.ext.scala.syntax.Data_FunctionData.PartialVisitor<>() {
-      @Override
-      public hydra.ast.Expr visit(hydra.ext.scala.syntax.Data_FunctionData.Function f) {
-        hydra.ext.scala.syntax.Data body = (f).value.body;
-        hydra.ast.Expr bodyExpr = hydra.ext.scala.Serde.writeTerm(body);
-        Integer bodyLen = hydra.Serialization.expressionLength(bodyExpr);
-        hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param> params = (f).value.params;
-        return hydra.lib.logic.IfElse.lazy(
-          hydra.lib.equality.Gt.apply(
-            bodyLen,
-            60),
-          () -> hydra.Serialization.noSep(hydra.util.ConsList.of(
-            hydra.Serialization.parenList(
-              false,
-              hydra.lib.lists.Map.apply(
-                hydra.ext.scala.Serde::writeData_Param,
-                params)),
-            hydra.Serialization.cst(" =>\n  "),
-            bodyExpr)),
-          () -> hydra.Serialization.spaceSep(hydra.util.ConsList.of(
-            hydra.Serialization.parenList(
-              false,
-              hydra.lib.lists.Map.apply(
-                hydra.ext.scala.Serde::writeData_Param,
-                params)),
-            hydra.Serialization.cst("=>"),
-            bodyExpr)));
-      }
-    });
-  }
-
-  static hydra.ast.Expr writeData_Name(hydra.ext.scala.syntax.Data_Name dn) {
-    return hydra.Serialization.cst((dn).value.value);
-  }
-
-  static hydra.ast.Expr writeData_Param(hydra.ext.scala.syntax.Data_Param dp) {
-    hydra.ext.scala.syntax.Name name = (dp).name;
-    hydra.util.Maybe<hydra.ext.scala.syntax.Type> stype = (dp).decltpe;
-    return hydra.Serialization.noSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
-      hydra.lib.maybes.Pure.apply(hydra.ext.scala.Serde.writeName(name)),
-      hydra.lib.maybes.Map.apply(
-        (java.util.function.Function<hydra.ext.scala.syntax.Type, hydra.ast.Expr>) (t -> hydra.Serialization.spaceSep(hydra.util.ConsList.of(
-          hydra.Serialization.cst(":"),
-          hydra.ext.scala.Serde.writeType(t)))),
-        stype))));
-  }
-
-  static hydra.ast.Expr writeData_Ref(hydra.ext.scala.syntax.Data_Ref ref) {
-    return (ref).accept(new hydra.ext.scala.syntax.Data_Ref.PartialVisitor<>() {
-      @Override
-      public hydra.ast.Expr visit(hydra.ext.scala.syntax.Data_Ref.Name name) {
-        return hydra.ext.scala.Serde.writeData_Name((name).value);
-      }
-
-      @Override
-      public hydra.ast.Expr visit(hydra.ext.scala.syntax.Data_Ref.Select sel) {
-        return hydra.ext.scala.Serde.writeData_Select((sel).value);
-      }
-    });
-  }
-
-  static hydra.ast.Expr writeData_Select(hydra.ext.scala.syntax.Data_Select sel) {
-    hydra.ext.scala.syntax.Data arg = (sel).qual;
-    hydra.ext.scala.syntax.Data_Name name = (sel).name;
-    return hydra.Serialization.ifx(
-      hydra.ext.scala.Serde.dotOp(),
-      hydra.ext.scala.Serde.writeTerm(arg),
-      hydra.ext.scala.Serde.writeTerm(new hydra.ext.scala.syntax.Data.Ref(new hydra.ext.scala.syntax.Data_Ref.Name(name))));
-  }
-
   static hydra.ast.Expr writeType(hydra.ext.scala.syntax.Type typ) {
     return (typ).accept(new hydra.ext.scala.syntax.Type.PartialVisitor<>() {
       @Override
@@ -665,58 +718,5 @@ public interface Serde {
 
   static hydra.ast.Expr writeType_Param(hydra.ext.scala.syntax.Type_Param tp) {
     return hydra.ext.scala.Serde.writeName((tp).name);
-  }
-
-  static hydra.ast.Expr writeInit(hydra.ext.scala.syntax.Init init) {
-    return hydra.ext.scala.Serde.writeType((init).tpe);
-  }
-
-  static hydra.ast.Expr writeMod(hydra.ext.scala.syntax.Mod m) {
-    return (m).accept(new hydra.ext.scala.syntax.Mod.PartialVisitor<>() {
-      @Override
-      public hydra.ast.Expr visit(hydra.ext.scala.syntax.Mod.Case ignored) {
-        return hydra.Serialization.cst("case");
-      }
-
-      @Override
-      public hydra.ast.Expr visit(hydra.ext.scala.syntax.Mod.Sealed ignored) {
-        return hydra.Serialization.cst("sealed");
-      }
-
-      @Override
-      public hydra.ast.Expr visit(hydra.ext.scala.syntax.Mod.Abstract ignored) {
-        return hydra.Serialization.cst("abstract");
-      }
-
-      @Override
-      public hydra.ast.Expr visit(hydra.ext.scala.syntax.Mod.Final ignored) {
-        return hydra.Serialization.cst("final");
-      }
-
-      @Override
-      public hydra.ast.Expr visit(hydra.ext.scala.syntax.Mod.Override_ ignored) {
-        return hydra.Serialization.cst("override");
-      }
-
-      @Override
-      public hydra.ast.Expr visit(hydra.ext.scala.syntax.Mod.Implicit ignored) {
-        return hydra.Serialization.cst("implicit");
-      }
-
-      @Override
-      public hydra.ast.Expr visit(hydra.ext.scala.syntax.Mod.Lazy ignored) {
-        return hydra.Serialization.cst("lazy");
-      }
-
-      @Override
-      public hydra.ast.Expr visit(hydra.ext.scala.syntax.Mod.Private ignored) {
-        return hydra.Serialization.cst("private");
-      }
-
-      @Override
-      public hydra.ast.Expr visit(hydra.ext.scala.syntax.Mod.Protected ignored) {
-        return hydra.Serialization.cst("protected");
-      }
-    });
   }
 }
