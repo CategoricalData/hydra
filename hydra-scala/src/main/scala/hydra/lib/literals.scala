@@ -18,8 +18,8 @@ object literals:
   def bigintToUint16(x: BigInt): Int = (x & 0xffff).toInt
   def bigintToUint32(x: BigInt): Long = (x & 0xffffffffL).toLong
   def bigintToUint64(x: BigInt): BigInt = x & BigInt("ffffffffffffffff", 16)
-  def binaryToBytes(b: String): Seq[Int] = b.getBytes.toSeq.map(_.toInt)
-  def binaryToString(b: String): String = b
+  def binaryToBytes(b: String): Seq[Int] = b.getBytes("ISO-8859-1").toSeq.map(_.toInt & 0xff)
+  def binaryToString(b: String): String = java.util.Base64.getEncoder.encodeToString(b.getBytes("ISO-8859-1"))
   def float(ft: Any)(x: BigDecimal): Any = x // Placeholder
   def float32ToBigfloat(x: Float): BigDecimal = BigDecimal(x)
   def float64ToBigfloat(x: Double): BigDecimal = BigDecimal(x)
@@ -73,7 +73,7 @@ object literals:
   def showUint16(x: Int): String = x.toString
   def showUint32(x: Long): String = x.toString
   def showUint64(x: BigInt): String = x.toString
-  def stringToBinary(s: String): String = s
+  def stringToBinary(s: String): String = new String(java.util.Base64.getDecoder.decode(s), "ISO-8859-1")
   def uint(it: Any)(x: BigInt): Any = x // Placeholder
   def uint8ToBigint(x: Byte): BigInt = BigInt(x.toInt & 0xff)
   def uint16ToBigint(x: Int): BigInt = BigInt(x)
