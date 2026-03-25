@@ -7,7 +7,6 @@ import           Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
-import qualified Hydra.Dsl.Grammars                        as Grammars
 import qualified Hydra.Dsl.LiteralTypes                    as LiteralTypes
 import qualified Hydra.Dsl.Literals                        as Literals
 import qualified Hydra.Dsl.Accessors                  as Accessors
@@ -16,7 +15,6 @@ import qualified Hydra.Dsl.Meta.Base                       as MetaBase
 import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
-import qualified Hydra.Dsl.Grammar                    as Grammar
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
@@ -54,7 +52,6 @@ import qualified Hydra.Sources.Kernel.Terms.Constants      as Constants
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core   as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Extract.Util   as ExtractUtil
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
-import qualified Hydra.Sources.Kernel.Terms.Grammars       as Grammars
 import qualified Hydra.Sources.Kernel.Terms.Inference      as Inference
 import qualified Hydra.Sources.Kernel.Terms.Languages      as Languages
 import qualified Hydra.Sources.Kernel.Terms.Lexical        as Lexical
@@ -83,18 +80,18 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-pdlLanguageDefinition :: String -> TTerm a -> TBinding a
-pdlLanguageDefinition = definitionInModule pdlLanguageModule
+define :: String -> TTerm a -> TBinding a
+define = definitionInModule module_
 
-pdlLanguageModule :: Module
-pdlLanguageModule = Module (Namespace "hydra.ext.pegasus.language")
+module_ :: Module
+module_ = Module (Namespace "hydra.ext.pegasus.language")
   [toTermDefinition pdlLanguage]
   [Lexical.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints for LinkedIn Pegasus (PDL)"
 
 pdlLanguage :: TBinding Language
-pdlLanguage = pdlLanguageDefinition "pdlLanguage" $
+pdlLanguage = define "pdlLanguage" $
   doc "Language constraints for LinkedIn Pegasus (PDL)" $ lets [
   "eliminationVariants">: Sets.empty,
   "literalVariants">: Sets.fromList $ list [

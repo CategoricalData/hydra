@@ -7,7 +7,6 @@ import           Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
-import qualified Hydra.Dsl.Grammars                        as Grammars
 import qualified Hydra.Dsl.LiteralTypes                    as LiteralTypes
 import qualified Hydra.Dsl.Literals                        as Literals
 import qualified Hydra.Dsl.Accessors                  as Accessors
@@ -18,7 +17,6 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Errors                      as Error
-import qualified Hydra.Dsl.Grammar                    as Grammar
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
@@ -56,7 +54,6 @@ import qualified Hydra.Sources.Kernel.Terms.Constants      as Constants
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core   as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Extract.Util   as ExtractUtil
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
-import qualified Hydra.Sources.Kernel.Terms.Grammars       as Grammars
 import qualified Hydra.Sources.Kernel.Terms.Inference      as Inference
 import qualified Hydra.Sources.Kernel.Terms.Languages      as Languages
 import qualified Hydra.Sources.Kernel.Terms.Lexical        as Lexical
@@ -100,7 +97,7 @@ ns = Namespace "hydra.ext.pegasus.coder"
 
 module_ :: Module
 module_ = Module ns elements
-    [PegasusSerdeSource.ns, moduleNamespace PegasusLanguageSource.pdlLanguageModule, Formatting.ns, Names.ns, Schemas.ns, Sorting.ns, Rewriting.ns, Annotations.ns, Serialization.ns, ShowCore.ns]
+    [PegasusSerdeSource.ns, moduleNamespace PegasusLanguageSource.module_, Formatting.ns, Names.ns, Schemas.ns, Sorting.ns, Rewriting.ns, Annotations.ns, Serialization.ns, ShowCore.ns]
     (PdlSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Pegasus PDL code generator: converts Hydra modules to PDL schema files"
   where

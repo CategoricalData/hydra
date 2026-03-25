@@ -7,8 +7,6 @@ Note: the following modules are part of the kernel, but they are not default imp
 - Hydra.Extract.Core
 - Hydra.Extract.Helpers
 - Hydra.Extract.Util
-- Hydra.Grammar
-- Hydra.Grammars
 - Hydra.Json.Parser
 - Hydra.Json.Writer
 - Hydra.Parsers

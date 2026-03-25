@@ -72,7 +72,7 @@ module_ :: Module
 module_ = Module ns elements
     [ScalaUtilsSource.ns, ScalaSerdeSource.ns, Formatting.ns, Names.ns, Rewriting.ns, CoderUtils.ns, Schemas.ns, ShowCore.ns, Annotations.ns, Constants.ns,
       Inference.ns, Sorting.ns, Arity.ns, SerializationSource.ns, Reduction.ns]
-    (ScalaSyntax.ns:moduleNamespace ScalaLanguageSource.scalaLanguageModule:KernelTypes.kernelTypesNamespaces) $
+    (ScalaSyntax.ns:moduleNamespace ScalaLanguageSource.module_:KernelTypes.kernelTypesNamespaces) $
     Just "Scala code generator: converts Hydra modules to Scala source code"
   where
     elements = [
