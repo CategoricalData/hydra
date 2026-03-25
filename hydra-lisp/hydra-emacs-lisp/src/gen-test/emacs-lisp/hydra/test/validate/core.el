@@ -1,10 +1,10 @@
 (require 'cl-lib)
 
-(require 'hydra.accessors)
-
 (require 'hydra.core)
 
 (require 'hydra.error.core)
+
+(require 'hydra.paths)
 
 (require 'hydra.testing)
 

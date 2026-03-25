@@ -7,7 +7,6 @@ from collections.abc import Callable
 from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Just, Left, Maybe, Nothing, Right, frozenlist
 from typing import TypeVar, cast
-import hydra.accessors
 import hydra.coders
 import hydra.core
 import hydra.graph
@@ -23,6 +22,7 @@ import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
 import hydra.names
+import hydra.paths
 import hydra.sorting
 
 T0 = TypeVar("T0")
@@ -617,31 +617,31 @@ def fold_over_type(order: hydra.coders.TraversalOrder, fld: Callable[[T0, hydra.
             raise AssertionError("Unreachable: all variants handled")
 
 def rewrite_and_fold_term_with_path(f: Callable[[
-  Callable[[frozenlist[hydra.accessors.TermAccessor], T0, hydra.core.Term], tuple[T0, hydra.core.Term]],
-  frozenlist[hydra.accessors.TermAccessor],
+  Callable[[frozenlist[hydra.paths.SubtermStep], T0, hydra.core.Term], tuple[T0, hydra.core.Term]],
+  frozenlist[hydra.paths.SubtermStep],
   T0,
   hydra.core.Term], tuple[T0, hydra.core.Term]], term0: T0, v1: hydra.core.Term) -> tuple[T0, hydra.core.Term]:
-    r"""Rewrite a term with path tracking, and fold a function over it, accumulating a value. The path is a list of TermAccessors from root to current position."""
+    r"""Rewrite a term with path tracking, and fold a function over it, accumulating a value. The path is a list of SubtermSteps from root to current position."""
 
-    def fsub(recurse: Callable[[frozenlist[hydra.accessors.TermAccessor], T1, hydra.core.Term], tuple[T1, hydra.core.Term]], path: frozenlist[hydra.accessors.TermAccessor], val0: T1, term02: hydra.core.Term):
-        def for_single_with_accessor(rec: Callable[[frozenlist[hydra.accessors.TermAccessor], T2, T3], tuple[T4, T5]], cons: Callable[[T5], T6], accessor: hydra.accessors.TermAccessor, val: T2, term: T3) -> tuple[T4, T6]:
+    def fsub(recurse: Callable[[frozenlist[hydra.paths.SubtermStep], T1, hydra.core.Term], tuple[T1, hydra.core.Term]], path: frozenlist[hydra.paths.SubtermStep], val0: T1, term02: hydra.core.Term):
+        def for_single_with_accessor(rec: Callable[[frozenlist[hydra.paths.SubtermStep], T2, T3], tuple[T4, T5]], cons: Callable[[T5], T6], accessor: hydra.paths.SubtermStep, val: T2, term: T3) -> tuple[T4, T6]:
             @lru_cache(1)
             def r() -> tuple[T4, T5]:
                 return rec(hydra.lib.lists.concat2(path, (accessor,)), val, term)
             return (hydra.lib.pairs.first(r()), cons(hydra.lib.pairs.second(r())))
-        def for_many_with_accessors(rec: Callable[[frozenlist[hydra.accessors.TermAccessor], T2, T3], tuple[T2, T4]], cons: Callable[[frozenlist[T4]], T5], val: T2, accessor_term_pairs: frozenlist[tuple[hydra.accessors.TermAccessor, T3]]) -> tuple[T2, T5]:
+        def for_many_with_accessors(rec: Callable[[frozenlist[hydra.paths.SubtermStep], T2, T3], tuple[T2, T4]], cons: Callable[[frozenlist[T4]], T5], val: T2, accessor_term_pairs: frozenlist[tuple[hydra.paths.SubtermStep, T3]]) -> tuple[T2, T5]:
             @lru_cache(1)
             def rr() -> tuple[T2, frozenlist[T4]]:
                 return hydra.lib.lists.foldl((lambda r, atp: (r2 := rec(hydra.lib.lists.concat2(path, (hydra.lib.pairs.first(atp),)), hydra.lib.pairs.first(r), hydra.lib.pairs.second(atp)), (hydra.lib.pairs.first(r2), hydra.lib.lists.cons(hydra.lib.pairs.second(r2), hydra.lib.pairs.second(r))))[1]), (val, ()), accessor_term_pairs)
             return (hydra.lib.pairs.first(rr()), cons(hydra.lib.lists.reverse(hydra.lib.pairs.second(rr()))))
-        def for_field_with_accessor(mk_accessor: Callable[[hydra.core.Name], hydra.accessors.TermAccessor], val: T1, field: hydra.core.Field) -> tuple[hydra.core.Term, hydra.core.Field]:
+        def for_field_with_accessor(mk_accessor: Callable[[hydra.core.Name], hydra.paths.SubtermStep], val: T1, field: hydra.core.Field) -> tuple[hydra.core.Term, hydra.core.Field]:
             @lru_cache(1)
             def r() -> tuple[T1, hydra.core.Term]:
                 return recurse(hydra.lib.lists.concat2(path, (mk_accessor(field.name),)), val, field.term)
             return (hydra.lib.pairs.first(r()), hydra.core.Field(field.name, hydra.lib.pairs.second(r())))
-        def for_fields_with_accessor(mk_accessor: Callable[[hydra.core.Name], hydra.accessors.TermAccessor], v1: T1, v2: frozenlist[tuple[hydra.accessors.TermAccessor, hydra.core.Field]]) -> tuple[T1, frozenlist[hydra.core.Field]]:
+        def for_fields_with_accessor(mk_accessor: Callable[[hydra.core.Name], hydra.paths.SubtermStep], v1: T1, v2: frozenlist[tuple[hydra.paths.SubtermStep, hydra.core.Field]]) -> tuple[T1, frozenlist[hydra.core.Field]]:
             return for_many_with_accessors((lambda path1, val1, field1: for_field_with_accessor(mk_accessor, val1, field1)), (lambda x: x), v1, v2)
-        def for_pair_with_accessors(key_accessor: hydra.accessors.TermAccessor, val_accessor: hydra.accessors.TermAccessor, val: T1, kv: tuple[hydra.core.Term, hydra.core.Term]) -> tuple[hydra.core.Term, tuple[hydra.core.Term, hydra.core.Term]]:
+        def for_pair_with_accessors(key_accessor: hydra.paths.SubtermStep, val_accessor: hydra.paths.SubtermStep, val: T1, kv: tuple[hydra.core.Term, hydra.core.Term]) -> tuple[hydra.core.Term, tuple[hydra.core.Term, hydra.core.Term]]:
             @lru_cache(1)
             def rk() -> tuple[T1, hydra.core.Term]:
                 return recurse(hydra.lib.lists.concat2(path, (key_accessor,)), val, hydra.lib.pairs.first(kv))
@@ -652,7 +652,7 @@ def rewrite_and_fold_term_with_path(f: Callable[[
         def for_binding_with_accessor(val: T1, binding: hydra.core.Binding) -> tuple[hydra.core.Term, hydra.core.Binding]:
             @lru_cache(1)
             def r() -> tuple[T1, hydra.core.Term]:
-                return recurse(hydra.lib.lists.concat2(path, (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLetBinding(binding.name)),)), val, binding.term)
+                return recurse(hydra.lib.lists.concat2(path, (cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepLetBinding(binding.name)),)), val, binding.term)
             return (hydra.lib.pairs.first(r()), hydra.core.Binding(binding.name, hydra.lib.pairs.second(r()), binding.type))
         def for_elimination(val: T1, elm: hydra.core.Elimination) -> tuple[hydra.core.Elimination, hydra.core.Elimination]:
             @lru_cache(1)
@@ -662,13 +662,13 @@ def rewrite_and_fold_term_with_path(f: Callable[[
                         case hydra.core.EliminationUnion(value=cs):
                             @lru_cache(1)
                             def rmd() -> Maybe[tuple[T1, hydra.core.Term]]:
-                                return hydra.lib.maybes.map((lambda def_: recurse(hydra.lib.lists.concat2(path, (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorUnionCasesDefault()),)), val, def_)), cs.default)
+                                return hydra.lib.maybes.map((lambda def_: recurse(hydra.lib.lists.concat2(path, (cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepUnionCasesDefault()),)), val, def_)), cs.default)
                             @lru_cache(1)
                             def val1() -> tuple[T1, hydra.core.Term]:
                                 return hydra.lib.maybes.maybe((lambda : val), (lambda x1: hydra.lib.pairs.first(x1)), rmd())
                             @lru_cache(1)
                             def rcases() -> tuple[T1, frozenlist[hydra.core.Term]]:
-                                return for_many_with_accessors(recurse, (lambda x: x), val1(), hydra.lib.lists.map((lambda f2: (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorUnionCasesBranch(f2.name)), f2.term)), cs.cases))
+                                return for_many_with_accessors(recurse, (lambda x: x), val1(), hydra.lib.lists.map((lambda f2: (cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepUnionCasesBranch(f2.name)), f2.term)), cs.cases))
                             return (hydra.lib.pairs.first(rcases()), cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(cs.type_name, hydra.lib.maybes.map((lambda x1: hydra.lib.pairs.second(x1)), rmd()), hydra.lib.lists.map((lambda ft: hydra.core.Field(hydra.lib.pairs.first(ft), hydra.lib.pairs.second(ft))), hydra.lib.lists.zip(hydra.lib.lists.map((lambda v1: v1.name), cs.cases), hydra.lib.pairs.second(rcases())))))))
 
                         case _:
@@ -687,7 +687,7 @@ def rewrite_and_fold_term_with_path(f: Callable[[
                     case hydra.core.FunctionLambda(value=l):
                         @lru_cache(1)
                         def rl() -> tuple[T1, hydra.core.Term]:
-                            return recurse(hydra.lib.lists.concat2(path, (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLambdaBody()),)), val, l.body)
+                            return recurse(hydra.lib.lists.concat2(path, (cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepLambdaBody()),)), val, l.body)
                         return (hydra.lib.pairs.first(rl()), cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(l.parameter, l.domain, hydra.lib.pairs.second(rl())))))
 
                     case _:
@@ -699,19 +699,19 @@ def rewrite_and_fold_term_with_path(f: Callable[[
         def _hoist_dflt_body_1(v1):
             match v1:
                 case hydra.core.TermAnnotated(value=at):
-                    return for_single_with_accessor(recurse, (lambda t: cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(t, at.annotation)))), cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorAnnotatedBody()), val0, at.body)
+                    return for_single_with_accessor(recurse, (lambda t: cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(t, at.annotation)))), cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepAnnotatedBody()), val0, at.body)
 
                 case hydra.core.TermApplication(value=a):
                     @lru_cache(1)
                     def rlhs() -> tuple[T1, hydra.core.Term]:
-                        return recurse(hydra.lib.lists.concat2(path, (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorApplicationFunction()),)), val0, a.function)
+                        return recurse(hydra.lib.lists.concat2(path, (cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepApplicationFunction()),)), val0, a.function)
                     @lru_cache(1)
                     def rrhs() -> tuple[T1, hydra.core.Term]:
-                        return recurse(hydra.lib.lists.concat2(path, (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorApplicationArgument()),)), hydra.lib.pairs.first(rlhs()), a.argument)
+                        return recurse(hydra.lib.lists.concat2(path, (cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepApplicationArgument()),)), hydra.lib.pairs.first(rlhs()), a.argument)
                     return (hydra.lib.pairs.first(rrhs()), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(hydra.lib.pairs.second(rlhs()), hydra.lib.pairs.second(rrhs())))))
 
                 case hydra.core.TermEither(value=e):
-                    return hydra.lib.eithers.either((lambda l: (rl := recurse(hydra.lib.lists.concat2(path, (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorSumTerm()),)), val0, l), (hydra.lib.pairs.first(rl), cast(hydra.core.Term, hydra.core.TermEither(Left(hydra.lib.pairs.second(rl))))))[1]), (lambda r: (rr := recurse(hydra.lib.lists.concat2(path, (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorSumTerm()),)), val0, r), (hydra.lib.pairs.first(rr), cast(hydra.core.Term, hydra.core.TermEither(Right(hydra.lib.pairs.second(rr))))))[1]), e)
+                    return hydra.lib.eithers.either((lambda l: (rl := recurse(hydra.lib.lists.concat2(path, (cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepSumTerm()),)), val0, l), (hydra.lib.pairs.first(rl), cast(hydra.core.Term, hydra.core.TermEither(Left(hydra.lib.pairs.second(rl))))))[1]), (lambda r: (rr := recurse(hydra.lib.lists.concat2(path, (cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepSumTerm()),)), val0, r), (hydra.lib.pairs.first(rr), cast(hydra.core.Term, hydra.core.TermEither(Right(hydra.lib.pairs.second(rr))))))[1]), e)
 
                 case hydra.core.TermFunction(value=f2):
                     @lru_cache(1)
@@ -722,7 +722,7 @@ def rewrite_and_fold_term_with_path(f: Callable[[
                 case hydra.core.TermLet(value=l):
                     @lru_cache(1)
                     def renv() -> tuple[T1, hydra.core.Term]:
-                        return recurse(hydra.lib.lists.concat2(path, (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLetBody()),)), val0, l.body)
+                        return recurse(hydra.lib.lists.concat2(path, (cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepLetBody()),)), val0, l.body)
                     @lru_cache(1)
                     def rbindings() -> tuple[hydra.core.Binding, frozenlist[hydra.core.Binding]]:
                         return hydra.lib.lists.foldl((lambda r, binding: (rb := for_binding_with_accessor(hydra.lib.pairs.first(r), binding), (hydra.lib.pairs.first(rb), hydra.lib.lists.cons(hydra.lib.pairs.second(rb), hydra.lib.pairs.second(r))))[1]), (hydra.lib.pairs.first(renv()), ()), l.bindings)
@@ -732,72 +732,72 @@ def rewrite_and_fold_term_with_path(f: Callable[[
                     idx = 0
                     @lru_cache(1)
                     def rr() -> tuple[int, tuple[hydra.core.Term, frozenlist[hydra.core.Term]]]:
-                        return hydra.lib.lists.foldl((lambda r, el: (r2 := recurse(hydra.lib.lists.concat2(path, (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorListElement(hydra.lib.pairs.first(r))),)), hydra.lib.pairs.first(hydra.lib.pairs.second(r)), el), (hydra.lib.math.add(hydra.lib.pairs.first(r), 1), (hydra.lib.pairs.first(r2), hydra.lib.lists.cons(hydra.lib.pairs.second(r2), hydra.lib.pairs.second(hydra.lib.pairs.second(r))))))[1]), (idx, (val0, ())), els)
+                        return hydra.lib.lists.foldl((lambda r, el: (r2 := recurse(hydra.lib.lists.concat2(path, (cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepListElement(hydra.lib.pairs.first(r))),)), hydra.lib.pairs.first(hydra.lib.pairs.second(r)), el), (hydra.lib.math.add(hydra.lib.pairs.first(r), 1), (hydra.lib.pairs.first(r2), hydra.lib.lists.cons(hydra.lib.pairs.second(r2), hydra.lib.pairs.second(hydra.lib.pairs.second(r))))))[1]), (idx, (val0, ())), els)
                     return (hydra.lib.pairs.first(hydra.lib.pairs.second(rr())), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.reverse(hydra.lib.pairs.second(hydra.lib.pairs.second(rr()))))))
 
                 case hydra.core.TermMap(value=m):
                     idx = 0
                     @lru_cache(1)
                     def rr() -> tuple[int, tuple[tuple[hydra.core.Term, hydra.core.Term], frozenlist[tuple[hydra.core.Term, hydra.core.Term]]]]:
-                        return hydra.lib.lists.foldl((lambda r, kv: (rk := recurse(hydra.lib.lists.concat2(path, (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorMapKey(hydra.lib.pairs.first(r))),)), hydra.lib.pairs.first(hydra.lib.pairs.second(r)), hydra.lib.pairs.first(kv)), rv := recurse(hydra.lib.lists.concat2(path, (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorMapValue(hydra.lib.pairs.first(r))),)), hydra.lib.pairs.first(rk), hydra.lib.pairs.second(kv)), (hydra.lib.math.add(hydra.lib.pairs.first(r), 1), (hydra.lib.pairs.first(rv), hydra.lib.lists.cons((hydra.lib.pairs.second(rk), hydra.lib.pairs.second(rv)), hydra.lib.pairs.second(hydra.lib.pairs.second(r))))))[2]), (idx, (val0, ())), hydra.lib.maps.to_list(m))
+                        return hydra.lib.lists.foldl((lambda r, kv: (rk := recurse(hydra.lib.lists.concat2(path, (cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepMapKey(hydra.lib.pairs.first(r))),)), hydra.lib.pairs.first(hydra.lib.pairs.second(r)), hydra.lib.pairs.first(kv)), rv := recurse(hydra.lib.lists.concat2(path, (cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepMapValue(hydra.lib.pairs.first(r))),)), hydra.lib.pairs.first(rk), hydra.lib.pairs.second(kv)), (hydra.lib.math.add(hydra.lib.pairs.first(r), 1), (hydra.lib.pairs.first(rv), hydra.lib.lists.cons((hydra.lib.pairs.second(rk), hydra.lib.pairs.second(rv)), hydra.lib.pairs.second(hydra.lib.pairs.second(r))))))[2]), (idx, (val0, ())), hydra.lib.maps.to_list(m))
                     return (hydra.lib.pairs.first(hydra.lib.pairs.second(rr())), cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.from_list(hydra.lib.lists.reverse(hydra.lib.pairs.second(hydra.lib.pairs.second(rr())))))))
 
                 case hydra.core.TermMaybe(value=mt):
-                    return hydra.lib.maybes.maybe((lambda : dflt()), (lambda t: for_single_with_accessor(recurse, (lambda t1: cast(hydra.core.Term, hydra.core.TermMaybe(Just(t1)))), cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorMaybeTerm()), val0, t)), mt)
+                    return hydra.lib.maybes.maybe((lambda : dflt()), (lambda t: for_single_with_accessor(recurse, (lambda t1: cast(hydra.core.Term, hydra.core.TermMaybe(Just(t1)))), cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepMaybeTerm()), val0, t)), mt)
 
                 case hydra.core.TermPair(value=p):
                     @lru_cache(1)
                     def rf() -> tuple[T1, hydra.core.Term]:
-                        return recurse(hydra.lib.lists.concat2(path, (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorProductTerm(0)),)), val0, hydra.lib.pairs.first(p))
+                        return recurse(hydra.lib.lists.concat2(path, (cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepProductTerm(0)),)), val0, hydra.lib.pairs.first(p))
                     @lru_cache(1)
                     def rs() -> tuple[T1, hydra.core.Term]:
-                        return recurse(hydra.lib.lists.concat2(path, (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorProductTerm(1)),)), hydra.lib.pairs.first(rf()), hydra.lib.pairs.second(p))
+                        return recurse(hydra.lib.lists.concat2(path, (cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepProductTerm(1)),)), hydra.lib.pairs.first(rf()), hydra.lib.pairs.second(p))
                     return (hydra.lib.pairs.first(rs()), cast(hydra.core.Term, hydra.core.TermPair((hydra.lib.pairs.second(rf()), hydra.lib.pairs.second(rs())))))
 
                 case hydra.core.TermRecord(value=r):
                     @lru_cache(1)
                     def rfields() -> tuple[T1, frozenlist[hydra.core.Term]]:
-                        return for_many_with_accessors(recurse, (lambda x: x), val0, hydra.lib.lists.map((lambda f2: (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorRecordField(f2.name)), f2.term)), r.fields))
+                        return for_many_with_accessors(recurse, (lambda x: x), val0, hydra.lib.lists.map((lambda f2: (cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepRecordField(f2.name)), f2.term)), r.fields))
                     return (hydra.lib.pairs.first(rfields()), cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(r.type_name, hydra.lib.lists.map((lambda ft: hydra.core.Field(hydra.lib.pairs.first(ft), hydra.lib.pairs.second(ft))), hydra.lib.lists.zip(hydra.lib.lists.map((lambda v1: v1.name), r.fields), hydra.lib.pairs.second(rfields())))))))
 
                 case hydra.core.TermSet(value=els):
                     idx = 0
                     @lru_cache(1)
                     def rr() -> tuple[int, tuple[hydra.core.Term, frozenlist[hydra.core.Term]]]:
-                        return hydra.lib.lists.foldl((lambda r, el: (r2 := recurse(hydra.lib.lists.concat2(path, (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorSetElement(hydra.lib.pairs.first(r))),)), hydra.lib.pairs.first(hydra.lib.pairs.second(r)), el), (hydra.lib.math.add(hydra.lib.pairs.first(r), 1), (hydra.lib.pairs.first(r2), hydra.lib.lists.cons(hydra.lib.pairs.second(r2), hydra.lib.pairs.second(hydra.lib.pairs.second(r))))))[1]), (idx, (val0, ())), hydra.lib.sets.to_list(els))
+                        return hydra.lib.lists.foldl((lambda r, el: (r2 := recurse(hydra.lib.lists.concat2(path, (cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepSetElement(hydra.lib.pairs.first(r))),)), hydra.lib.pairs.first(hydra.lib.pairs.second(r)), el), (hydra.lib.math.add(hydra.lib.pairs.first(r), 1), (hydra.lib.pairs.first(r2), hydra.lib.lists.cons(hydra.lib.pairs.second(r2), hydra.lib.pairs.second(hydra.lib.pairs.second(r))))))[1]), (idx, (val0, ())), hydra.lib.sets.to_list(els))
                     return (hydra.lib.pairs.first(hydra.lib.pairs.second(rr())), cast(hydra.core.Term, hydra.core.TermSet(hydra.lib.sets.from_list(hydra.lib.lists.reverse(hydra.lib.pairs.second(hydra.lib.pairs.second(rr())))))))
 
                 case hydra.core.TermTypeApplication(value=ta):
-                    return for_single_with_accessor(recurse, (lambda t: cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(t, ta.type)))), cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorTypeApplicationTerm()), val0, ta.body)
+                    return for_single_with_accessor(recurse, (lambda t: cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(t, ta.type)))), cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepTypeApplicationTerm()), val0, ta.body)
 
                 case hydra.core.TermTypeLambda(value=tl):
-                    return for_single_with_accessor(recurse, (lambda t: cast(hydra.core.Term, hydra.core.TermTypeLambda(hydra.core.TypeLambda(tl.parameter, t)))), cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorTypeLambdaBody()), val0, tl.body)
+                    return for_single_with_accessor(recurse, (lambda t: cast(hydra.core.Term, hydra.core.TermTypeLambda(hydra.core.TypeLambda(tl.parameter, t)))), cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepTypeLambdaBody()), val0, tl.body)
 
                 case hydra.core.TermUnion(value=inj):
-                    return for_single_with_accessor(recurse, (lambda t: cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(inj.type_name, hydra.core.Field(inj.field.name, t))))), cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorInjectionTerm()), val0, inj.field.term)
+                    return for_single_with_accessor(recurse, (lambda t: cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(inj.type_name, hydra.core.Field(inj.field.name, t))))), cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepInjectionTerm()), val0, inj.field.term)
 
                 case hydra.core.TermWrap(value=wt):
-                    return for_single_with_accessor(recurse, (lambda t: cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(wt.type_name, t)))), cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorWrappedTerm()), val0, wt.body)
+                    return for_single_with_accessor(recurse, (lambda t: cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(wt.type_name, t)))), cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepWrappedTerm()), val0, wt.body)
 
                 case _:
                     return dflt()
         return _hoist_dflt_body_1(term02)
-    def recurse(v1: frozenlist[hydra.accessors.TermAccessor], v2: T0, v3: hydra.core.Term) -> tuple[T0, hydra.core.Term]:
+    def recurse(v1: frozenlist[hydra.paths.SubtermStep], v2: T0, v3: hydra.core.Term) -> tuple[T0, hydra.core.Term]:
         return f((lambda v12, v22, v32: fsub((lambda x1, x2, x3: recurse(x1, x2, x3)), v12, v22, v32)), v1, v2, v3)
     return recurse((), term0, v1)
 
 def rewrite_and_fold_term_with_graph_and_path(f: Callable[[
   Callable[[T0, hydra.core.Term], tuple[T0, hydra.core.Term]],
-  frozenlist[hydra.accessors.TermAccessor],
+  frozenlist[hydra.paths.SubtermStep],
   hydra.graph.Graph,
   T0,
   hydra.core.Term], tuple[T0, hydra.core.Term]], cx0: hydra.graph.Graph, val0: T0, term0: hydra.core.Term) -> tuple[T0, hydra.core.Term]:
-    r"""Rewrite a term while folding to produce a value, with both Graph and accessor path tracked. The path is a list of TermAccessors representing the position from the root to the current term. Combines the features of rewriteAndFoldTermWithPath and Graph tracking. The Graph is automatically updated when descending into lambdas, lets, and type lambdas."""
+    r"""Rewrite a term while folding to produce a value, with both Graph and accessor path tracked. The path is a list of SubtermSteps representing the position from the root to the current term. Combines the features of rewriteAndFoldTermWithPath and Graph tracking. The Graph is automatically updated when descending into lambdas, lets, and type lambdas."""
 
     def wrapper(recurse: Callable[[
-      frozenlist[hydra.accessors.TermAccessor],
+      frozenlist[hydra.paths.SubtermStep],
       tuple[hydra.graph.Graph, T0],
-      hydra.core.Term], tuple[tuple[T1, T0], hydra.core.Term]], path: frozenlist[hydra.accessors.TermAccessor], cx_and_val: tuple[hydra.graph.Graph, T0], term: hydra.core.Term) -> tuple[tuple[hydra.graph.Graph, T0], hydra.core.Term]:
+      hydra.core.Term], tuple[tuple[T1, T0], hydra.core.Term]], path: frozenlist[hydra.paths.SubtermStep], cx_and_val: tuple[hydra.graph.Graph, T0], term: hydra.core.Term) -> tuple[tuple[hydra.graph.Graph, T0], hydra.core.Term]:
         @lru_cache(1)
         def cx() -> hydra.graph.Graph:
             return hydra.lib.pairs.first(cx_and_val)
@@ -843,13 +843,13 @@ def rewrite_and_fold_term_with_graph_and_path(f: Callable[[
 
 def fold_term_with_graph_and_path(f: Callable[[
   Callable[[T0, hydra.core.Term], T0],
-  frozenlist[hydra.accessors.TermAccessor],
+  frozenlist[hydra.paths.SubtermStep],
   hydra.graph.Graph,
   T0,
   hydra.core.Term], T0], cx0: hydra.graph.Graph, val0: T0, term0: hydra.core.Term) -> T0:
     r"""Fold over a term to produce a value, with both Graph and accessor path tracked. Like rewriteAndFoldTermWithGraphAndPath, but only folds without rewriting. The Graph is automatically updated when descending into lambdas, lets, and type lambdas."""
 
-    def wrapper(recurse: Callable[[T0, hydra.core.Term], tuple[T0, T1]], path: frozenlist[hydra.accessors.TermAccessor], cx: hydra.graph.Graph, val: T0, term: hydra.core.Term) -> tuple[T0, hydra.core.Term]:
+    def wrapper(recurse: Callable[[T0, hydra.core.Term], tuple[T0, T1]], path: frozenlist[hydra.paths.SubtermStep], cx: hydra.graph.Graph, val: T0, term: hydra.core.Term) -> tuple[T0, hydra.core.Term]:
         def recurse_for_user(val_in: T0, subterm: hydra.core.Term) -> T0:
             @lru_cache(1)
             def r() -> tuple[T0, T1]:
@@ -2142,15 +2142,15 @@ def substitute_type_variables_in_term(subst: FrozenDict[hydra.core.Name, hydra.c
                 return recurse(t)
     return rewrite_term((lambda x1, x2: replace(x1, x2)), term)
 
-def subterms_with_accessors(v1: hydra.core.Term) -> frozenlist[tuple[hydra.accessors.TermAccessor, hydra.core.Term]]:
+def subterms_with_steps(v1: hydra.core.Term) -> frozenlist[tuple[hydra.paths.SubtermStep, hydra.core.Term]]:
     r"""Find the children of a given term."""
 
     match v1:
         case hydra.core.TermAnnotated(value=at):
-            return ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorAnnotatedBody()), at.body),)
+            return ((cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepAnnotatedBody()), at.body),)
 
         case hydra.core.TermApplication(value=p):
-            return ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorApplicationFunction()), p.function), (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorApplicationArgument()), p.argument))
+            return ((cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepApplicationFunction()), p.function), (cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepApplicationArgument()), p.argument))
 
         case hydra.core.TermEither():
             return ()
@@ -2160,49 +2160,49 @@ def subterms_with_accessors(v1: hydra.core.Term) -> frozenlist[tuple[hydra.acces
                 case hydra.core.FunctionElimination(value=v13):
                     match v13:
                         case hydra.core.EliminationUnion(value=cs):
-                            return hydra.lib.lists.concat2(hydra.lib.maybes.maybe((lambda : ()), (lambda t: ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorUnionCasesDefault()), t),)), cs.default), hydra.lib.lists.map((lambda f: (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorUnionCasesBranch(f.name)), f.term)), cs.cases))
+                            return hydra.lib.lists.concat2(hydra.lib.maybes.maybe((lambda : ()), (lambda t: ((cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepUnionCasesDefault()), t),)), cs.default), hydra.lib.lists.map((lambda f: (cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepUnionCasesBranch(f.name)), f.term)), cs.cases))
 
                         case _:
                             return ()
 
                 case hydra.core.FunctionLambda(value=l):
-                    return ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLambdaBody()), l.body),)
+                    return ((cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepLambdaBody()), l.body),)
 
                 case _:
                     return ()
 
         case hydra.core.TermLet(value=lt):
-            return hydra.lib.lists.cons((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLetBody()), lt.body), hydra.lib.lists.map((lambda b: (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLetBinding(b.name)), b.term)), lt.bindings))
+            return hydra.lib.lists.cons((cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepLetBody()), lt.body), hydra.lib.lists.map((lambda b: (cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepLetBinding(b.name)), b.term)), lt.bindings))
 
         case hydra.core.TermList(value=l):
-            return hydra.lib.lists.map((lambda e: (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorListElement(0)), e)), l)
+            return hydra.lib.lists.map((lambda e: (cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepListElement(0)), e)), l)
 
         case hydra.core.TermLiteral():
             return ()
 
         case hydra.core.TermMap(value=m):
-            return hydra.lib.lists.concat(hydra.lib.lists.map((lambda p: ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorMapKey(0)), hydra.lib.pairs.first(p)), (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorMapValue(0)), hydra.lib.pairs.second(p)))), hydra.lib.maps.to_list(m)))
+            return hydra.lib.lists.concat(hydra.lib.lists.map((lambda p: ((cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepMapKey(0)), hydra.lib.pairs.first(p)), (cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepMapValue(0)), hydra.lib.pairs.second(p)))), hydra.lib.maps.to_list(m)))
 
         case hydra.core.TermMaybe(value=m2):
-            return hydra.lib.maybes.maybe((lambda : ()), (lambda t: ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorMaybeTerm()), t),)), m2)
+            return hydra.lib.maybes.maybe((lambda : ()), (lambda t: ((cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepMaybeTerm()), t),)), m2)
 
         case hydra.core.TermPair():
             return ()
 
         case hydra.core.TermRecord(value=rt):
-            return hydra.lib.lists.map((lambda f: (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorRecordField(f.name)), f.term)), rt.fields)
+            return hydra.lib.lists.map((lambda f: (cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepRecordField(f.name)), f.term)), rt.fields)
 
         case hydra.core.TermSet(value=s):
-            return hydra.lib.lists.map((lambda e: (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorListElement(0)), e)), hydra.lib.sets.to_list(s))
+            return hydra.lib.lists.map((lambda e: (cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepListElement(0)), e)), hydra.lib.sets.to_list(s))
 
         case hydra.core.TermTypeApplication(value=ta):
-            return ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorTypeApplicationTerm()), ta.body),)
+            return ((cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepTypeApplicationTerm()), ta.body),)
 
         case hydra.core.TermTypeLambda(value=ta2):
-            return ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorTypeLambdaBody()), ta2.body),)
+            return ((cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepTypeLambdaBody()), ta2.body),)
 
         case hydra.core.TermUnion(value=ut):
-            return ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorInjectionTerm()), ut.field.term),)
+            return ((cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepInjectionTerm()), ut.field.term),)
 
         case hydra.core.TermUnit():
             return ()
@@ -2211,7 +2211,7 @@ def subterms_with_accessors(v1: hydra.core.Term) -> frozenlist[tuple[hydra.acces
             return ()
 
         case hydra.core.TermWrap(value=n):
-            return ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorWrappedTerm()), n.body),)
+            return ((cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepWrappedTerm()), n.body),)
 
         case _:
             raise AssertionError("Unreachable: all variants handled")

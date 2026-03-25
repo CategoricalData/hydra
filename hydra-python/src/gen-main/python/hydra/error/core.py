@@ -7,15 +7,15 @@ from dataclasses import dataclass
 from functools import lru_cache
 from hydra.dsl.python import Node
 from typing import Annotated, TypeAlias, cast
-import hydra.accessors
 import hydra.core
+import hydra.paths
 import hydra.variants
 
 @dataclass(frozen=True)
 class DuplicateBindingError:
     r"""A duplicate binding name in a let expression."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the duplicate binding within the term"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the duplicate binding within the term"]
     name: Annotated[hydra.core.Name, "The duplicated binding name"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.DuplicateBindingError")
@@ -26,7 +26,7 @@ class DuplicateBindingError:
 class DuplicateFieldError:
     r"""A duplicate field name in a record or union type."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the duplicate field within the term"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the duplicate field within the term"]
     name: Annotated[hydra.core.Name, "The duplicated field name"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.DuplicateFieldError")
@@ -70,7 +70,7 @@ class UnexpectedTypeVariantError:
 class ConstantConditionError:
     r"""An application of ifElse where the condition is a literal boolean, creating a dead branch (optional)."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the constant condition within the term"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the constant condition within the term"]
     value: Annotated[bool, "The constant boolean value of the condition"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.ConstantConditionError")
@@ -81,7 +81,7 @@ class ConstantConditionError:
 class EmptyCaseStatementError:
     r"""A case statement with no cases and no default (optional)."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the empty case statement within the term"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the empty case statement within the term"]
     type_name: Annotated[hydra.core.Name, "The name of the union type being matched"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.EmptyCaseStatementError")
@@ -92,7 +92,7 @@ class EmptyCaseStatementError:
 class EmptyLetBindingsError:
     r"""A let expression with an empty list of bindings (optional)."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the empty let expression within the term"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the empty let expression within the term"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.EmptyLetBindingsError")
     LOCATION = hydra.core.Name("location")
@@ -101,7 +101,7 @@ class EmptyLetBindingsError:
 class EmptyTermAnnotationError:
     r"""A term annotation with an empty annotation map (optional)."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the empty annotation within the term"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the empty annotation within the term"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.EmptyTermAnnotationError")
     LOCATION = hydra.core.Name("location")
@@ -110,7 +110,7 @@ class EmptyTermAnnotationError:
 class EmptyTypeNameInTermError:
     r"""A record, injection, projection, or case statement with an empty type name (optional)."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the term with the empty type name"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the term with the empty type name"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.EmptyTypeNameInTermError")
     LOCATION = hydra.core.Name("location")
@@ -119,7 +119,7 @@ class EmptyTypeNameInTermError:
 class InvalidLambdaParameterNameError:
     r"""A lambda parameter name that violates naming conventions (optional)."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the lambda within the term"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the lambda within the term"]
     name: Annotated[hydra.core.Name, "The invalid parameter name"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.InvalidLambdaParameterNameError")
@@ -130,7 +130,7 @@ class InvalidLambdaParameterNameError:
 class InvalidLetBindingNameError:
     r"""A let binding name that violates naming conventions (optional)."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the binding within the term"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the binding within the term"]
     name: Annotated[hydra.core.Name, "The invalid binding name"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.InvalidLetBindingNameError")
@@ -141,7 +141,7 @@ class InvalidLetBindingNameError:
 class InvalidTypeLambdaParameterNameError:
     r"""A type lambda parameter name that violates naming conventions (optional)."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the type lambda within the term"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the type lambda within the term"]
     name: Annotated[hydra.core.Name, "The invalid type lambda parameter name"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.InvalidTypeLambdaParameterNameError")
@@ -152,7 +152,7 @@ class InvalidTypeLambdaParameterNameError:
 class NestedTermAnnotationError:
     r"""A term annotation directly wrapping another term annotation; annotations should be merged (optional)."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the outer annotation within the term"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the outer annotation within the term"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.NestedTermAnnotationError")
     LOCATION = hydra.core.Name("location")
@@ -161,7 +161,7 @@ class NestedTermAnnotationError:
 class RedundantWrapUnwrapError:
     r"""An unwrap elimination applied to a wrap term of the same type, forming a no-op round-trip (optional)."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the redundant wrap/unwrap within the term"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the redundant wrap/unwrap within the term"]
     type_name: Annotated[hydra.core.Name, "The type name of the wrapper"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.RedundantWrapUnwrapError")
@@ -172,7 +172,7 @@ class RedundantWrapUnwrapError:
 class SelfApplicationError:
     r"""A variable applied to itself, which is almost always a mistake in Hydra's type system (optional)."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the self-application within the term"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the self-application within the term"]
     name: Annotated[hydra.core.Name, "The name of the variable applied to itself"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.SelfApplicationError")
@@ -183,7 +183,7 @@ class SelfApplicationError:
 class TermVariableShadowingError:
     r"""A lambda parameter or let binding name that shadows a variable already in scope (optional)."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the shadowing binding within the term"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the shadowing binding within the term"]
     name: Annotated[hydra.core.Name, "The name of the shadowed variable"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.TermVariableShadowingError")
@@ -194,7 +194,7 @@ class TermVariableShadowingError:
 class TypeVariableShadowingInTypeLambdaError:
     r"""A type lambda parameter that shadows a type variable already in scope (optional)."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the type lambda within the term"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the type lambda within the term"]
     name: Annotated[hydra.core.Name, "The name of the shadowed type variable"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.TypeVariableShadowingInTypeLambdaError")
@@ -205,7 +205,7 @@ class TypeVariableShadowingInTypeLambdaError:
 class UndefinedTermVariableError:
     r"""A variable reference to a term name that is not bound in scope."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the undefined variable within the term"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the undefined variable within the term"]
     name: Annotated[hydra.core.Name, "The name of the undefined variable"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.UndefinedTermVariableError")
@@ -216,7 +216,7 @@ class UndefinedTermVariableError:
 class UndefinedTypeVariableInBindingTypeError:
     r"""A type variable in a let binding's type scheme that is not bound by the scheme or enclosing scope."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the binding within the term"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the binding within the term"]
     name: Annotated[hydra.core.Name, "The name of the undefined type variable"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.UndefinedTypeVariableInBindingTypeError")
@@ -227,7 +227,7 @@ class UndefinedTypeVariableInBindingTypeError:
 class UndefinedTypeVariableInLambdaDomainError:
     r"""A type variable in a lambda domain annotation that is not bound in scope."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the lambda within the term"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the lambda within the term"]
     name: Annotated[hydra.core.Name, "The name of the undefined type variable"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.UndefinedTypeVariableInLambdaDomainError")
@@ -238,7 +238,7 @@ class UndefinedTypeVariableInLambdaDomainError:
 class UndefinedTypeVariableInTypeApplicationError:
     r"""A type variable in a type application term that is not bound in scope."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the type application within the term"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the type application within the term"]
     name: Annotated[hydra.core.Name, "The name of the undefined type variable"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.UndefinedTypeVariableInTypeApplicationError")
@@ -249,7 +249,7 @@ class UndefinedTypeVariableInTypeApplicationError:
 class UnknownPrimitiveNameError:
     r"""A primitive function reference to a name not in the known primitive registry."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the primitive reference within the term"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the primitive reference within the term"]
     name: Annotated[hydra.core.Name, "The unknown primitive name"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.UnknownPrimitiveNameError")
@@ -260,7 +260,7 @@ class UnknownPrimitiveNameError:
 class UnnecessaryIdentityApplicationError:
     r"""An application of an identity lambda to an argument, which simplifies to the argument (optional)."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the identity application within the term"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the identity application within the term"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.UnnecessaryIdentityApplicationError")
     LOCATION = hydra.core.Name("location")
@@ -269,7 +269,7 @@ class UnnecessaryIdentityApplicationError:
 class UntypedTermVariableError:
     r"""A term variable whose type is not known in the current scope."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the untyped variable within the term"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the untyped variable within the term"]
     name: Annotated[hydra.core.Name, "The name of the untyped variable"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.UntypedTermVariableError")
@@ -378,7 +378,7 @@ class InvalidTermError(metaclass=_InvalidTermErrorMeta):
 class DuplicateRecordTypeFieldNamesError:
     r"""A record type with duplicate field names."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the record type with duplicate fields"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the record type with duplicate fields"]
     name: Annotated[hydra.core.Name, "The duplicated field name"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.DuplicateRecordTypeFieldNamesError")
@@ -389,7 +389,7 @@ class DuplicateRecordTypeFieldNamesError:
 class DuplicateUnionTypeFieldNamesError:
     r"""A union type with duplicate field names."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the union type with duplicate fields"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the union type with duplicate fields"]
     name: Annotated[hydra.core.Name, "The duplicated field name"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.DuplicateUnionTypeFieldNamesError")
@@ -400,7 +400,7 @@ class DuplicateUnionTypeFieldNamesError:
 class EmptyRecordTypeError:
     r"""A record type with no fields; TypeUnit is preferred for the unit-like case (optional)."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the empty record type"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the empty record type"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.EmptyRecordTypeError")
     LOCATION = hydra.core.Name("location")
@@ -409,7 +409,7 @@ class EmptyRecordTypeError:
 class EmptyTypeAnnotationError:
     r"""A type annotation with an empty annotation map (optional)."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the empty annotation"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the empty annotation"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.EmptyTypeAnnotationError")
     LOCATION = hydra.core.Name("location")
@@ -418,7 +418,7 @@ class EmptyTypeAnnotationError:
 class EmptyUnionTypeError:
     r"""A union type with no alternatives; TypeVoid is preferred (optional)."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the empty union type"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the empty union type"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.EmptyUnionTypeError")
     LOCATION = hydra.core.Name("location")
@@ -427,7 +427,7 @@ class EmptyUnionTypeError:
 class InvalidForallParameterNameError:
     r"""A forall type parameter name that violates type variable naming conventions (optional)."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the forall type"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the forall type"]
     name: Annotated[hydra.core.Name, "The invalid parameter name"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.InvalidForallParameterNameError")
@@ -438,7 +438,7 @@ class InvalidForallParameterNameError:
 class InvalidTypeSchemeVariableNameError:
     r"""A type scheme variable name that violates type variable naming conventions (optional)."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the type scheme"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the type scheme"]
     name: Annotated[hydra.core.Name, "The invalid variable name"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.InvalidTypeSchemeVariableNameError")
@@ -449,7 +449,7 @@ class InvalidTypeSchemeVariableNameError:
 class NestedTypeAnnotationError:
     r"""A type annotation directly wrapping another type annotation; annotations should be merged (optional)."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the outer annotation"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the outer annotation"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.NestedTypeAnnotationError")
     LOCATION = hydra.core.Name("location")
@@ -458,7 +458,7 @@ class NestedTypeAnnotationError:
 class NonComparableMapKeyTypeError:
     r"""A map type whose key type is or directly contains a function type, which cannot be compared for equality."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the map type"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the map type"]
     key_type: Annotated[hydra.core.Type, "The non-comparable key type"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.NonComparableMapKeyTypeError")
@@ -469,7 +469,7 @@ class NonComparableMapKeyTypeError:
 class NonComparableSetElementTypeError:
     r"""A set type whose element type is or directly contains a function type, which cannot be compared for equality."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the set type"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the set type"]
     element_type: Annotated[hydra.core.Type, "The non-comparable element type"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.NonComparableSetElementTypeError")
@@ -480,7 +480,7 @@ class NonComparableSetElementTypeError:
 class SingleVariantUnionError:
     r"""A union type with exactly one field; could be a wrapped type or record instead (optional)."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the single-variant union type"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the single-variant union type"]
     field_name: Annotated[hydra.core.Name, "The name of the single field"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.SingleVariantUnionError")
@@ -491,7 +491,7 @@ class SingleVariantUnionError:
 class TypeVariableShadowingInForallError:
     r"""A forall type parameter that shadows a type variable already in scope (optional)."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the shadowing forall type"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the shadowing forall type"]
     name: Annotated[hydra.core.Name, "The name of the shadowed type variable"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.TypeVariableShadowingInForallError")
@@ -502,7 +502,7 @@ class TypeVariableShadowingInForallError:
 class UndefinedTypeVariableError:
     r"""A type variable reference to a name that is not bound in scope."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the undefined type variable"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the undefined type variable"]
     name: Annotated[hydra.core.Name, "The name of the undefined type variable"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.UndefinedTypeVariableError")
@@ -513,7 +513,7 @@ class UndefinedTypeVariableError:
 class VoidInNonBottomPositionError:
     r"""TypeVoid appearing in a position where no value can be constructed, such as a record field, list element, map key/value, set element, pair component, or function codomain (optional)."""
 
-    location: Annotated[hydra.accessors.AccessorPath, "The path to the void type in a non-bottom position"]
+    location: Annotated[hydra.paths.SubtermPath, "The path to the void type in a non-bottom position"]
 
     TYPE_ = hydra.core.Name("hydra.error.core.VoidInNonBottomPositionError")
     LOCATION = hydra.core.Name("location")

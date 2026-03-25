@@ -1,10 +1,10 @@
 package hydra.hoisting
 
-import hydra.accessors.*
-
 import hydra.core.*
 
 import hydra.graph.*
+
+import hydra.paths.*
 
 import hydra.typing.*
 
@@ -430,14 +430,14 @@ def hoistPolymorphicLetBindings(isParentBinding: (hydra.core.Binding => Boolean)
   hydra.hoisting.hoistLetBindingsWithPredicate(isParentBinding)(hydra.hoisting.shouldHoistPolymorphic)(emptyCx)(let0)
 }
 
-def hoistSubterms(shouldHoist: (Tuple2[Seq[hydra.accessors.TermAccessor], hydra.core.Term] => Boolean))(cx0: hydra.graph.Graph)(term0: hydra.core.Term): hydra.core.Term =
+def hoistSubterms(shouldHoist: (Tuple2[Seq[hydra.paths.SubtermStep], hydra.core.Term] => Boolean))(cx0: hydra.graph.Graph)(term0: hydra.core.Term): hydra.core.Term =
   {
-  def processImmediateSubterm(cx: hydra.graph.Graph)(counter: Int)(namePrefix: scala.Predef.String)(pathPrefix: Seq[hydra.accessors.TermAccessor])(subterm: hydra.core.Term): Tuple2[Int,
+  def processImmediateSubterm(cx: hydra.graph.Graph)(counter: Int)(namePrefix: scala.Predef.String)(pathPrefix: Seq[hydra.paths.SubtermStep])(subterm: hydra.core.Term): Tuple2[Int,
      hydra.core.Term] =
     {
     lazy val baselineLambdaVars: scala.collection.immutable.Set[hydra.core.Name] = (cx.lambdaVariables)
     def collectAndReplace(recurse: (Tuple2[Int, Seq[hydra.core.Binding]] => hydra.core.Term => Tuple2[Tuple2[Int,
-       Seq[hydra.core.Binding]], hydra.core.Term]))(path: Seq[hydra.accessors.TermAccessor])(cxInner: hydra.graph.Graph)(acc: Tuple2[Int,
+       Seq[hydra.core.Binding]], hydra.core.Term]))(path: Seq[hydra.paths.SubtermStep])(cxInner: hydra.graph.Graph)(acc: Tuple2[Int,
        Seq[hydra.core.Binding]])(term: hydra.core.Term): Tuple2[Tuple2[Int, Seq[hydra.core.Binding]],
        hydra.core.Term] =
       {
@@ -457,7 +457,7 @@ def hoistSubterms(shouldHoist: (Tuple2[Seq[hydra.accessors.TermAccessor], hydra.
                 {
                   lazy val newBindings: Seq[hydra.core.Binding] = hydra.lib.pairs.second[Int, Seq[hydra.core.Binding]](newAcc)
                   {
-                    lazy val fullPath: Seq[hydra.accessors.TermAccessor] = hydra.lib.lists.concat2[hydra.accessors.TermAccessor](pathPrefix)(path)
+                    lazy val fullPath: Seq[hydra.paths.SubtermStep] = hydra.lib.lists.concat2[hydra.paths.SubtermStep](pathPrefix)(path)
                     hydra.lib.logic.ifElse[Tuple2[Tuple2[Int, Seq[hydra.core.Binding]], hydra.core.Term]](shouldHoist(Tuple2(fullPath, processedTerm)))({
                       lazy val proposedName: hydra.core.Name = hydra.lib.strings.cat(Seq("_hoist_", namePrefix, "_", hydra.lib.literals.showInt32(newCounter)))
                       {
@@ -527,14 +527,14 @@ def hoistSubterms(shouldHoist: (Tuple2[Seq[hydra.accessors.TermAccessor], hydra.
       Tuple2(finalCounter, localLet)
     })
   }
-  def processLetTerm[T0](cx: hydra.graph.Graph)(counter: T0)(path: Seq[hydra.accessors.TermAccessor])(lt: hydra.core.Let): Tuple2[T0, hydra.core.Term] =
+  def processLetTerm[T0](cx: hydra.graph.Graph)(counter: T0)(path: Seq[hydra.paths.SubtermStep])(lt: hydra.core.Let): Tuple2[T0, hydra.core.Term] =
     {
     lazy val bindings: Seq[hydra.core.Binding] = (lt.bindings)
     lazy val body: hydra.core.Term = (lt.body)
     def processBinding(acc: Seq[hydra.core.Binding])(binding: hydra.core.Binding): Seq[hydra.core.Binding] =
       {
       lazy val namePrefix: scala.Predef.String = hydra.lib.strings.intercalate("_")(hydra.lib.strings.splitOn(".")(binding.name))
-      lazy val bindingPathPrefix: Seq[hydra.accessors.TermAccessor] = hydra.lib.lists.concat2[hydra.accessors.TermAccessor](path)(Seq(hydra.accessors.TermAccessor.letBinding(binding.name)))
+      lazy val bindingPathPrefix: Seq[hydra.paths.SubtermStep] = hydra.lib.lists.concat2[hydra.paths.SubtermStep](path)(Seq(hydra.paths.SubtermStep.letBinding(binding.name)))
       lazy val result: Tuple2[Int, hydra.core.Term] = processImmediateSubterm(cx)(1)(namePrefix)(bindingPathPrefix)(binding.term)
       lazy val newValue: hydra.core.Term = hydra.lib.pairs.second[Int, hydra.core.Term](result)
       lazy val newBinding: hydra.core.Binding = hydra.core.Binding(binding.name, newValue, (binding.`type`))
@@ -542,7 +542,7 @@ def hoistSubterms(shouldHoist: (Tuple2[Seq[hydra.accessors.TermAccessor], hydra.
     }
     lazy val newBindingsReversed: Seq[hydra.core.Binding] = hydra.lib.lists.foldl[Seq[hydra.core.Binding], hydra.core.Binding](processBinding)(Seq())(bindings)
     lazy val newBindings: Seq[hydra.core.Binding] = hydra.lib.lists.reverse[hydra.core.Binding](newBindingsReversed)
-    lazy val bodyPathPrefix: Seq[hydra.accessors.TermAccessor] = hydra.lib.lists.concat2[hydra.accessors.TermAccessor](path)(Seq(hydra.accessors.TermAccessor.letBody))
+    lazy val bodyPathPrefix: Seq[hydra.paths.SubtermStep] = hydra.lib.lists.concat2[hydra.paths.SubtermStep](path)(Seq(hydra.paths.SubtermStep.letBody))
     lazy val firstBindingName: scala.Predef.String = hydra.lib.maybes.maybe[scala.Predef.String, hydra.core.Binding]("body")((b: hydra.core.Binding) =>
       hydra.lib.strings.intercalate("_")(hydra.lib.strings.splitOn(".")(b.name)))(hydra.lib.lists.safeHead[hydra.core.Binding](bindings))
     lazy val bodyPrefix: scala.Predef.String = hydra.lib.strings.cat2(firstBindingName)("_body")
@@ -550,7 +550,7 @@ def hoistSubterms(shouldHoist: (Tuple2[Seq[hydra.accessors.TermAccessor], hydra.
     lazy val newBody: hydra.core.Term = hydra.lib.pairs.second[Int, hydra.core.Term](bodyResult)
     Tuple2(counter, hydra.core.Term.let(hydra.core.Let(newBindings, newBody)))
   }
-  def rewrite[T0, T1](recurse: (T0 => hydra.core.Term => Tuple2[T1, hydra.core.Term]))(path: Seq[hydra.accessors.TermAccessor])(cx: hydra.graph.Graph)(counter: T0)(term: hydra.core.Term): Tuple2[T1,
+  def rewrite[T0, T1](recurse: (T0 => hydra.core.Term => Tuple2[T1, hydra.core.Term]))(path: Seq[hydra.paths.SubtermStep])(cx: hydra.graph.Graph)(counter: T0)(term: hydra.core.Term): Tuple2[T1,
      hydra.core.Term] =
     term match
     case hydra.core.Term.let(v_Term_let_lt) => {
@@ -569,9 +569,9 @@ def hoistSubterms(shouldHoist: (Tuple2[Seq[hydra.accessors.TermAccessor], hydra.
   hydra.lib.pairs.second[Int, hydra.core.Term](hydra.rewriting.rewriteAndFoldTermWithGraphAndPath(rewrite)(cx0)(1)(term0))
 }
 
-def isApplicationFunction(acc: hydra.accessors.TermAccessor): Boolean =
+def isApplicationFunction(acc: hydra.paths.SubtermStep): Boolean =
   acc match
-  case hydra.accessors.TermAccessor.applicationFunction => true
+  case hydra.paths.SubtermStep.applicationFunction => true
   case _ => false
 
 def isEliminationUnion(f: hydra.core.Function): Boolean =
@@ -581,9 +581,9 @@ def isEliminationUnion(f: hydra.core.Function): Boolean =
     case _ => false
   case _ => false
 
-def isLambdaBody(acc: hydra.accessors.TermAccessor): Boolean =
+def isLambdaBody(acc: hydra.paths.SubtermStep): Boolean =
   acc match
-  case hydra.accessors.TermAccessor.lambdaBody => true
+  case hydra.paths.SubtermStep.lambdaBody => true
   case _ => false
 
 def isUnionElimination(term: hydra.core.Term): Boolean =
@@ -596,16 +596,16 @@ def isUnionEliminationApplication(term: hydra.core.Term): Boolean =
   case hydra.core.Term.application(v_Term_application_app) => hydra.hoisting.isUnionElimination(hydra.rewriting.deannotateAndDetypeTerm(v_Term_application_app.function))
   case _ => false
 
-def normalizePathForHoisting(path: Seq[hydra.accessors.TermAccessor]): Seq[hydra.accessors.TermAccessor] =
+def normalizePathForHoisting(path: Seq[hydra.paths.SubtermStep]): Seq[hydra.paths.SubtermStep] =
   {
-  def go(remaining: Seq[hydra.accessors.TermAccessor]): Seq[hydra.accessors.TermAccessor] =
-    hydra.lib.logic.ifElse[Seq[hydra.accessors.TermAccessor]](hydra.lib.logic.or(hydra.lib.lists.`null`[hydra.accessors.TermAccessor](remaining))(hydra.lib.lists.`null`[hydra.accessors.TermAccessor](hydra.lib.lists.tail[hydra.accessors.TermAccessor](remaining))))(remaining)({
-    lazy val first: hydra.accessors.TermAccessor = hydra.lib.lists.head[hydra.accessors.TermAccessor](remaining)
+  def go(remaining: Seq[hydra.paths.SubtermStep]): Seq[hydra.paths.SubtermStep] =
+    hydra.lib.logic.ifElse[Seq[hydra.paths.SubtermStep]](hydra.lib.logic.or(hydra.lib.lists.`null`[hydra.paths.SubtermStep](remaining))(hydra.lib.lists.`null`[hydra.paths.SubtermStep](hydra.lib.lists.tail[hydra.paths.SubtermStep](remaining))))(remaining)({
+    lazy val first: hydra.paths.SubtermStep = hydra.lib.lists.head[hydra.paths.SubtermStep](remaining)
     {
-      lazy val second: hydra.accessors.TermAccessor = hydra.lib.lists.head[hydra.accessors.TermAccessor](hydra.lib.lists.tail[hydra.accessors.TermAccessor](remaining))
+      lazy val second: hydra.paths.SubtermStep = hydra.lib.lists.head[hydra.paths.SubtermStep](hydra.lib.lists.tail[hydra.paths.SubtermStep](remaining))
       {
-        lazy val rest: Seq[hydra.accessors.TermAccessor] = hydra.lib.lists.tail[hydra.accessors.TermAccessor](hydra.lib.lists.tail[hydra.accessors.TermAccessor](remaining))
-        hydra.lib.logic.ifElse[Seq[hydra.accessors.TermAccessor]](hydra.lib.logic.and(hydra.hoisting.isApplicationFunction(first))(hydra.hoisting.isLambdaBody(second)))(hydra.lib.lists.cons[hydra.accessors.TermAccessor](hydra.accessors.TermAccessor.letBody)(go(rest)))(hydra.lib.lists.cons[hydra.accessors.TermAccessor](first)(go(hydra.lib.lists.tail[hydra.accessors.TermAccessor](remaining))))
+        lazy val rest: Seq[hydra.paths.SubtermStep] = hydra.lib.lists.tail[hydra.paths.SubtermStep](hydra.lib.lists.tail[hydra.paths.SubtermStep](remaining))
+        hydra.lib.logic.ifElse[Seq[hydra.paths.SubtermStep]](hydra.lib.logic.and(hydra.hoisting.isApplicationFunction(first))(hydra.hoisting.isLambdaBody(second)))(hydra.lib.lists.cons[hydra.paths.SubtermStep](hydra.paths.SubtermStep.letBody)(go(rest)))(hydra.lib.lists.cons[hydra.paths.SubtermStep](first)(go(hydra.lib.lists.tail[hydra.paths.SubtermStep](remaining))))
       }
     }
   })
@@ -614,14 +614,13 @@ def normalizePathForHoisting(path: Seq[hydra.accessors.TermAccessor]): Seq[hydra
 
 def shouldHoistAll[T0, T1](_x: T0)(_2: T1): Boolean = true
 
-def shouldHoistCaseStatement(pathAndTerm: Tuple2[Seq[hydra.accessors.TermAccessor], hydra.core.Term]): Boolean =
+def shouldHoistCaseStatement(pathAndTerm: Tuple2[Seq[hydra.paths.SubtermStep], hydra.core.Term]): Boolean =
   {
-  lazy val path: Seq[hydra.accessors.TermAccessor] = hydra.lib.pairs.first[Seq[hydra.accessors.TermAccessor], hydra.core.Term](pathAndTerm)
-  lazy val term: hydra.core.Term = hydra.lib.pairs.second[Seq[hydra.accessors.TermAccessor], hydra.core.Term](pathAndTerm)
+  lazy val path: Seq[hydra.paths.SubtermStep] = hydra.lib.pairs.first[Seq[hydra.paths.SubtermStep], hydra.core.Term](pathAndTerm)
+  lazy val term: hydra.core.Term = hydra.lib.pairs.second[Seq[hydra.paths.SubtermStep], hydra.core.Term](pathAndTerm)
   hydra.lib.logic.ifElse[Boolean](hydra.lib.logic.not(hydra.lib.logic.or(hydra.hoisting.isUnionElimination(term))(hydra.hoisting.isUnionEliminationApplication(term))))(false)({
-    lazy val finalState: Tuple2[Boolean, Boolean] = hydra.lib.lists.foldl[Tuple2[Boolean, Boolean], hydra.accessors.TermAccessor]((st: Tuple2[Boolean,
-       Boolean]) =>
-      (acc: hydra.accessors.TermAccessor) => hydra.hoisting.updateHoistState(acc)(st))(Tuple2(true, false))(path)
+    lazy val finalState: Tuple2[Boolean, Boolean] = hydra.lib.lists.foldl[Tuple2[Boolean, Boolean], hydra.paths.SubtermStep]((st: Tuple2[Boolean, Boolean]) =>
+      (acc: hydra.paths.SubtermStep) => hydra.hoisting.updateHoistState(acc)(st))(Tuple2(true, false))(path)
     hydra.lib.logic.not(hydra.lib.pairs.first[Boolean, Boolean](finalState))
   })
 }
@@ -629,19 +628,19 @@ def shouldHoistCaseStatement(pathAndTerm: Tuple2[Seq[hydra.accessors.TermAccesso
 def shouldHoistPolymorphic(cx: hydra.graph.Graph)(binding: hydra.core.Binding): Boolean =
   hydra.lib.logic.or(hydra.hoisting.bindingIsPolymorphic(binding))(hydra.hoisting.bindingUsesContextTypeVars(cx)(binding))
 
-def updateHoistState(accessor: hydra.accessors.TermAccessor)(state: Tuple2[Boolean, Boolean]): Tuple2[Boolean, Boolean] =
+def updateHoistState(accessor: hydra.paths.SubtermStep)(state: Tuple2[Boolean, Boolean]): Tuple2[Boolean, Boolean] =
   {
   lazy val atTop: Boolean = hydra.lib.pairs.first[Boolean, Boolean](state)
   lazy val usedApp: Boolean = hydra.lib.pairs.second[Boolean, Boolean](state)
   hydra.lib.logic.ifElse[Tuple2[Boolean, Boolean]](hydra.lib.logic.not(atTop))(Tuple2(false, usedApp))(accessor match
-    case hydra.accessors.TermAccessor.annotatedBody => Tuple2(true, usedApp)
-    case hydra.accessors.TermAccessor.letBody => Tuple2(true, usedApp)
-    case hydra.accessors.TermAccessor.letBinding(v_TermAccessor_letBinding__) => Tuple2(true, usedApp)
-    case hydra.accessors.TermAccessor.lambdaBody => hydra.lib.logic.ifElse[Tuple2[Boolean, Boolean]](usedApp)(Tuple2(false, true))(Tuple2(true, false))
-    case hydra.accessors.TermAccessor.unionCasesBranch(v_TermAccessor_unionCasesBranch__) => hydra.lib.logic.ifElse[Tuple2[Boolean,
+    case hydra.paths.SubtermStep.annotatedBody => Tuple2(true, usedApp)
+    case hydra.paths.SubtermStep.letBody => Tuple2(true, usedApp)
+    case hydra.paths.SubtermStep.letBinding(v_SubtermStep_letBinding__) => Tuple2(true, usedApp)
+    case hydra.paths.SubtermStep.lambdaBody => hydra.lib.logic.ifElse[Tuple2[Boolean, Boolean]](usedApp)(Tuple2(false, true))(Tuple2(true, false))
+    case hydra.paths.SubtermStep.unionCasesBranch(v_SubtermStep_unionCasesBranch__) => hydra.lib.logic.ifElse[Tuple2[Boolean,
        Boolean]](usedApp)(Tuple2(false, true))(Tuple2(true, false))
-    case hydra.accessors.TermAccessor.unionCasesDefault => hydra.lib.logic.ifElse[Tuple2[Boolean, Boolean]](usedApp)(Tuple2(false, true))(Tuple2(true, false))
-    case hydra.accessors.TermAccessor.applicationFunction => hydra.lib.logic.ifElse[Tuple2[Boolean, Boolean]](usedApp)(Tuple2(false, true))(Tuple2(true, true))
-    case hydra.accessors.TermAccessor.applicationArgument => Tuple2(false, usedApp)
+    case hydra.paths.SubtermStep.unionCasesDefault => hydra.lib.logic.ifElse[Tuple2[Boolean, Boolean]](usedApp)(Tuple2(false, true))(Tuple2(true, false))
+    case hydra.paths.SubtermStep.applicationFunction => hydra.lib.logic.ifElse[Tuple2[Boolean, Boolean]](usedApp)(Tuple2(false, true))(Tuple2(true, true))
+    case hydra.paths.SubtermStep.applicationArgument => Tuple2(false, usedApp)
     case _ => Tuple2(false, usedApp))
 }

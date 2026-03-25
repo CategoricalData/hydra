@@ -7,7 +7,6 @@ from collections.abc import Callable
 from functools import lru_cache
 from hydra.dsl.python import Just, Maybe, Nothing, frozenlist
 from typing import TypeVar, cast
-import hydra.accessors
 import hydra.core
 import hydra.graph
 import hydra.lexical
@@ -21,6 +20,7 @@ import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
+import hydra.paths
 import hydra.rewriting
 import hydra.schemas
 import hydra.sorting
@@ -336,12 +336,12 @@ def hoist_all_let_bindings(let0: hydra.core.Let) -> hydra.core.Let:
         return hydra.graph.Graph(hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty())
     return hoist_let_bindings_with_predicate((lambda _: True), (lambda x1, x2: should_hoist_all(x1, x2)), empty_cx(), let0)
 
-def hoist_subterms(should_hoist: Callable[[tuple[frozenlist[hydra.accessors.TermAccessor], hydra.core.Term]], bool], cx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra.core.Term:
-    r"""Hoist subterms into local let bindings based on a path-aware predicate. The predicate receives a pair of (path, term) where path is the list of TermAccessors from the root to the current term, and returns True if the term should be hoisted. For each let term found, the immediate subterms (binding values and body) are processed: matching subterms within each immediate subterm are collected and hoisted into a local let that wraps that immediate subterm. If a hoisted term contains free variables that are lambda-bound at an enclosing scope, the hoisted binding is wrapped in lambdas for those variables, and the reference is replaced with an application of those variables."""
+def hoist_subterms(should_hoist: Callable[[tuple[frozenlist[hydra.paths.SubtermStep], hydra.core.Term]], bool], cx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra.core.Term:
+    r"""Hoist subterms into local let bindings based on a path-aware predicate. The predicate receives a pair of (path, term) where path is the list of SubtermSteps from the root to the current term, and returns True if the term should be hoisted. For each let term found, the immediate subterms (binding values and body) are processed: matching subterms within each immediate subterm are collected and hoisted into a local let that wraps that immediate subterm. If a hoisted term contains free variables that are lambda-bound at an enclosing scope, the hoisted binding is wrapped in lambdas for those variables, and the reference is replaced with an application of those variables."""
 
-    def process_immediate_subterm(cx: hydra.graph.Graph, counter: int, name_prefix: str, path_prefix: frozenlist[hydra.accessors.TermAccessor], subterm: hydra.core.Term) -> tuple[int, hydra.core.Term]:
+    def process_immediate_subterm(cx: hydra.graph.Graph, counter: int, name_prefix: str, path_prefix: frozenlist[hydra.paths.SubtermStep], subterm: hydra.core.Term) -> tuple[int, hydra.core.Term]:
         baseline_lambda_vars = cx.lambda_variables
-        def collect_and_replace(recurse: Callable[[tuple[int, frozenlist[hydra.core.Binding]], hydra.core.Term], tuple[tuple[int, frozenlist[hydra.core.Binding]], hydra.core.Term]], path: frozenlist[hydra.accessors.TermAccessor], cx_inner: hydra.graph.Graph, acc: tuple[int, frozenlist[hydra.core.Binding]], term: hydra.core.Term) -> tuple[tuple[int, frozenlist[hydra.core.Binding]], hydra.core.Term]:
+        def collect_and_replace(recurse: Callable[[tuple[int, frozenlist[hydra.core.Binding]], hydra.core.Term], tuple[tuple[int, frozenlist[hydra.core.Binding]], hydra.core.Term]], path: frozenlist[hydra.paths.SubtermStep], cx_inner: hydra.graph.Graph, acc: tuple[int, frozenlist[hydra.core.Binding]], term: hydra.core.Term) -> tuple[tuple[int, frozenlist[hydra.core.Binding]], hydra.core.Term]:
             @lru_cache(1)
             def current_counter() -> int:
                 return hydra.lib.pairs.first(acc)
@@ -373,7 +373,7 @@ def hoist_subterms(should_hoist: Callable[[tuple[frozenlist[hydra.accessors.Term
         def bindings() -> frozenlist[hydra.core.Binding]:
             return hydra.lib.pairs.second(final_acc())
         return hydra.lib.logic.if_else(hydra.lib.lists.null(bindings()), (lambda : (final_counter(), transformed_subterm())), (lambda : (local_let := cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(hydra.lib.lists.reverse(bindings()), transformed_subterm()))), (final_counter(), local_let))[1]))
-    def process_let_term(cx: hydra.graph.Graph, counter: T0, path: frozenlist[hydra.accessors.TermAccessor], lt: hydra.core.Let) -> tuple[T0, hydra.core.Term]:
+    def process_let_term(cx: hydra.graph.Graph, counter: T0, path: frozenlist[hydra.paths.SubtermStep], lt: hydra.core.Let) -> tuple[T0, hydra.core.Term]:
         bindings = lt.bindings
         body = lt.body
         def process_binding(acc: frozenlist[hydra.core.Binding], binding: hydra.core.Binding) -> frozenlist[hydra.core.Binding]:
@@ -381,8 +381,8 @@ def hoist_subterms(should_hoist: Callable[[tuple[frozenlist[hydra.accessors.Term
             def name_prefix() -> str:
                 return hydra.lib.strings.intercalate("_", hydra.lib.strings.split_on(".", binding.name.value))
             @lru_cache(1)
-            def binding_path_prefix() -> frozenlist[hydra.accessors.TermAccessor]:
-                return hydra.lib.lists.concat2(path, (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLetBinding(binding.name)),))
+            def binding_path_prefix() -> frozenlist[hydra.paths.SubtermStep]:
+                return hydra.lib.lists.concat2(path, (cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepLetBinding(binding.name)),))
             @lru_cache(1)
             def result() -> tuple[int, hydra.core.Term]:
                 return process_immediate_subterm(cx, 1, name_prefix(), binding_path_prefix(), binding.term)
@@ -398,8 +398,8 @@ def hoist_subterms(should_hoist: Callable[[tuple[frozenlist[hydra.accessors.Term
         def new_bindings() -> frozenlist[hydra.core.Binding]:
             return hydra.lib.lists.reverse(new_bindings_reversed())
         @lru_cache(1)
-        def body_path_prefix() -> frozenlist[hydra.accessors.TermAccessor]:
-            return hydra.lib.lists.concat2(path, (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLetBody()),))
+        def body_path_prefix() -> frozenlist[hydra.paths.SubtermStep]:
+            return hydra.lib.lists.concat2(path, (cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepLetBody()),))
         @lru_cache(1)
         def first_binding_name() -> str:
             return hydra.lib.maybes.maybe((lambda : "body"), (lambda b: hydra.lib.strings.intercalate("_", hydra.lib.strings.split_on(".", b.name.value))), hydra.lib.lists.safe_head(bindings))
@@ -413,7 +413,7 @@ def hoist_subterms(should_hoist: Callable[[tuple[frozenlist[hydra.accessors.Term
         def new_body() -> hydra.core.Term:
             return hydra.lib.pairs.second(body_result())
         return (counter, cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(new_bindings(), new_body()))))
-    def rewrite(recurse: Callable[[T0, hydra.core.Term], tuple[T1, hydra.core.Term]], path: frozenlist[hydra.accessors.TermAccessor], cx: hydra.graph.Graph, counter: T0, term: hydra.core.Term):
+    def rewrite(recurse: Callable[[T0, hydra.core.Term], tuple[T1, hydra.core.Term]], path: frozenlist[hydra.paths.SubtermStep], cx: hydra.graph.Graph, counter: T0, term: hydra.core.Term):
         match term:
             case hydra.core.TermLet():
                 @lru_cache(1)
@@ -473,7 +473,7 @@ def is_union_elimination_application(term: hydra.core.Term) -> bool:
         case _:
             return False
 
-def update_hoist_state(accessor: hydra.accessors.TermAccessor, state: tuple[bool, bool]):
+def update_hoist_state(accessor: hydra.paths.SubtermStep, state: tuple[bool, bool]):
     r"""Update hoisting state when traversing an accessor. State is (atTopLevel, usedAppLHS). Returns updated state."""
 
     @lru_cache(1)
@@ -484,39 +484,39 @@ def update_hoist_state(accessor: hydra.accessors.TermAccessor, state: tuple[bool
         return hydra.lib.pairs.second(state)
     def _hoist_used_app_body_1(v1):
         match v1:
-            case hydra.accessors.TermAccessorAnnotatedBody():
+            case hydra.paths.SubtermStepAnnotatedBody():
                 return (True, used_app())
 
-            case hydra.accessors.TermAccessorLetBody():
+            case hydra.paths.SubtermStepLetBody():
                 return (True, used_app())
 
-            case hydra.accessors.TermAccessorLetBinding():
+            case hydra.paths.SubtermStepLetBinding():
                 return (True, used_app())
 
-            case hydra.accessors.TermAccessorLambdaBody():
+            case hydra.paths.SubtermStepLambdaBody():
                 return hydra.lib.logic.if_else(used_app(), (lambda : (False, True)), (lambda : (True, False)))
 
-            case hydra.accessors.TermAccessorUnionCasesBranch():
+            case hydra.paths.SubtermStepUnionCasesBranch():
                 return hydra.lib.logic.if_else(used_app(), (lambda : (False, True)), (lambda : (True, False)))
 
-            case hydra.accessors.TermAccessorUnionCasesDefault():
+            case hydra.paths.SubtermStepUnionCasesDefault():
                 return hydra.lib.logic.if_else(used_app(), (lambda : (False, True)), (lambda : (True, False)))
 
-            case hydra.accessors.TermAccessorApplicationFunction():
+            case hydra.paths.SubtermStepApplicationFunction():
                 return hydra.lib.logic.if_else(used_app(), (lambda : (False, True)), (lambda : (True, True)))
 
-            case hydra.accessors.TermAccessorApplicationArgument():
+            case hydra.paths.SubtermStepApplicationArgument():
                 return (False, used_app())
 
             case _:
                 return (False, used_app())
     return hydra.lib.logic.if_else(hydra.lib.logic.not_(at_top()), (lambda : (False, used_app())), (lambda : _hoist_used_app_body_1(accessor)))
 
-def should_hoist_case_statement(path_and_term: tuple[frozenlist[hydra.accessors.TermAccessor], hydra.core.Term]) -> bool:
+def should_hoist_case_statement(path_and_term: tuple[frozenlist[hydra.paths.SubtermStep], hydra.core.Term]) -> bool:
     r"""Predicate for case statement hoisting. Returns True if term is a union elimination (bare case function) or a case statement application (union elimination applied to an argument) AND not at top level. Top level = reachable through annotations, let body/binding, lambda bodies, or ONE app LHS. Once through an app LHS, lambda bodies no longer pass through."""
 
     @lru_cache(1)
-    def path() -> frozenlist[hydra.accessors.TermAccessor]:
+    def path() -> frozenlist[hydra.paths.SubtermStep]:
         return hydra.lib.pairs.first(path_and_term)
     @lru_cache(1)
     def term() -> hydra.core.Term:
@@ -560,25 +560,25 @@ def hoist_polymorphic_let_bindings(is_parent_binding: Callable[[hydra.core.Bindi
         return hydra.graph.Graph(hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty())
     return hoist_let_bindings_with_predicate(is_parent_binding, (lambda x1, x2: should_hoist_polymorphic(x1, x2)), empty_cx(), let0)
 
-def is_application_function(acc: hydra.accessors.TermAccessor) -> bool:
+def is_application_function(acc: hydra.paths.SubtermStep) -> bool:
     match acc:
-        case hydra.accessors.TermAccessorApplicationFunction():
+        case hydra.paths.SubtermStepApplicationFunction():
             return True
 
         case _:
             return False
 
-def is_lambda_body(acc: hydra.accessors.TermAccessor) -> bool:
+def is_lambda_body(acc: hydra.paths.SubtermStep) -> bool:
     match acc:
-        case hydra.accessors.TermAccessorLambdaBody():
+        case hydra.paths.SubtermStepLambdaBody():
             return True
 
         case _:
             return False
 
-def normalize_path_for_hoisting(path: frozenlist[hydra.accessors.TermAccessor]) -> frozenlist[hydra.accessors.TermAccessor]:
+def normalize_path_for_hoisting(path: frozenlist[hydra.paths.SubtermStep]) -> frozenlist[hydra.paths.SubtermStep]:
     r"""Normalize a path for hoisting by treating immediately-applied lambdas as let bindings. Replaces [applicationFunction, lambdaBody, ...] with [letBody, ...]."""
 
-    def go(remaining: frozenlist[hydra.accessors.TermAccessor]) -> frozenlist[hydra.accessors.TermAccessor]:
-        return hydra.lib.logic.if_else(hydra.lib.logic.or_(hydra.lib.lists.null(remaining), hydra.lib.lists.null(hydra.lib.lists.tail(remaining))), (lambda : remaining), (lambda : (first := hydra.lib.lists.head(remaining), (second := hydra.lib.lists.head(hydra.lib.lists.tail(remaining)), (rest := hydra.lib.lists.tail(hydra.lib.lists.tail(remaining)), hydra.lib.logic.if_else(hydra.lib.logic.and_(is_application_function(first), is_lambda_body(second)), (lambda : hydra.lib.lists.cons(cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLetBody()), go(rest))), (lambda : hydra.lib.lists.cons(first, go(hydra.lib.lists.tail(remaining))))))[1])[1])[1]))
+    def go(remaining: frozenlist[hydra.paths.SubtermStep]) -> frozenlist[hydra.paths.SubtermStep]:
+        return hydra.lib.logic.if_else(hydra.lib.logic.or_(hydra.lib.lists.null(remaining), hydra.lib.lists.null(hydra.lib.lists.tail(remaining))), (lambda : remaining), (lambda : (first := hydra.lib.lists.head(remaining), (second := hydra.lib.lists.head(hydra.lib.lists.tail(remaining)), (rest := hydra.lib.lists.tail(hydra.lib.lists.tail(remaining)), hydra.lib.logic.if_else(hydra.lib.logic.and_(is_application_function(first), is_lambda_body(second)), (lambda : hydra.lib.lists.cons(cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepLetBody()), go(rest))), (lambda : hydra.lib.lists.cons(first, go(hydra.lib.lists.tail(remaining))))))[1])[1])[1]))
     return go(path)

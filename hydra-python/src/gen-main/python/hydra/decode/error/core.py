@@ -8,8 +8,8 @@ from functools import lru_cache
 from hydra.dsl.python import Either, Left, Right
 from typing import cast
 import hydra.core
-import hydra.decode.accessors
 import hydra.decode.core
+import hydra.decode.paths
 import hydra.decode.variants
 import hydra.error.core
 import hydra.errors
@@ -41,7 +41,7 @@ def constant_condition_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
                         case _:
                             return Left(hydra.errors.DecodingError("expected literal"))
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("value", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_field_map_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_value: Right(hydra.error.core.ConstantConditionError(field_location, field_value))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("value", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_field_map_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_value: Right(hydra.error.core.ConstantConditionError(field_location, field_value))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -54,7 +54,7 @@ def duplicate_binding_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.DuplicateBindingError(field_location, field_name))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.DuplicateBindingError(field_location, field_name))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -67,7 +67,7 @@ def duplicate_field_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.DuplicateFieldError(field_location, field_name))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.DuplicateFieldError(field_location, field_name))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -80,7 +80,7 @@ def duplicate_record_type_field_names_error(cx: hydra.graph.Graph, raw: hydra.co
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.DuplicateRecordTypeFieldNamesError(field_location, field_name))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.DuplicateRecordTypeFieldNamesError(field_location, field_name))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -93,7 +93,7 @@ def duplicate_union_type_field_names_error(cx: hydra.graph.Graph, raw: hydra.cor
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.DuplicateUnionTypeFieldNamesError(field_location, field_name))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.DuplicateUnionTypeFieldNamesError(field_location, field_name))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -106,7 +106,7 @@ def empty_case_statement_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("typeName", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_type_name: Right(hydra.error.core.EmptyCaseStatementError(field_location, field_type_name))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("typeName", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_type_name: Right(hydra.error.core.EmptyCaseStatementError(field_location, field_type_name))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -119,7 +119,7 @@ def empty_let_bindings_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: Right(hydra.error.core.EmptyLetBindingsError(field_location))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: Right(hydra.error.core.EmptyLetBindingsError(field_location))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -132,7 +132,7 @@ def empty_record_type_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: Right(hydra.error.core.EmptyRecordTypeError(field_location))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: Right(hydra.error.core.EmptyRecordTypeError(field_location))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -145,7 +145,7 @@ def empty_term_annotation_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: Right(hydra.error.core.EmptyTermAnnotationError(field_location))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: Right(hydra.error.core.EmptyTermAnnotationError(field_location))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -158,7 +158,7 @@ def empty_type_annotation_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: Right(hydra.error.core.EmptyTypeAnnotationError(field_location))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: Right(hydra.error.core.EmptyTypeAnnotationError(field_location))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -171,7 +171,7 @@ def empty_type_name_in_term_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: Right(hydra.error.core.EmptyTypeNameInTermError(field_location))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: Right(hydra.error.core.EmptyTypeNameInTermError(field_location))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -184,7 +184,7 @@ def empty_union_type_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: Right(hydra.error.core.EmptyUnionTypeError(field_location))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: Right(hydra.error.core.EmptyUnionTypeError(field_location))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -197,7 +197,7 @@ def invalid_forall_parameter_name_error(cx: hydra.graph.Graph, raw: hydra.core.T
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.InvalidForallParameterNameError(field_location, field_name))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.InvalidForallParameterNameError(field_location, field_name))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -210,7 +210,7 @@ def invalid_lambda_parameter_name_error(cx: hydra.graph.Graph, raw: hydra.core.T
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.InvalidLambdaParameterNameError(field_location, field_name))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.InvalidLambdaParameterNameError(field_location, field_name))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -223,7 +223,7 @@ def invalid_let_binding_name_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.InvalidLetBindingNameError(field_location, field_name))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.InvalidLetBindingNameError(field_location, field_name))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -236,7 +236,7 @@ def invalid_type_lambda_parameter_name_error(cx: hydra.graph.Graph, raw: hydra.c
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.InvalidTypeLambdaParameterNameError(field_location, field_name))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.InvalidTypeLambdaParameterNameError(field_location, field_name))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -249,7 +249,7 @@ def nested_term_annotation_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: Right(hydra.error.core.NestedTermAnnotationError(field_location))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: Right(hydra.error.core.NestedTermAnnotationError(field_location))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -262,7 +262,7 @@ def redundant_wrap_unwrap_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("typeName", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_type_name: Right(hydra.error.core.RedundantWrapUnwrapError(field_location, field_type_name))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("typeName", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_type_name: Right(hydra.error.core.RedundantWrapUnwrapError(field_location, field_type_name))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -275,7 +275,7 @@ def self_application_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.SelfApplicationError(field_location, field_name))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.SelfApplicationError(field_location, field_name))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -288,7 +288,7 @@ def term_variable_shadowing_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.TermVariableShadowingError(field_location, field_name))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.TermVariableShadowingError(field_location, field_name))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -301,7 +301,7 @@ def type_variable_shadowing_in_type_lambda_error(cx: hydra.graph.Graph, raw: hyd
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.TypeVariableShadowingInTypeLambdaError(field_location, field_name))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.TypeVariableShadowingInTypeLambdaError(field_location, field_name))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -314,7 +314,7 @@ def undefined_term_variable_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.UndefinedTermVariableError(field_location, field_name))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.UndefinedTermVariableError(field_location, field_name))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -327,7 +327,7 @@ def undefined_type_variable_in_binding_type_error(cx: hydra.graph.Graph, raw: hy
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.UndefinedTypeVariableInBindingTypeError(field_location, field_name))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.UndefinedTypeVariableInBindingTypeError(field_location, field_name))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -340,7 +340,7 @@ def undefined_type_variable_in_lambda_domain_error(cx: hydra.graph.Graph, raw: h
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.UndefinedTypeVariableInLambdaDomainError(field_location, field_name))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.UndefinedTypeVariableInLambdaDomainError(field_location, field_name))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -353,7 +353,7 @@ def undefined_type_variable_in_type_application_error(cx: hydra.graph.Graph, raw
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.UndefinedTypeVariableInTypeApplicationError(field_location, field_name))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.UndefinedTypeVariableInTypeApplicationError(field_location, field_name))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -366,7 +366,7 @@ def unknown_primitive_name_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.UnknownPrimitiveNameError(field_location, field_name))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.UnknownPrimitiveNameError(field_location, field_name))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -379,7 +379,7 @@ def unnecessary_identity_application_error(cx: hydra.graph.Graph, raw: hydra.cor
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: Right(hydra.error.core.UnnecessaryIdentityApplicationError(field_location))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: Right(hydra.error.core.UnnecessaryIdentityApplicationError(field_location))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -392,7 +392,7 @@ def untyped_term_variable_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.UntypedTermVariableError(field_location, field_name))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.UntypedTermVariableError(field_location, field_name))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -421,7 +421,7 @@ def invalid_type_scheme_variable_name_error(cx: hydra.graph.Graph, raw: hydra.co
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.InvalidTypeSchemeVariableNameError(field_location, field_name))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.InvalidTypeSchemeVariableNameError(field_location, field_name))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -434,7 +434,7 @@ def nested_type_annotation_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: Right(hydra.error.core.NestedTypeAnnotationError(field_location))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: Right(hydra.error.core.NestedTypeAnnotationError(field_location))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -447,7 +447,7 @@ def non_comparable_map_key_type_error(cx: hydra.graph.Graph, raw: hydra.core.Ter
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("keyType", (lambda x1, x2: hydra.decode.core.type(x1, x2)), field_map(), cx), (lambda field_key_type: Right(hydra.error.core.NonComparableMapKeyTypeError(field_location, field_key_type))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("keyType", (lambda x1, x2: hydra.decode.core.type(x1, x2)), field_map(), cx), (lambda field_key_type: Right(hydra.error.core.NonComparableMapKeyTypeError(field_location, field_key_type))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -460,7 +460,7 @@ def non_comparable_set_element_type_error(cx: hydra.graph.Graph, raw: hydra.core
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("elementType", (lambda x1, x2: hydra.decode.core.type(x1, x2)), field_map(), cx), (lambda field_element_type: Right(hydra.error.core.NonComparableSetElementTypeError(field_location, field_element_type))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("elementType", (lambda x1, x2: hydra.decode.core.type(x1, x2)), field_map(), cx), (lambda field_element_type: Right(hydra.error.core.NonComparableSetElementTypeError(field_location, field_element_type))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -473,7 +473,7 @@ def single_variant_union_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("fieldName", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_field_name: Right(hydra.error.core.SingleVariantUnionError(field_location, field_field_name))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("fieldName", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_field_name: Right(hydra.error.core.SingleVariantUnionError(field_location, field_field_name))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -486,7 +486,7 @@ def type_variable_shadowing_in_forall_error(cx: hydra.graph.Graph, raw: hydra.co
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.TypeVariableShadowingInForallError(field_location, field_name))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.TypeVariableShadowingInForallError(field_location, field_name))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -499,7 +499,7 @@ def undefined_type_variable_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.UndefinedTypeVariableError(field_location, field_name))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: Right(hydra.error.core.UndefinedTypeVariableError(field_location, field_name))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -512,7 +512,7 @@ def void_in_non_bottom_position_error(cx: hydra.graph.Graph, raw: hydra.core.Ter
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.accessors.accessor_path(x1, x2)), field_map(), cx), (lambda field_location: Right(hydra.error.core.VoidInNonBottomPositionError(field_location))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("location", (lambda x1, x2: hydra.decode.paths.subterm_path(x1, x2)), field_map(), cx), (lambda field_location: Right(hydra.error.core.VoidInNonBottomPositionError(field_location))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))

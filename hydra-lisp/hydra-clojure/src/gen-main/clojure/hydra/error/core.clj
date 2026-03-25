@@ -1,5 +1,5 @@
 (ns hydra.error.core
-  (:require [hydra.accessors :refer :all] [hydra.core :refer :all] [hydra.variants :refer :all]
+  (:require [hydra.core :refer :all] [hydra.paths :refer :all] [hydra.variants :refer :all]
 ))
 
 (declare hydra_error_core_invalid_term_error-variants hydra_error_core_invalid_type_error-variants)

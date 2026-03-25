@@ -1,7 +1,5 @@
 (require 'cl-lib)
 
-(require 'hydra.accessors)
-
 (require 'hydra.core)
 
 (require 'hydra.error.core)
@@ -21,6 +19,8 @@
 (require 'hydra.lib.pairs)
 
 (require 'hydra.lib.sets)
+
+(require 'hydra.paths)
 
 (require 'hydra.rewriting)
 
