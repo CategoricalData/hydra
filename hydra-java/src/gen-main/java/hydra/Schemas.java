@@ -235,25 +235,33 @@ public interface Schemas {
 
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>> visit(hydra.core.Type.Variable name) {
-        return hydra.lib.eithers.Bind.apply(
-          hydra.Lexical.requireElement(
-            cx,
-            graph,
-            (name).value),
-          (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>>>) (el -> hydra.lib.eithers.Bind.apply(
-            hydra.lib.eithers.Bimap.apply(
-              (java.util.function.Function<hydra.errors.Error_, hydra.context.InContext<hydra.errors.Error_>>) (_wc_e -> (hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(_wc_e, cx))),
-              (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (_wc_a -> _wc_a),
-              hydra.lib.eithers.Bimap.apply(
-                (java.util.function.Function<hydra.errors.DecodingError, hydra.errors.Error_>) (_e -> new hydra.errors.Error_.Other(new hydra.errors.OtherError((_e).value))),
-                (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (_a -> _a),
-                hydra.decode.Core.type(
-                  graph,
-                  (el).term))),
-            (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>>>) (decodedType -> hydra.Schemas.fieldTypes(
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> hydra.lib.eithers.Bind.apply(
+            hydra.Lexical.requireElement(
               cx,
               graph,
-              decodedType)))));
+              (name).value),
+            (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>>>) (el -> hydra.lib.eithers.Bind.apply(
+              hydra.lib.eithers.Bimap.apply(
+                (java.util.function.Function<hydra.errors.Error_, hydra.context.InContext<hydra.errors.Error_>>) (_wc_e -> (hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(_wc_e, cx))),
+                (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (_wc_a -> _wc_a),
+                hydra.lib.eithers.Bimap.apply(
+                  (java.util.function.Function<hydra.errors.DecodingError, hydra.errors.Error_>) (_e -> new hydra.errors.Error_.Other(new hydra.errors.OtherError((_e).value))),
+                  (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (_a -> _a),
+                  hydra.decode.Core.type(
+                    graph,
+                    (el).term))),
+              (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>>>) (decodedType -> hydra.Schemas.fieldTypes(
+                cx,
+                graph,
+                decodedType))))),
+          (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>>>) (ts -> hydra.Schemas.fieldTypes(
+            cx,
+            graph,
+            (ts).type)),
+          hydra.lib.maps.Lookup.apply(
+            (name).value,
+            (graph).schemaTypes));
       }
     });
   }

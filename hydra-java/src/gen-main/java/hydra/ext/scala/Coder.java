@@ -157,6 +157,32 @@ public interface Coder {
     hydra.core.Term applied = hydra.ext.scala.Coder.applyVar(
       fterm,
       v);
+    hydra.util.Lazy<Boolean> domainIsUnit = new hydra.util.Lazy<>(() -> hydra.Rewriting.deannotateAndDetypeTerm(fterm).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public Boolean otherwise(hydra.core.Term instance) {
+        return true;
+      }
+
+      @Override
+      public Boolean visit(hydra.core.Term.Function fn) {
+        return (fn).value.accept(new hydra.core.Function.PartialVisitor<>() {
+          @Override
+          public Boolean otherwise(hydra.core.Function instance) {
+            return true;
+          }
+
+          @Override
+          public Boolean visit(hydra.core.Function.Lambda lam) {
+            return hydra.lib.maybes.Maybe.applyLazy(
+              () -> true,
+              (java.util.function.Function<hydra.core.Type, Boolean>) (dom -> hydra.lib.equality.Equal.apply(
+                dom,
+                new hydra.core.Type.Unit())),
+              (lam).value.domain);
+          }
+        });
+      }
+    }));
     hydra.util.Lazy<Boolean> isUnit = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
       () -> hydra.Rewriting.deannotateAndDetypeTerm(fterm).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
@@ -227,7 +253,10 @@ public interface Coder {
         ftypes)));
     hydra.util.Lazy<hydra.util.ConsList<hydra.ext.scala.syntax.Pat>> patArgs = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
       isUnit.get(),
-      () -> (hydra.util.ConsList<hydra.ext.scala.syntax.Pat>) (hydra.util.ConsList.<hydra.ext.scala.syntax.Pat>empty()),
+      () -> hydra.lib.logic.IfElse.lazy(
+        domainIsUnit.get(),
+        () -> (hydra.util.ConsList<hydra.ext.scala.syntax.Pat>) (hydra.util.ConsList.<hydra.ext.scala.syntax.Pat>empty()),
+        () -> hydra.util.ConsList.of(new hydra.ext.scala.syntax.Pat.Wildcard())),
       () -> hydra.util.ConsList.of(hydra.ext.scala.Utils.svar(v))));
     hydra.ext.scala.syntax.Pat pat = new hydra.ext.scala.syntax.Pat.Extract(new hydra.ext.scala.syntax.Pat_Extract(hydra.ext.scala.Utils.sname(hydra.ext.scala.Utils.qualifyUnionFieldName(
       "MATCHED.",

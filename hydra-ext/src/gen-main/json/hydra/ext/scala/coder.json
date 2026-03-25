@@ -15464,6 +15464,88 @@
                                                       "type": {"variable": "hydra.core.Name"},
                                                       "variables": []}]},
                                                 {
+                                                  "name": "domainIsUnit",
+                                                  "term": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "application": {
+                                                          "argument": {"variable": "fterm"},
+                                                          "function": {"variable": "hydra.rewriting.deannotateAndDetypeTerm"}}},
+                                                      "function": {
+                                                        "function": {
+                                                          "elimination": {
+                                                            "union": {
+                                                              "cases": [
+                                                                {
+                                                                  "name": "function",
+                                                                  "term": {
+                                                                    "function": {
+                                                                      "lambda": {
+                                                                        "body": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "fn"},
+                                                                            "function": {
+                                                                              "function": {
+                                                                                "elimination": {
+                                                                                  "union": {
+                                                                                    "cases": [
+                                                                                      {
+                                                                                        "name": "lambda",
+                                                                                        "term": {
+                                                                                          "function": {
+                                                                                            "lambda": {
+                                                                                              "body": {
+                                                                                                "application": {
+                                                                                                  "argument": {
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "lam"},
+                                                                                                      "function": {
+                                                                                                        "function": {
+                                                                                                          "elimination": {"record": {"field": "domain", "typeName": "hydra.core.Lambda"}}}}}},
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "argument": {
+                                                                                                        "function": {
+                                                                                                          "lambda": {
+                                                                                                            "body": {
+                                                                                                              "application": {
+                                                                                                                "argument": {
+                                                                                                                  "union": {
+                                                                                                                    "field": {"name": "unit", "term": {"unit": {}}},
+                                                                                                                    "typeName": "hydra.core.Type"}},
+                                                                                                                "function": {
+                                                                                                                  "application": {
+                                                                                                                    "argument": {"variable": "dom"},
+                                                                                                                    "function": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                                                                                        "type": {"variable": "hydra.core.Type"}}}}}}},
+                                                                                                            "domain": [{"variable": "hydra.core.Type"}],
+                                                                                                            "parameter": "dom"}}},
+                                                                                                      "function": {
+                                                                                                        "application": {
+                                                                                                          "argument": {"literal": {"boolean": true}},
+                                                                                                          "function": {
+                                                                                                            "typeApplication": {
+                                                                                                              "body": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                                                  "type": {"literal": {"boolean": {}}}}},
+                                                                                                              "type": {"variable": "hydra.core.Type"}}}}}}}}},
+                                                                                              "domain": [{"variable": "hydra.core.Lambda"}],
+                                                                                              "parameter": "lam"}}}}],
+                                                                                    "default": [{"literal": {"boolean": true}}],
+                                                                                    "typeName": "hydra.core.Function"}}}}}},
+                                                                        "domain": [{"variable": "hydra.core.Function"}],
+                                                                        "parameter": "fn"}}}}],
+                                                              "default": [{"literal": {"boolean": true}}],
+                                                              "typeName": "hydra.core.Term"}}}}}},
+                                                  "type": [
+                                                    {
+                                                      "constraints": null,
+                                                      "type": {"literal": {"boolean": {}}},
+                                                      "variables": []}]},
+                                                {
                                                   "name": "patArgs",
                                                   "term": {
                                                     "application": {
@@ -15476,9 +15558,26 @@
                                                       "function": {
                                                         "application": {
                                                           "argument": {
-                                                            "typeApplication": {
-                                                              "body": {"list": []},
-                                                              "type": {"variable": "hydra.ext.scala.syntax.Pat"}}},
+                                                            "application": {
+                                                              "argument": {
+                                                                "list": [
+                                                                  {
+                                                                    "union": {
+                                                                      "field": {"name": "wildcard", "term": {"unit": {}}},
+                                                                      "typeName": "hydra.ext.scala.syntax.Pat"}}]},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "typeApplication": {
+                                                                      "body": {"list": []},
+                                                                      "type": {"variable": "hydra.ext.scala.syntax.Pat"}}},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "domainIsUnit"},
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                          "type": {"list": {"variable": "hydra.ext.scala.syntax.Pat"}}}}}}}}}},
                                                           "function": {
                                                             "application": {
                                                               "argument": {"variable": "isUnit"},

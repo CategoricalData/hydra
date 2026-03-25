@@ -297,9 +297,14 @@ format_time() {
     fi
 }
 
-# Convert a time string like "3.6s", "1m 36.1s", or "1m 36.1" to total seconds (decimal)
+# Convert a time string like "3.6s", "1m 36.1s", "1m 36.1", or "100ms" to total seconds (decimal)
 parse_time_to_secs() {
     local raw=$1
+    # Handle millisecond format (e.g. "0ms", "100ms")
+    if [[ "$raw" =~ ^([0-9]+)ms$ ]]; then
+        python3 -c "print(${BASH_REMATCH[1]} / 1000.0)"
+        return
+    fi
     # Strip trailing 's' if present
     raw="${raw%s}"
     if [[ "$raw" =~ ^([0-9]+)m\ (.+)$ ]]; then
@@ -307,9 +312,12 @@ parse_time_to_secs() {
         local mins="${BASH_REMATCH[1]}"
         local secs="${BASH_REMATCH[2]}"
         python3 -c "print(${mins} * 60 + ${secs})"
-    else
+    elif [[ "$raw" =~ ^[0-9]+\.?[0-9]*$ ]]; then
         # Plain seconds (e.g. "3.6")
         echo "$raw"
+    else
+        # Unrecognized format - return empty to avoid invalid JSON
+        echo ""
     fi
 }
 
