@@ -542,8 +542,23 @@ def encode_case(cx: hydra.context.Context, g: hydra.graph.Graph, ftypes: FrozenD
     def v() -> hydra.core.Name:
         return hydra.core.Name(hydra.lib.strings.cat(("v_", short_type_name(), "_", fname.value, lam_param_suffix())))
     @lru_cache(1)
+    def domain_is_unit():
+        def _hoist_domain_is_unit_1(v1):
+            match v1:
+                case hydra.core.FunctionLambda(value=lam):
+                    return hydra.lib.maybes.maybe((lambda : True), (lambda dom: hydra.lib.equality.equal(dom, cast(hydra.core.Type, hydra.core.TypeUnit()))), lam.domain)
+
+                case _:
+                    return True
+        match hydra.rewriting.deannotate_and_detype_term(fterm):
+            case hydra.core.TermFunction(value=fn):
+                return _hoist_domain_is_unit_1(fn)
+
+            case _:
+                return True
+    @lru_cache(1)
     def pat_args() -> frozenlist[hydra.ext.scala.syntax.Pat]:
-        return hydra.lib.logic.if_else(is_unit(), (lambda : ()), (lambda : (hydra.ext.scala.utils.svar(v()),)))
+        return hydra.lib.logic.if_else(is_unit(), (lambda : hydra.lib.logic.if_else(domain_is_unit(), (lambda : ()), (lambda : (cast(hydra.ext.scala.syntax.Pat, hydra.ext.scala.syntax.PatWildcard()),)))), (lambda : (hydra.ext.scala.utils.svar(v()),)))
     @lru_cache(1)
     def pat() -> hydra.ext.scala.syntax.Pat:
         return cast(hydra.ext.scala.syntax.Pat, hydra.ext.scala.syntax.PatExtract(hydra.ext.scala.syntax.Pat_Extract(hydra.ext.scala.utils.sname(hydra.ext.scala.utils.qualify_union_field_name("MATCHED.", sn, fname)), pat_args())))

@@ -181,7 +181,7 @@ def field_types(cx: hydra.context.Context, graph: hydra.graph.Graph, t: hydra.co
             return Right(to_map(rt2))
 
         case hydra.core.TypeVariable(value=name):
-            return hydra.lib.eithers.bind(hydra.lexical.require_element(cx, graph, name), (lambda el: hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda _wc_e: hydra.context.InContext(_wc_e, cx)), (lambda _wc_a: _wc_a), hydra.lib.eithers.bimap((lambda _e: cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(_e.value)))), (lambda _a: _a), hydra.decode.core.type(graph, el.term))), (lambda decoded_type: field_types(cx, graph, decoded_type)))))
+            return hydra.lib.maybes.maybe((lambda : hydra.lib.eithers.bind(hydra.lexical.require_element(cx, graph, name), (lambda el: hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda _wc_e: hydra.context.InContext(_wc_e, cx)), (lambda _wc_a: _wc_a), hydra.lib.eithers.bimap((lambda _e: cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(_e.value)))), (lambda _a: _a), hydra.decode.core.type(graph, el.term))), (lambda decoded_type: field_types(cx, graph, decoded_type)))))), (lambda ts: field_types(cx, graph, ts.type)), hydra.lib.maps.lookup(name, graph.schema_types))
 
         case _:
             return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat(("expected record or union type but found ", hydra.show.core.type(t)))))), cx))

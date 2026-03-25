@@ -30,10 +30,15 @@ mkdir -p "$OUTPUT_DIR/project"
 cp "$HYDRA_SCALA_DIR/project/build.properties" "$OUTPUT_DIR/project/" 2>/dev/null || true
 
 # Hand-written source files (primitive libraries)
+# Note: we exclude Generation.scala and Bootstrap.scala because they reference
+# hydra.ext.* coder modules which are not present in the bootstrapping target.
 echo "  Copying hand-written source files..."
 if [ -d "$HYDRA_SCALA_DIR/src/main/scala" ]; then
-    mkdir -p "$OUTPUT_DIR/src/main/scala"
-    cp -r "$HYDRA_SCALA_DIR/src/main/scala/hydra" "$OUTPUT_DIR/src/main/scala/"
+    mkdir -p "$OUTPUT_DIR/src/main/scala/hydra"
+    # Copy lib/ directory (primitive implementations)
+    if [ -d "$HYDRA_SCALA_DIR/src/main/scala/hydra/lib" ]; then
+        cp -r "$HYDRA_SCALA_DIR/src/main/scala/hydra/lib" "$OUTPUT_DIR/src/main/scala/hydra/"
+    fi
 fi
 
 # Test runner

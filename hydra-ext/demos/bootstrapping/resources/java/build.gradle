@@ -10,6 +10,12 @@ repositories {
     mavenCentral()
 }
 
+// Temporarily exclude generated files with stale visitor patterns pending full regeneration
+compileJava {
+    exclude '**/hydra/ext/lisp/Coder.java'
+    exclude '**/hydra/ext/scala/**'
+}
+
 sourceSets {
     main {
         java {

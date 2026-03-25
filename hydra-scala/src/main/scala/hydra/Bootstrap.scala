@@ -152,7 +152,47 @@ import java.io.File
   println(s"  Time: ${Generation.formatTime(stepTime)}")
   println()
 
+  // Optionally load and generate test modules
+  var testFileCount = 0
+  if includeTests then
+    val testJsonDir = jDir.replace("gen-main/json", "gen-test/json")
+    println("Loading test modules from JSON...")
+    println(s"  Source: $testJsonDir")
+    stepStart = System.currentTimeMillis()
+    val testNamespaces = Generation.readManifestField(jDir, "testModules")
+    val testMods = Generation.loadModulesFromJson(testJsonDir, schemaMap, testNamespaces)
+    stepTime = System.currentTimeMillis() - stepStart
+    val testBindings = testMods.map(_.definitions.size).sum
+    println(s"  Loaded ${testMods.size} test modules ($testBindings bindings).")
+    println(s"  Time: ${Generation.formatTime(stepTime)}")
+    println()
+
+    val allUniverse = allMainMods ++ testMods
+    val outTest = outDir + File.separator + "src/gen-test"
+
+    println(s"Mapping test modules to $targetCap...")
+    println(s"  Universe: ${allUniverse.size} modules")
+    println(s"  Generating: ${testMods.size} test modules")
+    println(s"  Output: $outTest")
+    println()
+
+    stepStart = System.currentTimeMillis()
+
+    testFileCount = tgt match
+      case "haskell" => Generation.writeHaskell(outTest + "/haskell", allUniverse, testMods)
+      case "java" => Generation.writeJava(outTest + "/java", allUniverse, testMods)
+      case "python" => Generation.writePython(outTest + "/python", allUniverse, testMods)
+      case _ => 0
+
+    stepTime = System.currentTimeMillis() - stepStart
+    println(s"  Generated $testFileCount test files.")
+    println(s"  Time: ${Generation.formatTime(stepTime)}")
+    println()
+
   val totalTime = System.currentTimeMillis() - totalStart
+  val testStr = if includeTests then s" + $testFileCount test" else ""
   println("==========================================")
-  println(s"Bootstrap complete! Total time: ${Generation.formatTime(totalTime)}")
+  println(s"Done: $fileCount main$testStr files")
+  println(s"  Output: $outDir")
+  println(s"  Total time: ${Generation.formatTime(totalTime)}")
   println("==========================================")
