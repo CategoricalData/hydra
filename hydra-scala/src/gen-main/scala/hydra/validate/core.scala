@@ -1,12 +1,12 @@
 package hydra.validate.core
 
-import hydra.accessors.*
-
 import hydra.core.*
 
 import hydra.error.core.*
 
 import hydra.graph.*
+
+import hydra.paths.*
 
 import hydra.lib.equality
 
@@ -22,7 +22,7 @@ import hydra.lib.pairs
 
 import hydra.lib.sets
 
-def checkDuplicateBindings(path: hydra.accessors.AccessorPath)(bindings: Seq[hydra.core.Binding]): Option[hydra.error.core.InvalidTermError] =
+def checkDuplicateBindings(path: hydra.paths.SubtermPath)(bindings: Seq[hydra.core.Binding]): Option[hydra.error.core.InvalidTermError] =
   {
   lazy val names: Seq[hydra.core.Name] = hydra.lib.lists.map[hydra.core.Binding, hydra.core.Name]((x: hydra.core.Binding) => (x.name))(bindings)
   lazy val dup: Option[hydra.core.Name] = hydra.validate.core.findDuplicate(names)
@@ -37,14 +37,14 @@ def checkDuplicateFieldTypes[T0](fields: Seq[hydra.core.FieldType])(mkError: (hy
   hydra.lib.maybes.cases[hydra.core.Name, Option[T0]](dup)(None)((name: hydra.core.Name) => mkError(name))
 }
 
-def checkDuplicateFields(path: hydra.accessors.AccessorPath)(names: Seq[hydra.core.Name]): Option[hydra.error.core.InvalidTermError] =
+def checkDuplicateFields(path: hydra.paths.SubtermPath)(names: Seq[hydra.core.Name]): Option[hydra.error.core.InvalidTermError] =
   {
   lazy val dup: Option[hydra.core.Name] = hydra.validate.core.findDuplicate(names)
   hydra.lib.maybes.map[hydra.core.Name, hydra.error.core.InvalidTermError]((name: hydra.core.Name) =>
     hydra.error.core.InvalidTermError.duplicateField(hydra.error.core.DuplicateFieldError(path, name)))(dup)
 }
 
-def checkShadowing(path: hydra.accessors.AccessorPath)(cx: hydra.graph.Graph)(names: Seq[hydra.core.Name]): Option[hydra.error.core.InvalidTermError] =
+def checkShadowing(path: hydra.paths.SubtermPath)(cx: hydra.graph.Graph)(names: Seq[hydra.core.Name]): Option[hydra.error.core.InvalidTermError] =
   {
   lazy val result: Option[hydra.error.core.InvalidTermError] = hydra.lib.lists.foldl[Option[hydra.error.core.InvalidTermError],
      hydra.core.Name]((acc: Option[hydra.error.core.InvalidTermError]) =>
@@ -55,7 +55,7 @@ def checkShadowing(path: hydra.accessors.AccessorPath)(cx: hydra.graph.Graph)(na
   result
 }
 
-def checkTerm(typed: Boolean)(path: hydra.accessors.AccessorPath)(cx: hydra.graph.Graph)(term: hydra.core.Term): Option[hydra.error.core.InvalidTermError] =
+def checkTerm(typed: Boolean)(path: hydra.paths.SubtermPath)(cx: hydra.graph.Graph)(term: hydra.core.Term): Option[hydra.error.core.InvalidTermError] =
   term match
   case hydra.core.Term.annotated(v_Term_annotated_ann) => {
     lazy val body: hydra.core.Term = (v_Term_annotated_ann.body)
@@ -268,7 +268,7 @@ def isValidName(name: hydra.core.Name): Boolean = hydra.lib.logic.not(hydra.lib.
 
 def term(typed: Boolean)(g: hydra.graph.Graph)(t: hydra.core.Term): Option[hydra.error.core.InvalidTermError] =
   hydra.rewriting.foldTermWithGraphAndPath((recurse: (Option[hydra.error.core.InvalidTermError] => hydra.core.Term => Option[hydra.error.core.InvalidTermError])) =>
-  (path: Seq[hydra.accessors.TermAccessor]) =>
+  (path: Seq[hydra.paths.SubtermStep]) =>
   (cx: hydra.graph.Graph) =>
   (acc: Option[hydra.error.core.InvalidTermError]) =>
   (trm: hydra.core.Term) =>

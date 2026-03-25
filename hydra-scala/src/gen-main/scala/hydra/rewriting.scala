@@ -1,12 +1,12 @@
 package hydra.rewriting
 
-import hydra.accessors.*
-
 import hydra.coders.*
 
 import hydra.core.*
 
 import hydra.graph.*
+
+import hydra.paths.*
 
 import hydra.lib.eithers
 
@@ -276,9 +276,9 @@ def foldOverType[T0](order: hydra.coders.TraversalOrder)(fld: (T0 => hydra.core.
   case hydra.coders.TraversalOrder.post => fld(hydra.lib.lists.foldl[T0, hydra.core.Type]((v1: T0) =>
     (v2: hydra.core.Type) => hydra.rewriting.foldOverType(order)(fld)(v1)(v2))(b0)(hydra.rewriting.subtypes(typ)))(typ)
 
-def foldTermWithGraphAndPath[T0](f: ((T0 => hydra.core.Term => T0) => Seq[hydra.accessors.TermAccessor] => hydra.graph.Graph => T0 => hydra.core.Term => T0))(cx0: hydra.graph.Graph)(val0: T0)(term0: hydra.core.Term): T0 =
+def foldTermWithGraphAndPath[T0](f: ((T0 => hydra.core.Term => T0) => Seq[hydra.paths.SubtermStep] => hydra.graph.Graph => T0 => hydra.core.Term => T0))(cx0: hydra.graph.Graph)(val0: T0)(term0: hydra.core.Term): T0 =
   {
-  def wrapper[T1](recurse: (T0 => hydra.core.Term => Tuple2[T0, T1]))(path: Seq[hydra.accessors.TermAccessor])(cx: hydra.graph.Graph)(`val`: T0)(term: hydra.core.Term): Tuple2[T0,
+  def wrapper[T1](recurse: (T0 => hydra.core.Term => Tuple2[T0, T1]))(path: Seq[hydra.paths.SubtermStep])(cx: hydra.graph.Graph)(`val`: T0)(term: hydra.core.Term): Tuple2[T0,
      hydra.core.Term] =
     {
     def recurseForUser(valIn: T0)(subterm: hydra.core.Term): T0 =
@@ -853,12 +853,12 @@ def rewriteAndFoldTermWithGraph[T0](f: ((T0 => hydra.core.Term => Tuple2[T0, hyd
      hydra.core.Term](result)), hydra.lib.pairs.second[Tuple2[T0, hydra.graph.Graph], hydra.core.Term](result))
 }
 
-def rewriteAndFoldTermWithGraphAndPath[T0](f: ((T0 => hydra.core.Term => Tuple2[T0, hydra.core.Term]) => Seq[hydra.accessors.TermAccessor] => hydra.graph.Graph => T0 => hydra.core.Term => Tuple2[T0,
+def rewriteAndFoldTermWithGraphAndPath[T0](f: ((T0 => hydra.core.Term => Tuple2[T0, hydra.core.Term]) => Seq[hydra.paths.SubtermStep] => hydra.graph.Graph => T0 => hydra.core.Term => Tuple2[T0,
    hydra.core.Term]))(cx0: hydra.graph.Graph)(val0: T0)(term0: hydra.core.Term): Tuple2[T0, hydra.core.Term] =
   {
-  def wrapper[T1](recurse: (Seq[hydra.accessors.TermAccessor] => Tuple2[hydra.graph.Graph, T0] => hydra.core.Term => Tuple2[Tuple2[T1,
-     T0], hydra.core.Term]))(path: Seq[hydra.accessors.TermAccessor])(cxAndVal: Tuple2[hydra.graph.Graph,
-     T0])(term: hydra.core.Term): Tuple2[Tuple2[hydra.graph.Graph, T0], hydra.core.Term] =
+  def wrapper[T1](recurse: (Seq[hydra.paths.SubtermStep] => Tuple2[hydra.graph.Graph, T0] => hydra.core.Term => Tuple2[Tuple2[T1,
+     T0], hydra.core.Term]))(path: Seq[hydra.paths.SubtermStep])(cxAndVal: Tuple2[hydra.graph.Graph, T0])(term: hydra.core.Term): Tuple2[Tuple2[hydra.graph.Graph,
+     T0], hydra.core.Term] =
     {
     lazy val cx: hydra.graph.Graph = hydra.lib.pairs.first[hydra.graph.Graph, T0](cxAndVal)
     lazy val `val`: T0 = hydra.lib.pairs.second[hydra.graph.Graph, T0](cxAndVal)
@@ -883,57 +883,56 @@ def rewriteAndFoldTermWithGraphAndPath[T0](f: ((T0 => hydra.core.Term => Tuple2[
      T0], hydra.core.Term](result)), hydra.lib.pairs.second[Tuple2[hydra.graph.Graph, T0], hydra.core.Term](result))
 }
 
-def rewriteAndFoldTermWithPath[T0](f: ((Seq[hydra.accessors.TermAccessor] => T0 => hydra.core.Term => Tuple2[T0,
-   hydra.core.Term]) => Seq[hydra.accessors.TermAccessor] => T0 => hydra.core.Term => Tuple2[T0, hydra.core.Term]))(term0: T0)(v1: hydra.core.Term): Tuple2[T0,
+def rewriteAndFoldTermWithPath[T0](f: ((Seq[hydra.paths.SubtermStep] => T0 => hydra.core.Term => Tuple2[T0,
+   hydra.core.Term]) => Seq[hydra.paths.SubtermStep] => T0 => hydra.core.Term => Tuple2[T0, hydra.core.Term]))(term0: T0)(v1: hydra.core.Term): Tuple2[T0,
    hydra.core.Term] =
   {
-  def fsub[T1](recurse: (Seq[hydra.accessors.TermAccessor] => T1 => hydra.core.Term => Tuple2[T1, hydra.core.Term]))(path: Seq[hydra.accessors.TermAccessor])(val0: T1)(term02: hydra.core.Term): Tuple2[T1,
+  def fsub[T1](recurse: (Seq[hydra.paths.SubtermStep] => T1 => hydra.core.Term => Tuple2[T1, hydra.core.Term]))(path: Seq[hydra.paths.SubtermStep])(val0: T1)(term02: hydra.core.Term): Tuple2[T1,
      hydra.core.Term] =
     {
-    def forSingleWithAccessor[T2, T3, T4, T5, T6](rec: (Seq[hydra.accessors.TermAccessor] => T2 => T3 => Tuple2[T4,
-       T5]))(cons: (T5 => T6))(accessor: hydra.accessors.TermAccessor)(`val`: T2)(term: T3): Tuple2[T4,
-       T6] =
+    def forSingleWithAccessor[T2, T3, T4, T5, T6](rec: (Seq[hydra.paths.SubtermStep] => T2 => T3 => Tuple2[T4,
+       T5]))(cons: (T5 => T6))(accessor: hydra.paths.SubtermStep)(`val`: T2)(term: T3): Tuple2[T4, T6] =
       {
-      lazy val r: Tuple2[T4, T5] = rec(hydra.lib.lists.concat2[hydra.accessors.TermAccessor](path)(Seq(accessor)))(`val`)(term)
+      lazy val r: Tuple2[T4, T5] = rec(hydra.lib.lists.concat2[hydra.paths.SubtermStep](path)(Seq(accessor)))(`val`)(term)
       Tuple2(hydra.lib.pairs.first[T4, T5](r), cons(hydra.lib.pairs.second[T4, T5](r)))
     }
-    def forManyWithAccessors[T2, T3, T4, T5](rec: (Seq[hydra.accessors.TermAccessor] => T2 => T3 => Tuple2[T2,
-       T4]))(cons: (Seq[T4] => T5))(`val`: T2)(accessorTermPairs: Seq[Tuple2[hydra.accessors.TermAccessor,
+    def forManyWithAccessors[T2, T3, T4, T5](rec: (Seq[hydra.paths.SubtermStep] => T2 => T3 => Tuple2[T2,
+       T4]))(cons: (Seq[T4] => T5))(`val`: T2)(accessorTermPairs: Seq[Tuple2[hydra.paths.SubtermStep,
        T3]]): Tuple2[T2, T5] =
       {
-      lazy val rr: Tuple2[T2, Seq[T4]] = hydra.lib.lists.foldl[Tuple2[T2, Seq[T4]], Tuple2[hydra.accessors.TermAccessor, T3]]((r: Tuple2[T2, Seq[T4]]) =>
-        (atp: Tuple2[hydra.accessors.TermAccessor, T3]) =>
+      lazy val rr: Tuple2[T2, Seq[T4]] = hydra.lib.lists.foldl[Tuple2[T2, Seq[T4]], Tuple2[hydra.paths.SubtermStep, T3]]((r: Tuple2[T2, Seq[T4]]) =>
+        (atp: Tuple2[hydra.paths.SubtermStep, T3]) =>
         {
-        lazy val r2: Tuple2[T2, T4] = rec(hydra.lib.lists.concat2[hydra.accessors.TermAccessor](path)(Seq(hydra.lib.pairs.first[hydra.accessors.TermAccessor,
-           T3](atp))))(hydra.lib.pairs.first[T2, Seq[T4]](r))(hydra.lib.pairs.second[hydra.accessors.TermAccessor,
+        lazy val r2: Tuple2[T2, T4] = rec(hydra.lib.lists.concat2[hydra.paths.SubtermStep](path)(Seq(hydra.lib.pairs.first[hydra.paths.SubtermStep,
+           T3](atp))))(hydra.lib.pairs.first[T2, Seq[T4]](r))(hydra.lib.pairs.second[hydra.paths.SubtermStep,
            T3](atp))
         Tuple2(hydra.lib.pairs.first[T2, T4](r2), hydra.lib.lists.cons[T4](hydra.lib.pairs.second[T2, T4](r2))(hydra.lib.pairs.second[T2, Seq[T4]](r)))
       })(Tuple2(`val`, Seq()))(accessorTermPairs)
       Tuple2(hydra.lib.pairs.first[T2, Seq[T4]](rr), cons(hydra.lib.lists.reverse[T4](hydra.lib.pairs.second[T2, Seq[T4]](rr))))
     }
-    def forFieldWithAccessor(mkAccessor: (hydra.core.Name => hydra.accessors.TermAccessor))(`val`: T1)(field: hydra.core.Field): Tuple2[T1, hydra.core.Field] =
+    def forFieldWithAccessor(mkAccessor: (hydra.core.Name => hydra.paths.SubtermStep))(`val`: T1)(field: hydra.core.Field): Tuple2[T1, hydra.core.Field] =
       {
-      lazy val r: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.accessors.TermAccessor](path)(Seq(mkAccessor(field.name))))(`val`)(field.term)
+      lazy val r: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.paths.SubtermStep](path)(Seq(mkAccessor(field.name))))(`val`)(field.term)
       Tuple2(hydra.lib.pairs.first[T1, hydra.core.Term](r), hydra.core.Field(field.name, hydra.lib.pairs.second[T1, hydra.core.Term](r)))
     }
-    def forFieldsWithAccessor(mkAccessor: (hydra.core.Name => hydra.accessors.TermAccessor))(v1: T1)(v2: Seq[Tuple2[hydra.accessors.TermAccessor,
+    def forFieldsWithAccessor(mkAccessor: (hydra.core.Name => hydra.paths.SubtermStep))(v1: T1)(v2: Seq[Tuple2[hydra.paths.SubtermStep,
        hydra.core.Field]]): Tuple2[T1, Seq[hydra.core.Field]] =
-      forManyWithAccessors((path1: Seq[hydra.accessors.TermAccessor]) =>
+      forManyWithAccessors((path1: Seq[hydra.paths.SubtermStep]) =>
       (val1: T1) =>
       (field1: hydra.core.Field) => forFieldWithAccessor(mkAccessor)(val1)(field1))((x: Seq[hydra.core.Field]) => x)(v1)(v2)
-    def forPairWithAccessors(keyAccessor: hydra.accessors.TermAccessor)(valAccessor: hydra.accessors.TermAccessor)(`val`: T1)(kv: Tuple2[hydra.core.Term,
+    def forPairWithAccessors(keyAccessor: hydra.paths.SubtermStep)(valAccessor: hydra.paths.SubtermStep)(`val`: T1)(kv: Tuple2[hydra.core.Term,
        hydra.core.Term]): Tuple2[T1, Tuple2[hydra.core.Term, hydra.core.Term]] =
       {
-      lazy val rk: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.accessors.TermAccessor](path)(Seq(keyAccessor)))(`val`)(hydra.lib.pairs.first[hydra.core.Term,
+      lazy val rk: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.paths.SubtermStep](path)(Seq(keyAccessor)))(`val`)(hydra.lib.pairs.first[hydra.core.Term,
          hydra.core.Term](kv))
-      lazy val rv: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.accessors.TermAccessor](path)(Seq(valAccessor)))(hydra.lib.pairs.first[T1,
+      lazy val rv: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.paths.SubtermStep](path)(Seq(valAccessor)))(hydra.lib.pairs.first[T1,
          hydra.core.Term](rk))(hydra.lib.pairs.second[hydra.core.Term, hydra.core.Term](kv))
       Tuple2(hydra.lib.pairs.first[T1, hydra.core.Term](rv), Tuple2(hydra.lib.pairs.second[T1, hydra.core.Term](rk),
          hydra.lib.pairs.second[T1, hydra.core.Term](rv)))
     }
     def forBindingWithAccessor(`val`: T1)(binding: hydra.core.Binding): Tuple2[T1, hydra.core.Binding] =
       {
-      lazy val r: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.accessors.TermAccessor](path)(Seq(hydra.accessors.TermAccessor.letBinding(binding.name))))(`val`)(binding.term)
+      lazy val r: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.paths.SubtermStep](path)(Seq(hydra.paths.SubtermStep.letBinding(binding.name))))(`val`)(binding.term)
       Tuple2(hydra.lib.pairs.first[T1, hydra.core.Term](r), hydra.core.Binding(binding.name, hydra.lib.pairs.second[T1, hydra.core.Term](r), (binding.`type`)))
     }
     def forElimination(`val`: T1)(elm: hydra.core.Elimination): Tuple2[T1, hydra.core.Elimination] =
@@ -941,13 +940,13 @@ def rewriteAndFoldTermWithPath[T0](f: ((Seq[hydra.accessors.TermAccessor] => T0 
       lazy val r: Tuple2[T1, hydra.core.Elimination] = elm match
         case hydra.core.Elimination.union(v_Elimination_union_cs) => {
           lazy val rmd: Option[Tuple2[T1, hydra.core.Term]] = hydra.lib.maybes.map[hydra.core.Term, Tuple2[T1, hydra.core.Term]]((`def`: hydra.core.Term) =>
-            recurse(hydra.lib.lists.concat2[hydra.accessors.TermAccessor](path)(Seq(hydra.accessors.TermAccessor.unionCasesDefault)))(`val`)(`def`))(v_Elimination_union_cs.default)
+            recurse(hydra.lib.lists.concat2[hydra.paths.SubtermStep](path)(Seq(hydra.paths.SubtermStep.unionCasesDefault)))(`val`)(`def`))(v_Elimination_union_cs.default)
           {
             lazy val val1: T1 = hydra.lib.maybes.maybe[T1, Tuple2[T1, hydra.core.Term]](`val`)(hydra.lib.pairs.first[T1, hydra.core.Term])(rmd)
             {
               lazy val rcases: Tuple2[T1, Seq[hydra.core.Term]] = forManyWithAccessors(recurse)((x: Seq[hydra.core.Term]) => x)(val1)(hydra.lib.lists.map[hydra.core.Field,
-                 Tuple2[hydra.accessors.TermAccessor, hydra.core.Term]]((f2: hydra.core.Field) =>
-                Tuple2(hydra.accessors.TermAccessor.unionCasesBranch(f2.name), (f2.term)))(v_Elimination_union_cs.cases))
+                 Tuple2[hydra.paths.SubtermStep, hydra.core.Term]]((f2: hydra.core.Field) =>
+                Tuple2(hydra.paths.SubtermStep.unionCasesBranch(f2.name), (f2.term)))(v_Elimination_union_cs.cases))
               Tuple2(hydra.lib.pairs.first[T1, Seq[hydra.core.Term]](rcases), hydra.core.Elimination.union(hydra.core.CaseStatement(v_Elimination_union_cs.typeName,
                  hydra.lib.maybes.map[Tuple2[T1, hydra.core.Term], hydra.core.Term](hydra.lib.pairs.second[T1,
                  hydra.core.Term])(rmd), hydra.lib.lists.map[Tuple2[hydra.core.Name, hydra.core.Term],
@@ -969,7 +968,7 @@ def rewriteAndFoldTermWithPath[T0](f: ((Seq[hydra.accessors.TermAccessor] => T0 
         Tuple2(hydra.lib.pairs.first[T1, hydra.core.Elimination](re), hydra.core.Function.elimination(hydra.lib.pairs.second[T1, hydra.core.Elimination](re)))
       }
       case hydra.core.Function.lambda(v_Function_lambda_l) => {
-        lazy val rl: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.accessors.TermAccessor](path)(Seq(hydra.accessors.TermAccessor.lambdaBody)))(`val`)(v_Function_lambda_l.body)
+        lazy val rl: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.paths.SubtermStep](path)(Seq(hydra.paths.SubtermStep.lambdaBody)))(`val`)(v_Function_lambda_l.body)
         Tuple2(hydra.lib.pairs.first[T1, hydra.core.Term](rl), hydra.core.Function.lambda(hydra.core.Lambda(v_Function_lambda_l.parameter,
            (v_Function_lambda_l.domain), hydra.lib.pairs.second[T1, hydra.core.Term](rl))))
       }
@@ -977,11 +976,11 @@ def rewriteAndFoldTermWithPath[T0](f: ((Seq[hydra.accessors.TermAccessor] => T0 
     lazy val dflt: Tuple2[T1, hydra.core.Term] = Tuple2(val0, term02)
     term02 match
       case hydra.core.Term.annotated(v_Term_annotated_at) => forSingleWithAccessor(recurse)((t: hydra.core.Term) =>
-        hydra.core.Term.annotated(hydra.core.AnnotatedTerm(t, (v_Term_annotated_at.annotation))))(hydra.accessors.TermAccessor.annotatedBody)(val0)(v_Term_annotated_at.body)
+        hydra.core.Term.annotated(hydra.core.AnnotatedTerm(t, (v_Term_annotated_at.annotation))))(hydra.paths.SubtermStep.annotatedBody)(val0)(v_Term_annotated_at.body)
       case hydra.core.Term.application(v_Term_application_a) => {
-        lazy val rlhs: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.accessors.TermAccessor](path)(Seq(hydra.accessors.TermAccessor.applicationFunction)))(val0)(v_Term_application_a.function)
+        lazy val rlhs: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.paths.SubtermStep](path)(Seq(hydra.paths.SubtermStep.applicationFunction)))(val0)(v_Term_application_a.function)
         {
-          lazy val rrhs: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.accessors.TermAccessor](path)(Seq(hydra.accessors.TermAccessor.applicationArgument)))(hydra.lib.pairs.first[T1,
+          lazy val rrhs: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.paths.SubtermStep](path)(Seq(hydra.paths.SubtermStep.applicationArgument)))(hydra.lib.pairs.first[T1,
              hydra.core.Term](rlhs))(v_Term_application_a.argument)
           Tuple2(hydra.lib.pairs.first[T1, hydra.core.Term](rrhs), hydra.core.Term.application(hydra.core.Application(hydra.lib.pairs.second[T1,
              hydra.core.Term](rlhs), hydra.lib.pairs.second[T1, hydra.core.Term](rrhs))))
@@ -990,11 +989,11 @@ def rewriteAndFoldTermWithPath[T0](f: ((Seq[hydra.accessors.TermAccessor] => T0 
       case hydra.core.Term.either(v_Term_either_e) => hydra.lib.eithers.either[hydra.core.Term, hydra.core.Term,
          Tuple2[T1, hydra.core.Term]]((l: hydra.core.Term) =>
         {
-        lazy val rl: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.accessors.TermAccessor](path)(Seq(hydra.accessors.TermAccessor.sumTerm)))(val0)(l)
+        lazy val rl: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.paths.SubtermStep](path)(Seq(hydra.paths.SubtermStep.sumTerm)))(val0)(l)
         Tuple2(hydra.lib.pairs.first[T1, hydra.core.Term](rl), hydra.core.Term.either(Left(hydra.lib.pairs.second[T1, hydra.core.Term](rl))))
       })((r: hydra.core.Term) =>
         {
-        lazy val rr: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.accessors.TermAccessor](path)(Seq(hydra.accessors.TermAccessor.sumTerm)))(val0)(r)
+        lazy val rr: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.paths.SubtermStep](path)(Seq(hydra.paths.SubtermStep.sumTerm)))(val0)(r)
         Tuple2(hydra.lib.pairs.first[T1, hydra.core.Term](rr), hydra.core.Term.either(Right(hydra.lib.pairs.second[T1, hydra.core.Term](rr))))
       })(v_Term_either_e)
       case hydra.core.Term.function(v_Term_function_f2) => {
@@ -1002,7 +1001,7 @@ def rewriteAndFoldTermWithPath[T0](f: ((Seq[hydra.accessors.TermAccessor] => T0 
         Tuple2(hydra.lib.pairs.first[T1, hydra.core.Function](rf), hydra.core.Term.function(hydra.lib.pairs.second[T1, hydra.core.Function](rf)))
       }
       case hydra.core.Term.let(v_Term_let_l) => {
-        lazy val renv: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.accessors.TermAccessor](path)(Seq(hydra.accessors.TermAccessor.letBody)))(val0)(v_Term_let_l.body)
+        lazy val renv: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.paths.SubtermStep](path)(Seq(hydra.paths.SubtermStep.letBody)))(val0)(v_Term_let_l.body)
         {
           lazy val rbindings: Tuple2[T1, Seq[hydra.core.Binding]] = hydra.lib.lists.foldl[Tuple2[T1, Seq[hydra.core.Binding]],
              hydra.core.Binding]((r: Tuple2[T1, Seq[hydra.core.Binding]]) =>
@@ -1023,7 +1022,7 @@ def rewriteAndFoldTermWithPath[T0](f: ((Seq[hydra.accessors.TermAccessor] => T0 
              Tuple2[T1, Seq[hydra.core.Term]]], hydra.core.Term]((r: Tuple2[Int, Tuple2[T1, Seq[hydra.core.Term]]]) =>
             (el: hydra.core.Term) =>
             {
-            lazy val r2: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.accessors.TermAccessor](path)(Seq(hydra.accessors.TermAccessor.listElement(hydra.lib.pairs.first[Int,
+            lazy val r2: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.paths.SubtermStep](path)(Seq(hydra.paths.SubtermStep.listElement(hydra.lib.pairs.first[Int,
                Tuple2[T1, Seq[hydra.core.Term]]](r)))))(hydra.lib.pairs.first[T1, Seq[hydra.core.Term]](hydra.lib.pairs.second[Int,
                Tuple2[T1, Seq[hydra.core.Term]]](r)))(el)
             Tuple2(hydra.lib.math.add(hydra.lib.pairs.first[Int, Tuple2[T1, Seq[hydra.core.Term]]](r))(1),
@@ -1044,12 +1043,12 @@ def rewriteAndFoldTermWithPath[T0](f: ((Seq[hydra.accessors.TermAccessor] => T0 
              Tuple2[T1, Seq[Tuple2[hydra.core.Term, hydra.core.Term]]]]) =>
             (kv: Tuple2[hydra.core.Term, hydra.core.Term]) =>
             {
-            lazy val rk: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.accessors.TermAccessor](path)(Seq(hydra.accessors.TermAccessor.mapKey(hydra.lib.pairs.first[Int,
+            lazy val rk: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.paths.SubtermStep](path)(Seq(hydra.paths.SubtermStep.mapKey(hydra.lib.pairs.first[Int,
                Tuple2[T1, Seq[Tuple2[hydra.core.Term, hydra.core.Term]]]](r)))))(hydra.lib.pairs.first[T1,
                Seq[Tuple2[hydra.core.Term, hydra.core.Term]]](hydra.lib.pairs.second[Int, Tuple2[T1, Seq[Tuple2[hydra.core.Term,
                hydra.core.Term]]]](r)))(hydra.lib.pairs.first[hydra.core.Term, hydra.core.Term](kv))
             {
-              lazy val rv: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.accessors.TermAccessor](path)(Seq(hydra.accessors.TermAccessor.mapValue(hydra.lib.pairs.first[Int,
+              lazy val rv: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.paths.SubtermStep](path)(Seq(hydra.paths.SubtermStep.mapValue(hydra.lib.pairs.first[Int,
                  Tuple2[T1, Seq[Tuple2[hydra.core.Term, hydra.core.Term]]]](r)))))(hydra.lib.pairs.first[T1,
                  hydra.core.Term](rk))(hydra.lib.pairs.second[hydra.core.Term, hydra.core.Term](kv))
               Tuple2(hydra.lib.math.add(hydra.lib.pairs.first[Int, Tuple2[T1, Seq[Tuple2[hydra.core.Term,
@@ -1067,12 +1066,12 @@ def rewriteAndFoldTermWithPath[T0](f: ((Seq[hydra.accessors.TermAccessor] => T0 
         }
       }
       case hydra.core.Term.maybe(v_Term_maybe_mt) => hydra.lib.maybes.maybe[Tuple2[T1, hydra.core.Term], hydra.core.Term](dflt)((t: hydra.core.Term) =>
-        forSingleWithAccessor(recurse)((t1: hydra.core.Term) => hydra.core.Term.maybe(Some(t1)))(hydra.accessors.TermAccessor.maybeTerm)(val0)(t))(v_Term_maybe_mt)
+        forSingleWithAccessor(recurse)((t1: hydra.core.Term) => hydra.core.Term.maybe(Some(t1)))(hydra.paths.SubtermStep.maybeTerm)(val0)(t))(v_Term_maybe_mt)
       case hydra.core.Term.pair(v_Term_pair_p) => {
-        lazy val rf: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.accessors.TermAccessor](path)(Seq(hydra.accessors.TermAccessor.productTerm(0))))(val0)(hydra.lib.pairs.first[hydra.core.Term,
+        lazy val rf: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.paths.SubtermStep](path)(Seq(hydra.paths.SubtermStep.productTerm(0))))(val0)(hydra.lib.pairs.first[hydra.core.Term,
            hydra.core.Term](v_Term_pair_p))
         {
-          lazy val rs: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.accessors.TermAccessor](path)(Seq(hydra.accessors.TermAccessor.productTerm(1))))(hydra.lib.pairs.first[T1,
+          lazy val rs: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.paths.SubtermStep](path)(Seq(hydra.paths.SubtermStep.productTerm(1))))(hydra.lib.pairs.first[T1,
              hydra.core.Term](rf))(hydra.lib.pairs.second[hydra.core.Term, hydra.core.Term](v_Term_pair_p))
           Tuple2(hydra.lib.pairs.first[T1, hydra.core.Term](rs), hydra.core.Term.pair(Tuple2(hydra.lib.pairs.second[T1,
              hydra.core.Term](rf), hydra.lib.pairs.second[T1, hydra.core.Term](rs))))
@@ -1080,8 +1079,8 @@ def rewriteAndFoldTermWithPath[T0](f: ((Seq[hydra.accessors.TermAccessor] => T0 
       }
       case hydra.core.Term.record(v_Term_record_r) => {
         lazy val rfields: Tuple2[T1, Seq[hydra.core.Term]] = forManyWithAccessors(recurse)((x: Seq[hydra.core.Term]) => x)(val0)(hydra.lib.lists.map[hydra.core.Field,
-           Tuple2[hydra.accessors.TermAccessor, hydra.core.Term]]((f2: hydra.core.Field) =>
-          Tuple2(hydra.accessors.TermAccessor.recordField(f2.name), (f2.term)))(v_Term_record_r.fields))
+           Tuple2[hydra.paths.SubtermStep, hydra.core.Term]]((f2: hydra.core.Field) =>
+          Tuple2(hydra.paths.SubtermStep.recordField(f2.name), (f2.term)))(v_Term_record_r.fields))
         Tuple2(hydra.lib.pairs.first[T1, Seq[hydra.core.Term]](rfields), hydra.core.Term.record(hydra.core.Record(v_Term_record_r.typeName,
            hydra.lib.lists.map[Tuple2[hydra.core.Name, hydra.core.Term], hydra.core.Field]((ft: Tuple2[hydra.core.Name,
            hydra.core.Term]) =>
@@ -1097,7 +1096,7 @@ def rewriteAndFoldTermWithPath[T0](f: ((Seq[hydra.accessors.TermAccessor] => T0 
              Tuple2[T1, Seq[hydra.core.Term]]], hydra.core.Term]((r: Tuple2[Int, Tuple2[T1, Seq[hydra.core.Term]]]) =>
             (el: hydra.core.Term) =>
             {
-            lazy val r2: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.accessors.TermAccessor](path)(Seq(hydra.accessors.TermAccessor.setElement(hydra.lib.pairs.first[Int,
+            lazy val r2: Tuple2[T1, hydra.core.Term] = recurse(hydra.lib.lists.concat2[hydra.paths.SubtermStep](path)(Seq(hydra.paths.SubtermStep.setElement(hydra.lib.pairs.first[Int,
                Tuple2[T1, Seq[hydra.core.Term]]](r)))))(hydra.lib.pairs.first[T1, Seq[hydra.core.Term]](hydra.lib.pairs.second[Int,
                Tuple2[T1, Seq[hydra.core.Term]]](r)))(el)
             Tuple2(hydra.lib.math.add(hydra.lib.pairs.first[Int, Tuple2[T1, Seq[hydra.core.Term]]](r))(1),
@@ -1111,18 +1110,18 @@ def rewriteAndFoldTermWithPath[T0](f: ((Seq[hydra.accessors.TermAccessor] => T0 
         }
       }
       case hydra.core.Term.typeApplication(v_Term_typeApplication_ta) => forSingleWithAccessor(recurse)((t: hydra.core.Term) =>
-        hydra.core.Term.typeApplication(hydra.core.TypeApplicationTerm(t, (v_Term_typeApplication_ta.`type`))))(hydra.accessors.TermAccessor.typeApplicationTerm)(val0)(v_Term_typeApplication_ta.body)
+        hydra.core.Term.typeApplication(hydra.core.TypeApplicationTerm(t, (v_Term_typeApplication_ta.`type`))))(hydra.paths.SubtermStep.typeApplicationTerm)(val0)(v_Term_typeApplication_ta.body)
       case hydra.core.Term.typeLambda(v_Term_typeLambda_tl) => forSingleWithAccessor(recurse)((t: hydra.core.Term) =>
-        hydra.core.Term.typeLambda(hydra.core.TypeLambda(v_Term_typeLambda_tl.parameter, t)))(hydra.accessors.TermAccessor.typeLambdaBody)(val0)(v_Term_typeLambda_tl.body)
+        hydra.core.Term.typeLambda(hydra.core.TypeLambda(v_Term_typeLambda_tl.parameter, t)))(hydra.paths.SubtermStep.typeLambdaBody)(val0)(v_Term_typeLambda_tl.body)
       case hydra.core.Term.union(v_Term_union_inj) => forSingleWithAccessor(recurse)((t: hydra.core.Term) =>
         hydra.core.Term.union(hydra.core.Injection(v_Term_union_inj.typeName, hydra.core.Field(v_Term_union_inj.field.name,
-           t))))(hydra.accessors.TermAccessor.injectionTerm)(val0)(v_Term_union_inj.field.term)
+           t))))(hydra.paths.SubtermStep.injectionTerm)(val0)(v_Term_union_inj.field.term)
       case hydra.core.Term.wrap(v_Term_wrap_wt) => forSingleWithAccessor(recurse)((t: hydra.core.Term) =>
-        hydra.core.Term.wrap(hydra.core.WrappedTerm(v_Term_wrap_wt.typeName, t)))(hydra.accessors.TermAccessor.wrappedTerm)(val0)(v_Term_wrap_wt.body)
+        hydra.core.Term.wrap(hydra.core.WrappedTerm(v_Term_wrap_wt.typeName, t)))(hydra.paths.SubtermStep.wrappedTerm)(val0)(v_Term_wrap_wt.body)
       case _ => dflt
   }
-  def recurse(v1: Seq[hydra.accessors.TermAccessor])(v2: T0)(v3: hydra.core.Term): Tuple2[T0, hydra.core.Term] =
-    f((v12: Seq[hydra.accessors.TermAccessor]) =>
+  def recurse(v1: Seq[hydra.paths.SubtermStep])(v2: T0)(v3: hydra.core.Term): Tuple2[T0, hydra.core.Term] =
+    f((v12: Seq[hydra.paths.SubtermStep]) =>
     (v22: T0) => (v32: hydra.core.Term) => fsub(recurse)(v12)(v22)(v32))(v1)(v2)(v3)
   recurse(Seq())(term0)(v1)
 }
@@ -1796,52 +1795,49 @@ def subterms(v1: hydra.core.Term): Seq[hydra.core.Term] =
   case hydra.core.Term.variable(v_Term_variable__) => Seq()
   case hydra.core.Term.wrap(v_Term_wrap_n) => Seq(v_Term_wrap_n.body)
 
-def subtermsWithAccessors(v1: hydra.core.Term): Seq[Tuple2[hydra.accessors.TermAccessor, hydra.core.Term]] =
+def subtermsWithSteps(v1: hydra.core.Term): Seq[Tuple2[hydra.paths.SubtermStep, hydra.core.Term]] =
   v1 match
-  case hydra.core.Term.annotated(v_Term_annotated_at) => Seq(Tuple2(hydra.accessors.TermAccessor.annotatedBody, (v_Term_annotated_at.body)))
-  case hydra.core.Term.application(v_Term_application_p) => Seq(Tuple2(hydra.accessors.TermAccessor.applicationFunction,
-     (v_Term_application_p.function)), Tuple2(hydra.accessors.TermAccessor.applicationArgument, (v_Term_application_p.argument)))
+  case hydra.core.Term.annotated(v_Term_annotated_at) => Seq(Tuple2(hydra.paths.SubtermStep.annotatedBody, (v_Term_annotated_at.body)))
+  case hydra.core.Term.application(v_Term_application_p) => Seq(Tuple2(hydra.paths.SubtermStep.applicationFunction,
+     (v_Term_application_p.function)), Tuple2(hydra.paths.SubtermStep.applicationArgument, (v_Term_application_p.argument)))
   case hydra.core.Term.either(v_Term_either_e) => Seq()
   case hydra.core.Term.function(v_Term_function_v12) => v_Term_function_v12 match
     case hydra.core.Function.elimination(v_Function_elimination_v13) => v_Function_elimination_v13 match
-      case hydra.core.Elimination.union(v_Elimination_union_cs) => hydra.lib.lists.concat2[Tuple2[hydra.accessors.TermAccessor,
-         hydra.core.Term]](hydra.lib.maybes.maybe[Seq[Tuple2[hydra.accessors.TermAccessor, hydra.core.Term]],
-         hydra.core.Term](Seq())((t: hydra.core.Term) =>
-        Seq(Tuple2(hydra.accessors.TermAccessor.unionCasesDefault, t)))(v_Elimination_union_cs.default))(hydra.lib.lists.map[hydra.core.Field,
-           Tuple2[hydra.accessors.TermAccessor, hydra.core.Term]]((f: hydra.core.Field) =>
-        Tuple2(hydra.accessors.TermAccessor.unionCasesBranch(f.name), (f.term)))(v_Elimination_union_cs.cases))
+      case hydra.core.Elimination.union(v_Elimination_union_cs) => hydra.lib.lists.concat2[Tuple2[hydra.paths.SubtermStep,
+         hydra.core.Term]](hydra.lib.maybes.maybe[Seq[Tuple2[hydra.paths.SubtermStep, hydra.core.Term]],
+         hydra.core.Term](Seq())((t: hydra.core.Term) => Seq(Tuple2(hydra.paths.SubtermStep.unionCasesDefault,
+         t)))(v_Elimination_union_cs.default))(hydra.lib.lists.map[hydra.core.Field, Tuple2[hydra.paths.SubtermStep,
+         hydra.core.Term]]((f: hydra.core.Field) =>
+        Tuple2(hydra.paths.SubtermStep.unionCasesBranch(f.name), (f.term)))(v_Elimination_union_cs.cases))
       case _ => Seq()
-    case hydra.core.Function.lambda(v_Function_lambda_l) => Seq(Tuple2(hydra.accessors.TermAccessor.lambdaBody, (v_Function_lambda_l.body)))
+    case hydra.core.Function.lambda(v_Function_lambda_l) => Seq(Tuple2(hydra.paths.SubtermStep.lambdaBody, (v_Function_lambda_l.body)))
     case _ => Seq()
-  case hydra.core.Term.let(v_Term_let_lt) => hydra.lib.lists.cons[Tuple2[hydra.accessors.TermAccessor,
-     hydra.core.Term]](Tuple2(hydra.accessors.TermAccessor.letBody, (v_Term_let_lt.body)))(hydra.lib.lists.map[hydra.core.Binding,
-     Tuple2[hydra.accessors.TermAccessor, hydra.core.Term]]((b: hydra.core.Binding) =>
-    Tuple2(hydra.accessors.TermAccessor.letBinding(b.name), (b.term)))(v_Term_let_lt.bindings))
-  case hydra.core.Term.list(v_Term_list_l) => hydra.lib.lists.map[hydra.core.Term, Tuple2[hydra.accessors.TermAccessor,
-     hydra.core.Term]]((e: hydra.core.Term) => Tuple2(hydra.accessors.TermAccessor.listElement(0), e))(v_Term_list_l)
+  case hydra.core.Term.let(v_Term_let_lt) => hydra.lib.lists.cons[Tuple2[hydra.paths.SubtermStep, hydra.core.Term]](Tuple2(hydra.paths.SubtermStep.letBody,
+     (v_Term_let_lt.body)))(hydra.lib.lists.map[hydra.core.Binding, Tuple2[hydra.paths.SubtermStep, hydra.core.Term]]((b: hydra.core.Binding) => Tuple2(hydra.paths.SubtermStep.letBinding(b.name),
+     (b.term)))(v_Term_let_lt.bindings))
+  case hydra.core.Term.list(v_Term_list_l) => hydra.lib.lists.map[hydra.core.Term, Tuple2[hydra.paths.SubtermStep,
+     hydra.core.Term]]((e: hydra.core.Term) => Tuple2(hydra.paths.SubtermStep.listElement(0), e))(v_Term_list_l)
   case hydra.core.Term.literal(v_Term_literal__) => Seq()
-  case hydra.core.Term.map(v_Term_map_m) => hydra.lib.lists.concat[Tuple2[hydra.accessors.TermAccessor,
-     hydra.core.Term]](hydra.lib.lists.map[Tuple2[hydra.core.Term, hydra.core.Term], Seq[Tuple2[hydra.accessors.TermAccessor,
-     hydra.core.Term]]]((p: Tuple2[hydra.core.Term, hydra.core.Term]) =>
-    Seq(Tuple2(hydra.accessors.TermAccessor.mapKey(0), hydra.lib.pairs.first[hydra.core.Term, hydra.core.Term](p)),
-       Tuple2(hydra.accessors.TermAccessor.mapValue(0), hydra.lib.pairs.second[hydra.core.Term, hydra.core.Term](p))))(hydra.lib.maps.toList[hydra.core.Term,
+  case hydra.core.Term.map(v_Term_map_m) => hydra.lib.lists.concat[Tuple2[hydra.paths.SubtermStep, hydra.core.Term]](hydra.lib.lists.map[Tuple2[hydra.core.Term,
+     hydra.core.Term], Seq[Tuple2[hydra.paths.SubtermStep, hydra.core.Term]]]((p: Tuple2[hydra.core.Term,
+     hydra.core.Term]) =>
+    Seq(Tuple2(hydra.paths.SubtermStep.mapKey(0), hydra.lib.pairs.first[hydra.core.Term, hydra.core.Term](p)),
+       Tuple2(hydra.paths.SubtermStep.mapValue(0), hydra.lib.pairs.second[hydra.core.Term, hydra.core.Term](p))))(hydra.lib.maps.toList[hydra.core.Term,
        hydra.core.Term](v_Term_map_m)))
-  case hydra.core.Term.maybe(v_Term_maybe_m) => hydra.lib.maybes.maybe[Seq[Tuple2[hydra.accessors.TermAccessor,
-     hydra.core.Term]], hydra.core.Term](Seq())((t: hydra.core.Term) => Seq(Tuple2(hydra.accessors.TermAccessor.maybeTerm,
+  case hydra.core.Term.maybe(v_Term_maybe_m) => hydra.lib.maybes.maybe[Seq[Tuple2[hydra.paths.SubtermStep,
+     hydra.core.Term]], hydra.core.Term](Seq())((t: hydra.core.Term) => Seq(Tuple2(hydra.paths.SubtermStep.maybeTerm,
      t)))(v_Term_maybe_m)
   case hydra.core.Term.pair(v_Term_pair_p) => Seq()
-  case hydra.core.Term.record(v_Term_record_rt) => hydra.lib.lists.map[hydra.core.Field, Tuple2[hydra.accessors.TermAccessor,
-     hydra.core.Term]]((f: hydra.core.Field) =>
-    Tuple2(hydra.accessors.TermAccessor.recordField(f.name), (f.term)))(v_Term_record_rt.fields)
-  case hydra.core.Term.set(v_Term_set_s) => hydra.lib.lists.map[hydra.core.Term, Tuple2[hydra.accessors.TermAccessor,
-     hydra.core.Term]]((e: hydra.core.Term) => Tuple2(hydra.accessors.TermAccessor.listElement(0), e))(hydra.lib.sets.toList[hydra.core.Term](v_Term_set_s))
-  case hydra.core.Term.typeApplication(v_Term_typeApplication_ta) => Seq(Tuple2(hydra.accessors.TermAccessor.typeApplicationTerm,
-     (v_Term_typeApplication_ta.body)))
-  case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => Seq(Tuple2(hydra.accessors.TermAccessor.typeLambdaBody, (v_Term_typeLambda_ta.body)))
-  case hydra.core.Term.union(v_Term_union_ut) => Seq(Tuple2(hydra.accessors.TermAccessor.injectionTerm, (v_Term_union_ut.field.term)))
+  case hydra.core.Term.record(v_Term_record_rt) => hydra.lib.lists.map[hydra.core.Field, Tuple2[hydra.paths.SubtermStep,
+     hydra.core.Term]]((f: hydra.core.Field) => Tuple2(hydra.paths.SubtermStep.recordField(f.name), (f.term)))(v_Term_record_rt.fields)
+  case hydra.core.Term.set(v_Term_set_s) => hydra.lib.lists.map[hydra.core.Term, Tuple2[hydra.paths.SubtermStep,
+     hydra.core.Term]]((e: hydra.core.Term) => Tuple2(hydra.paths.SubtermStep.listElement(0), e))(hydra.lib.sets.toList[hydra.core.Term](v_Term_set_s))
+  case hydra.core.Term.typeApplication(v_Term_typeApplication_ta) => Seq(Tuple2(hydra.paths.SubtermStep.typeApplicationTerm, (v_Term_typeApplication_ta.body)))
+  case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => Seq(Tuple2(hydra.paths.SubtermStep.typeLambdaBody, (v_Term_typeLambda_ta.body)))
+  case hydra.core.Term.union(v_Term_union_ut) => Seq(Tuple2(hydra.paths.SubtermStep.injectionTerm, (v_Term_union_ut.field.term)))
   case hydra.core.Term.unit => Seq()
   case hydra.core.Term.variable(v_Term_variable__) => Seq()
-  case hydra.core.Term.wrap(v_Term_wrap_n) => Seq(Tuple2(hydra.accessors.TermAccessor.wrappedTerm, (v_Term_wrap_n.body)))
+  case hydra.core.Term.wrap(v_Term_wrap_n) => Seq(Tuple2(hydra.paths.SubtermStep.wrappedTerm, (v_Term_wrap_n.body)))
 
 def subtypes(v1: hydra.core.Type): Seq[hydra.core.Type] =
   v1 match

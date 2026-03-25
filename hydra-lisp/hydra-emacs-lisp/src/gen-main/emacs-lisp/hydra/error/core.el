@@ -1,8 +1,8 @@
 (require 'cl-lib)
 
-(require 'hydra.accessors)
-
 (require 'hydra.core)
+
+(require 'hydra.paths)
 
 (require 'hydra.variants)
 

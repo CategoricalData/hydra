@@ -6,94 +6,94 @@ from __future__ import annotations
 from functools import lru_cache
 from typing import cast
 import hydra.core
-import hydra.encode.accessors
 import hydra.encode.core
+import hydra.encode.paths
 import hydra.encode.variants
 import hydra.error.core
 
 def constant_condition_error(x: hydra.error.core.ConstantConditionError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.ConstantConditionError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)), hydra.core.Field(hydra.core.Name("value"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(x.value)))))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.ConstantConditionError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)), hydra.core.Field(hydra.core.Name("value"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(x.value)))))))))
 
 def duplicate_binding_error(x: hydra.error.core.DuplicateBindingError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.DuplicateBindingError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.DuplicateBindingError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
 
 def duplicate_field_error(x: hydra.error.core.DuplicateFieldError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.DuplicateFieldError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.DuplicateFieldError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
 
 def duplicate_record_type_field_names_error(x: hydra.error.core.DuplicateRecordTypeFieldNamesError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.DuplicateRecordTypeFieldNamesError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.DuplicateRecordTypeFieldNamesError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
 
 def duplicate_union_type_field_names_error(x: hydra.error.core.DuplicateUnionTypeFieldNamesError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.DuplicateUnionTypeFieldNamesError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.DuplicateUnionTypeFieldNamesError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
 
 def empty_case_statement_error(x: hydra.error.core.EmptyCaseStatementError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.EmptyCaseStatementError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)), hydra.core.Field(hydra.core.Name("typeName"), hydra.encode.core.name(x.type_name))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.EmptyCaseStatementError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)), hydra.core.Field(hydra.core.Name("typeName"), hydra.encode.core.name(x.type_name))))))
 
 def empty_let_bindings_error(x: hydra.error.core.EmptyLetBindingsError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.EmptyLetBindingsError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)),))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.EmptyLetBindingsError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)),))))
 
 def empty_record_type_error(x: hydra.error.core.EmptyRecordTypeError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.EmptyRecordTypeError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)),))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.EmptyRecordTypeError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)),))))
 
 def empty_term_annotation_error(x: hydra.error.core.EmptyTermAnnotationError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.EmptyTermAnnotationError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)),))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.EmptyTermAnnotationError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)),))))
 
 def empty_type_annotation_error(x: hydra.error.core.EmptyTypeAnnotationError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.EmptyTypeAnnotationError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)),))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.EmptyTypeAnnotationError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)),))))
 
 def empty_type_name_in_term_error(x: hydra.error.core.EmptyTypeNameInTermError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.EmptyTypeNameInTermError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)),))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.EmptyTypeNameInTermError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)),))))
 
 def empty_union_type_error(x: hydra.error.core.EmptyUnionTypeError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.EmptyUnionTypeError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)),))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.EmptyUnionTypeError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)),))))
 
 def invalid_forall_parameter_name_error(x: hydra.error.core.InvalidForallParameterNameError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.InvalidForallParameterNameError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.InvalidForallParameterNameError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
 
 def invalid_lambda_parameter_name_error(x: hydra.error.core.InvalidLambdaParameterNameError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.InvalidLambdaParameterNameError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.InvalidLambdaParameterNameError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
 
 def invalid_let_binding_name_error(x: hydra.error.core.InvalidLetBindingNameError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.InvalidLetBindingNameError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.InvalidLetBindingNameError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
 
 def invalid_type_lambda_parameter_name_error(x: hydra.error.core.InvalidTypeLambdaParameterNameError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.InvalidTypeLambdaParameterNameError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.InvalidTypeLambdaParameterNameError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
 
 def nested_term_annotation_error(x: hydra.error.core.NestedTermAnnotationError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.NestedTermAnnotationError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)),))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.NestedTermAnnotationError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)),))))
 
 def redundant_wrap_unwrap_error(x: hydra.error.core.RedundantWrapUnwrapError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.RedundantWrapUnwrapError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)), hydra.core.Field(hydra.core.Name("typeName"), hydra.encode.core.name(x.type_name))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.RedundantWrapUnwrapError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)), hydra.core.Field(hydra.core.Name("typeName"), hydra.encode.core.name(x.type_name))))))
 
 def self_application_error(x: hydra.error.core.SelfApplicationError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.SelfApplicationError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.SelfApplicationError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
 
 def term_variable_shadowing_error(x: hydra.error.core.TermVariableShadowingError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.TermVariableShadowingError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.TermVariableShadowingError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
 
 def type_variable_shadowing_in_type_lambda_error(x: hydra.error.core.TypeVariableShadowingInTypeLambdaError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.TypeVariableShadowingInTypeLambdaError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.TypeVariableShadowingInTypeLambdaError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
 
 def undefined_term_variable_error(x: hydra.error.core.UndefinedTermVariableError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.UndefinedTermVariableError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.UndefinedTermVariableError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
 
 def undefined_type_variable_in_binding_type_error(x: hydra.error.core.UndefinedTypeVariableInBindingTypeError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.UndefinedTypeVariableInBindingTypeError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.UndefinedTypeVariableInBindingTypeError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
 
 def undefined_type_variable_in_lambda_domain_error(x: hydra.error.core.UndefinedTypeVariableInLambdaDomainError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.UndefinedTypeVariableInLambdaDomainError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.UndefinedTypeVariableInLambdaDomainError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
 
 def undefined_type_variable_in_type_application_error(x: hydra.error.core.UndefinedTypeVariableInTypeApplicationError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.UndefinedTypeVariableInTypeApplicationError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.UndefinedTypeVariableInTypeApplicationError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
 
 def unknown_primitive_name_error(x: hydra.error.core.UnknownPrimitiveNameError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.UnknownPrimitiveNameError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.UnknownPrimitiveNameError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
 
 def unnecessary_identity_application_error(x: hydra.error.core.UnnecessaryIdentityApplicationError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.UnnecessaryIdentityApplicationError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)),))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.UnnecessaryIdentityApplicationError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)),))))
 
 def untyped_term_variable_error(x: hydra.error.core.UntypedTermVariableError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.UntypedTermVariableError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.UntypedTermVariableError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
 
 def invalid_term_error(v1: hydra.error.core.InvalidTermError) -> hydra.core.Term:
     match v1:
@@ -167,28 +167,28 @@ def invalid_term_error(v1: hydra.error.core.InvalidTermError) -> hydra.core.Term
             raise AssertionError("Unreachable: all variants handled")
 
 def invalid_type_scheme_variable_name_error(x: hydra.error.core.InvalidTypeSchemeVariableNameError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.InvalidTypeSchemeVariableNameError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.InvalidTypeSchemeVariableNameError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
 
 def nested_type_annotation_error(x: hydra.error.core.NestedTypeAnnotationError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.NestedTypeAnnotationError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)),))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.NestedTypeAnnotationError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)),))))
 
 def non_comparable_map_key_type_error(x: hydra.error.core.NonComparableMapKeyTypeError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.NonComparableMapKeyTypeError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)), hydra.core.Field(hydra.core.Name("keyType"), hydra.encode.core.type(x.key_type))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.NonComparableMapKeyTypeError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)), hydra.core.Field(hydra.core.Name("keyType"), hydra.encode.core.type(x.key_type))))))
 
 def non_comparable_set_element_type_error(x: hydra.error.core.NonComparableSetElementTypeError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.NonComparableSetElementTypeError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)), hydra.core.Field(hydra.core.Name("elementType"), hydra.encode.core.type(x.element_type))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.NonComparableSetElementTypeError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)), hydra.core.Field(hydra.core.Name("elementType"), hydra.encode.core.type(x.element_type))))))
 
 def single_variant_union_error(x: hydra.error.core.SingleVariantUnionError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.SingleVariantUnionError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)), hydra.core.Field(hydra.core.Name("fieldName"), hydra.encode.core.name(x.field_name))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.SingleVariantUnionError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)), hydra.core.Field(hydra.core.Name("fieldName"), hydra.encode.core.name(x.field_name))))))
 
 def type_variable_shadowing_in_forall_error(x: hydra.error.core.TypeVariableShadowingInForallError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.TypeVariableShadowingInForallError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.TypeVariableShadowingInForallError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
 
 def undefined_type_variable_error(x: hydra.error.core.UndefinedTypeVariableError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.UndefinedTypeVariableError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.UndefinedTypeVariableError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)), hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name))))))
 
 def void_in_non_bottom_position_error(x: hydra.error.core.VoidInNonBottomPositionError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.VoidInNonBottomPositionError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.accessors.accessor_path(x.location)),))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.core.VoidInNonBottomPositionError"), (hydra.core.Field(hydra.core.Name("location"), hydra.encode.paths.subterm_path(x.location)),))))
 
 def invalid_type_error(v1: hydra.error.core.InvalidTypeError) -> hydra.core.Term:
     match v1:

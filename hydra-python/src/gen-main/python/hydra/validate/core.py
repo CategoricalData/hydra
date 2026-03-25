@@ -7,7 +7,6 @@ from collections.abc import Callable
 from functools import lru_cache
 from hydra.dsl.python import Just, Maybe, Nothing, frozenlist
 from typing import TypeVar, cast
-import hydra.accessors
 import hydra.core
 import hydra.error.core
 import hydra.graph
@@ -18,6 +17,7 @@ import hydra.lib.maps
 import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.sets
+import hydra.paths
 import hydra.rewriting
 
 T0 = TypeVar("T0")
@@ -31,7 +31,7 @@ def find_duplicate(names: frozenlist[T0]) -> Maybe[T0]:
         return hydra.lib.lists.foldl((lambda acc, name: (seen := hydra.lib.pairs.first(acc), dup := hydra.lib.pairs.second(acc), hydra.lib.maybes.cases(dup, (lambda : hydra.lib.logic.if_else(hydra.lib.sets.member(name, seen), (lambda : (seen, Just(name))), (lambda : (hydra.lib.sets.insert(name, seen), Nothing())))), (lambda _: acc)))[2]), (hydra.lib.sets.empty(), Nothing()), names)
     return hydra.lib.pairs.second(result())
 
-def check_duplicate_bindings(path: hydra.accessors.AccessorPath, bindings: frozenlist[hydra.core.Binding]) -> Maybe[hydra.error.core.InvalidTermError]:
+def check_duplicate_bindings(path: hydra.paths.SubtermPath, bindings: frozenlist[hydra.core.Binding]) -> Maybe[hydra.error.core.InvalidTermError]:
     r"""Check for duplicate binding names in a list of bindings."""
 
     @lru_cache(1)
@@ -61,7 +61,7 @@ def check_duplicate_field_types(fields: frozenlist[hydra.core.FieldType], mk_err
         return find_duplicate_field_type(names())
     return hydra.lib.maybes.cases(dup(), (lambda : Nothing()), (lambda name: mk_error(name)))
 
-def check_duplicate_fields(path: hydra.accessors.AccessorPath, names: frozenlist[hydra.core.Name]) -> Maybe[hydra.error.core.InvalidTermError]:
+def check_duplicate_fields(path: hydra.paths.SubtermPath, names: frozenlist[hydra.core.Name]) -> Maybe[hydra.error.core.InvalidTermError]:
     r"""Check for duplicate field names in a list of fields."""
 
     @lru_cache(1)
@@ -69,7 +69,7 @@ def check_duplicate_fields(path: hydra.accessors.AccessorPath, names: frozenlist
         return find_duplicate(names)
     return hydra.lib.maybes.map((lambda name: cast(hydra.error.core.InvalidTermError, hydra.error.core.InvalidTermErrorDuplicateField(hydra.error.core.DuplicateFieldError(path, name)))), dup())
 
-def check_shadowing(path: hydra.accessors.AccessorPath, cx: hydra.graph.Graph, names: frozenlist[hydra.core.Name]) -> Maybe[hydra.error.core.InvalidTermError]:
+def check_shadowing(path: hydra.paths.SubtermPath, cx: hydra.graph.Graph, names: frozenlist[hydra.core.Name]) -> Maybe[hydra.error.core.InvalidTermError]:
     r"""Check if any name in a list shadows a variable already in scope."""
 
     @lru_cache(1)
@@ -109,7 +109,7 @@ def is_valid_name(name: hydra.core.Name) -> bool:
 
     return hydra.lib.logic.not_(hydra.lib.equality.equal(name.value, ""))
 
-def check_term(typed: bool, path: hydra.accessors.AccessorPath, cx: hydra.graph.Graph, term: hydra.core.Term):
+def check_term(typed: bool, path: hydra.paths.SubtermPath, cx: hydra.graph.Graph, term: hydra.core.Term):
     def _hoist_hydra_validate_core_check_term_1(path, v1):
         match v1:
             case hydra.core.EliminationRecord(value=proj):
@@ -291,7 +291,7 @@ def check_void(typ: hydra.core.Type) -> Maybe[hydra.error.core.InvalidTypeError]
 
     match typ:
         case hydra.core.TypeVoid():
-            return Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorVoidInNonBottomPosition(hydra.error.core.VoidInNonBottomPositionError(hydra.accessors.AccessorPath(())))))
+            return Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorVoidInNonBottomPosition(hydra.error.core.VoidInNonBottomPositionError(hydra.paths.SubtermPath(())))))
 
         case _:
             return Nothing()
@@ -304,13 +304,13 @@ def first_type_error(checks: frozenlist[Maybe[T0]]) -> Maybe[T0]:
 def term(typed: bool, g: hydra.graph.Graph, t: hydra.core.Term) -> Maybe[hydra.error.core.InvalidTermError]:
     r"""Validate a term, returning the first error found or nothing if valid. The 'typed' parameter indicates whether to expect System F (typed) terms; when true, type variable binding checks and UntypedTermVariableError are active."""
 
-    return hydra.rewriting.fold_term_with_graph_and_path((lambda recurse, path, cx, acc, trm: hydra.lib.maybes.cases(acc, (lambda : (check_result := check_term(typed, hydra.accessors.AccessorPath(path), cx, trm), hydra.lib.maybes.cases(check_result, (lambda : recurse(Nothing(), trm)), (lambda err: Just(err))))[1]), (lambda _: acc))), g, Nothing(), t)
+    return hydra.rewriting.fold_term_with_graph_and_path((lambda recurse, path, cx, acc, trm: hydra.lib.maybes.cases(acc, (lambda : (check_result := check_term(typed, hydra.paths.SubtermPath(path), cx, trm), hydra.lib.maybes.cases(check_result, (lambda : recurse(Nothing(), trm)), (lambda err: Just(err))))[1]), (lambda _: acc))), g, Nothing(), t)
 
 def validate_type_node(bound_vars: frozenset[hydra.core.Name], typ: hydra.core.Type):
     def _hoist_hydra_validate_core_validate_type_node_1(elem_type, v1):
         match v1:
             case hydra.core.TypeFunction():
-                return Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorNonComparableSetElementType(hydra.error.core.NonComparableSetElementTypeError(hydra.accessors.AccessorPath(()), elem_type))))
+                return Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorNonComparableSetElementType(hydra.error.core.NonComparableSetElementTypeError(hydra.paths.SubtermPath(()), elem_type))))
 
             case _:
                 return Nothing()
@@ -321,18 +321,18 @@ def validate_type_node(bound_vars: frozenset[hydra.core.Name], typ: hydra.core.T
             def _hoist_ann_map_body_1(v1):
                 match v1:
                     case hydra.core.TypeAnnotated():
-                        return Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorNestedTypeAnnotation(hydra.error.core.NestedTypeAnnotationError(hydra.accessors.AccessorPath(())))))
+                        return Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorNestedTypeAnnotation(hydra.error.core.NestedTypeAnnotationError(hydra.paths.SubtermPath(())))))
 
                     case _:
                         return Nothing()
-            return first_type_error((hydra.lib.logic.if_else(hydra.lib.maps.null(ann_map), (lambda : Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorEmptyTypeAnnotation(hydra.error.core.EmptyTypeAnnotationError(hydra.accessors.AccessorPath(())))))), (lambda : Nothing())), _hoist_ann_map_body_1(body)))
+            return first_type_error((hydra.lib.logic.if_else(hydra.lib.maps.null(ann_map), (lambda : Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorEmptyTypeAnnotation(hydra.error.core.EmptyTypeAnnotationError(hydra.paths.SubtermPath(())))))), (lambda : Nothing())), _hoist_ann_map_body_1(body)))
 
         case hydra.core.TypeEither(value=et):
             return first_type_error((check_void(et.left), check_void(et.right)))
 
         case hydra.core.TypeForall(value=ft):
             param_name = ft.parameter
-            return first_type_error((hydra.lib.logic.if_else(hydra.lib.sets.member(param_name, bound_vars), (lambda : Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorTypeVariableShadowingInForall(hydra.error.core.TypeVariableShadowingInForallError(hydra.accessors.AccessorPath(()), param_name))))), (lambda : Nothing())), hydra.lib.logic.if_else(is_valid_name(param_name), (lambda : Nothing()), (lambda : Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorInvalidForallParameterName(hydra.error.core.InvalidForallParameterNameError(hydra.accessors.AccessorPath(()), param_name))))))))
+            return first_type_error((hydra.lib.logic.if_else(hydra.lib.sets.member(param_name, bound_vars), (lambda : Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorTypeVariableShadowingInForall(hydra.error.core.TypeVariableShadowingInForallError(hydra.paths.SubtermPath(()), param_name))))), (lambda : Nothing())), hydra.lib.logic.if_else(is_valid_name(param_name), (lambda : Nothing()), (lambda : Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorInvalidForallParameterName(hydra.error.core.InvalidForallParameterNameError(hydra.paths.SubtermPath(()), param_name))))))))
 
         case hydra.core.TypeFunction(value=ft2):
             return check_void(ft2.codomain)
@@ -345,7 +345,7 @@ def validate_type_node(bound_vars: frozenset[hydra.core.Name], typ: hydra.core.T
             def _hoist_key_type_body_1(v1):
                 match v1:
                     case hydra.core.TypeFunction():
-                        return Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorNonComparableMapKeyType(hydra.error.core.NonComparableMapKeyTypeError(hydra.accessors.AccessorPath(()), key_type))))
+                        return Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorNonComparableMapKeyType(hydra.error.core.NonComparableMapKeyTypeError(hydra.paths.SubtermPath(()), key_type))))
 
                     case _:
                         return Nothing()
@@ -355,16 +355,16 @@ def validate_type_node(bound_vars: frozenset[hydra.core.Name], typ: hydra.core.T
             return first_type_error((check_void(pt.first), check_void(pt.second)))
 
         case hydra.core.TypeRecord(value=fields):
-            return first_type_error((hydra.lib.logic.if_else(hydra.lib.lists.null(fields), (lambda : Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorEmptyRecordType(hydra.error.core.EmptyRecordTypeError(hydra.accessors.AccessorPath(())))))), (lambda : Nothing())), check_duplicate_field_types(fields, (lambda dup_name: Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorDuplicateRecordTypeFieldNames(hydra.error.core.DuplicateRecordTypeFieldNamesError(hydra.accessors.AccessorPath(()), dup_name)))))), first_type_error(hydra.lib.lists.map((lambda f: check_void(f.type)), fields))))
+            return first_type_error((hydra.lib.logic.if_else(hydra.lib.lists.null(fields), (lambda : Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorEmptyRecordType(hydra.error.core.EmptyRecordTypeError(hydra.paths.SubtermPath(())))))), (lambda : Nothing())), check_duplicate_field_types(fields, (lambda dup_name: Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorDuplicateRecordTypeFieldNames(hydra.error.core.DuplicateRecordTypeFieldNamesError(hydra.paths.SubtermPath(()), dup_name)))))), first_type_error(hydra.lib.lists.map((lambda f: check_void(f.type)), fields))))
 
         case hydra.core.TypeSet(value=elem_type):
             return first_type_error((_hoist_hydra_validate_core_validate_type_node_1(elem_type, elem_type), check_void(elem_type)))
 
         case hydra.core.TypeUnion(value=fields2):
-            return first_type_error((hydra.lib.logic.if_else(hydra.lib.lists.null(fields2), (lambda : Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorEmptyUnionType(hydra.error.core.EmptyUnionTypeError(hydra.accessors.AccessorPath(())))))), (lambda : Nothing())), hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(fields2), 1), (lambda : (single_field := hydra.lib.lists.head(fields2), Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorSingleVariantUnion(hydra.error.core.SingleVariantUnionError(hydra.accessors.AccessorPath(()), single_field.name)))))[1]), (lambda : Nothing())), check_duplicate_field_types(fields2, (lambda dup_name: Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorDuplicateUnionTypeFieldNames(hydra.error.core.DuplicateUnionTypeFieldNamesError(hydra.accessors.AccessorPath(()), dup_name)))))), first_type_error(hydra.lib.lists.map((lambda f: check_void(f.type)), fields2))))
+            return first_type_error((hydra.lib.logic.if_else(hydra.lib.lists.null(fields2), (lambda : Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorEmptyUnionType(hydra.error.core.EmptyUnionTypeError(hydra.paths.SubtermPath(())))))), (lambda : Nothing())), hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(fields2), 1), (lambda : (single_field := hydra.lib.lists.head(fields2), Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorSingleVariantUnion(hydra.error.core.SingleVariantUnionError(hydra.paths.SubtermPath(()), single_field.name)))))[1]), (lambda : Nothing())), check_duplicate_field_types(fields2, (lambda dup_name: Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorDuplicateUnionTypeFieldNames(hydra.error.core.DuplicateUnionTypeFieldNamesError(hydra.paths.SubtermPath(()), dup_name)))))), first_type_error(hydra.lib.lists.map((lambda f: check_void(f.type)), fields2))))
 
         case hydra.core.TypeVariable(value=var_name):
-            return hydra.lib.logic.if_else(hydra.lib.sets.member(var_name, bound_vars), (lambda : Nothing()), (lambda : Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorUndefinedTypeVariable(hydra.error.core.UndefinedTypeVariableError(hydra.accessors.AccessorPath(()), var_name))))))
+            return hydra.lib.logic.if_else(hydra.lib.sets.member(var_name, bound_vars), (lambda : Nothing()), (lambda : Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorUndefinedTypeVariable(hydra.error.core.UndefinedTypeVariableError(hydra.paths.SubtermPath(()), var_name))))))
 
         case _:
             return Nothing()

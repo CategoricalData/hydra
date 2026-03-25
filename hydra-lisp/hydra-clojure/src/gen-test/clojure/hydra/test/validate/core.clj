@@ -1,5 +1,5 @@
 (ns hydra.test.validate.core
-  (:require [hydra.accessors :refer :all] [hydra.core :refer :all] [hydra.error.core :refer :all] [hydra.testing :refer :all]
+  (:require [hydra.core :refer :all] [hydra.error.core :refer :all] [hydra.paths :refer :all] [hydra.testing :refer :all]
 ))
 
 (declare hydra_test_validate_core_duplicate_bindings_tests hydra_test_validate_core_duplicate_fields_tests hydra_test_validate_core_empty_let_bindings_tests hydra_test_validate_core_identity_application_tests hydra_test_validate_core_variable_shadowing_tests hydra_test_validate_core_all_tests)

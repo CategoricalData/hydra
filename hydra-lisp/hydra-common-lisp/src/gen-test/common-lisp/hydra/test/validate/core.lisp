@@ -1,5 +1,5 @@
 (defpackage :hydra.test.validate.core
-(:use :cl :hydra.accessors :hydra.core :hydra.error.core :hydra.testing)
+(:use :cl :hydra.core :hydra.error.core :hydra.paths :hydra.testing)
 (:export :hydra_test_validate_core_duplicate_bindings_tests :hydra_test_validate_core_duplicate_fields_tests :hydra_test_validate_core_empty_let_bindings_tests :hydra_test_validate_core_identity_application_tests :hydra_test_validate_core_variable_shadowing_tests :hydra_test_validate_core_all_tests))
 
 (in-package :hydra.test.validate.core)

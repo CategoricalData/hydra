@@ -1,20 +1,20 @@
 package hydra.error.core
 
-import hydra.accessors.*
-
 import hydra.core.*
+
+import hydra.paths.*
 
 import hydra.variants.*
 
-import hydra.accessors
-
 import hydra.core
+
+import hydra.paths
 
 import hydra.variants
 
-case class DuplicateBindingError(location: hydra.accessors.AccessorPath, name: hydra.core.Name)
+case class DuplicateBindingError(location: hydra.paths.SubtermPath, name: hydra.core.Name)
 
-case class DuplicateFieldError(location: hydra.accessors.AccessorPath, name: hydra.core.Name)
+case class DuplicateFieldError(location: hydra.paths.SubtermPath, name: hydra.core.Name)
 
 case class UndefinedFieldError(fieldName: hydra.core.Name, typeName: hydra.core.Name)
 
@@ -22,45 +22,45 @@ case class UnexpectedTermVariantError(expectedVariant: hydra.variants.TermVarian
 
 case class UnexpectedTypeVariantError(expectedVariant: hydra.variants.TypeVariant, actualType: hydra.core.Type)
 
-case class ConstantConditionError(location: hydra.accessors.AccessorPath, value: Boolean)
+case class ConstantConditionError(location: hydra.paths.SubtermPath, value: Boolean)
 
-case class EmptyCaseStatementError(location: hydra.accessors.AccessorPath, typeName: hydra.core.Name)
+case class EmptyCaseStatementError(location: hydra.paths.SubtermPath, typeName: hydra.core.Name)
 
-case class EmptyLetBindingsError(location: hydra.accessors.AccessorPath)
+case class EmptyLetBindingsError(location: hydra.paths.SubtermPath)
 
-case class EmptyTermAnnotationError(location: hydra.accessors.AccessorPath)
+case class EmptyTermAnnotationError(location: hydra.paths.SubtermPath)
 
-case class EmptyTypeNameInTermError(location: hydra.accessors.AccessorPath)
+case class EmptyTypeNameInTermError(location: hydra.paths.SubtermPath)
 
-case class InvalidLambdaParameterNameError(location: hydra.accessors.AccessorPath, name: hydra.core.Name)
+case class InvalidLambdaParameterNameError(location: hydra.paths.SubtermPath, name: hydra.core.Name)
 
-case class InvalidLetBindingNameError(location: hydra.accessors.AccessorPath, name: hydra.core.Name)
+case class InvalidLetBindingNameError(location: hydra.paths.SubtermPath, name: hydra.core.Name)
 
-case class InvalidTypeLambdaParameterNameError(location: hydra.accessors.AccessorPath, name: hydra.core.Name)
+case class InvalidTypeLambdaParameterNameError(location: hydra.paths.SubtermPath, name: hydra.core.Name)
 
-case class NestedTermAnnotationError(location: hydra.accessors.AccessorPath)
+case class NestedTermAnnotationError(location: hydra.paths.SubtermPath)
 
-case class RedundantWrapUnwrapError(location: hydra.accessors.AccessorPath, typeName: hydra.core.Name)
+case class RedundantWrapUnwrapError(location: hydra.paths.SubtermPath, typeName: hydra.core.Name)
 
-case class SelfApplicationError(location: hydra.accessors.AccessorPath, name: hydra.core.Name)
+case class SelfApplicationError(location: hydra.paths.SubtermPath, name: hydra.core.Name)
 
-case class TermVariableShadowingError(location: hydra.accessors.AccessorPath, name: hydra.core.Name)
+case class TermVariableShadowingError(location: hydra.paths.SubtermPath, name: hydra.core.Name)
 
-case class TypeVariableShadowingInTypeLambdaError(location: hydra.accessors.AccessorPath, name: hydra.core.Name)
+case class TypeVariableShadowingInTypeLambdaError(location: hydra.paths.SubtermPath, name: hydra.core.Name)
 
-case class UndefinedTermVariableError(location: hydra.accessors.AccessorPath, name: hydra.core.Name)
+case class UndefinedTermVariableError(location: hydra.paths.SubtermPath, name: hydra.core.Name)
 
-case class UndefinedTypeVariableInBindingTypeError(location: hydra.accessors.AccessorPath, name: hydra.core.Name)
+case class UndefinedTypeVariableInBindingTypeError(location: hydra.paths.SubtermPath, name: hydra.core.Name)
 
-case class UndefinedTypeVariableInLambdaDomainError(location: hydra.accessors.AccessorPath, name: hydra.core.Name)
+case class UndefinedTypeVariableInLambdaDomainError(location: hydra.paths.SubtermPath, name: hydra.core.Name)
 
-case class UndefinedTypeVariableInTypeApplicationError(location: hydra.accessors.AccessorPath, name: hydra.core.Name)
+case class UndefinedTypeVariableInTypeApplicationError(location: hydra.paths.SubtermPath, name: hydra.core.Name)
 
-case class UnknownPrimitiveNameError(location: hydra.accessors.AccessorPath, name: hydra.core.Name)
+case class UnknownPrimitiveNameError(location: hydra.paths.SubtermPath, name: hydra.core.Name)
 
-case class UnnecessaryIdentityApplicationError(location: hydra.accessors.AccessorPath)
+case class UnnecessaryIdentityApplicationError(location: hydra.paths.SubtermPath)
 
-case class UntypedTermVariableError(location: hydra.accessors.AccessorPath, name: hydra.core.Name)
+case class UntypedTermVariableError(location: hydra.paths.SubtermPath, name: hydra.core.Name)
 
 enum InvalidTermError :
    case constantCondition(value: hydra.error.core.ConstantConditionError) extends InvalidTermError
@@ -86,33 +86,33 @@ enum InvalidTermError :
    case unnecessaryIdentityApplication(value: hydra.error.core.UnnecessaryIdentityApplicationError) extends InvalidTermError
    case untypedTermVariable(value: hydra.error.core.UntypedTermVariableError) extends InvalidTermError
 
-case class DuplicateRecordTypeFieldNamesError(location: hydra.accessors.AccessorPath, name: hydra.core.Name)
+case class DuplicateRecordTypeFieldNamesError(location: hydra.paths.SubtermPath, name: hydra.core.Name)
 
-case class DuplicateUnionTypeFieldNamesError(location: hydra.accessors.AccessorPath, name: hydra.core.Name)
+case class DuplicateUnionTypeFieldNamesError(location: hydra.paths.SubtermPath, name: hydra.core.Name)
 
-case class EmptyRecordTypeError(location: hydra.accessors.AccessorPath)
+case class EmptyRecordTypeError(location: hydra.paths.SubtermPath)
 
-case class EmptyTypeAnnotationError(location: hydra.accessors.AccessorPath)
+case class EmptyTypeAnnotationError(location: hydra.paths.SubtermPath)
 
-case class EmptyUnionTypeError(location: hydra.accessors.AccessorPath)
+case class EmptyUnionTypeError(location: hydra.paths.SubtermPath)
 
-case class InvalidForallParameterNameError(location: hydra.accessors.AccessorPath, name: hydra.core.Name)
+case class InvalidForallParameterNameError(location: hydra.paths.SubtermPath, name: hydra.core.Name)
 
-case class InvalidTypeSchemeVariableNameError(location: hydra.accessors.AccessorPath, name: hydra.core.Name)
+case class InvalidTypeSchemeVariableNameError(location: hydra.paths.SubtermPath, name: hydra.core.Name)
 
-case class NestedTypeAnnotationError(location: hydra.accessors.AccessorPath)
+case class NestedTypeAnnotationError(location: hydra.paths.SubtermPath)
 
-case class NonComparableMapKeyTypeError(location: hydra.accessors.AccessorPath, keyType: hydra.core.Type)
+case class NonComparableMapKeyTypeError(location: hydra.paths.SubtermPath, keyType: hydra.core.Type)
 
-case class NonComparableSetElementTypeError(location: hydra.accessors.AccessorPath, elementType: hydra.core.Type)
+case class NonComparableSetElementTypeError(location: hydra.paths.SubtermPath, elementType: hydra.core.Type)
 
-case class SingleVariantUnionError(location: hydra.accessors.AccessorPath, fieldName: hydra.core.Name)
+case class SingleVariantUnionError(location: hydra.paths.SubtermPath, fieldName: hydra.core.Name)
 
-case class TypeVariableShadowingInForallError(location: hydra.accessors.AccessorPath, name: hydra.core.Name)
+case class TypeVariableShadowingInForallError(location: hydra.paths.SubtermPath, name: hydra.core.Name)
 
-case class UndefinedTypeVariableError(location: hydra.accessors.AccessorPath, name: hydra.core.Name)
+case class UndefinedTypeVariableError(location: hydra.paths.SubtermPath, name: hydra.core.Name)
 
-case class VoidInNonBottomPositionError(location: hydra.accessors.AccessorPath)
+case class VoidInNonBottomPositionError(location: hydra.paths.SubtermPath)
 
 enum InvalidTypeError :
    case duplicateRecordTypeFieldNames(value: hydra.error.core.DuplicateRecordTypeFieldNamesError) extends InvalidTypeError

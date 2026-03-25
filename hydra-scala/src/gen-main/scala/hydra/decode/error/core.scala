@@ -19,7 +19,7 @@ def constantConditionError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.ConstantConditionError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.ConstantConditionError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, Boolean, hydra.error.core.ConstantConditionError](hydra.extract.helpers.requireField("value")((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
       hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
@@ -38,7 +38,7 @@ def duplicateBindingError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[h
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.DuplicateBindingError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.DuplicateBindingError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.error.core.DuplicateBindingError](hydra.extract.helpers.requireField("name")(hydra.decode.core.name)(fieldMap)(cx))((field_name: hydra.core.Name) =>
       Right(hydra.error.core.DuplicateBindingError(field_location, field_name))))
   }
@@ -49,7 +49,7 @@ def duplicateFieldError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hyd
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.DuplicateFieldError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.DuplicateFieldError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.error.core.DuplicateFieldError](hydra.extract.helpers.requireField("name")(hydra.decode.core.name)(fieldMap)(cx))((field_name: hydra.core.Name) =>
       Right(hydra.error.core.DuplicateFieldError(field_location, field_name))))
   }
@@ -61,7 +61,7 @@ def duplicateRecordTypeFieldNamesError(cx: hydra.graph.Graph)(raw: hydra.core.Te
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.DuplicateRecordTypeFieldNamesError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.DuplicateRecordTypeFieldNamesError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.error.core.DuplicateRecordTypeFieldNamesError](hydra.extract.helpers.requireField("name")(hydra.decode.core.name)(fieldMap)(cx))((field_name: hydra.core.Name) =>
       Right(hydra.error.core.DuplicateRecordTypeFieldNamesError(field_location, field_name))))
   }
@@ -73,7 +73,7 @@ def duplicateUnionTypeFieldNamesError(cx: hydra.graph.Graph)(raw: hydra.core.Ter
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.DuplicateUnionTypeFieldNamesError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.DuplicateUnionTypeFieldNamesError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.error.core.DuplicateUnionTypeFieldNamesError](hydra.extract.helpers.requireField("name")(hydra.decode.core.name)(fieldMap)(cx))((field_name: hydra.core.Name) =>
       Right(hydra.error.core.DuplicateUnionTypeFieldNamesError(field_location, field_name))))
   }
@@ -84,7 +84,7 @@ def emptyCaseStatementError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.EmptyCaseStatementError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.EmptyCaseStatementError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.error.core.EmptyCaseStatementError](hydra.extract.helpers.requireField("typeName")(hydra.decode.core.name)(fieldMap)(cx))((field_typeName: hydra.core.Name) =>
       Right(hydra.error.core.EmptyCaseStatementError(field_location, field_typeName))))
   }
@@ -95,7 +95,7 @@ def emptyLetBindingsError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[h
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.EmptyLetBindingsError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.EmptyLetBindingsError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       Right(hydra.error.core.EmptyLetBindingsError(field_location)))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
@@ -105,7 +105,7 @@ def emptyRecordTypeError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hy
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.EmptyRecordTypeError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) => Right(hydra.error.core.EmptyRecordTypeError(field_location)))
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.EmptyRecordTypeError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) => Right(hydra.error.core.EmptyRecordTypeError(field_location)))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
 
@@ -114,7 +114,7 @@ def emptyTermAnnotationError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Eithe
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.EmptyTermAnnotationError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.EmptyTermAnnotationError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       Right(hydra.error.core.EmptyTermAnnotationError(field_location)))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
@@ -124,7 +124,7 @@ def emptyTypeAnnotationError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Eithe
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.EmptyTypeAnnotationError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.EmptyTypeAnnotationError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       Right(hydra.error.core.EmptyTypeAnnotationError(field_location)))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
@@ -134,7 +134,7 @@ def emptyTypeNameInTermError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Eithe
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.EmptyTypeNameInTermError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.EmptyTypeNameInTermError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       Right(hydra.error.core.EmptyTypeNameInTermError(field_location)))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
@@ -144,7 +144,7 @@ def emptyUnionTypeError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hyd
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.EmptyUnionTypeError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) => Right(hydra.error.core.EmptyUnionTypeError(field_location)))
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.EmptyUnionTypeError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) => Right(hydra.error.core.EmptyUnionTypeError(field_location)))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
 
@@ -154,7 +154,7 @@ def invalidForallParameterNameError(cx: hydra.graph.Graph)(raw: hydra.core.Term)
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.InvalidForallParameterNameError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.InvalidForallParameterNameError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.error.core.InvalidForallParameterNameError](hydra.extract.helpers.requireField("name")(hydra.decode.core.name)(fieldMap)(cx))((field_name: hydra.core.Name) =>
       Right(hydra.error.core.InvalidForallParameterNameError(field_location, field_name))))
   }
@@ -166,7 +166,7 @@ def invalidLambdaParameterNameError(cx: hydra.graph.Graph)(raw: hydra.core.Term)
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.InvalidLambdaParameterNameError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.InvalidLambdaParameterNameError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.error.core.InvalidLambdaParameterNameError](hydra.extract.helpers.requireField("name")(hydra.decode.core.name)(fieldMap)(cx))((field_name: hydra.core.Name) =>
       Right(hydra.error.core.InvalidLambdaParameterNameError(field_location, field_name))))
   }
@@ -177,7 +177,7 @@ def invalidLetBindingNameError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Eit
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.InvalidLetBindingNameError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.InvalidLetBindingNameError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.error.core.InvalidLetBindingNameError](hydra.extract.helpers.requireField("name")(hydra.decode.core.name)(fieldMap)(cx))((field_name: hydra.core.Name) =>
       Right(hydra.error.core.InvalidLetBindingNameError(field_location, field_name))))
   }
@@ -340,7 +340,7 @@ def invalidTypeLambdaParameterNameError(cx: hydra.graph.Graph)(raw: hydra.core.T
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.InvalidTypeLambdaParameterNameError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.InvalidTypeLambdaParameterNameError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.error.core.InvalidTypeLambdaParameterNameError](hydra.extract.helpers.requireField("name")(hydra.decode.core.name)(fieldMap)(cx))((field_name: hydra.core.Name) =>
       Right(hydra.error.core.InvalidTypeLambdaParameterNameError(field_location, field_name))))
   }
@@ -352,7 +352,7 @@ def invalidTypeSchemeVariableNameError(cx: hydra.graph.Graph)(raw: hydra.core.Te
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.InvalidTypeSchemeVariableNameError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.InvalidTypeSchemeVariableNameError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.error.core.InvalidTypeSchemeVariableNameError](hydra.extract.helpers.requireField("name")(hydra.decode.core.name)(fieldMap)(cx))((field_name: hydra.core.Name) =>
       Right(hydra.error.core.InvalidTypeSchemeVariableNameError(field_location, field_name))))
   }
@@ -363,7 +363,7 @@ def nestedTermAnnotationError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Eith
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.NestedTermAnnotationError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.NestedTermAnnotationError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       Right(hydra.error.core.NestedTermAnnotationError(field_location)))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
@@ -373,7 +373,7 @@ def nestedTypeAnnotationError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Eith
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.NestedTypeAnnotationError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.NestedTypeAnnotationError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       Right(hydra.error.core.NestedTypeAnnotationError(field_location)))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
@@ -384,7 +384,7 @@ def nonComparableMapKeyTypeError(cx: hydra.graph.Graph)(raw: hydra.core.Term): E
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.NonComparableMapKeyTypeError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.NonComparableMapKeyTypeError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Type, hydra.error.core.NonComparableMapKeyTypeError](hydra.extract.helpers.requireField("keyType")(hydra.decode.core.`type`)(fieldMap)(cx))((field_keyType: hydra.core.Type) =>
       Right(hydra.error.core.NonComparableMapKeyTypeError(field_location, field_keyType))))
   }
@@ -396,7 +396,7 @@ def nonComparableSetElementTypeError(cx: hydra.graph.Graph)(raw: hydra.core.Term
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.NonComparableSetElementTypeError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.NonComparableSetElementTypeError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Type, hydra.error.core.NonComparableSetElementTypeError](hydra.extract.helpers.requireField("elementType")(hydra.decode.core.`type`)(fieldMap)(cx))((field_elementType: hydra.core.Type) =>
       Right(hydra.error.core.NonComparableSetElementTypeError(field_location, field_elementType))))
   }
@@ -407,7 +407,7 @@ def redundantWrapUnwrapError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Eithe
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.RedundantWrapUnwrapError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.RedundantWrapUnwrapError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.error.core.RedundantWrapUnwrapError](hydra.extract.helpers.requireField("typeName")(hydra.decode.core.name)(fieldMap)(cx))((field_typeName: hydra.core.Name) =>
       Right(hydra.error.core.RedundantWrapUnwrapError(field_location, field_typeName))))
   }
@@ -418,7 +418,7 @@ def selfApplicationError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hy
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.SelfApplicationError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.SelfApplicationError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.error.core.SelfApplicationError](hydra.extract.helpers.requireField("name")(hydra.decode.core.name)(fieldMap)(cx))((field_name: hydra.core.Name) =>
       Right(hydra.error.core.SelfApplicationError(field_location, field_name))))
   }
@@ -429,7 +429,7 @@ def singleVariantUnionError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.SingleVariantUnionError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.SingleVariantUnionError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.error.core.SingleVariantUnionError](hydra.extract.helpers.requireField("fieldName")(hydra.decode.core.name)(fieldMap)(cx))((field_fieldName: hydra.core.Name) =>
       Right(hydra.error.core.SingleVariantUnionError(field_location, field_fieldName))))
   }
@@ -440,7 +440,7 @@ def termVariableShadowingError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Eit
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.TermVariableShadowingError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.TermVariableShadowingError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.error.core.TermVariableShadowingError](hydra.extract.helpers.requireField("name")(hydra.decode.core.name)(fieldMap)(cx))((field_name: hydra.core.Name) =>
       Right(hydra.error.core.TermVariableShadowingError(field_location, field_name))))
   }
@@ -452,7 +452,7 @@ def typeVariableShadowingInForallError(cx: hydra.graph.Graph)(raw: hydra.core.Te
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.TypeVariableShadowingInForallError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.TypeVariableShadowingInForallError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.error.core.TypeVariableShadowingInForallError](hydra.extract.helpers.requireField("name")(hydra.decode.core.name)(fieldMap)(cx))((field_name: hydra.core.Name) =>
       Right(hydra.error.core.TypeVariableShadowingInForallError(field_location, field_name))))
   }
@@ -464,7 +464,7 @@ def typeVariableShadowingInTypeLambdaError(cx: hydra.graph.Graph)(raw: hydra.cor
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.TypeVariableShadowingInTypeLambdaError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.TypeVariableShadowingInTypeLambdaError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.error.core.TypeVariableShadowingInTypeLambdaError](hydra.extract.helpers.requireField("name")(hydra.decode.core.name)(fieldMap)(cx))((field_name: hydra.core.Name) =>
       Right(hydra.error.core.TypeVariableShadowingInTypeLambdaError(field_location, field_name))))
   }
@@ -486,7 +486,7 @@ def undefinedTermVariableError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Eit
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.UndefinedTermVariableError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.UndefinedTermVariableError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.error.core.UndefinedTermVariableError](hydra.extract.helpers.requireField("name")(hydra.decode.core.name)(fieldMap)(cx))((field_name: hydra.core.Name) =>
       Right(hydra.error.core.UndefinedTermVariableError(field_location, field_name))))
   }
@@ -497,7 +497,7 @@ def undefinedTypeVariableError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Eit
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.UndefinedTypeVariableError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.UndefinedTypeVariableError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.error.core.UndefinedTypeVariableError](hydra.extract.helpers.requireField("name")(hydra.decode.core.name)(fieldMap)(cx))((field_name: hydra.core.Name) =>
       Right(hydra.error.core.UndefinedTypeVariableError(field_location, field_name))))
   }
@@ -509,7 +509,7 @@ def undefinedTypeVariableInBindingTypeError(cx: hydra.graph.Graph)(raw: hydra.co
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.UndefinedTypeVariableInBindingTypeError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.UndefinedTypeVariableInBindingTypeError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.error.core.UndefinedTypeVariableInBindingTypeError](hydra.extract.helpers.requireField("name")(hydra.decode.core.name)(fieldMap)(cx))((field_name: hydra.core.Name) =>
       Right(hydra.error.core.UndefinedTypeVariableInBindingTypeError(field_location, field_name))))
   }
@@ -521,7 +521,7 @@ def undefinedTypeVariableInLambdaDomainError(cx: hydra.graph.Graph)(raw: hydra.c
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.UndefinedTypeVariableInLambdaDomainError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.UndefinedTypeVariableInLambdaDomainError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.error.core.UndefinedTypeVariableInLambdaDomainError](hydra.extract.helpers.requireField("name")(hydra.decode.core.name)(fieldMap)(cx))((field_name: hydra.core.Name) =>
       Right(hydra.error.core.UndefinedTypeVariableInLambdaDomainError(field_location, field_name))))
   }
@@ -533,7 +533,7 @@ def undefinedTypeVariableInTypeApplicationError(cx: hydra.graph.Graph)(raw: hydr
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.UndefinedTypeVariableInTypeApplicationError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.UndefinedTypeVariableInTypeApplicationError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.error.core.UndefinedTypeVariableInTypeApplicationError](hydra.extract.helpers.requireField("name")(hydra.decode.core.name)(fieldMap)(cx))((field_name: hydra.core.Name) =>
       Right(hydra.error.core.UndefinedTypeVariableInTypeApplicationError(field_location, field_name))))
   }
@@ -566,7 +566,7 @@ def unknownPrimitiveNameError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Eith
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.UnknownPrimitiveNameError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.UnknownPrimitiveNameError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.error.core.UnknownPrimitiveNameError](hydra.extract.helpers.requireField("name")(hydra.decode.core.name)(fieldMap)(cx))((field_name: hydra.core.Name) =>
       Right(hydra.error.core.UnknownPrimitiveNameError(field_location, field_name))))
   }
@@ -578,7 +578,7 @@ def unnecessaryIdentityApplicationError(cx: hydra.graph.Graph)(raw: hydra.core.T
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.UnnecessaryIdentityApplicationError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.UnnecessaryIdentityApplicationError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       Right(hydra.error.core.UnnecessaryIdentityApplicationError(field_location)))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
@@ -588,7 +588,7 @@ def untypedTermVariableError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Eithe
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.UntypedTermVariableError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.UntypedTermVariableError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.error.core.UntypedTermVariableError](hydra.extract.helpers.requireField("name")(hydra.decode.core.name)(fieldMap)(cx))((field_name: hydra.core.Name) =>
       Right(hydra.error.core.UntypedTermVariableError(field_location, field_name))))
   }
@@ -600,7 +600,7 @@ def voidInNonBottomPositionError(cx: hydra.graph.Graph)(raw: hydra.core.Term): E
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.accessors.AccessorPath, hydra.error.core.VoidInNonBottomPositionError](hydra.extract.helpers.requireField("location")(hydra.decode.accessors.accessorPath)(fieldMap)(cx))((field_location: hydra.accessors.AccessorPath) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.paths.SubtermPath, hydra.error.core.VoidInNonBottomPositionError](hydra.extract.helpers.requireField("location")(hydra.decode.paths.subtermPath)(fieldMap)(cx))((field_location: hydra.paths.SubtermPath) =>
       Right(hydra.error.core.VoidInNonBottomPositionError(field_location)))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))

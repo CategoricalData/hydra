@@ -1,7 +1,5 @@
 package hydra.checking
 
-import hydra.accessors.*
-
 import hydra.coders.*
 
 import hydra.context.*
@@ -15,6 +13,8 @@ import hydra.error.core.*
 import hydra.errors.*
 
 import hydra.graph.*
+
+import hydra.paths.*
 
 import hydra.typing.*
 

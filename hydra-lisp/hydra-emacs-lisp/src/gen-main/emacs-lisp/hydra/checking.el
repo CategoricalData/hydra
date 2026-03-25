@@ -1,7 +1,5 @@
 (require 'cl-lib)
 
-(require 'hydra.accessors)
-
 (require 'hydra.coders)
 
 (require 'hydra.constants)
@@ -43,6 +41,8 @@
 (require 'hydra.lib.sets)
 
 (require 'hydra.lib.strings)
+
+(require 'hydra.paths)
 
 (require 'hydra.reflect)
 

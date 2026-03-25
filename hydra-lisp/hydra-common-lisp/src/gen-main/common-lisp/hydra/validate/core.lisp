@@ -1,5 +1,5 @@
 (defpackage :hydra.validate.core
-(:use :cl :hydra.accessors :hydra.core :hydra.error.core :hydra.graph :hydra.lib.equality :hydra.lib.lists :hydra.lib.logic :hydra.lib.maps :hydra.lib.maybes :hydra.lib.pairs :hydra.lib.sets :hydra.rewriting)
+(:use :cl :hydra.core :hydra.error.core :hydra.graph :hydra.lib.equality :hydra.lib.lists :hydra.lib.logic :hydra.lib.maps :hydra.lib.maybes :hydra.lib.pairs :hydra.lib.sets :hydra.paths :hydra.rewriting)
 (:export :hydra_validate_core_find_duplicate :hydra_validate_core_check_duplicate_bindings :hydra_validate_core_find_duplicate_field_type :hydra_validate_core_check_duplicate_field_types :hydra_validate_core_check_duplicate_fields :hydra_validate_core_check_shadowing :hydra_validate_core_check_undefined_type_variables_in_type :hydra_validate_core_check_undefined_type_variables_in_type_scheme :hydra_validate_core_first_error :hydra_validate_core_is_valid_name :hydra_validate_core_check_term :hydra_validate_core_check_void :hydra_validate_core_first_type_error :hydra_validate_core_term :hydra_validate_core_validate_type_node :hydra_validate_core_type))
 
 (in-package :hydra.validate.core)
