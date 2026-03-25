@@ -32,28 +32,22 @@ import hydra.lib.sets
 
 import hydra.lib.strings
 
-def analyzeFunctionTerm[T0, T1](cx: hydra.context.Context)(getTC: (T0 => hydra.graph.Graph))(setTC: (hydra.graph.Graph => T0 => T0))(env: T0)(term: hydra.core.Term): Either[T1,
-   hydra.typing.FunctionStructure[T0]] =
+def analyzeFunctionTerm[T0, T1](cx: hydra.context.Context)(getTC: (T0 => hydra.graph.Graph))(setTC: (hydra.graph.Graph => T0 => T0))(env: T0)(term: hydra.core.Term): Either[T1, hydra.typing.FunctionStructure[T0]] =
   hydra.coderUtils.analyzeFunctionTermWith(cx)(hydra.coderUtils.bindingMetadata)(getTC)(setTC)(env)(term)
 
-def analyzeFunctionTermWith[T0, T1](cx: hydra.context.Context)(forBinding: (hydra.graph.Graph => hydra.core.Binding => Option[hydra.core.Term]))(getTC: (T0 => hydra.graph.Graph))(setTC: (hydra.graph.Graph => T0 => T0))(env: T0)(term: hydra.core.Term): Either[T1,
-   hydra.typing.FunctionStructure[T0]] =
+def analyzeFunctionTermWith[T0, T1](cx: hydra.context.Context)(forBinding: (hydra.graph.Graph => hydra.core.Binding => Option[hydra.core.Term]))(getTC: (T0 => hydra.graph.Graph))(setTC: (hydra.graph.Graph => T0 => T0))(env: T0)(term: hydra.core.Term): Either[T1, hydra.typing.FunctionStructure[T0]] =
   hydra.coderUtils.analyzeFunctionTermWith_gather(cx)(forBinding)(getTC)(setTC)(true)(env)(Seq())(Seq())(Seq())(Seq())(Seq())(term)
 
-def analyzeFunctionTermWith_finish[T0, T1](cx: hydra.context.Context)(getTC: (T0 => hydra.graph.Graph))(fEnv: T0)(tparams: Seq[hydra.core.Name])(args: Seq[hydra.core.Name])(bindings: Seq[hydra.core.Binding])(doms: Seq[hydra.core.Type])(tapps: Seq[hydra.core.Type])(body: hydra.core.Term): Either[T1,
-   hydra.typing.FunctionStructure[T0]] =
+def analyzeFunctionTermWith_finish[T0, T1](cx: hydra.context.Context)(getTC: (T0 => hydra.graph.Graph))(fEnv: T0)(tparams: Seq[hydra.core.Name])(args: Seq[hydra.core.Name])(bindings: Seq[hydra.core.Binding])(doms: Seq[hydra.core.Type])(tapps: Seq[hydra.core.Type])(body: hydra.core.Term): Either[T1, hydra.typing.FunctionStructure[T0]] =
   {
   lazy val bodyWithTapps: hydra.core.Term = hydra.lib.lists.foldl[hydra.core.Term, hydra.core.Type]((trm: hydra.core.Term) =>
     (typ: hydra.core.Type) =>
     hydra.core.Term.typeApplication(hydra.core.TypeApplicationTerm(trm, typ)))(body)(tapps)
-  lazy val mcod: Option[hydra.core.Type] = hydra.lib.eithers.either[hydra.context.InContext[hydra.errors.Error],
-     hydra.core.Type, Option[hydra.core.Type]]((_x: hydra.context.InContext[hydra.errors.Error]) => None)((c: hydra.core.Type) => Some(c))(hydra.coderUtils.typeOfTerm(cx)(getTC(fEnv))(bodyWithTapps))
-  Right(hydra.typing.FunctionStructure(hydra.lib.lists.reverse[hydra.core.Name](tparams), hydra.lib.lists.reverse[hydra.core.Name](args),
-     bindings, bodyWithTapps, hydra.lib.lists.reverse[hydra.core.Type](doms), mcod, fEnv))
+  lazy val mcod: Option[hydra.core.Type] = hydra.lib.eithers.either[hydra.context.InContext[hydra.errors.Error], hydra.core.Type, Option[hydra.core.Type]]((_x: hydra.context.InContext[hydra.errors.Error]) => None)((c: hydra.core.Type) => Some(c))(hydra.coderUtils.typeOfTerm(cx)(getTC(fEnv))(bodyWithTapps))
+  Right(hydra.typing.FunctionStructure(hydra.lib.lists.reverse[hydra.core.Name](tparams), hydra.lib.lists.reverse[hydra.core.Name](args), bindings, bodyWithTapps, hydra.lib.lists.reverse[hydra.core.Type](doms), mcod, fEnv))
 }
 
-def analyzeFunctionTermWith_gather[T0, T1](cx: hydra.context.Context)(forBinding: (hydra.graph.Graph => hydra.core.Binding => Option[hydra.core.Term]))(getTC: (T0 => hydra.graph.Graph))(setTC: (hydra.graph.Graph => T0 => T0))(argMode: Boolean)(gEnv: T0)(tparams: Seq[hydra.core.Name])(args: Seq[hydra.core.Name])(bindings: Seq[hydra.core.Binding])(doms: Seq[hydra.core.Type])(tapps: Seq[hydra.core.Type])(t: hydra.core.Term): Either[T1,
-   hydra.typing.FunctionStructure[T0]] =
+def analyzeFunctionTermWith_gather[T0, T1](cx: hydra.context.Context)(forBinding: (hydra.graph.Graph => hydra.core.Binding => Option[hydra.core.Term]))(getTC: (T0 => hydra.graph.Graph))(setTC: (hydra.graph.Graph => T0 => T0))(argMode: Boolean)(gEnv: T0)(tparams: Seq[hydra.core.Name])(args: Seq[hydra.core.Name])(bindings: Seq[hydra.core.Binding])(doms: Seq[hydra.core.Type])(tapps: Seq[hydra.core.Type])(t: hydra.core.Term): Either[T1, hydra.typing.FunctionStructure[T0]] =
   hydra.rewriting.deannotateTerm(t) match
   case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
     case hydra.core.Function.lambda(v_Function_lambda_lam) => hydra.lib.logic.ifElse[Either[T1, hydra.typing.FunctionStructure[T0]]](argMode)({
@@ -102,11 +96,9 @@ def analyzeFunctionTermWith_gather[T0, T1](cx: hydra.context.Context)(forBinding
 def bindingMetadata(tc: hydra.graph.Graph)(b: hydra.core.Binding): Option[hydra.core.Term] =
   hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.coderUtils.isComplexBinding(tc)(b))(Some(hydra.core.Term.literal(hydra.core.Literal.boolean(true))))(None)
 
-def commentsFromBinding(cx: hydra.context.Context)(g: hydra.graph.Graph)(b: hydra.core.Binding): Either[hydra.context.InContext[hydra.errors.Error],
-   Option[scala.Predef.String]] = hydra.annotations.getTermDescription(cx)(g)(b.term)
+def commentsFromBinding(cx: hydra.context.Context)(g: hydra.graph.Graph)(b: hydra.core.Binding): Either[hydra.context.InContext[hydra.errors.Error], Option[scala.Predef.String]] = hydra.annotations.getTermDescription(cx)(g)(b.term)
 
-def commentsFromFieldType(cx: hydra.context.Context)(g: hydra.graph.Graph)(ft: hydra.core.FieldType): Either[hydra.context.InContext[hydra.errors.Error],
-   Option[scala.Predef.String]] = hydra.annotations.getTypeDescription(cx)(g)(ft.`type`)
+def commentsFromFieldType(cx: hydra.context.Context)(g: hydra.graph.Graph)(ft: hydra.core.FieldType): Either[hydra.context.InContext[hydra.errors.Error], Option[scala.Predef.String]] = hydra.annotations.getTypeDescription(cx)(g)(ft.`type`)
 
 def gatherApplications(term: hydra.core.Term): Tuple2[Seq[hydra.core.Term], hydra.core.Term] =
   {
@@ -142,8 +134,7 @@ def gatherArgs(term: hydra.core.Term)(args: Seq[hydra.core.Term]): Tuple2[hydra.
   }
   case _ => Tuple2(term, args)
 
-def gatherArgsWithTypeApps(term: hydra.core.Term)(args: Seq[hydra.core.Term])(tyArgs: Seq[hydra.core.Type]): Tuple2[hydra.core.Term,
-   Tuple2[Seq[hydra.core.Term], Seq[hydra.core.Type]]] =
+def gatherArgsWithTypeApps(term: hydra.core.Term)(args: Seq[hydra.core.Term])(tyArgs: Seq[hydra.core.Type]): Tuple2[hydra.core.Term, Tuple2[Seq[hydra.core.Term], Seq[hydra.core.Type]]] =
   hydra.rewriting.deannotateTerm(term) match
   case hydra.core.Term.application(v_Term_application_app) => {
     lazy val lhs: hydra.core.Term = (v_Term_application_app.function)
@@ -358,18 +349,13 @@ def normalizeComment(s: scala.Predef.String): scala.Predef.String =
 def reorderDefs(defs: Seq[hydra.module.Definition]): Seq[hydra.module.Definition] =
   {
   lazy val partitioned: Tuple2[Seq[hydra.module.TypeDefinition], Seq[hydra.module.TermDefinition]] = hydra.schemas.partitionDefinitions(defs)
-  lazy val typeDefsRaw: Seq[hydra.module.TypeDefinition] = hydra.lib.pairs.first[Seq[hydra.module.TypeDefinition],
-     Seq[hydra.module.TermDefinition]](partitioned)
+  lazy val typeDefsRaw: Seq[hydra.module.TypeDefinition] = hydra.lib.pairs.first[Seq[hydra.module.TypeDefinition], Seq[hydra.module.TermDefinition]](partitioned)
   lazy val nameFirst: Seq[hydra.module.TypeDefinition] = hydra.lib.lists.filter[hydra.module.TypeDefinition]((td: hydra.module.TypeDefinition) =>
     hydra.lib.equality.equal[hydra.core.Name](td.name)("hydra.core.Name"))(typeDefsRaw)
   lazy val nameRest: Seq[hydra.module.TypeDefinition] = hydra.lib.lists.filter[hydra.module.TypeDefinition]((td: hydra.module.TypeDefinition) =>
     hydra.lib.logic.not(hydra.lib.equality.equal[hydra.core.Name](td.name)("hydra.core.Name")))(typeDefsRaw)
-  lazy val typeDefs: Seq[hydra.module.Definition] = hydra.lib.lists.concat[hydra.module.Definition](Seq(hydra.lib.lists.map[hydra.module.TypeDefinition,
-     hydra.module.Definition]((td: hydra.module.TypeDefinition) => hydra.module.Definition.`type`(td))(nameFirst),
-     hydra.lib.lists.map[hydra.module.TypeDefinition, hydra.module.Definition]((td: hydra.module.TypeDefinition) => hydra.module.Definition.`type`(td))(nameRest)))
-  lazy val termDefsWrapped: Seq[hydra.module.Definition] = hydra.lib.lists.map[hydra.module.TermDefinition,
-     hydra.module.Definition]((td: hydra.module.TermDefinition) => hydra.module.Definition.term(td))(hydra.lib.pairs.second[Seq[hydra.module.TypeDefinition],
-     Seq[hydra.module.TermDefinition]](partitioned))
+  lazy val typeDefs: Seq[hydra.module.Definition] = hydra.lib.lists.concat[hydra.module.Definition](Seq(hydra.lib.lists.map[hydra.module.TypeDefinition, hydra.module.Definition]((td: hydra.module.TypeDefinition) => hydra.module.Definition.`type`(td))(nameFirst), hydra.lib.lists.map[hydra.module.TypeDefinition, hydra.module.Definition]((td: hydra.module.TypeDefinition) => hydra.module.Definition.`type`(td))(nameRest)))
+  lazy val termDefsWrapped: Seq[hydra.module.Definition] = hydra.lib.lists.map[hydra.module.TermDefinition, hydra.module.Definition]((td: hydra.module.TermDefinition) => hydra.module.Definition.term(td))(hydra.lib.pairs.second[Seq[hydra.module.TypeDefinition], Seq[hydra.module.TermDefinition]](partitioned))
   lazy val sortedTermDefs: Seq[hydra.module.Definition] = hydra.lib.lists.concat[hydra.module.Definition](hydra.sorting.topologicalSortNodes((d: hydra.module.Definition) =>
     d match
     case hydra.module.Definition.term(v_Definition_term_td) => (v_Definition_term_td.name))((d: hydra.module.Definition) =>
@@ -380,5 +366,4 @@ def reorderDefs(defs: Seq[hydra.module.Definition]): Seq[hydra.module.Definition
 }
 
 def typeOfTerm(cx: hydra.context.Context)(g: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Type] =
-  hydra.lib.eithers.map[Tuple2[hydra.core.Type, hydra.context.Context], hydra.core.Type, hydra.context.InContext[hydra.errors.Error]](hydra.lib.pairs.first[hydra.core.Type,
-     hydra.context.Context])(hydra.checking.typeOf(cx)(g)(Seq())(term))
+  hydra.lib.eithers.map[Tuple2[hydra.core.Type, hydra.context.Context], hydra.core.Type, hydra.context.InContext[hydra.errors.Error]](hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context])(hydra.checking.typeOf(cx)(g)(Seq())(term))

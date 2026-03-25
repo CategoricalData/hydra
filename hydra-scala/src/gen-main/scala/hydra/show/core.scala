@@ -45,8 +45,7 @@ def elimination(elm: hydra.core.Elimination): scala.Predef.String =
       {
         lazy val cases: Seq[hydra.core.Field] = (v_Elimination_union_cs.cases)
         {
-          lazy val defaultField: Seq[hydra.core.Field] = hydra.lib.maybes.maybe[Seq[hydra.core.Field],
-             hydra.core.Term](Seq())((d: hydra.core.Term) => Seq(hydra.core.Field("[default]", d)))(mdef)
+          lazy val defaultField: Seq[hydra.core.Field] = hydra.lib.maybes.maybe[Seq[hydra.core.Field], hydra.core.Term](Seq())((d: hydra.core.Term) => Seq(hydra.core.Field("[default]", d)))(mdef)
           {
             lazy val allFields: Seq[hydra.core.Field] = hydra.lib.lists.concat[hydra.core.Field](Seq(cases, defaultField))
             hydra.lib.strings.cat(Seq("case(", tname, ")", hydra.show.core.fields(allFields)))
@@ -198,17 +197,12 @@ def term(t: hydra.core.Term): scala.Predef.String =
     case hydra.core.Term.literal(v_Term_literal_lit) => hydra.show.core.literal(v_Term_literal_lit)
     case hydra.core.Term.map(v_Term_map_m) => {
       def entry(p: Tuple2[hydra.core.Term, hydra.core.Term]): scala.Predef.String =
-        hydra.lib.strings.cat(Seq(hydra.show.core.term(hydra.lib.pairs.first[hydra.core.Term, hydra.core.Term](p)),
-           "=", hydra.show.core.term(hydra.lib.pairs.second[hydra.core.Term, hydra.core.Term](p))))
-      hydra.lib.strings.cat(Seq("{", hydra.lib.strings.intercalate(", ")(hydra.lib.lists.map[Tuple2[hydra.core.Term,
-         hydra.core.Term], scala.Predef.String](entry)(hydra.lib.maps.toList[hydra.core.Term, hydra.core.Term](v_Term_map_m))),
-         "}"))
+        hydra.lib.strings.cat(Seq(hydra.show.core.term(hydra.lib.pairs.first[hydra.core.Term, hydra.core.Term](p)), "=", hydra.show.core.term(hydra.lib.pairs.second[hydra.core.Term, hydra.core.Term](p))))
+      hydra.lib.strings.cat(Seq("{", hydra.lib.strings.intercalate(", ")(hydra.lib.lists.map[Tuple2[hydra.core.Term, hydra.core.Term], scala.Predef.String](entry)(hydra.lib.maps.toList[hydra.core.Term, hydra.core.Term](v_Term_map_m))), "}"))
     }
     case hydra.core.Term.maybe(v_Term_maybe_mt) => hydra.lib.maybes.maybe[scala.Predef.String, hydra.core.Term]("nothing")((t2: hydra.core.Term) =>
       hydra.lib.strings.cat(Seq("just(", hydra.show.core.term(t2), ")")))(v_Term_maybe_mt)
-    case hydra.core.Term.pair(v_Term_pair_p) => hydra.lib.strings.cat(Seq("(", hydra.show.core.term(hydra.lib.pairs.first[hydra.core.Term,
-       hydra.core.Term](v_Term_pair_p)), ", ", hydra.show.core.term(hydra.lib.pairs.second[hydra.core.Term,
-       hydra.core.Term](v_Term_pair_p)), ")"))
+    case hydra.core.Term.pair(v_Term_pair_p) => hydra.lib.strings.cat(Seq("(", hydra.show.core.term(hydra.lib.pairs.first[hydra.core.Term, hydra.core.Term](v_Term_pair_p)), ", ", hydra.show.core.term(hydra.lib.pairs.second[hydra.core.Term, hydra.core.Term](v_Term_pair_p)), ")"))
     case hydra.core.Term.record(v_Term_record_rec) => {
       lazy val tname: scala.Predef.String = (v_Term_record_rec.typeName)
       {
@@ -216,9 +210,7 @@ def term(t: hydra.core.Term): scala.Predef.String =
         hydra.lib.strings.cat(Seq("record(", tname, ")", hydra.show.core.fields(flds)))
       }
     }
-    case hydra.core.Term.set(v_Term_set_s) => hydra.lib.strings.cat(Seq("{", hydra.lib.strings.intercalate(", ")(hydra.lib.lists.map[hydra.core.Term,
-       scala.Predef.String](hydra.show.core.term)(hydra.lib.sets.toList[hydra.core.Term](v_Term_set_s))),
-       "}"))
+    case hydra.core.Term.set(v_Term_set_s) => hydra.lib.strings.cat(Seq("{", hydra.lib.strings.intercalate(", ")(hydra.lib.lists.map[hydra.core.Term, scala.Predef.String](hydra.show.core.term)(hydra.lib.sets.toList[hydra.core.Term](v_Term_set_s))), "}"))
     case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => {
       lazy val param: scala.Predef.String = (v_Term_typeLambda_ta.parameter)
       {
@@ -331,17 +323,12 @@ def typeScheme(ts: hydra.core.TypeScheme): scala.Predef.String =
   lazy val vars: Seq[hydra.core.Name] = (ts.variables)
   lazy val body: hydra.core.Type = (ts.`type`)
   lazy val varNames: Seq[scala.Predef.String] = hydra.lib.lists.map[hydra.core.Name, scala.Predef.String]((x) => x)(vars)
-  lazy val fa: scala.Predef.String = hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.lists.`null`[hydra.core.Name](vars))("")(hydra.lib.strings.cat(Seq("forall ",
-     hydra.lib.strings.intercalate(",")(varNames), ". ")))
+  lazy val fa: scala.Predef.String = hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.lists.`null`[hydra.core.Name](vars))("")(hydra.lib.strings.cat(Seq("forall ", hydra.lib.strings.intercalate(",")(varNames), ". ")))
   def toConstraintPair(v: hydra.core.Name)(c: hydra.core.Name): scala.Predef.String = hydra.lib.strings.cat(Seq(c, " ", v))
   def toConstraintPairs(p: Tuple2[hydra.core.Name, hydra.core.TypeVariableMetadata]): Seq[scala.Predef.String] =
     hydra.lib.lists.map[hydra.core.Name, scala.Predef.String]((v1: hydra.core.Name) =>
-    toConstraintPair(hydra.lib.pairs.first[hydra.core.Name, hydra.core.TypeVariableMetadata](p))(v1))(hydra.lib.sets.toList[hydra.core.Name](hydra.lib.pairs.second[hydra.core.Name,
-       hydra.core.TypeVariableMetadata](p).classes))
-  lazy val tc: Seq[scala.Predef.String] = hydra.lib.maybes.maybe[Seq[scala.Predef.String], Map[hydra.core.Name,
-     hydra.core.TypeVariableMetadata]](Seq())((m: Map[hydra.core.Name, hydra.core.TypeVariableMetadata]) =>
-    hydra.lib.lists.concat[scala.Predef.String](hydra.lib.lists.map[Tuple2[hydra.core.Name, hydra.core.TypeVariableMetadata],
-       Seq[scala.Predef.String]](toConstraintPairs)(hydra.lib.maps.toList[hydra.core.Name, hydra.core.TypeVariableMetadata](m))))(ts.constraints)
-  hydra.lib.strings.cat(Seq("(", fa, hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.lists.`null`[scala.Predef.String](tc))("")(hydra.lib.strings.cat(Seq("(",
-     hydra.lib.strings.intercalate(", ")(tc), ") => "))), hydra.show.core.`type`(body), ")"))
+    toConstraintPair(hydra.lib.pairs.first[hydra.core.Name, hydra.core.TypeVariableMetadata](p))(v1))(hydra.lib.sets.toList[hydra.core.Name](hydra.lib.pairs.second[hydra.core.Name, hydra.core.TypeVariableMetadata](p).classes))
+  lazy val tc: Seq[scala.Predef.String] = hydra.lib.maybes.maybe[Seq[scala.Predef.String], Map[hydra.core.Name, hydra.core.TypeVariableMetadata]](Seq())((m: Map[hydra.core.Name, hydra.core.TypeVariableMetadata]) =>
+    hydra.lib.lists.concat[scala.Predef.String](hydra.lib.lists.map[Tuple2[hydra.core.Name, hydra.core.TypeVariableMetadata], Seq[scala.Predef.String]](toConstraintPairs)(hydra.lib.maps.toList[hydra.core.Name, hydra.core.TypeVariableMetadata](m))))(ts.constraints)
+  hydra.lib.strings.cat(Seq("(", fa, hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.lists.`null`[scala.Predef.String](tc))("")(hydra.lib.strings.cat(Seq("(", hydra.lib.strings.intercalate(", ")(tc), ") => "))), hydra.show.core.`type`(body), ")"))
 }

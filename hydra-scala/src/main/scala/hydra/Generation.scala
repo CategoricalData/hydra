@@ -135,6 +135,14 @@ object Generation:
       doInfer = false, doExpand = true, doHoistCaseStatements = true, doHoistPolymorphicLetBindings = false,
       basePath, universe, mods)
 
+  /** Generate Scala source files from modules. */
+  def writeScala(basePath: String, universe: Seq[Module], mods: Seq[Module]): Int =
+    generateSources(
+      mod => defs => cx => g => hydra.ext.scala.coder.moduleToScala(mod)(defs)(cx)(g),
+      hydra.ext.scala.language.scalaLanguage,
+      doInfer = false, doExpand = true, doHoistCaseStatements = false, doHoistPolymorphicLetBindings = false,
+      basePath, universe, mods)
+
   /** Generate Haskell source files from modules. */
   def writeHaskell(basePath: String, universe: Seq[Module], mods: Seq[Module]): Int =
     generateSources(

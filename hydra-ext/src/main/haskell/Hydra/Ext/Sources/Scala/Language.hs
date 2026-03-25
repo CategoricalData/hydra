@@ -177,7 +177,7 @@ scalaReservedWords = scalaLanguageDefinition "scalaReservedWords" $
     doc "Scala keywords" $
     list $ string <$> [
       "abstract", "case", "catch", "class", "def", "do", "else", "end", "enum", "export", "extends", "false", "final", "finally", "for",
-      "forSome", "given", "if", "implicit", "import", "lazy", "match", "new", "null", "object", "override", "package", "private",
+      "forSome", "given", "if", "implicit", "import", "lazy", "macro", "match", "new", "null", "object", "override", "package", "private",
       "protected", "return", "sealed", "super", "then", "this", "throw", "trait", "true", "try", "type", "val", "var", "while",
       "with", "yield"],
   "classNames">:

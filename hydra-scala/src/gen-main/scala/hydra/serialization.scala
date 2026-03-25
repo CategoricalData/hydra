@@ -38,8 +38,7 @@ def bracketListAdaptive(els: Seq[hydra.ast.Expr]): hydra.ast.Expr =
   hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.equality.gt[Int](hydra.serialization.expressionLength(inlineList))(70))(hydra.serialization.bracketList(hydra.serialization.halfBlockStyle)(els))(inlineList)
 }
 
-def brackets(br: hydra.ast.Brackets)(style: hydra.ast.BlockStyle)(e: hydra.ast.Expr): hydra.ast.Expr = hydra.ast.Expr.brackets(hydra.ast.BracketExpr(br,
-   e, style))
+def brackets(br: hydra.ast.Brackets)(style: hydra.ast.BlockStyle)(e: hydra.ast.Expr): hydra.ast.Expr = hydra.ast.Expr.brackets(hydra.ast.BracketExpr(br, e, style))
 
 def commaSep(v1: hydra.ast.BlockStyle)(v2: Seq[hydra.ast.Expr]): hydra.ast.Expr = hydra.serialization.symbolSep(",")(v1)(v2)
 
@@ -53,24 +52,20 @@ def curlyBracesList(msymb: Option[scala.Predef.String])(style: hydra.ast.BlockSt
   hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.lists.`null`[hydra.ast.Expr](els))(hydra.serialization.cst("{}"))(hydra.serialization.brackets(hydra.serialization.curlyBraces)(style)(hydra.serialization.symbolSep(hydra.lib.maybes.fromMaybe[scala.Predef.String](",")(msymb))(style)(els)))
 
 def customIndent(idt: scala.Predef.String)(s: scala.Predef.String): scala.Predef.String =
-  hydra.lib.strings.cat(hydra.lib.lists.intersperse[scala.Predef.String]("\n")(hydra.lib.lists.map[scala.Predef.String,
-     scala.Predef.String]((line: scala.Predef.String) => hydra.lib.strings.cat2(idt)(line))(hydra.lib.strings.lines(s))))
+  hydra.lib.strings.cat(hydra.lib.lists.intersperse[scala.Predef.String]("\n")(hydra.lib.lists.map[scala.Predef.String, scala.Predef.String]((line: scala.Predef.String) => hydra.lib.strings.cat2(idt)(line))(hydra.lib.strings.lines(s))))
 
 def customIndentBlock(idt: scala.Predef.String)(els: Seq[hydra.ast.Expr]): hydra.ast.Expr =
   {
-  lazy val idtOp: hydra.ast.Op = hydra.ast.Op(hydra.serialization.sym(""), hydra.ast.Padding(hydra.ast.Ws.space,
-     hydra.ast.Ws.breakAndIndent(idt)), 0, hydra.ast.Associativity.none)
+  lazy val idtOp: hydra.ast.Op = hydra.ast.Op(hydra.serialization.sym(""), hydra.ast.Padding(hydra.ast.Ws.space, hydra.ast.Ws.breakAndIndent(idt)), 0, hydra.ast.Associativity.none)
   hydra.lib.maybes.maybe[hydra.ast.Expr, hydra.ast.Expr](hydra.serialization.cst(""))((head: hydra.ast.Expr) =>
     hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.ast.Expr](els))(1))(head)(hydra.serialization.ifx(idtOp)(head)(hydra.serialization.newlineSep(hydra.lib.lists.drop[hydra.ast.Expr](1)(els)))))(hydra.lib.lists.safeHead[hydra.ast.Expr](els))
 }
 
 def dotSep(v1: Seq[hydra.ast.Expr]): hydra.ast.Expr =
-  hydra.serialization.sep(hydra.ast.Op(hydra.serialization.sym("."), hydra.ast.Padding(hydra.ast.Ws.none,
-     hydra.ast.Ws.none), 0, hydra.ast.Associativity.none))(v1)
+  hydra.serialization.sep(hydra.ast.Op(hydra.serialization.sym("."), hydra.ast.Padding(hydra.ast.Ws.none, hydra.ast.Ws.none), 0, hydra.ast.Associativity.none))(v1)
 
 def doubleNewlineSep(v1: Seq[hydra.ast.Expr]): hydra.ast.Expr =
-  hydra.serialization.sep(hydra.ast.Op(hydra.serialization.sym(""), hydra.ast.Padding(hydra.ast.Ws.break,
-     hydra.ast.Ws.break), 0, hydra.ast.Associativity.none))(v1)
+  hydra.serialization.sep(hydra.ast.Op(hydra.serialization.sym(""), hydra.ast.Padding(hydra.ast.Ws.break, hydra.ast.Ws.break), 0, hydra.ast.Associativity.none))(v1)
 
 lazy val doubleSpace: scala.Predef.String = "  "
 
@@ -146,8 +141,7 @@ def indentBlock(v1: Seq[hydra.ast.Expr]): hydra.ast.Expr = hydra.serialization.c
 def indentSubsequentLines(idt: scala.Predef.String)(e: hydra.ast.Expr): hydra.ast.Expr =
   hydra.ast.Expr.indent(hydra.ast.IndentedExpression(hydra.ast.IndentStyle.subsequentLines(idt), e))
 
-def infixWs(op: scala.Predef.String)(l: hydra.ast.Expr)(r: hydra.ast.Expr): hydra.ast.Expr = hydra.serialization.spaceSep(Seq(l,
-   hydra.serialization.cst(op), r))
+def infixWs(op: scala.Predef.String)(l: hydra.ast.Expr)(r: hydra.ast.Expr): hydra.ast.Expr = hydra.serialization.spaceSep(Seq(l, hydra.serialization.cst(op), r))
 
 def infixWsList(op: scala.Predef.String)(opers: Seq[hydra.ast.Expr]): hydra.ast.Expr =
   {
@@ -160,14 +154,12 @@ def infixWsList(op: scala.Predef.String)(opers: Seq[hydra.ast.Expr]): hydra.ast.
 lazy val inlineStyle: hydra.ast.BlockStyle = hydra.ast.BlockStyle(None, false, false)
 
 def newlineSep(v1: Seq[hydra.ast.Expr]): hydra.ast.Expr =
-  hydra.serialization.sep(hydra.ast.Op(hydra.serialization.sym(""), hydra.ast.Padding(hydra.ast.Ws.none,
-     hydra.ast.Ws.break), 0, hydra.ast.Associativity.none))(v1)
+  hydra.serialization.sep(hydra.ast.Op(hydra.serialization.sym(""), hydra.ast.Padding(hydra.ast.Ws.none, hydra.ast.Ws.break), 0, hydra.ast.Associativity.none))(v1)
 
 lazy val noPadding: hydra.ast.Padding = hydra.ast.Padding(hydra.ast.Ws.none, hydra.ast.Ws.none)
 
 def noSep(v1: Seq[hydra.ast.Expr]): hydra.ast.Expr =
-  hydra.serialization.sep(hydra.ast.Op(hydra.serialization.sym(""), hydra.ast.Padding(hydra.ast.Ws.none,
-     hydra.ast.Ws.none), 0, hydra.ast.Associativity.none))(v1)
+  hydra.serialization.sep(hydra.ast.Op(hydra.serialization.sym(""), hydra.ast.Padding(hydra.ast.Ws.none, hydra.ast.Ws.none), 0, hydra.ast.Associativity.none))(v1)
 
 def num(i: Int): hydra.ast.Expr = hydra.serialization.cst(hydra.lib.literals.showInt32(i))
 
@@ -175,8 +167,7 @@ def op(s: scala.Predef.String)(p: Int)(assoc: hydra.ast.Associativity): hydra.as
   hydra.ast.Op(hydra.serialization.sym(s), hydra.ast.Padding(hydra.ast.Ws.space, hydra.ast.Ws.space), p, assoc)
 
 def orOp(newlines: Boolean): hydra.ast.Op =
-  hydra.ast.Op(hydra.serialization.sym("|"), hydra.ast.Padding(hydra.ast.Ws.space, hydra.lib.logic.ifElse[hydra.ast.Ws](newlines)(hydra.ast.Ws.break)(hydra.ast.Ws.space)),
-     0, hydra.ast.Associativity.none)
+  hydra.ast.Op(hydra.serialization.sym("|"), hydra.ast.Padding(hydra.ast.Ws.space, hydra.lib.logic.ifElse[hydra.ast.Ws](newlines)(hydra.ast.Ws.break)(hydra.ast.Ws.space)), 0, hydra.ast.Associativity.none)
 
 def orSep(style: hydra.ast.BlockStyle)(l: Seq[hydra.ast.Expr]): hydra.ast.Expr =
   {
@@ -209,13 +200,10 @@ def parenthesize(exp: hydra.ast.Expr): hydra.ast.Expr =
     case hydra.ast.Associativity.left => false
     case _ => true
   exp match
-    case hydra.ast.Expr.brackets(v_Expr_brackets_bracketExpr) => hydra.ast.Expr.brackets(hydra.ast.BracketExpr(v_Expr_brackets_bracketExpr.brackets,
-       hydra.serialization.parenthesize(v_Expr_brackets_bracketExpr.enclosed), (v_Expr_brackets_bracketExpr.style)))
+    case hydra.ast.Expr.brackets(v_Expr_brackets_bracketExpr) => hydra.ast.Expr.brackets(hydra.ast.BracketExpr(v_Expr_brackets_bracketExpr.brackets, hydra.serialization.parenthesize(v_Expr_brackets_bracketExpr.enclosed), (v_Expr_brackets_bracketExpr.style)))
     case hydra.ast.Expr.const(v_Expr_const_ignored) => exp
-    case hydra.ast.Expr.indent(v_Expr_indent_indentExpr) => hydra.ast.Expr.indent(hydra.ast.IndentedExpression(v_Expr_indent_indentExpr.style,
-       hydra.serialization.parenthesize(v_Expr_indent_indentExpr.expr)))
-    case hydra.ast.Expr.seq(v_Expr_seq_seqExpr) => hydra.ast.Expr.seq(hydra.ast.SeqExpr(v_Expr_seq_seqExpr.op,
-       hydra.lib.lists.map[hydra.ast.Expr, hydra.ast.Expr](hydra.serialization.parenthesize)(v_Expr_seq_seqExpr.elements)))
+    case hydra.ast.Expr.indent(v_Expr_indent_indentExpr) => hydra.ast.Expr.indent(hydra.ast.IndentedExpression(v_Expr_indent_indentExpr.style, hydra.serialization.parenthesize(v_Expr_indent_indentExpr.expr)))
+    case hydra.ast.Expr.seq(v_Expr_seq_seqExpr) => hydra.ast.Expr.seq(hydra.ast.SeqExpr(v_Expr_seq_seqExpr.op, hydra.lib.lists.map[hydra.ast.Expr, hydra.ast.Expr](hydra.serialization.parenthesize)(v_Expr_seq_seqExpr.elements)))
     case hydra.ast.Expr.op(v_Expr_op_opExpr) => {
       lazy val op: hydra.ast.Op = (v_Expr_op_opExpr.op)
       {
@@ -282,8 +270,7 @@ def parenthesize(exp: hydra.ast.Expr): hydra.ast.Expr =
 
 def prefix(p: scala.Predef.String)(expr: hydra.ast.Expr): hydra.ast.Expr =
   {
-  lazy val preOp: hydra.ast.Op = hydra.ast.Op(hydra.serialization.sym(p), hydra.ast.Padding(hydra.ast.Ws.none,
-     hydra.ast.Ws.none), 0, hydra.ast.Associativity.none)
+  lazy val preOp: hydra.ast.Op = hydra.ast.Op(hydra.serialization.sym(p), hydra.ast.Padding(hydra.ast.Ws.none, hydra.ast.Ws.none), 0, hydra.ast.Associativity.none)
   hydra.serialization.ifx(preOp)(hydra.serialization.cst(""))(expr)
 }
 
@@ -310,10 +297,8 @@ def printExpr(e: hydra.ast.Expr): scala.Predef.String =
           lazy val lns: Seq[scala.Predef.String] = hydra.lib.strings.lines(hydra.serialization.printExpr(expr))
           {
             lazy val ilns: Seq[scala.Predef.String] = style match
-              case hydra.ast.IndentStyle.allLines(v_IndentStyle_allLines_idt2) => hydra.lib.lists.map[scala.Predef.String,
-                 scala.Predef.String]((line: scala.Predef.String) => hydra.lib.strings.cat2(v_IndentStyle_allLines_idt2)(line))(lns)
-              case hydra.ast.IndentStyle.subsequentLines(v_IndentStyle_subsequentLines_idt2) => hydra.lib.logic.ifElse[Seq[scala.Predef.String]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[scala.Predef.String](lns))(1))(lns)(hydra.lib.lists.cons[scala.Predef.String](hydra.lib.lists.head[scala.Predef.String](lns))(hydra.lib.lists.map[scala.Predef.String,
-                 scala.Predef.String]((line: scala.Predef.String) =>
+              case hydra.ast.IndentStyle.allLines(v_IndentStyle_allLines_idt2) => hydra.lib.lists.map[scala.Predef.String, scala.Predef.String]((line: scala.Predef.String) => hydra.lib.strings.cat2(v_IndentStyle_allLines_idt2)(line))(lns)
+              case hydra.ast.IndentStyle.subsequentLines(v_IndentStyle_subsequentLines_idt2) => hydra.lib.logic.ifElse[Seq[scala.Predef.String]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[scala.Predef.String](lns))(1))(lns)(hydra.lib.lists.cons[scala.Predef.String](hydra.lib.lists.head[scala.Predef.String](lns))(hydra.lib.lists.map[scala.Predef.String, scala.Predef.String]((line: scala.Predef.String) =>
                 hydra.lib.strings.cat2(v_IndentStyle_subsequentLines_idt2)(line))(hydra.lib.lists.tail[scala.Predef.String](lns))))
             hydra.lib.strings.intercalate("\n")(ilns)
           }
@@ -335,8 +320,7 @@ def printExpr(e: hydra.ast.Expr): scala.Predef.String =
                 {
                   lazy val separator: scala.Predef.String = hydra.lib.strings.cat2(hydra.lib.strings.cat2(pad(spadl))(ssym))(pad(spadr))
                   {
-                    lazy val printedElements: Seq[scala.Predef.String] = hydra.lib.lists.map[hydra.ast.Expr,
-                       scala.Predef.String]((el: hydra.ast.Expr) => idt(spadr)(hydra.serialization.printExpr(el)))(selements)
+                    lazy val printedElements: Seq[scala.Predef.String] = hydra.lib.lists.map[hydra.ast.Expr, scala.Predef.String]((el: hydra.ast.Expr) => idt(spadr)(hydra.serialization.printExpr(el)))(selements)
                     hydra.lib.strings.intercalate(separator)(printedElements)
                   }
                 }
@@ -393,8 +377,7 @@ def printExpr(e: hydra.ast.Expr): scala.Predef.String =
                     {
                       lazy val nlAfter: Boolean = (style.newlineAfterContent)
                       {
-                        lazy val ibody: scala.Predef.String = hydra.lib.maybes.maybe[scala.Predef.String,
-                           scala.Predef.String](body)((idt2: scala.Predef.String) => hydra.serialization.customIndent(idt2)(body))(doIndent)
+                        lazy val ibody: scala.Predef.String = hydra.lib.maybes.maybe[scala.Predef.String, scala.Predef.String](body)((idt2: scala.Predef.String) => hydra.serialization.customIndent(idt2)(body))(doIndent)
                         {
                           lazy val pre: scala.Predef.String = hydra.lib.logic.ifElse[scala.Predef.String](nlBefore)("\n")("")
                           {
@@ -421,23 +404,19 @@ def sep(op: hydra.ast.Op)(els: Seq[hydra.ast.Expr]): hydra.ast.Expr =
   hydra.lib.lists.foldl[hydra.ast.Expr, hydra.ast.Expr]((acc: hydra.ast.Expr) => (el: hydra.ast.Expr) => hydra.serialization.ifx(op)(acc)(el))(h)(hydra.lib.lists.drop[hydra.ast.Expr](1)(els)))(hydra.lib.lists.safeHead[hydra.ast.Expr](els))
 
 def spaceSep(v1: Seq[hydra.ast.Expr]): hydra.ast.Expr =
-  hydra.serialization.sep(hydra.ast.Op(hydra.serialization.sym(""), hydra.ast.Padding(hydra.ast.Ws.space,
-     hydra.ast.Ws.none), 0, hydra.ast.Associativity.none))(v1)
+  hydra.serialization.sep(hydra.ast.Op(hydra.serialization.sym(""), hydra.ast.Padding(hydra.ast.Ws.space, hydra.ast.Ws.none), 0, hydra.ast.Associativity.none))(v1)
 
 lazy val squareBrackets: hydra.ast.Brackets = hydra.ast.Brackets("[", "]")
 
 def structuralSep(op: hydra.ast.Op)(els: Seq[hydra.ast.Expr]): hydra.ast.Expr =
-  hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.lists.`null`[hydra.ast.Expr](els))(hydra.serialization.cst(""))(hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.ast.Expr](els))(1))(hydra.lib.lists.head[hydra.ast.Expr](els))(hydra.ast.Expr.seq(hydra.ast.SeqExpr(op,
-     els))))
+  hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.lists.`null`[hydra.ast.Expr](els))(hydra.serialization.cst(""))(hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.ast.Expr](els))(1))(hydra.lib.lists.head[hydra.ast.Expr](els))(hydra.ast.Expr.seq(hydra.ast.SeqExpr(op, els))))
 
 def structuralSpaceSep(v1: Seq[hydra.ast.Expr]): hydra.ast.Expr =
-  hydra.serialization.structuralSep(hydra.ast.Op(hydra.serialization.sym(""), hydra.ast.Padding(hydra.ast.Ws.space,
-     hydra.ast.Ws.none), 0, hydra.ast.Associativity.none))(v1)
+  hydra.serialization.structuralSep(hydra.ast.Op(hydra.serialization.sym(""), hydra.ast.Padding(hydra.ast.Ws.space, hydra.ast.Ws.none), 0, hydra.ast.Associativity.none))(v1)
 
 def suffix(s: scala.Predef.String)(expr: hydra.ast.Expr): hydra.ast.Expr =
   {
-  lazy val sufOp: hydra.ast.Op = hydra.ast.Op(hydra.serialization.sym(s), hydra.ast.Padding(hydra.ast.Ws.none,
-     hydra.ast.Ws.none), 0, hydra.ast.Associativity.none)
+  lazy val sufOp: hydra.ast.Op = hydra.ast.Op(hydra.serialization.sym(s), hydra.ast.Padding(hydra.ast.Ws.none, hydra.ast.Ws.none), 0, hydra.ast.Associativity.none)
   hydra.serialization.ifx(sufOp)(expr)(hydra.serialization.cst(""))
 }
 
@@ -445,8 +424,7 @@ def sym(s: scala.Predef.String): hydra.ast.Symbol = s
 
 def symbolSep(symb: scala.Predef.String)(style: hydra.ast.BlockStyle)(l: Seq[hydra.ast.Expr]): hydra.ast.Expr =
   {
-  lazy val breakCount: Int = hydra.lib.lists.length[Boolean](hydra.lib.lists.filter[Boolean]((`x_`: Boolean) => `x_`)(Seq(style.newlineBeforeContent,
-     (style.newlineAfterContent))))
+  lazy val breakCount: Int = hydra.lib.lists.length[Boolean](hydra.lib.lists.filter[Boolean]((`x_`: Boolean) => `x_`)(Seq(style.newlineBeforeContent, (style.newlineAfterContent))))
   lazy val break: hydra.ast.Ws = hydra.lib.logic.ifElse[hydra.ast.Ws](hydra.lib.equality.equal[Int](breakCount)(0))(hydra.ast.Ws.space)(hydra.lib.logic.ifElse[hydra.ast.Ws](hydra.lib.equality.equal[Int](breakCount)(1))(hydra.ast.Ws.break)(hydra.ast.Ws.doubleBreak))
   lazy val commaOp: hydra.ast.Op = hydra.ast.Op(hydra.serialization.sym(symb), hydra.ast.Padding(hydra.ast.Ws.none, break), 0, hydra.ast.Associativity.none)
   hydra.lib.maybes.maybe[hydra.ast.Expr, hydra.ast.Expr](hydra.serialization.cst(""))((h: hydra.ast.Expr) =>

@@ -68,6 +68,11 @@ echo ""
 stack exec update-scala -- $RTS_FLAGS
 python3 "$HYDRA_SCALA_DIR/bin/break-long-lines.py"
 
+# Fix Scala 3 reserved word 'macro' in generated enum cases and pattern matches
+echo "  Post-processing: escaping 'macro' keyword..."
+find "$HYDRA_SCALA_DIR/src/gen-main/scala" -name "*.scala" -exec \
+    sed -i '' -e 's/case macro(/case `macro`(/g' -e 's/\.macro(/.`macro`(/g' {} +
+
 if [ "$QUICK_MODE" = false ]; then
     echo ""
     echo "Step 3/$TOTAL_STEPS: Compiling Scala..."

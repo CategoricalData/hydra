@@ -132,6 +132,7 @@ scalaReservedWords =
           "implicit",
           "import",
           "lazy",
+          "macro",
           "match",
           "new",
           "null",

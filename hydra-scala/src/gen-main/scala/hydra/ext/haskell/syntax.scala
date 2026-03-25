@@ -22,9 +22,7 @@ case class RecordConstructor(name: hydra.ext.haskell.syntax.Name, fields: Seq[hy
 
 case class ConstructorWithComments(body: hydra.ext.haskell.syntax.Constructor, comments: Option[scala.Predef.String])
 
-case class DataDeclaration(keyword: hydra.ext.haskell.syntax.DataOrNewtype, context: Seq[hydra.ext.haskell.syntax.Assertion],
-   head: hydra.ext.haskell.syntax.DeclarationHead, constructors: Seq[hydra.ext.haskell.syntax.ConstructorWithComments],
-   deriving: Seq[hydra.ext.haskell.syntax.Deriving])
+case class DataDeclaration(keyword: hydra.ext.haskell.syntax.DataOrNewtype, context: Seq[hydra.ext.haskell.syntax.Assertion], head: hydra.ext.haskell.syntax.DeclarationHead, constructors: Seq[hydra.ext.haskell.syntax.ConstructorWithComments], deriving: Seq[hydra.ext.haskell.syntax.Deriving])
 
 enum DataOrNewtype :
    case data extends DataOrNewtype
@@ -77,11 +75,9 @@ case class CaseExpression(`case`: hydra.ext.haskell.syntax.Expression, alternati
 
 case class ConstructRecordExpression(name: hydra.ext.haskell.syntax.Name, fields: Seq[hydra.ext.haskell.syntax.FieldUpdate])
 
-case class IfExpression(condition: hydra.ext.haskell.syntax.Expression, `then`: hydra.ext.haskell.syntax.Expression,
-   `else`: hydra.ext.haskell.syntax.Expression)
+case class IfExpression(condition: hydra.ext.haskell.syntax.Expression, `then`: hydra.ext.haskell.syntax.Expression, `else`: hydra.ext.haskell.syntax.Expression)
 
-case class InfixApplicationExpression(lhs: hydra.ext.haskell.syntax.Expression, operator: hydra.ext.haskell.syntax.Operator,
-   rhs: hydra.ext.haskell.syntax.Expression)
+case class InfixApplicationExpression(lhs: hydra.ext.haskell.syntax.Expression, operator: hydra.ext.haskell.syntax.Operator, rhs: hydra.ext.haskell.syntax.Expression)
 
 case class LambdaExpression(bindings: Seq[hydra.ext.haskell.syntax.Pattern], inner: hydra.ext.haskell.syntax.Expression)
 
@@ -101,8 +97,7 @@ case class FieldWithComments(field: hydra.ext.haskell.syntax.Field, comments: Op
 
 case class FieldUpdate(name: hydra.ext.haskell.syntax.Name, value: hydra.ext.haskell.syntax.Expression)
 
-case class Import(qualified: Boolean, module: hydra.ext.haskell.syntax.ModuleName, as: Option[hydra.ext.haskell.syntax.ModuleName],
-   spec: Option[hydra.ext.haskell.syntax.SpecImport])
+case class Import(qualified: Boolean, module: hydra.ext.haskell.syntax.ModuleName, as: Option[hydra.ext.haskell.syntax.ModuleName], spec: Option[hydra.ext.haskell.syntax.SpecImport])
 
 enum SpecImport :
    case list(value: Seq[hydra.ext.haskell.syntax.ImportExportSpec]) extends SpecImport
@@ -112,8 +107,7 @@ enum ImportModifier :
    case pattern extends ImportModifier
    case `type` extends ImportModifier
 
-case class ImportExportSpec(modifier: Option[hydra.ext.haskell.syntax.ImportModifier], name: hydra.ext.haskell.syntax.Name,
-   subspec: Option[hydra.ext.haskell.syntax.SubspecImportExportSpec])
+case class ImportExportSpec(modifier: Option[hydra.ext.haskell.syntax.ImportModifier], name: hydra.ext.haskell.syntax.Name, subspec: Option[hydra.ext.haskell.syntax.SubspecImportExportSpec])
 
 enum SubspecImportExportSpec :
    case all extends SubspecImportExportSpec
@@ -133,8 +127,7 @@ enum LocalBinding :
 
 type LocalBindings = Seq[hydra.ext.haskell.syntax.LocalBinding]
 
-case class Module(head: Option[hydra.ext.haskell.syntax.ModuleHead], imports: Seq[hydra.ext.haskell.syntax.Import],
-   declarations: Seq[hydra.ext.haskell.syntax.DeclarationWithComments])
+case class Module(head: Option[hydra.ext.haskell.syntax.ModuleHead], imports: Seq[hydra.ext.haskell.syntax.Import], declarations: Seq[hydra.ext.haskell.syntax.DeclarationWithComments])
 
 case class ModuleHead(comments: Option[scala.Predef.String], name: hydra.ext.haskell.syntax.ModuleName, exports: Seq[hydra.ext.haskell.syntax.Export])
 
@@ -206,7 +199,6 @@ case class TypedBinding(typeSignature: hydra.ext.haskell.syntax.TypeSignature, v
 enum ValueBinding :
    case simple(value: hydra.ext.haskell.syntax.SimpleValueBinding) extends ValueBinding
 
-case class SimpleValueBinding(pattern: hydra.ext.haskell.syntax.Pattern, rhs: hydra.ext.haskell.syntax.RightHandSide,
-   localBindings: Option[hydra.ext.haskell.syntax.LocalBindings])
+case class SimpleValueBinding(pattern: hydra.ext.haskell.syntax.Pattern, rhs: hydra.ext.haskell.syntax.RightHandSide, localBindings: Option[hydra.ext.haskell.syntax.LocalBindings])
 
 type Variable = hydra.ext.haskell.syntax.Name
