@@ -97,6 +97,16 @@ lazy val emptyGraph: hydra.graph.Graph = hydra.graph.Graph(hydra.lib.maps.empty[
    hydra.core.Term], hydra.lib.maps.empty[hydra.core.Name, hydra.graph.Primitive], hydra.lib.maps.empty[hydra.core.Name,
    hydra.core.TypeScheme], hydra.lib.sets.empty[hydra.core.Name])
 
+def graphToBindings(g: hydra.graph.Graph): Seq[hydra.core.Binding] =
+  hydra.lib.lists.map[Tuple2[hydra.core.Name, hydra.core.Term], hydra.core.Binding]((p: Tuple2[hydra.core.Name, hydra.core.Term]) =>
+  {
+  lazy val name: hydra.core.Name = hydra.lib.pairs.first[hydra.core.Name, hydra.core.Term](p)
+  {
+    lazy val term: hydra.core.Term = hydra.lib.pairs.second[hydra.core.Name, hydra.core.Term](p)
+    hydra.core.Binding(name, term, hydra.lib.maps.lookup[hydra.core.Name, hydra.core.TypeScheme](name)(g.boundTypes))
+  }
+})(hydra.lib.maps.toList[hydra.core.Name, hydra.core.Term](g.boundTerms))
+
 def fieldsOf(t: hydra.core.Type): Seq[hydra.core.FieldType] =
   {
   lazy val stripped: hydra.core.Type = hydra.rewriting.deannotateType(t)
@@ -111,16 +121,6 @@ def getField[T0, T1](cx: hydra.context.Context)(m: Map[hydra.core.Name, T0])(fna
    T1])): Either[hydra.context.InContext[hydra.errors.Error], T1] =
   hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error], T1], T0](Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected field ")(fname))(" not found")),
      cx)))(decode)(hydra.lib.maps.lookup[hydra.core.Name, T0](fname)(m))
-
-def graphToBindings(g: hydra.graph.Graph): Seq[hydra.core.Binding] =
-  hydra.lib.lists.map[Tuple2[hydra.core.Name, hydra.core.Term], hydra.core.Binding]((p: Tuple2[hydra.core.Name, hydra.core.Term]) =>
-  {
-  lazy val name: hydra.core.Name = hydra.lib.pairs.first[hydra.core.Name, hydra.core.Term](p)
-  {
-    lazy val term: hydra.core.Term = hydra.lib.pairs.second[hydra.core.Name, hydra.core.Term](p)
-    hydra.core.Binding(name, term, hydra.lib.maps.lookup[hydra.core.Name, hydra.core.TypeScheme](name)(g.boundTypes))
-  }
-})(hydra.lib.maps.toList[hydra.core.Name, hydra.core.Term](g.boundTerms))
 
 def lookupElement(graph: hydra.graph.Graph)(name: hydra.core.Name): Option[hydra.core.Binding] =
   hydra.lib.maybes.map[hydra.core.Term, hydra.core.Binding]((term: hydra.core.Term) =>

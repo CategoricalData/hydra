@@ -151,10 +151,12 @@
       (sort pairs (lambda (a b) (< (generic-compare (first a) (first b)) 0))))))
 
 ;; union :: Map k v -> Map k v -> Map k v (left-biased)
+;; Uses copy-alist (not copy-list) so that m2's cons cells are not mutated
+;; when an existing key is overwritten via setf.
 (defvar hydra_lib_maps_union
   (lambda (m1)
     (lambda (m2)
-      (let ((result (copy-list m2)))
+      (let ((result (copy-alist m2)))
         (dolist (pair m1 result)
           (let ((existing (assoc (car pair) result :test #'equal)))
             (if existing
