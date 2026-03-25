@@ -142,6 +142,7 @@ import java.io.File
     case "haskell" => Generation.writeHaskell(outMain + "/haskell", allMainMods, modsToGenerate)
     case "java" => Generation.writeJava(outMain + "/java", allMainMods, modsToGenerate)
     case "python" => Generation.writePython(outMain + "/python", allMainMods, modsToGenerate)
+    case "scala" => Generation.writeScala(outMain + "/scala", allMainMods, modsToGenerate)
     case other =>
       println(s"Unknown target: $other")
       System.exit(1)
@@ -182,6 +183,7 @@ import java.io.File
       case "haskell" => Generation.writeHaskell(outTest + "/haskell", allUniverse, testMods)
       case "java" => Generation.writeJava(outTest + "/java", allUniverse, testMods)
       case "python" => Generation.writePython(outTest + "/python", allUniverse, testMods)
+      case "scala" => Generation.writeScala(outTest + "/scala", allUniverse, testMods)
       case _ => 0
 
     stepTime = System.currentTimeMillis() - stepStart

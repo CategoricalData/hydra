@@ -26,8 +26,7 @@ def adjacencyListToMap[T0, T1](pairs: Seq[Tuple2[T0, Seq[T1]]]): Map[T0, Seq[T1]
   {
     lazy val vs: Seq[T1] = hydra.lib.pairs.second[T0, Seq[T1]](p)
     {
-      lazy val existing: Seq[T1] = hydra.lib.maybes.maybe[Seq[T1], Seq[T1]](Seq())(hydra.lib.equality.identity[Seq[T1]])(hydra.lib.maps.lookup[T0,
-         Seq[T1]](k)(mp))
+      lazy val existing: Seq[T1] = hydra.lib.maybes.maybe[Seq[T1], Seq[T1]](Seq())(hydra.lib.equality.identity[Seq[T1]])(hydra.lib.maps.lookup[T0, Seq[T1]](k)(mp))
       hydra.lib.maps.insert[T0, Seq[T1]](k)(hydra.lib.lists.concat2[T1](existing)(vs))(mp)
     }
   }
@@ -36,10 +35,8 @@ def adjacencyListToMap[T0, T1](pairs: Seq[Tuple2[T0, Seq[T1]]]): Map[T0, Seq[T1]
 def adjacencyListsToGraph[T0](edges0: Seq[Tuple2[T0, Seq[T0]]]): Tuple2[Map[Int, Seq[Int]], (Int => T0)] =
   {
   lazy val sortedEdges: Seq[Tuple2[T0, Seq[T0]]] = hydra.lib.lists.sortOn[Tuple2[T0, Seq[T0]], T0](hydra.lib.pairs.first[T0, Seq[T0]])(edges0)
-  lazy val indexedEdges: Seq[Tuple2[Int, Tuple2[T0, Seq[T0]]]] = hydra.lib.lists.zip[Int, Tuple2[T0, Seq[T0]]](hydra.lib.math.range(0)(hydra.lib.lists.length[Tuple2[T0,
-     Seq[T0]]](sortedEdges)))(sortedEdges)
-  lazy val keyToVertex: Map[T0, Int] = hydra.lib.maps.fromList[T0, Int](hydra.lib.lists.map[Tuple2[Int,
-     Tuple2[T0, Seq[T0]]], Tuple2[T0, Int]]((vkNeighbors: Tuple2[Int, Tuple2[T0, Seq[T0]]]) =>
+  lazy val indexedEdges: Seq[Tuple2[Int, Tuple2[T0, Seq[T0]]]] = hydra.lib.lists.zip[Int, Tuple2[T0, Seq[T0]]](hydra.lib.math.range(0)(hydra.lib.lists.length[Tuple2[T0, Seq[T0]]](sortedEdges)))(sortedEdges)
+  lazy val keyToVertex: Map[T0, Int] = hydra.lib.maps.fromList[T0, Int](hydra.lib.lists.map[Tuple2[Int, Tuple2[T0, Seq[T0]]], Tuple2[T0, Int]]((vkNeighbors: Tuple2[Int, Tuple2[T0, Seq[T0]]]) =>
     {
     lazy val v: Int = hydra.lib.pairs.first[Int, Tuple2[T0, Seq[T0]]](vkNeighbors)
     {
@@ -50,8 +47,7 @@ def adjacencyListsToGraph[T0](edges0: Seq[Tuple2[T0, Seq[T0]]]): Tuple2[Map[Int,
       }
     }
   })(indexedEdges))
-  lazy val vertexMap: Map[Int, T0] = hydra.lib.maps.fromList[Int, T0](hydra.lib.lists.map[Tuple2[Int,
-     Tuple2[T0, Seq[T0]]], Tuple2[Int, T0]]((vkNeighbors: Tuple2[Int, Tuple2[T0, Seq[T0]]]) =>
+  lazy val vertexMap: Map[Int, T0] = hydra.lib.maps.fromList[Int, T0](hydra.lib.lists.map[Tuple2[Int, Tuple2[T0, Seq[T0]]], Tuple2[Int, T0]]((vkNeighbors: Tuple2[Int, Tuple2[T0, Seq[T0]]]) =>
     {
     lazy val v: Int = hydra.lib.pairs.first[Int, Tuple2[T0, Seq[T0]]](vkNeighbors)
     {
@@ -62,8 +58,7 @@ def adjacencyListsToGraph[T0](edges0: Seq[Tuple2[T0, Seq[T0]]]): Tuple2[Map[Int,
       }
     }
   })(indexedEdges))
-  lazy val graph: Map[Int, Seq[Int]] = hydra.lib.maps.fromList[Int, Seq[Int]](hydra.lib.lists.map[Tuple2[Int,
-     Tuple2[T0, Seq[T0]]], Tuple2[Int, Seq[Int]]]((vkNeighbors: Tuple2[Int, Tuple2[T0, Seq[T0]]]) =>
+  lazy val graph: Map[Int, Seq[Int]] = hydra.lib.maps.fromList[Int, Seq[Int]](hydra.lib.lists.map[Tuple2[Int, Tuple2[T0, Seq[T0]]], Tuple2[Int, Seq[Int]]]((vkNeighbors: Tuple2[Int, Tuple2[T0, Seq[T0]]]) =>
     {
     lazy val v: Int = hydra.lib.pairs.first[Int, Tuple2[T0, Seq[T0]]](vkNeighbors)
     {
@@ -98,14 +93,12 @@ def findReachableNodes[T0](adj: (T0 => scala.collection.immutable.Set[T0]))(root
   def visit(visited: scala.collection.immutable.Set[T0])(node: T0): scala.collection.immutable.Set[T0] =
     {
     lazy val toVisit: scala.collection.immutable.Set[T0] = hydra.lib.sets.difference[T0](adj(node))(visited)
-    hydra.lib.logic.ifElse[scala.collection.immutable.Set[T0]](hydra.lib.sets.`null`[T0](toVisit))(visited)(hydra.lib.lists.foldl[scala.collection.immutable.Set[T0],
-       T0]((v: scala.collection.immutable.Set[T0]) => (n: T0) => visit(hydra.lib.sets.insert[T0](n)(v))(n))(visited)(hydra.lib.sets.toList[T0](toVisit)))
+    hydra.lib.logic.ifElse[scala.collection.immutable.Set[T0]](hydra.lib.sets.`null`[T0](toVisit))(visited)(hydra.lib.lists.foldl[scala.collection.immutable.Set[T0], T0]((v: scala.collection.immutable.Set[T0]) => (n: T0) => visit(hydra.lib.sets.insert[T0](n)(v))(n))(visited)(hydra.lib.sets.toList[T0](toVisit)))
   }
   visit(hydra.lib.sets.singleton[T0](root))(root)
 }
 
-lazy val initialState: hydra.topology.TarjanState = hydra.topology.TarjanState(0, hydra.lib.maps.empty[Int,
-   Int], hydra.lib.maps.empty[Int, Int], Seq(), hydra.lib.sets.empty[Int], Seq())
+lazy val initialState: hydra.topology.TarjanState = hydra.topology.TarjanState(0, hydra.lib.maps.empty[Int, Int], hydra.lib.maps.empty[Int, Int], Seq(), hydra.lib.sets.empty[Int], Seq())
 
 def popStackUntil(v: Int)(st0: hydra.topology.TarjanState): Tuple2[Seq[Int], hydra.topology.TarjanState] =
   {
@@ -114,11 +107,9 @@ def popStackUntil(v: Int)(st0: hydra.topology.TarjanState): Tuple2[Seq[Int], hyd
     lazy val x: Int = hydra.lib.lists.head[Int](st.stack)
     lazy val xs: Seq[Int] = hydra.lib.lists.tail[Int](st.stack)
     lazy val newSt: hydra.topology.TarjanState = hydra.topology.TarjanState(st.counter, (st.indices), (st.lowLinks), xs, (st.onStack), (st.sccs))
-    lazy val newSt2: hydra.topology.TarjanState = hydra.topology.TarjanState(newSt.counter, (newSt.indices),
-       (newSt.lowLinks), (newSt.stack), hydra.lib.sets.delete[Int](x)(st.onStack), (newSt.sccs))
+    lazy val newSt2: hydra.topology.TarjanState = hydra.topology.TarjanState(newSt.counter, (newSt.indices), (newSt.lowLinks), (newSt.stack), hydra.lib.sets.delete[Int](x)(st.onStack), (newSt.sccs))
     lazy val `acc_`: Seq[Int] = hydra.lib.lists.cons[Int](x)(acc)
-    hydra.lib.logic.ifElse[Tuple2[Seq[Int], hydra.topology.TarjanState]](hydra.lib.equality.equal[Int](x)(v))(Tuple2(hydra.lib.lists.reverse[Int](`acc_`),
-       newSt2))(go(`acc_`)(newSt2))
+    hydra.lib.logic.ifElse[Tuple2[Seq[Int], hydra.topology.TarjanState]](hydra.lib.equality.equal[Int](x)(v))(Tuple2(hydra.lib.lists.reverse[Int](`acc_`), newSt2))(go(`acc_`)(newSt2))
   }
   go(Seq())(st0)
 }
@@ -126,19 +117,14 @@ def popStackUntil(v: Int)(st0: hydra.topology.TarjanState): Tuple2[Seq[Int], hyd
 def propagateTags[T0, T1](edges: Seq[Tuple2[T0, Seq[T0]]])(nodeTags: Seq[Tuple2[T0, Seq[T1]]]): Seq[Tuple2[T0, scala.collection.immutable.Set[T1]]] =
   {
   lazy val adjMap: Map[T0, Seq[T0]] = hydra.sorting.adjacencyListToMap(edges)
-  lazy val tagMap: Map[T0, scala.collection.immutable.Set[T1]] = hydra.lib.maps.map[Seq[T1], scala.collection.immutable.Set[T1],
-     T0](hydra.lib.sets.fromList[T1])(hydra.sorting.adjacencyListToMap(nodeTags))
-  lazy val allNodes: Seq[T0] = hydra.lib.sets.toList[T0](hydra.lib.sets.fromList[T0](hydra.lib.lists.concat2[T0](hydra.lib.lists.map[Tuple2[T0,
-     Seq[T0]], T0](hydra.lib.pairs.first[T0, Seq[T0]])(edges))(hydra.lib.lists.map[Tuple2[T0, Seq[T1]],
-     T0](hydra.lib.pairs.first[T0, Seq[T1]])(nodeTags))))
+  lazy val tagMap: Map[T0, scala.collection.immutable.Set[T1]] = hydra.lib.maps.map[Seq[T1], scala.collection.immutable.Set[T1], T0](hydra.lib.sets.fromList[T1])(hydra.sorting.adjacencyListToMap(nodeTags))
+  lazy val allNodes: Seq[T0] = hydra.lib.sets.toList[T0](hydra.lib.sets.fromList[T0](hydra.lib.lists.concat2[T0](hydra.lib.lists.map[Tuple2[T0, Seq[T0]], T0](hydra.lib.pairs.first[T0, Seq[T0]])(edges))(hydra.lib.lists.map[Tuple2[T0, Seq[T1]], T0](hydra.lib.pairs.first[T0, Seq[T1]])(nodeTags))))
   def getTagsForNode(node: T0): scala.collection.immutable.Set[T1] =
     {
     lazy val reachable: scala.collection.immutable.Set[T0] = hydra.sorting.findReachableNodes((n: T0) =>
-      hydra.lib.sets.fromList[T0](hydra.lib.maybes.maybe[Seq[T0], Seq[T0]](Seq())(hydra.lib.equality.identity[Seq[T0]])(hydra.lib.maps.lookup[T0,
-         Seq[T0]](n)(adjMap))))(node)
+      hydra.lib.sets.fromList[T0](hydra.lib.maybes.maybe[Seq[T0], Seq[T0]](Seq())(hydra.lib.equality.identity[Seq[T0]])(hydra.lib.maps.lookup[T0, Seq[T0]](n)(adjMap))))(node)
     hydra.lib.sets.unions[T1](hydra.lib.lists.map[T0, scala.collection.immutable.Set[T1]]((n: T0) =>
-      hydra.lib.maybes.maybe[scala.collection.immutable.Set[T1], scala.collection.immutable.Set[T1]](hydra.lib.sets.empty[T1])(hydra.lib.equality.identity[scala.collection.immutable.Set[T1]])(hydra.lib.maps.lookup[T0,
-         scala.collection.immutable.Set[T1]](n)(tagMap)))(hydra.lib.sets.toList[T0](reachable)))
+      hydra.lib.maybes.maybe[scala.collection.immutable.Set[T1], scala.collection.immutable.Set[T1]](hydra.lib.sets.empty[T1])(hydra.lib.equality.identity[scala.collection.immutable.Set[T1]])(hydra.lib.maps.lookup[T0, scala.collection.immutable.Set[T1]](n)(tagMap)))(hydra.lib.sets.toList[T0](reachable)))
   }
   hydra.lib.lists.map[T0, Tuple2[T0, scala.collection.immutable.Set[T1]]]((n: T0) => Tuple2(n, getTagsForNode(n)))(allNodes)
 }
@@ -146,9 +132,7 @@ def propagateTags[T0, T1](edges: Seq[Tuple2[T0, Seq[T0]]])(nodeTags: Seq[Tuple2[
 def strongConnect(graph: Map[Int, Seq[Int]])(v: Int)(st: hydra.topology.TarjanState): hydra.topology.TarjanState =
   {
   lazy val i: Int = (st.counter)
-  lazy val newSt: hydra.topology.TarjanState = hydra.topology.TarjanState(hydra.lib.math.add(i)(1), hydra.lib.maps.insert[Int,
-     Int](v)(i)(st.indices), hydra.lib.maps.insert[Int, Int](v)(i)(st.lowLinks), hydra.lib.lists.cons[Int](v)(st.stack),
-     hydra.lib.sets.insert[Int](v)(st.onStack), (st.sccs))
+  lazy val newSt: hydra.topology.TarjanState = hydra.topology.TarjanState(hydra.lib.math.add(i)(1), hydra.lib.maps.insert[Int, Int](v)(i)(st.indices), hydra.lib.maps.insert[Int, Int](v)(i)(st.lowLinks), hydra.lib.lists.cons[Int](v)(st.stack), hydra.lib.sets.insert[Int](v)(st.onStack), (st.sccs))
   lazy val neighbors: Seq[Int] = hydra.lib.maps.findWithDefault[Seq[Int], Int](Seq())(v)(graph)
   def processNeighbor(`st_`: hydra.topology.TarjanState)(w: Int): hydra.topology.TarjanState =
     {
@@ -156,8 +140,7 @@ def strongConnect(graph: Map[Int, Seq[Int]])(v: Int)(st: hydra.topology.TarjanSt
       {
       lazy val lowV1: Int = hydra.lib.maps.findWithDefault[Int, Int](hydra.constants.maxInt32)(v)(s.lowLinks)
       lazy val idx_w: Int = hydra.lib.maps.findWithDefault[Int, Int](hydra.constants.maxInt32)(w)(s.indices)
-      hydra.topology.TarjanState(s.counter, (s.indices), hydra.lib.maps.insert[Int, Int](v)(hydra.lib.equality.min[Int](lowV1)(idx_w))(s.lowLinks),
-         (s.stack), (s.onStack), (s.sccs))
+      hydra.topology.TarjanState(s.counter, (s.indices), hydra.lib.maps.insert[Int, Int](v)(hydra.lib.equality.min[Int](lowV1)(idx_w))(s.lowLinks), (s.stack), (s.onStack), (s.sccs))
     }
     hydra.lib.logic.ifElse[hydra.topology.TarjanState](hydra.lib.logic.not(hydra.lib.maps.member[Int, Int](w)(`st_`.indices)))({
       lazy val stAfter: hydra.topology.TarjanState = hydra.sorting.strongConnect(graph)(w)(`st_`)
@@ -165,8 +148,7 @@ def strongConnect(graph: Map[Int, Seq[Int]])(v: Int)(st: hydra.topology.TarjanSt
         lazy val lowV2: Int = hydra.lib.maps.findWithDefault[Int, Int](hydra.constants.maxInt32)(v)(stAfter.lowLinks)
         {
           lazy val low_w: Int = hydra.lib.maps.findWithDefault[Int, Int](hydra.constants.maxInt32)(w)(stAfter.lowLinks)
-          hydra.topology.TarjanState(stAfter.counter, (stAfter.indices), hydra.lib.maps.insert[Int, Int](v)(hydra.lib.equality.min[Int](lowV2)(low_w))(stAfter.lowLinks),
-             (stAfter.stack), (stAfter.onStack), (stAfter.sccs))
+          hydra.topology.TarjanState(stAfter.counter, (stAfter.indices), hydra.lib.maps.insert[Int, Int](v)(hydra.lib.equality.min[Int](lowV2)(low_w))(stAfter.lowLinks), (stAfter.stack), (stAfter.onStack), (stAfter.sccs))
         }
       }
     })(hydra.lib.logic.ifElse[hydra.topology.TarjanState](hydra.lib.sets.member[Int](w)(`st_`.onStack))(lowLink(`st_`))(`st_`))
@@ -180,8 +162,7 @@ def strongConnect(graph: Map[Int, Seq[Int]])(v: Int)(st: hydra.topology.TarjanSt
       lazy val comp: Seq[Int] = hydra.lib.pairs.first[Seq[Int], hydra.topology.TarjanState](compResult)
       {
         lazy val stPopped: hydra.topology.TarjanState = hydra.lib.pairs.second[Seq[Int], hydra.topology.TarjanState](compResult)
-        hydra.topology.TarjanState(stPopped.counter, (stPopped.indices), (stPopped.lowLinks), (stPopped.stack),
-           (stPopped.onStack), hydra.lib.lists.cons[Seq[Int]](comp)(stPopped.sccs))
+        hydra.topology.TarjanState(stPopped.counter, (stPopped.indices), (stPopped.lowLinks), (stPopped.stack), (stPopped.onStack), hydra.lib.lists.cons[Seq[Int]](comp)(stPopped.sccs))
       }
     }
   })(stAfterNeighbors)

@@ -20,8 +20,7 @@ enum CaseConvention :
    case lowerSnake extends CaseConvention
    case upperSnake extends CaseConvention
 
-case class Coder[V1, V2](encode: (hydra.context.Context => V1 => Either[hydra.context.InContext[hydra.errors.Error],
-   V2]), decode: (hydra.context.Context => V2 => Either[hydra.context.InContext[hydra.errors.Error], V1]))
+case class Coder[V1, V2](encode: (hydra.context.Context => V1 => Either[hydra.context.InContext[hydra.errors.Error], V2]), decode: (hydra.context.Context => V2 => Either[hydra.context.InContext[hydra.errors.Error], V1]))
 
 enum Comparison :
    case lessThan extends Comparison

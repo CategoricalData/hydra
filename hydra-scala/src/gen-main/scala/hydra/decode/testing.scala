@@ -36,8 +36,7 @@ def caseConversionTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.util.CaseConvention, hydra.testing.CaseConversionTestCase](hydra.extract.helpers.requireField("toConvention")(hydra.decode.util.caseConvention)(fieldMap)(cx))((field_toConvention: hydra.util.CaseConvention) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, scala.Predef.String, hydra.testing.CaseConversionTestCase](hydra.extract.helpers.requireField("fromString")((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
-         scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.string(v_Literal_string_s) => Right(v_Literal_string_s)
@@ -45,8 +44,7 @@ def caseConversionTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[
       case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx2)(raw2)))(fieldMap)(cx))((field_fromString: scala.Predef.String) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, scala.Predef.String, hydra.testing.CaseConversionTestCase](hydra.extract.helpers.requireField("toString")((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
-         scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.string(v_Literal_string_s) => Right(v_Literal_string_s)
@@ -107,16 +105,10 @@ def evaluationStyle(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.e
     lazy val field: hydra.core.Field = (v_Term_union_inj.field)
     lazy val fname: hydra.core.Name = (field.name)
     lazy val fterm: hydra.core.Term = (field.term)
-    lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.EvaluationStyle])] = hydra.lib.maps.fromList[hydra.core.Name,
-       (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.EvaluationStyle]](Seq(Tuple2("eager",
-       (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.testing.EvaluationStyle, hydra.errors.DecodingError]((t: Unit) => hydra.testing.EvaluationStyle.eager)(hydra.extract.helpers.decodeUnit(cx)(input))),
-         Tuple2("lazy", (input: hydra.core.Term) =>
+    lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.EvaluationStyle])] = hydra.lib.maps.fromList[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.EvaluationStyle]](Seq(Tuple2("eager", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.testing.EvaluationStyle, hydra.errors.DecodingError]((t: Unit) => hydra.testing.EvaluationStyle.eager)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("lazy", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.testing.EvaluationStyle, hydra.errors.DecodingError]((t: Unit) => hydra.testing.EvaluationStyle.`lazy`)(hydra.extract.helpers.decodeUnit(cx)(input)))))
-    hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.testing.EvaluationStyle], (hydra.core.Term) => Either[hydra.errors.DecodingError,
-       hydra.testing.EvaluationStyle]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
-       hydra.testing.EvaluationStyle])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
-       hydra.testing.EvaluationStyle]](fname)(variantMap))
+    hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.testing.EvaluationStyle], (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.EvaluationStyle]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.EvaluationStyle])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.EvaluationStyle]](fname)(variantMap))
   }
   case _ => Left("expected union"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
 
@@ -150,18 +142,11 @@ def foldOperation(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.err
     lazy val field: hydra.core.Field = (v_Term_union_inj.field)
     lazy val fname: hydra.core.Name = (field.name)
     lazy val fterm: hydra.core.Term = (field.term)
-    lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.FoldOperation])] = hydra.lib.maps.fromList[hydra.core.Name,
-       (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.FoldOperation]](Seq(Tuple2("sumInt32Literals",
-       (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.testing.FoldOperation, hydra.errors.DecodingError]((t: Unit) => hydra.testing.FoldOperation.sumInt32Literals)(hydra.extract.helpers.decodeUnit(cx)(input))),
-         Tuple2("collectListLengths", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.testing.FoldOperation, hydra.errors.DecodingError]((t: Unit) => hydra.testing.FoldOperation.collectListLengths)(hydra.extract.helpers.decodeUnit(cx)(input))),
-         Tuple2("collectLabels", (input: hydra.core.Term) =>
+    lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.FoldOperation])] = hydra.lib.maps.fromList[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.FoldOperation]](Seq(Tuple2("sumInt32Literals", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.testing.FoldOperation, hydra.errors.DecodingError]((t: Unit) => hydra.testing.FoldOperation.sumInt32Literals)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("collectListLengths", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.testing.FoldOperation, hydra.errors.DecodingError]((t: Unit) => hydra.testing.FoldOperation.collectListLengths)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("collectLabels", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.testing.FoldOperation, hydra.errors.DecodingError]((t: Unit) => hydra.testing.FoldOperation.collectLabels)(hydra.extract.helpers.decodeUnit(cx)(input)))))
-    hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.testing.FoldOperation], (hydra.core.Term) => Either[hydra.errors.DecodingError,
-       hydra.testing.FoldOperation]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
-       hydra.testing.FoldOperation])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
-       hydra.testing.FoldOperation]](fname)(variantMap))
+    hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.testing.FoldOperation], (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.FoldOperation]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.FoldOperation])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.FoldOperation]](fname)(variantMap))
   }
   case _ => Left("expected union"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
 
@@ -184,8 +169,7 @@ def freeVariablesTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[h
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
     hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Term, hydra.testing.FreeVariablesTestCase](hydra.extract.helpers.requireField("input")(hydra.decode.core.term)(fieldMap)(cx))((field_input: hydra.core.Term) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, scala.collection.immutable.Set[hydra.core.Name],
-         hydra.testing.FreeVariablesTestCase](hydra.extract.helpers.requireField("output")((v1: hydra.graph.Graph) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, scala.collection.immutable.Set[hydra.core.Name], hydra.testing.FreeVariablesTestCase](hydra.extract.helpers.requireField("output")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.helpers.decodeSet(hydra.decode.core.name)(v1)(v2))(fieldMap)(cx))((field_output: scala.collection.immutable.Set[hydra.core.Name]) =>
       Right(hydra.testing.FreeVariablesTestCase(field_input, field_output))))
@@ -214,8 +198,7 @@ def hoistLetBindingsTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Eithe
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
 
-def hoistPolymorphicLetBindingsTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
-   hydra.testing.HoistPolymorphicLetBindingsTestCase] =
+def hoistPolymorphicLetBindingsTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.testing.HoistPolymorphicLetBindingsTestCase] =
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.testing.HoistPolymorphicLetBindingsTestCase]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
@@ -233,20 +216,12 @@ def hoistPredicate(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.er
     lazy val field: hydra.core.Field = (v_Term_union_inj.field)
     lazy val fname: hydra.core.Name = (field.name)
     lazy val fterm: hydra.core.Term = (field.term)
-    lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.HoistPredicate])] = hydra.lib.maps.fromList[hydra.core.Name,
-       (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.HoistPredicate]](Seq(Tuple2("caseStatements",
-       (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.testing.HoistPredicate, hydra.errors.DecodingError]((t: Unit) => hydra.testing.HoistPredicate.caseStatements)(hydra.extract.helpers.decodeUnit(cx)(input))),
-         Tuple2("applications", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.testing.HoistPredicate, hydra.errors.DecodingError]((t: Unit) => hydra.testing.HoistPredicate.applications)(hydra.extract.helpers.decodeUnit(cx)(input))),
-         Tuple2("lists", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.testing.HoistPredicate, hydra.errors.DecodingError]((t: Unit) => hydra.testing.HoistPredicate.lists)(hydra.extract.helpers.decodeUnit(cx)(input))),
-         Tuple2("nothing", (input: hydra.core.Term) =>
+    lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.HoistPredicate])] = hydra.lib.maps.fromList[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.HoistPredicate]](Seq(Tuple2("caseStatements", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.testing.HoistPredicate, hydra.errors.DecodingError]((t: Unit) => hydra.testing.HoistPredicate.caseStatements)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("applications", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.testing.HoistPredicate, hydra.errors.DecodingError]((t: Unit) => hydra.testing.HoistPredicate.applications)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("lists", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.testing.HoistPredicate, hydra.errors.DecodingError]((t: Unit) => hydra.testing.HoistPredicate.lists)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("nothing", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.testing.HoistPredicate, hydra.errors.DecodingError]((t: Unit) => hydra.testing.HoistPredicate.nothing)(hydra.extract.helpers.decodeUnit(cx)(input)))))
-    hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.testing.HoistPredicate], (hydra.core.Term) => Either[hydra.errors.DecodingError,
-       hydra.testing.HoistPredicate]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
-       hydra.testing.HoistPredicate])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
-       hydra.testing.HoistPredicate]](fname)(variantMap))
+    hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.testing.HoistPredicate], (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.HoistPredicate]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.HoistPredicate])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.HoistPredicate]](fname)(variantMap))
   }
   case _ => Left("expected union"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
 
@@ -289,13 +264,11 @@ def joinTypesTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
     hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Type, hydra.testing.JoinTypesTestCase](hydra.extract.helpers.requireField("left")(hydra.decode.core.`type`)(fieldMap)(cx))((field_left: hydra.core.Type) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Type, hydra.testing.JoinTypesTestCase](hydra.extract.helpers.requireField("right")(hydra.decode.core.`type`)(fieldMap)(cx))((field_right: hydra.core.Type) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, Either[Unit, Seq[hydra.typing.TypeConstraint]],
-         hydra.testing.JoinTypesTestCase](hydra.extract.helpers.requireField("expected")((v1: hydra.graph.Graph) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, Either[Unit, Seq[hydra.typing.TypeConstraint]], hydra.testing.JoinTypesTestCase](hydra.extract.helpers.requireField("expected")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.helpers.decodeEither(hydra.extract.helpers.decodeUnit)((v12: hydra.graph.Graph) =>
       (v22: hydra.core.Term) =>
-      hydra.extract.helpers.decodeList(hydra.decode.typing.typeConstraint)(v12)(v22))(v1)(v2))(fieldMap)(cx))((field_expected: Either[Unit,
-         Seq[hydra.typing.TypeConstraint]]) =>
+      hydra.extract.helpers.decodeList(hydra.decode.typing.typeConstraint)(v12)(v22))(v1)(v2))(fieldMap)(cx))((field_expected: Either[Unit, Seq[hydra.typing.TypeConstraint]]) =>
       Right(hydra.testing.JoinTypesTestCase(field_left, field_right, field_expected)))))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
@@ -307,19 +280,16 @@ def jsonDecodeTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydr
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
     hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Type, hydra.testing.JsonDecodeTestCase](hydra.extract.helpers.requireField("type")(hydra.decode.core.`type`)(fieldMap)(cx))((field_type: hydra.core.Type) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.json.model.Value, hydra.testing.JsonDecodeTestCase](hydra.extract.helpers.requireField("json")(hydra.decode.json.model.value)(fieldMap)(cx))((field_json: hydra.json.model.Value) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, Either[scala.Predef.String, hydra.core.Term],
-         hydra.testing.JsonDecodeTestCase](hydra.extract.helpers.requireField("expected")((v1: hydra.graph.Graph) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, Either[scala.Predef.String, hydra.core.Term], hydra.testing.JsonDecodeTestCase](hydra.extract.helpers.requireField("expected")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.helpers.decodeEither((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
-         scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.string(v_Literal_string_s) => Right(v_Literal_string_s)
         case _ => Left("expected string literal")
-      case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx2)(raw2)))(hydra.decode.core.term)(v1)(v2))(fieldMap)(cx))((field_expected: Either[scala.Predef.String,
-         hydra.core.Term]) =>
+      case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx2)(raw2)))(hydra.decode.core.term)(v1)(v2))(fieldMap)(cx))((field_expected: Either[scala.Predef.String, hydra.core.Term]) =>
       Right(hydra.testing.JsonDecodeTestCase(field_type, field_json, field_expected)))))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
@@ -330,25 +300,21 @@ def jsonEncodeTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydr
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
     hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Term, hydra.testing.JsonEncodeTestCase](hydra.extract.helpers.requireField("term")(hydra.decode.core.term)(fieldMap)(cx))((field_term: hydra.core.Term) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, Either[scala.Predef.String, hydra.json.model.Value],
-         hydra.testing.JsonEncodeTestCase](hydra.extract.helpers.requireField("expected")((v1: hydra.graph.Graph) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, Either[scala.Predef.String, hydra.json.model.Value], hydra.testing.JsonEncodeTestCase](hydra.extract.helpers.requireField("expected")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.helpers.decodeEither((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
-         scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.string(v_Literal_string_s) => Right(v_Literal_string_s)
         case _ => Left("expected string literal")
-      case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx2)(raw2)))(hydra.decode.json.model.value)(v1)(v2))(fieldMap)(cx))((field_expected: Either[scala.Predef.String,
-         hydra.json.model.Value]) =>
+      case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx2)(raw2)))(hydra.decode.json.model.value)(v1)(v2))(fieldMap)(cx))((field_expected: Either[scala.Predef.String, hydra.json.model.Value]) =>
       Right(hydra.testing.JsonEncodeTestCase(field_term, field_expected))))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
 
-def jsonParserTestCase(v1: hydra.graph.Graph)(v2: hydra.core.Term): Either[hydra.errors.DecodingError,
-   hydra.testing.ParserTestCase[hydra.json.model.Value]] = hydra.decode.testing.parserTestCase(hydra.decode.json.model.value)(v1)(v2)
+def jsonParserTestCase(v1: hydra.graph.Graph)(v2: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.testing.ParserTestCase[hydra.json.model.Value]] = hydra.decode.testing.parserTestCase(hydra.decode.json.model.value)(v1)(v2)
 
 def jsonRoundtripTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.testing.JsonRoundtripTestCase] =
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.testing.JsonRoundtripTestCase]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
@@ -361,8 +327,7 @@ def jsonRoundtripTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[h
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
 
-def jsonWriterTestCase(v1: hydra.graph.Graph)(v2: hydra.core.Term): Either[hydra.errors.DecodingError,
-   hydra.testing.WriterTestCase[hydra.json.model.Value]] = hydra.decode.testing.writerTestCase(hydra.decode.json.model.value)(v1)(v2)
+def jsonWriterTestCase(v1: hydra.graph.Graph)(v2: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.testing.WriterTestCase[hydra.json.model.Value]] = hydra.decode.testing.writerTestCase(hydra.decode.json.model.value)(v1)(v2)
 
 def liftLambdaAboveLetTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.testing.LiftLambdaAboveLetTestCase] =
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.testing.LiftLambdaAboveLetTestCase]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
@@ -375,8 +340,7 @@ def liftLambdaAboveLetTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Eit
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
 
-def normalizeTypeVariablesTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
-   hydra.testing.NormalizeTypeVariablesTestCase] =
+def normalizeTypeVariablesTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.testing.NormalizeTypeVariablesTestCase] =
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.testing.NormalizeTypeVariablesTestCase]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
@@ -387,16 +351,14 @@ def normalizeTypeVariablesTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term):
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
 
-def parserTestCase[T0](a: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.DecodingError,
-   T0]))(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.testing.ParserTestCase[T0]] =
+def parserTestCase[T0](a: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.DecodingError, T0]))(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.testing.ParserTestCase[T0]] =
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.testing.ParserTestCase[T0]]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
     hydra.lib.eithers.bind[hydra.errors.DecodingError, scala.Predef.String, hydra.testing.ParserTestCase[T0]](hydra.extract.helpers.requireField("input")((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
-         scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.string(v_Literal_string_s) => Right(v_Literal_string_s)
@@ -440,8 +402,7 @@ def serializationTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[h
     hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.ast.Expr, hydra.testing.SerializationTestCase](hydra.extract.helpers.requireField("input")(hydra.decode.ast.expr)(fieldMap)(cx))((field_input: hydra.ast.Expr) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, scala.Predef.String, hydra.testing.SerializationTestCase](hydra.extract.helpers.requireField("output")((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
-         scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.string(v_Literal_string_s) => Right(v_Literal_string_s)
@@ -467,13 +428,11 @@ def substInTypeTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hyd
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[Tuple2[hydra.core.Name, hydra.core.Type]],
-       hydra.testing.SubstInTypeTestCase](hydra.extract.helpers.requireField("substitution")((v1: hydra.graph.Graph) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[Tuple2[hydra.core.Name, hydra.core.Type]], hydra.testing.SubstInTypeTestCase](hydra.extract.helpers.requireField("substitution")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.helpers.decodeList((v12: hydra.graph.Graph) =>
       (v22: hydra.core.Term) =>
-      hydra.extract.helpers.decodePair(hydra.decode.core.name)(hydra.decode.core.`type`)(v12)(v22))(v1)(v2))(fieldMap)(cx))((field_substitution: Seq[Tuple2[hydra.core.Name,
-         hydra.core.Type]]) =>
+      hydra.extract.helpers.decodePair(hydra.decode.core.name)(hydra.decode.core.`type`)(v12)(v22))(v1)(v2))(fieldMap)(cx))((field_substitution: Seq[Tuple2[hydra.core.Name, hydra.core.Type]]) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Type, hydra.testing.SubstInTypeTestCase](hydra.extract.helpers.requireField("input")(hydra.decode.core.`type`)(fieldMap)(cx))((field_input: hydra.core.Type) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Type, hydra.testing.SubstInTypeTestCase](hydra.extract.helpers.requireField("output")(hydra.decode.core.`type`)(fieldMap)(cx))((field_output: hydra.core.Type) =>
       Right(hydra.testing.SubstInTypeTestCase(field_substitution, field_input, field_output)))))
@@ -483,9 +442,7 @@ def substInTypeTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hyd
 def tag(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.testing.Tag] =
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.testing.Tag]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
-  case hydra.core.Term.wrap(v_Term_wrap_wrappedTerm) => hydra.lib.eithers.map[scala.Predef.String, hydra.testing.Tag,
-     hydra.errors.DecodingError]((b: scala.Predef.String) => b)(hydra.lib.eithers.either[scala.Predef.String,
-     hydra.core.Term, Either[hydra.errors.DecodingError, scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+  case hydra.core.Term.wrap(v_Term_wrap_wrappedTerm) => hydra.lib.eithers.map[scala.Predef.String, hydra.testing.Tag, hydra.errors.DecodingError]((b: scala.Predef.String) => b)(hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
     stripped2 match
     case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
       case hydra.core.Literal.string(v_Literal_string_s) => Right(v_Literal_string_s)
@@ -500,16 +457,10 @@ def termRewriter(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.erro
     lazy val field: hydra.core.Field = (v_Term_union_inj.field)
     lazy val fname: hydra.core.Name = (field.name)
     lazy val fterm: hydra.core.Term = (field.term)
-    lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.TermRewriter])] = hydra.lib.maps.fromList[hydra.core.Name,
-       (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.TermRewriter]](Seq(Tuple2("replaceFooWithBar",
-       (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.testing.TermRewriter, hydra.errors.DecodingError]((t: Unit) => hydra.testing.TermRewriter.replaceFooWithBar)(hydra.extract.helpers.decodeUnit(cx)(input))),
-         Tuple2("replaceInt32WithInt64", (input: hydra.core.Term) =>
+    lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.TermRewriter])] = hydra.lib.maps.fromList[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.TermRewriter]](Seq(Tuple2("replaceFooWithBar", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.testing.TermRewriter, hydra.errors.DecodingError]((t: Unit) => hydra.testing.TermRewriter.replaceFooWithBar)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("replaceInt32WithInt64", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.testing.TermRewriter, hydra.errors.DecodingError]((t: Unit) => hydra.testing.TermRewriter.replaceInt32WithInt64)(hydra.extract.helpers.decodeUnit(cx)(input)))))
-    hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.testing.TermRewriter], (hydra.core.Term) => Either[hydra.errors.DecodingError,
-       hydra.testing.TermRewriter]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
-       hydra.testing.TermRewriter])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
-       hydra.testing.TermRewriter]](fname)(variantMap))
+    hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.testing.TermRewriter], (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.TermRewriter]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.TermRewriter])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.TermRewriter]](fname)(variantMap))
   }
   case _ => Left("expected union"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
 
@@ -520,93 +471,47 @@ def testCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.D
     lazy val field: hydra.core.Field = (v_Term_union_inj.field)
     lazy val fname: hydra.core.Name = (field.name)
     lazy val fterm: hydra.core.Term = (field.term)
-    lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.TestCase])] = hydra.lib.maps.fromList[hydra.core.Name,
-       (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.TestCase]](Seq(Tuple2("alphaConversion",
-       (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.AlphaConversionTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.AlphaConversionTestCase) => hydra.testing.TestCase.alphaConversion(t))(hydra.decode.testing.alphaConversionTestCase(cx)(input))),
-         Tuple2("caseConversion", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.CaseConversionTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.CaseConversionTestCase) => hydra.testing.TestCase.caseConversion(t))(hydra.decode.testing.caseConversionTestCase(cx)(input))),
-         Tuple2("deannotateTerm", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.DeannotateTermTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.DeannotateTermTestCase) => hydra.testing.TestCase.deannotateTerm(t))(hydra.decode.testing.deannotateTermTestCase(cx)(input))),
-         Tuple2("deannotateType", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.DeannotateTypeTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.DeannotateTypeTestCase) => hydra.testing.TestCase.deannotateType(t))(hydra.decode.testing.deannotateTypeTestCase(cx)(input))),
-         Tuple2("delegatedEvaluation", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.DelegatedEvaluationTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.DelegatedEvaluationTestCase) => hydra.testing.TestCase.delegatedEvaluation(t))(hydra.decode.testing.delegatedEvaluationTestCase(cx)(input))),
-         Tuple2("etaExpansion", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.EtaExpansionTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.EtaExpansionTestCase) => hydra.testing.TestCase.etaExpansion(t))(hydra.decode.testing.etaExpansionTestCase(cx)(input))),
-         Tuple2("flattenLetTerms", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.FlattenLetTermsTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.FlattenLetTermsTestCase) => hydra.testing.TestCase.flattenLetTerms(t))(hydra.decode.testing.flattenLetTermsTestCase(cx)(input))),
-         Tuple2("freeVariables", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.FreeVariablesTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.FreeVariablesTestCase) => hydra.testing.TestCase.freeVariables(t))(hydra.decode.testing.freeVariablesTestCase(cx)(input))),
-         Tuple2("evaluation", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.EvaluationTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.EvaluationTestCase) => hydra.testing.TestCase.evaluation(t))(hydra.decode.testing.evaluationTestCase(cx)(input))),
-         Tuple2("inference", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.InferenceTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.InferenceTestCase) => hydra.testing.TestCase.inference(t))(hydra.decode.testing.inferenceTestCase(cx)(input))),
-         Tuple2("inferenceFailure", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.InferenceFailureTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.InferenceFailureTestCase) => hydra.testing.TestCase.inferenceFailure(t))(hydra.decode.testing.inferenceFailureTestCase(cx)(input))),
-         Tuple2("jsonDecode", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.JsonDecodeTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.JsonDecodeTestCase) => hydra.testing.TestCase.jsonDecode(t))(hydra.decode.testing.jsonDecodeTestCase(cx)(input))),
-         Tuple2("jsonEncode", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.JsonEncodeTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.JsonEncodeTestCase) => hydra.testing.TestCase.jsonEncode(t))(hydra.decode.testing.jsonEncodeTestCase(cx)(input))),
-         Tuple2("jsonParser", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.ParserTestCase[hydra.json.model.Value], hydra.testing.TestCase,
-         hydra.errors.DecodingError]((t: hydra.testing.ParserTestCase[hydra.json.model.Value]) => hydra.testing.TestCase.jsonParser(t))(hydra.decode.testing.jsonParserTestCase(cx)(input))),
-         Tuple2("jsonRoundtrip", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.JsonRoundtripTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.JsonRoundtripTestCase) => hydra.testing.TestCase.jsonRoundtrip(t))(hydra.decode.testing.jsonRoundtripTestCase(cx)(input))),
-         Tuple2("jsonWriter", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.WriterTestCase[hydra.json.model.Value], hydra.testing.TestCase,
-         hydra.errors.DecodingError]((t: hydra.testing.WriterTestCase[hydra.json.model.Value]) => hydra.testing.TestCase.jsonWriter(t))(hydra.decode.testing.jsonWriterTestCase(cx)(input))),
-         Tuple2("liftLambdaAboveLet", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.LiftLambdaAboveLetTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.LiftLambdaAboveLetTestCase) => hydra.testing.TestCase.liftLambdaAboveLet(t))(hydra.decode.testing.liftLambdaAboveLetTestCase(cx)(input))),
-         Tuple2("serialization", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.SerializationTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.SerializationTestCase) => hydra.testing.TestCase.serialization(t))(hydra.decode.testing.serializationTestCase(cx)(input))),
-         Tuple2("simplifyTerm", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.SimplifyTermTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.SimplifyTermTestCase) => hydra.testing.TestCase.simplifyTerm(t))(hydra.decode.testing.simplifyTermTestCase(cx)(input))),
-         Tuple2("topologicalSort", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.TopologicalSortTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.TopologicalSortTestCase) => hydra.testing.TestCase.topologicalSort(t))(hydra.decode.testing.topologicalSortTestCase(cx)(input))),
-         Tuple2("topologicalSortBindings", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.TopologicalSortBindingsTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.TopologicalSortBindingsTestCase) => hydra.testing.TestCase.topologicalSortBindings(t))(hydra.decode.testing.topologicalSortBindingsTestCase(cx)(input))),
-         Tuple2("topologicalSortSCC", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.TopologicalSortSCCTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.TopologicalSortSCCTestCase) => hydra.testing.TestCase.topologicalSortSCC(t))(hydra.decode.testing.topologicalSortSCCTestCase(cx)(input))),
-         Tuple2("typeChecking", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.TypeCheckingTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.TypeCheckingTestCase) => hydra.testing.TestCase.typeChecking(t))(hydra.decode.testing.typeCheckingTestCase(cx)(input))),
-         Tuple2("typeCheckingFailure", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.TypeCheckingFailureTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.TypeCheckingFailureTestCase) => hydra.testing.TestCase.typeCheckingFailure(t))(hydra.decode.testing.typeCheckingFailureTestCase(cx)(input))),
-         Tuple2("typeReduction", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.TypeReductionTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.TypeReductionTestCase) => hydra.testing.TestCase.typeReduction(t))(hydra.decode.testing.typeReductionTestCase(cx)(input))),
-         Tuple2("normalizeTypeVariables", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.NormalizeTypeVariablesTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.NormalizeTypeVariablesTestCase) => hydra.testing.TestCase.normalizeTypeVariables(t))(hydra.decode.testing.normalizeTypeVariablesTestCase(cx)(input))),
-         Tuple2("foldOverTerm", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.FoldOverTermTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.FoldOverTermTestCase) => hydra.testing.TestCase.foldOverTerm(t))(hydra.decode.testing.foldOverTermTestCase(cx)(input))),
-         Tuple2("rewriteTerm", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.RewriteTermTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.RewriteTermTestCase) => hydra.testing.TestCase.rewriteTerm(t))(hydra.decode.testing.rewriteTermTestCase(cx)(input))),
-         Tuple2("rewriteType", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.RewriteTypeTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.RewriteTypeTestCase) => hydra.testing.TestCase.rewriteType(t))(hydra.decode.testing.rewriteTypeTestCase(cx)(input))),
-         Tuple2("hoistSubterms", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.HoistSubtermsTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.HoistSubtermsTestCase) => hydra.testing.TestCase.hoistSubterms(t))(hydra.decode.testing.hoistSubtermsTestCase(cx)(input))),
-         Tuple2("hoistCaseStatements", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.HoistCaseStatementsTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.HoistCaseStatementsTestCase) => hydra.testing.TestCase.hoistCaseStatements(t))(hydra.decode.testing.hoistCaseStatementsTestCase(cx)(input))),
-         Tuple2("hoistLetBindings", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.HoistLetBindingsTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.HoistLetBindingsTestCase) => hydra.testing.TestCase.hoistLetBindings(t))(hydra.decode.testing.hoistLetBindingsTestCase(cx)(input))),
-         Tuple2("hoistPolymorphicLetBindings", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.HoistPolymorphicLetBindingsTestCase, hydra.testing.TestCase,
-         hydra.errors.DecodingError]((t: hydra.testing.HoistPolymorphicLetBindingsTestCase) => hydra.testing.TestCase.hoistPolymorphicLetBindings(t))(hydra.decode.testing.hoistPolymorphicLetBindingsTestCase(cx)(input))),
-         Tuple2("substInType", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.SubstInTypeTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.SubstInTypeTestCase) => hydra.testing.TestCase.substInType(t))(hydra.decode.testing.substInTypeTestCase(cx)(input))),
-         Tuple2("variableOccursInType", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.VariableOccursInTypeTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.VariableOccursInTypeTestCase) => hydra.testing.TestCase.variableOccursInType(t))(hydra.decode.testing.variableOccursInTypeTestCase(cx)(input))),
-         Tuple2("unifyTypes", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.UnifyTypesTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.UnifyTypesTestCase) => hydra.testing.TestCase.unifyTypes(t))(hydra.decode.testing.unifyTypesTestCase(cx)(input))),
-         Tuple2("joinTypes", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.JoinTypesTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.JoinTypesTestCase) => hydra.testing.TestCase.joinTypes(t))(hydra.decode.testing.joinTypesTestCase(cx)(input))),
-         Tuple2("unshadowVariables", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.testing.UnshadowVariablesTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.UnshadowVariablesTestCase) => hydra.testing.TestCase.unshadowVariables(t))(hydra.decode.testing.unshadowVariablesTestCase(cx)(input))),
-         Tuple2("validateCoreTerm", (input: hydra.core.Term) =>
+    lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.TestCase])] = hydra.lib.maps.fromList[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.TestCase]](Seq(Tuple2("alphaConversion", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.AlphaConversionTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.AlphaConversionTestCase) => hydra.testing.TestCase.alphaConversion(t))(hydra.decode.testing.alphaConversionTestCase(cx)(input))), Tuple2("caseConversion", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.CaseConversionTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.CaseConversionTestCase) => hydra.testing.TestCase.caseConversion(t))(hydra.decode.testing.caseConversionTestCase(cx)(input))), Tuple2("deannotateTerm", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.DeannotateTermTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.DeannotateTermTestCase) => hydra.testing.TestCase.deannotateTerm(t))(hydra.decode.testing.deannotateTermTestCase(cx)(input))), Tuple2("deannotateType", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.DeannotateTypeTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.DeannotateTypeTestCase) => hydra.testing.TestCase.deannotateType(t))(hydra.decode.testing.deannotateTypeTestCase(cx)(input))), Tuple2("delegatedEvaluation", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.DelegatedEvaluationTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.DelegatedEvaluationTestCase) => hydra.testing.TestCase.delegatedEvaluation(t))(hydra.decode.testing.delegatedEvaluationTestCase(cx)(input))), Tuple2("etaExpansion", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.EtaExpansionTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.EtaExpansionTestCase) => hydra.testing.TestCase.etaExpansion(t))(hydra.decode.testing.etaExpansionTestCase(cx)(input))), Tuple2("flattenLetTerms", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.FlattenLetTermsTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.FlattenLetTermsTestCase) => hydra.testing.TestCase.flattenLetTerms(t))(hydra.decode.testing.flattenLetTermsTestCase(cx)(input))), Tuple2("freeVariables", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.FreeVariablesTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.FreeVariablesTestCase) => hydra.testing.TestCase.freeVariables(t))(hydra.decode.testing.freeVariablesTestCase(cx)(input))), Tuple2("evaluation", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.EvaluationTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.EvaluationTestCase) => hydra.testing.TestCase.evaluation(t))(hydra.decode.testing.evaluationTestCase(cx)(input))), Tuple2("inference", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.InferenceTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.InferenceTestCase) => hydra.testing.TestCase.inference(t))(hydra.decode.testing.inferenceTestCase(cx)(input))), Tuple2("inferenceFailure", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.InferenceFailureTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.InferenceFailureTestCase) => hydra.testing.TestCase.inferenceFailure(t))(hydra.decode.testing.inferenceFailureTestCase(cx)(input))), Tuple2("jsonDecode", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.JsonDecodeTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.JsonDecodeTestCase) => hydra.testing.TestCase.jsonDecode(t))(hydra.decode.testing.jsonDecodeTestCase(cx)(input))), Tuple2("jsonEncode", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.JsonEncodeTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.JsonEncodeTestCase) => hydra.testing.TestCase.jsonEncode(t))(hydra.decode.testing.jsonEncodeTestCase(cx)(input))), Tuple2("jsonParser", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.ParserTestCase[hydra.json.model.Value], hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.ParserTestCase[hydra.json.model.Value]) => hydra.testing.TestCase.jsonParser(t))(hydra.decode.testing.jsonParserTestCase(cx)(input))), Tuple2("jsonRoundtrip", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.JsonRoundtripTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.JsonRoundtripTestCase) => hydra.testing.TestCase.jsonRoundtrip(t))(hydra.decode.testing.jsonRoundtripTestCase(cx)(input))), Tuple2("jsonWriter", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.WriterTestCase[hydra.json.model.Value], hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.WriterTestCase[hydra.json.model.Value]) => hydra.testing.TestCase.jsonWriter(t))(hydra.decode.testing.jsonWriterTestCase(cx)(input))), Tuple2("liftLambdaAboveLet", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.LiftLambdaAboveLetTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.LiftLambdaAboveLetTestCase) => hydra.testing.TestCase.liftLambdaAboveLet(t))(hydra.decode.testing.liftLambdaAboveLetTestCase(cx)(input))), Tuple2("serialization", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.SerializationTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.SerializationTestCase) => hydra.testing.TestCase.serialization(t))(hydra.decode.testing.serializationTestCase(cx)(input))), Tuple2("simplifyTerm", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.SimplifyTermTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.SimplifyTermTestCase) => hydra.testing.TestCase.simplifyTerm(t))(hydra.decode.testing.simplifyTermTestCase(cx)(input))), Tuple2("topologicalSort", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.TopologicalSortTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.TopologicalSortTestCase) => hydra.testing.TestCase.topologicalSort(t))(hydra.decode.testing.topologicalSortTestCase(cx)(input))), Tuple2("topologicalSortBindings", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.TopologicalSortBindingsTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.TopologicalSortBindingsTestCase) => hydra.testing.TestCase.topologicalSortBindings(t))(hydra.decode.testing.topologicalSortBindingsTestCase(cx)(input))), Tuple2("topologicalSortSCC", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.TopologicalSortSCCTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.TopologicalSortSCCTestCase) => hydra.testing.TestCase.topologicalSortSCC(t))(hydra.decode.testing.topologicalSortSCCTestCase(cx)(input))), Tuple2("typeChecking", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.TypeCheckingTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.TypeCheckingTestCase) => hydra.testing.TestCase.typeChecking(t))(hydra.decode.testing.typeCheckingTestCase(cx)(input))), Tuple2("typeCheckingFailure", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.TypeCheckingFailureTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.TypeCheckingFailureTestCase) => hydra.testing.TestCase.typeCheckingFailure(t))(hydra.decode.testing.typeCheckingFailureTestCase(cx)(input))), Tuple2("typeReduction", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.TypeReductionTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.TypeReductionTestCase) => hydra.testing.TestCase.typeReduction(t))(hydra.decode.testing.typeReductionTestCase(cx)(input))), Tuple2("normalizeTypeVariables", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.NormalizeTypeVariablesTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.NormalizeTypeVariablesTestCase) => hydra.testing.TestCase.normalizeTypeVariables(t))(hydra.decode.testing.normalizeTypeVariablesTestCase(cx)(input))), Tuple2("foldOverTerm", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.FoldOverTermTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.FoldOverTermTestCase) => hydra.testing.TestCase.foldOverTerm(t))(hydra.decode.testing.foldOverTermTestCase(cx)(input))), Tuple2("rewriteTerm", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.RewriteTermTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.RewriteTermTestCase) => hydra.testing.TestCase.rewriteTerm(t))(hydra.decode.testing.rewriteTermTestCase(cx)(input))), Tuple2("rewriteType", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.RewriteTypeTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.RewriteTypeTestCase) => hydra.testing.TestCase.rewriteType(t))(hydra.decode.testing.rewriteTypeTestCase(cx)(input))), Tuple2("hoistSubterms", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.HoistSubtermsTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.HoistSubtermsTestCase) => hydra.testing.TestCase.hoistSubterms(t))(hydra.decode.testing.hoistSubtermsTestCase(cx)(input))), Tuple2("hoistCaseStatements", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.HoistCaseStatementsTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.HoistCaseStatementsTestCase) => hydra.testing.TestCase.hoistCaseStatements(t))(hydra.decode.testing.hoistCaseStatementsTestCase(cx)(input))), Tuple2("hoistLetBindings", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.HoistLetBindingsTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.HoistLetBindingsTestCase) => hydra.testing.TestCase.hoistLetBindings(t))(hydra.decode.testing.hoistLetBindingsTestCase(cx)(input))), Tuple2("hoistPolymorphicLetBindings", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.HoistPolymorphicLetBindingsTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.HoistPolymorphicLetBindingsTestCase) => hydra.testing.TestCase.hoistPolymorphicLetBindings(t))(hydra.decode.testing.hoistPolymorphicLetBindingsTestCase(cx)(input))), Tuple2("substInType", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.SubstInTypeTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.SubstInTypeTestCase) => hydra.testing.TestCase.substInType(t))(hydra.decode.testing.substInTypeTestCase(cx)(input))), Tuple2("variableOccursInType", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.VariableOccursInTypeTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.VariableOccursInTypeTestCase) => hydra.testing.TestCase.variableOccursInType(t))(hydra.decode.testing.variableOccursInTypeTestCase(cx)(input))), Tuple2("unifyTypes", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.UnifyTypesTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.UnifyTypesTestCase) => hydra.testing.TestCase.unifyTypes(t))(hydra.decode.testing.unifyTypesTestCase(cx)(input))), Tuple2("joinTypes", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.JoinTypesTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.JoinTypesTestCase) => hydra.testing.TestCase.joinTypes(t))(hydra.decode.testing.joinTypesTestCase(cx)(input))), Tuple2("unshadowVariables", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.testing.UnshadowVariablesTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.UnshadowVariablesTestCase) => hydra.testing.TestCase.unshadowVariables(t))(hydra.decode.testing.unshadowVariablesTestCase(cx)(input))), Tuple2("validateCoreTerm", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.testing.ValidateCoreTermTestCase, hydra.testing.TestCase, hydra.errors.DecodingError]((t: hydra.testing.ValidateCoreTermTestCase) => hydra.testing.TestCase.validateCoreTerm(t))(hydra.decode.testing.validateCoreTermTestCase(cx)(input)))))
-    hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.testing.TestCase], (hydra.core.Term) => Either[hydra.errors.DecodingError,
-       hydra.testing.TestCase]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
-       hydra.testing.TestCase])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
-       hydra.testing.TestCase]](fname)(variantMap))
+    hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.testing.TestCase], (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.TestCase]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.TestCase])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.TestCase]](fname)(variantMap))
   }
   case _ => Left("expected union"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
 
@@ -617,8 +522,7 @@ def testCaseWithMetadata(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hy
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
     hydra.lib.eithers.bind[hydra.errors.DecodingError, scala.Predef.String, hydra.testing.TestCaseWithMetadata](hydra.extract.helpers.requireField("name")((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
-         scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.string(v_Literal_string_s) => Right(v_Literal_string_s)
@@ -629,8 +533,7 @@ def testCaseWithMetadata(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hy
       (v2: hydra.core.Term) =>
       hydra.extract.helpers.decodeMaybe((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
-         scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.string(v_Literal_string_s) => Right(v_Literal_string_s)
@@ -650,8 +553,7 @@ def testGroup(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
     hydra.lib.eithers.bind[hydra.errors.DecodingError, scala.Predef.String, hydra.testing.TestGroup](hydra.extract.helpers.requireField("name")((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
-         scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.string(v_Literal_string_s) => Right(v_Literal_string_s)
@@ -661,8 +563,7 @@ def testGroup(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.
       (v2: hydra.core.Term) =>
       hydra.extract.helpers.decodeMaybe((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
-         scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.string(v_Literal_string_s) => Right(v_Literal_string_s)
@@ -678,28 +579,23 @@ def testGroup(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
 
-def topologicalSortBindingsTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
-   hydra.testing.TopologicalSortBindingsTestCase] =
+def topologicalSortBindingsTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.testing.TopologicalSortBindingsTestCase] =
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.testing.TopologicalSortBindingsTestCase]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[Tuple2[hydra.core.Name, hydra.core.Term]],
-       hydra.testing.TopologicalSortBindingsTestCase](hydra.extract.helpers.requireField("bindings")((v1: hydra.graph.Graph) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[Tuple2[hydra.core.Name, hydra.core.Term]], hydra.testing.TopologicalSortBindingsTestCase](hydra.extract.helpers.requireField("bindings")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.helpers.decodeList((v12: hydra.graph.Graph) =>
       (v22: hydra.core.Term) =>
-      hydra.extract.helpers.decodePair(hydra.decode.core.name)(hydra.decode.core.term)(v12)(v22))(v1)(v2))(fieldMap)(cx))((field_bindings: Seq[Tuple2[hydra.core.Name,
-         hydra.core.Term]]) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[Seq[Tuple2[hydra.core.Name, hydra.core.Term]]],
-         hydra.testing.TopologicalSortBindingsTestCase](hydra.extract.helpers.requireField("expected")((v1: hydra.graph.Graph) =>
+      hydra.extract.helpers.decodePair(hydra.decode.core.name)(hydra.decode.core.term)(v12)(v22))(v1)(v2))(fieldMap)(cx))((field_bindings: Seq[Tuple2[hydra.core.Name, hydra.core.Term]]) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[Seq[Tuple2[hydra.core.Name, hydra.core.Term]]], hydra.testing.TopologicalSortBindingsTestCase](hydra.extract.helpers.requireField("expected")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.helpers.decodeList((v12: hydra.graph.Graph) =>
       (v22: hydra.core.Term) =>
       hydra.extract.helpers.decodeList((v13: hydra.graph.Graph) =>
       (v23: hydra.core.Term) =>
-      hydra.extract.helpers.decodePair(hydra.decode.core.name)(hydra.decode.core.term)(v13)(v23))(v12)(v22))(v1)(v2))(fieldMap)(cx))((field_expected: Seq[Seq[Tuple2[hydra.core.Name,
-         hydra.core.Term]]]) =>
+      hydra.extract.helpers.decodePair(hydra.decode.core.name)(hydra.decode.core.term)(v13)(v23))(v12)(v22))(v1)(v2))(fieldMap)(cx))((field_expected: Seq[Seq[Tuple2[hydra.core.Name, hydra.core.Term]]]) =>
       Right(hydra.testing.TopologicalSortBindingsTestCase(field_bindings, field_expected))))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
@@ -715,8 +611,7 @@ def topologicalSortSCCTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Eit
       (v22: hydra.core.Term) =>
       hydra.extract.helpers.decodePair((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
-         Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.integer(v_Literal_integer_v13) => v_Literal_integer_v13 match
@@ -727,24 +622,21 @@ def topologicalSortSCCTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Eit
       (v23: hydra.core.Term) =>
       hydra.extract.helpers.decodeList((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
-         Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.integer(v_Literal_integer_v14) => v_Literal_integer_v14 match
           case hydra.core.IntegerValue.int32(v_IntegerValue_int32_i) => Right(v_IntegerValue_int32_i)
           case _ => Left("expected int32 value")
         case _ => Left("expected int32 literal")
-      case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx2)(raw2)))(v13)(v23))(v12)(v22))(v1)(v2))(fieldMap)(cx))((field_adjacencyList: Seq[Tuple2[Int,
-         Seq[Int]]]) =>
+      case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx2)(raw2)))(v13)(v23))(v12)(v22))(v1)(v2))(fieldMap)(cx))((field_adjacencyList: Seq[Tuple2[Int, Seq[Int]]]) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[Seq[Int]], hydra.testing.TopologicalSortSCCTestCase](hydra.extract.helpers.requireField("expected")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.helpers.decodeList((v12: hydra.graph.Graph) =>
       (v22: hydra.core.Term) =>
       hydra.extract.helpers.decodeList((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
-         Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.integer(v_Literal_integer_v13) => v_Literal_integer_v13 match
@@ -767,8 +659,7 @@ def topologicalSortTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either
       (v22: hydra.core.Term) =>
       hydra.extract.helpers.decodePair((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
-         Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.integer(v_Literal_integer_v13) => v_Literal_integer_v13 match
@@ -779,16 +670,14 @@ def topologicalSortTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either
       (v23: hydra.core.Term) =>
       hydra.extract.helpers.decodeList((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
-         Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.integer(v_Literal_integer_v14) => v_Literal_integer_v14 match
           case hydra.core.IntegerValue.int32(v_IntegerValue_int32_i) => Right(v_IntegerValue_int32_i)
           case _ => Left("expected int32 value")
         case _ => Left("expected int32 literal")
-      case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx2)(raw2)))(v13)(v23))(v12)(v22))(v1)(v2))(fieldMap)(cx))((field_adjacencyList: Seq[Tuple2[Int,
-         Seq[Int]]]) =>
+      case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx2)(raw2)))(v13)(v23))(v12)(v22))(v1)(v2))(fieldMap)(cx))((field_adjacencyList: Seq[Tuple2[Int, Seq[Int]]]) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, Either[Seq[Seq[Int]], Seq[Int]], hydra.testing.TopologicalSortTestCase](hydra.extract.helpers.requireField("expected")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.helpers.decodeEither((v12: hydra.graph.Graph) =>
@@ -797,8 +686,7 @@ def topologicalSortTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either
       (v23: hydra.core.Term) =>
       hydra.extract.helpers.decodeList((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
-         Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.integer(v_Literal_integer_v14) => v_Literal_integer_v14 match
@@ -809,16 +697,14 @@ def topologicalSortTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either
       (v22: hydra.core.Term) =>
       hydra.extract.helpers.decodeList((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
-         Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.integer(v_Literal_integer_v13) => v_Literal_integer_v13 match
           case hydra.core.IntegerValue.int32(v_IntegerValue_int32_i) => Right(v_IntegerValue_int32_i)
           case _ => Left("expected int32 value")
         case _ => Left("expected int32 literal")
-      case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx2)(raw2)))(v12)(v22))(v1)(v2))(fieldMap)(cx))((field_expected: Either[Seq[Seq[Int]],
-         Seq[Int]]) =>
+      case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx2)(raw2)))(v12)(v22))(v1)(v2))(fieldMap)(cx))((field_expected: Either[Seq[Seq[Int]], Seq[Int]]) =>
       Right(hydra.testing.TopologicalSortTestCase(field_adjacencyList, field_expected))))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
@@ -863,14 +749,9 @@ def typeRewriter(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.erro
     lazy val field: hydra.core.Field = (v_Term_union_inj.field)
     lazy val fname: hydra.core.Name = (field.name)
     lazy val fterm: hydra.core.Term = (field.term)
-    lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.TypeRewriter])] = hydra.lib.maps.fromList[hydra.core.Name,
-       (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.TypeRewriter]](Seq(Tuple2("replaceStringWithInt32",
-       (input: hydra.core.Term) =>
+    lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.TypeRewriter])] = hydra.lib.maps.fromList[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.TypeRewriter]](Seq(Tuple2("replaceStringWithInt32", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.testing.TypeRewriter, hydra.errors.DecodingError]((t: Unit) => hydra.testing.TypeRewriter.replaceStringWithInt32)(hydra.extract.helpers.decodeUnit(cx)(input)))))
-    hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.testing.TypeRewriter], (hydra.core.Term) => Either[hydra.errors.DecodingError,
-       hydra.testing.TypeRewriter]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
-       hydra.testing.TypeRewriter])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
-       hydra.testing.TypeRewriter]](fname)(variantMap))
+    hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.testing.TypeRewriter], (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.TypeRewriter]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.TypeRewriter])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.TypeRewriter]](fname)(variantMap))
   }
   case _ => Left("expected union"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
 
@@ -884,19 +765,16 @@ def unifyTypesTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydr
       hydra.extract.helpers.decodeList(hydra.decode.core.name)(v1)(v2))(fieldMap)(cx))((field_schemaTypes: Seq[hydra.core.Name]) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Type, hydra.testing.UnifyTypesTestCase](hydra.extract.helpers.requireField("left")(hydra.decode.core.`type`)(fieldMap)(cx))((field_left: hydra.core.Type) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Type, hydra.testing.UnifyTypesTestCase](hydra.extract.helpers.requireField("right")(hydra.decode.core.`type`)(fieldMap)(cx))((field_right: hydra.core.Type) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, Either[scala.Predef.String, hydra.typing.TypeSubst],
-         hydra.testing.UnifyTypesTestCase](hydra.extract.helpers.requireField("expected")((v1: hydra.graph.Graph) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, Either[scala.Predef.String, hydra.typing.TypeSubst], hydra.testing.UnifyTypesTestCase](hydra.extract.helpers.requireField("expected")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.helpers.decodeEither((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
-         scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.string(v_Literal_string_s) => Right(v_Literal_string_s)
         case _ => Left("expected string literal")
-      case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx2)(raw2)))(hydra.decode.typing.typeSubst)(v1)(v2))(fieldMap)(cx))((field_expected: Either[scala.Predef.String,
-         hydra.typing.TypeSubst]) =>
+      case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx2)(raw2)))(hydra.decode.typing.typeSubst)(v1)(v2))(fieldMap)(cx))((field_expected: Either[scala.Predef.String, hydra.typing.TypeSubst]) =>
       Right(hydra.testing.UnifyTypesTestCase(field_schemaTypes, field_left, field_right, field_expected))))))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
@@ -919,8 +797,7 @@ def validateCoreTermTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Eithe
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
     hydra.lib.eithers.bind[hydra.errors.DecodingError, Boolean, hydra.testing.ValidateCoreTermTestCase](hydra.extract.helpers.requireField("typed")((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
-         Boolean]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, Boolean]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.boolean(v_Literal_boolean_b) => Right(v_Literal_boolean_b)
@@ -943,8 +820,7 @@ def variableOccursInTypeTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): E
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Type, hydra.testing.VariableOccursInTypeTestCase](hydra.extract.helpers.requireField("type")(hydra.decode.core.`type`)(fieldMap)(cx))((field_type: hydra.core.Type) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, Boolean, hydra.testing.VariableOccursInTypeTestCase](hydra.extract.helpers.requireField("expected")((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
-         Boolean]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, Boolean]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.boolean(v_Literal_boolean_b) => Right(v_Literal_boolean_b)
@@ -954,8 +830,7 @@ def variableOccursInTypeTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): E
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
 
-def writerTestCase[T0](a: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.DecodingError,
-   T0]))(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.testing.WriterTestCase[T0]] =
+def writerTestCase[T0](a: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.DecodingError, T0]))(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.testing.WriterTestCase[T0]] =
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.testing.WriterTestCase[T0]]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
@@ -963,8 +838,7 @@ def writerTestCase[T0](a: (hydra.graph.Graph => hydra.core.Term => Either[hydra.
     hydra.lib.eithers.bind[hydra.errors.DecodingError, T0, hydra.testing.WriterTestCase[T0]](hydra.extract.helpers.requireField("input")(a)(fieldMap)(cx))((field_input: T0) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, scala.Predef.String, hydra.testing.WriterTestCase[T0]](hydra.extract.helpers.requireField("output")((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
-         scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.string(v_Literal_string_s) => Right(v_Literal_string_s)

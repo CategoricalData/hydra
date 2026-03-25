@@ -21,15 +21,9 @@ def typeClass(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.
     lazy val field: hydra.core.Field = (v_Term_union_inj.field)
     lazy val fname: hydra.core.Name = (field.name)
     lazy val fterm: hydra.core.Term = (field.term)
-    lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.classes.TypeClass])] = hydra.lib.maps.fromList[hydra.core.Name,
-       (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.classes.TypeClass]](Seq(Tuple2("equality",
-       (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.classes.TypeClass, hydra.errors.DecodingError]((t: Unit) => hydra.classes.TypeClass.equality)(hydra.extract.helpers.decodeUnit(cx)(input))),
-         Tuple2("ordering", (input: hydra.core.Term) =>
+    lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.classes.TypeClass])] = hydra.lib.maps.fromList[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.classes.TypeClass]](Seq(Tuple2("equality", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.classes.TypeClass, hydra.errors.DecodingError]((t: Unit) => hydra.classes.TypeClass.equality)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("ordering", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.classes.TypeClass, hydra.errors.DecodingError]((t: Unit) => hydra.classes.TypeClass.ordering)(hydra.extract.helpers.decodeUnit(cx)(input)))))
-    hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.classes.TypeClass], (hydra.core.Term) => Either[hydra.errors.DecodingError,
-       hydra.classes.TypeClass]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
-       hydra.classes.TypeClass])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
-       hydra.classes.TypeClass]](fname)(variantMap))
+    hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.classes.TypeClass], (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.classes.TypeClass]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.classes.TypeClass])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.classes.TypeClass]](fname)(variantMap))
   }
   case _ => Left("expected union"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
