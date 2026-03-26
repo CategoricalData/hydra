@@ -3943,7 +3943,12 @@
                                                                   "either": {
                                                                     "@right": {
                                                                       "union": {
-                                                                        "field": {"name": "string", "term": {"literal": {"string": "<binary>"}}},
+                                                                        "field": {
+                                                                          "name": "string",
+                                                                          "term": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "b"},
+                                                                              "function": {"function": {"primitive": "hydra.lib.literals.binaryToString"}}}}},
                                                                         "typeName": "hydra.ext.scala.syntax.Lit"}}}},
                                                                 "type": {
                                                                   "application": {
@@ -3951,7 +3956,7 @@
                                                                     "function": {"variable": "hydra.context.InContext"}}}}},
                                                             "type": {"variable": "hydra.ext.scala.syntax.Lit"}}},
                                                         "domain": [{"literal": {"binary": {}}}],
-                                                        "parameter": "_"}}}},
+                                                        "parameter": "b"}}}},
                                                 {
                                                   "name": "boolean",
                                                   "term": {
@@ -6489,7 +6494,22 @@
                                                                                                                             "either": {
                                                                                                                               "@right": {
                                                                                                                                 "application": {
-                                                                                                                                  "argument": {"list": [{"variable": "litData"}]},
+                                                                                                                                  "argument": {
+                                                                                                                                    "list": [
+                                                                                                                                      {
+                                                                                                                                        "union": {
+                                                                                                                                          "field": {
+                                                                                                                                            "name": "lit",
+                                                                                                                                            "term": {
+                                                                                                                                              "union": {
+                                                                                                                                                "field": {
+                                                                                                                                                  "name": "string",
+                                                                                                                                                  "term": {
+                                                                                                                                                    "application": {
+                                                                                                                                                      "argument": {"variable": "bi"},
+                                                                                                                                                      "function": {"function": {"primitive": "hydra.lib.literals.showBigint"}}}}},
+                                                                                                                                                "typeName": "hydra.ext.scala.syntax.Lit"}}},
+                                                                                                                                          "typeName": "hydra.ext.scala.syntax.Data"}}]},
                                                                                                                                   "function": {
                                                                                                                                     "application": {
                                                                                                                                       "argument": {
@@ -6503,7 +6523,7 @@
                                                                                                                               "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                                       "type": {"variable": "hydra.ext.scala.syntax.Data"}}},
                                                                                                                   "domain": [{"literal": {"integer": {"bigint": {}}}}],
-                                                                                                                  "parameter": "_"}}}},
+                                                                                                                  "parameter": "bi"}}}},
                                                                                                           {
                                                                                                             "name": "uint64",
                                                                                                             "term": {
@@ -6517,7 +6537,25 @@
                                                                                                                             "either": {
                                                                                                                               "@right": {
                                                                                                                                 "application": {
-                                                                                                                                  "argument": {"list": [{"variable": "litData"}]},
+                                                                                                                                  "argument": {
+                                                                                                                                    "list": [
+                                                                                                                                      {
+                                                                                                                                        "union": {
+                                                                                                                                          "field": {
+                                                                                                                                            "name": "lit",
+                                                                                                                                            "term": {
+                                                                                                                                              "union": {
+                                                                                                                                                "field": {
+                                                                                                                                                  "name": "string",
+                                                                                                                                                  "term": {
+                                                                                                                                                    "application": {
+                                                                                                                                                      "argument": {
+                                                                                                                                                        "application": {
+                                                                                                                                                          "argument": {"variable": "ui"},
+                                                                                                                                                          "function": {"function": {"primitive": "hydra.lib.literals.uint64ToBigint"}}}},
+                                                                                                                                                      "function": {"function": {"primitive": "hydra.lib.literals.showBigint"}}}}},
+                                                                                                                                                "typeName": "hydra.ext.scala.syntax.Lit"}}},
+                                                                                                                                          "typeName": "hydra.ext.scala.syntax.Data"}}]},
                                                                                                                                   "function": {
                                                                                                                                     "application": {
                                                                                                                                       "argument": {
@@ -6531,7 +6569,7 @@
                                                                                                                               "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                                       "type": {"variable": "hydra.ext.scala.syntax.Data"}}},
                                                                                                                   "domain": [{"literal": {"integer": {"uint64": {}}}}],
-                                                                                                                  "parameter": "_"}}}}],
+                                                                                                                  "parameter": "ui"}}}}],
                                                                                                         "default": [
                                                                                                           {
                                                                                                             "typeApplication": {

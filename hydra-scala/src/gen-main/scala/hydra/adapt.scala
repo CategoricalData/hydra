@@ -181,7 +181,7 @@ def adaptLiteral(lt: hydra.core.LiteralType)(l: hydra.core.Literal): hydra.core.
   case hydra.core.Literal.binary(v_Literal_binary_b) => lt match
     case hydra.core.LiteralType.string => hydra.core.Literal.string(hydra.lib.literals.binaryToString(v_Literal_binary_b))
   case hydra.core.Literal.boolean(v_Literal_boolean_b) => lt match
-    case hydra.core.LiteralType.integer(v_LiteralType_integer_it) => hydra.core.Literal.integer(hydra.literals.bigintToIntegerValue(v_LiteralType_integer_it)(hydra.lib.logic.ifElse[BigInt](v_Literal_boolean_b)(BigInt(1L))(BigInt(0L))))
+    case hydra.core.LiteralType.integer(v_LiteralType_integer_it) => hydra.core.Literal.integer(hydra.literals.bigintToIntegerValue(v_LiteralType_integer_it)(hydra.lib.logic.ifElse[BigInt](v_Literal_boolean_b)(BigInt("1"))(BigInt("0"))))
   case hydra.core.Literal.float(v_Literal_float_f) => lt match
     case hydra.core.LiteralType.float(v_LiteralType_float_ft) => hydra.core.Literal.float(hydra.literals.bigfloatToFloatValue(v_LiteralType_float_ft)(hydra.literals.floatValueToBigfloat(v_Literal_float_f)))
   case hydra.core.Literal.integer(v_Literal_integer_i) => lt match

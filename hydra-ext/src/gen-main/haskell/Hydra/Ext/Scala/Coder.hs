@@ -433,10 +433,10 @@ encodeTerm cx g term0 =
           let litData = Syntax.DataLit slit
           in case v0 of
             Core.LiteralInteger v1 -> case v1 of
-              Core.IntegerValueBigint bi -> Right (Utils.sapply (Utils.sname "BigInt") [
-                Syntax.DataLit (Syntax.LitString (Literals.showBigint bi))])
-              Core.IntegerValueUint64 ui -> Right (Utils.sapply (Utils.sname "BigInt") [
-                Syntax.DataLit (Syntax.LitString (Literals.showBigint (Literals.uint64ToBigint ui)))])
+              Core.IntegerValueBigint v2 -> Right (Utils.sapply (Utils.sname "BigInt") [
+                Syntax.DataLit (Syntax.LitString (Literals.showBigint v2))])
+              Core.IntegerValueUint64 v2 -> Right (Utils.sapply (Utils.sname "BigInt") [
+                Syntax.DataLit (Syntax.LitString (Literals.showBigint (Literals.uint64ToBigint v2)))])
               _ -> Right litData
             Core.LiteralFloat v1 -> case v1 of
               Core.FloatValueBigfloat _ -> Right (Utils.sapply (Utils.sname "BigDecimal") [

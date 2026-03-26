@@ -572,12 +572,12 @@ def classifyDataTerm_stripTypeLambdas(t: hydra.core.Term): hydra.core.Term =
   case _ => t
 
 def cmpDeclStatement[T0](aliases: T0): hydra.ext.java.syntax.BlockStatement =
-  hydra.ext.java.utils.variableDeclarationStatement(aliases)(hydra.ext.java.utils.javaIntType)(hydra.ext.java.utils.javaIdentifier("cmp"))(hydra.ext.java.utils.javaIntExpression(BigInt(0L)))
+  hydra.ext.java.utils.variableDeclarationStatement(aliases)(hydra.ext.java.utils.javaIntType)(hydra.ext.java.utils.javaIdentifier("cmp"))(hydra.ext.java.utils.javaIntExpression(BigInt("0")))
 
 lazy val cmpNotZeroExpr: hydra.ext.java.syntax.Expression = {
   lazy val lhs: hydra.ext.java.syntax.EqualityExpression = hydra.ext.java.utils.javaRelationalExpressionToJavaEqualityExpression(hydra.ext.java.utils.javaPostfixExpressionToJavaRelationalExpression(hydra.ext.java.syntax.PostfixExpression.name(hydra.ext.java.syntax.ExpressionName(None,
      hydra.ext.java.utils.javaIdentifier("cmp")))))
-  lazy val rhs: hydra.ext.java.syntax.RelationalExpression = hydra.ext.java.utils.javaPostfixExpressionToJavaRelationalExpression(hydra.ext.java.syntax.PostfixExpression.primary(hydra.ext.java.utils.javaLiteralToJavaPrimary(hydra.ext.java.utils.javaInt(BigInt(0L)))))
+  lazy val rhs: hydra.ext.java.syntax.RelationalExpression = hydra.ext.java.utils.javaPostfixExpressionToJavaRelationalExpression(hydra.ext.java.syntax.PostfixExpression.primary(hydra.ext.java.utils.javaLiteralToJavaPrimary(hydra.ext.java.utils.javaInt(BigInt("0")))))
   hydra.ext.java.utils.javaEqualityExpressionToJavaExpression(hydra.ext.java.syntax.EqualityExpression.notEqual(hydra.ext.java.syntax.EqualityExpression_Binary(lhs,
      rhs)))
 }
@@ -650,7 +650,7 @@ def compareFieldExpr(otherVar: scala.Predef.String)(ft: hydra.core.FieldType): h
 }
 
 def compareToBody[T0](aliases: T0)(otherVar: scala.Predef.String)(fields: Seq[hydra.core.FieldType]): Seq[hydra.ext.java.syntax.BlockStatement] =
-  hydra.lib.logic.ifElse[Seq[hydra.ext.java.syntax.BlockStatement]](hydra.lib.lists.`null`[hydra.core.FieldType](fields))(Seq(hydra.ext.java.syntax.BlockStatement.statement(hydra.ext.java.utils.javaReturnStatement(Some(hydra.ext.java.utils.javaIntExpression(BigInt(0L)))))))(hydra.lib.logic.ifElse[Seq[hydra.ext.java.syntax.BlockStatement]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.FieldType](fields))(1))(Seq(hydra.ext.java.syntax.BlockStatement.statement(hydra.ext.java.utils.javaReturnStatement(Some(hydra.ext.java.coder.compareFieldExpr(otherVar)(hydra.lib.lists.head[hydra.core.FieldType](fields)))))))(hydra.lib.lists.concat2[hydra.ext.java.syntax.BlockStatement](Seq(hydra.ext.java.coder.cmpDeclStatement(aliases)))(hydra.lib.lists.concat2[hydra.ext.java.syntax.BlockStatement](hydra.lib.lists.concat[hydra.ext.java.syntax.BlockStatement](hydra.lib.lists.map[hydra.core.FieldType,
+  hydra.lib.logic.ifElse[Seq[hydra.ext.java.syntax.BlockStatement]](hydra.lib.lists.`null`[hydra.core.FieldType](fields))(Seq(hydra.ext.java.syntax.BlockStatement.statement(hydra.ext.java.utils.javaReturnStatement(Some(hydra.ext.java.utils.javaIntExpression(BigInt("0")))))))(hydra.lib.logic.ifElse[Seq[hydra.ext.java.syntax.BlockStatement]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.FieldType](fields))(1))(Seq(hydra.ext.java.syntax.BlockStatement.statement(hydra.ext.java.utils.javaReturnStatement(Some(hydra.ext.java.coder.compareFieldExpr(otherVar)(hydra.lib.lists.head[hydra.core.FieldType](fields)))))))(hydra.lib.lists.concat2[hydra.ext.java.syntax.BlockStatement](Seq(hydra.ext.java.coder.cmpDeclStatement(aliases)))(hydra.lib.lists.concat2[hydra.ext.java.syntax.BlockStatement](hydra.lib.lists.concat[hydra.ext.java.syntax.BlockStatement](hydra.lib.lists.map[hydra.core.FieldType,
      Seq[hydra.ext.java.syntax.BlockStatement]]((f: hydra.core.FieldType) => hydra.ext.java.coder.compareAndReturnStmts(otherVar)(f))(hydra.lib.lists.init[hydra.core.FieldType](fields))))(Seq(hydra.ext.java.syntax.BlockStatement.statement(hydra.ext.java.utils.javaReturnStatement(Some(hydra.ext.java.coder.compareFieldExpr(otherVar)(hydra.lib.lists.last[hydra.core.FieldType](fields))))))))))
 
 def compareToZeroClause(tmpName: scala.Predef.String)(fname: scala.Predef.String): hydra.ext.java.syntax.InclusiveOrExpression =
@@ -661,7 +661,7 @@ def compareToZeroClause(tmpName: scala.Predef.String)(fname: scala.Predef.String
      Seq(), hydra.ext.java.names.compareToMethodName))
   lazy val lhs: hydra.ext.java.syntax.EqualityExpression = hydra.ext.java.utils.javaRelationalExpressionToJavaEqualityExpression(hydra.ext.java.utils.javaPostfixExpressionToJavaRelationalExpression(hydra.ext.java.utils.javaMethodInvocationToJavaPostfixExpression(hydra.ext.java.syntax.MethodInvocation(compareToHeader,
      Seq(compareToArg)))))
-  lazy val rhs: hydra.ext.java.syntax.RelationalExpression = hydra.ext.java.utils.javaPostfixExpressionToJavaRelationalExpression(hydra.ext.java.syntax.PostfixExpression.primary(hydra.ext.java.utils.javaLiteralToJavaPrimary(hydra.ext.java.utils.javaInt(BigInt(0L)))))
+  lazy val rhs: hydra.ext.java.syntax.RelationalExpression = hydra.ext.java.utils.javaPostfixExpressionToJavaRelationalExpression(hydra.ext.java.syntax.PostfixExpression.primary(hydra.ext.java.utils.javaLiteralToJavaPrimary(hydra.ext.java.utils.javaInt(BigInt("0")))))
   hydra.ext.java.utils.javaEqualityExpressionToJavaInclusiveOrExpression(hydra.ext.java.syntax.EqualityExpression.equal(hydra.ext.java.syntax.EqualityExpression_Binary(lhs,
      rhs)))
 }
@@ -2846,9 +2846,9 @@ def findSelfRefVar[T0](grouped: Map[T0, Seq[T0]]): Option[T0] =
      Seq[T0]](hydra.lib.lists.head[Tuple2[T0, Seq[T0]]](selfRefs))))
 }
 
-lazy val first20Primes: Seq[BigInt] = Seq(BigInt(2L), BigInt(3L), BigInt(5L), BigInt(7L), BigInt(11L),
-   BigInt(13L), BigInt(17L), BigInt(19L), BigInt(23L), BigInt(29L), BigInt(31L), BigInt(37L), BigInt(41L),
-   BigInt(43L), BigInt(47L), BigInt(53L), BigInt(59L), BigInt(61L), BigInt(67L), BigInt(71L))
+lazy val first20Primes: Seq[BigInt] = Seq(BigInt("2"), BigInt("3"), BigInt("5"), BigInt("7"), BigInt("11"),
+   BigInt("13"), BigInt("17"), BigInt("19"), BigInt("23"), BigInt("29"), BigInt("31"), BigInt("37"), BigInt("41"),
+   BigInt("43"), BigInt("47"), BigInt("53"), BigInt("59"), BigInt("61"), BigInt("67"), BigInt("71"))
 
 def flattenApps(t: hydra.core.Term)(acc: Seq[hydra.core.Term]): Tuple2[Seq[hydra.core.Term], hydra.core.Term] =
   hydra.rewriting.deannotateTerm(t) match
@@ -3407,7 +3407,7 @@ def recordHashCodeMethod(fields: Seq[hydra.core.FieldType]): hydra.ext.java.synt
   lazy val anns: Seq[hydra.ext.java.syntax.Annotation] = Seq(hydra.ext.java.utils.overrideAnnotation)
   lazy val mods: Seq[hydra.ext.java.syntax.MethodModifier] = Seq(hydra.ext.java.syntax.MethodModifier.public)
   lazy val result: hydra.ext.java.syntax.Result = hydra.ext.java.utils.javaTypeToJavaResult(hydra.ext.java.utils.javaIntType)
-  lazy val returnSum: hydra.ext.java.syntax.BlockStatement = hydra.ext.java.syntax.BlockStatement.statement(hydra.lib.logic.ifElse[hydra.ext.java.syntax.Statement](hydra.lib.lists.`null`[hydra.core.FieldType](fields))(hydra.ext.java.utils.javaReturnStatement(Some(hydra.ext.java.utils.javaIntExpression(BigInt(0L)))))(hydra.ext.java.utils.javaReturnStatement(Some(hydra.ext.java.utils.javaAdditiveExpressionToJavaExpression(hydra.ext.java.utils.addExpressions(hydra.lib.lists.zipWith[BigInt,
+  lazy val returnSum: hydra.ext.java.syntax.BlockStatement = hydra.ext.java.syntax.BlockStatement.statement(hydra.lib.logic.ifElse[hydra.ext.java.syntax.Statement](hydra.lib.lists.`null`[hydra.core.FieldType](fields))(hydra.ext.java.utils.javaReturnStatement(Some(hydra.ext.java.utils.javaIntExpression(BigInt("0")))))(hydra.ext.java.utils.javaReturnStatement(Some(hydra.ext.java.utils.javaAdditiveExpressionToJavaExpression(hydra.ext.java.utils.addExpressions(hydra.lib.lists.zipWith[BigInt,
      hydra.core.Name, hydra.ext.java.syntax.MultiplicativeExpression](hydra.ext.java.coder.hashCodeMultPair)(hydra.ext.java.coder.first20Primes)(hydra.lib.lists.map[hydra.core.FieldType,
      hydra.core.Name]((f: hydra.core.FieldType) => (f.name))(fields))))))))
   hydra.ext.java.utils.methodDeclaration(mods)(Seq())(anns)(hydra.ext.java.names.hashCodeMethodName)(Seq())(result)(Some(Seq(returnSum)))
@@ -3537,7 +3537,7 @@ def substituteTypeVarsWithTypes_go(subst: Map[hydra.core.Name, hydra.core.Type])
 lazy val tagCmpNotZeroExpr: hydra.ext.java.syntax.Expression = {
   lazy val lhs: hydra.ext.java.syntax.EqualityExpression = hydra.ext.java.utils.javaRelationalExpressionToJavaEqualityExpression(hydra.ext.java.utils.javaPostfixExpressionToJavaRelationalExpression(hydra.ext.java.syntax.PostfixExpression.name(hydra.ext.java.syntax.ExpressionName(None,
      hydra.ext.java.utils.javaIdentifier("tagCmp")))))
-  lazy val rhs: hydra.ext.java.syntax.RelationalExpression = hydra.ext.java.utils.javaPostfixExpressionToJavaRelationalExpression(hydra.ext.java.syntax.PostfixExpression.primary(hydra.ext.java.utils.javaLiteralToJavaPrimary(hydra.ext.java.utils.javaInt(BigInt(0L)))))
+  lazy val rhs: hydra.ext.java.syntax.RelationalExpression = hydra.ext.java.utils.javaPostfixExpressionToJavaRelationalExpression(hydra.ext.java.syntax.PostfixExpression.primary(hydra.ext.java.utils.javaLiteralToJavaPrimary(hydra.ext.java.utils.javaInt(BigInt("0")))))
   hydra.ext.java.utils.javaEqualityExpressionToJavaExpression(hydra.ext.java.syntax.EqualityExpression.notEqual(hydra.ext.java.syntax.EqualityExpression_Binary(lhs,
      rhs)))
 }
@@ -3782,7 +3782,7 @@ def variantCompareToMethod[T0](aliases: hydra.ext.java.environment.Aliases)(tpar
   lazy val variantJavaType: hydra.ext.java.syntax.Type = hydra.ext.java.utils.javaTypeFromTypeName(aliases)(variantName)
   lazy val castOtherExpr: hydra.ext.java.syntax.Expression = hydra.ext.java.utils.javaCastExpressionToJavaExpression(hydra.ext.java.utils.javaCastExpression(hydra.ext.java.utils.nameToJavaReferenceType(aliases)(false)(Seq())(variantName)(None))(hydra.ext.java.utils.javaIdentifierToJavaUnaryExpression(hydra.ext.java.names.otherInstanceName)))
   lazy val castDeclStmt: hydra.ext.java.syntax.BlockStatement = hydra.ext.java.utils.variableDeclarationStatement(aliases)(variantJavaType)(hydra.ext.java.utils.javaIdentifier(varTmpName))(castOtherExpr)
-  lazy val emptyReturn: Seq[hydra.ext.java.syntax.BlockStatement] = Seq(hydra.ext.java.syntax.BlockStatement.statement(hydra.ext.java.utils.javaReturnStatement(Some(hydra.ext.java.utils.javaIntExpression(BigInt(0L))))))
+  lazy val emptyReturn: Seq[hydra.ext.java.syntax.BlockStatement] = Seq(hydra.ext.java.syntax.BlockStatement.statement(hydra.ext.java.utils.javaReturnStatement(Some(hydra.ext.java.utils.javaIntExpression(BigInt("0"))))))
   lazy val valueCompareStmt: Seq[hydra.ext.java.syntax.BlockStatement] = hydra.lib.logic.ifElse[Seq[hydra.ext.java.syntax.BlockStatement]](hydra.lib.lists.`null`[hydra.core.FieldType](fields))(emptyReturn)(hydra.lib.lists.concat2[hydra.ext.java.syntax.BlockStatement](Seq(castDeclStmt))(hydra.ext.java.coder.compareToBody(aliases)(varTmpName)(fields)))
   lazy val body: Seq[hydra.ext.java.syntax.BlockStatement] = hydra.lib.lists.concat2[hydra.ext.java.syntax.BlockStatement](Seq(tagDeclStmt,
      tagReturnStmt))(valueCompareStmt)

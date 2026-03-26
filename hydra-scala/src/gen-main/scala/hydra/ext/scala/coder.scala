@@ -285,7 +285,7 @@ def encodeLetBinding(cx: hydra.context.Context)(g: hydra.graph.Graph)(outerTypeV
 def encodeLiteral[T0](cx: hydra.context.Context)(g: T0)(av: hydra.core.Literal): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.ext.scala.syntax.Lit] =
   av match
-  case hydra.core.Literal.binary(v_Literal_binary__) => Right(hydra.ext.scala.syntax.Lit.string("<binary>"))
+  case hydra.core.Literal.binary(v_Literal_binary_b) => Right(hydra.ext.scala.syntax.Lit.string(hydra.lib.literals.binaryToString(v_Literal_binary_b)))
   case hydra.core.Literal.boolean(v_Literal_boolean_b) => Right(hydra.ext.scala.syntax.Lit.boolean(v_Literal_boolean_b))
   case hydra.core.Literal.float(v_Literal_float_fv) => v_Literal_float_fv match
     case hydra.core.FloatValue.bigfloat(v_FloatValue_bigfloat_bf) => Right(hydra.ext.scala.syntax.Lit.double(hydra.lib.literals.bigfloatToFloat64(v_FloatValue_bigfloat_bf)))
@@ -454,8 +454,8 @@ def encodeTerm(cx: hydra.context.Context)(g: hydra.graph.Graph)(term0: hydra.cor
       lazy val litData: hydra.ext.scala.syntax.Data = hydra.ext.scala.syntax.Data.lit(slit)
       v_Term_literal_v match
         case hydra.core.Literal.integer(v_Literal_integer_iv) => v_Literal_integer_iv match
-          case hydra.core.IntegerValue.bigint(v_IntegerValue_bigint__) => Right(hydra.ext.scala.utils.sapply(hydra.ext.scala.utils.sname("BigInt"))(Seq(litData)))
-          case hydra.core.IntegerValue.uint64(v_IntegerValue_uint64__) => Right(hydra.ext.scala.utils.sapply(hydra.ext.scala.utils.sname("BigInt"))(Seq(litData)))
+          case hydra.core.IntegerValue.bigint(v_IntegerValue_bigint_bi) => Right(hydra.ext.scala.utils.sapply(hydra.ext.scala.utils.sname("BigInt"))(Seq(hydra.ext.scala.syntax.Data.lit(hydra.ext.scala.syntax.Lit.string(hydra.lib.literals.showBigint(v_IntegerValue_bigint_bi))))))
+          case hydra.core.IntegerValue.uint64(v_IntegerValue_uint64_ui) => Right(hydra.ext.scala.utils.sapply(hydra.ext.scala.utils.sname("BigInt"))(Seq(hydra.ext.scala.syntax.Data.lit(hydra.ext.scala.syntax.Lit.string(hydra.lib.literals.showBigint(hydra.lib.literals.uint64ToBigint(v_IntegerValue_uint64_ui)))))))
           case _ => Right(litData)
         case hydra.core.Literal.float(v_Literal_float_fv) => v_Literal_float_fv match
           case hydra.core.FloatValue.bigfloat(v_FloatValue_bigfloat__) => Right(hydra.ext.scala.utils.sapply(hydra.ext.scala.utils.sname("BigDecimal"))(Seq(litData)))

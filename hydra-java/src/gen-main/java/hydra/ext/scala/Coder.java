@@ -620,8 +620,8 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.scala.syntax.Lit> visit(hydra.core.Literal.Binary ignored) {
-        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.scala.syntax.Lit>right(new hydra.ext.scala.syntax.Lit.String_("<binary>"));
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.scala.syntax.Lit> visit(hydra.core.Literal.Binary b) {
+        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.scala.syntax.Lit>right(new hydra.ext.scala.syntax.Lit.String_(hydra.lib.literals.BinaryToString.apply((b).value)));
       }
 
       @Override
@@ -1166,17 +1166,17 @@ public interface Coder {
                   }
 
                   @Override
-                  public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.scala.syntax.Data> visit(hydra.core.IntegerValue.Bigint ignored) {
+                  public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.scala.syntax.Data> visit(hydra.core.IntegerValue.Bigint bi) {
                     return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.scala.syntax.Data>right(hydra.ext.scala.Utils.sapply(
                       hydra.ext.scala.Utils.sname("BigInt"),
-                      hydra.util.ConsList.of(litData)));
+                      hydra.util.ConsList.of(new hydra.ext.scala.syntax.Data.Lit(new hydra.ext.scala.syntax.Lit.String_(hydra.lib.literals.ShowBigint.apply((bi).value))))));
                   }
 
                   @Override
-                  public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.scala.syntax.Data> visit(hydra.core.IntegerValue.Uint64 ignored) {
+                  public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.scala.syntax.Data> visit(hydra.core.IntegerValue.Uint64 ui) {
                     return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.scala.syntax.Data>right(hydra.ext.scala.Utils.sapply(
                       hydra.ext.scala.Utils.sname("BigInt"),
-                      hydra.util.ConsList.of(litData)));
+                      hydra.util.ConsList.of(new hydra.ext.scala.syntax.Data.Lit(new hydra.ext.scala.syntax.Lit.String_(hydra.lib.literals.ShowBigint.apply(hydra.lib.literals.Uint64ToBigint.apply((ui).value)))))));
                   }
                 });
               }

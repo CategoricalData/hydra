@@ -2105,7 +2105,7 @@ def isVariantUnitType(rowType: Seq[hydra.core.FieldType])(fieldName: hydra.core.
     hydra.schemas.isUnitType(hydra.rewriting.deannotateType(ft.`type`)))(mfield))
 }
 
-lazy val lruCacheDecorator: hydra.ext.python.syntax.NamedExpression = hydra.ext.python.syntax.NamedExpression.simple(hydra.ext.python.utils.functionCall(hydra.ext.python.syntax.Primary.simple(hydra.ext.python.syntax.Atom.name("lru_cache")))(Seq(hydra.ext.python.coder.pyInt(BigInt(1L)))))
+lazy val lruCacheDecorator: hydra.ext.python.syntax.NamedExpression = hydra.ext.python.syntax.NamedExpression.simple(hydra.ext.python.utils.functionCall(hydra.ext.python.syntax.Primary.simple(hydra.ext.python.syntax.Atom.name("lru_cache")))(Seq(hydra.ext.python.coder.pyInt(BigInt("1")))))
 
 def makeCurriedLambda(params: Seq[hydra.ext.python.syntax.Name])(body: hydra.ext.python.syntax.Expression): hydra.ext.python.syntax.Expression =
   hydra.lib.lists.foldl[hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.Name]((acc: hydra.ext.python.syntax.Expression) =>
@@ -2130,7 +2130,7 @@ def makeSimpleLambda(arity: Int)(lhs: hydra.ext.python.syntax.Expression): hydra
 }
 
 def makeThunk(pbody: hydra.ext.python.syntax.Expression): hydra.ext.python.syntax.Expression =
-  hydra.ext.python.utils.functionCall(hydra.ext.python.utils.pyExpressionToPyPrimary(hydra.ext.python.utils.functionCall(hydra.ext.python.syntax.Primary.simple(hydra.ext.python.syntax.Atom.name("lru_cache")))(Seq(hydra.ext.python.coder.pyInt(BigInt(1L))))))(Seq(hydra.ext.python.coder.wrapInNullaryLambda(pbody)))
+  hydra.ext.python.utils.functionCall(hydra.ext.python.utils.pyExpressionToPyPrimary(hydra.ext.python.utils.functionCall(hydra.ext.python.syntax.Primary.simple(hydra.ext.python.syntax.Atom.name("lru_cache")))(Seq(hydra.ext.python.coder.pyInt(BigInt("1"))))))(Seq(hydra.ext.python.coder.wrapInNullaryLambda(pbody)))
 
 def makeUncurriedLambda(params: Seq[hydra.ext.python.syntax.Name])(body: hydra.ext.python.syntax.Expression): hydra.ext.python.syntax.Expression =
   hydra.ext.python.syntax.Expression.lambda(hydra.ext.python.syntax.Lambda(hydra.ext.python.syntax.LambdaParameters(None,
