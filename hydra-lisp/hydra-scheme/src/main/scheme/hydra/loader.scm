@@ -930,7 +930,6 @@
            "module.scm"
            "ast.scm"
            "coders.scm"
-           "grammar.scm"
            "phantoms.scm"
            "parsing.scm"
            "query.scm"
@@ -944,7 +943,7 @@
            "json/model.scm"
            "classes.scm"
            "constants.scm"
-           "accessors.scm"
+           "paths.scm"
            ;; Core operations
            "formatting.scm"
            "rewriting.scm"
