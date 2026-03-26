@@ -281,7 +281,7 @@ encodeLetBinding cx g outerTypeVars b =
 encodeLiteral :: Context.Context -> t0 -> Core.Literal -> Either (Context.InContext Errors.Error) Syntax.Lit
 encodeLiteral cx g av =
     case av of
-      Core.LiteralBinary _ -> Right (Syntax.LitString "<binary>")
+      Core.LiteralBinary v0 -> Right (Syntax.LitString (Literals.binaryToString v0))
       Core.LiteralBoolean v0 -> Right (Syntax.LitBoolean v0)
       Core.LiteralFloat v0 -> case v0 of
         Core.FloatValueBigfloat v1 -> Right (Syntax.LitDouble (Literals.bigfloatToFloat64 v1))
@@ -433,10 +433,10 @@ encodeTerm cx g term0 =
           let litData = Syntax.DataLit slit
           in case v0 of
             Core.LiteralInteger v1 -> case v1 of
-              Core.IntegerValueBigint _ -> Right (Utils.sapply (Utils.sname "BigInt") [
-                litData])
-              Core.IntegerValueUint64 _ -> Right (Utils.sapply (Utils.sname "BigInt") [
-                litData])
+              Core.IntegerValueBigint bi -> Right (Utils.sapply (Utils.sname "BigInt") [
+                Syntax.DataLit (Syntax.LitString (Literals.showBigint bi))])
+              Core.IntegerValueUint64 ui -> Right (Utils.sapply (Utils.sname "BigInt") [
+                Syntax.DataLit (Syntax.LitString (Literals.showBigint (Literals.uint64ToBigint ui)))])
               _ -> Right litData
             Core.LiteralFloat v1 -> case v1 of
               Core.FloatValueBigfloat _ -> Right (Utils.sapply (Utils.sname "BigDecimal") [

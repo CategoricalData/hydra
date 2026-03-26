@@ -979,7 +979,7 @@ encodeLiteral = def "encodeLiteral" $
   doc "Encode a literal value as a Scala literal" $
   lambda "cx" $ lambda "g" $ lambda "av" $
     (cases _Literal (var "av") (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError (string "unexpected literal")) (var "cx"))) [
-      _Literal_binary>>: (constant $ right (inject _Lit _Lit_string (string "<binary>"))),
+      _Literal_binary>>: ("b" ~> right (inject _Lit _Lit_string (Literals.binaryToString (var "b")))),
       _Literal_boolean>>: ("b" ~> right (inject _Lit _Lit_boolean (var "b"))),
       _Literal_float>>: ("fv" ~> cases _FloatValue (var "fv") (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError (string "unexpected float value")) (var "cx"))) [
         _FloatValue_bigfloat>>: ("bf" ~> right (inject _Lit _Lit_double (Literals.bigfloatToFloat64 (var "bf")))),
@@ -1165,8 +1165,8 @@ encodeTerm = def "encodeTerm" $
             -- Wrap BigInt and BigDecimal literals in constructor calls
             cases _Literal (var "v") (Just $ right (var "litData")) [
               _Literal_integer>>: ("iv" ~> cases _IntegerValue (var "iv") (Just $ right (var "litData")) [
-                _IntegerValue_bigint>>: (constant $ right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "BigInt") @@ list [var "litData"])),
-                _IntegerValue_uint64>>: (constant $ right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "BigInt") @@ list [var "litData"]))]),
+                _IntegerValue_bigint>>: ("bi" ~> right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "BigInt") @@ list [inject _Data _Data_lit (inject _Lit _Lit_string (Literals.showBigint (var "bi")))])),
+                _IntegerValue_uint64>>: ("ui" ~> right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "BigInt") @@ list [inject _Data _Data_lit (inject _Lit _Lit_string (Literals.showBigint (Literals.uint64ToBigint (var "ui"))))]))]),
               _Literal_float>>: ("fv" ~> cases _FloatValue (var "fv") (Just $ right (var "litData")) [
                 _FloatValue_bigfloat>>: (constant $ right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "BigDecimal") @@ list [var "litData"]))])])),
       _Term_map>>: ("m" ~>
