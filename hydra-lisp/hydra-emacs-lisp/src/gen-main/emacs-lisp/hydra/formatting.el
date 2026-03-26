@@ -20,7 +20,7 @@
 
 (require 'hydra.util)
 
-(defvar hydra_formatting_map_first_letter (lambda (mapping) (lambda (s) (let ((list (hydra_lib_strings_to_list s))) (let ((first_letter (mapping (hydra_lib_strings_from_list (hydra_lib_lists_pure (hydra_lib_lists_head list)))))) (if (hydra_lib_strings_null s) s (funcall (hydra_lib_strings_cat2 first_letter) (hydra_lib_strings_from_list (hydra_lib_lists_tail list)))))))))
+(defvar hydra_formatting_map_first_letter (lambda (mapping) (lambda (s) (if (hydra_lib_strings_null s) s (let ((list (hydra_lib_strings_to_list s))) (let ((first_letter (mapping (hydra_lib_strings_from_list (hydra_lib_lists_pure (hydra_lib_lists_head list)))))) (funcall (hydra_lib_strings_cat2 first_letter) (hydra_lib_strings_from_list (hydra_lib_lists_tail list)))))))))
 
 (defvar hydra_formatting_capitalize (hydra_formatting_map_first_letter hydra_lib_strings_to_upper))
 

@@ -4,7 +4,7 @@
 
 (in-package :hydra.formatting)
 
-(cl:defvar hydra_formatting_map_first_letter (cl:lambda (mapping) (cl:lambda (s) (let ((list (hydra_lib_strings_to_list s))) (let ((first_letter (mapping (hydra_lib_strings_from_list (hydra_lib_lists_pure (hydra_lib_lists_head list)))))) (if (hydra_lib_strings_null s) s ((hydra_lib_strings_cat2 first_letter) (hydra_lib_strings_from_list (hydra_lib_lists_tail list)))))))))
+(cl:defvar hydra_formatting_map_first_letter (cl:lambda (mapping) (cl:lambda (s) (if (hydra_lib_strings_null s) s (let ((list (hydra_lib_strings_to_list s))) (let ((first_letter (mapping (hydra_lib_strings_from_list (hydra_lib_lists_pure (hydra_lib_lists_head list)))))) ((hydra_lib_strings_cat2 first_letter) (hydra_lib_strings_from_list (hydra_lib_lists_tail list)))))))))
 
 (cl:defvar hydra_formatting_capitalize (hydra_formatting_map_first_letter hydra_lib_strings_to_upper))
 

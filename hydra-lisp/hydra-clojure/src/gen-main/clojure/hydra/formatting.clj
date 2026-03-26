@@ -4,7 +4,7 @@
 
 (declare hydra_formatting_map_first_letter hydra_formatting_capitalize hydra_formatting_decapitalize hydra_formatting_convert_case hydra_formatting_convert_case_camel_to_lower_snake hydra_formatting_convert_case_camel_or_underscore_to_lower_snake hydra_formatting_convert_case_camel_to_upper_snake hydra_formatting_convert_case_pascal_to_upper_snake hydra_formatting_escape_with_underscore hydra_formatting_indent_lines hydra_formatting_java_style_comment hydra_formatting_non_alnum_to_underscores hydra_formatting_sanitize_with_underscores hydra_formatting_show_list hydra_formatting_strip_leading_and_trailing_whitespace hydra_formatting_with_character_aliases hydra_formatting_wrap_line)
 
-(def hydra_formatting_map_first_letter (fn [mapping] (fn [s] (let [list (hydra_lib_strings_to_list s)] (let [first_letter (mapping (hydra_lib_strings_from_list (hydra_lib_lists_pure (hydra_lib_lists_head list))))] (if (hydra_lib_strings_null s) s ((hydra_lib_strings_cat2 first_letter) (hydra_lib_strings_from_list (hydra_lib_lists_tail list)))))))))
+(def hydra_formatting_map_first_letter (fn [mapping] (fn [s] (if (hydra_lib_strings_null s) s (let [list (hydra_lib_strings_to_list s)] (let [first_letter (mapping (hydra_lib_strings_from_list (hydra_lib_lists_pure (hydra_lib_lists_head list))))] ((hydra_lib_strings_cat2 first_letter) (hydra_lib_strings_from_list (hydra_lib_lists_tail list)))))))))
 
 (def hydra_formatting_capitalize (hydra_formatting_map_first_letter hydra_lib_strings_to_upper))
 

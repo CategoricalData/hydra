@@ -92,10 +92,10 @@ javaStyleComment s = Strings.cat2 (Strings.cat2 (Strings.cat2 "/**\n" " * ") s) 
 -- | A helper which maps the first letter of a string to another string
 mapFirstLetter :: (String -> String) -> String -> String
 mapFirstLetter mapping s =
-
+    Logic.ifElse (Strings.null s) s (
       let list = Strings.toList s
           firstLetter = mapping (Strings.fromList (Lists.pure (Lists.head list)))
-      in (Logic.ifElse (Strings.null s) s (Strings.cat2 firstLetter (Strings.fromList (Lists.tail list))))
+      in (Strings.cat2 firstLetter (Strings.fromList (Lists.tail list))))
 
 -- | Replace sequences of non-alphanumeric characters with single underscores
 nonAlnumToUnderscores :: String -> String
