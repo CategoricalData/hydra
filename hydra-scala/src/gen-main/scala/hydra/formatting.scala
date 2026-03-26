@@ -82,11 +82,13 @@ def javaStyleComment(s: scala.Predef.String): scala.Predef.String =
   hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("/**\n")(" * "))(s))("\n */")
 
 def mapFirstLetter(mapping: (scala.Predef.String => scala.Predef.String))(s: scala.Predef.String): scala.Predef.String =
-  {
+  hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.strings.`null`(s))(s)({
   lazy val list: Seq[Int] = hydra.lib.strings.toList(s)
-  lazy val firstLetter: scala.Predef.String = mapping(hydra.lib.strings.fromList(hydra.lib.lists.pure[Int](hydra.lib.lists.head[Int](list))))
-  hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.strings.`null`(s))(s)(hydra.lib.strings.cat2(firstLetter)(hydra.lib.strings.fromList(hydra.lib.lists.tail[Int](list))))
-}
+  {
+    lazy val firstLetter: scala.Predef.String = mapping(hydra.lib.strings.fromList(hydra.lib.lists.pure[Int](hydra.lib.lists.head[Int](list))))
+    hydra.lib.strings.cat2(firstLetter)(hydra.lib.strings.fromList(hydra.lib.lists.tail[Int](list)))
+  }
+})
 
 def nonAlnumToUnderscores(input: scala.Predef.String): scala.Predef.String =
   {
