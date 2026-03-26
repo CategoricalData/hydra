@@ -196,7 +196,7 @@
     (hydra-load-native-lib (string-append *script-dir* "lib/" f)))
   '("equality.scm" "maps.scm" "sets.scm" "lists.scm" "strings.scm"
     "logic.scm" "math.scm" "chars.scm" "eithers.scm" "literals.scm"
-    "maybes.scm" "pairs.scm"))
+    "maybes.scm" "pairs.scm" "regex.scm"))
 
 ;; Load core modules via loader
 (hydra-load-gen-main *gen-main-base*)
@@ -227,12 +227,16 @@
     "adapt.scm"
     "code_generation.scm"
     ;; Show modules
-    "show/core.scm" "show/error.scm" "show/graph.scm"
+    "show/core.scm" "show/error/core.scm" "show/errors.scm" "show/graph.scm"
     "show/meta.scm" "show/typing.scm" "show/util.scm" "show/accessors.scm"
+    ;; Validate
+    "validate/core.scm"
     ;; Decode modules (needed by hydra_decode_module_module)
     "decode/accessors.scm" "decode/ast.scm" "decode/classes.scm"
     "decode/coders.scm" "decode/context.scm" "decode/core.scm"
-    "decode/grammar.scm" "decode/graph.scm" "decode/module.scm"
+    "decode/error/core.scm" "decode/error/checking.scm" "decode/errors.scm"
+    "decode/grammar.scm" "decode/graph.scm" "decode/json/model.scm"
+    "decode/module.scm"
     "decode/parsing.scm" "decode/phantoms.scm" "decode/query.scm"
     "decode/relational.scm" "decode/tabular.scm" "decode/testing.scm"
     "decode/topology.scm" "decode/typing.scm" "decode/util.scm"
@@ -240,7 +244,8 @@
     ;; Encode modules (may be needed by code generation)
     "encode/accessors.scm" "encode/ast.scm" "encode/classes.scm"
     "encode/coders.scm" "encode/context.scm" "encode/core.scm"
-    "encode/grammar.scm" "encode/module.scm"
+    "encode/error/core.scm" "encode/error/checking.scm" "encode/errors.scm"
+    "encode/grammar.scm" "encode/json/model.scm" "encode/module.scm"
     "encode/parsing.scm" "encode/phantoms.scm" "encode/query.scm"
     "encode/relational.scm" "encode/tabular.scm" "encode/testing.scm"
     "encode/topology.scm" "encode/typing.scm" "encode/util.scm"
@@ -267,11 +272,11 @@
                "ext/haskell/serde.scm" "ext/haskell/coder.scm"))
             ((equal? target "java")
              '("ext/java/syntax.scm" "ext/java/language.scm" "ext/java/names.scm"
-               "ext/java/helpers.scm" "ext/java/utils.scm"
+               "ext/java/utils.scm"
                "ext/java/serde.scm" "ext/java/coder.scm"))
             ((equal? target "python")
              '("ext/python/syntax.scm" "ext/python/language.scm" "ext/python/names.scm"
-               "ext/python/helpers.scm" "ext/python/utils.scm"
+               "ext/python/utils.scm"
                "ext/python/serde.scm" "ext/python/coder.scm"))
             ((or (equal? target "clojure") (equal? target "scheme")
                  (equal? target "common-lisp") (equal? target "emacs-lisp"))

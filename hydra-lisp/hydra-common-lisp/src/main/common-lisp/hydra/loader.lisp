@@ -385,7 +385,8 @@
   "Load all generated main modules. Uses retry loop to handle forward references."
   (let* ((base *hydra-gen-main-dir*)
          ;; Priority files: load these first for best dependency order
-         (priority '("core.lisp" "error.lisp" "context.lisp" "graph.lisp"
+         (priority '("core.lisp" "error/core.lisp" "error/checking.lisp" "error/module.lisp"
+                     "context.lisp" "graph.lisp"
                      "module.lisp" "ast.lisp" "coders.lisp" "grammar.lisp" "phantoms.lisp"
                      "parsing.lisp" "query.lisp" "relational.lisp" "tabular.lisp" "testing.lisp"
                      "topology.lisp" "typing.lisp" "util.lisp" "variants.lisp"
@@ -394,7 +395,10 @@
                      "names.lisp" "schemas.lisp" "arity.lisp" "lexical.lisp"
                      "literals.lisp" "reflect.lisp" "languages.lisp" "parsers.lisp" "grammars.lisp"
                      "templates.lisp" "encoding.lisp" "decoding.lisp" "code_generation.lisp"
-                     "hoisting.lisp" "show/core.lisp" "encode/core.lisp" "decode/core.lisp"
+                     "hoisting.lisp" "show/core.lisp" "show/error/core.lisp" "show/errors.lisp"
+                     "validate/core.lisp"
+                     "encode/core.lisp" "encode/error/core.lisp" "encode/error/checking.lisp" "encode/errors.lisp"
+                     "decode/core.lisp" "decode/error/core.lisp" "decode/error/checking.lisp" "decode/errors.lisp"
                      "extract/core.lisp" "extract/helpers.lisp" "extract/util.lisp" "extract/json.lisp"
                      "substitution.lisp" "annotations.lisp" "unification.lisp"
                      "inference.lisp" "checking.lisp" "serialization.lisp" "reduction.lisp"
@@ -434,6 +438,7 @@
            "test/lib/math.lisp"
            "test/lib/maybes.lisp"
            "test/lib/pairs.lisp"
+           "test/lib/regex.lisp"
            "test/lib/sets.lisp"
            "test/lib/strings.lisp"
            "test/annotations.lisp"
@@ -467,6 +472,8 @@
            "test/sorting.lisp"
            "test/substitution.lisp"
            "test/unification.lisp"
+           "test/validate/core.lisp"
+           "test/validate/all.lisp"
            "test/test_suite.lisp")))
     (dolist (f files)
       (let ((path (merge-pathnames f base)))

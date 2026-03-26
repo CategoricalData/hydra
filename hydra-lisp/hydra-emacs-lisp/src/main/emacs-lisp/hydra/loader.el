@@ -385,7 +385,8 @@
 (defun hydra-load-gen-main ()
   "Load all generated main modules, then byte-compile for performance."
   (let* ((base hydra-gen-main-dir)
-         (priority '("core.el" "error.el" "context.el" "graph.el"
+         (priority '("core.el" "error/core.el" "error/checking.el" "error/module.el"
+                     "context.el" "graph.el"
                      "module.el" "ast.el" "coders.el" "grammar.el" "phantoms.el"
                      "parsing.el" "query.el" "relational.el" "tabular.el" "testing.el"
                      "topology.el" "typing.el" "util.el" "variants.el"
@@ -394,7 +395,10 @@
                      "names.el" "schemas.el" "arity.el" "lexical.el"
                      "literals.el" "reflect.el" "languages.el" "parsers.el" "grammars.el"
                      "templates.el" "encoding.el" "decoding.el" "code_generation.el"
-                     "hoisting.el" "show/core.el" "encode/core.el" "decode/core.el"
+                     "hoisting.el" "show/core.el" "show/error/core.el" "show/errors.el"
+                     "validate/core.el"
+                     "encode/core.el" "encode/error/core.el" "encode/error/checking.el" "encode/errors.el"
+                     "decode/core.el" "decode/error/core.el" "decode/error/checking.el" "decode/errors.el"
                      "extract/core.el" "extract/helpers.el" "extract/util.el" "extract/json.el"
                      "substitution.el" "annotations.el" "unification.el"
                      "inference.el" "checking.el" "serialization.el" "reduction.el"
@@ -427,6 +431,7 @@
                   "test/lib/math.el"
                   "test/lib/maybes.el"
                   "test/lib/pairs.el"
+                  "test/lib/regex.el"
                   "test/lib/sets.el"
                   "test/lib/strings.el"
                   "test/annotations.el"
@@ -460,6 +465,8 @@
                   "test/sorting.el"
                   "test/substitution.el"
                   "test/unification.el"
+                  "test/validate/core.el"
+                  "test/validate/all.el"
                   "test/test_suite.el")))
     (dolist (f files)
       (let ((path (expand-file-name f base)))
