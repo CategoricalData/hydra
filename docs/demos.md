@@ -29,9 +29,10 @@ See the [GenPG README](../../hydra-ext/demos/genpg/README.md) for setup, usage, 
 ## Bootstrapping (everything-to-everything code generation)
 
 The bootstrapping demo validates Hydra's self-hosting capability.
-All three complete implementations (Haskell, Java, Python) independently load Hydra modules from a
+All five complete implementations (Haskell, Java, Python, Scala, Clojure) independently load Hydra modules from a
 language-independent JSON representation and regenerate code for any target language.
-This produces 9 bootstrapping paths (3 host languages x 3 target languages) covering 249 modules.
+The default demo uses Haskell, Java, and Python as both hosts and targets, producing 9 bootstrapping paths.
+Scala and Clojure can also be included as hosts and targets.
 
 The pipeline works in four steps:
 

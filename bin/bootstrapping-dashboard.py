@@ -43,8 +43,8 @@ _RESET = "\033[0m"
 _RUN_DIR_RE = re.compile(r"^run_(\d{4}-\d{2}-\d{2}_\d{6}_\d{3})(_.+)?$")
 _ANSI_RE = re.compile(r"\033\[[0-9;]*m")
 
-HOSTS = ["haskell", "java", "python"]
-TARGETS = ["haskell", "java", "python"]
+HOSTS = ["haskell", "java", "scala", "python"]
+TARGETS = ["haskell", "java", "scala", "python", "clojure", "common-lisp", "emacs-lisp", "scheme"]
 
 
 def visible_len(s):
@@ -217,7 +217,7 @@ def fmt_time_short(seconds):
 
 
 def capitalize(s):
-    return s[0].upper() + s[1:]
+    return "-".join(w[0].upper() + w[1:] for w in s.split("-"))
 
 
 def print_run_header(run):

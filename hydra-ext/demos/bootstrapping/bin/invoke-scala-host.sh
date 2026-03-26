@@ -38,4 +38,13 @@ echo "Scala host: generating $TARGET code..."
 echo ""
 
 cd "$HYDRA_SCALA_DIR"
-sbt -warn "runMain hydra.bootstrap $EXTRA_ARGS"
+# sbt wraps program println output as [info] lines. We need to let those
+# through (not use -warn) and strip the [info] prefix so the output matches
+# the log format expected by bootstrap-all.sh's parse_bootstrap_log.
+# Filter out sbt's own [info] noise (loading, compiling, etc.) but keep
+# program output by only stripping [info] from lines that don't start with
+# sbt-specific patterns.
+sbt "runMain hydra.bootstrap $EXTRA_ARGS" 2>&1 \
+    | grep -v '^\[info\] \(welcome\|loading\|set current\|compiling\|done compiling\|Executing\)' \
+    | grep -v '^\[warn\]' \
+    | sed 's/^\[info\] //'

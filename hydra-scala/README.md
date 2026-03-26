@@ -2,12 +2,12 @@
 
 Hydra-Scala is a complete Scala 3 implementation of the [Hydra](https://github.com/CategoricalData/hydra)
 kernel. It supports the full code generation pipeline and passes the bootstrapping test suite,
-producing output identical to the Haskell and Java hosts for all target languages.
+producing output identical to the Haskell, Java, and Python hosts for all target languages.
 
 ## Features
 
-- **145 generated modules** from the Hydra kernel, all compiling cleanly under Scala 3.3.7
-- **Bootstrapping host**: loads Hydra modules from JSON and generates Haskell, Java, and Python
+- **150 generated modules** from the Hydra kernel, all compiling cleanly under Scala 3.3.7
+- **Bootstrapping host**: loads Hydra modules from JSON and generates Haskell, Java, Python, and Scala
 - **231 primitive functions** across 12 categories (chars, equality, eithers, lists, literals,
   logic, maps, math, maybes, pairs, sets, strings)
 - **Lazy evaluation support** via Scala's by-name parameters for `ifElse`, `maybe`, `fromMaybe`, etc.

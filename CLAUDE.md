@@ -95,7 +95,7 @@ This section links to every major document in the project with a brief descripti
 |--------|------|-------------|
 | Recipe index | [docs/recipes/index.md](docs/recipes/index.md) | Table of contents for all recipes, organized by category |
 | Code generation | [docs/recipes/code-generation.md](docs/recipes/code-generation.md) | End-to-end guide to generating code from Hydra modules. DSL vs JSON source paths, writeXxx functions, bootstrap CLI, sync scripts, troubleshooting |
-| Adding primitives | [docs/recipes/adding-primitives.md](docs/recipes/adding-primitives.md) | Add new primitive functions across all 3 implementations. File-by-file checklist. Covers `prim1`/`prim2`/`prim2Eval` registration, eval elements for higher-order primitives, DSL wrappers, tests |
+| Adding primitives | [docs/recipes/adding-primitives.md](docs/recipes/adding-primitives.md) | Add new primitive functions across all 5 implementations. File-by-file checklist. Covers `prim1`/`prim2`/`prim2Eval` registration, eval elements for higher-order primitives, DSL wrappers, tests |
 | Extending Hydra Core | [docs/recipes/extending-hydra-core.md](docs/recipes/extending-hydra-core.md) | Add new type/term constructors (e.g., Either). The most complex recipe. 12+ steps covering the bootstrap problem, manual patching of generated files, inference, checking, rewriting, encoding/decoding. Also covers adding fields to existing records |
 | Extending tests | [docs/recipes/extending-tests.md](docs/recipes/extending-tests.md) | Add tests to the common test suite. Choosing test modules, writing test cases with `checkWithType`/`inferWithType`/`primCase`, meta-level vs term-level DSL differences |
 | JSON kernel | [docs/recipes/json-kernel.md](docs/recipes/json-kernel.md) | Export Hydra modules to JSON for language-agnostic access. `update-json-kernel.sh`, `update-json-main.sh`, `update-json-test.sh`, and `verify-json-kernel.sh`. JSON encoding format details |
@@ -142,6 +142,7 @@ Hydra-Haskell (source of truth)
   |     Haskell  -> hydra-haskell/src/gen-main/haskell/
   |     Java     -> hydra-java/src/gen-main/java/       (via hydra-ext)
   |     Python   -> hydra-python/src/gen-main/python/    (via hydra-ext)
+  |     Scala    -> hydra-scala/src/gen-main/scala/      (via hydra-ext)
   |     Clojure  -> hydra-lisp/hydra-clojure/src/gen-main/clojure/ (via hydra-ext)
   |
   |-- DSL generation (hydra.dsls) produces phantom-typed DSL modules:
@@ -153,6 +154,7 @@ Hydra-Haskell (source of truth)
         Haskell  -> hydra-haskell/src/main/haskell/Hydra/Lib/
         Java     -> hydra-java/src/main/java/hydra/lib/
         Python   -> hydra-python/src/main/python/hydra/lib/
+        Scala    -> hydra-scala/src/main/scala/hydra/lib/
         Clojure  -> hydra-lisp/hydra-clojure/src/main/clojure/hydra/lib/
 ```
 
@@ -458,13 +460,15 @@ This is a frequent task. See [promoting-code.md](docs/recipes/promoting-code.md)
 ### Adding primitives
 
 See [adding-primitives.md](docs/recipes/adding-primitives.md). Must touch 6+ files
-per primitive across all three implementations. Checklist:
+per primitive across all five implementations. Checklist:
 
 1. Haskell: `Hydra/Lib/<Library>.hs`, `Hydra/Sources/Libraries.hs`, `Hydra/Dsl/Lib/<Library>.hs`
 2. Java: `hydra/lib/<library>/<Name>.java`, **`hydra/lib/Libraries.java`**
 3. Python: `hydra/lib/<library>.py`, `libraries.py`
-4. Higher-order primitives also need eval elements in `Hydra/Sources/Eval/Lib/`
-5. Tests: `Hydra/Sources/Test/Lib/<Library>.hs`
+4. Scala: `hydra/lib/<library>.scala`, `Libraries.scala`
+5. Clojure: `hydra/lib/<library>.clj`, `libraries.clj`
+6. Higher-order primitives also need eval elements in `Hydra/Sources/Eval/Lib/`
+7. Tests: `Hydra/Sources/Test/Lib/<Library>.hs`
 
 #### Primitive registration and implementation (Java)
 
