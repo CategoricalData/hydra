@@ -1,7 +1,8 @@
 package hydra.lib
 
 object literals:
-  def bigfloatToBigint(x: BigDecimal): BigInt = x.toBigInt
+  // Haskell uses round (half-even / banker's rounding)
+  def bigfloatToBigint(x: BigDecimal): BigInt = x.setScale(0, BigDecimal.RoundingMode.HALF_EVEN).toBigInt
   def bigfloatToFloat(x: BigDecimal)(ft: Any): Any = ft // Placeholder
   def bigfloatToFloat32(x: BigDecimal): Float = x.toFloat
   def bigfloatToFloat64(x: BigDecimal): Double = x.toDouble
@@ -19,9 +20,11 @@ object literals:
   def bigintToUint32(x: BigInt): Long = (x & 0xffffffffL).toLong
   def bigintToUint64(x: BigInt): BigInt = x & BigInt("ffffffffffffffff", 16)
   def binaryToBytes(b: String): Seq[Int] = b.getBytes("ISO-8859-1").toSeq.map(_.toInt & 0xff)
-  def binaryToString(b: String): String = java.util.Base64.getEncoder.encodeToString(b.getBytes("ISO-8859-1"))
+  // In Scala, binary data is stored as a String (same representation).
+  // binaryToString is an identity function since both are Strings.
+  def binaryToString(b: String): String = b
   def float(ft: Any)(x: BigDecimal): Any = x // Placeholder
-  def float32ToBigfloat(x: Float): BigDecimal = BigDecimal(x)
+  def float32ToBigfloat(x: Float): BigDecimal = BigDecimal(x.toDouble)
   def float64ToBigfloat(x: Double): BigDecimal = BigDecimal(x)
   def floatValueToBigfloat(x: Any): BigDecimal = x match
     case d: BigDecimal => d
@@ -50,30 +53,116 @@ object literals:
   def readInt16(s: String): Option[Short] = s.toShortOption
   def readInt32(s: String): Option[Int] = s.toIntOption
   def readInt64(s: String): Option[Long] = s.toLongOption
-  def readString(s: String): Option[String] = Some(s)
+  def readString(s: String): Option[String] =
+    // Haskell read expects a quoted string: read "\"hello\"" = "hello"
+    if s.startsWith("\"") && s.endsWith("\"") && s.length >= 2 then
+      Some(s.substring(1, s.length - 1)
+        .replace("\\\\", "\u0000").replace("\\\"", "\"")
+        .replace("\\n", "\n").replace("\\t", "\t").replace("\\r", "\r")
+        .replace("\\a", "\u0007").replace("\\b", "\b").replace("\\f", "\f")
+        .replace("\\v", "\u000b")
+        .replace("\u0000", "\\"))
+    else None
   def readUint(s: String)(it: Any): Option[Any] = s.toIntOption.filter(_ >= 0)
   def readUint8(s: String): Option[Byte] = s.toShortOption.filter(n => n >= 0 && n <= 255).map(_.toByte)
   def readUint16(s: String): Option[Int] = s.toIntOption.filter(n => n >= 0 && n <= 65535)
   def readUint32(s: String): Option[Long] = s.toLongOption.filter(n => n >= 0 && n <= 4294967295L)
   def readUint64(s: String): Option[BigInt] = try { val n = BigInt(s); if (n >= 0 && n <= BigInt("18446744073709551615")) Some(n) else None } catch { case _: Exception => None }
-  def showBigfloat(x: BigDecimal): String = x.toString
+
+  // Format a float32 to match Hydra's show for Float (Haskell-compatible)
+  private def showHaskellFloat32(x: Float): String =
+    if x.isNaN then "NaN"
+    else if x.isInfinite then if x > 0 then "Infinity" else "-Infinity"
+    else if x == 0.0f then if (java.lang.Float.floatToRawIntBits(x) < 0) "-0.0" else "0.0"
+    else
+      val abs = scala.math.abs(x)
+      if abs >= 0.1f && abs < 1.0e7f then x.toString
+      else toScientific(x.toString)
+
+  // Format a double to match Hydra's show for Double (Haskell-compatible)
+  private def showHaskellDouble(x: Double): String =
+    if x.isNaN then "NaN"
+    else if x.isInfinite then if x > 0 then "Infinity" else "-Infinity"
+    else if x == 0.0 then if (java.lang.Double.doubleToRawLongBits(x) < 0) "-0.0" else "0.0"
+    else
+      val abs = scala.math.abs(x)
+      if abs >= 0.1 && abs < 1.0e7 then x.toString
+      else toScientific(x.toString)
+
+  // Convert a Java float/double string representation to scientific notation
+  private def toScientific(javaStr: String): String =
+    val eIdx = javaStr.indexOf('E')
+    if eIdx >= 0 then
+      // Already in scientific notation, just lowercase the E
+      javaStr.substring(0, eIdx) + "e" + javaStr.substring(eIdx + 1)
+    else
+      // Decimal form - convert to scientific notation
+      val negative = javaStr.startsWith("-")
+      val abs = if negative then javaStr.substring(1) else javaStr
+      val dot = abs.indexOf('.')
+      if dot < 0 then javaStr
+      else
+        val intPart = abs.substring(0, dot)
+        val fracPart = abs.substring(dot + 1)
+        val allDigits = intPart + fracPart
+        // Find first non-zero digit
+        var firstNonZero = 0
+        while firstNonZero < allDigits.length && allDigits.charAt(firstNonZero) == '0' do firstNonZero += 1
+        if firstNonZero >= allDigits.length then "0.0"
+        else
+          val exponent = dot - firstNonZero - 1
+          var significant = allDigits.substring(firstNonZero)
+          // Remove trailing zeros
+          while significant.length > 1 && significant.endsWith("0") do
+            significant = significant.substring(0, significant.length - 1)
+          val mantissa = if significant.length == 1 then significant + ".0"
+                         else significant.charAt(0).toString + "." + significant.substring(1)
+          val sb = new StringBuilder
+          if negative then sb.append('-')
+          sb.append(mantissa).append('e').append(exponent)
+          sb.toString
+
+  def showBigfloat(x: BigDecimal): String = showHaskellDouble(x.toDouble)
   def showBigint(x: BigInt): String = x.toString
-  def showBoolean(x: Boolean): String = x.toString
+  def showBoolean(x: Boolean): String = if x then "true" else "false"
   def showFloat(x: Any)(ft: Any): String = x.toString
-  def showFloat32(x: Float): String = x.toString
-  def showFloat64(x: Double): String = x.toString
+  def showFloat32(x: Float): String = showHaskellFloat32(x)
+  def showFloat64(x: Double): String = showHaskellDouble(x)
   def showInt(x: Any)(it: Any): String = x.toString
   def showInt8(x: Byte): String = x.toString
   def showInt16(x: Short): String = x.toString
   def showInt32(x: Int): String = x.toString
   def showInt64(x: Long): String = x.toString
-  def showString(s: String): String = "\"" + s.replace("\\", "\\\\").replace("\"", "\\\"") + "\""
+
+  // Haskell show for strings: escapes special chars and non-ASCII
+  def showString(s: String): String =
+    val sb = new StringBuilder("\"")
+    s.codePoints().forEach { cp =>
+      cp match
+        case '\\' => sb.append("\\\\")
+        case '"' => sb.append("\\\"")
+        case '\u0007' => sb.append("\\a")   // bell
+        case '\b' => sb.append("\\b")       // backspace
+        case '\t' => sb.append("\\t")       // tab
+        case '\n' => sb.append("\\n")       // newline
+        case '\u000b' => sb.append("\\v")   // vertical tab
+        case '\f' => sb.append("\\f")       // form feed
+        case '\r' => sb.append("\\r")       // carriage return
+        case 0x7f => sb.append("\\DEL")     // delete
+        case 0 => sb.append("\\NUL")        // null
+        case c if c >= 32 && c < 127 => sb.append(c.toChar)
+        case c => sb.append("\\").append(c) // Non-ASCII: numeric escape
+    }
+    sb.append("\"").toString
+
   def showUint(x: Any)(it: Any): String = x.toString
-  def showUint8(x: Byte): String = x.toString
+  def showUint8(x: Byte): String = (x.toInt & 0xff).toString
   def showUint16(x: Int): String = x.toString
   def showUint32(x: Long): String = x.toString
   def showUint64(x: BigInt): String = x.toString
-  def stringToBinary(s: String): String = new String(java.util.Base64.getDecoder.decode(s), "ISO-8859-1")
+  // In Scala, binary data is stored as a String (same representation).
+  // stringToBinary is an identity function since both are Strings.
+  def stringToBinary(s: String): String = s
   def uint(it: Any)(x: BigInt): Any = x // Placeholder
   def uint8ToBigint(x: Byte): BigInt = BigInt(x.toInt & 0xff)
   def uint16ToBigint(x: Int): BigInt = BigInt(x)

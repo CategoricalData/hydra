@@ -15,7 +15,9 @@ object maps:
   def findWithDefault[V, K](d: V)(k: K)(m: Map[K, V]): V = m.getOrElse(k, d)
   def fromList[K, V](pairs: Seq[(K, V)]): Map[K, V] = pairs.toMap
   def insert[K, V](k: K)(v: V)(m: Map[K, V]): Map[K, V] = m.updated(k, v)
-  def keys[K, V](m: Map[K, V]): Seq[K] = m.keys.toSeq
+  // Haskell's Data.Map.keys returns keys in sorted order.
+  // We sort using the same comparator as equality.lt for consistency.
+  def keys[K, V](m: Map[K, V]): Seq[K] = m.keys.toSeq.sortWith((a, b) => equality.lt(a)(b))
   def lookup[K, V](k: K)(m: Map[K, V]): Option[V] = m.get(k)
   def map[V1, V2, K](f: V1 => V2)(m: Map[K, V1]): Map[K, V2] = m.map((k, v) => (k, f(v)))
   def mapKeys[K1, K2, V](f: K1 => K2)(m: Map[K1, V]): Map[K2, V] = m.map((k, v) => (f(k), v))
