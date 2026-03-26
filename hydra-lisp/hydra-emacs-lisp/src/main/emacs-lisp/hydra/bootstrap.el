@@ -77,39 +77,39 @@
   (when (file-directory-p ext-dir)
     (bootstrap-pre-declare-exports ext-dir)))
 
-;; Selective byte compilation: skip deeply nested generation functions
-;; that overflow the bytecode stack.
-(let ((original-compile (symbol-function 'hydra-byte-compile-all)))
-  (fset 'hydra-byte-compile-all
-    (lambda ()
-      (let ((skip-prefixes '("hydra_code_generation_" "hydra_reduction_"
-                             "hydra_adapt_" "hydra_checking_" "hydra_inference_"
-                             "hydra_ext_python_coder_" "hydra_ext_java_coder_"
-                             "hydra_ext_haskell_coder_" "hydra_ext_lisp_coder_")))
-        (let ((compiled 0) (skipped 0))
-          (mapatoms
-            (lambda (sym)
-              (let ((name (symbol-name sym)))
-                (when (and (> (length name) 6)
-                           (string-prefix-p "hydra_" name)
-                           (boundp sym)
-                           (functionp (symbol-value sym))
-                           (not (byte-code-function-p (symbol-value sym))))
-                  (if (cl-some (lambda (p) (string-prefix-p p name)) skip-prefixes)
-                      (cl-incf skipped)
-                    (condition-case nil
-                        (progn
-                          (set sym (byte-compile (symbol-value sym)))
-                          (when (fboundp sym)
-                            (fset sym (symbol-value sym)))
-                          (cl-incf compiled))
-                      (error (cl-incf skipped))))))))
-          (princ (format "Byte-compiled %d hydra functions (%d kept interpreted)\n" compiled skipped)))))))
+;; Selective byte compilation: skip deeply nested functions that overflow
+;; Emacs's C bytecode stack. The skip list covers code gen, adaptation,
+;; type checking, and all language coders.
+(fset 'hydra-byte-compile-all
+  (lambda ()
+    (let ((skip-prefixes '("hydra_code_generation_" "hydra_reduction_"
+                           "hydra_adapt_" "hydra_checking_" "hydra_inference_"
+                           "hydra_hoisting_" "hydra_encoding_" "hydra_decoding_"
+                           "hydra_rewriting_" "hydra_schemas_"
+                           "hydra_ext_")))
+      (let ((compiled 0) (skipped 0))
+        (mapatoms
+          (lambda (sym)
+            (let ((name (symbol-name sym)))
+              (when (and (> (length name) 6)
+                         (string-prefix-p "hydra_" name)
+                         (boundp sym)
+                         (functionp (symbol-value sym))
+                         (not (byte-code-function-p (symbol-value sym))))
+                (if (cl-some (lambda (p) (string-prefix-p p name)) skip-prefixes)
+                    (cl-incf skipped)
+                  (condition-case nil
+                      (progn
+                        (set sym (byte-compile (symbol-value sym)))
+                        (when (fboundp sym)
+                          (fset sym (symbol-value sym)))
+                        (cl-incf compiled))
+                    (error (cl-incf skipped))))))))
+        (princ (format "Byte-compiled %d hydra functions (%d kept interpreted)\n" compiled skipped))))))
 
 (hydra-load-gen-main)
 (hydra-load-prims-and-libraries)
 (hydra-set-function-bindings)
-
 
 (princ "Kernel loaded.\n")
 
