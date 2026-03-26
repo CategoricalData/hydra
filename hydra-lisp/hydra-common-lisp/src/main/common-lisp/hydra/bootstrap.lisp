@@ -11,6 +11,11 @@
 ;;;   --include-tests       Also generate test modules
 (in-package :cl-user)
 
+;; Ensure floats are read as double-precision by default.
+;; Generated code contains decimal literals like 1.0 without a d0 suffix.
+;; Without this setting, SBCL reads them as single-float, losing precision.
+(setf *read-default-float-format* 'double-float)
+
 ;; Parse command-line arguments
 ;; With --load, SBCL puts everything after -- in *posix-argv*
 (defvar *bootstrap-args*
@@ -157,7 +162,7 @@
          (string= target "common-lisp") (string= target "emacs-lisp"))
      ;; Lisp targets use Lisp coder with dialect parameter
      (let* ((dialect-map '(("clojure" . :clojure) ("scheme" . :scheme)
-                           ("common-lisp" . :commonLisp) ("emacs-lisp" . :emacsLisp)))
+                           ("common-lisp" . :common_lisp) ("emacs-lisp" . :emacs_lisp)))
             (ext-map '(("clojure" . ".clj") ("scheme" . ".scm")
                        ("common-lisp" . ".lisp") ("emacs-lisp" . ".el")))
             (dialect (cdr (assoc target dialect-map :test #'string=)))
@@ -177,7 +182,11 @@
                                             (funcall pte program))))
                                   (ns-val (let ((ns (cdr (assoc :namespace mod))))
                                             (if (stringp ns) ns (cdr (assoc :value ns)))))
-                                  (fp (format nil "~A~A" (namespace-to-path ns-val) ext)))
+                                  (fp (funcall (funcall (funcall
+                                        (symbol-value 'hydra_names_namespace_to_file_path)
+                                        (list :lower_snake nil))
+                                        (subseq ext 1))  ; ".lisp" -> "lisp"
+                                        ns-val)))
                              (list :right (list (cons fp code))))))))))
              (symbol-value 'hydra_ext_lisp_language_lisp_language)
              (list nil nil nil nil)
@@ -210,18 +219,23 @@
       (format t "  Code generation took ~,1Fs for ~A files~%"
               (/ (- t1 t0) (float internal-time-units-per-second)) (length files))
       (force-output)
-      (dolist (pair files)
-        (let* ((path (format nil "~A/~A" out-dir (first pair)))
-               (content (second pair)))
-          (when (and content (stringp content) (> (length content) 0))
-            (let* ((content (if (char/= (char content (1- (length content))) #\Newline)
-                                (concatenate 'string content (string #\Newline))
-                                content))
-                   (dir (directory-namestring path)))
-              (ensure-directories-exist dir)
-              (with-open-file (out path :direction :output :if-exists :supersede
-                                        :external-format :utf-8)
-                (write-string content out))))))
+      (let ((written 0))
+        (dolist (pair files)
+          (let* ((path (format nil "~A/~A" out-dir (first pair)))
+                 (content (second pair)))
+            (when (and content (stringp content) (> (length content) 0))
+              (let* ((content (if (char/= (char content (1- (length content))) #\Newline)
+                                  (concatenate 'string content (string #\Newline))
+                                  content))
+                     (dir (directory-namestring path)))
+                (ensure-directories-exist dir)
+                (with-open-file (out path :direction :output :if-exists :supersede
+                                          :external-format :utf-8)
+                  (write-string content out))
+                (incf written)))))
+        (when (< written (length files))
+          (format t "  WARNING: ~A of ~A files had empty content~%" (- (length files) written) (length files))
+          (force-output)))
       (length files))))
 
 ;; --- Main ---
@@ -277,38 +291,43 @@
         (format t "  Output: ~A~%" out-main)
         (force-output)
 
-        (let ((file-count (generate-sources coder language flags out-main all-mods mods-to-generate)))
-          (format t "  Generated ~A files.~%" file-count)
-          (force-output)
-
-          ;; Tests
-          (when *include-tests*
-            (format t "~%Loading test modules from JSON...~%")
-            (force-output)
-            (let* ((test-json-dir (substitute "*test*" "*main*" *json-dir*))
-                   ;; Use gen-test JSON directory
-                   (test-json-dir2 (let ((pos (search "gen-main" *json-dir*)))
-                                     (if pos
-                                         (concatenate 'string
-                                           (subseq *json-dir* 0 pos)
-                                           "gen-test"
-                                           (subseq *json-dir* (+ pos 8)))
-                                         *json-dir*)))
-                   (test-ns (coerce (read-manifest-field *json-dir* "testModules") 'list))
-                   (test-mods (load-modules-from-json test-json-dir2 test-ns))
-                   (all-universe (append all-mods test-mods))
-                   (out-test (format nil "~A/common-lisp-to-~A/src/gen-test/~A"
-                                    *output-base* *target* subdir)))
-              (format t "  Loaded ~A test modules.~%" (length test-mods))
-              (format t "~%Mapping test modules to ~A...~%" target-cap)
+        (let ((test-file-count 0)
+              (main-start (get-internal-real-time)))
+          (let ((file-count (generate-sources coder language flags out-main all-mods mods-to-generate)))
+            (let ((main-secs (/ (- (get-internal-real-time) main-start) internal-time-units-per-second 1.0)))
+              (format t "  Generated ~A files.~%" file-count)
+              (format t "  Time: ~,1Fs~%" main-secs)
               (force-output)
-              (let ((test-count (generate-sources coder language flags out-test all-universe test-mods)))
-                (format t "  Generated ~A test files.~%" test-count))))
 
-          (format t "~%==========================================~%")
-          (format t "Done: ~A main files~%" file-count)
-          (format t "  Output: ~A/common-lisp-to-~A~%" *output-base* *target*)
-          (format t "==========================================~%")
-          (force-output))))))
+              ;; Tests
+              (when *include-tests*
+                (format t "~%Loading test modules from JSON...~%")
+                (force-output)
+                (let* ((test-json-dir2 (let ((pos (search "gen-main" *json-dir*)))
+                                         (if pos
+                                             (concatenate 'string
+                                               (subseq *json-dir* 0 pos)
+                                               "gen-test"
+                                               (subseq *json-dir* (+ pos 8)))
+                                             *json-dir*)))
+                       (test-ns (coerce (read-manifest-field *json-dir* "testModules") 'list))
+                       (test-mods (load-modules-from-json test-json-dir2 test-ns))
+                       (all-universe (append all-mods test-mods))
+                       (out-test (format nil "~A/common-lisp-to-~A/src/gen-test/~A"
+                                        *output-base* *target* subdir))
+                       (test-start (get-internal-real-time)))
+                  (format t "  Loaded ~A test modules.~%" (length test-mods))
+                  (format t "~%Mapping test modules to ~A...~%" target-cap)
+                  (force-output)
+                  (setf test-file-count (generate-sources coder language flags out-test all-universe test-mods))
+                  (let ((test-secs (/ (- (get-internal-real-time) test-start) internal-time-units-per-second 1.0)))
+                    (format t "  Generated ~A test files.~%" test-file-count)
+                    (format t "  Time: ~,1Fs~%" test-secs))))
+
+              (format t "~%==========================================~%")
+              (format t "Done: ~A main + ~A test files~%" file-count test-file-count)
+              (format t "  Output: ~A/common-lisp-to-~A~%" *output-base* *target*)
+              (format t "==========================================~%")
+              (force-output))))))))
 
 (sb-ext:exit :code 0)

@@ -403,7 +403,20 @@
                      "substitution.lisp" "annotations.lisp" "unification.lisp"
                      "inference.lisp" "checking.lisp" "serialization.lisp" "reduction.lisp"
                      "json/coder.lisp" "json/parser.lisp" "json/writer.lisp"
-                     "json/encode.lisp" "json/decode.lisp" "json/bootstrap.lisp"))
+                     "json/encode.lisp" "json/decode.lisp" "json/bootstrap.lisp"
+                     ;; Ext coder modules (dependency order: syntax, environment, names, utils, serde, language, testing, coder)
+                     "ext/haskell/syntax.lisp" "ext/haskell/language.lisp" "ext/haskell/utils.lisp"
+                     "ext/haskell/serde.lisp" "ext/haskell/testing.lisp" "ext/haskell/coder.lisp"
+                     "ext/java/syntax.lisp" "ext/java/environment.lisp" "ext/java/language.lisp"
+                     "ext/java/utils.lisp" "ext/java/serde.lisp" "ext/java/testing.lisp" "ext/java/coder.lisp"
+                     "ext/python/syntax.lisp" "ext/python/environment.lisp" "ext/python/language.lisp"
+                     "ext/python/names.lisp" "ext/python/utils.lisp" "ext/python/serde.lisp"
+                     "ext/python/testing.lisp" "ext/python/coder.lisp"
+                     "ext/scala/syntax.lisp" "ext/scala/language.lisp" "ext/scala/utils.lisp"
+                     "ext/scala/serde.lisp" "ext/scala/coder.lisp"
+                     "ext/lisp/syntax.lisp" "ext/lisp/language.lisp"
+                     "ext/lisp/serde.lisp" "ext/lisp/coder.lisp"
+                     "ext/org/json/decoding.lisp"))
          ;; Collect ALL .lisp files from gen-main
          (all-files (collect-lisp-files base))
          ;; Build ordered list: priority first, then remaining

@@ -18,6 +18,8 @@
                ((char= ch #\\)
                 (let ((esc (read-char stream)))
                   (case esc
+                    (#\b (write-char (code-char 8) out))   ; backspace
+                    (#\f (write-char (code-char 12) out))  ; form feed
                     (#\n (write-char #\Newline out))
                     (#\t (write-char #\Tab out))
                     (#\r (write-char #\Return out))
