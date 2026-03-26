@@ -94,6 +94,8 @@
 (load (string-append *script-dir* "loader.scm"))
 ;; Re-import SRFI-9 to override (scheme base) define-record-type from loader
 (use-modules (srfi srfi-9))
+;; Import bitwise operations (arithmetic-shift etc.) needed by literals
+(use-modules (srfi srfi-60))
 ;; Load the JSON reader
 (load (string-append *script-dir* "json-reader.scm"))
 
