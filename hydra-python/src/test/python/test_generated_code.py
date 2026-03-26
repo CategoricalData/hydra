@@ -133,13 +133,10 @@ pyright src/gen-main/python/hydra/variants.py
 """
 
 # types
-from hydra.accessors import *
 from hydra.ast import *
 from hydra.coders import *
 from hydra.core import *
 from hydra.graph import *
-from hydra.json import *
-# from hydra.meta import *  # meta module no longer exists after refactoring
 from hydra.util import *
 from hydra.module import *
 from hydra.phantoms import *
@@ -151,19 +148,9 @@ from hydra.topology import *
 from hydra.typing import *
 
 # terms
-# TODO: adapt, decode, describe, encode, extract, show
-# from hydra.annotations import *
-# from hydra.arity import *
 from hydra.constants import *
-# from hydra.decoding import *
-# from hydra.formatting import *
-# from hydra.grammars import *
-# from hydra.inference import *
 from hydra.languages import *
-# from hydra.lexical import *
 from hydra.literals import *
-# from hydra.names import *
-# from hydra.reduction import *
 # from hydra.rewriting import *
 # from hydra.schemas import *
 # from hydra.serialization import *
