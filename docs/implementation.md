@@ -519,20 +519,20 @@ Primitives are organized into **13 library modules** by category:
 | Library | Count | Examples |
 |---------|-------|----------|
 | **hydra.lib.chars** | 6 | `isAlphaNum`, `isLower`, `toUpper` |
+| **hydra.lib.eithers** | 8 | `either`, `isLeft`, `rights` |
 | **hydra.lib.equality** | 9 | `equal`, `compare`, `gt`, `lt`, `max` |
-| **hydra.lib.eithers** | 8 | `either`, `isLeft`, `rights` (NEW) |
-| **hydra.lib.flows** | 12 | `apply`, `bind`, `map`, `sequence` |
 | **hydra.lib.lists** | 34 | `map`, `filter`, `fold`, `concat`, `sort` |
 | **hydra.lib.literals** | 43 | Type conversions, parsing, showing |
 | **hydra.lib.logic** | 4 | `and`, `or`, `not`, `ifElse` |
 | **hydra.lib.maps** | 19 | `lookup`, `insert`, `keys`, `toList` |
 | **hydra.lib.math** | 37 | `add`, `mul`, `sin`, `sqrt`, `abs` |
 | **hydra.lib.maybes** | 13 | `fromMaybe`, `maybe`, `isJust` |
+| **hydra.lib.pairs** | 4 | `first`, `second`, `map`, `swap` |
+| **hydra.lib.regex** | 6 | `matches`, `find`, `findAll`, `replace`, `replaceAll`, `split` |
 | **hydra.lib.sets** | 14 | `union`, `intersection`, `member` |
 | **hydra.lib.strings** | 13 | `concat`, `split`, `length`, `lines` |
-| **hydra.lib.tuples** | 4 | `fst`, `snd`, `curry`, `uncurry` |
 
-**Total: ~180+ primitive functions**
+**Total: ~210 primitive functions**
 
 ### Three-level definition structure
 
