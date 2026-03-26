@@ -1596,6 +1596,9 @@
                   ((eq? case-type 'delegated_evaluation)    (list 0 0 1))
                   (else                                     (list 0 0 1))))))))
 
+    ;; Test groups to skip entirely (e.g. R7RS has no standard regex library)
+    (define *skip-groups* '("hydra.lib.regex primitives"))
+
     (define (run-test-group path group)
       (guard (exn (#t
                    (let* ((gname (hydra_testing_test_group-name group))
@@ -1605,14 +1608,19 @@
                      (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                      (list 0 1 0))))
         (let* ((gname (hydra_testing_test_group-name group))
-               (full (if (string=? path "") gname (string-append path " > " gname)))
-               (sub-results (map (lambda (sg) (run-test-group full sg))
-                                 (hydra_testing_test_group-subgroups group)))
-               (case-results (map (lambda (tc) (run-test-case full tc))
-                                  (hydra_testing_test_group-cases group)))
-               (all (append sub-results case-results)))
-          (list (apply + (map car all))
-                (apply + (map cadr all))
-                (apply + (map caddr all))))))
+               (full (if (string=? path "") gname (string-append path " > " gname))))
+          (if (member gname *skip-groups*)
+              (let ((n (+ (length (hydra_testing_test_group-cases group))
+                          (apply + (map (lambda (sg) (length (hydra_testing_test_group-cases sg)))
+                                        (hydra_testing_test_group-subgroups group))))))
+                (list 0 0 (max n 1)))
+              (let* ((sub-results (map (lambda (sg) (run-test-group full sg))
+                                       (hydra_testing_test_group-subgroups group)))
+                     (case-results (map (lambda (tc) (run-test-case full tc))
+                                        (hydra_testing_test_group-cases group)))
+                     (all (append sub-results case-results)))
+                (list (apply + (map car all))
+                      (apply + (map cadr all))
+                      (apply + (map caddr all))))))))
 
 )))  ;; close begin and define-library

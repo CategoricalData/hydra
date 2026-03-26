@@ -87,9 +87,9 @@ lazy val dataclassDecorator: hydra.ext.python.syntax.NamedExpression = hydra.ext
 def deconflictVariantName(isQualified: Boolean)(env: hydra.ext.python.environment.PythonEnvironment)(unionName: hydra.core.Name)(fname: hydra.core.Name)(g: hydra.graph.Graph): hydra.ext.python.syntax.Name =
   {
   lazy val candidateHydraName: hydra.core.Name = hydra.lib.strings.cat2(unionName)(hydra.formatting.capitalize(fname))
-  lazy val elements: Seq[hydra.core.Binding] = hydra.lexical.graphToBindings(g)
-  lazy val collision: Boolean = hydra.lib.maybes.isJust[hydra.core.Binding](hydra.lib.lists.find[hydra.core.Binding]((b: hydra.core.Binding) =>
-    hydra.lib.equality.equal[scala.Predef.String](b.name)(candidateHydraName))(elements))
+  lazy val termCollision: Boolean = hydra.lib.maps.member[hydra.core.Name, hydra.core.Term](candidateHydraName)(g.boundTerms)
+  lazy val typeCollision: Boolean = hydra.lib.maps.member[hydra.core.Name, hydra.core.TypeScheme](candidateHydraName)(g.schemaTypes)
+  lazy val collision: Boolean = hydra.lib.logic.or(termCollision)(typeCollision)
   hydra.lib.logic.ifElse[hydra.ext.python.syntax.Name](collision)(hydra.lib.strings.cat2(hydra.ext.python.names.variantName(isQualified)(env)(unionName)(fname))("_"))(hydra.ext.python.names.variantName(isQualified)(env)(unionName)(fname))
 }
 
