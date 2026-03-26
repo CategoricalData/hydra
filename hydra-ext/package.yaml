@@ -50,6 +50,16 @@ executables:
     dependencies:
       - hydra-ext
 
+  update-scala-tests:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-scala-tests
+      - ../hydra-haskell/src/gen-test/haskell
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra-ext
+      - hspec                      >= 2.11.0 && < 2.12
+
   update-ext-sources:
     main: Main.hs
     source-dirs:

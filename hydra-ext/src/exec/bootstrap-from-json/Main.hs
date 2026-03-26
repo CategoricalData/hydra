@@ -44,6 +44,7 @@ import Hydra.Generation (TestGenerator, generateGenerationTestSuite, createTestG
 import Hydra.Ext.Haskell.TestingIo (haskellTestGenerator)
 import Hydra.Ext.Java.TestingIo (javaTestGenerator)
 import Hydra.Ext.Python.TestingIo (pythonTestGenerator)
+import Hydra.Ext.Scala.TestingIo (scalaTestGenerator)
 import qualified Hydra.Sources.Test.TestSuite as TestSuite
 import qualified Hydra.Test.TestSuite as GenTests
 
@@ -381,6 +382,7 @@ main = do
             "haskell" -> (outBase FP.</> "src/gen-test/haskell", ".hs")
             "java"    -> (outBase FP.</> "src/gen-test/java/generation", ".java")
             "python"  -> (outBase FP.</> "src/gen-test/python", ".py")
+            "scala"   -> (outBase FP.</> "src/gen-test/scala/generation", ".scala")
             _         -> (outBase FP.</> "src/gen-test/" ++ target, "")
       putStrLn $ "Generating " ++ targetCap ++ " generation tests..."
       genTestStart <- getCurrentTime
@@ -388,6 +390,7 @@ main = do
         "haskell" -> runGenTests haskellTestGenerator genTestDir
         "java"    -> runGenTests javaTestGenerator genTestDir
         "python"  -> runGenTests pythonTestGenerator genTestDir
+        "scala"   -> runGenTests scalaTestGenerator genTestDir
         _ -> do
           putStrLn $ "  WARNING: No generation test codec for target: " ++ target
           return True
