@@ -16,7 +16,11 @@ testDependencyModules = [HaskellOperators.module_]
 
 main :: IO ()
 main = do
-  let universeModules = mainModules ++ testModules
+  let allMainModules = mainModules ++ hydraBootstrapCoderModules
+  let universeModules = allMainModules ++ testModules
+  -- Ext coder modules only (excluding kernel modules already in mainModules)
+  let kernelNamespaces = map moduleNamespace mainModules
+  let coderOnlyModules = filter (\m -> moduleNamespace m `notElem` kernelNamespaces) hydraBootstrapCoderModules
 
   -- Scheme
   let schemeMainDir = "../hydra-lisp/hydra-scheme/src/gen-main/scheme"
@@ -27,6 +31,8 @@ main = do
   putStrLn "Generating Scheme..."
   n1 <- writeScheme schemeMainDir mainModules mainModules
   putStrLn $ "  " ++ show n1 ++ " kernel modules"
+  c1 <- writeScheme schemeMainDir allMainModules coderOnlyModules
+  putStrLn $ "  " ++ show c1 ++ " ext coder modules"
   e1 <- writeScheme schemeMainDir universeModules testDependencyModules
   putStrLn $ "  " ++ show e1 ++ " extra modules (test dependencies)"
   t1 <- writeScheme schemeTestDir universeModules testModules
@@ -55,6 +61,8 @@ main = do
   putStrLn "Generating Clojure..."
   n2 <- writeClojure clojureMainDir mainModules mainModules
   putStrLn $ "  " ++ show n2 ++ " kernel modules"
+  c2 <- writeClojure clojureMainDir allMainModules coderOnlyModules
+  putStrLn $ "  " ++ show c2 ++ " ext coder modules"
   e2 <- writeClojure clojureMainDir universeModules testDependencyModules
   putStrLn $ "  " ++ show e2 ++ " extra modules (test dependencies)"
   t2 <- writeClojure clojureTestDir universeModules testModules
@@ -66,6 +74,8 @@ main = do
   putStrLn "Generating Common Lisp..."
   n3 <- writeCommonLisp commonLispMainDir mainModules mainModules
   putStrLn $ "  " ++ show n3 ++ " kernel modules"
+  c3 <- writeCommonLisp commonLispMainDir allMainModules coderOnlyModules
+  putStrLn $ "  " ++ show c3 ++ " ext coder modules"
   e3 <- writeCommonLisp commonLispMainDir universeModules testDependencyModules
   putStrLn $ "  " ++ show e3 ++ " extra modules (test dependencies)"
   t3 <- writeCommonLisp commonLispTestDir universeModules testModules
@@ -77,12 +87,14 @@ main = do
   putStrLn "Generating Emacs Lisp..."
   n4 <- writeEmacsLisp emacsLispMainDir mainModules mainModules
   putStrLn $ "  " ++ show n4 ++ " kernel modules"
+  c4 <- writeEmacsLisp emacsLispMainDir allMainModules coderOnlyModules
+  putStrLn $ "  " ++ show c4 ++ " ext coder modules"
   e4 <- writeEmacsLisp emacsLispMainDir universeModules testDependencyModules
   putStrLn $ "  " ++ show e4 ++ " extra modules (test dependencies)"
   t4 <- writeEmacsLisp emacsLispTestDir universeModules testModules
   putStrLn $ "  " ++ show t4 ++ " test modules"
 
-  let totalMain = n1 + e1 + length scmFiles + nSchemeStubs + n2 + e2 + n3 + e3 + n4 + e4
+  let totalMain = n1 + c1 + e1 + length scmFiles + nSchemeStubs + n2 + c2 + e2 + n3 + c3 + e3 + n4 + c4 + e4
   let totalTest = t1 + t2 + t3 + t4
   putStrLn $ "Total: " ++ show totalMain ++ " main files, " ++ show totalTest ++ " test files"
 

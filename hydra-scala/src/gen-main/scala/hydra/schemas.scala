@@ -121,6 +121,12 @@ def elementsWithDependencies(cx: hydra.context.Context)(graph: hydra.graph.Graph
   hydra.lib.eithers.mapList[hydra.core.Name, hydra.core.Binding, hydra.context.InContext[hydra.errors.Error]]((name: hydra.core.Name) => hydra.lexical.requireElement(cx)(graph)(name))(allDepNames)
 }
 
+def fTypeIsPolymorphic(typ: hydra.core.Type): Boolean =
+  typ match
+  case hydra.core.Type.annotated(v_Type_annotated_at) => hydra.schemas.fTypeIsPolymorphic(v_Type_annotated_at.body)
+  case hydra.core.Type.forall(v_Type_forall_ft) => true
+  case _ => false
+
 def fieldMap(fields: Seq[hydra.core.Field]): Map[hydra.core.Name, hydra.core.Term] =
   {
   def toPair(f: hydra.core.Field): Tuple2[hydra.core.Name, hydra.core.Term] = Tuple2(f.name, (f.term))
@@ -143,12 +149,14 @@ def fieldTypes(cx: hydra.context.Context)(graph: hydra.graph.Graph)(t: hydra.cor
     case hydra.core.Type.forall(v_Type_forall_ft) => hydra.schemas.fieldTypes(cx)(graph)(v_Type_forall_ft.body)
     case hydra.core.Type.record(v_Type_record_rt) => Right(toMap(v_Type_record_rt))
     case hydra.core.Type.union(v_Type_union_rt) => Right(toMap(v_Type_union_rt))
-    case hydra.core.Type.variable(v_Type_variable_name) => hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error],
+    case hydra.core.Type.variable(v_Type_variable_name) => hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error],
+       Map[hydra.core.Name, hydra.core.Type]], hydra.core.TypeScheme](hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error],
        hydra.core.Binding, Map[hydra.core.Name, hydra.core.Type]](hydra.lexical.requireElement(cx)(graph)(v_Type_variable_name))((el: hydra.core.Binding) =>
       hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Type, Map[hydra.core.Name,
          hydra.core.Type]](hydra.lib.eithers.bimap[hydra.errors.Error, hydra.core.Type, hydra.context.InContext[hydra.errors.Error],
          hydra.core.Type]((_wc_e: hydra.errors.Error) => hydra.context.InContext(_wc_e, cx))((_wc_a: hydra.core.Type) => _wc_a)(hydra.lib.eithers.bimap[hydra.errors.DecodingError,
-         hydra.core.Type, hydra.errors.Error, hydra.core.Type]((_e: hydra.errors.DecodingError) => hydra.errors.Error.other(_e))((_a: hydra.core.Type) => _a)(hydra.decode.core.`type`(graph)(el.term))))((decodedType: hydra.core.Type) => hydra.schemas.fieldTypes(cx)(graph)(decodedType)))
+         hydra.core.Type, hydra.errors.Error, hydra.core.Type]((_e: hydra.errors.DecodingError) => hydra.errors.Error.other(_e))((_a: hydra.core.Type) => _a)(hydra.decode.core.`type`(graph)(el.term))))((decodedType: hydra.core.Type) => hydra.schemas.fieldTypes(cx)(graph)(decodedType))))((ts: hydra.core.TypeScheme) => hydra.schemas.fieldTypes(cx)(graph)(ts.`type`))(hydra.lib.maps.lookup[hydra.core.Name,
+         hydra.core.TypeScheme](v_Type_variable_name)(graph.schemaTypes))
     case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat(Seq("expected record or union type but found ",
        hydra.show.core.`type`(t)))), cx))
 }
@@ -182,12 +190,6 @@ def freshNames(n: Int)(cx: hydra.context.Context): Tuple2[Seq[hydra.core.Name], 
   }
   hydra.lib.lists.foldl[Tuple2[Seq[hydra.core.Name], hydra.context.Context], Unit](go)(Tuple2(Seq(), cx))(hydra.lib.lists.replicate[Unit](n)(()))
 }
-
-def fTypeIsPolymorphic(typ: hydra.core.Type): Boolean =
-  typ match
-  case hydra.core.Type.annotated(v_Type_annotated_at) => hydra.schemas.fTypeIsPolymorphic(v_Type_annotated_at.body)
-  case hydra.core.Type.forall => true
-  case _ => false
 
 def fullyStripAndNormalizeType(typ: hydra.core.Type): hydra.core.Type =
   {
@@ -279,6 +281,14 @@ def isEnumType(typ: hydra.core.Type): Boolean =
   case hydra.core.Type.union(v_Type_union_rt) => hydra.schemas.isEnumRowType(v_Type_union_rt)
   case _ => false
 
+def isNominalType(typ: hydra.core.Type): Boolean =
+  hydra.rewriting.deannotateType(typ) match
+  case hydra.core.Type.record(v_Type_record_rt) => true
+  case hydra.core.Type.union(v_Type_union_rt) => true
+  case hydra.core.Type.wrap(v_Type_wrap_wt) => true
+  case hydra.core.Type.forall(v_Type_forall_fa) => hydra.schemas.isNominalType(v_Type_forall_fa.body)
+  case _ => false
+
 def isSerializable(cx: hydra.context.Context)(graph: hydra.graph.Graph)(el: hydra.core.Binding): Either[hydra.context.InContext[hydra.errors.Error], Boolean] =
   {
   def variants(typ: hydra.core.Type): Seq[hydra.variants.TypeVariant] =
@@ -291,14 +301,6 @@ def isSerializable(cx: hydra.context.Context)(graph: hydra.graph.Graph)(el: hydr
        Seq[hydra.variants.TypeVariant]](variants)(hydra.lib.maps.elems[hydra.core.Name, hydra.core.Type](deps))))
     hydra.lib.logic.not(hydra.lib.sets.member[hydra.variants.TypeVariant](hydra.variants.TypeVariant.function)(allVariants))
   })(hydra.schemas.typeDependencies(cx)(graph)(false)(hydra.lib.equality.identity[hydra.core.Type])(el.name))
-}
-
-def isSerializableType(typ: hydra.core.Type): Boolean =
-  {
-  lazy val allVariants: scala.collection.immutable.Set[hydra.variants.TypeVariant] = hydra.lib.sets.fromList[hydra.variants.TypeVariant](hydra.lib.lists.map[hydra.core.Type,
-     hydra.variants.TypeVariant](hydra.reflect.typeVariant)(hydra.rewriting.foldOverType(hydra.coders.TraversalOrder.pre)((m: Seq[hydra.core.Type]) =>
-    (t: hydra.core.Type) => hydra.lib.lists.cons[hydra.core.Type](t)(m))(Seq())(typ)))
-  hydra.lib.logic.not(hydra.lib.sets.member[hydra.variants.TypeVariant](hydra.variants.TypeVariant.function)(allVariants))
 }
 
 def isSerializableByName(cx: hydra.context.Context)(graph: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.context.InContext[hydra.errors.Error],
@@ -316,19 +318,19 @@ def isSerializableByName(cx: hydra.context.Context)(graph: hydra.graph.Graph)(na
   })(hydra.schemas.typeDependencies(cx)(graph)(false)(hydra.lib.equality.identity[hydra.core.Type])(name))
 }
 
-def isNominalType(typ: hydra.core.Type): Boolean =
-  hydra.rewriting.deannotateType(typ) match
-  case hydra.core.Type.record => true
-  case hydra.core.Type.union => true
-  case hydra.core.Type.wrap => true
-  case hydra.core.Type.forall(v_Type_forall_fa) => hydra.schemas.isNominalType(v_Type_forall_fa.body)
-  case _ => false
+def isSerializableType(typ: hydra.core.Type): Boolean =
+  {
+  lazy val allVariants: scala.collection.immutable.Set[hydra.variants.TypeVariant] = hydra.lib.sets.fromList[hydra.variants.TypeVariant](hydra.lib.lists.map[hydra.core.Type,
+     hydra.variants.TypeVariant](hydra.reflect.typeVariant)(hydra.rewriting.foldOverType(hydra.coders.TraversalOrder.pre)((m: Seq[hydra.core.Type]) =>
+    (t: hydra.core.Type) => hydra.lib.lists.cons[hydra.core.Type](t)(m))(Seq())(typ)))
+  hydra.lib.logic.not(hydra.lib.sets.member[hydra.variants.TypeVariant](hydra.variants.TypeVariant.function)(allVariants))
+}
 
 def isType(t: hydra.core.Type): Boolean =
   hydra.rewriting.deannotateType(t) match
   case hydra.core.Type.application(v_Type_application_a) => hydra.schemas.isType(v_Type_application_a.function)
   case hydra.core.Type.forall(v_Type_forall_l) => hydra.schemas.isType(v_Type_forall_l.body)
-  case hydra.core.Type.union => false
+  case hydra.core.Type.union(v_Type_union_rt) => false
   case hydra.core.Type.variable(v_Type_variable_v) => hydra.lib.equality.equal[hydra.core.Name](v_Type_variable_v)("hydra.core.Type")
   case _ => false
 
@@ -347,7 +349,7 @@ def moduleContainsBinaryLiterals(mod: hydra.module.Module): Boolean =
   def checkTerm(found: Boolean)(term: hydra.core.Term): Boolean =
     hydra.lib.logic.or(found)(term match
     case hydra.core.Term.literal(v_Term_literal_lit) => v_Term_literal_lit match
-      case hydra.core.Literal.binary => true
+      case hydra.core.Literal.binary(v_Literal_binary__) => true
       case _ => false
     case _ => false)
   def termContainsBinary(term: hydra.core.Term): Boolean =
@@ -396,10 +398,10 @@ def partitionDefinitions(defs: Seq[hydra.module.Definition]): Tuple2[Seq[hydra.m
   def getType(`def`: hydra.module.Definition): Option[hydra.module.TypeDefinition] =
     `def` match
     case hydra.module.Definition.`type`(v_Definition_type_td) => Some(v_Definition_type_td)
-    case hydra.module.Definition.term => None
+    case hydra.module.Definition.term(v_Definition_term__) => None
   def getTerm(`def`: hydra.module.Definition): Option[hydra.module.TermDefinition] =
     `def` match
-    case hydra.module.Definition.`type` => None
+    case hydra.module.Definition.`type`(v_Definition_type__) => None
     case hydra.module.Definition.term(v_Definition_term_td) => Some(v_Definition_term_td)
   Tuple2(hydra.lib.maybes.cat[hydra.module.TypeDefinition](hydra.lib.lists.map[hydra.module.Definition,
      Option[hydra.module.TypeDefinition]](getType)(defs)), hydra.lib.maybes.cat[hydra.module.TermDefinition](hydra.lib.lists.map[hydra.module.Definition,

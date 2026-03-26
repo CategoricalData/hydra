@@ -48,15 +48,6 @@ def failOnFlag(cx: hydra.context.Context)(flag: hydra.core.Name)(msg: scala.Pred
   hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], Unit]](`val`)(Left(hydra.context.InContext(hydra.errors.Error.other(msg),
      cx)))(Right(())))
 
-def getDebugId(cx: hydra.context.Context): Either[hydra.context.InContext[hydra.errors.Error], Option[scala.Predef.String]] =
-  hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error], Option[scala.Predef.String]],
-     hydra.core.Term](Right(None))((term: hydra.core.Term) =>
-  hydra.lib.eithers.map[scala.Predef.String, Option[scala.Predef.String], hydra.context.InContext[hydra.errors.Error]](hydra.lib.maybes.pure[scala.Predef.String])(hydra.extract.core.string(cx)(hydra.graph.Graph(hydra.lib.maps.empty[hydra.core.Name,
-     hydra.core.Term], hydra.lib.maps.empty[hydra.core.Name, hydra.core.TypeScheme], hydra.lib.maps.empty[hydra.core.Name,
-     hydra.core.TypeVariableMetadata], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.maps.empty[hydra.core.Name,
-     hydra.core.Term], hydra.lib.maps.empty[hydra.core.Name, hydra.graph.Primitive], hydra.lib.maps.empty[hydra.core.Name,
-     hydra.core.TypeScheme], hydra.lib.sets.empty[hydra.core.Name]))(term)))(hydra.annotations.getAttr(hydra.constants.key_debugId)(cx))
-
 def getAttr(key: hydra.core.Name)(cx: hydra.context.Context): Option[hydra.core.Term] = hydra.lib.maps.lookup[hydra.core.Name, hydra.core.Term](key)(cx.other)
 
 def getAttrWithDefault(key: hydra.core.Name)(`def`: hydra.core.Term)(cx: hydra.context.Context): hydra.core.Term =
@@ -71,6 +62,15 @@ def getCount(key: hydra.core.Name)(cx: hydra.context.Context): Int =
       case _ => 0
     case _ => 0
   case _ => 0)(hydra.lib.maps.lookup[hydra.core.Name, hydra.core.Term](key)(cx.other))
+
+def getDebugId(cx: hydra.context.Context): Either[hydra.context.InContext[hydra.errors.Error], Option[scala.Predef.String]] =
+  hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error], Option[scala.Predef.String]],
+     hydra.core.Term](Right(None))((term: hydra.core.Term) =>
+  hydra.lib.eithers.map[scala.Predef.String, Option[scala.Predef.String], hydra.context.InContext[hydra.errors.Error]](hydra.lib.maybes.pure[scala.Predef.String])(hydra.extract.core.string(cx)(hydra.graph.Graph(hydra.lib.maps.empty[hydra.core.Name,
+     hydra.core.Term], hydra.lib.maps.empty[hydra.core.Name, hydra.core.TypeScheme], hydra.lib.maps.empty[hydra.core.Name,
+     hydra.core.TypeVariableMetadata], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.maps.empty[hydra.core.Name,
+     hydra.core.Term], hydra.lib.maps.empty[hydra.core.Name, hydra.graph.Primitive], hydra.lib.maps.empty[hydra.core.Name,
+     hydra.core.TypeScheme], hydra.lib.sets.empty[hydra.core.Name]))(term)))(hydra.annotations.getAttr(hydra.constants.key_debugId)(cx))
 
 def getDescription(cx: hydra.context.Context)(graph: hydra.graph.Graph)(anns: Map[hydra.core.Name, hydra.core.Term]): Either[hydra.context.InContext[hydra.errors.Error],
    Option[scala.Predef.String]] =
@@ -126,15 +126,6 @@ def getTypeDescription(cx: hydra.context.Context)(graph: hydra.graph.Graph)(typ:
    Option[scala.Predef.String]] =
   hydra.annotations.getDescription(cx)(graph)(hydra.annotations.typeAnnotationInternal(typ))
 
-def isNativeType(el: hydra.core.Binding): Boolean =
-  {
-  lazy val isFlaggedAsFirstClassType: Boolean = hydra.lib.maybes.fromMaybe[Boolean](false)(hydra.lib.maybes.map[hydra.core.Term,
-     Boolean]((_x: hydra.core.Term) => true)(hydra.annotations.getTermAnnotation(hydra.constants.key_firstClassType)(el.term)))
-  hydra.lib.maybes.maybe[Boolean, hydra.core.TypeScheme](false)((ts: hydra.core.TypeScheme) =>
-    hydra.lib.logic.and(hydra.lib.equality.equal[hydra.core.TypeScheme](ts)(hydra.core.TypeScheme(Seq(),
-       hydra.core.Type.variable("hydra.core.Type"), None)))(hydra.lib.logic.not(isFlaggedAsFirstClassType)))(el.`type`)
-}
-
 def hasDescription[T0](anns: Map[hydra.core.Name, T0]): Boolean =
   hydra.lib.maybes.isJust[T0](hydra.lib.maps.lookup[hydra.core.Name, T0](hydra.constants.key_description)(anns))
 
@@ -149,6 +140,15 @@ def hasFlag(cx: hydra.context.Context)(flag: hydra.core.Name): Either[hydra.cont
 }
 
 def hasTypeDescription(typ: hydra.core.Type): Boolean = hydra.annotations.hasDescription(hydra.annotations.typeAnnotationInternal(typ))
+
+def isNativeType(el: hydra.core.Binding): Boolean =
+  {
+  lazy val isFlaggedAsFirstClassType: Boolean = hydra.lib.maybes.fromMaybe[Boolean](false)(hydra.lib.maybes.map[hydra.core.Term,
+     Boolean]((_x: hydra.core.Term) => true)(hydra.annotations.getTermAnnotation(hydra.constants.key_firstClassType)(el.term)))
+  hydra.lib.maybes.maybe[Boolean, hydra.core.TypeScheme](false)((ts: hydra.core.TypeScheme) =>
+    hydra.lib.logic.and(hydra.lib.equality.equal[hydra.core.TypeScheme](ts)(hydra.core.TypeScheme(Seq(),
+       hydra.core.Type.variable("hydra.core.Type"), None)))(hydra.lib.logic.not(isFlaggedAsFirstClassType)))(el.`type`)
+}
 
 def nextCount(key: hydra.core.Name)(cx: hydra.context.Context): Tuple2[Int, hydra.context.Context] =
   {

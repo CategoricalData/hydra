@@ -34,18 +34,6 @@ import hydra.lib.sets
 
 import hydra.lib.strings
 
-def adaptFloatType(constraints: hydra.coders.LanguageConstraints)(ft: hydra.core.FloatType): Option[hydra.core.FloatType] =
-  {
-  lazy val supported: Boolean = hydra.lib.sets.member[hydra.core.FloatType](ft)(constraints.floatTypes)
-  def alt(v1: hydra.core.FloatType): Option[hydra.core.FloatType] = hydra.adapt.adaptFloatType(constraints)(v1)
-  def forUnsupported(ft2: hydra.core.FloatType): Option[hydra.core.FloatType] =
-    ft2 match
-    case hydra.core.FloatType.bigfloat => alt(hydra.core.FloatType.float64)
-    case hydra.core.FloatType.float32 => alt(hydra.core.FloatType.float64)
-    case hydra.core.FloatType.float64 => alt(hydra.core.FloatType.bigfloat)
-  hydra.lib.logic.ifElse[Option[hydra.core.FloatType]](supported)(Some(ft))(forUnsupported(ft))
-}
-
 def adaptDataGraph(constraints: hydra.coders.LanguageConstraints)(doExpand: Boolean)(els0: Seq[hydra.core.Binding])(cx: hydra.context.Context)(graph0: hydra.graph.Graph): Either[scala.Predef.String,
    Tuple2[hydra.graph.Graph, Seq[hydra.core.Binding]]] =
   {
@@ -126,6 +114,18 @@ def adaptDataGraph(constraints: hydra.coders.LanguageConstraints)(doExpand: Bool
       }
     }
   })
+}
+
+def adaptFloatType(constraints: hydra.coders.LanguageConstraints)(ft: hydra.core.FloatType): Option[hydra.core.FloatType] =
+  {
+  lazy val supported: Boolean = hydra.lib.sets.member[hydra.core.FloatType](ft)(constraints.floatTypes)
+  def alt(v1: hydra.core.FloatType): Option[hydra.core.FloatType] = hydra.adapt.adaptFloatType(constraints)(v1)
+  def forUnsupported(ft2: hydra.core.FloatType): Option[hydra.core.FloatType] =
+    ft2 match
+    case hydra.core.FloatType.bigfloat => alt(hydra.core.FloatType.float64)
+    case hydra.core.FloatType.float32 => alt(hydra.core.FloatType.float64)
+    case hydra.core.FloatType.float64 => alt(hydra.core.FloatType.bigfloat)
+  hydra.lib.logic.ifElse[Option[hydra.core.FloatType]](supported)(Some(ft))(forUnsupported(ft))
 }
 
 def adaptGraphSchema[T0](constraints: hydra.coders.LanguageConstraints)(litmap: Map[hydra.core.LiteralType,
@@ -271,7 +271,7 @@ def adaptTerm(constraints: hydra.coders.LanguageConstraints)(litmap: Map[hydra.c
       case hydra.core.Term.typeApplication(v_Term_typeApplication_ta) => hydra.lib.eithers.bind[scala.Predef.String,
          hydra.core.Type, hydra.core.Term](hydra.adapt.adaptType(constraints)(litmap)(v_Term_typeApplication_ta.`type`))((atyp: hydra.core.Type) =>
         Right(hydra.core.Term.typeApplication(hydra.core.TypeApplicationTerm(v_Term_typeApplication_ta.body, atyp))))
-      case hydra.core.Term.typeLambda => Right(term1)
+      case hydra.core.Term.typeLambda(v_Term_typeLambda__) => Right(term1)
       case _ => hydra.lib.eithers.bind[scala.Predef.String, Option[hydra.core.Term], hydra.core.Term](tryTerm(term1))((mterm: Option[hydra.core.Term]) =>
         hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], hydra.core.Term](Left(hydra.lib.strings.cat2("no alternatives for term: ")(hydra.show.core.term(term1))))((term2: hydra.core.Term) => Right(term2))(mterm)))
   }
@@ -524,6 +524,9 @@ def prepareLiteralType(at: hydra.core.LiteralType): Tuple2[hydra.core.LiteralTyp
   }
   case _ => hydra.adapt.prepareSame(at)
 
+def prepareSame[T0, T1, T2](x: T0): Tuple2[T0, Tuple2[(T1 => T1), scala.collection.immutable.Set[T2]]] = Tuple2(x,
+   Tuple2((y: T1) => y, hydra.lib.sets.empty[T2]))
+
 def prepareType[T0](cx: T0)(typ: hydra.core.Type): Tuple2[hydra.core.Type, Tuple2[(hydra.core.Term => hydra.core.Term),
    scala.collection.immutable.Set[scala.Predef.String]]] =
   hydra.rewriting.deannotateType(typ) match
@@ -544,9 +547,6 @@ def prepareType[T0](cx: T0)(typ: hydra.core.Type): Tuple2[hydra.core.Type, Tuple
       case _ => v, msgs))
   }
   case _ => hydra.adapt.prepareSame(typ)
-
-def prepareSame[T0, T1, T2](x: T0): Tuple2[T0, Tuple2[(T1 => T1), scala.collection.immutable.Set[T2]]] = Tuple2(x,
-   Tuple2((y: T1) => y, hydra.lib.sets.empty[T2]))
 
 def pushTypeAppsInward(term: hydra.core.Term): hydra.core.Term =
   {

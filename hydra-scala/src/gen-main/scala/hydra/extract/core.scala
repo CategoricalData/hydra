@@ -91,6 +91,27 @@ def cases(cx: hydra.context.Context)(name: hydra.core.Name)(graph: hydra.graph.G
   case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ")("case statement"))(" but found "))(hydra.show.core.term(term))),
      cx)))
 
+def eitherTerm[T0, T1](cx: hydra.context.Context)(leftFun: (hydra.core.Term => Either[hydra.context.InContext[hydra.errors.Error],
+   T0]))(rightFun: (hydra.core.Term => Either[hydra.context.InContext[hydra.errors.Error], T1]))(graph: hydra.graph.Graph)(term0: hydra.core.Term): Either[hydra.context.InContext[hydra.errors.Error],
+   Either[T0, T1]] =
+  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Term, Either[T0, T1]](hydra.lexical.stripAndDereferenceTerm(cx)(graph)(term0))((term: hydra.core.Term) =>
+  term match
+  case hydra.core.Term.either(v_Term_either_et) => hydra.lib.eithers.either[hydra.core.Term, hydra.core.Term,
+     Either[hydra.context.InContext[hydra.errors.Error], Either[T0, T1]]]((l: hydra.core.Term) =>
+    hydra.lib.eithers.map[T0, Either[T0, T1], hydra.context.InContext[hydra.errors.Error]]((x: T0) => Left(x))(leftFun(l)))((r: hydra.core.Term) =>
+    hydra.lib.eithers.map[T1, Either[T0, T1], hydra.context.InContext[hydra.errors.Error]]((x: T1) => Right(x))(rightFun(r)))(v_Term_either_et)
+  case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ")("either value"))(" but found "))(hydra.show.core.term(term))),
+     cx)))
+
+def eitherType(cx: hydra.context.Context)(typ: hydra.core.Type): Either[hydra.context.InContext[hydra.errors.Error], hydra.core.EitherType] =
+  {
+  lazy val stripped: hydra.core.Type = hydra.rewriting.deannotateType(typ)
+  stripped match
+    case hydra.core.Type.either(v_Type_either_et) => Right(v_Type_either_et)
+    case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ")("either type"))(" but found "))(hydra.show.core.`type`(typ))),
+       cx))
+}
+
 def field[T0](cx: hydra.context.Context)(fname: hydra.core.Name)(mapping: (hydra.core.Term => Either[hydra.context.InContext[hydra.errors.Error],
    T0]))(graph: hydra.graph.Graph)(fields: Seq[hydra.core.Field]): Either[hydra.context.InContext[hydra.errors.Error],
    T0] =
@@ -131,27 +152,6 @@ def floatLiteral(cx: hydra.context.Context)(lit: hydra.core.Literal): Either[hyd
 def floatValue(cx: hydra.context.Context)(graph: hydra.graph.Graph)(t: hydra.core.Term): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.core.FloatValue] =
   hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Literal, hydra.core.FloatValue](hydra.extract.core.literal(cx)(graph)(t))((l: hydra.core.Literal) => hydra.extract.core.floatLiteral(cx)(l))
-
-def eitherTerm[T0, T1](cx: hydra.context.Context)(leftFun: (hydra.core.Term => Either[hydra.context.InContext[hydra.errors.Error],
-   T0]))(rightFun: (hydra.core.Term => Either[hydra.context.InContext[hydra.errors.Error], T1]))(graph: hydra.graph.Graph)(term0: hydra.core.Term): Either[hydra.context.InContext[hydra.errors.Error],
-   Either[T0, T1]] =
-  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Term, Either[T0, T1]](hydra.lexical.stripAndDereferenceTerm(cx)(graph)(term0))((term: hydra.core.Term) =>
-  term match
-  case hydra.core.Term.either(v_Term_either_et) => hydra.lib.eithers.either[hydra.core.Term, hydra.core.Term,
-     Either[hydra.context.InContext[hydra.errors.Error], Either[T0, T1]]]((l: hydra.core.Term) =>
-    hydra.lib.eithers.map[T0, Either[T0, T1], hydra.context.InContext[hydra.errors.Error]]((x: T0) => Left(x))(leftFun(l)))((r: hydra.core.Term) =>
-    hydra.lib.eithers.map[T1, Either[T0, T1], hydra.context.InContext[hydra.errors.Error]]((x: T1) => Right(x))(rightFun(r)))(v_Term_either_et)
-  case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ")("either value"))(" but found "))(hydra.show.core.term(term))),
-     cx)))
-
-def eitherType(cx: hydra.context.Context)(typ: hydra.core.Type): Either[hydra.context.InContext[hydra.errors.Error], hydra.core.EitherType] =
-  {
-  lazy val stripped: hydra.core.Type = hydra.rewriting.deannotateType(typ)
-  stripped match
-    case hydra.core.Type.either(v_Type_either_et) => Right(v_Type_either_et)
-    case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ")("either type"))(" but found "))(hydra.show.core.`type`(typ))),
-       cx))
-}
 
 def functionType(cx: hydra.context.Context)(typ: hydra.core.Type): Either[hydra.context.InContext[hydra.errors.Error], hydra.core.FunctionType] =
   {
@@ -222,10 +222,6 @@ def integerValue(cx: hydra.context.Context)(graph: hydra.graph.Graph)(t: hydra.c
    hydra.core.IntegerValue] =
   hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Literal, hydra.core.IntegerValue](hydra.extract.core.literal(cx)(graph)(t))((l: hydra.core.Literal) => hydra.extract.core.integerLiteral(cx)(l))
 
-def lambdaBody(cx: hydra.context.Context)(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.context.InContext[hydra.errors.Error],
-   hydra.core.Term] =
-  hydra.lib.eithers.map[hydra.core.Lambda, hydra.core.Term, hydra.context.InContext[hydra.errors.Error]]((x: hydra.core.Lambda) => (x.body))(hydra.extract.core.lambda(cx)(graph)(term))
-
 def lambda(cx: hydra.context.Context)(graph: hydra.graph.Graph)(term0: hydra.core.Term): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.core.Lambda] =
   hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Term, hydra.core.Lambda](hydra.lexical.stripAndDereferenceTerm(cx)(graph)(term0))((term: hydra.core.Term) =>
@@ -235,6 +231,17 @@ def lambda(cx: hydra.context.Context)(graph: hydra.graph.Graph)(term0: hydra.cor
     case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ")("lambda"))(" but found "))(hydra.show.core.term(term))),
        cx))
   case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ")("lambda"))(" but found "))(hydra.show.core.term(term))),
+     cx)))
+
+def lambdaBody(cx: hydra.context.Context)(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.context.InContext[hydra.errors.Error],
+   hydra.core.Term] =
+  hydra.lib.eithers.map[hydra.core.Lambda, hydra.core.Term, hydra.context.InContext[hydra.errors.Error]]((x: hydra.core.Lambda) => (x.body))(hydra.extract.core.lambda(cx)(graph)(term))
+
+def let(cx: hydra.context.Context)(graph: hydra.graph.Graph)(term0: hydra.core.Term): Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Let] =
+  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Term, hydra.core.Let](hydra.lexical.stripAndDereferenceTerm(cx)(graph)(term0))((term: hydra.core.Term) =>
+  term match
+  case hydra.core.Term.let(v_Term_let_lt) => Right(v_Term_let_lt)
+  case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ")("let term"))(" but found "))(hydra.show.core.term(term))),
      cx)))
 
 def letBinding(cx: hydra.context.Context)(n: scala.Predef.String)(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.context.InContext[hydra.errors.Error],
@@ -249,13 +256,6 @@ def letBinding(cx: hydra.context.Context)(n: scala.Predef.String)(graph: hydra.g
        cx))))
   })
 }
-
-def let(cx: hydra.context.Context)(graph: hydra.graph.Graph)(term0: hydra.core.Term): Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Let] =
-  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Term, hydra.core.Let](hydra.lexical.stripAndDereferenceTerm(cx)(graph)(term0))((term: hydra.core.Term) =>
-  term match
-  case hydra.core.Term.let(v_Term_let_lt) => Right(v_Term_let_lt)
-  case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ")("let term"))(" but found "))(hydra.show.core.term(term))),
-     cx)))
 
 def list(cx: hydra.context.Context)(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.context.InContext[hydra.errors.Error],
    Seq[hydra.core.Term]] =
@@ -323,11 +323,6 @@ def mapType(cx: hydra.context.Context)(typ: hydra.core.Type): Either[hydra.conte
        cx))
 }
 
-def nArgs[T0](cx: hydra.context.Context)(name: hydra.core.Name)(n: Int)(args: Seq[T0]): Either[hydra.context.InContext[hydra.errors.Error], Unit] =
-  hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], Unit]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[T0](args))(n))(Right(()))(Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ")(hydra.lib.strings.cat(Seq(hydra.lib.literals.showInt32(n),
-     " arguments to primitive ", hydra.lib.literals.showString(name)))))(" but found "))(hydra.lib.literals.showInt32(hydra.lib.lists.length[T0](args)))),
-     cx)))
-
 def maybeTerm[T0](cx: hydra.context.Context)(f: (hydra.core.Term => Either[hydra.context.InContext[hydra.errors.Error],
    T0]))(graph: hydra.graph.Graph)(term0: hydra.core.Term): Either[hydra.context.InContext[hydra.errors.Error],
    Option[T0]] =
@@ -347,6 +342,11 @@ def maybeType(cx: hydra.context.Context)(typ: hydra.core.Type): Either[hydra.con
     case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ")("maybe type"))(" but found "))(hydra.show.core.`type`(typ))),
        cx))
 }
+
+def nArgs[T0](cx: hydra.context.Context)(name: hydra.core.Name)(n: Int)(args: Seq[T0]): Either[hydra.context.InContext[hydra.errors.Error], Unit] =
+  hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], Unit]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[T0](args))(n))(Right(()))(Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ")(hydra.lib.strings.cat(Seq(hydra.lib.literals.showInt32(n),
+     " arguments to primitive ", hydra.lib.literals.showString(name)))))(" but found "))(hydra.lib.literals.showInt32(hydra.lib.lists.length[T0](args)))),
+     cx)))
 
 def pair[T0, T1](cx: hydra.context.Context)(kf: (hydra.core.Term => Either[hydra.context.InContext[hydra.errors.Error],
    T0]))(vf: (hydra.core.Term => Either[hydra.context.InContext[hydra.errors.Error], T1]))(graph: hydra.graph.Graph)(term0: hydra.core.Term): Either[hydra.context.InContext[hydra.errors.Error],

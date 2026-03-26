@@ -17,5 +17,6 @@ lazy val hydraLanguage: hydra.coders.Language = {
   def types(t: hydra.core.Type): Boolean =
     t match
     case _ => true
-  hydra.coders.Language("hydra.core", hydra.coders.LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types))
+  hydra.coders.Language("hydra.core", hydra.coders.LanguageConstraints(eliminationVariants, literalVariants,
+     floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types))
 }

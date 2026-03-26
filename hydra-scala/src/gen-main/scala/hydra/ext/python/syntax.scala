@@ -65,9 +65,11 @@ enum Assignment :
    case untyped(value: hydra.ext.python.syntax.UntypedAssignment) extends Assignment
    case aug(value: hydra.ext.python.syntax.AugAssignment) extends Assignment
 
-case class TypedAssignment(lhs: hydra.ext.python.syntax.SingleTarget, `type`: hydra.ext.python.syntax.Expression, rhs: Option[hydra.ext.python.syntax.AnnotatedRhs])
+case class TypedAssignment(lhs: hydra.ext.python.syntax.SingleTarget, `type`: hydra.ext.python.syntax.Expression,
+   rhs: Option[hydra.ext.python.syntax.AnnotatedRhs])
 
-case class UntypedAssignment(targets: Seq[hydra.ext.python.syntax.StarTarget], rhs: hydra.ext.python.syntax.AnnotatedRhs, typeComment: Option[hydra.ext.python.syntax.TypeComment])
+case class UntypedAssignment(targets: Seq[hydra.ext.python.syntax.StarTarget], rhs: hydra.ext.python.syntax.AnnotatedRhs,
+   typeComment: Option[hydra.ext.python.syntax.TypeComment])
 
 case class AugAssignment(lhs: hydra.ext.python.syntax.SingleTarget, augassign: hydra.ext.python.syntax.AugAssign, rhs: hydra.ext.python.syntax.AnnotatedRhs)
 
@@ -108,7 +110,8 @@ enum ImportStatement :
 
 type ImportName = Seq[hydra.ext.python.syntax.DottedAsName]
 
-case class ImportFrom(prefixes: Seq[hydra.ext.python.syntax.RelativeImportPrefix], dottedName: Option[hydra.ext.python.syntax.DottedName], targets: hydra.ext.python.syntax.ImportFromTargets)
+case class ImportFrom(prefixes: Seq[hydra.ext.python.syntax.RelativeImportPrefix], dottedName: Option[hydra.ext.python.syntax.DottedName],
+   targets: hydra.ext.python.syntax.ImportFromTargets)
 
 enum RelativeImportPrefix :
    case dot extends RelativeImportPrefix
@@ -131,11 +134,15 @@ enum Block :
 
 type Decorators = Seq[hydra.ext.python.syntax.NamedExpression]
 
-case class ClassDefinition(decorators: Option[hydra.ext.python.syntax.Decorators], name: hydra.ext.python.syntax.Name, typeParams: Seq[hydra.ext.python.syntax.TypeParameter], arguments: Option[hydra.ext.python.syntax.Args], body: hydra.ext.python.syntax.Block)
+case class ClassDefinition(decorators: Option[hydra.ext.python.syntax.Decorators], name: hydra.ext.python.syntax.Name,
+   typeParams: Seq[hydra.ext.python.syntax.TypeParameter], arguments: Option[hydra.ext.python.syntax.Args],
+   body: hydra.ext.python.syntax.Block)
 
 case class FunctionDefinition(decorators: Option[hydra.ext.python.syntax.Decorators], raw: hydra.ext.python.syntax.FunctionDefRaw)
 
-case class FunctionDefRaw(async: Boolean, name: hydra.ext.python.syntax.Name, typeParams: Seq[hydra.ext.python.syntax.TypeParameter], params: Option[hydra.ext.python.syntax.Parameters], returnType: Option[hydra.ext.python.syntax.Expression], funcTypeComment: Option[hydra.ext.python.syntax.FuncTypeComment], block: hydra.ext.python.syntax.Block)
+case class FunctionDefRaw(async: Boolean, name: hydra.ext.python.syntax.Name, typeParams: Seq[hydra.ext.python.syntax.TypeParameter],
+   params: Option[hydra.ext.python.syntax.Parameters], returnType: Option[hydra.ext.python.syntax.Expression],
+   funcTypeComment: Option[hydra.ext.python.syntax.FuncTypeComment], block: hydra.ext.python.syntax.Block)
 
 enum Parameters :
    case slashNoDefault(value: hydra.ext.python.syntax.SlashNoDefaultParameters) extends Parameters
@@ -144,11 +151,14 @@ enum Parameters :
    case paramWithDefault(value: hydra.ext.python.syntax.ParamWithDefaultParameters) extends Parameters
    case starEtc(value: hydra.ext.python.syntax.StarEtc) extends Parameters
 
-case class SlashNoDefaultParameters(slash: hydra.ext.python.syntax.SlashNoDefault, paramNoDefault: Seq[hydra.ext.python.syntax.ParamNoDefault], paramWithDefault: Seq[hydra.ext.python.syntax.ParamWithDefault], starEtc: Option[hydra.ext.python.syntax.StarEtc])
+case class SlashNoDefaultParameters(slash: hydra.ext.python.syntax.SlashNoDefault, paramNoDefault: Seq[hydra.ext.python.syntax.ParamNoDefault],
+   paramWithDefault: Seq[hydra.ext.python.syntax.ParamWithDefault], starEtc: Option[hydra.ext.python.syntax.StarEtc])
 
-case class SlashWithDefaultParameters(paramNoDefault: Seq[hydra.ext.python.syntax.ParamNoDefault], paramWithDefault: Seq[hydra.ext.python.syntax.ParamWithDefault], starEtc: Option[hydra.ext.python.syntax.StarEtc])
+case class SlashWithDefaultParameters(paramNoDefault: Seq[hydra.ext.python.syntax.ParamNoDefault], paramWithDefault: Seq[hydra.ext.python.syntax.ParamWithDefault],
+   starEtc: Option[hydra.ext.python.syntax.StarEtc])
 
-case class ParamNoDefaultParameters(paramNoDefault: Seq[hydra.ext.python.syntax.ParamNoDefault], paramWithDefault: Seq[hydra.ext.python.syntax.ParamWithDefault], starEtc: Option[hydra.ext.python.syntax.StarEtc])
+case class ParamNoDefaultParameters(paramNoDefault: Seq[hydra.ext.python.syntax.ParamNoDefault], paramWithDefault: Seq[hydra.ext.python.syntax.ParamWithDefault],
+   starEtc: Option[hydra.ext.python.syntax.StarEtc])
 
 case class ParamWithDefaultParameters(paramWithDefault: Seq[hydra.ext.python.syntax.ParamWithDefault], starEtc: Option[hydra.ext.python.syntax.StarEtc])
 
@@ -162,9 +172,11 @@ enum StarEtc :
    case starComma(value: hydra.ext.python.syntax.CommaStarEtc) extends StarEtc
    case keywords(value: hydra.ext.python.syntax.Keywords) extends StarEtc
 
-case class NoDefaultStarEtc(paramNoDefault: hydra.ext.python.syntax.ParamNoDefault, paramMaybeDefault: Seq[hydra.ext.python.syntax.ParamMaybeDefault], keywords: Option[hydra.ext.python.syntax.Keywords])
+case class NoDefaultStarEtc(paramNoDefault: hydra.ext.python.syntax.ParamNoDefault, paramMaybeDefault: Seq[hydra.ext.python.syntax.ParamMaybeDefault],
+   keywords: Option[hydra.ext.python.syntax.Keywords])
 
-case class NoDefaultStarAnnotationStarEtc(paramNoDefaultStarAnnotation: hydra.ext.python.syntax.ParamNoDefaultStarAnnotation, paramMaybeDefault: Seq[hydra.ext.python.syntax.ParamMaybeDefault], keywords: Option[hydra.ext.python.syntax.Keywords])
+case class NoDefaultStarAnnotationStarEtc(paramNoDefaultStarAnnotation: hydra.ext.python.syntax.ParamNoDefaultStarAnnotation,
+   paramMaybeDefault: Seq[hydra.ext.python.syntax.ParamMaybeDefault], keywords: Option[hydra.ext.python.syntax.Keywords])
 
 case class CommaStarEtc(paramMaybeDefault: Seq[hydra.ext.python.syntax.ParamMaybeDefault], keywords: Option[hydra.ext.python.syntax.Keywords])
 
@@ -172,11 +184,14 @@ type Keywords = hydra.ext.python.syntax.ParamNoDefault
 
 case class ParamNoDefault(param: hydra.ext.python.syntax.Param, typeComment: Option[hydra.ext.python.syntax.TypeComment])
 
-case class ParamNoDefaultStarAnnotation(paramStarAnnotation: hydra.ext.python.syntax.ParamStarAnnotation, typeComment: Option[hydra.ext.python.syntax.TypeComment])
+case class ParamNoDefaultStarAnnotation(paramStarAnnotation: hydra.ext.python.syntax.ParamStarAnnotation,
+   typeComment: Option[hydra.ext.python.syntax.TypeComment])
 
-case class ParamWithDefault(param: hydra.ext.python.syntax.Param, default: hydra.ext.python.syntax.Default, typeComment: Option[hydra.ext.python.syntax.TypeComment])
+case class ParamWithDefault(param: hydra.ext.python.syntax.Param, default: hydra.ext.python.syntax.Default,
+   typeComment: Option[hydra.ext.python.syntax.TypeComment])
 
-case class ParamMaybeDefault(param: hydra.ext.python.syntax.Param, default: Option[hydra.ext.python.syntax.Default], typeComment: Option[hydra.ext.python.syntax.TypeComment])
+case class ParamMaybeDefault(param: hydra.ext.python.syntax.Param, default: Option[hydra.ext.python.syntax.Default],
+   typeComment: Option[hydra.ext.python.syntax.TypeComment])
 
 case class Param(name: hydra.ext.python.syntax.Name, annotation: Option[hydra.ext.python.syntax.Annotation])
 
@@ -188,17 +203,21 @@ type StarAnnotation = hydra.ext.python.syntax.StarExpression
 
 type Default = hydra.ext.python.syntax.Expression
 
-case class IfStatement(condition: hydra.ext.python.syntax.NamedExpression, body: hydra.ext.python.syntax.Block, continuation: Option[hydra.ext.python.syntax.IfTail])
+case class IfStatement(condition: hydra.ext.python.syntax.NamedExpression, body: hydra.ext.python.syntax.Block,
+   continuation: Option[hydra.ext.python.syntax.IfTail])
 
 enum IfTail :
    case elif(value: hydra.ext.python.syntax.IfStatement) extends IfTail
    case `else`(value: hydra.ext.python.syntax.Block) extends IfTail
 
-case class WhileStatement(condition: hydra.ext.python.syntax.NamedExpression, body: hydra.ext.python.syntax.Block, `else`: Option[hydra.ext.python.syntax.Block])
+case class WhileStatement(condition: hydra.ext.python.syntax.NamedExpression, body: hydra.ext.python.syntax.Block,
+   `else`: Option[hydra.ext.python.syntax.Block])
 
-case class ForStatement(async: Boolean, targets: Seq[hydra.ext.python.syntax.StarTarget], expressions: Seq[hydra.ext.python.syntax.StarExpression], typeComment: Option[hydra.ext.python.syntax.TypeComment], body: hydra.ext.python.syntax.Block, `else`: Option[hydra.ext.python.syntax.Block])
+case class ForStatement(async: Boolean, targets: Seq[hydra.ext.python.syntax.StarTarget], expressions: Seq[hydra.ext.python.syntax.StarExpression],
+   typeComment: Option[hydra.ext.python.syntax.TypeComment], body: hydra.ext.python.syntax.Block, `else`: Option[hydra.ext.python.syntax.Block])
 
-case class WithStatement(async: Boolean, items: Seq[hydra.ext.python.syntax.WithItem], typeComment: Option[hydra.ext.python.syntax.TypeComment], body: hydra.ext.python.syntax.Block)
+case class WithStatement(async: Boolean, items: Seq[hydra.ext.python.syntax.WithItem], typeComment: Option[hydra.ext.python.syntax.TypeComment],
+   body: hydra.ext.python.syntax.Block)
 
 case class WithItem(expression: hydra.ext.python.syntax.Expression, as: Option[hydra.ext.python.syntax.StarTarget])
 
@@ -209,9 +228,11 @@ enum TryStatement :
 
 case class TryFinallyStatement(body: hydra.ext.python.syntax.Block, `finally`: hydra.ext.python.syntax.Block)
 
-case class TryExceptStatement(body: hydra.ext.python.syntax.Block, excepts: Seq[hydra.ext.python.syntax.ExceptBlock], `else`: Option[hydra.ext.python.syntax.Block], `finally`: Option[hydra.ext.python.syntax.Block])
+case class TryExceptStatement(body: hydra.ext.python.syntax.Block, excepts: Seq[hydra.ext.python.syntax.ExceptBlock],
+   `else`: Option[hydra.ext.python.syntax.Block], `finally`: Option[hydra.ext.python.syntax.Block])
 
-case class TryExceptStarStatement(body: hydra.ext.python.syntax.Block, excepts: Seq[hydra.ext.python.syntax.ExceptStarBlock], `else`: Option[hydra.ext.python.syntax.Block], `finally`: Option[hydra.ext.python.syntax.Block])
+case class TryExceptStarStatement(body: hydra.ext.python.syntax.Block, excepts: Seq[hydra.ext.python.syntax.ExceptStarBlock],
+   `else`: Option[hydra.ext.python.syntax.Block], `finally`: Option[hydra.ext.python.syntax.Block])
 
 case class ExceptBlock(expression: Option[hydra.ext.python.syntax.ExceptExpression], body: hydra.ext.python.syntax.Block)
 
@@ -259,7 +280,8 @@ enum LiteralExpression :
    case `true` extends LiteralExpression
    case `false` extends LiteralExpression
 
-case class ComplexNumber(real: hydra.ext.python.syntax.SignedRealNumber, plusOrMinus: hydra.ext.python.syntax.PlusOrMinus, imaginary: hydra.ext.python.syntax.ImaginaryNumber)
+case class ComplexNumber(real: hydra.ext.python.syntax.SignedRealNumber, plusOrMinus: hydra.ext.python.syntax.PlusOrMinus,
+   imaginary: hydra.ext.python.syntax.ImaginaryNumber)
 
 enum PlusOrMinus :
    case plus extends PlusOrMinus
@@ -317,7 +339,8 @@ enum LiteralExpressionOrAttribute :
 
 type DoubleStarPattern = hydra.ext.python.syntax.PatternCaptureTarget
 
-case class ClassPattern(nameOrAttribute: hydra.ext.python.syntax.NameOrAttribute, positionalPatterns: Option[hydra.ext.python.syntax.PositionalPatterns], keywordPatterns: Option[hydra.ext.python.syntax.KeywordPatterns])
+case class ClassPattern(nameOrAttribute: hydra.ext.python.syntax.NameOrAttribute, positionalPatterns: Option[hydra.ext.python.syntax.PositionalPatterns],
+   keywordPatterns: Option[hydra.ext.python.syntax.KeywordPatterns])
 
 type PositionalPatterns = Seq[hydra.ext.python.syntax.Pattern]
 
@@ -332,7 +355,8 @@ enum TypeParameter :
    case star(value: hydra.ext.python.syntax.StarTypeParameter) extends TypeParameter
    case doubleStar(value: hydra.ext.python.syntax.DoubleStarTypeParameter) extends TypeParameter
 
-case class SimpleTypeParameter(name: hydra.ext.python.syntax.Name, bound: Option[hydra.ext.python.syntax.Expression], default: Option[hydra.ext.python.syntax.Expression])
+case class SimpleTypeParameter(name: hydra.ext.python.syntax.Name, bound: Option[hydra.ext.python.syntax.Expression],
+   default: Option[hydra.ext.python.syntax.Expression])
 
 case class StarTypeParameter(name: hydra.ext.python.syntax.Name, default: Option[hydra.ext.python.syntax.StarExpression])
 
@@ -454,7 +478,8 @@ enum Slice :
    case named(value: hydra.ext.python.syntax.NamedExpression) extends Slice
    case `slice_`(value: hydra.ext.python.syntax.SliceExpression) extends Slice
 
-case class SliceExpression(start: Option[hydra.ext.python.syntax.Expression], stop: Option[hydra.ext.python.syntax.Expression], step: Option[hydra.ext.python.syntax.Expression])
+case class SliceExpression(start: Option[hydra.ext.python.syntax.Expression], stop: Option[hydra.ext.python.syntax.Expression],
+   step: Option[hydra.ext.python.syntax.Expression])
 
 enum Atom :
    case name(value: hydra.ext.python.syntax.Name) extends Atom
@@ -480,7 +505,8 @@ enum Group :
 
 case class Lambda(params: hydra.ext.python.syntax.LambdaParameters, body: hydra.ext.python.syntax.Expression)
 
-case class LambdaParameters(slashNoDefault: Option[hydra.ext.python.syntax.LambdaSlashNoDefault], paramNoDefault: Seq[hydra.ext.python.syntax.LambdaParamNoDefault], paramWithDefault: Seq[hydra.ext.python.syntax.LambdaParamWithDefault], starEtc: Option[hydra.ext.python.syntax.LambdaStarEtc])
+case class LambdaParameters(slashNoDefault: Option[hydra.ext.python.syntax.LambdaSlashNoDefault], paramNoDefault: Seq[hydra.ext.python.syntax.LambdaParamNoDefault],
+   paramWithDefault: Seq[hydra.ext.python.syntax.LambdaParamWithDefault], starEtc: Option[hydra.ext.python.syntax.LambdaStarEtc])
 
 case class LambdaSlashNoDefault(parameters: Seq[hydra.ext.python.syntax.LambdaParamNoDefault])
 
@@ -516,7 +542,8 @@ case class Kvpair(key: hydra.ext.python.syntax.Expression, value: hydra.ext.pyth
 
 type ForIfClauses = Seq[hydra.ext.python.syntax.ForIfClause]
 
-case class ForIfClause(async: Boolean, targets: Seq[hydra.ext.python.syntax.StarTarget], in: hydra.ext.python.syntax.Disjunction, ifs: Seq[hydra.ext.python.syntax.Disjunction])
+case class ForIfClause(async: Boolean, targets: Seq[hydra.ext.python.syntax.StarTarget], in: hydra.ext.python.syntax.Disjunction,
+   ifs: Seq[hydra.ext.python.syntax.Disjunction])
 
 case class Listcomp(expression: hydra.ext.python.syntax.NamedExpression, forIfClauses: hydra.ext.python.syntax.ForIfClauses)
 
@@ -530,7 +557,8 @@ enum GenexpHead :
 
 case class Dictcomp(kvpair: hydra.ext.python.syntax.Kvpair, forIfClauses: hydra.ext.python.syntax.ForIfClauses)
 
-case class Args(positional: Seq[hydra.ext.python.syntax.PosArg], kwargOrStarred: Seq[hydra.ext.python.syntax.KwargOrStarred], kwargOrDoubleStarred: Seq[hydra.ext.python.syntax.KwargOrDoubleStarred])
+case class Args(positional: Seq[hydra.ext.python.syntax.PosArg], kwargOrStarred: Seq[hydra.ext.python.syntax.KwargOrStarred],
+   kwargOrDoubleStarred: Seq[hydra.ext.python.syntax.KwargOrDoubleStarred])
 
 enum PosArg :
    case starred(value: hydra.ext.python.syntax.StarredExpression) extends PosArg

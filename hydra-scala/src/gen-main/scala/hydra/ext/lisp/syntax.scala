@@ -2,7 +2,9 @@ package hydra.ext.lisp.syntax
 
 import hydra.core.*
 
-case class Program(dialect: hydra.ext.lisp.syntax.Dialect, module: Option[hydra.ext.lisp.syntax.ModuleDeclaration], imports: Seq[hydra.ext.lisp.syntax.ImportDeclaration], exports: Seq[hydra.ext.lisp.syntax.ExportDeclaration], forms: Seq[hydra.ext.lisp.syntax.TopLevelFormWithComments])
+case class Program(dialect: hydra.ext.lisp.syntax.Dialect, module: Option[hydra.ext.lisp.syntax.ModuleDeclaration],
+   imports: Seq[hydra.ext.lisp.syntax.ImportDeclaration], exports: Seq[hydra.ext.lisp.syntax.ExportDeclaration],
+   forms: Seq[hydra.ext.lisp.syntax.TopLevelFormWithComments])
 
 enum TopLevelForm :
    case function(value: hydra.ext.lisp.syntax.FunctionDefinition) extends TopLevelForm
@@ -12,19 +14,24 @@ enum TopLevelForm :
    case `macro`(value: hydra.ext.lisp.syntax.MacroDefinition) extends TopLevelForm
    case expression(value: hydra.ext.lisp.syntax.Expression) extends TopLevelForm
 
-case class TopLevelFormWithComments(doc: Option[hydra.ext.lisp.syntax.Docstring], comment: Option[hydra.ext.lisp.syntax.Comment], form: hydra.ext.lisp.syntax.TopLevelForm)
+case class TopLevelFormWithComments(doc: Option[hydra.ext.lisp.syntax.Docstring], comment: Option[hydra.ext.lisp.syntax.Comment],
+   form: hydra.ext.lisp.syntax.TopLevelForm)
 
-case class FunctionDefinition(name: hydra.ext.lisp.syntax.Symbol, params: Seq[hydra.ext.lisp.syntax.Symbol], restParam: Option[hydra.ext.lisp.syntax.Symbol], doc: Option[hydra.ext.lisp.syntax.Docstring], typeHints: Seq[hydra.ext.lisp.syntax.TypeHint], body: Seq[hydra.ext.lisp.syntax.Expression])
+case class FunctionDefinition(name: hydra.ext.lisp.syntax.Symbol, params: Seq[hydra.ext.lisp.syntax.Symbol],
+   restParam: Option[hydra.ext.lisp.syntax.Symbol], doc: Option[hydra.ext.lisp.syntax.Docstring], typeHints: Seq[hydra.ext.lisp.syntax.TypeHint],
+   body: Seq[hydra.ext.lisp.syntax.Expression])
 
 case class VariableDefinition(name: hydra.ext.lisp.syntax.Symbol, value: hydra.ext.lisp.syntax.Expression, doc: Option[hydra.ext.lisp.syntax.Docstring])
 
 case class ConstantDefinition(name: hydra.ext.lisp.syntax.Symbol, value: hydra.ext.lisp.syntax.Expression, doc: Option[hydra.ext.lisp.syntax.Docstring])
 
-case class RecordTypeDefinition(name: hydra.ext.lisp.syntax.Symbol, fields: Seq[hydra.ext.lisp.syntax.FieldDefinition], doc: Option[hydra.ext.lisp.syntax.Docstring])
+case class RecordTypeDefinition(name: hydra.ext.lisp.syntax.Symbol, fields: Seq[hydra.ext.lisp.syntax.FieldDefinition],
+   doc: Option[hydra.ext.lisp.syntax.Docstring])
 
 case class FieldDefinition(name: hydra.ext.lisp.syntax.Symbol, defaultValue: Option[hydra.ext.lisp.syntax.Expression])
 
-case class MacroDefinition(name: hydra.ext.lisp.syntax.Symbol, params: Seq[hydra.ext.lisp.syntax.Symbol], restParam: Option[hydra.ext.lisp.syntax.Symbol], body: Seq[hydra.ext.lisp.syntax.Expression])
+case class MacroDefinition(name: hydra.ext.lisp.syntax.Symbol, params: Seq[hydra.ext.lisp.syntax.Symbol],
+   restParam: Option[hydra.ext.lisp.syntax.Symbol], body: Seq[hydra.ext.lisp.syntax.Expression])
 
 enum Expression :
    case application(value: hydra.ext.lisp.syntax.Application) extends Expression
@@ -56,7 +63,8 @@ enum Expression :
 
 case class Application(function: hydra.ext.lisp.syntax.Expression, arguments: Seq[hydra.ext.lisp.syntax.Expression])
 
-case class Lambda(name: Option[hydra.ext.lisp.syntax.Symbol], params: Seq[hydra.ext.lisp.syntax.Symbol], restParam: Option[hydra.ext.lisp.syntax.Symbol], body: Seq[hydra.ext.lisp.syntax.Expression])
+case class Lambda(name: Option[hydra.ext.lisp.syntax.Symbol], params: Seq[hydra.ext.lisp.syntax.Symbol],
+   restParam: Option[hydra.ext.lisp.syntax.Symbol], body: Seq[hydra.ext.lisp.syntax.Expression])
 
 case class VariableReference(name: hydra.ext.lisp.syntax.Symbol, functionNamespace: Boolean)
 
@@ -70,7 +78,8 @@ case class CondExpression(clauses: Seq[hydra.ext.lisp.syntax.CondClause], defaul
 
 case class CondClause(condition: hydra.ext.lisp.syntax.Expression, body: hydra.ext.lisp.syntax.Expression)
 
-case class CaseExpression(scrutinee: hydra.ext.lisp.syntax.Expression, clauses: Seq[hydra.ext.lisp.syntax.CaseClause], default: Option[hydra.ext.lisp.syntax.Expression])
+case class CaseExpression(scrutinee: hydra.ext.lisp.syntax.Expression, clauses: Seq[hydra.ext.lisp.syntax.CaseClause],
+   default: Option[hydra.ext.lisp.syntax.Expression])
 
 case class CaseClause(keys: Seq[hydra.ext.lisp.syntax.Expression], body: hydra.ext.lisp.syntax.Expression)
 

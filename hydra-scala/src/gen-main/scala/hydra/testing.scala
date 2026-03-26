@@ -46,7 +46,8 @@ enum EvaluationStyle :
    case eager extends EvaluationStyle
    case `lazy` extends EvaluationStyle
 
-case class CaseConversionTestCase(fromConvention: hydra.util.CaseConvention, toConvention: hydra.util.CaseConvention, fromString: scala.Predef.String, `toString_`: scala.Predef.String)
+case class CaseConversionTestCase(fromConvention: hydra.util.CaseConvention, toConvention: hydra.util.CaseConvention,
+   fromString: scala.Predef.String, `toString_`: scala.Predef.String)
 
 case class DelegatedEvaluationTestCase(input: hydra.core.Term, output: hydra.core.Term)
 
@@ -63,7 +64,8 @@ enum FoldOperation :
    case collectListLengths extends FoldOperation
    case collectLabels extends FoldOperation
 
-case class FoldOverTermTestCase(input: hydra.core.Term, traversalOrder: hydra.coders.TraversalOrder, operation: hydra.testing.FoldOperation, output: hydra.core.Term)
+case class FoldOverTermTestCase(input: hydra.core.Term, traversalOrder: hydra.coders.TraversalOrder, operation: hydra.testing.FoldOperation,
+   output: hydra.core.Term)
 
 case class FreeVariablesTestCase(input: hydra.core.Term, output: scala.collection.immutable.Set[hydra.core.Name])
 
@@ -114,9 +116,17 @@ case class ParserTestCase[A](input: scala.Predef.String, output: hydra.parsing.P
 
 type Tag = scala.Predef.String
 
-case class TestCodec(language: hydra.coders.LanguageName, fileExtension: hydra.module.FileExtension, encodeTerm: (hydra.core.Term => hydra.graph.Graph => Either[scala.Predef.String, scala.Predef.String]), encodeType: (hydra.core.Type => hydra.graph.Graph => Either[scala.Predef.String, scala.Predef.String]), formatTestName: (scala.Predef.String => scala.Predef.String), formatModuleName: (hydra.module.Namespace => scala.Predef.String), testCaseTemplate: scala.Predef.String, testGroupTemplate: scala.Predef.String, moduleTemplate: scala.Predef.String, importTemplate: scala.Predef.String, findImports: (scala.collection.immutable.Set[hydra.core.Name] => Seq[scala.Predef.String]))
+case class TestCodec(language: hydra.coders.LanguageName, fileExtension: hydra.module.FileExtension, encodeTerm: (hydra.core.Term => hydra.graph.Graph => Either[scala.Predef.String,
+   scala.Predef.String]), encodeType: (hydra.core.Type => hydra.graph.Graph => Either[scala.Predef.String,
+   scala.Predef.String]), formatTestName: (scala.Predef.String => scala.Predef.String), formatModuleName: (hydra.module.Namespace => scala.Predef.String),
+   testCaseTemplate: scala.Predef.String, testGroupTemplate: scala.Predef.String, moduleTemplate: scala.Predef.String,
+   importTemplate: scala.Predef.String, findImports: (scala.collection.immutable.Set[hydra.core.Name] => Seq[scala.Predef.String]))
 
-case class TestGenerator[A](namespacesForModule: (hydra.module.Module => hydra.graph.Graph => Either[scala.Predef.String, hydra.module.Namespaces[A]]), createCodec: (hydra.module.Namespaces[A] => hydra.testing.TestCodec), generateTestFile: (hydra.module.Module => hydra.testing.TestGroup => hydra.graph.Graph => Either[scala.Predef.String, Tuple2[scala.Predef.String, scala.Predef.String]]), aggregatorFile: Option[scala.Predef.String => Seq[hydra.module.Module] => Tuple2[scala.Predef.String, scala.Predef.String]])
+case class TestGenerator[A](namespacesForModule: (hydra.module.Module => hydra.graph.Graph => Either[scala.Predef.String,
+   hydra.module.Namespaces[A]]), createCodec: (hydra.module.Namespaces[A] => hydra.testing.TestCodec),
+   generateTestFile: (hydra.module.Module => hydra.testing.TestGroup => hydra.graph.Graph => Either[scala.Predef.String,
+   Tuple2[scala.Predef.String, scala.Predef.String]]), aggregatorFile: Option[scala.Predef.String => Seq[hydra.module.Module] => Tuple2[scala.Predef.String,
+   scala.Predef.String]])
 
 enum TestCase :
    case alphaConversion(value: hydra.testing.AlphaConversionTestCase) extends TestCase
@@ -159,15 +169,18 @@ enum TestCase :
    case unshadowVariables(value: hydra.testing.UnshadowVariablesTestCase) extends TestCase
    case validateCoreTerm(value: hydra.testing.ValidateCoreTermTestCase) extends TestCase
 
-case class TestCaseWithMetadata(name: scala.Predef.String, `case`: hydra.testing.TestCase, description: Option[scala.Predef.String], tags: Seq[hydra.testing.Tag])
+case class TestCaseWithMetadata(name: scala.Predef.String, `case`: hydra.testing.TestCase, description: Option[scala.Predef.String],
+   tags: Seq[hydra.testing.Tag])
 
-case class TestGroup(name: scala.Predef.String, description: Option[scala.Predef.String], subgroups: Seq[hydra.testing.TestGroup], cases: Seq[hydra.testing.TestCaseWithMetadata])
+case class TestGroup(name: scala.Predef.String, description: Option[scala.Predef.String], subgroups: Seq[hydra.testing.TestGroup],
+   cases: Seq[hydra.testing.TestCaseWithMetadata])
 
 case class TypeCheckingTestCase(input: hydra.core.Term, outputTerm: hydra.core.Term, outputType: hydra.core.Type)
 
 case class TypeCheckingFailureTestCase(input: hydra.core.Term)
 
-case class TopologicalSortBindingsTestCase(bindings: Seq[Tuple2[hydra.core.Name, hydra.core.Term]], expected: Seq[Seq[Tuple2[hydra.core.Name, hydra.core.Term]]])
+case class TopologicalSortBindingsTestCase(bindings: Seq[Tuple2[hydra.core.Name, hydra.core.Term]], expected: Seq[Seq[Tuple2[hydra.core.Name,
+   hydra.core.Term]]])
 
 case class TopologicalSortTestCase(adjacencyList: Seq[Tuple2[Int, Seq[Int]]], expected: Either[Seq[Seq[Int]], Seq[Int]])
 
@@ -189,7 +202,8 @@ case class VariableOccursInTypeTestCase(variable: hydra.core.Name, `type`: hydra
 
 case class UnshadowVariablesTestCase(input: hydra.core.Term, output: hydra.core.Term)
 
-case class UnifyTypesTestCase(schemaTypes: Seq[hydra.core.Name], left: hydra.core.Type, right: hydra.core.Type, expected: Either[scala.Predef.String, hydra.typing.TypeSubst])
+case class UnifyTypesTestCase(schemaTypes: Seq[hydra.core.Name], left: hydra.core.Type, right: hydra.core.Type,
+   expected: Either[scala.Predef.String, hydra.typing.TypeSubst])
 
 case class JoinTypesTestCase(left: hydra.core.Type, right: hydra.core.Type, expected: Either[Unit, Seq[hydra.typing.TypeConstraint]])
 

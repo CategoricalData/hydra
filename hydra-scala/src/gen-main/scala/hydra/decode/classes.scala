@@ -24,9 +24,9 @@ def typeClass(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.classes.TypeClass])] = hydra.lib.maps.fromList[hydra.core.Name,
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.classes.TypeClass]](Seq(Tuple2("equality",
        (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.classes.TypeClass, hydra.errors.DecodingError]((t: Unit) => hydra.classes.TypeClass.equality(t))(hydra.extract.helpers.decodeUnit(cx)(input))),
+      hydra.lib.eithers.map[Unit, hydra.classes.TypeClass, hydra.errors.DecodingError]((t: Unit) => hydra.classes.TypeClass.equality)(hydra.extract.helpers.decodeUnit(cx)(input))),
          Tuple2("ordering", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.classes.TypeClass, hydra.errors.DecodingError]((t: Unit) => hydra.classes.TypeClass.ordering(t))(hydra.extract.helpers.decodeUnit(cx)(input)))))
+      hydra.lib.eithers.map[Unit, hydra.classes.TypeClass, hydra.errors.DecodingError]((t: Unit) => hydra.classes.TypeClass.ordering)(hydra.extract.helpers.decodeUnit(cx)(input)))))
     hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.classes.TypeClass], (hydra.core.Term) => Either[hydra.errors.DecodingError,
        hydra.classes.TypeClass]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
        hydra.classes.TypeClass])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,

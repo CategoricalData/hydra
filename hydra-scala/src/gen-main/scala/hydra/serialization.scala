@@ -43,14 +43,14 @@ def brackets(br: hydra.ast.Brackets)(style: hydra.ast.BlockStyle)(e: hydra.ast.E
 
 def commaSep(v1: hydra.ast.BlockStyle)(v2: Seq[hydra.ast.Expr]): hydra.ast.Expr = hydra.serialization.symbolSep(",")(v1)(v2)
 
+def cst(s: scala.Predef.String): hydra.ast.Expr = hydra.ast.Expr.const(hydra.serialization.sym(s))
+
 def curlyBlock(style: hydra.ast.BlockStyle)(e: hydra.ast.Expr): hydra.ast.Expr = hydra.serialization.curlyBracesList(None)(style)(Seq(e))
 
 lazy val curlyBraces: hydra.ast.Brackets = hydra.ast.Brackets("{", "}")
 
 def curlyBracesList(msymb: Option[scala.Predef.String])(style: hydra.ast.BlockStyle)(els: Seq[hydra.ast.Expr]): hydra.ast.Expr =
   hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.lists.`null`[hydra.ast.Expr](els))(hydra.serialization.cst("{}"))(hydra.serialization.brackets(hydra.serialization.curlyBraces)(style)(hydra.serialization.symbolSep(hydra.lib.maybes.fromMaybe[scala.Predef.String](",")(msymb))(style)(els)))
-
-def cst(s: scala.Predef.String): hydra.ast.Expr = hydra.ast.Expr.const(hydra.serialization.sym(s))
 
 def customIndent(idt: scala.Predef.String)(s: scala.Predef.String): scala.Predef.String =
   hydra.lib.strings.cat(hydra.lib.lists.intersperse[scala.Predef.String]("\n")(hydra.lib.lists.map[scala.Predef.String,
@@ -82,7 +82,7 @@ def expressionLength(e: hydra.ast.Expr): Int =
     case hydra.ast.Ws.none => 0
     case hydra.ast.Ws.space => 1
     case hydra.ast.Ws.break => 10000
-    case hydra.ast.Ws.breakAndIndent => 10000
+    case hydra.ast.Ws.breakAndIndent(v_Ws_breakAndIndent_s) => 10000
     case hydra.ast.Ws.doubleBreak => 10000
   def blockStyleLength(style: hydra.ast.BlockStyle): Int =
     {
@@ -211,7 +211,7 @@ def parenthesize(exp: hydra.ast.Expr): hydra.ast.Expr =
   exp match
     case hydra.ast.Expr.brackets(v_Expr_brackets_bracketExpr) => hydra.ast.Expr.brackets(hydra.ast.BracketExpr(v_Expr_brackets_bracketExpr.brackets,
        hydra.serialization.parenthesize(v_Expr_brackets_bracketExpr.enclosed), (v_Expr_brackets_bracketExpr.style)))
-    case hydra.ast.Expr.const => exp
+    case hydra.ast.Expr.const(v_Expr_const_ignored) => exp
     case hydra.ast.Expr.indent(v_Expr_indent_indentExpr) => hydra.ast.Expr.indent(hydra.ast.IndentedExpression(v_Expr_indent_indentExpr.style,
        hydra.serialization.parenthesize(v_Expr_indent_indentExpr.expr)))
     case hydra.ast.Expr.seq(v_Expr_seq_seqExpr) => hydra.ast.Expr.seq(hydra.ast.SeqExpr(v_Expr_seq_seqExpr.op,
@@ -294,7 +294,7 @@ def printExpr(e: hydra.ast.Expr): scala.Predef.String =
     case hydra.ast.Ws.none => ""
     case hydra.ast.Ws.space => " "
     case hydra.ast.Ws.break => "\n"
-    case hydra.ast.Ws.breakAndIndent => "\n"
+    case hydra.ast.Ws.breakAndIndent(v_Ws_breakAndIndent_ignored) => "\n"
     case hydra.ast.Ws.doubleBreak => "\n\n"
   def idt(ws: hydra.ast.Ws)(s: scala.Predef.String): scala.Predef.String =
     ws match
@@ -424,6 +424,8 @@ def spaceSep(v1: Seq[hydra.ast.Expr]): hydra.ast.Expr =
   hydra.serialization.sep(hydra.ast.Op(hydra.serialization.sym(""), hydra.ast.Padding(hydra.ast.Ws.space,
      hydra.ast.Ws.none), 0, hydra.ast.Associativity.none))(v1)
 
+lazy val squareBrackets: hydra.ast.Brackets = hydra.ast.Brackets("[", "]")
+
 def structuralSep(op: hydra.ast.Op)(els: Seq[hydra.ast.Expr]): hydra.ast.Expr =
   hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.lists.`null`[hydra.ast.Expr](els))(hydra.serialization.cst(""))(hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.ast.Expr](els))(1))(hydra.lib.lists.head[hydra.ast.Expr](els))(hydra.ast.Expr.seq(hydra.ast.SeqExpr(op,
      els))))
@@ -431,8 +433,6 @@ def structuralSep(op: hydra.ast.Op)(els: Seq[hydra.ast.Expr]): hydra.ast.Expr =
 def structuralSpaceSep(v1: Seq[hydra.ast.Expr]): hydra.ast.Expr =
   hydra.serialization.structuralSep(hydra.ast.Op(hydra.serialization.sym(""), hydra.ast.Padding(hydra.ast.Ws.space,
      hydra.ast.Ws.none), 0, hydra.ast.Associativity.none))(v1)
-
-lazy val squareBrackets: hydra.ast.Brackets = hydra.ast.Brackets("[", "]")
 
 def suffix(s: scala.Predef.String)(expr: hydra.ast.Expr): hydra.ast.Expr =
   {

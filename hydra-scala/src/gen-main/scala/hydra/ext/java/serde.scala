@@ -16,20 +16,14 @@ import hydra.lib.maybes
 
 import hydra.lib.strings
 
+def escapeJavaChar(c: Int): scala.Predef.String =
+  hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(34))("\\\"")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(92))("\\\\")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(10))("\\n")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(13))("\\r")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(9))("\\t")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(8))("\\b")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(12))("\\f")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.logic.and(hydra.lib.equality.gte[Int](c)(32))(hydra.lib.equality.lt[Int](c)(127)))(hydra.lib.strings.fromList(Seq(c)))(hydra.ext.java.serde.javaUnicodeEscape(c)))))))))
+
+def escapeJavaString(s: scala.Predef.String): scala.Predef.String =
+  hydra.lib.strings.cat(hydra.lib.lists.map[Int, scala.Predef.String]((c: Int) => hydra.ext.java.serde.escapeJavaChar(c))(hydra.lib.strings.toList(s)))
+
 def hexDigit(n: Int): Int =
   hydra.lib.logic.ifElse[Int](hydra.lib.equality.lt[Int](n)(10))(hydra.lib.math.add(n)(48))(hydra.lib.math.add(hydra.lib.math.sub(n)(10))(65))
-
-def padHex4(n: Int): scala.Predef.String =
-  {
-  lazy val d3: Int = hydra.lib.math.div(n)(4096)
-  lazy val r3: Int = hydra.lib.math.mod(n)(4096)
-  lazy val d2: Int = hydra.lib.math.div(r3)(256)
-  lazy val r2: Int = hydra.lib.math.mod(r3)(256)
-  lazy val d1: Int = hydra.lib.math.div(r2)(16)
-  lazy val d0: Int = hydra.lib.math.mod(r2)(16)
-  hydra.lib.strings.fromList(Seq(hydra.ext.java.serde.hexDigit(d3), hydra.ext.java.serde.hexDigit(d2),
-     hydra.ext.java.serde.hexDigit(d1), hydra.ext.java.serde.hexDigit(d0)))
-}
 
 def javaUnicodeEscape(n: Int): scala.Predef.String =
   hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.gt[Int](n)(65535))({
@@ -43,11 +37,29 @@ def javaUnicodeEscape(n: Int): scala.Predef.String =
   }
 })(hydra.lib.strings.cat2("\\u")(hydra.ext.java.serde.padHex4(n)))
 
-def escapeJavaChar(c: Int): scala.Predef.String =
-  hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(34))("\\\"")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(92))("\\\\")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(10))("\\n")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(13))("\\r")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(9))("\\t")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(8))("\\b")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(12))("\\f")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.logic.and(hydra.lib.equality.gte[Int](c)(32))(hydra.lib.equality.lt[Int](c)(127)))(hydra.lib.strings.fromList(Seq(c)))(hydra.ext.java.serde.javaUnicodeEscape(c)))))))))
+def padHex4(n: Int): scala.Predef.String =
+  {
+  lazy val d3: Int = hydra.lib.math.div(n)(4096)
+  lazy val r3: Int = hydra.lib.math.mod(n)(4096)
+  lazy val d2: Int = hydra.lib.math.div(r3)(256)
+  lazy val r2: Int = hydra.lib.math.mod(r3)(256)
+  lazy val d1: Int = hydra.lib.math.div(r2)(16)
+  lazy val d0: Int = hydra.lib.math.mod(r2)(16)
+  hydra.lib.strings.fromList(Seq(hydra.ext.java.serde.hexDigit(d3), hydra.ext.java.serde.hexDigit(d2),
+     hydra.ext.java.serde.hexDigit(d1), hydra.ext.java.serde.hexDigit(d0)))
+}
 
-def escapeJavaString(s: scala.Predef.String): scala.Predef.String =
-  hydra.lib.strings.cat(hydra.lib.lists.map[Int, scala.Predef.String]((c: Int) => hydra.ext.java.serde.escapeJavaChar(c))(hydra.lib.strings.toList(s)))
+def sanitizeJavaComment(s: scala.Predef.String): scala.Predef.String =
+  hydra.lib.strings.intercalate("&gt;")(hydra.lib.strings.splitOn(">")(hydra.lib.strings.intercalate("&lt;")(hydra.lib.strings.splitOn("<")(s))))
+
+def singleLineComment(c: scala.Predef.String): hydra.ast.Expr =
+  hydra.serialization.cst(hydra.lib.strings.cat2("// ")(hydra.ext.java.serde.sanitizeJavaComment(c)))
+
+def withComments(mc: Option[scala.Predef.String])(expr: hydra.ast.Expr): hydra.ast.Expr =
+  hydra.lib.maybes.maybe[hydra.ast.Expr, scala.Predef.String](expr)((c: scala.Predef.String) =>
+  hydra.serialization.newlineSep(Seq(hydra.serialization.cst(hydra.lib.strings.cat2("/**\n")(hydra.lib.strings.cat2(hydra.lib.strings.intercalate("\n")(hydra.lib.lists.map[scala.Predef.String,
+     scala.Predef.String]((l: scala.Predef.String) => hydra.lib.strings.cat2(" * ")(l))(hydra.lib.strings.lines(hydra.ext.java.serde.sanitizeJavaComment(c)))))("\n */"))),
+     expr)))(mc)
 
 def writeAdditionalBound(ab: hydra.ext.java.syntax.AdditionalBound): hydra.ast.Expr =
   hydra.serialization.spaceSep(Seq(hydra.serialization.cst("&"), hydra.ext.java.serde.writeInterfaceType(ab)))
@@ -84,9 +96,9 @@ def writeArrayCreationExpression(ace: hydra.ext.java.syntax.ArrayCreationExpress
     hydra.serialization.spaceSep(Seq(hydra.serialization.cst("new"), hydra.serialization.noSep(Seq(hydra.ext.java.serde.writePrimitiveTypeWithAnnotations(pt),
        hydra.serialization.cst("[]"))), hydra.ext.java.serde.writeArrayInitializer(ai)))
   }
-  case hydra.ext.java.syntax.ArrayCreationExpression.classOrInterfaceArray => hydra.serialization.cst("STUB:ArrayCreationExpression")
-  case hydra.ext.java.syntax.ArrayCreationExpression.primitive => hydra.serialization.cst("STUB:ArrayCreationExpression")
-  case hydra.ext.java.syntax.ArrayCreationExpression.classOrInterface => hydra.serialization.cst("STUB:ArrayCreationExpression")
+  case hydra.ext.java.syntax.ArrayCreationExpression.classOrInterfaceArray(v_ArrayCreationExpression_classOrInterfaceArray__) => hydra.serialization.cst("STUB:ArrayCreationExpression")
+  case hydra.ext.java.syntax.ArrayCreationExpression.primitive(v_ArrayCreationExpression_primitive__) => hydra.serialization.cst("STUB:ArrayCreationExpression")
+  case hydra.ext.java.syntax.ArrayCreationExpression.classOrInterface(v_ArrayCreationExpression_classOrInterface__) => hydra.serialization.cst("STUB:ArrayCreationExpression")
 
 def writeArrayInitializer(ai: hydra.ext.java.syntax.ArrayInitializer): hydra.ast.Expr =
   {
@@ -168,6 +180,14 @@ def writeCastExpression_NotPlusMinus(npm: hydra.ext.java.syntax.CastExpression_N
   hydra.serialization.spaceSep(Seq(hydra.ext.java.serde.writeCastExpression_RefAndBounds(rb), hydra.ext.java.serde.writeUnaryExpression(ex)))
 }
 
+def writeCastExpression_Primitive(cp: hydra.ext.java.syntax.CastExpression_Primitive): hydra.ast.Expr =
+  {
+  lazy val pt: hydra.ext.java.syntax.PrimitiveTypeWithAnnotations = (cp.`type`)
+  lazy val ex: hydra.ext.java.syntax.UnaryExpression = (cp.expression)
+  hydra.serialization.spaceSep(Seq(hydra.serialization.parenList(false)(Seq(hydra.ext.java.serde.writePrimitiveTypeWithAnnotations(pt))),
+     hydra.ext.java.serde.writeUnaryExpression(ex)))
+}
+
 def writeCastExpression_RefAndBounds(rab: hydra.ext.java.syntax.CastExpression_RefAndBounds): hydra.ast.Expr =
   {
   lazy val rt: hydra.ext.java.syntax.ReferenceType = (rab.`type`)
@@ -175,14 +195,6 @@ def writeCastExpression_RefAndBounds(rab: hydra.ext.java.syntax.CastExpression_R
   hydra.serialization.parenList(false)(Seq(hydra.serialization.spaceSep(hydra.lib.maybes.cat[hydra.ast.Expr](Seq(Some(hydra.ext.java.serde.writeReferenceType(rt)),
      hydra.lib.logic.ifElse[Option[hydra.ast.Expr]](hydra.lib.lists.`null`[hydra.ext.java.syntax.AdditionalBound](adds))(None)(Some(hydra.serialization.spaceSep(hydra.lib.lists.map[hydra.ext.java.syntax.AdditionalBound,
      hydra.ast.Expr](hydra.ext.java.serde.writeAdditionalBound)(adds)))))))))
-}
-
-def writeCastExpression_Primitive(cp: hydra.ext.java.syntax.CastExpression_Primitive): hydra.ast.Expr =
-  {
-  lazy val pt: hydra.ext.java.syntax.PrimitiveTypeWithAnnotations = (cp.`type`)
-  lazy val ex: hydra.ext.java.syntax.UnaryExpression = (cp.expression)
-  hydra.serialization.spaceSep(Seq(hydra.serialization.parenList(false)(Seq(hydra.ext.java.serde.writePrimitiveTypeWithAnnotations(pt))),
-     hydra.ext.java.serde.writeUnaryExpression(ex)))
 }
 
 def writeClassBody(cb: hydra.ext.java.syntax.ClassBody): hydra.ast.Expr =
@@ -475,6 +487,8 @@ def writeFormalParameter_Simple(fps: hydra.ext.java.syntax.FormalParameter_Simpl
 
 def writeIdentifier(id: hydra.ext.java.syntax.Identifier): hydra.ast.Expr = hydra.serialization.cst(id)
 
+def writeIfThenElseStatement[T0](_x: T0): hydra.ast.Expr = hydra.serialization.cst("STUB:IfThenElseStatement")
+
 def writeIfThenStatement(its: hydra.ext.java.syntax.IfThenStatement): hydra.ast.Expr =
   {
   lazy val cond: hydra.ext.java.syntax.Expression = (its.expression)
@@ -483,15 +497,13 @@ def writeIfThenStatement(its: hydra.ext.java.syntax.IfThenStatement): hydra.ast.
      hydra.serialization.curlyBlock(hydra.serialization.fullBlockStyle)(hydra.ext.java.serde.writeStatement(thn))))
 }
 
-def writeIfThenElseStatement[T0](_x: T0): hydra.ast.Expr = hydra.serialization.cst("STUB:IfThenElseStatement")
-
 def writeImportDeclaration(imp: hydra.ext.java.syntax.ImportDeclaration): hydra.ast.Expr =
   imp match
   case hydra.ext.java.syntax.ImportDeclaration.singleType(v_ImportDeclaration_singleType_st) => hydra.serialization.withSemi(hydra.serialization.spaceSep(Seq(hydra.serialization.cst("import"),
      hydra.ext.java.serde.writeTypeName(v_ImportDeclaration_singleType_st))))
-  case hydra.ext.java.syntax.ImportDeclaration.typeImportOnDemand => hydra.serialization.cst("STUB:ImportDeclarationTypeImportOnDemand")
-  case hydra.ext.java.syntax.ImportDeclaration.singleStaticImport => hydra.serialization.cst("STUB:ImportDeclarationSingleStaticImport")
-  case hydra.ext.java.syntax.ImportDeclaration.staticImportOnDemand => hydra.serialization.cst("STUB:ImportDeclarationStaticImportOnDemand")
+  case hydra.ext.java.syntax.ImportDeclaration.typeImportOnDemand(v_ImportDeclaration_typeImportOnDemand__) => hydra.serialization.cst("STUB:ImportDeclarationTypeImportOnDemand")
+  case hydra.ext.java.syntax.ImportDeclaration.singleStaticImport(v_ImportDeclaration_singleStaticImport__) => hydra.serialization.cst("STUB:ImportDeclarationSingleStaticImport")
+  case hydra.ext.java.syntax.ImportDeclaration.staticImportOnDemand(v_ImportDeclaration_staticImportOnDemand__) => hydra.serialization.cst("STUB:ImportDeclarationStaticImportOnDemand")
 
 def writeInclusiveOrExpression(ioe: hydra.ext.java.syntax.InclusiveOrExpression): hydra.ast.Expr =
   hydra.serialization.infixWsList("|")(hydra.lib.lists.map[hydra.ext.java.syntax.ExclusiveOrExpression,
@@ -600,6 +612,11 @@ def writeLiteral(l: hydra.ext.java.syntax.Literal): hydra.ast.Expr =
   }
   case hydra.ext.java.syntax.Literal.string(v_Literal_string_sl) => hydra.ext.java.serde.writeStringLiteral(v_Literal_string_sl)
 
+def writeLocalName(t: hydra.ext.java.syntax.LocalVariableType): hydra.ast.Expr =
+  t match
+  case hydra.ext.java.syntax.LocalVariableType.`type`(v_LocalVariableType_type_ut) => hydra.ext.java.serde.writeUnannType(v_LocalVariableType_type_ut)
+  case hydra.ext.java.syntax.LocalVariableType.`var` => hydra.serialization.cst("var")
+
 def writeLocalVariableDeclaration(lvd: hydra.ext.java.syntax.LocalVariableDeclaration): hydra.ast.Expr =
   {
   lazy val mods: Seq[hydra.ext.java.syntax.VariableModifier] = (lvd.modifiers)
@@ -613,11 +630,6 @@ def writeLocalVariableDeclaration(lvd: hydra.ext.java.syntax.LocalVariableDeclar
 
 def writeLocalVariableDeclarationStatement(lvds: hydra.ext.java.syntax.LocalVariableDeclarationStatement): hydra.ast.Expr =
   hydra.serialization.withSemi(hydra.ext.java.serde.writeLocalVariableDeclaration(lvds))
-
-def writeLocalName(t: hydra.ext.java.syntax.LocalVariableType): hydra.ast.Expr =
-  t match
-  case hydra.ext.java.syntax.LocalVariableType.`type`(v_LocalVariableType_type_ut) => hydra.ext.java.serde.writeUnannType(v_LocalVariableType_type_ut)
-  case hydra.ext.java.syntax.LocalVariableType.`var` => hydra.serialization.cst("var")
 
 def writeMarkerAnnotation(ma: hydra.ext.java.syntax.MarkerAnnotation): hydra.ast.Expr = hydra.serialization.prefix("@")(hydra.ext.java.serde.writeTypeName(ma))
 
@@ -770,13 +782,13 @@ def writePackageDeclaration(pd: hydra.ext.java.syntax.PackageDeclaration): hydra
      scala.Predef.String]((id: hydra.ext.java.syntax.Identifier) => id)(ids))))))))))
 }
 
+def writePackageModifier(pm: hydra.ext.java.syntax.PackageModifier): hydra.ast.Expr = hydra.ext.java.serde.writeAnnotation(pm)
+
 def writePackageName(pn: hydra.ext.java.syntax.PackageName): hydra.ast.Expr =
   hydra.serialization.dotSep(hydra.lib.lists.map[hydra.ext.java.syntax.Identifier, hydra.ast.Expr](hydra.ext.java.serde.writeIdentifier)(pn))
 
 def writePackageOrTypeName(potn: hydra.ext.java.syntax.PackageOrTypeName): hydra.ast.Expr =
   hydra.serialization.dotSep(hydra.lib.lists.map[hydra.ext.java.syntax.Identifier, hydra.ast.Expr](hydra.ext.java.serde.writeIdentifier)(potn))
-
-def writePackageModifier(pm: hydra.ext.java.syntax.PackageModifier): hydra.ast.Expr = hydra.ext.java.serde.writeAnnotation(pm)
 
 def writePostDecrementExpression[T0](_x: T0): hydra.ast.Expr = hydra.serialization.cst("STUB:PostDecrementExpression")
 
@@ -795,22 +807,22 @@ def writePreIncrementExpression[T0](_x: T0): hydra.ast.Expr = hydra.serializatio
 
 def writePrimary(p: hydra.ext.java.syntax.Primary): hydra.ast.Expr =
   p match
-  case hydra.ext.java.syntax.Primary.noNewArray(v_Primary_noNewArray_n) => hydra.ext.java.serde.writePrimaryNoNewArray(v_Primary_noNewArray_n)
+  case hydra.ext.java.syntax.Primary.noNewArray(v_Primary_noNewArray_n) => hydra.ext.java.serde.writePrimaryNoNewArrayExpressionExpression(v_Primary_noNewArray_n)
   case hydra.ext.java.syntax.Primary.arrayCreation(v_Primary_arrayCreation_a) => hydra.ext.java.serde.writeArrayCreationExpression(v_Primary_arrayCreation_a)
 
-def writePrimaryNoNewArray(p: hydra.ext.java.syntax.PrimaryNoNewArray): hydra.ast.Expr =
+def writePrimaryNoNewArrayExpressionExpression(p: hydra.ext.java.syntax.PrimaryNoNewArrayExpression): hydra.ast.Expr =
   p match
-  case hydra.ext.java.syntax.PrimaryNoNewArray.literal(v_PrimaryNoNewArray_literal_l) => hydra.ext.java.serde.writeLiteral(v_PrimaryNoNewArray_literal_l)
-  case hydra.ext.java.syntax.PrimaryNoNewArray.classLiteral(v_PrimaryNoNewArray_classLiteral_cl) => hydra.ext.java.serde.writeClassLiteral(v_PrimaryNoNewArray_classLiteral_cl)
-  case hydra.ext.java.syntax.PrimaryNoNewArray.`this` => hydra.serialization.cst("this")
-  case hydra.ext.java.syntax.PrimaryNoNewArray.dotThis(v_PrimaryNoNewArray_dotThis_n) => hydra.serialization.dotSep(Seq(hydra.ext.java.serde.writeTypeName(v_PrimaryNoNewArray_dotThis_n),
+  case hydra.ext.java.syntax.PrimaryNoNewArrayExpression.literal(v_PrimaryNoNewArrayExpression_literal_l) => hydra.ext.java.serde.writeLiteral(v_PrimaryNoNewArrayExpression_literal_l)
+  case hydra.ext.java.syntax.PrimaryNoNewArrayExpression.classLiteral(v_PrimaryNoNewArrayExpression_classLiteral_cl) => hydra.ext.java.serde.writeClassLiteral(v_PrimaryNoNewArrayExpression_classLiteral_cl)
+  case hydra.ext.java.syntax.PrimaryNoNewArrayExpression.`this` => hydra.serialization.cst("this")
+  case hydra.ext.java.syntax.PrimaryNoNewArrayExpression.dotThis(v_PrimaryNoNewArrayExpression_dotThis_n) => hydra.serialization.dotSep(Seq(hydra.ext.java.serde.writeTypeName(v_PrimaryNoNewArrayExpression_dotThis_n),
      hydra.serialization.cst("this")))
-  case hydra.ext.java.syntax.PrimaryNoNewArray.parens(v_PrimaryNoNewArray_parens_e) => hydra.serialization.parenList(false)(Seq(hydra.ext.java.serde.writeExpression(v_PrimaryNoNewArray_parens_e)))
-  case hydra.ext.java.syntax.PrimaryNoNewArray.classInstance(v_PrimaryNoNewArray_classInstance_ci) => hydra.ext.java.serde.writeClassInstanceCreationExpression(v_PrimaryNoNewArray_classInstance_ci)
-  case hydra.ext.java.syntax.PrimaryNoNewArray.fieldAccess(v_PrimaryNoNewArray_fieldAccess_fa) => hydra.ext.java.serde.writeFieldAccess(v_PrimaryNoNewArray_fieldAccess_fa)
-  case hydra.ext.java.syntax.PrimaryNoNewArray.arrayAccess(v_PrimaryNoNewArray_arrayAccess_aa) => hydra.ext.java.serde.writeArrayAccess(v_PrimaryNoNewArray_arrayAccess_aa)
-  case hydra.ext.java.syntax.PrimaryNoNewArray.methodInvocation(v_PrimaryNoNewArray_methodInvocation_mi) => hydra.ext.java.serde.writeMethodInvocation(v_PrimaryNoNewArray_methodInvocation_mi)
-  case hydra.ext.java.syntax.PrimaryNoNewArray.methodReference(v_PrimaryNoNewArray_methodReference_mr) => hydra.ext.java.serde.writeMethodReference(v_PrimaryNoNewArray_methodReference_mr)
+  case hydra.ext.java.syntax.PrimaryNoNewArrayExpression.parens(v_PrimaryNoNewArrayExpression_parens_e) => hydra.serialization.parenList(false)(Seq(hydra.ext.java.serde.writeExpression(v_PrimaryNoNewArrayExpression_parens_e)))
+  case hydra.ext.java.syntax.PrimaryNoNewArrayExpression.classInstance(v_PrimaryNoNewArrayExpression_classInstance_ci) => hydra.ext.java.serde.writeClassInstanceCreationExpression(v_PrimaryNoNewArrayExpression_classInstance_ci)
+  case hydra.ext.java.syntax.PrimaryNoNewArrayExpression.fieldAccess(v_PrimaryNoNewArrayExpression_fieldAccess_fa) => hydra.ext.java.serde.writeFieldAccess(v_PrimaryNoNewArrayExpression_fieldAccess_fa)
+  case hydra.ext.java.syntax.PrimaryNoNewArrayExpression.arrayAccess(v_PrimaryNoNewArrayExpression_arrayAccess_aa) => hydra.ext.java.serde.writeArrayAccess(v_PrimaryNoNewArrayExpression_arrayAccess_aa)
+  case hydra.ext.java.syntax.PrimaryNoNewArrayExpression.methodInvocation(v_PrimaryNoNewArrayExpression_methodInvocation_mi) => hydra.ext.java.serde.writeMethodInvocation(v_PrimaryNoNewArrayExpression_methodInvocation_mi)
+  case hydra.ext.java.syntax.PrimaryNoNewArrayExpression.methodReference(v_PrimaryNoNewArrayExpression_methodReference_mr) => hydra.ext.java.serde.writeMethodReference(v_PrimaryNoNewArrayExpression_methodReference_mr)
 
 def writePrimitiveType(pt: hydra.ext.java.syntax.PrimitiveType): hydra.ast.Expr =
   pt match
@@ -1097,15 +1109,3 @@ def writeWildcardBounds(b: hydra.ext.java.syntax.WildcardBounds): hydra.ast.Expr
      hydra.ext.java.serde.writeReferenceType(v_WildcardBounds_extends_rt)))
   case hydra.ext.java.syntax.WildcardBounds.`super`(v_WildcardBounds_super_rt) => hydra.serialization.spaceSep(Seq(hydra.serialization.cst("super"),
      hydra.ext.java.serde.writeReferenceType(v_WildcardBounds_super_rt)))
-
-def sanitizeJavaComment(s: scala.Predef.String): scala.Predef.String =
-  hydra.lib.strings.intercalate("&gt;")(hydra.lib.strings.splitOn(">")(hydra.lib.strings.intercalate("&lt;")(hydra.lib.strings.splitOn("<")(s))))
-
-def singleLineComment(c: scala.Predef.String): hydra.ast.Expr =
-  hydra.serialization.cst(hydra.lib.strings.cat2("// ")(hydra.ext.java.serde.sanitizeJavaComment(c)))
-
-def withComments(mc: Option[scala.Predef.String])(expr: hydra.ast.Expr): hydra.ast.Expr =
-  hydra.lib.maybes.maybe[hydra.ast.Expr, scala.Predef.String](expr)((c: scala.Predef.String) =>
-  hydra.serialization.newlineSep(Seq(hydra.serialization.cst(hydra.lib.strings.cat2("/**\n")(hydra.lib.strings.cat2(hydra.lib.strings.intercalate("\n")(hydra.lib.lists.map[scala.Predef.String,
-     scala.Predef.String]((l: scala.Predef.String) => hydra.lib.strings.cat2(" * ")(l))(hydra.lib.strings.lines(hydra.ext.java.serde.sanitizeJavaComment(c)))))("\n */"))),
-     expr)))(mc)

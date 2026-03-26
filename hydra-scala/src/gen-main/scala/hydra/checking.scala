@@ -86,7 +86,7 @@ def checkForUnboundTypeVariables(cx: hydra.context.Context)(tx: hydra.graph.Grap
          Unit, hydra.context.InContext[hydra.errors.Error]](check)(m))((_x: Option[Unit]) => Right(()))
     term match
       case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-        case hydra.core.Function.elimination => dflt
+        case hydra.core.Function.elimination(v_Function_elimination_e) => dflt
         case hydra.core.Function.lambda(v_Function_lambda_l) => hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error],
            Unit, Unit](checkOptional(v_Function_lambda_l.domain))((_x: Unit) => recurse(v_Function_lambda_l.body))
         case _ => dflt
@@ -163,9 +163,9 @@ def checkTypeSubst(cx: hydra.context.Context)(tx: hydra.graph.Graph)(subst: hydr
      hydra.core.TypeScheme](tx.schemaTypes)))
   def isNominal(ts: hydra.core.TypeScheme): Boolean =
     hydra.rewriting.deannotateType(ts.`type`) match
-    case hydra.core.Type.record => true
-    case hydra.core.Type.union => true
-    case hydra.core.Type.wrap => true
+    case hydra.core.Type.record(v_Type_record__) => true
+    case hydra.core.Type.union(v_Type_union__) => true
+    case hydra.core.Type.wrap(v_Type_wrap__) => true
     case _ => false
   lazy val badVars: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.lists.filter[hydra.core.Name]((v: hydra.core.Name) =>
     hydra.lib.maybes.maybe[Boolean, hydra.core.TypeScheme](false)(isNominal)(hydra.lexical.dereferenceSchemaType(v)(tx.schemaTypes)))(hydra.lib.sets.toList[hydra.core.Name](suspectVars)))
@@ -265,7 +265,7 @@ def typeOfApplication(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs
            targ))), cx0)))
       }
     }
-    case hydra.core.Type.variable => {
+    case hydra.core.Type.variable(v_Type_variable_v) => {
       lazy val nameResult: Tuple2[hydra.core.Name, hydra.context.Context] = hydra.schemas.freshName(cx0)
       {
         lazy val freshN: hydra.core.Name = hydra.lib.pairs.first[hydra.core.Name, hydra.context.Context](nameResult)
@@ -460,7 +460,7 @@ def typeOfLambda(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq
   lazy val body: hydra.core.Term = (l.body)
   hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Tuple2[hydra.core.Type, hydra.context.Context],
      Tuple2[hydra.core.Type, hydra.context.Context]](hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error],
-     Tuple2[hydra.core.Type, hydra.context.Context]], hydra.core.Type](Left(hydra.context.InContext(hydra.errors.Error.checking(hydra.error.checking.CheckingError.untypedLambda),
+     Tuple2[hydra.core.Type, hydra.context.Context]], hydra.core.Type](Left(hydra.context.InContext(hydra.errors.Error.checking(hydra.error.checking.CheckingError.untypedLambda(hydra.error.checking.UntypedLambdaError())),
      cx)))((dom: hydra.core.Type) =>
     {
     lazy val types2: Map[hydra.core.Name, hydra.core.TypeScheme] = hydra.lib.maps.insert[hydra.core.Name,

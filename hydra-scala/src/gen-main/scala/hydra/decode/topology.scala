@@ -20,7 +20,8 @@ def tarjanState(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
     hydra.lib.eithers.bind[hydra.errors.DecodingError, Int, hydra.topology.TarjanState](hydra.extract.helpers.requireField("counter")((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
+         Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.integer(v_Literal_integer_v1) => v_Literal_integer_v1 match
@@ -32,7 +33,8 @@ def tarjanState(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error
       (v2: hydra.core.Term) =>
       hydra.extract.helpers.decodeMap(hydra.decode.topology.vertex)((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
+         Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.integer(v_Literal_integer_v12) => v_Literal_integer_v12 match
@@ -44,7 +46,8 @@ def tarjanState(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error
       (v2: hydra.core.Term) =>
       hydra.extract.helpers.decodeMap(hydra.decode.topology.vertex)((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
+         Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.integer(v_Literal_integer_v12) => v_Literal_integer_v12 match

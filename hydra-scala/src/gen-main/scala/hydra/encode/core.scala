@@ -47,10 +47,6 @@ def eitherType(x: hydra.core.EitherType): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.core.EitherType", Seq(hydra.core.Field("left", hydra.encode.core.`type`(x.left)),
      hydra.core.Field("right", hydra.encode.core.`type`(x.right)))))
 
-def pairType(x: hydra.core.PairType): hydra.core.Term =
-  hydra.core.Term.record(hydra.core.Record("hydra.core.PairType", Seq(hydra.core.Field("first", hydra.encode.core.`type`(x.first)),
-     hydra.core.Field("second", hydra.encode.core.`type`(x.second)))))
-
 def elimination(v1: hydra.core.Elimination): hydra.core.Term =
   v1 match
   case hydra.core.Elimination.record(v_Elimination_record_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Elimination",
@@ -176,6 +172,10 @@ def mapType(x: hydra.core.MapType): hydra.core.Term =
 
 def name(x: hydra.core.Name): hydra.core.Term =
   hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.core.Name", hydra.core.Term.literal(hydra.core.Literal.string(x))))
+
+def pairType(x: hydra.core.PairType): hydra.core.Term =
+  hydra.core.Term.record(hydra.core.Record("hydra.core.PairType", Seq(hydra.core.Field("first", hydra.encode.core.`type`(x.first)),
+     hydra.core.Field("second", hydra.encode.core.`type`(x.second)))))
 
 def projection(x: hydra.core.Projection): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.core.Projection", Seq(hydra.core.Field("typeName", hydra.encode.core.name(x.typeName)),

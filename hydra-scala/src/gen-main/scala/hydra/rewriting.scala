@@ -38,6 +38,61 @@ def applyInsideTypeLambdasAndAnnotations(f: (hydra.core.Term => hydra.core.Term)
      hydra.rewriting.applyInsideTypeLambdasAndAnnotations(f)(v_Term_typeLambda_tl.body)))
   case _ => f(term0)
 
+def deannotateAndDetypeTerm(t: hydra.core.Term): hydra.core.Term =
+  t match
+  case hydra.core.Term.annotated(v_Term_annotated_at) => hydra.rewriting.deannotateAndDetypeTerm(v_Term_annotated_at.body)
+  case hydra.core.Term.typeApplication(v_Term_typeApplication_tt) => hydra.rewriting.deannotateAndDetypeTerm(v_Term_typeApplication_tt.body)
+  case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => hydra.rewriting.deannotateAndDetypeTerm(v_Term_typeLambda_ta.body)
+  case _ => t
+
+def deannotateTerm(t: hydra.core.Term): hydra.core.Term =
+  t match
+  case hydra.core.Term.annotated(v_Term_annotated_at) => hydra.rewriting.deannotateTerm(v_Term_annotated_at.body)
+  case _ => t
+
+def deannotateType(t: hydra.core.Type): hydra.core.Type =
+  t match
+  case hydra.core.Type.annotated(v_Type_annotated_arg_) => hydra.rewriting.deannotateType(`v_Type_annotated_arg_`.body)
+  case _ => t
+
+def deannotateTypeParameters(t: hydra.core.Type): hydra.core.Type =
+  hydra.rewriting.deannotateType(t) match
+  case hydra.core.Type.forall(v_Type_forall_lt) => hydra.rewriting.deannotateTypeParameters(v_Type_forall_lt.body)
+  case _ => t
+
+def deannotateTypeRecursive(typ: hydra.core.Type): hydra.core.Type =
+  {
+  def strip[T0](recurse: (T0 => hydra.core.Type))(typ2: T0): hydra.core.Type =
+    {
+    lazy val rewritten: hydra.core.Type = recurse(typ2)
+    rewritten match
+      case hydra.core.Type.annotated(v_Type_annotated_at) => (v_Type_annotated_at.body)
+      case _ => rewritten
+  }
+  hydra.rewriting.rewriteType(strip)(typ)
+}
+
+def deannotateTypeSchemeRecursive(ts: hydra.core.TypeScheme): hydra.core.TypeScheme =
+  {
+  lazy val vars: Seq[hydra.core.Name] = (ts.variables)
+  lazy val typ: hydra.core.Type = (ts.`type`)
+  lazy val constraints: Option[Map[hydra.core.Name, hydra.core.TypeVariableMetadata]] = (ts.constraints)
+  hydra.core.TypeScheme(vars, hydra.rewriting.deannotateTypeRecursive(typ), constraints)
+}
+
+def detypeTerm(t: hydra.core.Term): hydra.core.Term =
+  t match
+  case hydra.core.Term.annotated(v_Term_annotated_at) => {
+    lazy val subj: hydra.core.Term = (v_Term_annotated_at.body)
+    {
+      lazy val ann: Map[hydra.core.Name, hydra.core.Term] = (v_Term_annotated_at.annotation)
+      hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.rewriting.detypeTerm(subj), ann))
+    }
+  }
+  case hydra.core.Term.typeApplication(v_Term_typeApplication_tt) => hydra.rewriting.deannotateAndDetypeTerm(v_Term_typeApplication_tt.body)
+  case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => hydra.rewriting.deannotateAndDetypeTerm(v_Term_typeLambda_ta.body)
+  case _ => t
+
 def extendGraphForLambda(g: hydra.graph.Graph)(lam: hydra.core.Lambda): hydra.graph.Graph =
   {
   lazy val `var`: hydra.core.Name = (lam.parameter)
@@ -96,60 +151,14 @@ def extendGraphWithBindings(bindings: Seq[hydra.core.Binding])(g: hydra.graph.Gr
      (g.primitives), (g.schemaTypes), (g.typeVariables))
 }
 
-def deannotateAndDetypeTerm(t: hydra.core.Term): hydra.core.Term =
-  t match
-  case hydra.core.Term.annotated(v_Term_annotated_at) => hydra.rewriting.deannotateAndDetypeTerm(v_Term_annotated_at.body)
-  case hydra.core.Term.typeApplication(v_Term_typeApplication_tt) => hydra.rewriting.deannotateAndDetypeTerm(v_Term_typeApplication_tt.body)
-  case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => hydra.rewriting.deannotateAndDetypeTerm(v_Term_typeLambda_ta.body)
-  case _ => t
-
-def deannotateTerm(t: hydra.core.Term): hydra.core.Term =
-  t match
-  case hydra.core.Term.annotated(v_Term_annotated_at) => hydra.rewriting.deannotateTerm(v_Term_annotated_at.body)
-  case _ => t
-
-def deannotateType(t: hydra.core.Type): hydra.core.Type =
-  t match
-  case hydra.core.Type.annotated(v_Type_annotated_arg_) => hydra.rewriting.deannotateType(`v_Type_annotated_arg_`.body)
-  case _ => t
-
-def deannotateTypeParameters(t: hydra.core.Type): hydra.core.Type =
-  hydra.rewriting.deannotateType(t) match
-  case hydra.core.Type.forall(v_Type_forall_lt) => hydra.rewriting.deannotateTypeParameters(v_Type_forall_lt.body)
-  case _ => t
-
-def deannotateTypeRecursive(typ: hydra.core.Type): hydra.core.Type =
+def fTypeToTypeScheme(typ: hydra.core.Type): hydra.core.TypeScheme =
   {
-  def strip[T0](recurse: (T0 => hydra.core.Type))(typ2: T0): hydra.core.Type =
-    {
-    lazy val rewritten: hydra.core.Type = recurse(typ2)
-    rewritten match
-      case hydra.core.Type.annotated(v_Type_annotated_at) => (v_Type_annotated_at.body)
-      case _ => rewritten
-  }
-  hydra.rewriting.rewriteType(strip)(typ)
+  def gatherForall(vars: Seq[hydra.core.Name])(typ2: hydra.core.Type): hydra.core.TypeScheme =
+    hydra.rewriting.deannotateType(typ2) match
+    case hydra.core.Type.forall(v_Type_forall_ft) => gatherForall(hydra.lib.lists.cons[hydra.core.Name](v_Type_forall_ft.parameter)(vars))(v_Type_forall_ft.body)
+    case _ => hydra.core.TypeScheme(hydra.lib.lists.reverse[hydra.core.Name](vars), typ2, None)
+  gatherForall(Seq())(typ)
 }
-
-def deannotateTypeSchemeRecursive(ts: hydra.core.TypeScheme): hydra.core.TypeScheme =
-  {
-  lazy val vars: Seq[hydra.core.Name] = (ts.variables)
-  lazy val typ: hydra.core.Type = (ts.`type`)
-  lazy val constraints: Option[Map[hydra.core.Name, hydra.core.TypeVariableMetadata]] = (ts.constraints)
-  hydra.core.TypeScheme(vars, hydra.rewriting.deannotateTypeRecursive(typ), constraints)
-}
-
-def detypeTerm(t: hydra.core.Term): hydra.core.Term =
-  t match
-  case hydra.core.Term.annotated(v_Term_annotated_at) => {
-    lazy val subj: hydra.core.Term = (v_Term_annotated_at.body)
-    {
-      lazy val ann: Map[hydra.core.Name, hydra.core.Term] = (v_Term_annotated_at.annotation)
-      hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.rewriting.detypeTerm(subj), ann))
-    }
-  }
-  case hydra.core.Term.typeApplication(v_Term_typeApplication_tt) => hydra.rewriting.deannotateAndDetypeTerm(v_Term_typeApplication_tt.body)
-  case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => hydra.rewriting.deannotateAndDetypeTerm(v_Term_typeLambda_ta.body)
-  case _ => t
 
 def flattenLetTerms(term: hydra.core.Term): hydra.core.Term =
   {
@@ -283,15 +292,6 @@ def foldTermWithGraphAndPath[T0](f: ((T0 => hydra.core.Term => T0) => Seq[hydra.
   hydra.lib.pairs.first[T0, hydra.core.Term](result)
 }
 
-def fTypeToTypeScheme(typ: hydra.core.Type): hydra.core.TypeScheme =
-  {
-  def gatherForall(vars: Seq[hydra.core.Name])(typ2: hydra.core.Type): hydra.core.TypeScheme =
-    hydra.rewriting.deannotateType(typ2) match
-    case hydra.core.Type.forall(v_Type_forall_ft) => gatherForall(hydra.lib.lists.cons[hydra.core.Name](v_Type_forall_ft.parameter)(vars))(v_Type_forall_ft.body)
-    case _ => hydra.core.TypeScheme(hydra.lib.lists.reverse[hydra.core.Name](vars), typ2, None)
-  gatherForall(Seq())(typ)
-}
-
 def freeTypeVariablesInTerm(term0: hydra.core.Term): scala.collection.immutable.Set[hydra.core.Name] =
   {
   def allOf[T0](sets: Seq[scala.collection.immutable.Set[T0]]): scala.collection.immutable.Set[T0] =
@@ -305,7 +305,7 @@ def freeTypeVariablesInTerm(term0: hydra.core.Term): scala.collection.immutable.
        scala.collection.immutable.Set[hydra.core.Name]](recurse)(hydra.rewriting.subterms(term)))
     term match
       case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-        case hydra.core.Function.elimination => dflt
+        case hydra.core.Function.elimination(v_Function_elimination_e) => dflt
         case hydra.core.Function.lambda(v_Function_lambda_l) => {
           lazy val domt: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.maybes.maybe[scala.collection.immutable.Set[hydra.core.Name],
              hydra.core.Type](hydra.lib.sets.empty[hydra.core.Name])((v1: hydra.core.Type) => tryType(vars)(v1))(v_Function_lambda_l.domain)
@@ -368,18 +368,18 @@ def freeVariablesInTypeOrdered(typ: hydra.core.Type): Seq[hydra.core.Name] =
   hydra.lib.lists.nub[hydra.core.Name](collectVars(hydra.lib.sets.empty[hydra.core.Name])(typ))
 }
 
-def freeVariablesInTypeSchemeSimple(ts: hydra.core.TypeScheme): scala.collection.immutable.Set[hydra.core.Name] =
-  {
-  lazy val vars: Seq[hydra.core.Name] = (ts.variables)
-  lazy val t: hydra.core.Type = (ts.`type`)
-  hydra.lib.sets.difference[hydra.core.Name](hydra.rewriting.freeVariablesInTypeSimple(t))(hydra.lib.sets.fromList[hydra.core.Name](vars))
-}
-
 def freeVariablesInTypeScheme(ts: hydra.core.TypeScheme): scala.collection.immutable.Set[hydra.core.Name] =
   {
   lazy val vars: Seq[hydra.core.Name] = (ts.variables)
   lazy val t: hydra.core.Type = (ts.`type`)
   hydra.lib.sets.difference[hydra.core.Name](hydra.rewriting.freeVariablesInType(t))(hydra.lib.sets.fromList[hydra.core.Name](vars))
+}
+
+def freeVariablesInTypeSchemeSimple(ts: hydra.core.TypeScheme): scala.collection.immutable.Set[hydra.core.Name] =
+  {
+  lazy val vars: Seq[hydra.core.Name] = (ts.variables)
+  lazy val t: hydra.core.Type = (ts.`type`)
+  hydra.lib.sets.difference[hydra.core.Name](hydra.rewriting.freeVariablesInTypeSimple(t))(hydra.lib.sets.fromList[hydra.core.Name](vars))
 }
 
 def freeVariablesInTypeSimple(typ: hydra.core.Type): scala.collection.immutable.Set[hydra.core.Name] =
@@ -412,7 +412,7 @@ def isFreeVariableInTerm(v: hydra.core.Name)(term: hydra.core.Term): Boolean =
 def isLambda(term: hydra.core.Term): Boolean =
   hydra.rewriting.deannotateTerm(term) match
   case hydra.core.Term.function(v_Term_function_v1) => v_Term_function_v1 match
-    case hydra.core.Function.lambda => true
+    case hydra.core.Function.lambda(v_Function_lambda__) => true
     case _ => false
   case hydra.core.Term.let(v_Term_let_lt) => hydra.rewriting.isLambda(v_Term_let_lt.body)
   case _ => false
@@ -472,7 +472,7 @@ def normalizeTypeVariablesInTerm(term: hydra.core.Term): hydra.core.Term =
     def rewrite(recurse: (hydra.core.Term => hydra.core.Term))(term2: hydra.core.Term): hydra.core.Term =
       term2 match
       case hydra.core.Term.function(v_Term_function_v1) => v_Term_function_v1 match
-        case hydra.core.Function.elimination => recurse(term2)
+        case hydra.core.Function.elimination(v_Function_elimination__) => recurse(term2)
         case hydra.core.Function.lambda(v_Function_lambda_l) => {
           lazy val domain: Option[hydra.core.Type] = (v_Function_lambda_l.domain)
           hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda(v_Function_lambda_l.parameter,
@@ -666,14 +666,14 @@ def replaceTypedefs(types: Map[hydra.core.Name, hydra.core.TypeScheme])(typ0: hy
     typ match
     case hydra.core.Type.annotated(v_Type_annotated_at) => hydra.core.Type.annotated(hydra.core.AnnotatedType(rewrite(recurse)(v_Type_annotated_at.body),
        (v_Type_annotated_at.annotation)))
-    case hydra.core.Type.record => typ
-    case hydra.core.Type.union => typ
+    case hydra.core.Type.record(v_Type_record__) => typ
+    case hydra.core.Type.union(v_Type_union__) => typ
     case hydra.core.Type.variable(v_Type_variable_v) => {
       def forMono(t: hydra.core.Type): hydra.core.Type =
         t match
-        case hydra.core.Type.record => typ
-        case hydra.core.Type.union => typ
-        case hydra.core.Type.wrap => typ
+        case hydra.core.Type.record(v_Type_record__) => typ
+        case hydra.core.Type.union(v_Type_union__) => typ
+        case hydra.core.Type.wrap(v_Type_wrap__) => typ
         case _ => rewrite(recurse)(t)
       {
         def forTypeScheme(ts: hydra.core.TypeScheme): hydra.core.Type =
@@ -685,7 +685,7 @@ def replaceTypedefs(types: Map[hydra.core.Name, hydra.core.TypeScheme])(typ0: hy
            hydra.core.TypeScheme](v_Type_variable_v)(types))
       }
     }
-    case hydra.core.Type.wrap => typ
+    case hydra.core.Type.wrap(v_Type_wrap__) => typ
     case _ => recurse(typ)
   hydra.rewriting.rewriteType(rewrite)(typ0)
 }
@@ -1391,41 +1391,6 @@ def rewriteTermWithContext[T0](f: ((T0 => hydra.core.Term => hydra.core.Term) =>
   rewrite(cx0)(term0)
 }
 
-def rewriteTermWithGraph[T0](f: ((hydra.core.Term => T0) => hydra.graph.Graph => hydra.core.Term => T0))(cx0: hydra.graph.Graph)(term0: hydra.core.Term): T0 =
-  {
-  def f2(recurse: (hydra.graph.Graph => hydra.core.Term => T0))(cx: hydra.graph.Graph)(term: hydra.core.Term): T0 =
-    {
-    def recurse1(term2: hydra.core.Term): T0 = recurse(cx)(term2)
-    term match
-      case hydra.core.Term.function(v_Term_function_fun) => v_Term_function_fun match
-        case hydra.core.Function.lambda(v_Function_lambda_l) => {
-          lazy val cx1: hydra.graph.Graph = hydra.rewriting.extendGraphForLambda(cx)(v_Function_lambda_l)
-          {
-            def recurse2(term2: hydra.core.Term): T0 = recurse(cx1)(term2)
-            f(recurse2)(cx1)(term)
-          }
-        }
-        case _ => f(recurse1)(cx)(term)
-      case hydra.core.Term.let(v_Term_let_l) => {
-        lazy val cx1: hydra.graph.Graph = hydra.rewriting.extendGraphForLet((_x: hydra.graph.Graph) => (_2: hydra.core.Binding) => None)(cx)(v_Term_let_l)
-        {
-          def recurse2(term2: hydra.core.Term): T0 = recurse(cx1)(term2)
-          f(recurse2)(cx1)(term)
-        }
-      }
-      case hydra.core.Term.typeLambda(v_Term_typeLambda_tl) => {
-        lazy val cx1: hydra.graph.Graph = hydra.rewriting.extendGraphForTypeLambda(cx)(v_Term_typeLambda_tl)
-        {
-          def recurse2(term2: hydra.core.Term): T0 = recurse(cx1)(term2)
-          f(recurse2)(cx1)(term)
-        }
-      }
-      case _ => f(recurse1)(cx)(term)
-  }
-  def rewrite(cx: hydra.graph.Graph)(term: hydra.core.Term): T0 = f2(rewrite)(cx)(term)
-  rewrite(cx0)(term0)
-}
-
 def rewriteTermWithContextM[T0, T1](f: ((T0 => hydra.core.Term => Either[T1, hydra.core.Term]) => T0 => hydra.core.Term => Either[T1,
    hydra.core.Term]))(cx0: T0)(term0: hydra.core.Term): Either[T1, hydra.core.Term] =
   {
@@ -1561,6 +1526,41 @@ def rewriteTermWithContextM[T0, T1](f: ((T0 => hydra.core.Term => Either[T1, hyd
   rewrite(cx0)(term0)
 }
 
+def rewriteTermWithGraph[T0](f: ((hydra.core.Term => T0) => hydra.graph.Graph => hydra.core.Term => T0))(cx0: hydra.graph.Graph)(term0: hydra.core.Term): T0 =
+  {
+  def f2(recurse: (hydra.graph.Graph => hydra.core.Term => T0))(cx: hydra.graph.Graph)(term: hydra.core.Term): T0 =
+    {
+    def recurse1(term2: hydra.core.Term): T0 = recurse(cx)(term2)
+    term match
+      case hydra.core.Term.function(v_Term_function_fun) => v_Term_function_fun match
+        case hydra.core.Function.lambda(v_Function_lambda_l) => {
+          lazy val cx1: hydra.graph.Graph = hydra.rewriting.extendGraphForLambda(cx)(v_Function_lambda_l)
+          {
+            def recurse2(term2: hydra.core.Term): T0 = recurse(cx1)(term2)
+            f(recurse2)(cx1)(term)
+          }
+        }
+        case _ => f(recurse1)(cx)(term)
+      case hydra.core.Term.let(v_Term_let_l) => {
+        lazy val cx1: hydra.graph.Graph = hydra.rewriting.extendGraphForLet((_x: hydra.graph.Graph) => (_2: hydra.core.Binding) => None)(cx)(v_Term_let_l)
+        {
+          def recurse2(term2: hydra.core.Term): T0 = recurse(cx1)(term2)
+          f(recurse2)(cx1)(term)
+        }
+      }
+      case hydra.core.Term.typeLambda(v_Term_typeLambda_tl) => {
+        lazy val cx1: hydra.graph.Graph = hydra.rewriting.extendGraphForTypeLambda(cx)(v_Term_typeLambda_tl)
+        {
+          def recurse2(term2: hydra.core.Term): T0 = recurse(cx1)(term2)
+          f(recurse2)(cx1)(term)
+        }
+      }
+      case _ => f(recurse1)(cx)(term)
+  }
+  def rewrite(cx: hydra.graph.Graph)(term: hydra.core.Term): T0 = f2(rewrite)(cx)(term)
+  rewrite(cx0)(term0)
+}
+
 def rewriteType(f: ((hydra.core.Type => hydra.core.Type) => hydra.core.Type => hydra.core.Type))(typ0: hydra.core.Type): hydra.core.Type =
   {
   def fsub(recurse: (hydra.core.Type => hydra.core.Type))(typ: hydra.core.Type): hydra.core.Type =
@@ -1685,6 +1685,18 @@ def simplifyTerm(term: hydra.core.Term): hydra.core.Term =
   hydra.rewriting.rewriteTerm(simplify)(term)
 }
 
+def stripTypeLambdas(t: hydra.core.Term): hydra.core.Term =
+  t match
+  case hydra.core.Term.annotated(v_Term_annotated_at) => {
+    lazy val subj: hydra.core.Term = (v_Term_annotated_at.body)
+    {
+      lazy val ann: Map[hydra.core.Name, hydra.core.Term] = (v_Term_annotated_at.annotation)
+      hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.rewriting.stripTypeLambdas(subj), ann))
+    }
+  }
+  case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => hydra.rewriting.stripTypeLambdas(v_Term_typeLambda_ta.body)
+  case _ => t
+
 def substituteTypeVariables(subst: Map[hydra.core.Name, hydra.core.Name])(typ: hydra.core.Type): hydra.core.Type =
   {
   def replace(recurse: (hydra.core.Type => hydra.core.Type))(typ2: hydra.core.Type): hydra.core.Type =
@@ -1750,18 +1762,6 @@ def substituteVariables(subst: Map[hydra.core.Name, hydra.core.Name])(term: hydr
   hydra.rewriting.rewriteTerm(replace)(term)
 }
 
-def stripTypeLambdas(t: hydra.core.Term): hydra.core.Term =
-  t match
-  case hydra.core.Term.annotated(v_Term_annotated_at) => {
-    lazy val subj: hydra.core.Term = (v_Term_annotated_at.body)
-    {
-      lazy val ann: Map[hydra.core.Name, hydra.core.Term] = (v_Term_annotated_at.annotation)
-      hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.rewriting.stripTypeLambdas(subj), ann))
-    }
-  }
-  case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => hydra.rewriting.stripTypeLambdas(v_Term_typeLambda_ta.body)
-  case _ => t
-
 def subterms(v1: hydra.core.Term): Seq[hydra.core.Term] =
   v1 match
   case hydra.core.Term.annotated(v_Term_annotated_at) => Seq(v_Term_annotated_at.body)
@@ -1779,7 +1779,7 @@ def subterms(v1: hydra.core.Term): Seq[hydra.core.Term] =
   case hydra.core.Term.let(v_Term_let_lt) => hydra.lib.lists.cons[hydra.core.Term](v_Term_let_lt.body)(hydra.lib.lists.map[hydra.core.Binding,
      hydra.core.Term]((x: hydra.core.Binding) => (x.term))(v_Term_let_lt.bindings))
   case hydra.core.Term.list(v_Term_list_l) => v_Term_list_l
-  case hydra.core.Term.literal => Seq()
+  case hydra.core.Term.literal(v_Term_literal__) => Seq()
   case hydra.core.Term.map(v_Term_map_m) => hydra.lib.lists.concat[hydra.core.Term](hydra.lib.lists.map[Tuple2[hydra.core.Term,
      hydra.core.Term], Seq[hydra.core.Term]]((p: Tuple2[hydra.core.Term, hydra.core.Term]) =>
     Seq(hydra.lib.pairs.first[hydra.core.Term, hydra.core.Term](p), hydra.lib.pairs.second[hydra.core.Term,
@@ -1793,7 +1793,7 @@ def subterms(v1: hydra.core.Term): Seq[hydra.core.Term] =
   case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => Seq(v_Term_typeLambda_ta.body)
   case hydra.core.Term.union(v_Term_union_ut) => Seq(v_Term_union_ut.field.term)
   case hydra.core.Term.unit => Seq()
-  case hydra.core.Term.variable => Seq()
+  case hydra.core.Term.variable(v_Term_variable__) => Seq()
   case hydra.core.Term.wrap(v_Term_wrap_n) => Seq(v_Term_wrap_n.body)
 
 def subtermsWithAccessors(v1: hydra.core.Term): Seq[Tuple2[hydra.accessors.TermAccessor, hydra.core.Term]] =
@@ -1801,7 +1801,7 @@ def subtermsWithAccessors(v1: hydra.core.Term): Seq[Tuple2[hydra.accessors.TermA
   case hydra.core.Term.annotated(v_Term_annotated_at) => Seq(Tuple2(hydra.accessors.TermAccessor.annotatedBody, (v_Term_annotated_at.body)))
   case hydra.core.Term.application(v_Term_application_p) => Seq(Tuple2(hydra.accessors.TermAccessor.applicationFunction,
      (v_Term_application_p.function)), Tuple2(hydra.accessors.TermAccessor.applicationArgument, (v_Term_application_p.argument)))
-  case hydra.core.Term.either => Seq()
+  case hydra.core.Term.either(v_Term_either_e) => Seq()
   case hydra.core.Term.function(v_Term_function_v12) => v_Term_function_v12 match
     case hydra.core.Function.elimination(v_Function_elimination_v13) => v_Function_elimination_v13 match
       case hydra.core.Elimination.union(v_Elimination_union_cs) => hydra.lib.lists.concat2[Tuple2[hydra.accessors.TermAccessor,
@@ -1819,7 +1819,7 @@ def subtermsWithAccessors(v1: hydra.core.Term): Seq[Tuple2[hydra.accessors.TermA
     Tuple2(hydra.accessors.TermAccessor.letBinding(b.name), (b.term)))(v_Term_let_lt.bindings))
   case hydra.core.Term.list(v_Term_list_l) => hydra.lib.lists.map[hydra.core.Term, Tuple2[hydra.accessors.TermAccessor,
      hydra.core.Term]]((e: hydra.core.Term) => Tuple2(hydra.accessors.TermAccessor.listElement(0), e))(v_Term_list_l)
-  case hydra.core.Term.literal => Seq()
+  case hydra.core.Term.literal(v_Term_literal__) => Seq()
   case hydra.core.Term.map(v_Term_map_m) => hydra.lib.lists.concat[Tuple2[hydra.accessors.TermAccessor,
      hydra.core.Term]](hydra.lib.lists.map[Tuple2[hydra.core.Term, hydra.core.Term], Seq[Tuple2[hydra.accessors.TermAccessor,
      hydra.core.Term]]]((p: Tuple2[hydra.core.Term, hydra.core.Term]) =>
@@ -1829,7 +1829,7 @@ def subtermsWithAccessors(v1: hydra.core.Term): Seq[Tuple2[hydra.accessors.TermA
   case hydra.core.Term.maybe(v_Term_maybe_m) => hydra.lib.maybes.maybe[Seq[Tuple2[hydra.accessors.TermAccessor,
      hydra.core.Term]], hydra.core.Term](Seq())((t: hydra.core.Term) => Seq(Tuple2(hydra.accessors.TermAccessor.maybeTerm,
      t)))(v_Term_maybe_m)
-  case hydra.core.Term.pair => Seq()
+  case hydra.core.Term.pair(v_Term_pair_p) => Seq()
   case hydra.core.Term.record(v_Term_record_rt) => hydra.lib.lists.map[hydra.core.Field, Tuple2[hydra.accessors.TermAccessor,
      hydra.core.Term]]((f: hydra.core.Field) =>
     Tuple2(hydra.accessors.TermAccessor.recordField(f.name), (f.term)))(v_Term_record_rt.fields)
@@ -1840,7 +1840,7 @@ def subtermsWithAccessors(v1: hydra.core.Term): Seq[Tuple2[hydra.accessors.TermA
   case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => Seq(Tuple2(hydra.accessors.TermAccessor.typeLambdaBody, (v_Term_typeLambda_ta.body)))
   case hydra.core.Term.union(v_Term_union_ut) => Seq(Tuple2(hydra.accessors.TermAccessor.injectionTerm, (v_Term_union_ut.field.term)))
   case hydra.core.Term.unit => Seq()
-  case hydra.core.Term.variable => Seq()
+  case hydra.core.Term.variable(v_Term_variable__) => Seq()
   case hydra.core.Term.wrap(v_Term_wrap_n) => Seq(Tuple2(hydra.accessors.TermAccessor.wrappedTerm, (v_Term_wrap_n.body)))
 
 def subtypes(v1: hydra.core.Type): Seq[hydra.core.Type] =
@@ -1852,14 +1852,14 @@ def subtypes(v1: hydra.core.Type): Seq[hydra.core.Type] =
   case hydra.core.Type.function(v_Type_function_ft) => Seq(v_Type_function_ft.domain, (v_Type_function_ft.codomain))
   case hydra.core.Type.forall(v_Type_forall_lt) => Seq(v_Type_forall_lt.body)
   case hydra.core.Type.list(v_Type_list_lt) => Seq(v_Type_list_lt)
-  case hydra.core.Type.literal => Seq()
+  case hydra.core.Type.literal(v_Type_literal__) => Seq()
   case hydra.core.Type.map(v_Type_map_mt) => Seq(v_Type_map_mt.keys, (v_Type_map_mt.values))
   case hydra.core.Type.maybe(v_Type_maybe_ot) => Seq(v_Type_maybe_ot)
   case hydra.core.Type.record(v_Type_record_rt) => hydra.lib.lists.map[hydra.core.FieldType, hydra.core.Type]((x: hydra.core.FieldType) => (x.`type`))(v_Type_record_rt)
   case hydra.core.Type.set(v_Type_set_st) => Seq(v_Type_set_st)
   case hydra.core.Type.union(v_Type_union_rt) => hydra.lib.lists.map[hydra.core.FieldType, hydra.core.Type]((x: hydra.core.FieldType) => (x.`type`))(v_Type_union_rt)
   case hydra.core.Type.unit => Seq()
-  case hydra.core.Type.variable => Seq()
+  case hydra.core.Type.variable(v_Type_variable__) => Seq()
   case hydra.core.Type.void => Seq()
   case hydra.core.Type.wrap(v_Type_wrap_nt) => Seq(v_Type_wrap_nt)
 
