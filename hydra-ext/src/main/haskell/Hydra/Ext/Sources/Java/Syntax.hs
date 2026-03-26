@@ -202,7 +202,7 @@ module_ = Module ns (map toTypeDef elements) [Core.ns] [Core.ns] $
       resource_Local,
       variableAccess,
       primary,
-      primaryNoNewArray,
+      primaryNoNewArrayExpression,
       classLiteral,
       typeNameArray,
       numericTypeArray,
@@ -1725,13 +1725,13 @@ variableAccess = def "VariableAccess" $ T.union [
 primary :: Binding
 primary = def "Primary" $ T.union [
 --  PrimaryNoNewArray
-  "noNewArray">: java "PrimaryNoNewArray",
+  "noNewArray">: java "PrimaryNoNewArrayExpression",
 --  ArrayCreationExpression
   "arrayCreation">: java "ArrayCreationExpression"]
 
---PrimaryNoNewArray:
-primaryNoNewArray :: Binding
-primaryNoNewArray = def "PrimaryNoNewArray" $ T.union [
+--PrimaryNoNewArrayExpression:
+primaryNoNewArrayExpression :: Binding
+primaryNoNewArrayExpression = def "PrimaryNoNewArrayExpression" $ T.union [
 --  Literal
   "literal">: java "Literal",
 --  ClassLiteral
@@ -1849,7 +1849,7 @@ arrayAccess_Variant = def "ArrayAccess_Variant" $ T.union [
 --  ExpressionName [ Expression ]
   "name">: java "ExpressionName",
 --  PrimaryNoNewArray [ Expression ]
-  "primary">: java "PrimaryNoNewArray"]
+  "primary">: java "PrimaryNoNewArrayExpression"]
 
 --MethodInvocation:
 methodInvocation :: Binding

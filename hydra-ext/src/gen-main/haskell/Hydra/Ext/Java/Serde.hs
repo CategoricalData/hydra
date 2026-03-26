@@ -941,25 +941,25 @@ writePreIncrementExpression _ = Serialization.cst "STUB:PreIncrementExpression"
 writePrimary :: Syntax.Primary -> Ast.Expr
 writePrimary p =
     case p of
-      Syntax.PrimaryNoNewArray_ v0 -> writePrimaryNoNewArray v0
+      Syntax.PrimaryNoNewArray v0 -> writePrimaryNoNewArrayExpressionExpression v0
       Syntax.PrimaryArrayCreation v0 -> writeArrayCreationExpression v0
 
-writePrimaryNoNewArray :: Syntax.PrimaryNoNewArray -> Ast.Expr
-writePrimaryNoNewArray p =
+writePrimaryNoNewArrayExpressionExpression :: Syntax.PrimaryNoNewArrayExpression -> Ast.Expr
+writePrimaryNoNewArrayExpressionExpression p =
     case p of
-      Syntax.PrimaryNoNewArrayLiteral v0 -> writeLiteral v0
-      Syntax.PrimaryNoNewArrayClassLiteral v0 -> writeClassLiteral v0
-      Syntax.PrimaryNoNewArrayThis -> Serialization.cst "this"
-      Syntax.PrimaryNoNewArrayDotThis v0 -> Serialization.dotSep [
+      Syntax.PrimaryNoNewArrayExpressionLiteral v0 -> writeLiteral v0
+      Syntax.PrimaryNoNewArrayExpressionClassLiteral v0 -> writeClassLiteral v0
+      Syntax.PrimaryNoNewArrayExpressionThis -> Serialization.cst "this"
+      Syntax.PrimaryNoNewArrayExpressionDotThis v0 -> Serialization.dotSep [
         writeTypeName v0,
         (Serialization.cst "this")]
-      Syntax.PrimaryNoNewArrayParens v0 -> Serialization.parenList False [
+      Syntax.PrimaryNoNewArrayExpressionParens v0 -> Serialization.parenList False [
         writeExpression v0]
-      Syntax.PrimaryNoNewArrayClassInstance v0 -> writeClassInstanceCreationExpression v0
-      Syntax.PrimaryNoNewArrayFieldAccess v0 -> writeFieldAccess v0
-      Syntax.PrimaryNoNewArrayArrayAccess v0 -> writeArrayAccess v0
-      Syntax.PrimaryNoNewArrayMethodInvocation v0 -> writeMethodInvocation v0
-      Syntax.PrimaryNoNewArrayMethodReference v0 -> writeMethodReference v0
+      Syntax.PrimaryNoNewArrayExpressionClassInstance v0 -> writeClassInstanceCreationExpression v0
+      Syntax.PrimaryNoNewArrayExpressionFieldAccess v0 -> writeFieldAccess v0
+      Syntax.PrimaryNoNewArrayExpressionArrayAccess v0 -> writeArrayAccess v0
+      Syntax.PrimaryNoNewArrayExpressionMethodInvocation v0 -> writeMethodInvocation v0
+      Syntax.PrimaryNoNewArrayExpressionMethodReference v0 -> writeMethodReference v0
 
 writePrimitiveType :: Syntax.PrimitiveType -> Ast.Expr
 writePrimitiveType pt =

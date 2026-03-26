@@ -2218,7 +2218,7 @@ _VariableAccess_expressionName = Core.Name "expressionName"
 _VariableAccess_fieldAccess = Core.Name "fieldAccess"
 
 data Primary =
-  PrimaryNoNewArray_ PrimaryNoNewArray |
+  PrimaryNoNewArray PrimaryNoNewArrayExpression |
   PrimaryArrayCreation ArrayCreationExpression
   deriving (Eq, Ord, Read, Show)
 
@@ -2228,40 +2228,40 @@ _Primary_noNewArray = Core.Name "noNewArray"
 
 _Primary_arrayCreation = Core.Name "arrayCreation"
 
-data PrimaryNoNewArray =
-  PrimaryNoNewArrayLiteral Literal |
-  PrimaryNoNewArrayClassLiteral ClassLiteral |
-  PrimaryNoNewArrayThis  |
-  PrimaryNoNewArrayDotThis TypeName |
-  PrimaryNoNewArrayParens Expression |
-  PrimaryNoNewArrayClassInstance ClassInstanceCreationExpression |
-  PrimaryNoNewArrayFieldAccess FieldAccess |
-  PrimaryNoNewArrayArrayAccess ArrayAccess |
-  PrimaryNoNewArrayMethodInvocation MethodInvocation |
-  PrimaryNoNewArrayMethodReference MethodReference
+data PrimaryNoNewArrayExpression =
+  PrimaryNoNewArrayExpressionLiteral Literal |
+  PrimaryNoNewArrayExpressionClassLiteral ClassLiteral |
+  PrimaryNoNewArrayExpressionThis  |
+  PrimaryNoNewArrayExpressionDotThis TypeName |
+  PrimaryNoNewArrayExpressionParens Expression |
+  PrimaryNoNewArrayExpressionClassInstance ClassInstanceCreationExpression |
+  PrimaryNoNewArrayExpressionFieldAccess FieldAccess |
+  PrimaryNoNewArrayExpressionArrayAccess ArrayAccess |
+  PrimaryNoNewArrayExpressionMethodInvocation MethodInvocation |
+  PrimaryNoNewArrayExpressionMethodReference MethodReference
   deriving (Eq, Ord, Read, Show)
 
-_PrimaryNoNewArray = Core.Name "hydra.ext.java.syntax.PrimaryNoNewArray"
+_PrimaryNoNewArrayExpression = Core.Name "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"
 
-_PrimaryNoNewArray_literal = Core.Name "literal"
+_PrimaryNoNewArrayExpression_literal = Core.Name "literal"
 
-_PrimaryNoNewArray_classLiteral = Core.Name "classLiteral"
+_PrimaryNoNewArrayExpression_classLiteral = Core.Name "classLiteral"
 
-_PrimaryNoNewArray_this = Core.Name "this"
+_PrimaryNoNewArrayExpression_this = Core.Name "this"
 
-_PrimaryNoNewArray_dotThis = Core.Name "dotThis"
+_PrimaryNoNewArrayExpression_dotThis = Core.Name "dotThis"
 
-_PrimaryNoNewArray_parens = Core.Name "parens"
+_PrimaryNoNewArrayExpression_parens = Core.Name "parens"
 
-_PrimaryNoNewArray_classInstance = Core.Name "classInstance"
+_PrimaryNoNewArrayExpression_classInstance = Core.Name "classInstance"
 
-_PrimaryNoNewArray_fieldAccess = Core.Name "fieldAccess"
+_PrimaryNoNewArrayExpression_fieldAccess = Core.Name "fieldAccess"
 
-_PrimaryNoNewArray_arrayAccess = Core.Name "arrayAccess"
+_PrimaryNoNewArrayExpression_arrayAccess = Core.Name "arrayAccess"
 
-_PrimaryNoNewArray_methodInvocation = Core.Name "methodInvocation"
+_PrimaryNoNewArrayExpression_methodInvocation = Core.Name "methodInvocation"
 
-_PrimaryNoNewArray_methodReference = Core.Name "methodReference"
+_PrimaryNoNewArrayExpression_methodReference = Core.Name "methodReference"
 
 data ClassLiteral =
   ClassLiteralType TypeNameArray |
@@ -2430,7 +2430,7 @@ _ArrayAccess_variant = Core.Name "variant"
 
 data ArrayAccess_Variant =
   ArrayAccess_VariantName ExpressionName |
-  ArrayAccess_VariantPrimary PrimaryNoNewArray
+  ArrayAccess_VariantPrimary PrimaryNoNewArrayExpression
   deriving (Eq, Ord, Read, Show)
 
 _ArrayAccess_Variant = Core.Name "hydra.ext.java.syntax.ArrayAccess_Variant"

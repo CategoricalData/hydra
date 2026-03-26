@@ -1922,13 +1922,13 @@
           "union": [
             {
               "name": "noNewArray",
-              "type": {"variable": "hydra.ext.java.syntax.PrimaryNoNewArray"}},
+              "type": {"variable": "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"}},
             {
               "name": "arrayCreation",
               "type": {"variable": "hydra.ext.java.syntax.ArrayCreationExpression"}}]}}},
     {
       "type": {
-        "name": "hydra.ext.java.syntax.PrimaryNoNewArray",
+        "name": "hydra.ext.java.syntax.PrimaryNoNewArrayExpression",
         "type": {
           "union": [
             {
@@ -2124,7 +2124,7 @@
               "type": {"variable": "hydra.ext.java.syntax.ExpressionName"}},
             {
               "name": "primary",
-              "type": {"variable": "hydra.ext.java.syntax.PrimaryNoNewArray"}}]}}},
+              "type": {"variable": "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"}}]}}},
     {
       "type": {
         "name": "hydra.ext.java.syntax.MethodInvocation",

@@ -9444,8 +9444,8 @@
                                     "body": {
                                       "application": {
                                         "argument": {"variable": "n"},
-                                        "function": {"variable": "hydra.ext.java.serde.writePrimaryNoNewArray"}}},
-                                    "domain": [{"variable": "hydra.ext.java.syntax.PrimaryNoNewArray"}],
+                                        "function": {"variable": "hydra.ext.java.serde.writePrimaryNoNewArrayExpression"}}},
+                                    "domain": [{"variable": "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"}],
                                     "parameter": "n"}}}},
                             {
                               "name": "arrayCreation",
@@ -9472,7 +9472,7 @@
             "variables": []}]}},
     {
       "term": {
-        "name": "hydra.ext.java.serde.writePrimaryNoNewArray",
+        "name": "hydra.ext.java.serde.writePrimaryNoNewArrayExpression",
         "term": {
           "function": {
             "lambda": {
@@ -9623,8 +9623,8 @@
                                     "domain": [{"variable": "hydra.ext.java.syntax.MethodReference"}],
                                     "parameter": "mr"}}}}],
                           "default": null,
-                          "typeName": "hydra.ext.java.syntax.PrimaryNoNewArray"}}}}}},
-              "domain": [{"variable": "hydra.ext.java.syntax.PrimaryNoNewArray"}],
+                          "typeName": "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"}}}}}},
+              "domain": [{"variable": "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"}],
               "parameter": "p"}}},
         "type": [
           {
@@ -9632,7 +9632,7 @@
             "type": {
               "function": {
                 "codomain": {"variable": "hydra.ast.Expr"},
-                "domain": {"variable": "hydra.ext.java.syntax.PrimaryNoNewArray"}}},
+                "domain": {"variable": "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"}}},
             "variables": []}]}},
     {
       "term": {

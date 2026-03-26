@@ -265,26 +265,26 @@ multiplicativeExpressionBinary lhs rhs = record Java._MultiplicativeExpression_B
 
 -- Custom helpers: primary constructors
 
-primaryLiteral :: TTerm Java.Literal -> TTerm Java.PrimaryNoNewArray
-primaryLiteral = inject Java._PrimaryNoNewArray Java._PrimaryNoNewArray_literal
+primaryLiteral :: TTerm Java.Literal -> TTerm Java.PrimaryNoNewArrayExpression
+primaryLiteral = inject Java._PrimaryNoNewArrayExpression Java._PrimaryNoNewArrayExpression_literal
 
-primaryParens :: TTerm Java.Expression -> TTerm Java.PrimaryNoNewArray
-primaryParens = inject Java._PrimaryNoNewArray Java._PrimaryNoNewArray_parens
+primaryParens :: TTerm Java.Expression -> TTerm Java.PrimaryNoNewArrayExpression
+primaryParens = inject Java._PrimaryNoNewArrayExpression Java._PrimaryNoNewArrayExpression_parens
 
-primaryFieldAccess :: TTerm Java.FieldAccess -> TTerm Java.PrimaryNoNewArray
-primaryFieldAccess = inject Java._PrimaryNoNewArray Java._PrimaryNoNewArray_fieldAccess
+primaryFieldAccess :: TTerm Java.FieldAccess -> TTerm Java.PrimaryNoNewArrayExpression
+primaryFieldAccess = inject Java._PrimaryNoNewArrayExpression Java._PrimaryNoNewArrayExpression_fieldAccess
 
-primaryMethodInvocation :: TTerm Java.MethodInvocation -> TTerm Java.PrimaryNoNewArray
-primaryMethodInvocation = inject Java._PrimaryNoNewArray Java._PrimaryNoNewArray_methodInvocation
+primaryMethodInvocation :: TTerm Java.MethodInvocation -> TTerm Java.PrimaryNoNewArrayExpression
+primaryMethodInvocation = inject Java._PrimaryNoNewArrayExpression Java._PrimaryNoNewArrayExpression_methodInvocation
 
-primaryThis :: TTerm Java.PrimaryNoNewArray
-primaryThis = injectUnit Java._PrimaryNoNewArray Java._PrimaryNoNewArray_this
+primaryThis :: TTerm Java.PrimaryNoNewArrayExpression
+primaryThis = injectUnit Java._PrimaryNoNewArrayExpression Java._PrimaryNoNewArrayExpression_this
 
-primaryClassInstance :: TTerm Java.ClassInstanceCreationExpression -> TTerm Java.PrimaryNoNewArray
-primaryClassInstance = inject Java._PrimaryNoNewArray Java._PrimaryNoNewArray_classInstance
+primaryClassInstance :: TTerm Java.ClassInstanceCreationExpression -> TTerm Java.PrimaryNoNewArrayExpression
+primaryClassInstance = inject Java._PrimaryNoNewArrayExpression Java._PrimaryNoNewArrayExpression_classInstance
 
-primaryArrayAccess :: TTerm Java.ArrayAccess -> TTerm Java.PrimaryNoNewArray
-primaryArrayAccess = inject Java._PrimaryNoNewArray Java._PrimaryNoNewArray_arrayAccess
+primaryArrayAccess :: TTerm Java.ArrayAccess -> TTerm Java.PrimaryNoNewArrayExpression
+primaryArrayAccess = inject Java._PrimaryNoNewArrayExpression Java._PrimaryNoNewArrayExpression_arrayAccess
 
 
 -- Custom helpers: statement constructors
