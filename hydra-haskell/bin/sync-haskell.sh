@@ -251,6 +251,11 @@ else
     echo "Step 8/$TOTAL_STEPS: Skipped (--quick mode)"
 fi
 
+# Phase 9: Regenerate the lexicon
+echo ""
+echo "Regenerating lexicon..."
+stack ghci hydra:lib --ghci-options='-e ":m Hydra.Generation" -e "writeLexiconToStandardPath"' 2>&1 | grep -E "^Lexicon|^Error"
+
 echo ""
 echo "=========================================="
 echo "Checking for new files..."
