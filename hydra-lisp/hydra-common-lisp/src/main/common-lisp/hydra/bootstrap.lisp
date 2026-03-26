@@ -50,20 +50,6 @@
 (format t "Loading kernel...~%")
 (force-output)
 
-;; Pre-declare all ext coder exports to avoid circular reference drops
-(let* ((script-path (or *load-truename*
-                        (merge-pathnames "hydra/bootstrap.lisp"
-                          (make-pathname :directory (pathname-directory (truename *default-pathname-defaults*))))))
-       (hydra-dir (make-pathname :directory (pathname-directory script-path)))
-       (gen-main-dir (merge-pathnames
-                       (make-pathname :directory '(:relative :up :up :up "gen-main" "common-lisp" "hydra"))
-                       hydra-dir)))
-  (dolist (subdir '("ext/java/" "ext/python/" "ext/haskell/" "ext/lisp/" "ext/org/"))
-    (let ((ext-dir (merge-pathnames subdir gen-main-dir)))
-      (when (probe-file ext-dir)
-        (dolist (f (directory (merge-pathnames "*.lisp" ext-dir)))
-          (hydra-pre-declare-exports f))))))
-
 (hydra-load-gen-main)
 (hydra-load-prims-and-libraries)
 (hydra-set-function-bindings)

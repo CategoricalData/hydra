@@ -215,7 +215,6 @@
     "reflect.scm"
     "languages.scm"
     "parsers.scm"
-    "grammars.scm"
     "templates.scm"
     "encoding.scm"
     "decoding.scm"
@@ -228,24 +227,24 @@
     "code_generation.scm"
     ;; Show modules
     "show/core.scm" "show/error/core.scm" "show/errors.scm" "show/graph.scm"
-    "show/meta.scm" "show/typing.scm" "show/util.scm" "show/accessors.scm"
+    "show/meta.scm" "show/typing.scm" "show/util.scm" "show/paths.scm"
     ;; Validate
     "validate/core.scm"
     ;; Decode modules (needed by hydra_decode_module_module)
-    "decode/accessors.scm" "decode/ast.scm" "decode/classes.scm"
+    "decode/paths.scm" "decode/ast.scm" "decode/classes.scm"
     "decode/coders.scm" "decode/context.scm" "decode/core.scm"
     "decode/error/core.scm" "decode/error/checking.scm" "decode/errors.scm"
-    "decode/grammar.scm" "decode/graph.scm" "decode/json/model.scm"
+    "decode/graph.scm" "decode/json/model.scm"
     "decode/module.scm"
     "decode/parsing.scm" "decode/phantoms.scm" "decode/query.scm"
     "decode/relational.scm" "decode/tabular.scm" "decode/testing.scm"
     "decode/topology.scm" "decode/typing.scm" "decode/util.scm"
     "decode/variants.scm"
     ;; Encode modules (may be needed by code generation)
-    "encode/accessors.scm" "encode/ast.scm" "encode/classes.scm"
+    "encode/paths.scm" "encode/ast.scm" "encode/classes.scm"
     "encode/coders.scm" "encode/context.scm" "encode/core.scm"
     "encode/error/core.scm" "encode/error/checking.scm" "encode/errors.scm"
-    "encode/grammar.scm" "encode/json/model.scm" "encode/module.scm"
+    "encode/json/model.scm" "encode/module.scm"
     "encode/parsing.scm" "encode/phantoms.scm" "encode/query.scm"
     "encode/relational.scm" "encode/tabular.scm" "encode/testing.scm"
     "encode/topology.scm" "encode/typing.scm" "encode/util.scm"
@@ -267,16 +266,16 @@
   (let ((coder-files
           (cond
             ((equal? target "haskell")
-             '("ext/haskell/ast.scm" "ext/haskell/operators.scm"
+             '("ext/haskell/syntax.scm" "ext/haskell/operators.scm"
                "ext/haskell/language.scm" "ext/haskell/utils.scm"
                "ext/haskell/serde.scm" "ext/haskell/coder.scm"))
             ((equal? target "java")
              '("ext/java/syntax.scm" "ext/java/language.scm" "ext/java/names.scm"
-               "ext/java/utils.scm"
+               "ext/java/environment.scm" "ext/java/utils.scm"
                "ext/java/serde.scm" "ext/java/coder.scm"))
             ((equal? target "python")
              '("ext/python/syntax.scm" "ext/python/language.scm" "ext/python/names.scm"
-               "ext/python/utils.scm"
+               "ext/python/environment.scm" "ext/python/utils.scm"
                "ext/python/serde.scm" "ext/python/coder.scm"))
             ((or (equal? target "clojure") (equal? target "scheme")
                  (equal? target "common-lisp") (equal? target "emacs-lisp"))
@@ -350,8 +349,8 @@
 ;; Module loading from JSON
 ;; ============================================================================
 
-(define (load-module-from-json bs-graph schema-map ns-str)
-  (let* ((file-path (string-append *json-dir* "/" (namespace-to-path ns-str) ".json"))
+(define (load-module-from-json bs-graph schema-map json-dir ns-str)
+  (let* ((file-path (string-append json-dir "/" (namespace-to-path ns-str) ".json"))
          (json-obj (json-read-file file-path))
          (hydra-json (scheme-to-hydra-json json-obj))
          (mod-type (list 'variable "hydra.module.Module"))
@@ -382,7 +381,7 @@
     (map (lambda (ns)
            (display (string-append "  Loaded: " ns "\n"))
            (force-output (current-output-port))
-           (load-module-from-json bs-graph schema-map ns))
+           (load-module-from-json bs-graph schema-map json-dir ns))
          namespaces)))
 
 ;; ============================================================================
