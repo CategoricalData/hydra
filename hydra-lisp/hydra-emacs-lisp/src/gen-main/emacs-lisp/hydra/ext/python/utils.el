@@ -1,6 +1,6 @@
 (require 'cl-lib)
 
-(require 'hydra.ext.python.helpers)
+(require 'hydra.ext.python.environment)
 
 (require 'hydra.ext.python.names)
 

@@ -135,6 +135,7 @@ public interface Language {
       "implicit",
       "import",
       "lazy",
+      "macro",
       "match",
       "new",
       "null",

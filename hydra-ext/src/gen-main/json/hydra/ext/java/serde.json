@@ -9444,7 +9444,8 @@
                                     "body": {
                                       "application": {
                                         "argument": {"variable": "n"},
-                                        "function": {"variable": "hydra.ext.java.serde.writePrimaryNoNewArrayExpression"}}},
+                                        "function": {
+                                          "variable": "hydra.ext.java.serde.writePrimaryNoNewArrayExpressionExpression"}}},
                                     "domain": [{"variable": "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"}],
                                     "parameter": "n"}}}},
                             {
@@ -9472,7 +9473,7 @@
             "variables": []}]}},
     {
       "term": {
-        "name": "hydra.ext.java.serde.writePrimaryNoNewArrayExpression",
+        "name": "hydra.ext.java.serde.writePrimaryNoNewArrayExpressionExpression",
         "term": {
           "function": {
             "lambda": {

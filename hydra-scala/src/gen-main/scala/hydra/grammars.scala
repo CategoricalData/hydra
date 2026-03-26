@@ -36,6 +36,7 @@ def findNames(pats: Seq[hydra.grammar.Pattern]): Seq[scala.Predef.String] =
     lazy val rn: scala.Predef.String = hydra.grammars.rawName(pat)
     lazy val nameAndIndex: Tuple2[scala.Predef.String, Int] = hydra.lib.maybes.maybe[Tuple2[scala.Predef.String, Int], Int](Tuple2(rn, 1))((i: Int) =>
       Tuple2(hydra.lib.strings.cat2(rn)(hydra.lib.literals.showInt32(hydra.lib.math.add(i)(1))), hydra.lib.math.add(i)(1)))(hydra.lib.maps.lookup[scala.Predef.String,
+        
          Int](rn)(nameMap))
     lazy val nn: scala.Predef.String = hydra.lib.pairs.first[scala.Predef.String, Int](nameAndIndex)
     lazy val ni: Int = hydra.lib.pairs.second[scala.Predef.String, Int](nameAndIndex)
@@ -104,6 +105,7 @@ def makeElements(omitTrivial: Boolean)(ns: hydra.module.Namespace)(lname: scala.
     f(hydra.lib.logic.ifElse[Seq[Tuple2[scala.Predef.String, hydra.core.Type]]](hydra.grammars.isComplex(p))(hydra.lib.lists.cons[Tuple2[scala.Predef.String,
        hydra.core.Type]](Tuple2(lname, hydra.core.Type.variable(hydra.grammars.toName(ns)(hydra.lib.pairs.first[scala.Predef.String,
        hydra.core.Type](hydra.lib.lists.head[Tuple2[scala.Predef.String, hydra.core.Type]](cpairs))))))(cpairs))(hydra.lib.logic.ifElse[Seq[Tuple2[scala.Predef.String,
+         
        hydra.core.Type]]](hydra.lib.lists.`null`[Tuple2[scala.Predef.String, hydra.core.Type]](cpairs))(Seq(Tuple2(lname,
        hydra.core.Type.unit)))(hydra.lib.lists.cons[Tuple2[scala.Predef.String, hydra.core.Type]](Tuple2(lname,
        hydra.lib.pairs.second[scala.Predef.String, hydra.core.Type](hydra.lib.lists.head[Tuple2[scala.Predef.String,
@@ -128,6 +130,7 @@ def makeElements(omitTrivial: Boolean)(ns: hydra.module.Namespace)(lname: scala.
     case hydra.grammar.Pattern.sequence(v_Pattern_sequence_pats) => forRecordOrUnion(true)((fields: Seq[hydra.core.FieldType]) => hydra.core.Type.record(fields))(v_Pattern_sequence_pats)
     case hydra.grammar.Pattern.star(v_Pattern_star_p) => mod("Elmt")((x: hydra.core.Type) => hydra.core.Type.list(x))(v_Pattern_star_p)
   def forRecordOrUnion(isRecord: Boolean)(construct: (Seq[hydra.core.FieldType] => hydra.core.Type))(pats: Seq[hydra.grammar.Pattern]): Seq[Tuple2[scala.Predef.String,
+    
      hydra.core.Type]] =
     {
     lazy val minPats: Seq[hydra.grammar.Pattern] = hydra.grammars.simplify(isRecord)(pats)
@@ -146,6 +149,7 @@ def makeElements(omitTrivial: Boolean)(ns: hydra.module.Namespace)(lname: scala.
        hydra.core.Type]]], Seq[Tuple2[scala.Predef.String, hydra.core.Type]]](hydra.lib.pairs.second[hydra.core.FieldType,
        Seq[Tuple2[scala.Predef.String, hydra.core.Type]]])(fieldPairs))
     hydra.lib.logic.ifElse[Seq[Tuple2[scala.Predef.String, hydra.core.Type]]](hydra.grammars.isNontrivial(isRecord)(pats))(hydra.lib.lists.cons[Tuple2[scala.Predef.String,
+      
        hydra.core.Type]](Tuple2(lname, construct(fields)))(els))(forPat(hydra.lib.lists.head[hydra.grammar.Pattern](minPats)))
   }
   forPat(pat)

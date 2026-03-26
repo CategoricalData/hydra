@@ -38,9 +38,9 @@ public abstract class Primary implements Serializable, Comparable<Primary> {
   }
 
   public static final class NoNewArray extends hydra.ext.java.syntax.Primary implements Serializable {
-    public final hydra.ext.java.syntax.PrimaryNoNewArray value;
+    public final hydra.ext.java.syntax.PrimaryNoNewArrayExpression value;
 
-    public NoNewArray (hydra.ext.java.syntax.PrimaryNoNewArray value) {
+    public NoNewArray (hydra.ext.java.syntax.PrimaryNoNewArrayExpression value) {
       this.value = value;
     }
 

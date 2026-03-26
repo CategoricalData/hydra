@@ -2021,7 +2021,7 @@ public interface Serde {
     return (p).accept(new hydra.ext.java.syntax.Primary.PartialVisitor<>() {
       @Override
       public hydra.ast.Expr visit(hydra.ext.java.syntax.Primary.NoNewArray n) {
-        return hydra.ext.java.Serde.writePrimaryNoNewArray((n).value);
+        return hydra.ext.java.Serde.writePrimaryNoNewArrayExpressionExpression((n).value);
       }
 
       @Override
@@ -2031,59 +2031,59 @@ public interface Serde {
     });
   }
 
-  static hydra.ast.Expr writePrimaryNoNewArray(hydra.ext.java.syntax.PrimaryNoNewArray p) {
-    return (p).accept(new hydra.ext.java.syntax.PrimaryNoNewArray.PartialVisitor<>() {
+  static hydra.ast.Expr writePrimaryNoNewArrayExpressionExpression(hydra.ext.java.syntax.PrimaryNoNewArrayExpression p) {
+    return (p).accept(new hydra.ext.java.syntax.PrimaryNoNewArrayExpression.PartialVisitor<>() {
       @Override
-      public hydra.ast.Expr visit(hydra.ext.java.syntax.PrimaryNoNewArray.Literal l) {
+      public hydra.ast.Expr visit(hydra.ext.java.syntax.PrimaryNoNewArrayExpression.Literal l) {
         return hydra.ext.java.Serde.writeLiteral((l).value);
       }
 
       @Override
-      public hydra.ast.Expr visit(hydra.ext.java.syntax.PrimaryNoNewArray.ClassLiteral cl) {
+      public hydra.ast.Expr visit(hydra.ext.java.syntax.PrimaryNoNewArrayExpression.ClassLiteral cl) {
         return hydra.ext.java.Serde.writeClassLiteral((cl).value);
       }
 
       @Override
-      public hydra.ast.Expr visit(hydra.ext.java.syntax.PrimaryNoNewArray.This ignored) {
+      public hydra.ast.Expr visit(hydra.ext.java.syntax.PrimaryNoNewArrayExpression.This ignored) {
         return hydra.Serialization.cst("this");
       }
 
       @Override
-      public hydra.ast.Expr visit(hydra.ext.java.syntax.PrimaryNoNewArray.DotThis n) {
+      public hydra.ast.Expr visit(hydra.ext.java.syntax.PrimaryNoNewArrayExpression.DotThis n) {
         return hydra.Serialization.dotSep(hydra.util.ConsList.of(
           hydra.ext.java.Serde.writeTypeName((n).value),
           hydra.Serialization.cst("this")));
       }
 
       @Override
-      public hydra.ast.Expr visit(hydra.ext.java.syntax.PrimaryNoNewArray.Parens e) {
+      public hydra.ast.Expr visit(hydra.ext.java.syntax.PrimaryNoNewArrayExpression.Parens e) {
         return hydra.Serialization.parenList(
           false,
           hydra.util.ConsList.of(hydra.ext.java.Serde.writeExpression((e).value)));
       }
 
       @Override
-      public hydra.ast.Expr visit(hydra.ext.java.syntax.PrimaryNoNewArray.ClassInstance ci) {
+      public hydra.ast.Expr visit(hydra.ext.java.syntax.PrimaryNoNewArrayExpression.ClassInstance ci) {
         return hydra.ext.java.Serde.writeClassInstanceCreationExpression((ci).value);
       }
 
       @Override
-      public hydra.ast.Expr visit(hydra.ext.java.syntax.PrimaryNoNewArray.FieldAccess fa) {
+      public hydra.ast.Expr visit(hydra.ext.java.syntax.PrimaryNoNewArrayExpression.FieldAccess fa) {
         return hydra.ext.java.Serde.writeFieldAccess((fa).value);
       }
 
       @Override
-      public hydra.ast.Expr visit(hydra.ext.java.syntax.PrimaryNoNewArray.ArrayAccess aa) {
+      public hydra.ast.Expr visit(hydra.ext.java.syntax.PrimaryNoNewArrayExpression.ArrayAccess aa) {
         return hydra.ext.java.Serde.writeArrayAccess((aa).value);
       }
 
       @Override
-      public hydra.ast.Expr visit(hydra.ext.java.syntax.PrimaryNoNewArray.MethodInvocation mi) {
+      public hydra.ast.Expr visit(hydra.ext.java.syntax.PrimaryNoNewArrayExpression.MethodInvocation mi) {
         return hydra.ext.java.Serde.writeMethodInvocation((mi).value);
       }
 
       @Override
-      public hydra.ast.Expr visit(hydra.ext.java.syntax.PrimaryNoNewArray.MethodReference mr) {
+      public hydra.ast.Expr visit(hydra.ext.java.syntax.PrimaryNoNewArrayExpression.MethodReference mr) {
         return hydra.ext.java.Serde.writeMethodReference((mr).value);
       }
     });

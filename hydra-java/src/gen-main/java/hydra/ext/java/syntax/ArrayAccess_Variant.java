@@ -78,9 +78,9 @@ public abstract class ArrayAccess_Variant implements Serializable, Comparable<Ar
   }
 
   public static final class Primary extends hydra.ext.java.syntax.ArrayAccess_Variant implements Serializable {
-    public final hydra.ext.java.syntax.PrimaryNoNewArray value;
+    public final hydra.ext.java.syntax.PrimaryNoNewArrayExpression value;
 
-    public Primary (hydra.ext.java.syntax.PrimaryNoNewArray value) {
+    public Primary (hydra.ext.java.syntax.PrimaryNoNewArrayExpression value) {
       this.value = value;
     }
 
