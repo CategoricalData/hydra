@@ -1,7 +1,7 @@
 package hydra.lib
 
 object lists:
-  def apply[A, B](fs: Seq[A => B])(xs: Seq[A]): Seq[B] = fs.zip(xs).map((f, x) => f(x))
+  def apply[A, B](fs: Seq[A => B])(xs: Seq[A]): Seq[B] = for { f <- fs; x <- xs } yield f(x)
   def at[A](i: Int)(xs: Seq[A]): A = xs(i)
   def bind[A, B](xs: Seq[A])(f: A => Seq[B]): Seq[B] = xs.flatMap(f)
   def concat[A](xss: Seq[Seq[A]]): Seq[A] = xss.flatten
@@ -38,8 +38,8 @@ object lists:
   def reverse[A](xs: Seq[A]): Seq[A] = xs.reverse
   def safeHead[A](xs: Seq[A]): Option[A] = xs.headOption
   def singleton[A](x: A): Seq[A] = Seq(x)
-  def sort[A](xs: Seq[A])(using ord: Ordering[A] = null): Seq[A] =
-    if ord != null then xs.sorted(using ord)
+  def sort[A](xs: Seq[A]): Seq[A] =
+    if xs.isEmpty then xs
     else xs.sortWith((a, b) => equality.lt(a)(b))
   def sortOn[A, B](f: A => B)(xs: Seq[A])(using ord: Ordering[B] = null): Seq[A] =
     if ord != null then xs.sortBy(f)(using ord)
@@ -47,6 +47,13 @@ object lists:
   def span[A](p: A => Boolean)(xs: Seq[A]): (Seq[A], Seq[A]) = xs.span(p)
   def tail[A](xs: Seq[A]): Seq[A] = if xs.isEmpty then Seq.empty else xs.tail
   def take[A](n: Int)(xs: Seq[A]): Seq[A] = xs.take(n)
-  def transpose[A](xss: Seq[Seq[A]]): Seq[Seq[A]] = xss.transpose
+  // Haskell's transpose handles ragged matrices (unlike Scala's built-in transpose)
+  def transpose[A](xss: Seq[Seq[A]]): Seq[Seq[A]] =
+    if xss.isEmpty then Seq.empty
+    else
+      val maxLen = xss.map(_.length).max
+      (0 until maxLen).map { i =>
+        xss.flatMap(row => if i < row.length then Some(row(i)) else None)
+      }.toSeq
   def zip[A, B](xs: Seq[A])(ys: Seq[B]): Seq[(A, B)] = xs.zip(ys)
   def zipWith[A, B, C](f: A => B => C)(xs: Seq[A])(ys: Seq[B]): Seq[C] = xs.zip(ys).map((a, b) => f(a)(b))
