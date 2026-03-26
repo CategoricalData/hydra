@@ -212,16 +212,16 @@
       (force-output)
       (dolist (pair files)
         (let* ((path (format nil "~A/~A" out-dir (first pair)))
-               (content (second pair))
-               (content (if (and (> (length content) 0)
-                                 (char/= (char content (1- (length content))) #\Newline))
-                            (concatenate 'string content (string #\Newline))
-                            content))
-               (dir (directory-namestring path)))
-          (ensure-directories-exist dir)
-          (with-open-file (out path :direction :output :if-exists :supersede
-                                    :external-format :utf-8)
-            (write-string content out))))
+               (content (second pair)))
+          (when (and content (stringp content) (> (length content) 0))
+            (let* ((content (if (char/= (char content (1- (length content))) #\Newline)
+                                (concatenate 'string content (string #\Newline))
+                                content))
+                   (dir (directory-namestring path)))
+              (ensure-directories-exist dir)
+              (with-open-file (out path :direction :output :if-exists :supersede
+                                        :external-format :utf-8)
+                (write-string content out))))))
       (length files))))
 
 ;; --- Main ---
