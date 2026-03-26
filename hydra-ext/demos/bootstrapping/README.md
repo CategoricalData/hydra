@@ -18,8 +18,9 @@ Each bootstrapping path proceeds as follows:
 3. Copy minimal static resources (primitive libraries, build files, test runners)
 4. Build and test the generated project
 
-By default, all output goes to `/tmp/hydra-bootstrapping-demo/` with subdirectories
-(override with `--output`):
+By default, the demo runs the 3x3 matrix of Haskell, Java, and Python as both hosts
+and targets. Scala and Clojure can be included with `--hosts` and `--targets` flags.
+All output goes to `/tmp/hydra-bootstrapping-demo/` (override with `--output`):
 
 ```
 /tmp/hydra-bootstrapping-demo/
@@ -29,8 +30,10 @@ By default, all output goes to `/tmp/hydra-bootstrapping-demo/` with subdirector
 ├── java-to-haskell/             # Java loads JSON, generates Haskell
 ├── java-to-java/                # Java loads JSON, generates Java
 ├── java-to-python/              # Java loads JSON, generates Python
+├── scala-to-python/             # Scala loads JSON, generates Python
 ├── python-to-haskell/           # Python loads JSON, generates Haskell
 ├── python-to-java/              # Python loads JSON, generates Java
+├── python-to-scala/             # Python loads JSON, generates Scala
 └── python-to-python/            # Python loads JSON, generates Python
 ```
 
@@ -41,7 +44,7 @@ hydra-ext/
 ├── demos/bootstrapping/
 │   ├── README.md                    # This file
 │   ├── bin/
-│   │   ├── bootstrap-all.sh         # Run all 9 bootstrapping paths
+│   │   ├── bootstrap-all.sh         # Run all bootstrapping paths
 │   │   ├── haskell-to-haskell.sh    # Haskell -> JSON -> Haskell
 │   │   ├── haskell-to-java.sh       # Haskell -> JSON -> Java
 │   │   ├── haskell-to-python.sh     # Haskell -> JSON -> Python
@@ -52,6 +55,10 @@ hydra-java/
 └── src/main/java/hydra/
     ├── Generation.java              # Java I/O wrapper
     └── Bootstrap.java               # Java bootstrap CLI
+hydra-scala/
+└── src/main/scala/hydra/
+    ├── Generation.scala             # Scala I/O wrapper
+    └── Bootstrap.scala              # Scala bootstrap CLI
 hydra-python/
 └── src/main/python/hydra/
     ├── generation.py                # Python I/O wrapper

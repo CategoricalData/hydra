@@ -1,20 +1,21 @@
 # Creating a new Hydra implementation
 
-Hydra currently has four complete implementations:
+Hydra currently has five complete implementations:
 [Hydra-Haskell](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell),
 [Hydra-Java](https://github.com/CategoricalData/hydra/tree/main/hydra-java),
-[Hydra-Python](https://github.com/CategoricalData/hydra/tree/main/hydra-python), and
+[Hydra-Python](https://github.com/CategoricalData/hydra/tree/main/hydra-python),
+[Hydra-Scala](https://github.com/CategoricalData/hydra/tree/main/hydra-scala), and
 [Hydra-Clojure](https://github.com/CategoricalData/hydra/tree/main/hydra-lisp/hydra-clojure).
-All four implement the entire [Hydra Kernel](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Kernel.hs),
+All five implement the entire [Hydra Kernel](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Kernel.hs),
 support the full [Hydra standard library](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Lib),
 and pass the [common test suite](https://github.com/CategoricalData/hydra/wiki/Testing).
-The four implementations are mutually self-hosting: each can load Hydra modules from a
+The five implementations are mutually self-hosting: each can load Hydra modules from a
 language-independent JSON representation and regenerate code for any of the target languages
 (see the [bootstrapping demo](https://github.com/CategoricalData/hydra/tree/main/hydra-ext/demos/bootstrapping)).
-Hydra-Haskell serves as the source of truth for the kernel, but the generated code in all four
+Hydra-Haskell serves as the source of truth for the kernel, but the generated code in all five
 languages is semantically equivalent.
 
-The following is a guide to creating a Hydra implementation in a new host language, like [Scala](https://github.com/CategoricalData/hydra/tree/main/hydra-scala) or [C#](https://github.com/CategoricalData/hydra/issues/139).
+The following is a guide to creating a Hydra implementation in a new host language, like [C#](https://github.com/CategoricalData/hydra/issues/139).
 For this guide, we'll use a hypothetical language called `NewLang` as our example.
 
 ## Step 1: Create the syntax model

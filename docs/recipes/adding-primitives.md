@@ -5,7 +5,7 @@ A step-by-step guide for adding new primitive functions and constants to Hydra's
 ## Prerequisites
 
 - Familiarity with Hydra's type system (see [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts))
-- Understanding of the target language implementations (Haskell, Java, Python, Clojure)
+- Understanding of the target language implementations (Haskell, Java, Python, Scala, Clojure)
 - Knowledge of which library the primitive belongs to (e.g. `hydra.lib.strings`, `hydra.lib.math`)
 
 **Important:** Every new primitive must include test cases in the common test suite. Tests ensure consistent behavior across all language implementations and catch regressions. Adding a primitive without tests is incomplete work.
@@ -14,7 +14,7 @@ A step-by-step guide for adding new primitive functions and constants to Hydra's
 
 Primitive functions are native implementations of operations which may not be expressible in Hydra's term language. They bridge Hydra to the host language's capabilities. Each primitive must be:
 
-1. Implemented natively in each language (Haskell, Java, Python)
+1. Implemented natively in each language (Haskell, Java, Python, Scala, Clojure)
 2. Registered in each language's primitive registry
 3. Exposed through a typed DSL wrapper
 
@@ -442,7 +442,7 @@ stack exec update-generation-tests
 
 ### Final verification
 
-After running `sync-all.sh` (or the individual sync scripts), verify that your new tests actually executed in all three implementations. Do not assume that a passing build means your tests ran -- confirm explicitly:
+After running `sync-all.sh` (or the individual sync scripts), verify that your new tests actually executed in all implementations. Do not assume that a passing build means your tests ran -- confirm explicitly:
 
 ```bash
 # Haskell: check that your test group appears in the output

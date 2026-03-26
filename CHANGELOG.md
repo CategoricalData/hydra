@@ -2,7 +2,7 @@
 
 All notable changes to the Hydra project are documented in this file.
 
-This changelog tracks changes across all Hydra implementations (Haskell, Java, Python) and supporting infrastructure.
+This changelog tracks changes across all Hydra implementations (Haskell, Java, Python, Scala, Clojure) and supporting infrastructure.
 
 The format is inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and [Apache TinkerPop](https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc).
 

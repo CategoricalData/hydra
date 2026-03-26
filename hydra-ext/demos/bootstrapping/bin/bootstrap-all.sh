@@ -80,10 +80,10 @@ done
 
 # Expand "all" for hosts and targets
 case "$HOSTS" in
-    all) HOSTS="haskell,java,python" ;;
+    all) HOSTS="haskell,java,scala,python" ;;
 esac
 case "$TARGETS" in
-    all) TARGETS="haskell,java,python,clojure,scheme,common-lisp,emacs-lisp" ;;
+    all) TARGETS="haskell,java,scala,python,clojure,scheme,common-lisp,emacs-lisp" ;;
 esac
 
 IFS=',' read -ra HOST_LIST <<< "$HOSTS"
@@ -96,6 +96,7 @@ IFS=',' read -ra TARGET_LIST <<< "$TARGETS"
 # Determine which tool families are needed based on selected hosts and targets.
 NEED_STACK=false
 NEED_JAVA=false
+NEED_SCALA=false
 NEED_PYTHON=false
 NEED_CLOJURE=false
 NEED_SCHEME=false
@@ -105,6 +106,7 @@ for lang in "${HOST_LIST[@]}" "${TARGET_LIST[@]}"; do
     case "$lang" in
         haskell)     NEED_STACK=true ;;
         java)        NEED_JAVA=true ;;
+        scala)       NEED_SCALA=true ;;
         python)      NEED_PYTHON=true ;;
         clojure)     NEED_CLOJURE=true ;;
         scheme)      NEED_SCHEME=true ;;
