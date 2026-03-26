@@ -9,6 +9,19 @@
 ;; a d0 suffix. Without this setting, SBCL reads them as single-float, losing precision.
 (setf *read-default-float-format* 'double-float)
 
+;; Load cl-ppcre for regex support.
+;; Try loading via ASDF directly (avoids quicklisp cache permission issues).
+(handler-case
+  (progn
+    (require :asdf)
+    ;; Register the quicklisp software directory so ASDF can find cl-ppcre
+    (let ((ql-software (merge-pathnames "quicklisp/dists/quicklisp/software/" (user-homedir-pathname))))
+      (when (probe-file ql-software)
+        (funcall (intern "INITIALIZE-SOURCE-REGISTRY" :asdf)
+                 `(:source-registry (:tree ,ql-software) :inherit-configuration))))
+    (funcall (intern "LOAD-SYSTEM" :asdf) :cl-ppcre :verbose nil))
+  (error (e) (format t "Warning: Could not load cl-ppcre: ~A~%" e)))
+
 ;; Determine the base directory (hydra-common-lisp/)
 (defvar *hydra-cl-base*
   (make-pathname :directory (butlast (pathname-directory *load-truename*) 3)
@@ -39,7 +52,8 @@
              "lib/eithers.lisp"
              "lib/literals.lisp"
              "lib/maybes.lisp"
-             "lib/pairs.lisp"))
+             "lib/pairs.lisp"
+             "lib/regex.lisp"))
   (load (hydra-path (concatenate 'string "src/main/common-lisp/hydra/" f))))
 
 ;; ============================================================================
@@ -100,6 +114,7 @@
              "lib/math.lisp"
              "lib/maybes.lisp"
              "lib/pairs.lisp"
+             "lib/regex.lisp"
              "lib/sets.lisp"
              "lib/strings.lisp"))
   (load-test-file f))
@@ -175,6 +190,7 @@
                     hydra_test_lib_math_all_tests
                     hydra_test_lib_maybes_all_tests
                     hydra_test_lib_pairs_all_tests
+                    hydra_test_lib_regex_all_tests
                     hydra_test_lib_sets_all_tests
                     hydra_test_lib_strings_all_tests
                     hydra_test_annotations_all_tests
