@@ -428,8 +428,12 @@
                                   (ns-val (let ((ns (hydra_module_module-namespace mod)))
                                             (if (string? ns) ns
                                                 (hydra_module_namespace-value ns))))
-                                  (ext (if (equal? target "clojure") ".clj" ".scm"))
-                                  (fp (string-append (namespace-to-path ns-val) ext)))
+                                  (ext (cond ((equal? target "clojure") "clj")
+                                             ((equal? target "scheme") "scm")
+                                             ((equal? target "common-lisp") "lisp")
+                                             ((equal? target "emacs-lisp") "el")
+                                             (else "scm")))
+                                  (fp (((hydra_names_namespace_to_file_path (list 'lower_snake '())) ext) ns-val)))
                              (list 'right (list (cons fp code))))))))))
              hydra_ext_lisp_language_lisp_language
              (list #f #f #f #f)
