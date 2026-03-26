@@ -55,3 +55,31 @@ jobs:
         working-directory: hydra-python
       - run: uv run pytest
         working-directory: hydra-python
+
+  clojure:
+    name: Clojure tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeLaGuardo/setup-clojure@v14
+        with:
+          cli: latest
+      - uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: clojure-${{ hashFiles('hydra-lisp/hydra-clojure/deps.edn') }}
+          restore-keys: clojure-
+      - run: bash run-tests.sh
+        working-directory: hydra-lisp/hydra-clojure
+
+  common-lisp:
+    name: Common Lisp tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install SBCL and cl-ppcre
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sbcl cl-ppcre
+      - run: bash run-tests.sh
+        working-directory: hydra-lisp/hydra-common-lisp
