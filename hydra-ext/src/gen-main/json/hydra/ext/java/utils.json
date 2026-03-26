@@ -269,7 +269,7 @@
                     "term": {
                       "union": {
                         "field": {"name": "literal", "term": {"variable": "lit"}},
-                        "typeName": "hydra.ext.java.syntax.PrimaryNoNewArray"}}},
+                        "typeName": "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"}}},
                   "typeName": "hydra.ext.java.syntax.Primary"}},
               "domain": [{"variable": "hydra.ext.java.syntax.Literal"}],
               "parameter": "lit"}}},
@@ -307,7 +307,7 @@
                                 "term": {
                                   "union": {
                                     "field": {"name": "parens", "term": {"variable": "e"}},
-                                    "typeName": "hydra.ext.java.syntax.PrimaryNoNewArray"}}},
+                                    "typeName": "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"}}},
                               "typeName": "hydra.ext.java.syntax.Primary"}},
                           "type": [
                             {
@@ -1251,7 +1251,7 @@
                                                             "typeName": "hydra.ext.java.syntax.ConditionalExpression"}}},
                                                       "typeName": "hydra.ext.java.syntax.AssignmentExpression"}}},
                                                 "typeName": "hydra.ext.java.syntax.Expression"}}},
-                                          "typeName": "hydra.ext.java.syntax.PrimaryNoNewArray"}}},
+                                          "typeName": "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"}}},
                                     "typeName": "hydra.ext.java.syntax.Primary"}}},
                               "typeName": "hydra.ext.java.syntax.PostfixExpression"}}},
                         "typeName": "hydra.ext.java.syntax.UnaryExpressionNotPlusMinus"}}},
@@ -1325,7 +1325,7 @@
                                             "term": {
                                               "union": {
                                                 "field": {"name": "literal", "term": {"variable": "lit"}},
-                                                "typeName": "hydra.ext.java.syntax.PrimaryNoNewArray"}}},
+                                                "typeName": "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"}}},
                                           "typeName": "hydra.ext.java.syntax.Primary"}}},
                                     "typeName": "hydra.ext.java.syntax.PostfixExpression"}}},
                               "typeName": "hydra.ext.java.syntax.UnaryExpressionNotPlusMinus"}}},
@@ -1382,7 +1382,7 @@
                                                               "term": {
                                                                 "union": {
                                                                   "field": {"name": "literal", "term": {"variable": "lit"}},
-                                                                  "typeName": "hydra.ext.java.syntax.PrimaryNoNewArray"}}},
+                                                                  "typeName": "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"}}},
                                                             "typeName": "hydra.ext.java.syntax.Primary"}}},
                                                       "typeName": "hydra.ext.java.syntax.PostfixExpression"}}},
                                                 "typeName": "hydra.ext.java.syntax.UnaryExpressionNotPlusMinus"}}},
@@ -1478,7 +1478,7 @@
                                                                                                                               "term": {
                                                                                                                                 "union": {
                                                                                                                                   "field": {"name": "literal", "term": {"variable": "lit"}},
-                                                                                                                                  "typeName": "hydra.ext.java.syntax.PrimaryNoNewArray"}}},
+                                                                                                                                  "typeName": "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"}}},
                                                                                                                             "typeName": "hydra.ext.java.syntax.Primary"}}},
                                                                                                                       "typeName": "hydra.ext.java.syntax.PostfixExpression"}}},
                                                                                                                 "typeName": "hydra.ext.java.syntax.UnaryExpressionNotPlusMinus"}}},
@@ -1916,7 +1916,7 @@
                                                                                                                               "term": {
                                                                                                                                 "union": {
                                                                                                                                   "field": {"name": "fieldAccess", "term": {"variable": "fa"}},
-                                                                                                                                  "typeName": "hydra.ext.java.syntax.PrimaryNoNewArray"}}},
+                                                                                                                                  "typeName": "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"}}},
                                                                                                                             "typeName": "hydra.ext.java.syntax.Primary"}}},
                                                                                                                       "typeName": "hydra.ext.java.syntax.PostfixExpression"}}},
                                                                                                                 "typeName": "hydra.ext.java.syntax.UnaryExpressionNotPlusMinus"}}},
@@ -2047,7 +2047,7 @@
                     "term": {
                       "union": {
                         "field": {"name": "methodInvocation", "term": {"variable": "mi"}},
-                        "typeName": "hydra.ext.java.syntax.PrimaryNoNewArray"}}},
+                        "typeName": "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"}}},
                   "typeName": "hydra.ext.java.syntax.Primary"}},
               "domain": [{"variable": "hydra.ext.java.syntax.MethodInvocation"}],
               "parameter": "mi"}}},
@@ -2136,7 +2136,7 @@
                                                                                                                               "term": {
                                                                                                                                 "union": {
                                                                                                                                   "field": {"name": "methodInvocation", "term": {"variable": "mi"}},
-                                                                                                                                  "typeName": "hydra.ext.java.syntax.PrimaryNoNewArray"}}},
+                                                                                                                                  "typeName": "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"}}},
                                                                                                                             "typeName": "hydra.ext.java.syntax.Primary"}}},
                                                                                                                       "typeName": "hydra.ext.java.syntax.PostfixExpression"}}},
                                                                                                                 "typeName": "hydra.ext.java.syntax.UnaryExpressionNotPlusMinus"}}},
@@ -2181,7 +2181,7 @@
                           "term": {
                             "union": {
                               "field": {"name": "methodInvocation", "term": {"variable": "mi"}},
-                              "typeName": "hydra.ext.java.syntax.PrimaryNoNewArray"}}},
+                              "typeName": "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"}}},
                         "typeName": "hydra.ext.java.syntax.Primary"}}},
                   "typeName": "hydra.ext.java.syntax.PostfixExpression"}},
               "domain": [{"variable": "hydra.ext.java.syntax.MethodInvocation"}],
@@ -2557,7 +2557,7 @@
                                       "term": {
                                         "union": {
                                           "field": {"name": "parens", "term": {"variable": "e"}},
-                                          "typeName": "hydra.ext.java.syntax.PrimaryNoNewArray"}}},
+                                          "typeName": "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"}}},
                                     "typeName": "hydra.ext.java.syntax.Primary"}}},
                               "typeName": "hydra.ext.java.syntax.PostfixExpression"}}},
                         "typeName": "hydra.ext.java.syntax.UnaryExpressionNotPlusMinus"}}},
@@ -3882,7 +3882,7 @@
                                                                                                                                                               {"name": "body", "term": {"variable": "mbody"}}],
                                                                                                                                                             "typeName": "hydra.ext.java.syntax.UnqualifiedClassInstanceCreationExpression"}}}],
                                                                                                                                                     "typeName": "hydra.ext.java.syntax.ClassInstanceCreationExpression"}}},
-                                                                                                                                              "typeName": "hydra.ext.java.syntax.PrimaryNoNewArray"}}},
+                                                                                                                                              "typeName": "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"}}},
                                                                                                                                         "typeName": "hydra.ext.java.syntax.Primary"}}},
                                                                                                                                   "typeName": "hydra.ext.java.syntax.PostfixExpression"}}},
                                                                                                                             "typeName": "hydra.ext.java.syntax.UnaryExpressionNotPlusMinus"}}},
@@ -3997,7 +3997,7 @@
                                                                                                                         "term": {
                                                                                                                           "union": {
                                                                                                                             "field": {"name": "this", "term": {"unit": {}}},
-                                                                                                                            "typeName": "hydra.ext.java.syntax.PrimaryNoNewArray"}}},
+                                                                                                                            "typeName": "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"}}},
                                                                                                                       "typeName": "hydra.ext.java.syntax.Primary"}}},
                                                                                                                 "typeName": "hydra.ext.java.syntax.PostfixExpression"}}},
                                                                                                           "typeName": "hydra.ext.java.syntax.UnaryExpressionNotPlusMinus"}}},
@@ -7094,7 +7094,7 @@
                                                 "term": {
                                                   "union": {
                                                     "field": {"name": "this", "term": {"unit": {}}},
-                                                    "typeName": "hydra.ext.java.syntax.PrimaryNoNewArray"}}},
+                                                    "typeName": "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"}}},
                                               "typeName": "hydra.ext.java.syntax.Primary"}}},
                                         "typeName": "hydra.ext.java.syntax.FieldAccess_Qualifier"}}},
                                   {"name": "identifier", "term": {"variable": "id"}}],

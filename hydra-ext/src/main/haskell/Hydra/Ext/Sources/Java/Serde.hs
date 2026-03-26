@@ -221,7 +221,7 @@ module_ = Module ns elements
       toTermDefinition writePreDecrementExpression,
       toTermDefinition writePreIncrementExpression,
       toTermDefinition writePrimary,
-      toTermDefinition writePrimaryNoNewArray,
+      toTermDefinition writePrimaryNoNewArrayExpressionExpression,
       toTermDefinition writePrimitiveType,
       toTermDefinition writePrimitiveTypeWithAnnotations,
       toTermDefinition writeReceiverParameter,
@@ -740,7 +740,7 @@ writePrimary :: TBinding (Java.Primary -> Expr)
 writePrimary = def "writePrimary" $
   lambda "p" $
     cases Java._Primary (var "p") Nothing [
-      Java._Primary_noNewArray>>: lambda "n" $ writePrimaryNoNewArray @@ var "n",
+      Java._Primary_noNewArray>>: lambda "n" $ writePrimaryNoNewArrayExpressionExpression @@ var "n",
       Java._Primary_arrayCreation>>: lambda "a" $ writeArrayCreationExpression @@ var "a"]
 
 writeWildcardBounds :: TBinding (Java.WildcardBounds -> Expr)
@@ -1269,20 +1269,20 @@ writeIfThenStatement = def "writeIfThenStatement" $
 -- Primary expressions
 -- =============================================================================
 
-writePrimaryNoNewArray :: TBinding (Java.PrimaryNoNewArray -> Expr)
-writePrimaryNoNewArray = def "writePrimaryNoNewArray" $
+writePrimaryNoNewArrayExpressionExpression :: TBinding (Java.PrimaryNoNewArrayExpression -> Expr)
+writePrimaryNoNewArrayExpressionExpression = def "writePrimaryNoNewArrayExpressionExpression" $
   lambda "p" $
-    cases Java._PrimaryNoNewArray (var "p") Nothing [
-      Java._PrimaryNoNewArray_literal>>: lambda "l" $ writeLiteral @@ var "l",
-      Java._PrimaryNoNewArray_classLiteral>>: lambda "cl" $ writeClassLiteral @@ var "cl",
-      Java._PrimaryNoNewArray_this>>: constant $ Serialization.cst @@ string "this",
-      Java._PrimaryNoNewArray_dotThis>>: lambda "n" $ Serialization.dotSep @@ list [writeTypeName @@ var "n", Serialization.cst @@ string "this"],
-      Java._PrimaryNoNewArray_parens>>: lambda "e" $ Serialization.parenList @@ false @@ list [writeExpression @@ var "e"],
-      Java._PrimaryNoNewArray_classInstance>>: lambda "ci" $ writeClassInstanceCreationExpression @@ var "ci",
-      Java._PrimaryNoNewArray_fieldAccess>>: lambda "fa" $ writeFieldAccess @@ var "fa",
-      Java._PrimaryNoNewArray_arrayAccess>>: lambda "aa" $ writeArrayAccess @@ var "aa",
-      Java._PrimaryNoNewArray_methodInvocation>>: lambda "mi" $ writeMethodInvocation @@ var "mi",
-      Java._PrimaryNoNewArray_methodReference>>: lambda "mr" $ writeMethodReference @@ var "mr"]
+    cases Java._PrimaryNoNewArrayExpression (var "p") Nothing [
+      Java._PrimaryNoNewArrayExpression_literal>>: lambda "l" $ writeLiteral @@ var "l",
+      Java._PrimaryNoNewArrayExpression_classLiteral>>: lambda "cl" $ writeClassLiteral @@ var "cl",
+      Java._PrimaryNoNewArrayExpression_this>>: constant $ Serialization.cst @@ string "this",
+      Java._PrimaryNoNewArrayExpression_dotThis>>: lambda "n" $ Serialization.dotSep @@ list [writeTypeName @@ var "n", Serialization.cst @@ string "this"],
+      Java._PrimaryNoNewArrayExpression_parens>>: lambda "e" $ Serialization.parenList @@ false @@ list [writeExpression @@ var "e"],
+      Java._PrimaryNoNewArrayExpression_classInstance>>: lambda "ci" $ writeClassInstanceCreationExpression @@ var "ci",
+      Java._PrimaryNoNewArrayExpression_fieldAccess>>: lambda "fa" $ writeFieldAccess @@ var "fa",
+      Java._PrimaryNoNewArrayExpression_arrayAccess>>: lambda "aa" $ writeArrayAccess @@ var "aa",
+      Java._PrimaryNoNewArrayExpression_methodInvocation>>: lambda "mi" $ writeMethodInvocation @@ var "mi",
+      Java._PrimaryNoNewArrayExpression_methodReference>>: lambda "mr" $ writeMethodReference @@ var "mr"]
 
 writeFieldAccess :: TBinding (Java.FieldAccess -> Expr)
 writeFieldAccess = def "writeFieldAccess" $

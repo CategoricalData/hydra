@@ -676,7 +676,7 @@ arrayAccess_VariantName x =
         Core.fieldName = (Core.Name "name"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-arrayAccess_VariantPrimary :: Phantoms.TTerm Syntax.PrimaryNoNewArray -> Phantoms.TTerm Syntax.ArrayAccess_Variant
+arrayAccess_VariantPrimary :: Phantoms.TTerm Syntax.PrimaryNoNewArrayExpression -> Phantoms.TTerm Syntax.ArrayAccess_Variant
 arrayAccess_VariantPrimary x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.ext.java.syntax.ArrayAccess_Variant"),
@@ -9530,7 +9530,7 @@ primaryArrayCreation x =
         Core.fieldName = (Core.Name "arrayCreation"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-primaryNoNewArray :: Phantoms.TTerm Syntax.PrimaryNoNewArray -> Phantoms.TTerm Syntax.Primary
+primaryNoNewArray :: Phantoms.TTerm Syntax.PrimaryNoNewArrayExpression -> Phantoms.TTerm Syntax.Primary
 primaryNoNewArray x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.ext.java.syntax.Primary"),
@@ -9538,82 +9538,82 @@ primaryNoNewArray x =
         Core.fieldName = (Core.Name "noNewArray"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-primaryNoNewArrayArrayAccess :: Phantoms.TTerm Syntax.ArrayAccess -> Phantoms.TTerm Syntax.PrimaryNoNewArray
-primaryNoNewArrayArrayAccess x =
+primaryNoNewArrayExpressionArrayAccess :: Phantoms.TTerm Syntax.ArrayAccess -> Phantoms.TTerm Syntax.PrimaryNoNewArrayExpression
+primaryNoNewArrayExpressionArrayAccess x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.java.syntax.PrimaryNoNewArray"),
+      Core.injectionTypeName = (Core.Name "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "arrayAccess"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-primaryNoNewArrayClassInstance :: Phantoms.TTerm Syntax.ClassInstanceCreationExpression -> Phantoms.TTerm Syntax.PrimaryNoNewArray
-primaryNoNewArrayClassInstance x =
+primaryNoNewArrayExpressionClassInstance :: Phantoms.TTerm Syntax.ClassInstanceCreationExpression -> Phantoms.TTerm Syntax.PrimaryNoNewArrayExpression
+primaryNoNewArrayExpressionClassInstance x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.java.syntax.PrimaryNoNewArray"),
+      Core.injectionTypeName = (Core.Name "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "classInstance"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-primaryNoNewArrayClassLiteral :: Phantoms.TTerm Syntax.ClassLiteral -> Phantoms.TTerm Syntax.PrimaryNoNewArray
-primaryNoNewArrayClassLiteral x =
+primaryNoNewArrayExpressionClassLiteral :: Phantoms.TTerm Syntax.ClassLiteral -> Phantoms.TTerm Syntax.PrimaryNoNewArrayExpression
+primaryNoNewArrayExpressionClassLiteral x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.java.syntax.PrimaryNoNewArray"),
+      Core.injectionTypeName = (Core.Name "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "classLiteral"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-primaryNoNewArrayDotThis :: Phantoms.TTerm Syntax.TypeName -> Phantoms.TTerm Syntax.PrimaryNoNewArray
-primaryNoNewArrayDotThis x =
+primaryNoNewArrayExpressionDotThis :: Phantoms.TTerm Syntax.TypeName -> Phantoms.TTerm Syntax.PrimaryNoNewArrayExpression
+primaryNoNewArrayExpressionDotThis x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.java.syntax.PrimaryNoNewArray"),
+      Core.injectionTypeName = (Core.Name "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dotThis"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-primaryNoNewArrayFieldAccess :: Phantoms.TTerm Syntax.FieldAccess -> Phantoms.TTerm Syntax.PrimaryNoNewArray
-primaryNoNewArrayFieldAccess x =
+primaryNoNewArrayExpressionFieldAccess :: Phantoms.TTerm Syntax.FieldAccess -> Phantoms.TTerm Syntax.PrimaryNoNewArrayExpression
+primaryNoNewArrayExpressionFieldAccess x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.java.syntax.PrimaryNoNewArray"),
+      Core.injectionTypeName = (Core.Name "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "fieldAccess"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-primaryNoNewArrayLiteral :: Phantoms.TTerm Syntax.Literal -> Phantoms.TTerm Syntax.PrimaryNoNewArray
-primaryNoNewArrayLiteral x =
+primaryNoNewArrayExpressionLiteral :: Phantoms.TTerm Syntax.Literal -> Phantoms.TTerm Syntax.PrimaryNoNewArrayExpression
+primaryNoNewArrayExpressionLiteral x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.java.syntax.PrimaryNoNewArray"),
+      Core.injectionTypeName = (Core.Name "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "literal"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-primaryNoNewArrayMethodInvocation :: Phantoms.TTerm Syntax.MethodInvocation -> Phantoms.TTerm Syntax.PrimaryNoNewArray
-primaryNoNewArrayMethodInvocation x =
+primaryNoNewArrayExpressionMethodInvocation :: Phantoms.TTerm Syntax.MethodInvocation -> Phantoms.TTerm Syntax.PrimaryNoNewArrayExpression
+primaryNoNewArrayExpressionMethodInvocation x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.java.syntax.PrimaryNoNewArray"),
+      Core.injectionTypeName = (Core.Name "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "methodInvocation"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-primaryNoNewArrayMethodReference :: Phantoms.TTerm Syntax.MethodReference -> Phantoms.TTerm Syntax.PrimaryNoNewArray
-primaryNoNewArrayMethodReference x =
+primaryNoNewArrayExpressionMethodReference :: Phantoms.TTerm Syntax.MethodReference -> Phantoms.TTerm Syntax.PrimaryNoNewArrayExpression
+primaryNoNewArrayExpressionMethodReference x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.java.syntax.PrimaryNoNewArray"),
+      Core.injectionTypeName = (Core.Name "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "methodReference"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-primaryNoNewArrayParens :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.PrimaryNoNewArray
-primaryNoNewArrayParens x =
+primaryNoNewArrayExpressionParens :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.PrimaryNoNewArrayExpression
+primaryNoNewArrayExpressionParens x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.java.syntax.PrimaryNoNewArray"),
+      Core.injectionTypeName = (Core.Name "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parens"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-primaryNoNewArrayThis :: Phantoms.TTerm Syntax.PrimaryNoNewArray
-primaryNoNewArrayThis =
+primaryNoNewArrayExpressionThis :: Phantoms.TTerm Syntax.PrimaryNoNewArrayExpression
+primaryNoNewArrayExpressionThis =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.ext.java.syntax.PrimaryNoNewArray"),
+      Core.injectionTypeName = (Core.Name "hydra.ext.java.syntax.PrimaryNoNewArrayExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "this"),
         Core.fieldTerm = Core.TermUnit}}))

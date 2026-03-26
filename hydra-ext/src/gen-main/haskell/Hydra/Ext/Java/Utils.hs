@@ -274,7 +274,7 @@ javaConstructorCall ci args mbody =
         Syntax.InclusiveOrExpression [
           Syntax.ExclusiveOrExpression [
             Syntax.AndExpression [
-              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayClassInstance (Syntax.ClassInstanceCreationExpression {
+              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray (Syntax.PrimaryNoNewArrayExpressionClassInstance (Syntax.ClassInstanceCreationExpression {
                 Syntax.classInstanceCreationExpressionQualifier = Nothing,
                 Syntax.classInstanceCreationExpressionExpression = Syntax.UnqualifiedClassInstanceCreationExpression {
                   Syntax.unqualifiedClassInstanceCreationExpressionTypeArguments = [],
@@ -345,7 +345,7 @@ javaExpressionNameToJavaExpression en =
 javaExpressionToJavaPrimary :: Syntax.Expression -> Syntax.Primary
 javaExpressionToJavaPrimary e =
 
-      let fallback = Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayParens e)
+      let fallback = Syntax.PrimaryNoNewArray (Syntax.PrimaryNoNewArrayExpressionParens e)
       in case e of
         Syntax.ExpressionAssignment v0 -> case v0 of
           Syntax.AssignmentExpressionConditional v1 -> case v1 of
@@ -382,7 +382,7 @@ javaExpressionToJavaPrimary e =
 
 javaExpressionToJavaUnaryExpression :: Syntax.Expression -> Syntax.UnaryExpression
 javaExpressionToJavaUnaryExpression e =
-    Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayParens e))))
+    Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray (Syntax.PrimaryNoNewArrayExpressionParens e))))
 
 javaFieldAccessToJavaExpression :: Syntax.FieldAccess -> Syntax.Expression
 javaFieldAccessToJavaExpression fa =
@@ -391,7 +391,7 @@ javaFieldAccessToJavaExpression fa =
         Syntax.InclusiveOrExpression [
           Syntax.ExclusiveOrExpression [
             Syntax.AndExpression [
-              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayFieldAccess fa)))))))))]]]]])))
+              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray (Syntax.PrimaryNoNewArrayExpressionFieldAccess fa)))))))))]]]]])))
 
 javaIdentifier :: String -> Syntax.Identifier
 javaIdentifier s = Syntax.Identifier (sanitizeJavaName s)
@@ -463,18 +463,18 @@ javaLiteralToJavaExpression lit =
         Syntax.InclusiveOrExpression [
           Syntax.ExclusiveOrExpression [
             Syntax.AndExpression [
-              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayLiteral lit)))))))))]]]]])))
+              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray (Syntax.PrimaryNoNewArrayExpressionLiteral lit)))))))))]]]]])))
 
 javaLiteralToJavaMultiplicativeExpression :: Syntax.Literal -> Syntax.MultiplicativeExpression
 javaLiteralToJavaMultiplicativeExpression lit =
-    Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayLiteral lit)))))
+    Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray (Syntax.PrimaryNoNewArrayExpressionLiteral lit)))))
 
 javaLiteralToJavaPrimary :: Syntax.Literal -> Syntax.Primary
-javaLiteralToJavaPrimary lit = Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayLiteral lit)
+javaLiteralToJavaPrimary lit = Syntax.PrimaryNoNewArray (Syntax.PrimaryNoNewArrayExpressionLiteral lit)
 
 javaLiteralToJavaRelationalExpression :: Syntax.Literal -> Syntax.RelationalExpression
 javaLiteralToJavaRelationalExpression lit =
-    Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayLiteral lit))))))))
+    Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray (Syntax.PrimaryNoNewArrayExpressionLiteral lit))))))))
 
 javaMemberField :: [Syntax.FieldModifier] -> Syntax.Type -> Syntax.VariableDeclarator -> Syntax.ClassBodyDeclaration
 javaMemberField mods jt v =
@@ -509,14 +509,14 @@ javaMethodInvocationToJavaExpression mi =
         Syntax.InclusiveOrExpression [
           Syntax.ExclusiveOrExpression [
             Syntax.AndExpression [
-              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayMethodInvocation mi)))))))))]]]]])))
+              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray (Syntax.PrimaryNoNewArrayExpressionMethodInvocation mi)))))))))]]]]])))
 
 javaMethodInvocationToJavaPostfixExpression :: Syntax.MethodInvocation -> Syntax.PostfixExpression
 javaMethodInvocationToJavaPostfixExpression mi =
-    Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayMethodInvocation mi))
+    Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray (Syntax.PrimaryNoNewArrayExpressionMethodInvocation mi))
 
 javaMethodInvocationToJavaPrimary :: Syntax.MethodInvocation -> Syntax.Primary
-javaMethodInvocationToJavaPrimary mi = Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayMethodInvocation mi)
+javaMethodInvocationToJavaPrimary mi = Syntax.PrimaryNoNewArray (Syntax.PrimaryNoNewArrayExpressionMethodInvocation mi)
 
 javaMethodInvocationToJavaStatement :: Syntax.MethodInvocation -> Syntax.Statement
 javaMethodInvocationToJavaStatement mi =
@@ -615,7 +615,7 @@ javaRelationalExpressionToJavaExpression re = javaEqualityExpressionToJavaExpres
 
 javaRelationalExpressionToJavaUnaryExpression :: Syntax.RelationalExpression -> Syntax.UnaryExpression
 javaRelationalExpressionToJavaUnaryExpression re =
-    Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayParens (Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
+    Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray (Syntax.PrimaryNoNewArrayExpressionParens (Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
       Syntax.ConditionalAndExpression [
         Syntax.InclusiveOrExpression [
           Syntax.ExclusiveOrExpression [
@@ -642,7 +642,7 @@ javaThis =
         Syntax.InclusiveOrExpression [
           Syntax.ExclusiveOrExpression [
             Syntax.AndExpression [
-              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray_ Syntax.PrimaryNoNewArrayThis))))))))]]]]])))
+              Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray Syntax.PrimaryNoNewArrayExpressionThis))))))))]]]]])))
 
 javaThrowIllegalArgumentException :: [Syntax.Expression] -> Syntax.Statement
 javaThrowIllegalArgumentException args =
@@ -909,7 +909,7 @@ toAssignStmt fname =
       let id = fieldNameToJavaIdentifier fname
           lhs =
                   Syntax.LeftHandSideFieldAccess (Syntax.FieldAccess {
-                    Syntax.fieldAccessQualifier = (Syntax.FieldAccess_QualifierPrimary (Syntax.PrimaryNoNewArray_ Syntax.PrimaryNoNewArrayThis)),
+                    Syntax.fieldAccessQualifier = (Syntax.FieldAccess_QualifierPrimary (Syntax.PrimaryNoNewArray Syntax.PrimaryNoNewArrayExpressionThis)),
                     Syntax.fieldAccessIdentifier = id})
           rhs = fieldNameToJavaExpression fname
       in (javaAssignmentStatement lhs rhs)
