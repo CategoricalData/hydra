@@ -24,13 +24,7 @@ T0 = TypeVar("T0")
 def map_first_letter(mapping: Callable[[str], str], s: str) -> str:
     r"""A helper which maps the first letter of a string to another string."""
 
-    @lru_cache(1)
-    def list() -> frozenlist[int]:
-        return hydra.lib.strings.to_list(s)
-    @lru_cache(1)
-    def first_letter() -> str:
-        return mapping(hydra.lib.strings.from_list(hydra.lib.lists.pure(hydra.lib.lists.head(list()))))
-    return hydra.lib.logic.if_else(hydra.lib.strings.null(s), (lambda : s), (lambda : hydra.lib.strings.cat2(first_letter(), hydra.lib.strings.from_list(hydra.lib.lists.tail(list())))))
+    return hydra.lib.logic.if_else(hydra.lib.strings.null(s), (lambda : s), (lambda : (list := hydra.lib.strings.to_list(s), (first_letter := mapping(hydra.lib.strings.from_list(hydra.lib.lists.pure(hydra.lib.lists.head(list)))), hydra.lib.strings.cat2(first_letter, hydra.lib.strings.from_list(hydra.lib.lists.tail(list))))[1])[1]))
 
 def capitalize(v1: str) -> str:
     r"""Capitalize the first letter of a string."""

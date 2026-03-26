@@ -782,51 +782,51 @@
                     "function": {
                       "lambda": {
                         "body": {
-                          "let": {
-                            "bindings": [
-                              {
-                                "name": "list",
-                                "term": {
-                                  "application": {
-                                    "argument": {"variable": "s"},
-                                    "function": {"function": {"primitive": "hydra.lib.strings.toList"}}}},
-                                "type": [
-                                  {
-                                    "constraints": null,
-                                    "type": {"list": {"literal": {"integer": {"int32": {}}}}},
-                                    "variables": []}]}],
-                            "body": {
+                          "application": {
+                            "argument": {
                               "let": {
                                 "bindings": [
                                   {
-                                    "name": "firstLetter",
+                                    "name": "list",
                                     "term": {
                                       "application": {
-                                        "argument": {
+                                        "argument": {"variable": "s"},
+                                        "function": {"function": {"primitive": "hydra.lib.strings.toList"}}}},
+                                    "type": [
+                                      {
+                                        "constraints": null,
+                                        "type": {"list": {"literal": {"integer": {"int32": {}}}}},
+                                        "variables": []}]}],
+                                "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "firstLetter",
+                                        "term": {
                                           "application": {
                                             "argument": {
                                               "application": {
                                                 "argument": {
                                                   "application": {
-                                                    "argument": {"variable": "list"},
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "list"},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"function": {"primitive": "hydra.lib.lists.head"}},
+                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
                                                     "function": {
                                                       "typeApplication": {
-                                                        "body": {"function": {"primitive": "hydra.lib.lists.head"}},
+                                                        "body": {"function": {"primitive": "hydra.lib.lists.pure"}},
                                                         "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {"function": {"primitive": "hydra.lib.lists.pure"}},
-                                                    "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                            "function": {"function": {"primitive": "hydra.lib.strings.fromList"}}}},
-                                        "function": {"variable": "mapping"}}},
-                                    "type": [
-                                      {
-                                        "constraints": null,
-                                        "type": {"literal": {"string": {}}},
-                                        "variables": []}]}],
-                                "body": {
-                                  "application": {
-                                    "argument": {
+                                                "function": {"function": {"primitive": "hydra.lib.strings.fromList"}}}},
+                                            "function": {"variable": "mapping"}}},
+                                        "type": [
+                                          {
+                                            "constraints": null,
+                                            "type": {"literal": {"string": {}}},
+                                            "variables": []}]}],
+                                    "body": {
                                       "application": {
                                         "argument": {
                                           "application": {
@@ -841,20 +841,20 @@
                                         "function": {
                                           "application": {
                                             "argument": {"variable": "firstLetter"},
-                                            "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                    "function": {
+                                            "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}}}}}},
+                            "function": {
+                              "application": {
+                                "argument": {"variable": "s"},
+                                "function": {
+                                  "application": {
+                                    "argument": {
                                       "application": {
                                         "argument": {"variable": "s"},
-                                        "function": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"variable": "s"},
-                                                "function": {"function": {"primitive": "hydra.lib.strings.null"}}}},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
-                                                "type": {"literal": {"string": {}}}}}}}}}}}}}}},
+                                        "function": {"function": {"primitive": "hydra.lib.strings.null"}}}},
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                        "type": {"literal": {"string": {}}}}}}}}}}},
                         "domain": [{"literal": {"string": {}}}],
                         "parameter": "s"}}},
                   "domain": [

@@ -158,14 +158,18 @@ public interface Formatting {
   }
 
   static String mapFirstLetter(java.util.function.Function<String, String> mapping, String s) {
-    hydra.util.ConsList<Integer> list = hydra.lib.strings.ToList.apply(s);
-    hydra.util.Lazy<String> firstLetter = new hydra.util.Lazy<>(() -> (mapping).apply(hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply(hydra.lib.lists.Head.apply(list)))));
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.strings.Null.apply(s),
       () -> s,
-      () -> hydra.lib.strings.Cat2.apply(
-        firstLetter.get(),
-        hydra.lib.strings.FromList.apply(hydra.lib.lists.Tail.apply(list))));
+      () -> ((java.util.function.Supplier<String>) (() -> {
+        hydra.util.ConsList<Integer> list = hydra.lib.strings.ToList.apply(s);
+        return ((java.util.function.Supplier<String>) (() -> {
+          hydra.util.Lazy<String> firstLetter = new hydra.util.Lazy<>(() -> (mapping).apply(hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply(hydra.lib.lists.Head.apply(list)))));
+          return hydra.lib.strings.Cat2.apply(
+            firstLetter.get(),
+            hydra.lib.strings.FromList.apply(hydra.lib.lists.Tail.apply(list)));
+        })).get();
+      })).get());
   }
 
   static String nonAlnumToUnderscores(String input) {
