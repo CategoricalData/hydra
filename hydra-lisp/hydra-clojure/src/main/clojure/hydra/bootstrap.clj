@@ -80,7 +80,7 @@
     "java"
     (do (load-coder-modules!
           ["hydra.ext.java.syntax" "hydra.ext.java.language" "hydra.ext.java.names"
-           "hydra.ext.java.helpers" "hydra.ext.java.utils"
+           "hydra.ext.java.environment" "hydra.ext.java.utils"
            "hydra.ext.java.serde" "hydra.ext.java.coder"])
         {:coder @(rc 'hydra_ext_java_coder_module_to_java)
          :language @(rc 'hydra_ext_java_language_java_language)
@@ -89,7 +89,7 @@
     "python"
     (do (load-coder-modules!
           ["hydra.ext.python.syntax" "hydra.ext.python.language" "hydra.ext.python.names"
-           "hydra.ext.python.helpers" "hydra.ext.python.utils"
+           "hydra.ext.python.environment" "hydra.ext.python.utils"
            "hydra.ext.python.serde" "hydra.ext.python.coder"])
         (preload/install-coder-performance-patches!)
         {:coder @(rc 'hydra_ext_python_coder_module_to_python)

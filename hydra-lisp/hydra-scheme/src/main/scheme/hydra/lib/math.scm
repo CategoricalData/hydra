@@ -1,7 +1,6 @@
 (define-library (hydra lib math)
   (import (scheme base)
-          (scheme inexact)
-          (scheme bytevector))
+          (scheme inexact))
   (export hydra_lib_math_abs
           hydra_lib_math_acos
           hydra_lib_math_acosh
