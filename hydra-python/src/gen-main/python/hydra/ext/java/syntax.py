@@ -2449,7 +2449,7 @@ class VariableAccess(metaclass=_VariableAccessMeta):
     EXPRESSION_NAME = hydra.core.Name("expressionName")
     FIELD_ACCESS = hydra.core.Name("fieldAccess")
 
-class PrimaryNoNewArray_(Node["PrimaryNoNewArray"]):
+class PrimaryNoNewArray(Node["PrimaryNoNewArrayExpression"]):
     ...
 
 class PrimaryArrayCreation(Node["ArrayCreationExpression"]):
@@ -2466,48 +2466,48 @@ class Primary(metaclass=_PrimaryMeta):
     NO_NEW_ARRAY = hydra.core.Name("noNewArray")
     ARRAY_CREATION = hydra.core.Name("arrayCreation")
 
-class PrimaryNoNewArrayLiteral(Node["Literal"]):
+class PrimaryNoNewArrayExpressionLiteral(Node["Literal"]):
     ...
 
-class PrimaryNoNewArrayClassLiteral(Node["ClassLiteral"]):
+class PrimaryNoNewArrayExpressionClassLiteral(Node["ClassLiteral"]):
     ...
 
-class PrimaryNoNewArrayThis:
+class PrimaryNoNewArrayExpressionThis:
     __slots__ = ()
     def __eq__(self, other):
-        return isinstance(other, PrimaryNoNewArrayThis)
+        return isinstance(other, PrimaryNoNewArrayExpressionThis)
     def __hash__(self):
-        return hash("PrimaryNoNewArrayThis")
+        return hash("PrimaryNoNewArrayExpressionThis")
 
-class PrimaryNoNewArrayDotThis(Node["TypeName"]):
+class PrimaryNoNewArrayExpressionDotThis(Node["TypeName"]):
     ...
 
-class PrimaryNoNewArrayParens(Node["Expression"]):
+class PrimaryNoNewArrayExpressionParens(Node["Expression"]):
     ...
 
-class PrimaryNoNewArrayClassInstance(Node["ClassInstanceCreationExpression"]):
+class PrimaryNoNewArrayExpressionClassInstance(Node["ClassInstanceCreationExpression"]):
     ...
 
-class PrimaryNoNewArrayFieldAccess(Node["FieldAccess"]):
+class PrimaryNoNewArrayExpressionFieldAccess(Node["FieldAccess"]):
     ...
 
-class PrimaryNoNewArrayArrayAccess(Node["ArrayAccess"]):
+class PrimaryNoNewArrayExpressionArrayAccess(Node["ArrayAccess"]):
     ...
 
-class PrimaryNoNewArrayMethodInvocation(Node["MethodInvocation"]):
+class PrimaryNoNewArrayExpressionMethodInvocation(Node["MethodInvocation"]):
     ...
 
-class PrimaryNoNewArrayMethodReference(Node["MethodReference"]):
+class PrimaryNoNewArrayExpressionMethodReference(Node["MethodReference"]):
     ...
 
-class _PrimaryNoNewArrayMeta(type):
+class _PrimaryNoNewArrayExpressionMeta(type):
     def __getitem__(cls, item):
         return object
 
-class PrimaryNoNewArray(metaclass=_PrimaryNoNewArrayMeta):
-    r"""PrimaryNoNewArrayLiteral | PrimaryNoNewArrayClassLiteral | PrimaryNoNewArrayThis | PrimaryNoNewArrayDotThis | PrimaryNoNewArrayParens | PrimaryNoNewArrayClassInstance | PrimaryNoNewArrayFieldAccess | PrimaryNoNewArrayArrayAccess | PrimaryNoNewArrayMethodInvocation | PrimaryNoNewArrayMethodReference"""
+class PrimaryNoNewArrayExpression(metaclass=_PrimaryNoNewArrayExpressionMeta):
+    r"""PrimaryNoNewArrayExpressionLiteral | PrimaryNoNewArrayExpressionClassLiteral | PrimaryNoNewArrayExpressionThis | PrimaryNoNewArrayExpressionDotThis | PrimaryNoNewArrayExpressionParens | PrimaryNoNewArrayExpressionClassInstance | PrimaryNoNewArrayExpressionFieldAccess | PrimaryNoNewArrayExpressionArrayAccess | PrimaryNoNewArrayExpressionMethodInvocation | PrimaryNoNewArrayExpressionMethodReference"""
 
-    TYPE_ = hydra.core.Name("hydra.ext.java.syntax.PrimaryNoNewArray")
+    TYPE_ = hydra.core.Name("hydra.ext.java.syntax.PrimaryNoNewArrayExpression")
     LITERAL = hydra.core.Name("literal")
     CLASS_LITERAL = hydra.core.Name("classLiteral")
     THIS = hydra.core.Name("this")
@@ -2727,7 +2727,7 @@ class ArrayAccess:
 class ArrayAccess_VariantName(Node["ExpressionName"]):
     ...
 
-class ArrayAccess_VariantPrimary(Node["PrimaryNoNewArray"]):
+class ArrayAccess_VariantPrimary(Node["PrimaryNoNewArrayExpression"]):
     ...
 
 class _ArrayAccess_VariantMeta(type):

@@ -431,6 +431,7 @@
                             {"literal": {"string": "implicit"}},
                             {"literal": {"string": "import"}},
                             {"literal": {"string": "lazy"}},
+                            {"literal": {"string": "macro"}},
                             {"literal": {"string": "match"}},
                             {"literal": {"string": "new"}},
                             {"literal": {"string": "null"}},

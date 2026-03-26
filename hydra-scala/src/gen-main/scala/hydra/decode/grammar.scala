@@ -66,31 +66,43 @@ def pattern(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.De
     lazy val fname: hydra.core.Name = (field.name)
     lazy val fterm: hydra.core.Term = (field.term)
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.grammar.Pattern])] = hydra.lib.maps.fromList[hydra.core.Name,
+      
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.grammar.Pattern]](Seq(Tuple2("alternatives",
        (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Seq[hydra.grammar.Pattern], hydra.grammar.Pattern, hydra.errors.DecodingError]((t: Seq[hydra.grammar.Pattern]) => hydra.grammar.Pattern.alternatives(t))(hydra.extract.helpers.decodeList(hydra.decode.grammar.pattern)(cx)(input))),
+        
          Tuple2("constant", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.grammar.Constant, hydra.grammar.Pattern, hydra.errors.DecodingError]((t: hydra.grammar.Constant) => hydra.grammar.Pattern.constant(t))(hydra.decode.grammar.constant(cx)(input))),
+        
          Tuple2("ignored", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.grammar.Pattern, hydra.grammar.Pattern, hydra.errors.DecodingError]((t: hydra.grammar.Pattern) => hydra.grammar.Pattern.ignored(t))(hydra.decode.grammar.pattern(cx)(input))),
+        
          Tuple2("labeled", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.grammar.LabeledPattern, hydra.grammar.Pattern, hydra.errors.DecodingError]((t: hydra.grammar.LabeledPattern) => hydra.grammar.Pattern.labeled(t))(hydra.decode.grammar.labeledPattern(cx)(input))),
+        
          Tuple2("nil", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.grammar.Pattern, hydra.errors.DecodingError]((t: Unit) => hydra.grammar.Pattern.nil)(hydra.extract.helpers.decodeUnit(cx)(input))),
+        
          Tuple2("nonterminal", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.grammar.Symbol, hydra.grammar.Pattern, hydra.errors.DecodingError]((t: hydra.grammar.Symbol) => hydra.grammar.Pattern.nonterminal(t))(hydra.decode.grammar.symbol(cx)(input))),
+        
          Tuple2("option", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.grammar.Pattern, hydra.grammar.Pattern, hydra.errors.DecodingError]((t: hydra.grammar.Pattern) => hydra.grammar.Pattern.option(t))(hydra.decode.grammar.pattern(cx)(input))),
+        
          Tuple2("plus", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.grammar.Pattern, hydra.grammar.Pattern, hydra.errors.DecodingError]((t: hydra.grammar.Pattern) => hydra.grammar.Pattern.plus(t))(hydra.decode.grammar.pattern(cx)(input))),
+        
          Tuple2("regex", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.grammar.Regex, hydra.grammar.Pattern, hydra.errors.DecodingError]((t: hydra.grammar.Regex) => hydra.grammar.Pattern.regex(t))(hydra.decode.grammar.regex(cx)(input))),
+        
          Tuple2("sequence", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Seq[hydra.grammar.Pattern], hydra.grammar.Pattern, hydra.errors.DecodingError]((t: Seq[hydra.grammar.Pattern]) => hydra.grammar.Pattern.sequence(t))(hydra.extract.helpers.decodeList(hydra.decode.grammar.pattern)(cx)(input))),
+        
          Tuple2("star", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.grammar.Pattern, hydra.grammar.Pattern, hydra.errors.DecodingError]((t: hydra.grammar.Pattern) => hydra.grammar.Pattern.star(t))(hydra.decode.grammar.pattern(cx)(input)))))
     hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.grammar.Pattern], (hydra.core.Term) => Either[hydra.errors.DecodingError,
        hydra.grammar.Pattern]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
+         
        hydra.grammar.Pattern])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
        hydra.grammar.Pattern]](fname)(variantMap))
   }
@@ -103,6 +115,7 @@ def production(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
     hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.grammar.Symbol, hydra.grammar.Production](hydra.extract.helpers.requireField("symbol")(hydra.decode.grammar.symbol)(fieldMap)(cx))((field_symbol: hydra.grammar.Symbol) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.grammar.Pattern, hydra.grammar.Production](hydra.extract.helpers.requireField("pattern")(hydra.decode.grammar.pattern)(fieldMap)(cx))((field_pattern: hydra.grammar.Pattern) => Right(hydra.grammar.Production(field_symbol,
+        
          field_pattern))))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))

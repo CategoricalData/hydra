@@ -48,7 +48,7 @@ def scala_reserved_words() -> frozenset[str]:
     r"""A set of reserved words in Scala."""
 
     # Scala keywords.
-    keywords = ("abstract", "case", "catch", "class", "def", "do", "else", "end", "enum", "export", "extends", "false", "final", "finally", "for", "forSome", "given", "if", "implicit", "import", "lazy", "match", "new", "null", "object", "override", "package", "private", "protected", "return", "sealed", "super", "then", "this", "throw", "trait", "true", "try", "type", "val", "var", "while", "with", "yield")
+    keywords = ("abstract", "case", "catch", "class", "def", "do", "else", "end", "enum", "export", "extends", "false", "final", "finally", "for", "forSome", "given", "if", "implicit", "import", "lazy", "macro", "match", "new", "null", "object", "override", "package", "private", "protected", "return", "sealed", "super", "then", "this", "throw", "trait", "true", "try", "type", "val", "var", "while", "with", "yield")
     # Classes in the Scala Standard Library 2.13.8.
     class_names = ("Any", "AnyVal", "App", "Array", "Boolean", "Byte", "Char", "Console", "DelayedInit", "Double", "DummyExplicit", "Dynamic", "Enumeration", "Equals", "Float", "Function", "Int", "Long", "MatchError", "None", "Nothing", "Null", "Option", "PartialFunction", "Predef", "Product", "Proxy", "SerialVersionUID", "Short", "Singleton", "Some", "Specializable", "StringContext", "Symbol", "Unit", "ValueOf")
     @lru_cache(1)

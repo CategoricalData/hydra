@@ -346,7 +346,7 @@
 
 (defvar hydra_ext_java_syntax_primary-variants (list :no_new_array :array_creation))
 
-(defvar hydra_ext_java_syntax_primary_no_new_array-variants (list :literal :class_literal :this :dot_this :parens :class_instance :field_access :array_access :method_invocation :method_reference))
+(defvar hydra_ext_java_syntax_primary_no_new_array_expression-variants (list :literal :class_literal :this :dot_this :parens :class_instance :field_access :array_access :method_invocation :method_reference))
 
 (defvar hydra_ext_java_syntax_class_literal-variants (list :type :numeric_type :boolean :void))
 
