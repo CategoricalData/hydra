@@ -168,7 +168,8 @@ def inferGraphTypes(fcx0: hydra.context.Context)(bindings0: Seq[hydra.core.Bindi
          Seq[hydra.core.Binding]], hydra.context.Context]](hydra.inference.finalizeInferredTerm(fcx2)(g0)(term))((finalized: hydra.core.Term) =>
         finalized match
         case hydra.core.Term.let(v_Term_let_l) => Right(Tuple2(fromLetTerm(v_Term_let_l), fcx2))
-        case hydra.core.Term.variable => Left(hydra.context.InContext(hydra.errors.Error.other("Expected inferred graph as let term"), fcx2)))
+        case hydra.core.Term.variable(v_Term_variable__) => Left(hydra.context.InContext(hydra.errors.Error.other("Expected inferred graph as let term"),
+           fcx2)))
     }
   })
 }
@@ -1377,11 +1378,11 @@ def inferTypeOfTerm(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(term: hyd
     case hydra.core.Term.wrap(v_Term_wrap_w) => hydra.inference.inferTypeOfWrappedTerm(fcx2)(cx)(v_Term_wrap_w)
 }
 
-def inferTypeOfTypeLambda(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(ta: hydra.core.TypeLambda): Either[hydra.context.InContext[hydra.errors.Error],
-   hydra.typing.InferenceResult] = hydra.inference.inferTypeOfTerm(fcx)(cx)(ta.body)("type abstraction")
-
 def inferTypeOfTypeApplication(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(tt: hydra.core.TypeApplicationTerm): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.typing.InferenceResult] = hydra.inference.inferTypeOfTerm(fcx)(cx)(tt.body)("type application term")
+
+def inferTypeOfTypeLambda(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(ta: hydra.core.TypeLambda): Either[hydra.context.InContext[hydra.errors.Error],
+   hydra.typing.InferenceResult] = hydra.inference.inferTypeOfTerm(fcx)(cx)(ta.body)("type abstraction")
 
 def inferTypeOfUnit(fcx: hydra.context.Context): hydra.typing.InferenceResult =
   hydra.typing.InferenceResult(hydra.core.Term.unit, hydra.core.Type.unit, hydra.substitution.idTypeSubst,

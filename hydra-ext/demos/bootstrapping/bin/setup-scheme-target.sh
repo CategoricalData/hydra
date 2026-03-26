@@ -27,6 +27,14 @@ echo "Copying static resources for Scheme target..."
 echo "  Copying hand-written source files..."
 mkdir -p "$OUTPUT_DIR/src/main/scheme"
 cp -r "$HYDRA_SCHEME_DIR/src/main/scheme/hydra" "$OUTPUT_DIR/src/main/scheme/"
+# Copy bundled SRFI implementations (e.g., SRFI-151 for bitwise ops)
+if [ -d "$HYDRA_SCHEME_DIR/src/main/scheme/srfi" ]; then
+    cp -r "$HYDRA_SCHEME_DIR/src/main/scheme/srfi" "$OUTPUT_DIR/src/main/scheme/"
+fi
+# Copy compatibility shims (e.g., (scheme bytevector) for Guile)
+if [ -d "$HYDRA_SCHEME_DIR/src/main/scheme/scheme" ]; then
+    cp -r "$HYDRA_SCHEME_DIR/src/main/scheme/scheme" "$OUTPUT_DIR/src/main/scheme/"
+fi
 for f in "$HYDRA_SCHEME_DIR/src/main/scheme"/*.scm "$HYDRA_SCHEME_DIR/src/main/scheme"/*.sld; do
     [ -f "$f" ] && cp "$f" "$OUTPUT_DIR/src/main/scheme/"
 done

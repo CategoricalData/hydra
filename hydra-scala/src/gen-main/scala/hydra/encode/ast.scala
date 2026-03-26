@@ -42,16 +42,16 @@ def expr(v1: hydra.ast.Expr): hydra.core.Term =
   case hydra.ast.Expr.seq(v_Expr_seq_y) => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Expr",
      hydra.core.Field("seq", hydra.encode.ast.seqExpr(v_Expr_seq_y))))
 
-def indentedExpression(x: hydra.ast.IndentedExpression): hydra.core.Term =
-  hydra.core.Term.record(hydra.core.Record("hydra.ast.IndentedExpression", Seq(hydra.core.Field("style",
-     hydra.encode.ast.indentStyle(x.style)), hydra.core.Field("expr", hydra.encode.ast.expr(x.expr)))))
-
 def indentStyle(v1: hydra.ast.IndentStyle): hydra.core.Term =
   v1 match
   case hydra.ast.IndentStyle.allLines(v_IndentStyle_allLines_y) => hydra.core.Term.union(hydra.core.Injection("hydra.ast.IndentStyle",
      hydra.core.Field("allLines", hydra.core.Term.literal(hydra.core.Literal.string(v_IndentStyle_allLines_y)))))
   case hydra.ast.IndentStyle.subsequentLines(v_IndentStyle_subsequentLines_y) => hydra.core.Term.union(hydra.core.Injection("hydra.ast.IndentStyle",
      hydra.core.Field("subsequentLines", hydra.core.Term.literal(hydra.core.Literal.string(v_IndentStyle_subsequentLines_y)))))
+
+def indentedExpression(x: hydra.ast.IndentedExpression): hydra.core.Term =
+  hydra.core.Term.record(hydra.core.Record("hydra.ast.IndentedExpression", Seq(hydra.core.Field("style",
+     hydra.encode.ast.indentStyle(x.style)), hydra.core.Field("expr", hydra.encode.ast.expr(x.expr)))))
 
 def op(x: hydra.ast.Op): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.ast.Op", Seq(hydra.core.Field("symbol", hydra.encode.ast.symbol(x.symbol)),

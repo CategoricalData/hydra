@@ -40,36 +40,105 @@ import hydra.lib.sets
 
 import hydra.lib.strings
 
-def termToHaskell(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName])(term: hydra.core.Term)(g: hydra.graph.Graph): Either[scala.Predef.String,
-   scala.Predef.String] =
-  hydra.lib.eithers.bimap[hydra.context.InContext[hydra.errors.Error], hydra.ext.haskell.syntax.Expression,
-     scala.Predef.String, scala.Predef.String]((ic: hydra.context.InContext[hydra.errors.Error]) => hydra.show.errors.error(ic.`object`))((`arg_`: hydra.ext.haskell.syntax.Expression) =>
-  hydra.serialization.printExpr(hydra.serialization.parenthesize(hydra.ext.haskell.serde.expressionToExpr(`arg_`))))(hydra.ext.haskell.coder.encodeTerm(0)(namespaces)(term)(hydra.lexical.emptyContext)(g))
+def addNamespacesToNamespaces(ns0: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName])(names: scala.collection.immutable.Set[hydra.core.Name]): hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName] =
+  {
+  lazy val newNamespaces: scala.collection.immutable.Set[hydra.module.Namespace] = hydra.lib.sets.fromList[hydra.module.Namespace](hydra.lib.maybes.cat[hydra.module.Namespace](hydra.lib.lists.map[hydra.core.Name,
+     Option[hydra.module.Namespace]](hydra.names.namespaceOf)(hydra.lib.sets.toList[hydra.core.Name](names))))
+  def toModuleName(namespace: hydra.module.Namespace): hydra.ext.haskell.syntax.ModuleName =
+    hydra.formatting.capitalize(hydra.lib.lists.last[scala.Predef.String](hydra.lib.strings.splitOn(".")(namespace)))
+  lazy val newMappings: Map[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName] = hydra.lib.maps.fromList[hydra.module.Namespace,
+     hydra.ext.haskell.syntax.ModuleName](hydra.lib.lists.map[hydra.module.Namespace, Tuple2[hydra.module.Namespace,
+     hydra.ext.haskell.syntax.ModuleName]]((`ns_`: hydra.module.Namespace) => Tuple2(`ns_`, toModuleName(`ns_`)))(hydra.lib.sets.toList[hydra.module.Namespace](newNamespaces)))
+  hydra.module.Namespaces(ns0.focus, hydra.lib.maps.union[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName](ns0.mapping)(newMappings))
+}
 
-def typeToHaskell[T0](namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName])(typ: hydra.core.Type)(g: T0): Either[scala.Predef.String,
-   scala.Predef.String] =
-  hydra.lib.eithers.bimap[hydra.context.InContext[hydra.errors.Error], hydra.ext.haskell.syntax.Type,
-     scala.Predef.String, scala.Predef.String]((ic: hydra.context.InContext[hydra.errors.Error]) => hydra.show.errors.error(ic.`object`))((`arg_`: hydra.ext.haskell.syntax.Type) =>
-  hydra.serialization.printExpr(hydra.serialization.parenthesize(hydra.ext.haskell.serde.typeToExpr(`arg_`))))(hydra.ext.haskell.coder.encodeType(namespaces)(typ)(hydra.lexical.emptyContext)(g))
+def buildNamespacesForTestGroup(mod: hydra.module.Module)(tgroup: hydra.testing.TestGroup)(`graph_`: hydra.graph.Graph): Either[scala.Predef.String,
+   hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]] =
+  {
+  lazy val `testCases_`: Seq[hydra.testing.TestCaseWithMetadata] = hydra.ext.haskell.testing.collectTestCases(tgroup)
+  lazy val testTerms: Seq[hydra.core.Term] = hydra.lib.lists.concat[hydra.core.Term](hydra.lib.lists.map[hydra.testing.TestCaseWithMetadata,
+     Seq[hydra.core.Term]](hydra.ext.haskell.testing.extractTestTerms)(`testCases_`))
+  lazy val testBindings: Seq[hydra.core.Binding] = hydra.lib.lists.map[hydra.core.Term, hydra.core.Binding]((term: hydra.core.Term) => hydra.core.Binding("_test_",
+     term, None))(testTerms)
+  lazy val tempModule: hydra.module.Module = hydra.module.Module(mod.namespace, hydra.lib.lists.map[hydra.core.Binding,
+     hydra.module.Definition]((b: hydra.core.Binding) =>
+    hydra.module.Definition.term(hydra.module.TermDefinition(b.name, (b.term), (b.`type`))))(testBindings),
+       (mod.termDependencies), (mod.typeDependencies), (mod.description))
+  hydra.lib.eithers.bind[scala.Predef.String, hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName],
+     hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]](hydra.lib.eithers.bimap[hydra.context.InContext[hydra.errors.Error],
+     hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName], scala.Predef.String, hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]]((ic: hydra.context.InContext[hydra.errors.Error]) => hydra.show.errors.error(ic.`object`))((a: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]) => a)(hydra.ext.haskell.utils.namespacesForModule(tempModule)(hydra.lexical.emptyContext)(`graph_`)))((baseNamespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]) =>
+    {
+    lazy val encodedNames: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.unions[hydra.core.Name](hydra.lib.lists.map[hydra.core.Term,
+       scala.collection.immutable.Set[hydra.core.Name]]((t: hydra.core.Term) =>
+      hydra.ext.haskell.testing.extractEncodedTermVariableNames(`graph_`)(t))(testTerms))
+    Right(hydra.ext.haskell.testing.addNamespacesToNamespaces(baseNamespaces)(encodedNames))
+  })
+}
 
-def haskellTestCodec(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]): hydra.testing.TestCodec =
-  hydra.testing.TestCodec("haskell", "hs", (v1: hydra.core.Term) =>
-  (v2: hydra.graph.Graph) => hydra.ext.haskell.testing.termToHaskell(namespaces)(v1)(v2), (v1: hydra.core.Type) =>
-  (v2: hydra.graph.Graph) => hydra.ext.haskell.testing.typeToHaskell(namespaces)(v1)(v2), (n: scala.Predef.String) => n,
-     hydra.ext.haskell.testing.namespaceToModuleName, hydra.ext.haskell.testing.haskellTestCaseTemplate,
-     hydra.ext.haskell.testing.haskellTestGroupTemplate, hydra.ext.haskell.testing.haskellModuleTemplate,
-     hydra.ext.haskell.testing.haskellImportTemplate, (v1: scala.collection.immutable.Set[hydra.core.Name]) => hydra.ext.haskell.testing.findHaskellImports(namespaces)(v1))
+def buildTestModuleWithCodec[T0](codec: hydra.testing.TestCodec)(testModule: hydra.module.Module)(testGroup: hydra.testing.TestGroup)(testBody: scala.Predef.String)(namespaces: T0): scala.Predef.String =
+  {
+  lazy val `ns_`: hydra.module.Namespace = (testModule.namespace)
+  lazy val specNs: hydra.module.Namespace = hydra.lib.strings.cat2(`ns_`)("Spec")
+  lazy val moduleNameString: scala.Predef.String = codec.formatModuleName(specNs)
+  lazy val `groupName_`: scala.Predef.String = (testGroup.name)
+  lazy val domainImports: Seq[scala.Predef.String] = codec.findImports(hydra.lib.sets.empty[hydra.core.Name])
+  lazy val standardImports: Seq[scala.Predef.String] = Seq("import Hydra.Kernel", "import qualified Test.Hspec as H",
+     "import qualified Data.List as L", "import qualified Data.Map as M", "import qualified Data.Set as S",
+     "import qualified Data.Maybe as Y")
+  lazy val allImports: Seq[scala.Predef.String] = hydra.lib.lists.concat2[scala.Predef.String](standardImports)(domainImports)
+  lazy val debugComments: Seq[scala.Predef.String] = Seq("-- DEBUG: Focus namespace = (see generated module)",
+     "-- DEBUG: Namespace mappings: (see generated module)")
+  lazy val header: scala.Predef.String = hydra.lib.strings.intercalate("\n")(hydra.lib.lists.concat[scala.Predef.String](Seq(Seq(hydra.lib.strings.cat2("-- ")(hydra.constants.warningAutoGeneratedFile),
+     ""), debugComments, Seq("", hydra.lib.strings.cat(Seq("module ", moduleNameString, " where")), ""),
+     allImports, Seq("", "spec :: H.Spec", hydra.lib.strings.cat(Seq("spec = H.describe ", hydra.lib.literals.showString(`groupName_`),
+     " $ do"))))))
+  hydra.lib.strings.cat(Seq(header, "\n", testBody, "\n"))
+}
 
-lazy val haskellTestCaseTemplate: scala.Predef.String = hydra.lib.strings.intercalate("\n")(Seq("  H.it {name} $ H.shouldBe",
-   "    ({input})", "    ({output})", ""))
+def collectNames(graf: hydra.graph.Graph)(names: scala.collection.immutable.Set[hydra.core.Name])(t: hydra.core.Term): scala.collection.immutable.Set[hydra.core.Name] =
+  hydra.lib.logic.ifElse[scala.collection.immutable.Set[hydra.core.Name]](hydra.schemas.isEncodedTerm(hydra.rewriting.deannotateTerm(t)))(hydra.lib.eithers.either[hydra.errors.DecodingError,
+     hydra.core.Term, scala.collection.immutable.Set[hydra.core.Name]]((_x: hydra.errors.DecodingError) => names)((decodedTerm: hydra.core.Term) =>
+  hydra.lib.sets.union[hydra.core.Name](names)(hydra.rewriting.termDependencyNames(true)(true)(true)(decodedTerm)))(hydra.lib.eithers.bimap[hydra.errors.DecodingError,
+     hydra.core.Term, hydra.errors.DecodingError, hydra.core.Term]((_e: hydra.errors.DecodingError) => _e)((_a: hydra.core.Term) => _a)(hydra.decode.core.term(graf)(t))))(names)
 
-lazy val haskellTestGroupTemplate: scala.Predef.String = "spec = H.describe {groupName} $ do"
+def collectTestCases(tg: hydra.testing.TestGroup): Seq[hydra.testing.TestCaseWithMetadata] =
+  hydra.lib.lists.concat2[hydra.testing.TestCaseWithMetadata](tg.cases)(hydra.lib.lists.concat[hydra.testing.TestCaseWithMetadata](hydra.lib.lists.map[hydra.testing.TestGroup,
+     Seq[hydra.testing.TestCaseWithMetadata]](hydra.ext.haskell.testing.collectTestCases)(tg.subgroups)))
 
-lazy val haskellModuleTemplate: scala.Predef.String = hydra.lib.strings.intercalate("\n")(Seq(hydra.lib.strings.cat2("-- ")(hydra.constants.warningAutoGeneratedFile),
-   "", "module {moduleName} where", "", "{imports}", "", "spec :: H.Spec", "{testGroup}", "{testCases}",
-   ""))
+def containsTriviallyPolymorphic(term: hydra.core.Term): Boolean =
+  term match
+  case hydra.core.Term.list(v_Term_list_xs) => hydra.lib.logic.or(hydra.lib.lists.`null`[hydra.core.Term](v_Term_list_xs))(hydra.lib.lists.foldl[Boolean,
+     Boolean](hydra.lib.logic.or)(false)(hydra.lib.lists.map[hydra.core.Term, Boolean](hydra.ext.haskell.testing.containsTriviallyPolymorphic)(v_Term_list_xs)))
+  case hydra.core.Term.set(v_Term_set_s) => hydra.lib.logic.or(hydra.lib.sets.`null`[hydra.core.Term](v_Term_set_s))(hydra.lib.lists.foldl[Boolean,
+     Boolean](hydra.lib.logic.or)(false)(hydra.lib.lists.map[hydra.core.Term, Boolean](hydra.ext.haskell.testing.containsTriviallyPolymorphic)(hydra.lib.sets.toList[hydra.core.Term](v_Term_set_s))))
+  case hydra.core.Term.map(v_Term_map_m) => hydra.lib.logic.or(hydra.lib.maps.`null`[hydra.core.Term,
+     hydra.core.Term](v_Term_map_m))(hydra.lib.logic.or(hydra.lib.lists.foldl[Boolean, Boolean](hydra.lib.logic.or)(false)(hydra.lib.lists.map[hydra.core.Term,
+     Boolean](hydra.ext.haskell.testing.containsTriviallyPolymorphic)(hydra.lib.maps.keys[hydra.core.Term,
+     hydra.core.Term](v_Term_map_m))))(hydra.lib.lists.foldl[Boolean, Boolean](hydra.lib.logic.or)(false)(hydra.lib.lists.map[hydra.core.Term,
+     Boolean](hydra.ext.haskell.testing.containsTriviallyPolymorphic)(hydra.lib.lists.map[Tuple2[hydra.core.Term,
+     hydra.core.Term], hydra.core.Term]((p: Tuple2[hydra.core.Term, hydra.core.Term]) => hydra.lib.pairs.second[hydra.core.Term,
+     hydra.core.Term](p))(hydra.lib.maps.toList[hydra.core.Term, hydra.core.Term](v_Term_map_m))))))
+  case hydra.core.Term.maybe(v_Term_maybe_mx) => hydra.lib.maybes.maybe[Boolean, hydra.core.Term](true)(hydra.ext.haskell.testing.containsTriviallyPolymorphic)(v_Term_maybe_mx)
+  case hydra.core.Term.either(v_Term_either__) => true
+  case hydra.core.Term.union(v_Term_union_inj) => hydra.ext.haskell.testing.containsTriviallyPolymorphic(v_Term_union_inj.field.term)
+  case hydra.core.Term.pair(v_Term_pair_p) => hydra.lib.logic.or(hydra.ext.haskell.testing.containsTriviallyPolymorphic(hydra.lib.pairs.first[hydra.core.Term,
+     hydra.core.Term](v_Term_pair_p)))(hydra.ext.haskell.testing.containsTriviallyPolymorphic(hydra.lib.pairs.second[hydra.core.Term,
+     hydra.core.Term](v_Term_pair_p)))
+  case hydra.core.Term.record(v_Term_record_rec) => hydra.lib.lists.foldl[Boolean, Boolean](hydra.lib.logic.or)(false)(hydra.lib.lists.map[hydra.core.Field,
+     Boolean]((f: hydra.core.Field) =>
+    hydra.ext.haskell.testing.containsTriviallyPolymorphic(f.term))(v_Term_record_rec.fields))
+  case hydra.core.Term.application(v_Term_application_app) => hydra.lib.logic.or(hydra.ext.haskell.testing.containsTriviallyPolymorphic(v_Term_application_app.function))(hydra.ext.haskell.testing.containsTriviallyPolymorphic(v_Term_application_app.argument))
+  case _ => false
 
-lazy val haskellImportTemplate: scala.Predef.String = "import qualified {namespace} as {alias}"
+def extractEncodedTermVariableNames(graf: hydra.graph.Graph)(term: hydra.core.Term): scala.collection.immutable.Set[hydra.core.Name] =
+  hydra.rewriting.foldOverTerm(hydra.coders.TraversalOrder.pre)((v1: scala.collection.immutable.Set[hydra.core.Name]) =>
+  (v2: hydra.core.Term) => hydra.ext.haskell.testing.collectNames(graf)(v1)(v2))(hydra.lib.sets.empty[hydra.core.Name])(term)
+
+def extractTestTerms(tcm: hydra.testing.TestCaseWithMetadata): Seq[hydra.core.Term] =
+  tcm.`case` match
+  case hydra.testing.TestCase.delegatedEvaluation(v_TestCase_delegatedEvaluation_delCase) => Seq(v_TestCase_delegatedEvaluation_delCase.input,
+     (v_TestCase_delegatedEvaluation_delCase.output))
+  case _ => Seq()
 
 def findHaskellImports[T0](namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName])(`names_`: T0): Seq[scala.Predef.String] =
   {
@@ -86,8 +155,49 @@ def findHaskellImports[T0](namespaces: hydra.module.Namespaces[hydra.ext.haskell
        hydra.ext.haskell.syntax.ModuleName](entry))))(hydra.lib.maps.toList[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName](filtered))
 }
 
-def namespaceToModuleName(`ns_`: hydra.module.Namespace): scala.Predef.String =
-  hydra.lib.strings.intercalate(".")(hydra.lib.lists.map[scala.Predef.String, scala.Predef.String](hydra.formatting.capitalize)(hydra.lib.strings.splitOn(".")(`ns_`)))
+def generateHaskellTestFile(testModule: hydra.module.Module)(testGroup: hydra.testing.TestGroup)(g: hydra.graph.Graph): Either[scala.Predef.String,
+   Tuple2[scala.Predef.String, scala.Predef.String]] =
+  hydra.lib.eithers.bind[scala.Predef.String, hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName],
+     Tuple2[scala.Predef.String, scala.Predef.String]](hydra.ext.haskell.testing.buildNamespacesForTestGroup(testModule)(testGroup)(g))((namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]) =>
+  hydra.ext.haskell.testing.generateTestFileWithCodec(hydra.ext.haskell.testing.haskellTestCodec(namespaces))(testModule)(testGroup)(namespaces)(g))
+
+def generateTestCaseWithCodec(g: hydra.graph.Graph)(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName])(codec: hydra.testing.TestCodec)(depth: Int)(tcm: hydra.testing.TestCaseWithMetadata): Either[scala.Predef.String,
+   Seq[scala.Predef.String]] =
+  {
+  lazy val `name_`: scala.Predef.String = (tcm.name)
+  lazy val tcase: hydra.testing.TestCase = (tcm.`case`)
+  tcase match
+    case hydra.testing.TestCase.delegatedEvaluation(v_TestCase_delegatedEvaluation_delCase) => {
+      lazy val `input_`: hydra.core.Term = (v_TestCase_delegatedEvaluation_delCase.input)
+      lazy val `output_`: hydra.core.Term = (v_TestCase_delegatedEvaluation_delCase.output)
+      lazy val formattedName: scala.Predef.String = codec.formatTestName(`name_`)
+      lazy val continuationIndent: Int = hydra.lib.math.add(hydra.lib.math.mul(depth)(2))(4)
+      hydra.lib.eithers.bind[scala.Predef.String, scala.Predef.String, Seq[scala.Predef.String]](codec.encodeTerm(`input_`)(g))((inputCode: scala.Predef.String) =>
+        hydra.lib.eithers.bind[scala.Predef.String, scala.Predef.String, Seq[scala.Predef.String]](codec.encodeTerm(`output_`)(g))((outputCode: scala.Predef.String) =>
+        hydra.lib.eithers.bind[scala.Predef.String, Option[scala.Predef.String], Seq[scala.Predef.String]](hydra.ext.haskell.testing.generateTypeAnnotationFor(g)(namespaces)(`input_`)(`output_`))((typeAnnotation: Option[scala.Predef.String]) =>
+        {
+        lazy val indentedInputCode: scala.Predef.String = hydra.ext.haskell.testing.indentContinuationLines(continuationIndent)(inputCode)
+        lazy val indentedOutputCode: scala.Predef.String = hydra.ext.haskell.testing.indentContinuationLines(continuationIndent)(outputCode)
+        lazy val finalOutputCode: scala.Predef.String = hydra.lib.maybes.maybe[scala.Predef.String, scala.Predef.String](indentedOutputCode)((anno: scala.Predef.String) => hydra.lib.strings.cat2(indentedOutputCode)(anno))(typeAnnotation)
+        Right(Seq(hydra.lib.strings.cat(Seq("H.it ", hydra.lib.literals.showString(formattedName), " $ H.shouldBe")),
+           hydra.lib.strings.cat(Seq("  (", indentedInputCode, ")")), hydra.lib.strings.cat(Seq("  (",
+           finalOutputCode, ")"))))
+      })))
+    }
+    case _ => Right(Seq())
+}
+
+def generateTestFileWithCodec(codec: hydra.testing.TestCodec)(testModule: hydra.module.Module)(testGroup: hydra.testing.TestGroup)(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName])(g: hydra.graph.Graph): Either[scala.Predef.String,
+   Tuple2[scala.Predef.String, scala.Predef.String]] =
+  hydra.lib.eithers.map[scala.Predef.String, Tuple2[scala.Predef.String, scala.Predef.String], scala.Predef.String]((testBody: scala.Predef.String) =>
+  {
+  lazy val testModuleContent: scala.Predef.String = hydra.ext.haskell.testing.buildTestModuleWithCodec(codec)(testModule)(testGroup)(testBody)(namespaces)
+  lazy val ext: scala.Predef.String = (codec.fileExtension)
+  lazy val `ns_`: hydra.module.Namespace = (testModule.namespace)
+  lazy val specNs: hydra.module.Namespace = hydra.lib.strings.cat2(`ns_`)("Spec")
+  lazy val filePath: scala.Predef.String = hydra.names.namespaceToFilePath(hydra.util.CaseConvention.pascal)(ext)(specNs)
+  Tuple2(filePath, testModuleContent)
+})(hydra.ext.haskell.testing.generateTestGroupHierarchy(g)(namespaces)(codec)(1)(testGroup))
 
 def generateTestGroupHierarchy(g: hydra.graph.Graph)(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName])(codec: hydra.testing.TestCodec)(depth: Int)(testGroup: hydra.testing.TestGroup): Either[scala.Predef.String,
    scala.Predef.String] =
@@ -116,35 +226,6 @@ def generateTestGroupHierarchy(g: hydra.graph.Graph)(namespaces: hydra.module.Na
   })
 }
 
-def generateTestCaseWithCodec(g: hydra.graph.Graph)(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName])(codec: hydra.testing.TestCodec)(depth: Int)(tcm: hydra.testing.TestCaseWithMetadata): Either[scala.Predef.String,
-   Seq[scala.Predef.String]] =
-  {
-  lazy val `name_`: scala.Predef.String = (tcm.name)
-  lazy val tcase: hydra.testing.TestCase = (tcm.`case`)
-  tcase match
-    case hydra.testing.TestCase.delegatedEvaluation(v_TestCase_delegatedEvaluation_delCase) => {
-      lazy val `input_`: hydra.core.Term = (v_TestCase_delegatedEvaluation_delCase.input)
-      lazy val `output_`: hydra.core.Term = (v_TestCase_delegatedEvaluation_delCase.output)
-      lazy val formattedName: scala.Predef.String = codec.formatTestName(`name_`)
-      lazy val continuationIndent: Int = hydra.lib.math.add(hydra.lib.math.mul(depth)(2))(4)
-      hydra.lib.eithers.bind[scala.Predef.String, scala.Predef.String, Seq[scala.Predef.String]](codec.encodeTerm(`input_`)(g))((inputCode: scala.Predef.String) =>
-        hydra.lib.eithers.bind[scala.Predef.String, scala.Predef.String, Seq[scala.Predef.String]](codec.encodeTerm(`output_`)(g))((outputCode: scala.Predef.String) =>
-        hydra.lib.eithers.bind[scala.Predef.String, Option[scala.Predef.String], Seq[scala.Predef.String]](hydra.ext.haskell.testing.generateTypeAnnotationFor(g)(namespaces)(`input_`)(`output_`))((typeAnnotation: Option[scala.Predef.String]) =>
-        {
-        lazy val indentedInputCode: scala.Predef.String = hydra.ext.haskell.testing.indentContinuationLines(continuationIndent)(inputCode)
-        lazy val indentedOutputCode: scala.Predef.String = hydra.ext.haskell.testing.indentContinuationLines(continuationIndent)(outputCode)
-        lazy val finalOutputCode: scala.Predef.String = hydra.lib.maybes.maybe[scala.Predef.String, scala.Predef.String](indentedOutputCode)((anno: scala.Predef.String) => hydra.lib.strings.cat2(indentedOutputCode)(anno))(typeAnnotation)
-        Right(Seq(hydra.lib.strings.cat(Seq("H.it ", hydra.lib.literals.showString(formattedName), " $ H.shouldBe")),
-           hydra.lib.strings.cat(Seq("  (", indentedInputCode, ")")), hydra.lib.strings.cat(Seq("  (",
-           finalOutputCode, ")"))))
-      })))
-    }
-    case _ => Right(Seq())
-}
-
-def indentContinuationLines(n: Int)(s: scala.Predef.String): scala.Predef.String =
-  hydra.lib.strings.intercalate(hydra.lib.strings.cat2("\n")(hydra.lib.strings.fromList(hydra.lib.lists.replicate[Int](n)(32))))(hydra.lib.strings.splitOn("\n")(s))
-
 def generateTypeAnnotationFor(g: hydra.graph.Graph)(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName])(inputTerm: hydra.core.Term)(outputTerm: hydra.core.Term): Either[scala.Predef.String,
    Option[scala.Predef.String]] =
   hydra.lib.logic.ifElse[Either[scala.Predef.String, Option[scala.Predef.String]]](hydra.lib.logic.not(hydra.ext.haskell.testing.containsTriviallyPolymorphic(outputTerm)))(Right(None))(hydra.lib.maybes.maybe[Either[scala.Predef.String,
@@ -157,7 +238,7 @@ def generateTypeAnnotationFor(g: hydra.graph.Graph)(namespaces: hydra.module.Nam
      hydra.core.TypeScheme](g.schemaTypes))
   lazy val freeVars: Seq[hydra.core.Name] = hydra.lib.sets.toList[hydra.core.Name](hydra.lib.sets.difference[hydra.core.Name](hydra.rewriting.freeVariablesInType(typ))(schemaVars))
   lazy val isEither: Boolean = hydra.rewriting.deannotateTerm(outputTerm) match
-    case hydra.core.Term.either => true
+    case hydra.core.Term.either(v_Term_either__) => true
     case _ => false
   hydra.lib.logic.ifElse[Either[scala.Predef.String, Option[scala.Predef.String]]](hydra.lib.logic.or(isEither)(hydra.lib.logic.not(hydra.lib.lists.`null`[hydra.core.Name](freeVars))))({
     lazy val int32Type: hydra.core.Type = hydra.core.Type.literal(hydra.core.LiteralType.integer(hydra.core.IntegerType.int32))
@@ -168,126 +249,45 @@ def generateTypeAnnotationFor(g: hydra.graph.Graph)(namespaces: hydra.module.Nam
   })(Right(None))
 })(hydra.ext.haskell.testing.tryInferTypeOf(g)(inputTerm)))
 
+lazy val haskellImportTemplate: scala.Predef.String = "import qualified {namespace} as {alias}"
+
+lazy val haskellModuleTemplate: scala.Predef.String = hydra.lib.strings.intercalate("\n")(Seq(hydra.lib.strings.cat2("-- ")(hydra.constants.warningAutoGeneratedFile),
+   "", "module {moduleName} where", "", "{imports}", "", "spec :: H.Spec", "{testGroup}", "{testCases}",
+   ""))
+
+lazy val haskellTestCaseTemplate: scala.Predef.String = hydra.lib.strings.intercalate("\n")(Seq("  H.it {name} $ H.shouldBe",
+   "    ({input})", "    ({output})", ""))
+
+def haskellTestCodec(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]): hydra.testing.TestCodec =
+  hydra.testing.TestCodec("haskell", "hs", (v1: hydra.core.Term) =>
+  (v2: hydra.graph.Graph) => hydra.ext.haskell.testing.termToHaskell(namespaces)(v1)(v2), (v1: hydra.core.Type) =>
+  (v2: hydra.graph.Graph) => hydra.ext.haskell.testing.typeToHaskell(namespaces)(v1)(v2), (n: scala.Predef.String) => n,
+     hydra.ext.haskell.testing.namespaceToModuleName, hydra.ext.haskell.testing.haskellTestCaseTemplate,
+     hydra.ext.haskell.testing.haskellTestGroupTemplate, hydra.ext.haskell.testing.haskellModuleTemplate,
+     hydra.ext.haskell.testing.haskellImportTemplate, (v1: scala.collection.immutable.Set[hydra.core.Name]) => hydra.ext.haskell.testing.findHaskellImports(namespaces)(v1))
+
+lazy val haskellTestGroupTemplate: scala.Predef.String = "spec = H.describe {groupName} $ do"
+
+def indentContinuationLines(n: Int)(s: scala.Predef.String): scala.Predef.String =
+  hydra.lib.strings.intercalate(hydra.lib.strings.cat2("\n")(hydra.lib.strings.fromList(hydra.lib.lists.replicate[Int](n)(32))))(hydra.lib.strings.splitOn("\n")(s))
+
+def namespaceToModuleName(`ns_`: hydra.module.Namespace): scala.Predef.String =
+  hydra.lib.strings.intercalate(".")(hydra.lib.lists.map[scala.Predef.String, scala.Predef.String](hydra.formatting.capitalize)(hydra.lib.strings.splitOn(".")(`ns_`)))
+
+def termToHaskell(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName])(term: hydra.core.Term)(g: hydra.graph.Graph): Either[scala.Predef.String,
+   scala.Predef.String] =
+  hydra.lib.eithers.bimap[hydra.context.InContext[hydra.errors.Error], hydra.ext.haskell.syntax.Expression,
+     scala.Predef.String, scala.Predef.String]((ic: hydra.context.InContext[hydra.errors.Error]) => hydra.show.errors.error(ic.`object`))((`arg_`: hydra.ext.haskell.syntax.Expression) =>
+  hydra.serialization.printExpr(hydra.serialization.parenthesize(hydra.ext.haskell.serde.expressionToExpr(`arg_`))))(hydra.ext.haskell.coder.encodeTerm(0)(namespaces)(term)(hydra.lexical.emptyContext)(g))
+
 def tryInferTypeOf(g: hydra.graph.Graph)(term: hydra.core.Term): Option[Tuple2[hydra.core.Term, hydra.core.TypeScheme]] =
   hydra.lib.eithers.either[hydra.context.InContext[hydra.errors.Error], Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context], Option[Tuple2[hydra.core.Term, hydra.core.TypeScheme]]]((_x: hydra.context.InContext[hydra.errors.Error]) => None)((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   Some(hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context](result)))(hydra.inference.inferTypeOf(hydra.lexical.emptyContext)(g)(term))
 
-def containsTriviallyPolymorphic(term: hydra.core.Term): Boolean =
-  term match
-  case hydra.core.Term.list(v_Term_list_xs) => hydra.lib.logic.or(hydra.lib.lists.`null`[hydra.core.Term](v_Term_list_xs))(hydra.lib.lists.foldl[Boolean,
-     Boolean](hydra.lib.logic.or)(false)(hydra.lib.lists.map[hydra.core.Term, Boolean](hydra.ext.haskell.testing.containsTriviallyPolymorphic)(v_Term_list_xs)))
-  case hydra.core.Term.set(v_Term_set_s) => hydra.lib.logic.or(hydra.lib.sets.`null`[hydra.core.Term](v_Term_set_s))(hydra.lib.lists.foldl[Boolean,
-     Boolean](hydra.lib.logic.or)(false)(hydra.lib.lists.map[hydra.core.Term, Boolean](hydra.ext.haskell.testing.containsTriviallyPolymorphic)(hydra.lib.sets.toList[hydra.core.Term](v_Term_set_s))))
-  case hydra.core.Term.map(v_Term_map_m) => hydra.lib.logic.or(hydra.lib.maps.`null`[hydra.core.Term,
-     hydra.core.Term](v_Term_map_m))(hydra.lib.logic.or(hydra.lib.lists.foldl[Boolean, Boolean](hydra.lib.logic.or)(false)(hydra.lib.lists.map[hydra.core.Term,
-     Boolean](hydra.ext.haskell.testing.containsTriviallyPolymorphic)(hydra.lib.maps.keys[hydra.core.Term,
-     hydra.core.Term](v_Term_map_m))))(hydra.lib.lists.foldl[Boolean, Boolean](hydra.lib.logic.or)(false)(hydra.lib.lists.map[hydra.core.Term,
-     Boolean](hydra.ext.haskell.testing.containsTriviallyPolymorphic)(hydra.lib.lists.map[Tuple2[hydra.core.Term,
-     hydra.core.Term], hydra.core.Term]((p: Tuple2[hydra.core.Term, hydra.core.Term]) => hydra.lib.pairs.second[hydra.core.Term,
-     hydra.core.Term](p))(hydra.lib.maps.toList[hydra.core.Term, hydra.core.Term](v_Term_map_m))))))
-  case hydra.core.Term.maybe(v_Term_maybe_mx) => hydra.lib.maybes.maybe[Boolean, hydra.core.Term](true)(hydra.ext.haskell.testing.containsTriviallyPolymorphic)(v_Term_maybe_mx)
-  case hydra.core.Term.either => true
-  case hydra.core.Term.union(v_Term_union_inj) => hydra.ext.haskell.testing.containsTriviallyPolymorphic(v_Term_union_inj.field.term)
-  case hydra.core.Term.pair(v_Term_pair_p) => hydra.lib.logic.or(hydra.ext.haskell.testing.containsTriviallyPolymorphic(hydra.lib.pairs.first[hydra.core.Term,
-     hydra.core.Term](v_Term_pair_p)))(hydra.ext.haskell.testing.containsTriviallyPolymorphic(hydra.lib.pairs.second[hydra.core.Term,
-     hydra.core.Term](v_Term_pair_p)))
-  case hydra.core.Term.record(v_Term_record_rec) => hydra.lib.lists.foldl[Boolean, Boolean](hydra.lib.logic.or)(false)(hydra.lib.lists.map[hydra.core.Field,
-     Boolean]((f: hydra.core.Field) =>
-    hydra.ext.haskell.testing.containsTriviallyPolymorphic(f.term))(v_Term_record_rec.fields))
-  case hydra.core.Term.application(v_Term_application_app) => hydra.lib.logic.or(hydra.ext.haskell.testing.containsTriviallyPolymorphic(v_Term_application_app.function))(hydra.ext.haskell.testing.containsTriviallyPolymorphic(v_Term_application_app.argument))
-  case _ => false
-
-def buildTestModuleWithCodec[T0](codec: hydra.testing.TestCodec)(testModule: hydra.module.Module)(testGroup: hydra.testing.TestGroup)(testBody: scala.Predef.String)(namespaces: T0): scala.Predef.String =
-  {
-  lazy val `ns_`: hydra.module.Namespace = (testModule.namespace)
-  lazy val specNs: hydra.module.Namespace = hydra.lib.strings.cat2(`ns_`)("Spec")
-  lazy val moduleNameString: scala.Predef.String = codec.formatModuleName(specNs)
-  lazy val `groupName_`: scala.Predef.String = (testGroup.name)
-  lazy val domainImports: Seq[scala.Predef.String] = codec.findImports(hydra.lib.sets.empty[hydra.core.Name])
-  lazy val standardImports: Seq[scala.Predef.String] = Seq("import Hydra.Kernel", "import qualified Test.Hspec as H",
-     "import qualified Data.List as L", "import qualified Data.Map as M", "import qualified Data.Set as S",
-     "import qualified Data.Maybe as Y")
-  lazy val allImports: Seq[scala.Predef.String] = hydra.lib.lists.concat2[scala.Predef.String](standardImports)(domainImports)
-  lazy val debugComments: Seq[scala.Predef.String] = Seq("-- DEBUG: Focus namespace = (see generated module)",
-     "-- DEBUG: Namespace mappings: (see generated module)")
-  lazy val header: scala.Predef.String = hydra.lib.strings.intercalate("\n")(hydra.lib.lists.concat[scala.Predef.String](Seq(Seq(hydra.lib.strings.cat2("-- ")(hydra.constants.warningAutoGeneratedFile),
-     ""), debugComments, Seq("", hydra.lib.strings.cat(Seq("module ", moduleNameString, " where")), ""),
-     allImports, Seq("", "spec :: H.Spec", hydra.lib.strings.cat(Seq("spec = H.describe ", hydra.lib.literals.showString(`groupName_`),
-     " $ do"))))))
-  hydra.lib.strings.cat(Seq(header, "\n", testBody, "\n"))
-}
-
-def generateTestFileWithCodec(codec: hydra.testing.TestCodec)(testModule: hydra.module.Module)(testGroup: hydra.testing.TestGroup)(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName])(g: hydra.graph.Graph): Either[scala.Predef.String,
-   Tuple2[scala.Predef.String, scala.Predef.String]] =
-  hydra.lib.eithers.map[scala.Predef.String, Tuple2[scala.Predef.String, scala.Predef.String], scala.Predef.String]((testBody: scala.Predef.String) =>
-  {
-  lazy val testModuleContent: scala.Predef.String = hydra.ext.haskell.testing.buildTestModuleWithCodec(codec)(testModule)(testGroup)(testBody)(namespaces)
-  lazy val ext: scala.Predef.String = (codec.fileExtension)
-  lazy val `ns_`: hydra.module.Namespace = (testModule.namespace)
-  lazy val specNs: hydra.module.Namespace = hydra.lib.strings.cat2(`ns_`)("Spec")
-  lazy val filePath: scala.Predef.String = hydra.names.namespaceToFilePath(hydra.util.CaseConvention.pascal)(ext)(specNs)
-  Tuple2(filePath, testModuleContent)
-})(hydra.ext.haskell.testing.generateTestGroupHierarchy(g)(namespaces)(codec)(1)(testGroup))
-
-def extractEncodedTermVariableNames(graf: hydra.graph.Graph)(term: hydra.core.Term): scala.collection.immutable.Set[hydra.core.Name] =
-  hydra.rewriting.foldOverTerm(hydra.coders.TraversalOrder.pre)((v1: scala.collection.immutable.Set[hydra.core.Name]) =>
-  (v2: hydra.core.Term) => hydra.ext.haskell.testing.collectNames(graf)(v1)(v2))(hydra.lib.sets.empty[hydra.core.Name])(term)
-
-def collectNames(graf: hydra.graph.Graph)(names: scala.collection.immutable.Set[hydra.core.Name])(t: hydra.core.Term): scala.collection.immutable.Set[hydra.core.Name] =
-  hydra.lib.logic.ifElse[scala.collection.immutable.Set[hydra.core.Name]](hydra.schemas.isEncodedTerm(hydra.rewriting.deannotateTerm(t)))(hydra.lib.eithers.either[hydra.errors.DecodingError,
-     hydra.core.Term, scala.collection.immutable.Set[hydra.core.Name]]((_x: hydra.errors.DecodingError) => names)((decodedTerm: hydra.core.Term) =>
-  hydra.lib.sets.union[hydra.core.Name](names)(hydra.rewriting.termDependencyNames(true)(true)(true)(decodedTerm)))(hydra.lib.eithers.bimap[hydra.errors.DecodingError,
-     hydra.core.Term, hydra.errors.DecodingError, hydra.core.Term]((_e: hydra.errors.DecodingError) => _e)((_a: hydra.core.Term) => _a)(hydra.decode.core.term(graf)(t))))(names)
-
-def addNamespacesToNamespaces(ns0: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName])(names: scala.collection.immutable.Set[hydra.core.Name]): hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName] =
-  {
-  lazy val newNamespaces: scala.collection.immutable.Set[hydra.module.Namespace] = hydra.lib.sets.fromList[hydra.module.Namespace](hydra.lib.maybes.cat[hydra.module.Namespace](hydra.lib.lists.map[hydra.core.Name,
-     Option[hydra.module.Namespace]](hydra.names.namespaceOf)(hydra.lib.sets.toList[hydra.core.Name](names))))
-  def toModuleName(namespace: hydra.module.Namespace): hydra.ext.haskell.syntax.ModuleName =
-    hydra.formatting.capitalize(hydra.lib.lists.last[scala.Predef.String](hydra.lib.strings.splitOn(".")(namespace)))
-  lazy val newMappings: Map[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName] = hydra.lib.maps.fromList[hydra.module.Namespace,
-     hydra.ext.haskell.syntax.ModuleName](hydra.lib.lists.map[hydra.module.Namespace, Tuple2[hydra.module.Namespace,
-     hydra.ext.haskell.syntax.ModuleName]]((`ns_`: hydra.module.Namespace) => Tuple2(`ns_`, toModuleName(`ns_`)))(hydra.lib.sets.toList[hydra.module.Namespace](newNamespaces)))
-  hydra.module.Namespaces(ns0.focus, hydra.lib.maps.union[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName](ns0.mapping)(newMappings))
-}
-
-def generateHaskellTestFile(testModule: hydra.module.Module)(testGroup: hydra.testing.TestGroup)(g: hydra.graph.Graph): Either[scala.Predef.String,
-   Tuple2[scala.Predef.String, scala.Predef.String]] =
-  hydra.lib.eithers.bind[scala.Predef.String, hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName],
-     Tuple2[scala.Predef.String, scala.Predef.String]](hydra.ext.haskell.testing.buildNamespacesForTestGroup(testModule)(testGroup)(g))((namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]) =>
-  hydra.ext.haskell.testing.generateTestFileWithCodec(hydra.ext.haskell.testing.haskellTestCodec(namespaces))(testModule)(testGroup)(namespaces)(g))
-
-def buildNamespacesForTestGroup(mod: hydra.module.Module)(tgroup: hydra.testing.TestGroup)(`graph_`: hydra.graph.Graph): Either[scala.Predef.String,
-   hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]] =
-  {
-  lazy val `testCases_`: Seq[hydra.testing.TestCaseWithMetadata] = hydra.ext.haskell.testing.collectTestCases(tgroup)
-  lazy val testTerms: Seq[hydra.core.Term] = hydra.lib.lists.concat[hydra.core.Term](hydra.lib.lists.map[hydra.testing.TestCaseWithMetadata,
-     Seq[hydra.core.Term]](hydra.ext.haskell.testing.extractTestTerms)(`testCases_`))
-  lazy val testBindings: Seq[hydra.core.Binding] = hydra.lib.lists.map[hydra.core.Term, hydra.core.Binding]((term: hydra.core.Term) => hydra.core.Binding("_test_",
-     term, None))(testTerms)
-  lazy val tempModule: hydra.module.Module = hydra.module.Module(mod.namespace, hydra.lib.lists.map[hydra.core.Binding,
-     hydra.module.Definition]((b: hydra.core.Binding) =>
-    hydra.module.Definition.term(hydra.module.TermDefinition(b.name, (b.term), (b.`type`))))(testBindings),
-       (mod.termDependencies), (mod.typeDependencies), (mod.description))
-  hydra.lib.eithers.bind[scala.Predef.String, hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName],
-     hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]](hydra.lib.eithers.bimap[hydra.context.InContext[hydra.errors.Error],
-     hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName], scala.Predef.String, hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]]((ic: hydra.context.InContext[hydra.errors.Error]) => hydra.show.errors.error(ic.`object`))((a: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]) => a)(hydra.ext.haskell.utils.namespacesForModule(tempModule)(hydra.lexical.emptyContext)(`graph_`)))((baseNamespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]) =>
-    {
-    lazy val encodedNames: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.unions[hydra.core.Name](hydra.lib.lists.map[hydra.core.Term,
-       scala.collection.immutable.Set[hydra.core.Name]]((t: hydra.core.Term) =>
-      hydra.ext.haskell.testing.extractEncodedTermVariableNames(`graph_`)(t))(testTerms))
-    Right(hydra.ext.haskell.testing.addNamespacesToNamespaces(baseNamespaces)(encodedNames))
-  })
-}
-
-def collectTestCases(tg: hydra.testing.TestGroup): Seq[hydra.testing.TestCaseWithMetadata] =
-  hydra.lib.lists.concat2[hydra.testing.TestCaseWithMetadata](tg.cases)(hydra.lib.lists.concat[hydra.testing.TestCaseWithMetadata](hydra.lib.lists.map[hydra.testing.TestGroup,
-     Seq[hydra.testing.TestCaseWithMetadata]](hydra.ext.haskell.testing.collectTestCases)(tg.subgroups)))
-
-def extractTestTerms(tcm: hydra.testing.TestCaseWithMetadata): Seq[hydra.core.Term] =
-  tcm.`case` match
-  case hydra.testing.TestCase.delegatedEvaluation(v_TestCase_delegatedEvaluation_delCase) => Seq(v_TestCase_delegatedEvaluation_delCase.input,
-     (v_TestCase_delegatedEvaluation_delCase.output))
-  case _ => Seq()
+def typeToHaskell[T0](namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName])(typ: hydra.core.Type)(g: T0): Either[scala.Predef.String,
+   scala.Predef.String] =
+  hydra.lib.eithers.bimap[hydra.context.InContext[hydra.errors.Error], hydra.ext.haskell.syntax.Type,
+     scala.Predef.String, scala.Predef.String]((ic: hydra.context.InContext[hydra.errors.Error]) => hydra.show.errors.error(ic.`object`))((`arg_`: hydra.ext.haskell.syntax.Type) =>
+  hydra.serialization.printExpr(hydra.serialization.parenthesize(hydra.ext.haskell.serde.typeToExpr(`arg_`))))(hydra.ext.haskell.coder.encodeType(namespaces)(typ)(hydra.lexical.emptyContext)(g))

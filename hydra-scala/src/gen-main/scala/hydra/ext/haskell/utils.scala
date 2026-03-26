@@ -38,10 +38,12 @@ def elementReference(namespaces: hydra.module.Namespaces[hydra.ext.haskell.synta
   lazy val escLocal: scala.Predef.String = hydra.ext.haskell.utils.sanitizeHaskellName(local)
   lazy val mns: Option[hydra.module.Namespace] = (qname.namespace)
   hydra.lib.maybes.cases[hydra.module.Namespace, hydra.ext.haskell.syntax.Name](qname.namespace)(hydra.ext.haskell.utils.simpleName(local))((ns: hydra.module.Namespace) =>
-    hydra.lib.maybes.cases[hydra.ext.haskell.syntax.ModuleName, hydra.ext.haskell.syntax.Name](hydra.lib.maps.lookup[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName](ns)(namespacesMap))(hydra.ext.haskell.utils.simpleName(local))((mn: hydra.ext.haskell.syntax.ModuleName) =>
+    hydra.lib.maybes.cases[hydra.ext.haskell.syntax.ModuleName, hydra.ext.haskell.syntax.Name](hydra.lib.maps.lookup[hydra.module.Namespace,
+       hydra.ext.haskell.syntax.ModuleName](ns)(namespacesMap))(hydra.ext.haskell.utils.simpleName(local))((mn: hydra.ext.haskell.syntax.ModuleName) =>
     {
     lazy val aliasStr: scala.Predef.String = mn
-    hydra.lib.logic.ifElse[hydra.ext.haskell.syntax.Name](hydra.lib.equality.equal[hydra.module.Namespace](ns)(gname))(hydra.ext.haskell.utils.simpleName(escLocal))(hydra.ext.haskell.utils.rawName(hydra.lib.strings.cat(Seq(aliasStr, ".", hydra.ext.haskell.utils.sanitizeHaskellName(local)))))
+    hydra.lib.logic.ifElse[hydra.ext.haskell.syntax.Name](hydra.lib.equality.equal[hydra.module.Namespace](ns)(gname))(hydra.ext.haskell.utils.simpleName(escLocal))(hydra.ext.haskell.utils.rawName(hydra.lib.strings.cat(Seq(aliasStr,
+       ".", hydra.ext.haskell.utils.sanitizeHaskellName(local)))))
   }))
 }
 
@@ -55,8 +57,10 @@ def hslit(lit: hydra.ext.haskell.syntax.Literal): hydra.ext.haskell.syntax.Expre
 
 def hsvar(s: scala.Predef.String): hydra.ext.haskell.syntax.Expression = hydra.ext.haskell.syntax.Expression.variable(hydra.ext.haskell.utils.rawName(s))
 
-def namespacesForModule(mod: hydra.module.Module)(cx: hydra.context.Context)(g: hydra.graph.Graph): Either[hydra.context.InContext[hydra.errors.Error], hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]] =
-  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], scala.collection.immutable.Set[hydra.module.Namespace], hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]](hydra.schemas.moduleDependencyNamespaces(cx)(g)(true)(true)(true)(true)(mod))((nss: scala.collection.immutable.Set[hydra.module.Namespace]) =>
+def namespacesForModule(mod: hydra.module.Module)(cx: hydra.context.Context)(g: hydra.graph.Graph): Either[hydra.context.InContext[hydra.errors.Error],
+   hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]] =
+  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], scala.collection.immutable.Set[hydra.module.Namespace],
+     hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]](hydra.schemas.moduleDependencyNamespaces(cx)(g)(true)(true)(true)(true)(mod))((nss: scala.collection.immutable.Set[hydra.module.Namespace]) =>
   {
   lazy val ns: hydra.module.Namespace = (mod.namespace)
   {
@@ -71,27 +75,39 @@ def namespacesForModule(mod: hydra.module.Module)(cx: hydra.context.Context)(g: 
     {
       def toPair(name: hydra.module.Namespace): Tuple2[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName] = Tuple2(name, toModuleName(name))
       {
-        def addPair[T0](state: Tuple2[Map[T0, hydra.ext.haskell.syntax.ModuleName], scala.collection.immutable.Set[hydra.ext.haskell.syntax.ModuleName]])(namePair: Tuple2[T0, hydra.ext.haskell.syntax.ModuleName]): Tuple2[Map[T0, hydra.ext.haskell.syntax.ModuleName], scala.collection.immutable.Set[hydra.ext.haskell.syntax.ModuleName]] =
+        def addPair[T0](state: Tuple2[Map[T0, hydra.ext.haskell.syntax.ModuleName], scala.collection.immutable.Set[hydra.ext.haskell.syntax.ModuleName]])(namePair: Tuple2[T0,
+           hydra.ext.haskell.syntax.ModuleName]): Tuple2[Map[T0, hydra.ext.haskell.syntax.ModuleName],
+           scala.collection.immutable.Set[hydra.ext.haskell.syntax.ModuleName]] =
           {
-          lazy val currentMap: Map[T0, hydra.ext.haskell.syntax.ModuleName] = hydra.lib.pairs.first[Map[T0, hydra.ext.haskell.syntax.ModuleName], scala.collection.immutable.Set[hydra.ext.haskell.syntax.ModuleName]](state)
-          lazy val currentSet: scala.collection.immutable.Set[hydra.ext.haskell.syntax.ModuleName] = hydra.lib.pairs.second[Map[T0, hydra.ext.haskell.syntax.ModuleName], scala.collection.immutable.Set[hydra.ext.haskell.syntax.ModuleName]](state)
+          lazy val currentMap: Map[T0, hydra.ext.haskell.syntax.ModuleName] = hydra.lib.pairs.first[Map[T0,
+             hydra.ext.haskell.syntax.ModuleName], scala.collection.immutable.Set[hydra.ext.haskell.syntax.ModuleName]](state)
+          lazy val currentSet: scala.collection.immutable.Set[hydra.ext.haskell.syntax.ModuleName] = hydra.lib.pairs.second[Map[T0,
+             hydra.ext.haskell.syntax.ModuleName], scala.collection.immutable.Set[hydra.ext.haskell.syntax.ModuleName]](state)
           lazy val name: T0 = hydra.lib.pairs.first[T0, hydra.ext.haskell.syntax.ModuleName](namePair)
           lazy val alias: hydra.ext.haskell.syntax.ModuleName = hydra.lib.pairs.second[T0, hydra.ext.haskell.syntax.ModuleName](namePair)
           lazy val aliasStr: scala.Predef.String = alias
-          hydra.lib.logic.ifElse[Tuple2[Map[T0, hydra.ext.haskell.syntax.ModuleName], scala.collection.immutable.Set[hydra.ext.haskell.syntax.ModuleName]]](hydra.lib.sets.member[hydra.ext.haskell.syntax.ModuleName](alias)(currentSet))(addPair(state)(Tuple2(name, hydra.lib.strings.cat2(aliasStr)("_"))))(Tuple2(hydra.lib.maps.insert[T0, hydra.ext.haskell.syntax.ModuleName](name)(alias)(currentMap), hydra.lib.sets.insert[hydra.ext.haskell.syntax.ModuleName](alias)(currentSet)))
+          hydra.lib.logic.ifElse[Tuple2[Map[T0, hydra.ext.haskell.syntax.ModuleName], scala.collection.immutable.Set[hydra.ext.haskell.syntax.ModuleName]]](hydra.lib.sets.member[hydra.ext.haskell.syntax.ModuleName](alias)(currentSet))(addPair(state)(Tuple2(name,
+             hydra.lib.strings.cat2(aliasStr)("_"))))(Tuple2(hydra.lib.maps.insert[T0, hydra.ext.haskell.syntax.ModuleName](name)(alias)(currentMap),
+             hydra.lib.sets.insert[hydra.ext.haskell.syntax.ModuleName](alias)(currentSet)))
         }
         {
           lazy val focusPair: Tuple2[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName] = toPair(ns)
           {
             lazy val nssAsList: Seq[hydra.module.Namespace] = hydra.lib.sets.toList[hydra.module.Namespace](nss)
             {
-              lazy val nssPairs: Seq[Tuple2[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName]] = hydra.lib.lists.map[hydra.module.Namespace, Tuple2[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName]](toPair)(nssAsList)
+              lazy val nssPairs: Seq[Tuple2[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName]] = hydra.lib.lists.map[hydra.module.Namespace,
+                 Tuple2[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName]](toPair)(nssAsList)
               {
-                def emptyState[T0, T1, T2]: Tuple2[Map[T0, T1], scala.collection.immutable.Set[T2]] = Tuple2(hydra.lib.maps.empty[T0, T1], hydra.lib.sets.empty[T2])
+                def emptyState[T0, T1, T2]: Tuple2[Map[T0, T1], scala.collection.immutable.Set[T2]] = Tuple2(hydra.lib.maps.empty[T0,
+                   T1], hydra.lib.sets.empty[T2])
                 {
-                  lazy val finalState: Tuple2[Map[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName], scala.collection.immutable.Set[hydra.ext.haskell.syntax.ModuleName]] = hydra.lib.lists.foldl[Tuple2[Map[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName], scala.collection.immutable.Set[hydra.ext.haskell.syntax.ModuleName]], Tuple2[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName]](addPair)(emptyState)(nssPairs)
+                  lazy val finalState: Tuple2[Map[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName],
+                     scala.collection.immutable.Set[hydra.ext.haskell.syntax.ModuleName]] = hydra.lib.lists.foldl[Tuple2[Map[hydra.module.Namespace,
+                     hydra.ext.haskell.syntax.ModuleName], scala.collection.immutable.Set[hydra.ext.haskell.syntax.ModuleName]],
+                     Tuple2[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName]](addPair)(emptyState)(nssPairs)
                   {
-                    lazy val resultMap: Map[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName] = hydra.lib.pairs.first[Map[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName], scala.collection.immutable.Set[hydra.ext.haskell.syntax.ModuleName]](finalState)
+                    lazy val resultMap: Map[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName] = hydra.lib.pairs.first[Map[hydra.module.Namespace,
+                       hydra.ext.haskell.syntax.ModuleName], scala.collection.immutable.Set[hydra.ext.haskell.syntax.ModuleName]](finalState)
                     Right(hydra.module.Namespaces(focusPair, resultMap))
                   }
                 }
@@ -139,7 +155,8 @@ def simpleValueBinding(hname: hydra.ext.haskell.syntax.Name)(rhs: hydra.ext.hask
 def toTypeApplication(types: Seq[hydra.ext.haskell.syntax.Type]): hydra.ext.haskell.syntax.Type =
   {
   def app(l: Seq[hydra.ext.haskell.syntax.Type]): hydra.ext.haskell.syntax.Type =
-    hydra.lib.logic.ifElse[hydra.ext.haskell.syntax.Type](hydra.lib.equality.gt[Int](hydra.lib.lists.length[hydra.ext.haskell.syntax.Type](l))(1))(hydra.ext.haskell.syntax.Type.application(hydra.ext.haskell.syntax.ApplicationType(app(hydra.lib.lists.tail[hydra.ext.haskell.syntax.Type](l)), hydra.lib.lists.head[hydra.ext.haskell.syntax.Type](l))))(hydra.lib.lists.head[hydra.ext.haskell.syntax.Type](l))
+    hydra.lib.logic.ifElse[hydra.ext.haskell.syntax.Type](hydra.lib.equality.gt[Int](hydra.lib.lists.length[hydra.ext.haskell.syntax.Type](l))(1))(hydra.ext.haskell.syntax.Type.application(hydra.ext.haskell.syntax.ApplicationType(app(hydra.lib.lists.tail[hydra.ext.haskell.syntax.Type](l)),
+       hydra.lib.lists.head[hydra.ext.haskell.syntax.Type](l))))(hydra.lib.lists.head[hydra.ext.haskell.syntax.Type](l))
   app(hydra.lib.lists.reverse[hydra.ext.haskell.syntax.Type](types))
 }
 

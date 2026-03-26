@@ -63,16 +63,6 @@ def adjacencyListsToGraph[T0](edges0: Seq[Tuple2[T0, Seq[T0]]]): Tuple2[Map[Int,
   Tuple2(graph, vertexToKey)
 }
 
-def stronglyConnectedComponents(graph: Map[hydra.topology.Vertex, Seq[hydra.topology.Vertex]]): Seq[Seq[hydra.topology.Vertex]] =
-  {
-  lazy val verts: Seq[hydra.topology.Vertex] = hydra.lib.maps.keys[hydra.topology.Vertex, Seq[hydra.topology.Vertex]](graph)
-  lazy val finalState: hydra.topology.TarjanState = hydra.lib.lists.foldl[hydra.topology.TarjanState, hydra.topology.Vertex]((st: hydra.topology.TarjanState) =>
-    (v: hydra.topology.Vertex) =>
-    hydra.lib.logic.ifElse[hydra.topology.TarjanState](hydra.lib.maps.member[hydra.topology.Vertex, Int](v)(st.indices))(st)(hydra.tarjan.strongConnect(graph)(v)(st)))(hydra.tarjan.initialState)(verts)
-  hydra.lib.lists.reverse[Seq[hydra.topology.Vertex]](hydra.lib.lists.map[Seq[hydra.topology.Vertex],
-     Seq[hydra.topology.Vertex]](hydra.lib.lists.sort[hydra.topology.Vertex])(finalState.sccs))
-}
-
 lazy val initialState: hydra.topology.TarjanState = hydra.topology.TarjanState(0, hydra.lib.maps.empty[hydra.topology.Vertex,
    Int], hydra.lib.maps.empty[hydra.topology.Vertex, Int], Seq(), hydra.lib.sets.empty[hydra.topology.Vertex],
    Seq())
@@ -137,4 +127,14 @@ def strongConnect(graph: Map[hydra.topology.Vertex, Seq[hydra.topology.Vertex]])
       }
     }
   })(stAfterNeighbors)
+}
+
+def stronglyConnectedComponents(graph: Map[hydra.topology.Vertex, Seq[hydra.topology.Vertex]]): Seq[Seq[hydra.topology.Vertex]] =
+  {
+  lazy val verts: Seq[hydra.topology.Vertex] = hydra.lib.maps.keys[hydra.topology.Vertex, Seq[hydra.topology.Vertex]](graph)
+  lazy val finalState: hydra.topology.TarjanState = hydra.lib.lists.foldl[hydra.topology.TarjanState, hydra.topology.Vertex]((st: hydra.topology.TarjanState) =>
+    (v: hydra.topology.Vertex) =>
+    hydra.lib.logic.ifElse[hydra.topology.TarjanState](hydra.lib.maps.member[hydra.topology.Vertex, Int](v)(st.indices))(st)(hydra.tarjan.strongConnect(graph)(v)(st)))(hydra.tarjan.initialState)(verts)
+  hydra.lib.lists.reverse[Seq[hydra.topology.Vertex]](hydra.lib.lists.map[Seq[hydra.topology.Vertex],
+     Seq[hydra.topology.Vertex]](hydra.lib.lists.sort[hydra.topology.Vertex])(finalState.sccs))
 }

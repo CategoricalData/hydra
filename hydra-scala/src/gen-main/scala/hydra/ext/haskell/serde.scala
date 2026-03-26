@@ -58,6 +58,21 @@ def classAssertionToExpr(clsAsrt: hydra.ext.haskell.syntax.ClassAssertion): hydr
      hydra.ast.Expr](hydra.ext.haskell.serde.typeToExpr)(types)))))
 }
 
+def constructRecordExpressionToExpr(constructRecord: hydra.ext.haskell.syntax.ConstructRecordExpression): hydra.ast.Expr =
+  {
+  lazy val name: hydra.ext.haskell.syntax.Name = (constructRecord.name)
+  lazy val updates: Seq[hydra.ext.haskell.syntax.FieldUpdate] = (constructRecord.fields)
+  def fromUpdate(update: hydra.ext.haskell.syntax.FieldUpdate): hydra.ast.Expr =
+    {
+    lazy val fn: hydra.ext.haskell.syntax.Name = (update.name)
+    lazy val `val`: hydra.ext.haskell.syntax.Expression = (update.value)
+    hydra.serialization.ifx(hydra.ext.haskell.operators.defineOp)(hydra.ext.haskell.serde.nameToExpr(fn))(hydra.ext.haskell.serde.expressionToExpr(`val`))
+  }
+  lazy val body: hydra.ast.Expr = hydra.serialization.commaSep(hydra.serialization.halfBlockStyle)(hydra.lib.lists.map[hydra.ext.haskell.syntax.FieldUpdate,
+     hydra.ast.Expr](fromUpdate)(updates))
+  hydra.serialization.spaceSep(hydra.lib.lists.cons[hydra.ast.Expr](hydra.ext.haskell.serde.nameToExpr(name))(Seq(hydra.serialization.brackets(hydra.serialization.curlyBraces)(hydra.serialization.halfBlockStyle)(body))))
+}
+
 def constructorToExpr(cons: hydra.ext.haskell.syntax.Constructor): hydra.ast.Expr =
   cons match
   case hydra.ext.haskell.syntax.Constructor.ordinary(v_Constructor_ordinary_ord) => {
@@ -159,21 +174,6 @@ def expressionToExpr(expr: hydra.ext.haskell.syntax.Expression): hydra.ast.Expr 
   case hydra.ext.haskell.syntax.Expression.tuple(v_Expression_tuple_exprs) => hydra.serialization.parenList(false)(hydra.lib.lists.map[hydra.ext.haskell.syntax.Expression,
      hydra.ast.Expr](hydra.ext.haskell.serde.expressionToExpr)(v_Expression_tuple_exprs))
   case hydra.ext.haskell.syntax.Expression.variable(v_Expression_variable_name) => hydra.ext.haskell.serde.nameToExpr(v_Expression_variable_name)
-
-def constructRecordExpressionToExpr(constructRecord: hydra.ext.haskell.syntax.ConstructRecordExpression): hydra.ast.Expr =
-  {
-  lazy val name: hydra.ext.haskell.syntax.Name = (constructRecord.name)
-  lazy val updates: Seq[hydra.ext.haskell.syntax.FieldUpdate] = (constructRecord.fields)
-  def fromUpdate(update: hydra.ext.haskell.syntax.FieldUpdate): hydra.ast.Expr =
-    {
-    lazy val fn: hydra.ext.haskell.syntax.Name = (update.name)
-    lazy val `val`: hydra.ext.haskell.syntax.Expression = (update.value)
-    hydra.serialization.ifx(hydra.ext.haskell.operators.defineOp)(hydra.ext.haskell.serde.nameToExpr(fn))(hydra.ext.haskell.serde.expressionToExpr(`val`))
-  }
-  lazy val body: hydra.ast.Expr = hydra.serialization.commaSep(hydra.serialization.halfBlockStyle)(hydra.lib.lists.map[hydra.ext.haskell.syntax.FieldUpdate,
-     hydra.ast.Expr](fromUpdate)(updates))
-  hydra.serialization.spaceSep(hydra.lib.lists.cons[hydra.ast.Expr](hydra.ext.haskell.serde.nameToExpr(name))(Seq(hydra.serialization.brackets(hydra.serialization.curlyBraces)(hydra.serialization.halfBlockStyle)(body))))
-}
 
 def fieldToExpr(field: hydra.ext.haskell.syntax.Field): hydra.ast.Expr =
   {
@@ -295,6 +295,12 @@ def rightHandSideToExpr(rhs: hydra.ext.haskell.syntax.RightHandSide): hydra.ast.
 
 def statementToExpr(stmt: hydra.ext.haskell.syntax.Statement): hydra.ast.Expr = hydra.ext.haskell.serde.expressionToExpr(stmt)
 
+def toHaskellComments(c: scala.Predef.String): scala.Predef.String =
+  hydra.lib.strings.intercalate("\n")(hydra.lib.lists.map[scala.Predef.String, scala.Predef.String]((s: scala.Predef.String) => hydra.lib.strings.cat2("-- | ")(s))(hydra.lib.strings.lines(c)))
+
+def toSimpleComments(c: scala.Predef.String): scala.Predef.String =
+  hydra.lib.strings.intercalate("\n")(hydra.lib.lists.map[scala.Predef.String, scala.Predef.String]((s: scala.Predef.String) => hydra.lib.strings.cat2("-- ")(s))(hydra.lib.strings.lines(c)))
+
 def typeSignatureToExpr(typeSig: hydra.ext.haskell.syntax.TypeSignature): hydra.ast.Expr =
   {
   lazy val name: hydra.ext.haskell.syntax.Name = (typeSig.name)
@@ -348,12 +354,6 @@ def valueBindingToExpr(vb: hydra.ext.haskell.syntax.ValueBinding): hydra.ast.Exp
   }
 
 def variableToExpr(variable: hydra.ext.haskell.syntax.Variable): hydra.ast.Expr = hydra.ext.haskell.serde.nameToExpr(variable)
-
-def toHaskellComments(c: scala.Predef.String): scala.Predef.String =
-  hydra.lib.strings.intercalate("\n")(hydra.lib.lists.map[scala.Predef.String, scala.Predef.String]((s: scala.Predef.String) => hydra.lib.strings.cat2("-- | ")(s))(hydra.lib.strings.lines(c)))
-
-def toSimpleComments(c: scala.Predef.String): scala.Predef.String =
-  hydra.lib.strings.intercalate("\n")(hydra.lib.lists.map[scala.Predef.String, scala.Predef.String]((s: scala.Predef.String) => hydra.lib.strings.cat2("-- ")(s))(hydra.lib.strings.lines(c)))
 
 def writeQualifiedName(qname: hydra.ext.haskell.syntax.QualifiedName): scala.Predef.String =
   {

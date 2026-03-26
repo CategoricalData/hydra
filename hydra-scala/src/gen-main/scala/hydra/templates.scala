@@ -68,9 +68,9 @@ def instantiateTemplate(cx: hydra.context.Context)(minimal: Boolean)(schema: Map
     case hydra.core.LiteralType.string => hydra.core.Literal.string("")
   t match
     case hydra.core.Type.annotated(v_Type_annotated_at) => inst(tname)(v_Type_annotated_at.body)
-    case hydra.core.Type.application => noPoly
-    case hydra.core.Type.function => noPoly
-    case hydra.core.Type.forall => noPoly
+    case hydra.core.Type.application(v_Type_application__) => noPoly
+    case hydra.core.Type.function(v_Type_function__) => noPoly
+    case hydra.core.Type.forall(v_Type_forall__) => noPoly
     case hydra.core.Type.list(v_Type_list_et) => hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error],
        hydra.core.Term]](minimal)(Right(hydra.core.Term.list(Seq())))(hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error],
        hydra.core.Term, hydra.core.Term](inst(tname)(v_Type_list_et))((e: hydra.core.Term) => Right(hydra.core.Term.list(Seq(e)))))

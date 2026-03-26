@@ -22,6 +22,129 @@ import hydra.lib.sets
 
 import hydra.lib.strings
 
+def decodeFloat(ft: hydra.core.FloatType)(value: hydra.json.model.Value): Either[scala.Predef.String, hydra.core.Term] =
+  ft match
+  case hydra.core.FloatType.bigfloat => {
+    lazy val numResult: Either[scala.Predef.String, BigDecimal] = hydra.json.decode.expectNumber(value)
+    hydra.lib.eithers.map[BigDecimal, hydra.core.Term, scala.Predef.String]((n: BigDecimal) =>
+      hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.bigfloat(n))))(numResult)
+  }
+  case hydra.core.FloatType.float32 => {
+    lazy val strResult: Either[scala.Predef.String, scala.Predef.String] = hydra.json.decode.expectString(value)
+    hydra.lib.eithers.either[scala.Predef.String, scala.Predef.String, Either[scala.Predef.String, hydra.core.Term]]((err: scala.Predef.String) => Left(err))((s: scala.Predef.String) =>
+      {
+      lazy val parsed: Option[Float] = hydra.lib.literals.readFloat32(s)
+      hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], Float](Left(hydra.lib.strings.cat(Seq("invalid float32: ", s))))((v: Float) =>
+        Right(hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float32(v)))))(parsed)
+    })(strResult)
+  }
+  case hydra.core.FloatType.float64 => {
+    lazy val numResult: Either[scala.Predef.String, BigDecimal] = hydra.json.decode.expectNumber(value)
+    hydra.lib.eithers.map[BigDecimal, hydra.core.Term, scala.Predef.String]((n: BigDecimal) =>
+      hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(hydra.lib.literals.bigfloatToFloat64(n)))))(numResult)
+  }
+
+def decodeInteger(it: hydra.core.IntegerType)(value: hydra.json.model.Value): Either[scala.Predef.String, hydra.core.Term] =
+  it match
+  case hydra.core.IntegerType.bigint => {
+    lazy val strResult: Either[scala.Predef.String, scala.Predef.String] = hydra.json.decode.expectString(value)
+    hydra.lib.eithers.either[scala.Predef.String, scala.Predef.String, Either[scala.Predef.String, hydra.core.Term]]((err: scala.Predef.String) => Left(err))((s: scala.Predef.String) =>
+      {
+      lazy val parsed: Option[BigInt] = hydra.lib.literals.readBigint(s)
+      hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], BigInt](Left(hydra.lib.strings.cat(Seq("invalid bigint: ", s))))((v: BigInt) =>
+        Right(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.bigint(v)))))(parsed)
+    })(strResult)
+  }
+  case hydra.core.IntegerType.int64 => {
+    lazy val strResult: Either[scala.Predef.String, scala.Predef.String] = hydra.json.decode.expectString(value)
+    hydra.lib.eithers.either[scala.Predef.String, scala.Predef.String, Either[scala.Predef.String, hydra.core.Term]]((err: scala.Predef.String) => Left(err))((s: scala.Predef.String) =>
+      {
+      lazy val parsed: Option[Long] = hydra.lib.literals.readInt64(s)
+      hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], Long](Left(hydra.lib.strings.cat(Seq("invalid int64: ", s))))((v: Long) =>
+        Right(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int64(v)))))(parsed)
+    })(strResult)
+  }
+  case hydra.core.IntegerType.uint32 => {
+    lazy val strResult: Either[scala.Predef.String, scala.Predef.String] = hydra.json.decode.expectString(value)
+    hydra.lib.eithers.either[scala.Predef.String, scala.Predef.String, Either[scala.Predef.String, hydra.core.Term]]((err: scala.Predef.String) => Left(err))((s: scala.Predef.String) =>
+      {
+      lazy val parsed: Option[Long] = hydra.lib.literals.readUint32(s)
+      hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], Long](Left(hydra.lib.strings.cat(Seq("invalid uint32: ", s))))((v: Long) =>
+        Right(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.uint32(v)))))(parsed)
+    })(strResult)
+  }
+  case hydra.core.IntegerType.uint64 => {
+    lazy val strResult: Either[scala.Predef.String, scala.Predef.String] = hydra.json.decode.expectString(value)
+    hydra.lib.eithers.either[scala.Predef.String, scala.Predef.String, Either[scala.Predef.String, hydra.core.Term]]((err: scala.Predef.String) => Left(err))((s: scala.Predef.String) =>
+      {
+      lazy val parsed: Option[BigInt] = hydra.lib.literals.readUint64(s)
+      hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], BigInt](Left(hydra.lib.strings.cat(Seq("invalid uint64: ", s))))((v: BigInt) =>
+        Right(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.uint64(v)))))(parsed)
+    })(strResult)
+  }
+  case hydra.core.IntegerType.int8 => {
+    lazy val numResult: Either[scala.Predef.String, BigDecimal] = hydra.json.decode.expectNumber(value)
+    hydra.lib.eithers.map[BigDecimal, hydra.core.Term, scala.Predef.String]((n: BigDecimal) =>
+      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int8(hydra.lib.literals.bigintToInt8(hydra.lib.literals.bigfloatToBigint(n))))))(numResult)
+  }
+  case hydra.core.IntegerType.int16 => {
+    lazy val numResult: Either[scala.Predef.String, BigDecimal] = hydra.json.decode.expectNumber(value)
+    hydra.lib.eithers.map[BigDecimal, hydra.core.Term, scala.Predef.String]((n: BigDecimal) =>
+      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int16(hydra.lib.literals.bigintToInt16(hydra.lib.literals.bigfloatToBigint(n))))))(numResult)
+  }
+  case hydra.core.IntegerType.int32 => {
+    lazy val numResult: Either[scala.Predef.String, BigDecimal] = hydra.json.decode.expectNumber(value)
+    hydra.lib.eithers.map[BigDecimal, hydra.core.Term, scala.Predef.String]((n: BigDecimal) =>
+      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(hydra.lib.literals.bigintToInt32(hydra.lib.literals.bigfloatToBigint(n))))))(numResult)
+  }
+  case hydra.core.IntegerType.uint8 => {
+    lazy val numResult: Either[scala.Predef.String, BigDecimal] = hydra.json.decode.expectNumber(value)
+    hydra.lib.eithers.map[BigDecimal, hydra.core.Term, scala.Predef.String]((n: BigDecimal) =>
+      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.uint8(hydra.lib.literals.bigintToUint8(hydra.lib.literals.bigfloatToBigint(n))))))(numResult)
+  }
+  case hydra.core.IntegerType.uint16 => {
+    lazy val numResult: Either[scala.Predef.String, BigDecimal] = hydra.json.decode.expectNumber(value)
+    hydra.lib.eithers.map[BigDecimal, hydra.core.Term, scala.Predef.String]((n: BigDecimal) =>
+      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.uint16(hydra.lib.literals.bigintToUint16(hydra.lib.literals.bigfloatToBigint(n))))))(numResult)
+  }
+
+def decodeLiteral(lt: hydra.core.LiteralType)(value: hydra.json.model.Value): Either[scala.Predef.String, hydra.core.Term] =
+  lt match
+  case hydra.core.LiteralType.binary => {
+    lazy val strResult: Either[scala.Predef.String, scala.Predef.String] = hydra.json.decode.expectString(value)
+    hydra.lib.eithers.map[scala.Predef.String, hydra.core.Term, scala.Predef.String]((s: scala.Predef.String) =>
+      hydra.core.Term.literal(hydra.core.Literal.binary(hydra.lib.literals.stringToBinary(s))))(strResult)
+  }
+  case hydra.core.LiteralType.boolean => value match
+    case hydra.json.model.Value.boolean(v_Value_boolean_b) => Right(hydra.core.Term.literal(hydra.core.Literal.boolean(v_Value_boolean_b)))
+    case _ => Left("expected boolean")
+  case hydra.core.LiteralType.float(v_LiteralType_float_ft) => hydra.json.decode.decodeFloat(v_LiteralType_float_ft)(value)
+  case hydra.core.LiteralType.integer(v_LiteralType_integer_it) => hydra.json.decode.decodeInteger(v_LiteralType_integer_it)(value)
+  case hydra.core.LiteralType.string => {
+    lazy val strResult: Either[scala.Predef.String, scala.Predef.String] = hydra.json.decode.expectString(value)
+    hydra.lib.eithers.map[scala.Predef.String, hydra.core.Term, scala.Predef.String]((s: scala.Predef.String) => hydra.core.Term.literal(hydra.core.Literal.string(s)))(strResult)
+  }
+
+def expectArray(value: hydra.json.model.Value): Either[scala.Predef.String, Seq[hydra.json.model.Value]] =
+  value match
+  case hydra.json.model.Value.array(v_Value_array_arr) => Right(v_Value_array_arr)
+  case _ => Left("expected array")
+
+def expectNumber(value: hydra.json.model.Value): Either[scala.Predef.String, BigDecimal] =
+  value match
+  case hydra.json.model.Value.number(v_Value_number_n) => Right(v_Value_number_n)
+  case _ => Left("expected number")
+
+def expectObject(value: hydra.json.model.Value): Either[scala.Predef.String, Map[scala.Predef.String, hydra.json.model.Value]] =
+  value match
+  case hydra.json.model.Value.`object`(v_Value_object_obj) => Right(v_Value_object_obj)
+  case _ => Left("expected object")
+
+def expectString(value: hydra.json.model.Value): Either[scala.Predef.String, scala.Predef.String] =
+  value match
+  case hydra.json.model.Value.string(v_Value_string_s) => Right(v_Value_string_s)
+  case _ => Left("expected string")
+
 def fromJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Name)(typ: hydra.core.Type)(value: hydra.json.model.Value): Either[scala.Predef.String,
    hydra.core.Term] =
   {
@@ -257,126 +380,3 @@ def fromJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Nam
     }
     case _ => Left(hydra.lib.strings.cat(Seq("unsupported type for JSON decoding: ", hydra.show.core.`type`(typ))))
 }
-
-def decodeLiteral(lt: hydra.core.LiteralType)(value: hydra.json.model.Value): Either[scala.Predef.String, hydra.core.Term] =
-  lt match
-  case hydra.core.LiteralType.binary => {
-    lazy val strResult: Either[scala.Predef.String, scala.Predef.String] = hydra.json.decode.expectString(value)
-    hydra.lib.eithers.map[scala.Predef.String, hydra.core.Term, scala.Predef.String]((s: scala.Predef.String) =>
-      hydra.core.Term.literal(hydra.core.Literal.binary(hydra.lib.literals.stringToBinary(s))))(strResult)
-  }
-  case hydra.core.LiteralType.boolean => value match
-    case hydra.json.model.Value.boolean(v_Value_boolean_b) => Right(hydra.core.Term.literal(hydra.core.Literal.boolean(v_Value_boolean_b)))
-    case _ => Left("expected boolean")
-  case hydra.core.LiteralType.float(v_LiteralType_float_ft) => hydra.json.decode.decodeFloat(v_LiteralType_float_ft)(value)
-  case hydra.core.LiteralType.integer(v_LiteralType_integer_it) => hydra.json.decode.decodeInteger(v_LiteralType_integer_it)(value)
-  case hydra.core.LiteralType.string => {
-    lazy val strResult: Either[scala.Predef.String, scala.Predef.String] = hydra.json.decode.expectString(value)
-    hydra.lib.eithers.map[scala.Predef.String, hydra.core.Term, scala.Predef.String]((s: scala.Predef.String) => hydra.core.Term.literal(hydra.core.Literal.string(s)))(strResult)
-  }
-
-def decodeFloat(ft: hydra.core.FloatType)(value: hydra.json.model.Value): Either[scala.Predef.String, hydra.core.Term] =
-  ft match
-  case hydra.core.FloatType.bigfloat => {
-    lazy val numResult: Either[scala.Predef.String, BigDecimal] = hydra.json.decode.expectNumber(value)
-    hydra.lib.eithers.map[BigDecimal, hydra.core.Term, scala.Predef.String]((n: BigDecimal) =>
-      hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.bigfloat(n))))(numResult)
-  }
-  case hydra.core.FloatType.float32 => {
-    lazy val strResult: Either[scala.Predef.String, scala.Predef.String] = hydra.json.decode.expectString(value)
-    hydra.lib.eithers.either[scala.Predef.String, scala.Predef.String, Either[scala.Predef.String, hydra.core.Term]]((err: scala.Predef.String) => Left(err))((s: scala.Predef.String) =>
-      {
-      lazy val parsed: Option[Float] = hydra.lib.literals.readFloat32(s)
-      hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], Float](Left(hydra.lib.strings.cat(Seq("invalid float32: ", s))))((v: Float) =>
-        Right(hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float32(v)))))(parsed)
-    })(strResult)
-  }
-  case hydra.core.FloatType.float64 => {
-    lazy val numResult: Either[scala.Predef.String, BigDecimal] = hydra.json.decode.expectNumber(value)
-    hydra.lib.eithers.map[BigDecimal, hydra.core.Term, scala.Predef.String]((n: BigDecimal) =>
-      hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(hydra.lib.literals.bigfloatToFloat64(n)))))(numResult)
-  }
-
-def decodeInteger(it: hydra.core.IntegerType)(value: hydra.json.model.Value): Either[scala.Predef.String, hydra.core.Term] =
-  it match
-  case hydra.core.IntegerType.bigint => {
-    lazy val strResult: Either[scala.Predef.String, scala.Predef.String] = hydra.json.decode.expectString(value)
-    hydra.lib.eithers.either[scala.Predef.String, scala.Predef.String, Either[scala.Predef.String, hydra.core.Term]]((err: scala.Predef.String) => Left(err))((s: scala.Predef.String) =>
-      {
-      lazy val parsed: Option[BigInt] = hydra.lib.literals.readBigint(s)
-      hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], BigInt](Left(hydra.lib.strings.cat(Seq("invalid bigint: ", s))))((v: BigInt) =>
-        Right(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.bigint(v)))))(parsed)
-    })(strResult)
-  }
-  case hydra.core.IntegerType.int64 => {
-    lazy val strResult: Either[scala.Predef.String, scala.Predef.String] = hydra.json.decode.expectString(value)
-    hydra.lib.eithers.either[scala.Predef.String, scala.Predef.String, Either[scala.Predef.String, hydra.core.Term]]((err: scala.Predef.String) => Left(err))((s: scala.Predef.String) =>
-      {
-      lazy val parsed: Option[Long] = hydra.lib.literals.readInt64(s)
-      hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], Long](Left(hydra.lib.strings.cat(Seq("invalid int64: ", s))))((v: Long) =>
-        Right(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int64(v)))))(parsed)
-    })(strResult)
-  }
-  case hydra.core.IntegerType.uint32 => {
-    lazy val strResult: Either[scala.Predef.String, scala.Predef.String] = hydra.json.decode.expectString(value)
-    hydra.lib.eithers.either[scala.Predef.String, scala.Predef.String, Either[scala.Predef.String, hydra.core.Term]]((err: scala.Predef.String) => Left(err))((s: scala.Predef.String) =>
-      {
-      lazy val parsed: Option[Long] = hydra.lib.literals.readUint32(s)
-      hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], Long](Left(hydra.lib.strings.cat(Seq("invalid uint32: ", s))))((v: Long) =>
-        Right(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.uint32(v)))))(parsed)
-    })(strResult)
-  }
-  case hydra.core.IntegerType.uint64 => {
-    lazy val strResult: Either[scala.Predef.String, scala.Predef.String] = hydra.json.decode.expectString(value)
-    hydra.lib.eithers.either[scala.Predef.String, scala.Predef.String, Either[scala.Predef.String, hydra.core.Term]]((err: scala.Predef.String) => Left(err))((s: scala.Predef.String) =>
-      {
-      lazy val parsed: Option[BigInt] = hydra.lib.literals.readUint64(s)
-      hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], BigInt](Left(hydra.lib.strings.cat(Seq("invalid uint64: ", s))))((v: BigInt) =>
-        Right(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.uint64(v)))))(parsed)
-    })(strResult)
-  }
-  case hydra.core.IntegerType.int8 => {
-    lazy val numResult: Either[scala.Predef.String, BigDecimal] = hydra.json.decode.expectNumber(value)
-    hydra.lib.eithers.map[BigDecimal, hydra.core.Term, scala.Predef.String]((n: BigDecimal) =>
-      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int8(hydra.lib.literals.bigintToInt8(hydra.lib.literals.bigfloatToBigint(n))))))(numResult)
-  }
-  case hydra.core.IntegerType.int16 => {
-    lazy val numResult: Either[scala.Predef.String, BigDecimal] = hydra.json.decode.expectNumber(value)
-    hydra.lib.eithers.map[BigDecimal, hydra.core.Term, scala.Predef.String]((n: BigDecimal) =>
-      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int16(hydra.lib.literals.bigintToInt16(hydra.lib.literals.bigfloatToBigint(n))))))(numResult)
-  }
-  case hydra.core.IntegerType.int32 => {
-    lazy val numResult: Either[scala.Predef.String, BigDecimal] = hydra.json.decode.expectNumber(value)
-    hydra.lib.eithers.map[BigDecimal, hydra.core.Term, scala.Predef.String]((n: BigDecimal) =>
-      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(hydra.lib.literals.bigintToInt32(hydra.lib.literals.bigfloatToBigint(n))))))(numResult)
-  }
-  case hydra.core.IntegerType.uint8 => {
-    lazy val numResult: Either[scala.Predef.String, BigDecimal] = hydra.json.decode.expectNumber(value)
-    hydra.lib.eithers.map[BigDecimal, hydra.core.Term, scala.Predef.String]((n: BigDecimal) =>
-      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.uint8(hydra.lib.literals.bigintToUint8(hydra.lib.literals.bigfloatToBigint(n))))))(numResult)
-  }
-  case hydra.core.IntegerType.uint16 => {
-    lazy val numResult: Either[scala.Predef.String, BigDecimal] = hydra.json.decode.expectNumber(value)
-    hydra.lib.eithers.map[BigDecimal, hydra.core.Term, scala.Predef.String]((n: BigDecimal) =>
-      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.uint16(hydra.lib.literals.bigintToUint16(hydra.lib.literals.bigfloatToBigint(n))))))(numResult)
-  }
-
-def expectString(value: hydra.json.model.Value): Either[scala.Predef.String, scala.Predef.String] =
-  value match
-  case hydra.json.model.Value.string(v_Value_string_s) => Right(v_Value_string_s)
-  case _ => Left("expected string")
-
-def expectArray(value: hydra.json.model.Value): Either[scala.Predef.String, Seq[hydra.json.model.Value]] =
-  value match
-  case hydra.json.model.Value.array(v_Value_array_arr) => Right(v_Value_array_arr)
-  case _ => Left("expected array")
-
-def expectObject(value: hydra.json.model.Value): Either[scala.Predef.String, Map[scala.Predef.String, hydra.json.model.Value]] =
-  value match
-  case hydra.json.model.Value.`object`(v_Value_object_obj) => Right(v_Value_object_obj)
-  case _ => Left("expected object")
-
-def expectNumber(value: hydra.json.model.Value): Either[scala.Predef.String, BigDecimal] =
-  value match
-  case hydra.json.model.Value.number(v_Value_number_n) => Right(v_Value_number_n)
-  case _ => Left("expected number")

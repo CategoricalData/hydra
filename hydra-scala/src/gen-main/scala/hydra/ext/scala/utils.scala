@@ -30,7 +30,8 @@ def qualifyUnionFieldName(dlft: scala.Predef.String)(sname: Option[hydra.core.Na
   hydra.lib.strings.cat2(hydra.lib.maybes.maybe[scala.Predef.String, hydra.core.Name](dlft)((n: hydra.core.Name) =>
   hydra.lib.strings.cat2(hydra.ext.scala.utils.scalaTypeName(true)(n))("."))(sname))(hydra.ext.scala.utils.scalaEscapeName(fname))
 
-def sapply(fun: hydra.ext.scala.syntax.Data)(args: Seq[hydra.ext.scala.syntax.Data]): hydra.ext.scala.syntax.Data = hydra.ext.scala.syntax.Data.apply(hydra.ext.scala.syntax.Data_Apply(fun, args))
+def sapply(fun: hydra.ext.scala.syntax.Data)(args: Seq[hydra.ext.scala.syntax.Data]): hydra.ext.scala.syntax.Data = hydra.ext.scala.syntax.Data.apply(hydra.ext.scala.syntax.Data_Apply(fun,
+   args))
 
 def sapplyTypes(fun: hydra.ext.scala.syntax.Data)(typeArgs: Seq[hydra.ext.scala.syntax.Type]): hydra.ext.scala.syntax.Data =
   {
@@ -48,7 +49,8 @@ def sapplyTypes(fun: hydra.ext.scala.syntax.Data)(typeArgs: Seq[hydra.ext.scala.
     case _ => fun
 }
 
-def sassign(lhs: hydra.ext.scala.syntax.Data)(rhs: hydra.ext.scala.syntax.Data): hydra.ext.scala.syntax.Data = hydra.ext.scala.syntax.Data.assign(hydra.ext.scala.syntax.Data_Assign(lhs, rhs))
+def sassign(lhs: hydra.ext.scala.syntax.Data)(rhs: hydra.ext.scala.syntax.Data): hydra.ext.scala.syntax.Data = hydra.ext.scala.syntax.Data.assign(hydra.ext.scala.syntax.Data_Assign(lhs,
+   rhs))
 
 def scalaEscapeName(s: scala.Predef.String): scala.Predef.String =
   {
@@ -66,7 +68,8 @@ def scalaTypeName(qualify: Boolean)(name: hydra.core.Name): scala.Predef.String 
   hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.logic.or(qualify)(hydra.lib.sets.member[scala.Predef.String](hydra.names.localNameOf(name))(hydra.ext.scala.utils.scalaReservedWords)))(name)(hydra.names.localNameOf(name))
 
 def slambda(v: scala.Predef.String)(body: hydra.ext.scala.syntax.Data)(sdom: Option[hydra.ext.scala.syntax.Type]): hydra.ext.scala.syntax.Data =
-  hydra.ext.scala.syntax.Data.functionData(hydra.ext.scala.syntax.Data_FunctionData.function(hydra.ext.scala.syntax.Data_Function(Seq(hydra.ext.scala.syntax.Data_Param(Seq(), hydra.ext.scala.syntax.Name.value(v), sdom, None)), body)))
+  hydra.ext.scala.syntax.Data.functionData(hydra.ext.scala.syntax.Data_FunctionData.function(hydra.ext.scala.syntax.Data_Function(Seq(hydra.ext.scala.syntax.Data_Param(Seq(),
+     hydra.ext.scala.syntax.Name.value(v), sdom, None)), body)))
 
 def sname(s: scala.Predef.String): hydra.ext.scala.syntax.Data =
   hydra.ext.scala.syntax.Data.ref(hydra.ext.scala.syntax.Data_Ref.name(hydra.ext.scala.syntax.Data_Name(s)))
@@ -79,11 +82,13 @@ def sprim(name: hydra.core.Name): hydra.ext.scala.syntax.Data =
   hydra.ext.scala.utils.sname(hydra.lib.strings.cat2(hydra.lib.strings.cat2(prefix)("."))(local))
 }
 
-def stapply(t: hydra.ext.scala.syntax.Type)(args: Seq[hydra.ext.scala.syntax.Type]): hydra.ext.scala.syntax.Type = hydra.ext.scala.syntax.Type.apply(hydra.ext.scala.syntax.Type_Apply(t, args))
+def stapply(t: hydra.ext.scala.syntax.Type)(args: Seq[hydra.ext.scala.syntax.Type]): hydra.ext.scala.syntax.Type = hydra.ext.scala.syntax.Type.apply(hydra.ext.scala.syntax.Type_Apply(t,
+   args))
 
 def stapply1(t1: hydra.ext.scala.syntax.Type)(t2: hydra.ext.scala.syntax.Type): hydra.ext.scala.syntax.Type = hydra.ext.scala.utils.stapply(t1)(Seq(t2))
 
-def stapply2(t1: hydra.ext.scala.syntax.Type)(t2: hydra.ext.scala.syntax.Type)(t3: hydra.ext.scala.syntax.Type): hydra.ext.scala.syntax.Type = hydra.ext.scala.utils.stapply(t1)(Seq(t2, t3))
+def stapply2(t1: hydra.ext.scala.syntax.Type)(t2: hydra.ext.scala.syntax.Type)(t3: hydra.ext.scala.syntax.Type): hydra.ext.scala.syntax.Type = hydra.ext.scala.utils.stapply(t1)(Seq(t2,
+   t3))
 
 def stparam(name: hydra.core.Name): hydra.ext.scala.syntax.Type_Param =
   {

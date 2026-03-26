@@ -40,18 +40,12 @@ import hydra.lib.sets
 
 import hydra.lib.strings
 
-lazy val includeTypeDefinitions: Boolean = false
-
-lazy val useCoreImport: Boolean = true
-
-lazy val keyHaskellVar: hydra.core.Name = "haskellVar"
-
 def adaptTypeToHaskellAndEncode[T0](namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName])(typ: hydra.core.Type)(cx: hydra.context.Context)(g: T0): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.ext.haskell.syntax.Type] =
   {
   def enc(t: hydra.core.Type): Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.haskell.syntax.Type] = hydra.ext.haskell.coder.encodeType(namespaces)(t)(cx)(g)
   hydra.rewriting.deannotateType(typ) match
-    case hydra.core.Type.variable => enc(typ)
+    case hydra.core.Type.variable(v_Type_variable__) => enc(typ)
     case _ => hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Type, hydra.ext.haskell.syntax.Type](hydra.lib.eithers.bimap[scala.Predef.String,
        hydra.core.Type, hydra.context.InContext[hydra.errors.Error], hydra.core.Type]((_s: scala.Predef.String) => hydra.context.InContext(hydra.errors.Error.other(_s),
        cx))((_x: hydra.core.Type) => _x)(hydra.adapt.adaptTypeForLanguage(hydra.ext.haskell.language.haskellLanguage)(typ)))((adaptedType: hydra.core.Type) => enc(adaptedType))
@@ -474,15 +468,15 @@ def encodeType[T0](namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.
       hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.ext.haskell.syntax.Type,
          hydra.ext.haskell.syntax.Type](encode(v_Type_pair_pt.second))((s: hydra.ext.haskell.syntax.Type) => Right(hydra.ext.haskell.syntax.Type.tuple(Seq(f,
          s)))))
-    case hydra.core.Type.record => ref("placeholder")
+    case hydra.core.Type.record(v_Type_record__) => ref("placeholder")
     case hydra.core.Type.set(v_Type_set_st) => hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error],
        hydra.ext.haskell.syntax.Type, hydra.ext.haskell.syntax.Type](encode(v_Type_set_st))((hst: hydra.ext.haskell.syntax.Type) =>
       Right(hydra.ext.haskell.utils.toTypeApplication(Seq(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("S.Set")), hst))))
-    case hydra.core.Type.union => ref("placeholder")
+    case hydra.core.Type.union(v_Type_union__) => ref("placeholder")
     case hydra.core.Type.unit => Right(unitTuple)
     case hydra.core.Type.variable(v_Type_variable_v1) => ref(v_Type_variable_v1)
     case hydra.core.Type.void => Right(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("Void")))
-    case hydra.core.Type.wrap => ref("placeholder")
+    case hydra.core.Type.wrap(v_Type_wrap__) => ref("placeholder")
     case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2("unexpected type: ")(hydra.show.core.`type`(typ))), cx))
 }
 
@@ -550,11 +544,9 @@ def getImplicitTypeClasses(typ: hydra.core.Type): Map[hydra.core.Name, scala.col
      Tuple2[hydra.core.Name, scala.collection.immutable.Set[hydra.classes.TypeClass]]](toPair)(hydra.lib.sets.toList[hydra.core.Name](hydra.ext.haskell.coder.findOrdVariables(typ))))
 }
 
-def moduleToHaskellModule(mod: hydra.module.Module)(defs: Seq[hydra.module.Definition])(cx: hydra.context.Context)(g: hydra.graph.Graph): Either[hydra.context.InContext[hydra.errors.Error],
-   hydra.ext.haskell.syntax.Module] =
-  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName],
-     hydra.ext.haskell.syntax.Module](hydra.ext.haskell.utils.namespacesForModule(mod)(cx)(g))((namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]) =>
-  hydra.ext.haskell.coder.constructModule(namespaces)(mod)(defs)(cx)(g))
+lazy val includeTypeDefinitions: Boolean = false
+
+lazy val keyHaskellVar: hydra.core.Name = "haskellVar"
 
 def moduleToHaskell(mod: hydra.module.Module)(defs: Seq[hydra.module.Definition])(cx: hydra.context.Context)(g: hydra.graph.Graph): Either[hydra.context.InContext[hydra.errors.Error],
    Map[scala.Predef.String, scala.Predef.String]] =
@@ -565,6 +557,12 @@ def moduleToHaskell(mod: hydra.module.Module)(defs: Seq[hydra.module.Definition]
   lazy val filepath: scala.Predef.String = hydra.names.namespaceToFilePath(hydra.util.CaseConvention.pascal)("hs")(mod.namespace)
   Right(hydra.lib.maps.singleton[scala.Predef.String, scala.Predef.String](filepath)(s))
 })
+
+def moduleToHaskellModule(mod: hydra.module.Module)(defs: Seq[hydra.module.Definition])(cx: hydra.context.Context)(g: hydra.graph.Graph): Either[hydra.context.InContext[hydra.errors.Error],
+   hydra.ext.haskell.syntax.Module] =
+  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName],
+     hydra.ext.haskell.syntax.Module](hydra.ext.haskell.utils.namespacesForModule(mod)(cx)(g))((namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]) =>
+  hydra.ext.haskell.coder.constructModule(namespaces)(mod)(defs)(cx)(g))
 
 def nameDecls(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName])(name: hydra.core.Name)(typ: hydra.core.Type): Seq[hydra.ext.haskell.syntax.DeclarationWithComments] =
   {
@@ -849,3 +847,5 @@ def typeSchemeConstraintsToClassMap[T0](maybeConstraints: Option[Map[T0, hydra.c
     hydra.lib.sets.fromList[hydra.classes.TypeClass](hydra.lib.maybes.cat[hydra.classes.TypeClass](hydra.lib.lists.map[hydra.core.Name,
        Option[hydra.classes.TypeClass]](nameToTypeClass)(hydra.lib.sets.toList[hydra.core.Name](meta.classes)))))(constraints))(maybeConstraints)
 }
+
+lazy val useCoreImport: Boolean = true

@@ -24,17 +24,17 @@ def comparisonConstraint(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hy
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.query.ComparisonConstraint])] = hydra.lib.maps.fromList[hydra.core.Name,
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.query.ComparisonConstraint]](Seq(Tuple2("equal",
        (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.query.ComparisonConstraint, hydra.errors.DecodingError]((t: Unit) => hydra.query.ComparisonConstraint.equal(t))(hydra.extract.helpers.decodeUnit(cx)(input))),
+      hydra.lib.eithers.map[Unit, hydra.query.ComparisonConstraint, hydra.errors.DecodingError]((t: Unit) => hydra.query.ComparisonConstraint.equal)(hydra.extract.helpers.decodeUnit(cx)(input))),
          Tuple2("notEqual", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.query.ComparisonConstraint, hydra.errors.DecodingError]((t: Unit) => hydra.query.ComparisonConstraint.notEqual(t))(hydra.extract.helpers.decodeUnit(cx)(input))),
+      hydra.lib.eithers.map[Unit, hydra.query.ComparisonConstraint, hydra.errors.DecodingError]((t: Unit) => hydra.query.ComparisonConstraint.notEqual)(hydra.extract.helpers.decodeUnit(cx)(input))),
          Tuple2("lessThan", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.query.ComparisonConstraint, hydra.errors.DecodingError]((t: Unit) => hydra.query.ComparisonConstraint.lessThan(t))(hydra.extract.helpers.decodeUnit(cx)(input))),
+      hydra.lib.eithers.map[Unit, hydra.query.ComparisonConstraint, hydra.errors.DecodingError]((t: Unit) => hydra.query.ComparisonConstraint.lessThan)(hydra.extract.helpers.decodeUnit(cx)(input))),
          Tuple2("greaterThan", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.query.ComparisonConstraint, hydra.errors.DecodingError]((t: Unit) => hydra.query.ComparisonConstraint.greaterThan(t))(hydra.extract.helpers.decodeUnit(cx)(input))),
+      hydra.lib.eithers.map[Unit, hydra.query.ComparisonConstraint, hydra.errors.DecodingError]((t: Unit) => hydra.query.ComparisonConstraint.greaterThan)(hydra.extract.helpers.decodeUnit(cx)(input))),
          Tuple2("lessThanOrEqual", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.query.ComparisonConstraint, hydra.errors.DecodingError]((t: Unit) => hydra.query.ComparisonConstraint.lessThanOrEqual(t))(hydra.extract.helpers.decodeUnit(cx)(input))),
+      hydra.lib.eithers.map[Unit, hydra.query.ComparisonConstraint, hydra.errors.DecodingError]((t: Unit) => hydra.query.ComparisonConstraint.lessThanOrEqual)(hydra.extract.helpers.decodeUnit(cx)(input))),
          Tuple2("greaterThanOrEqual", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.query.ComparisonConstraint, hydra.errors.DecodingError]((t: Unit) => hydra.query.ComparisonConstraint.greaterThanOrEqual(t))(hydra.extract.helpers.decodeUnit(cx)(input)))))
+      hydra.lib.eithers.map[Unit, hydra.query.ComparisonConstraint, hydra.errors.DecodingError]((t: Unit) => hydra.query.ComparisonConstraint.greaterThanOrEqual)(hydra.extract.helpers.decodeUnit(cx)(input)))))
     hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.query.ComparisonConstraint], (hydra.core.Term) => Either[hydra.errors.DecodingError,
        hydra.query.ComparisonConstraint]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
        hydra.query.ComparisonConstraint])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
@@ -84,7 +84,7 @@ def node(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.Decod
          Tuple2("variable", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.query.Variable, hydra.query.Node, hydra.errors.DecodingError]((t: hydra.query.Variable) => hydra.query.Node.variable(t))(hydra.decode.query.variable(cx)(input))),
          Tuple2("wildcard", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.query.Node, hydra.errors.DecodingError]((t: Unit) => hydra.query.Node.wildcard(t))(hydra.extract.helpers.decodeUnit(cx)(input)))))
+      hydra.lib.eithers.map[Unit, hydra.query.Node, hydra.errors.DecodingError]((t: Unit) => hydra.query.Node.wildcard)(hydra.extract.helpers.decodeUnit(cx)(input)))))
     hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.query.Node], (hydra.core.Term) => Either[hydra.errors.DecodingError,
        hydra.query.Node]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
        hydra.query.Node])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
@@ -217,13 +217,13 @@ def regexQuantifier(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.e
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.query.RegexQuantifier])] = hydra.lib.maps.fromList[hydra.core.Name,
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.query.RegexQuantifier]](Seq(Tuple2("one",
        (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.query.RegexQuantifier, hydra.errors.DecodingError]((t: Unit) => hydra.query.RegexQuantifier.one(t))(hydra.extract.helpers.decodeUnit(cx)(input))),
+      hydra.lib.eithers.map[Unit, hydra.query.RegexQuantifier, hydra.errors.DecodingError]((t: Unit) => hydra.query.RegexQuantifier.one)(hydra.extract.helpers.decodeUnit(cx)(input))),
          Tuple2("zeroOrOne", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.query.RegexQuantifier, hydra.errors.DecodingError]((t: Unit) => hydra.query.RegexQuantifier.zeroOrOne(t))(hydra.extract.helpers.decodeUnit(cx)(input))),
+      hydra.lib.eithers.map[Unit, hydra.query.RegexQuantifier, hydra.errors.DecodingError]((t: Unit) => hydra.query.RegexQuantifier.zeroOrOne)(hydra.extract.helpers.decodeUnit(cx)(input))),
          Tuple2("zeroOrMore", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.query.RegexQuantifier, hydra.errors.DecodingError]((t: Unit) => hydra.query.RegexQuantifier.zeroOrMore(t))(hydra.extract.helpers.decodeUnit(cx)(input))),
+      hydra.lib.eithers.map[Unit, hydra.query.RegexQuantifier, hydra.errors.DecodingError]((t: Unit) => hydra.query.RegexQuantifier.zeroOrMore)(hydra.extract.helpers.decodeUnit(cx)(input))),
          Tuple2("oneOrMore", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.query.RegexQuantifier, hydra.errors.DecodingError]((t: Unit) => hydra.query.RegexQuantifier.oneOrMore(t))(hydra.extract.helpers.decodeUnit(cx)(input))),
+      hydra.lib.eithers.map[Unit, hydra.query.RegexQuantifier, hydra.errors.DecodingError]((t: Unit) => hydra.query.RegexQuantifier.oneOrMore)(hydra.extract.helpers.decodeUnit(cx)(input))),
          Tuple2("exactly", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Int, hydra.query.RegexQuantifier, hydra.errors.DecodingError]((t: Int) => hydra.query.RegexQuantifier.exactly(t))(hydra.lib.eithers.either[scala.Predef.String,
          hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>

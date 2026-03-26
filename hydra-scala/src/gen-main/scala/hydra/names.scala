@@ -26,7 +26,8 @@ def compactName(namespaces: Map[hydra.module.Namespace, scala.Predef.String])(na
   lazy val mns: Option[hydra.module.Namespace] = (qualName.namespace)
   lazy val local: scala.Predef.String = (qualName.local)
   hydra.lib.maybes.maybe[scala.Predef.String, hydra.module.Namespace](name)((ns: hydra.module.Namespace) =>
-    hydra.lib.maybes.maybe[scala.Predef.String, scala.Predef.String](local)((pre: scala.Predef.String) => hydra.lib.strings.cat(Seq(pre, ":", local)))(hydra.lib.maps.lookup[hydra.module.Namespace, scala.Predef.String](ns)(namespaces)))(mns)
+    hydra.lib.maybes.maybe[scala.Predef.String, scala.Predef.String](local)((pre: scala.Predef.String) => hydra.lib.strings.cat(Seq(pre,
+       ":", local)))(hydra.lib.maps.lookup[hydra.module.Namespace, scala.Predef.String](ns)(namespaces)))(mns)
 }
 
 def localNameOf(`arg_`: hydra.core.Name): scala.Predef.String = (hydra.names.qualifyName(`arg_`).local)
@@ -45,7 +46,9 @@ def qname(ns: hydra.module.Namespace)(name: scala.Predef.String): hydra.core.Nam
 def qualifyName(name: hydra.core.Name): hydra.module.QualifiedName =
   {
   lazy val parts: Seq[scala.Predef.String] = hydra.lib.lists.reverse[scala.Predef.String](hydra.lib.strings.splitOn(".")(name))
-  hydra.lib.logic.ifElse[hydra.module.QualifiedName](hydra.lib.equality.equal[Int](1)(hydra.lib.lists.length[scala.Predef.String](parts)))(hydra.module.QualifiedName(None, name))(hydra.module.QualifiedName(Some(hydra.lib.strings.intercalate(".")(hydra.lib.lists.reverse[scala.Predef.String](hydra.lib.lists.tail[scala.Predef.String](parts)))), hydra.lib.lists.head[scala.Predef.String](parts)))
+  hydra.lib.logic.ifElse[hydra.module.QualifiedName](hydra.lib.equality.equal[Int](1)(hydra.lib.lists.length[scala.Predef.String](parts)))(hydra.module.QualifiedName(None,
+     name))(hydra.module.QualifiedName(Some(hydra.lib.strings.intercalate(".")(hydra.lib.lists.reverse[scala.Predef.String](hydra.lib.lists.tail[scala.Predef.String](parts)))),
+     hydra.lib.lists.head[scala.Predef.String](parts)))
 }
 
 def uniqueLabel(visited: scala.collection.immutable.Set[scala.Predef.String])(l: scala.Predef.String): scala.Predef.String =
