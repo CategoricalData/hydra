@@ -50,7 +50,7 @@ def instantiateTemplate(cx: hydra.context.Context)(minimal: Boolean)(schema: Map
     case hydra.core.FloatType.float64 => hydra.core.FloatValue.float64(0.0)
   def forInteger(it: hydra.core.IntegerType): hydra.core.IntegerValue =
     it match
-    case hydra.core.IntegerType.bigint => hydra.core.IntegerValue.bigint(BigInt(0L))
+    case hydra.core.IntegerType.bigint => hydra.core.IntegerValue.bigint(BigInt("0"))
     case hydra.core.IntegerType.int8 => hydra.core.IntegerValue.int8(0.toByte)
     case hydra.core.IntegerType.int16 => hydra.core.IntegerValue.int16(0.toShort)
     case hydra.core.IntegerType.int32 => hydra.core.IntegerValue.int32(0)
@@ -58,7 +58,7 @@ def instantiateTemplate(cx: hydra.context.Context)(minimal: Boolean)(schema: Map
     case hydra.core.IntegerType.uint8 => hydra.core.IntegerValue.uint8(0.toByte)
     case hydra.core.IntegerType.uint16 => hydra.core.IntegerValue.uint16(0)
     case hydra.core.IntegerType.uint32 => hydra.core.IntegerValue.uint32(0L)
-    case hydra.core.IntegerType.uint64 => hydra.core.IntegerValue.uint64(BigInt(0L))
+    case hydra.core.IntegerType.uint64 => hydra.core.IntegerValue.uint64(BigInt("0"))
   def forLiteral(lt: hydra.core.LiteralType): hydra.core.Literal =
     lt match
     case hydra.core.LiteralType.binary => hydra.core.Literal.string("")

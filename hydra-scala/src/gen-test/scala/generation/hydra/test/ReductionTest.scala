@@ -13,7 +13,7 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      ((x: Int) => x)(42)) == (
+      (x: Int) => x(42)) == (
 
       42))
 
@@ -23,7 +23,7 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      ((x: Int) => 1)(42)) == (
+      (x: Int) => 1(42)) == (
 
       1))
 
@@ -33,7 +33,7 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      ((x: Int) => (y: Int) => x)(1)(2)) == (
+      (x: Int) => (y: Int) => x(1)(2)) == (
 
       1))
 
@@ -451,7 +451,7 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      Seq(((x: Int) => x)(42))) == (
+      Seq((x: Int) => x(42))) == (
 
       Seq(42)))
 
@@ -483,7 +483,7 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      Some(((x: Int) => x)(42))) == (
+      Some((x: Int) => x(42))) == (
 
       Some(42)))
 

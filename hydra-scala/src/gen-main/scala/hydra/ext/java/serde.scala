@@ -514,7 +514,7 @@ def writeInstanceInitializer[T0](_x: T0): hydra.ast.Expr = hydra.serialization.c
 def writeIntegerLiteral(il: hydra.ext.java.syntax.IntegerLiteral): hydra.ast.Expr =
   {
   lazy val i: BigInt = il
-  lazy val suffix: scala.Predef.String = hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.logic.or(hydra.lib.equality.gt[BigInt](i)(BigInt(2147483647L)))(hydra.lib.equality.lt[BigInt](i)(BigInt(-2147483648L))))("L")("")
+  lazy val suffix: scala.Predef.String = hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.logic.or(hydra.lib.equality.gt[BigInt](i)(BigInt("2147483647")))(hydra.lib.equality.lt[BigInt](i)(BigInt("-2147483648"))))("L")("")
   hydra.serialization.cst(hydra.lib.strings.cat2(hydra.lib.literals.showBigint(i))(suffix))
 }
 
