@@ -65,9 +65,10 @@ if [ -n "$CODER_CHECK" ] && [ ! -f "$CODER_CHECK" ]; then
     echo ""
 fi
 
-# Run the EL bootstrap (increase stack size to avoid segfault during code gen)
+# Run the EL bootstrap
+# Use --eval+load instead of -l to avoid byte-compiling the bootstrap file,
+# which can overflow the bytecode compiler's C stack on deeply nested forms.
 cd "$HYDRA_EL_DIR"
-ulimit -s 65536 2>/dev/null || true
 emacs --batch --no-init-file \
-     -l src/main/emacs-lisp/hydra/bootstrap.el \
+     --eval "(load (expand-file-name \"src/main/emacs-lisp/hydra/bootstrap.el\") nil t)" \
      -- $EXTRA_ARGS
