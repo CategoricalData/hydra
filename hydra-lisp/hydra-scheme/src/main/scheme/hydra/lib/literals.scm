@@ -501,10 +501,14 @@
     ;; binary_to_bytes :: Binary -> [Int8]
     (define hydra_lib_literals_binary_to_bytes
       (lambda (bs)
-        (let loop ((i 0) (acc '()))
-          (if (>= i (bytevector-length bs))
-              (reverse acc)
-              (loop (+ i 1) (cons (bytevector-u8-ref bs i) acc))))))
+        (cond
+          ((bytevector? bs)
+           (let loop ((i 0) (acc '()))
+             (if (>= i (bytevector-length bs))
+                 (reverse acc)
+                 (loop (+ i 1) (cons (bytevector-u8-ref bs i) acc)))))
+          ((list? bs) bs)
+          (else (vector->list bs)))))
 
     ;; read_boolean :: String -> Maybe Bool
     (define hydra_lib_literals_read_boolean

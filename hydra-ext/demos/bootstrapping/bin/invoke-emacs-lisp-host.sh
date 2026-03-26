@@ -65,8 +65,9 @@ if [ -n "$CODER_CHECK" ] && [ ! -f "$CODER_CHECK" ]; then
     echo ""
 fi
 
-# Run the EL bootstrap
+# Run the EL bootstrap (increase stack size to avoid segfault during code gen)
 cd "$HYDRA_EL_DIR"
+ulimit -s 65536 2>/dev/null || true
 emacs --batch --no-init-file \
      -l src/main/emacs-lisp/hydra/bootstrap.el \
      -- $EXTRA_ARGS
