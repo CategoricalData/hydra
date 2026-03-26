@@ -79,7 +79,6 @@ pyright src/gen-main/python/hydra/ast.py
 pyright src/gen-main/python/hydra/coders.py
 pyright src/gen-main/python/hydra/compute.py
 pyright src/gen-main/python/hydra/core.py
-pyright src/gen-main/python/hydra/grammar.py
 pyright src/gen-main/python/hydra/graph.py
 pyright src/gen-main/python/hydra/json.py
 pyright src/gen-main/python/hydra/mantle.py
@@ -115,7 +114,6 @@ pyright src/gen-main/python/hydra/checking.py
 pyright src/gen-main/python/hydra/constants.py
 #pyright src/gen-main/python/hydra/decoding.py # TODO
 pyright src/gen-main/python/hydra/formatting.py
-pyright src/gen-main/python/hydra/grammars.py
 pyright src/gen-main/python/hydra/inference.py
 pyright src/gen-main/python/hydra/languages.py
 pyright src/gen-main/python/hydra/lexical.py
@@ -139,7 +137,6 @@ from hydra.accessors import *
 from hydra.ast import *
 from hydra.coders import *
 from hydra.core import *
-from hydra.grammar import *
 from hydra.graph import *
 from hydra.json import *
 # from hydra.meta import *  # meta module no longer exists after refactoring

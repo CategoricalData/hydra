@@ -7932,7 +7932,6 @@
     "hydra.context",
     "hydra.core",
     "hydra.error",
-    "hydra.grammar",
     "hydra.graph",
     "hydra.json.model",
     "hydra.module",
