@@ -170,12 +170,12 @@ mapFirstLetter :: TBinding ((String -> String) -> String -> String)
 mapFirstLetter = define "mapFirstLetter" $
   doc "A helper which maps the first letter of a string to another string" $
   "mapping" ~> "s" ~>
-  "list" <~ Strings.toList (var "s") $
-  "firstLetter" <~ var "mapping" @@ (Strings.fromList (Lists.pure (Lists.head $ var "list"))) $
   Logic.ifElse
     (Strings.null $ var "s")
     (var "s")
-    (Strings.cat2 (var "firstLetter") (Strings.fromList (Lists.tail $ var "list")))
+    ("list" <~ Strings.toList (var "s") $
+     "firstLetter" <~ var "mapping" @@ (Strings.fromList (Lists.pure (Lists.head $ var "list"))) $
+     Strings.cat2 (var "firstLetter") (Strings.fromList (Lists.tail $ var "list")))
 
 nonAlnumToUnderscores :: TBinding (String -> String)
 nonAlnumToUnderscores = define "nonAlnumToUnderscores" $
