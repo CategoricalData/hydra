@@ -89,6 +89,16 @@ esac
 IFS=',' read -ra HOST_LIST <<< "$HOSTS"
 IFS=',' read -ra TARGET_LIST <<< "$TARGETS"
 
+# Validate language names
+VALID_LANGS="haskell java scala python clojure scheme common-lisp emacs-lisp"
+for lang in "${HOST_LIST[@]}" "${TARGET_LIST[@]}"; do
+    if ! echo "$VALID_LANGS" | grep -qw "$lang"; then
+        echo "Error: unrecognized language '$lang'"
+        echo "Valid languages: $VALID_LANGS"
+        exit 1
+    fi
+done
+
 # ============================================================
 # Environment checks
 # ============================================================
