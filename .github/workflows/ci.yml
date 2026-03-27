@@ -61,7 +61,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: DeLaGuardo/setup-clojure@v14
+      - uses: DeLaGuardo/setup-clojure@13
         with:
           cli: latest
       - uses: actions/cache@v4
@@ -71,6 +71,25 @@ jobs:
           restore-keys: clojure-
       - run: bash run-tests.sh
         working-directory: hydra-lisp/hydra-clojure
+
+  scala:
+    name: Scala tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.sbt
+            ~/.cache/coursier
+          key: sbt-${{ hashFiles('hydra-scala/build.sbt', 'hydra-scala/project/build.properties') }}
+          restore-keys: sbt-
+      - run: sbt test
+        working-directory: hydra-scala
 
   common-lisp:
     name: Common Lisp tests
