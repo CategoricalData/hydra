@@ -55,8 +55,8 @@ _chars_toLower    = LibNames.charsToLower
 _chars_toUpper    = LibNames.charsToUpper
 
 -- Eithers
-_eithers_bind             = LibNames.eithersBind
 _eithers_bimap            = LibNames.eithersBimap
+_eithers_bind             = LibNames.eithersBind
 _eithers_either           = LibNames.eithersEither
 _eithers_foldl            = LibNames.eithersFoldl
 _eithers_fromLeft         = LibNames.eithersFromLeft
@@ -165,11 +165,11 @@ _literals_showInt8          = LibNames.literalsShowInt8
 _literals_showInt16         = LibNames.literalsShowInt16
 _literals_showInt32         = LibNames.literalsShowInt32
 _literals_showInt64         = LibNames.literalsShowInt64
+_literals_showString        = LibNames.literalsShowString
 _literals_showUint8         = LibNames.literalsShowUint8
 _literals_showUint16        = LibNames.literalsShowUint16
 _literals_showUint32        = LibNames.literalsShowUint32
 _literals_showUint64        = LibNames.literalsShowUint64
-_literals_showString        = LibNames.literalsShowString
 _literals_stringToBinary    = LibNames.literalsStringToBinary
 _literals_uint8ToBigint     = LibNames.literalsUint8ToBigint
 _literals_uint16ToBigint    = LibNames.literalsUint16ToBigint
@@ -300,9 +300,9 @@ _strings_cat2        = LibNames.stringsCat2
 _strings_charAt      = LibNames.stringsCharAt
 _strings_fromList    = LibNames.stringsFromList
 _strings_intercalate = LibNames.stringsIntercalate
-_strings_null        = LibNames.stringsNull
 _strings_length      = LibNames.stringsLength
 _strings_lines       = LibNames.stringsLines
+_strings_null        = LibNames.stringsNull
 _strings_splitOn     = LibNames.stringsSplitOn
 _strings_toList      = LibNames.stringsToList
 _strings_toLower     = LibNames.stringsToLower
@@ -403,8 +403,8 @@ hydraLibChars = standardLibrary _hydra_lib_chars [
 
 hydraLibEithers :: Library
 hydraLibEithers = standardLibrary _hydra_lib_eithers [
-    prim2       _eithers_bind             Eithers.bind             [_x, _y, _z]     (Prims.either_ x_ y_) (fun y_ (Prims.either_ x_ z_)) (Prims.either_ x_ z_),
     prim3       _eithers_bimap            Eithers.bimap            [_x, _y, _z, _w] (fun x_ z_) (fun y_ w_) (Prims.either_ x_ y_) (Prims.either_ z_ w_),
+    prim2       _eithers_bind             Eithers.bind             [_x, _y, _z]     (Prims.either_ x_ y_) (fun y_ (Prims.either_ x_ z_)) (Prims.either_ x_ z_),
     prim3       _eithers_either           Eithers.either           [_x, _y, _z]     (fun x_ z_) (fun y_ z_) (Prims.either_ x_ y_) z_,
     prim3       _eithers_foldl            Eithers.foldl            [_x, _y, _z]     (fun x_ (fun y_ (Prims.either_ z_ x_))) x_ (list y_) (Prims.either_ z_ x_),
     prim2       _eithers_fromLeft         Eithers.fromLeft         [_x, _y]         x_ (Prims.either_ x_ y_) x_,
@@ -423,9 +423,9 @@ hydraLibEquality :: Library
 hydraLibEquality = standardLibrary _hydra_lib_equality [
     prim2 _equality_compare  Equality.compare  [_xOrd] x_ x_ comparison,
     prim2 _equality_equal    Equality.equal    [_xEq]  x_ x_ boolean,
-    prim1 _equality_identity Equality.identity [_x]    x_ x_,
     prim2 _equality_gt       Equality.gt       [_xOrd] x_ x_ boolean,
     prim2 _equality_gte      Equality.gte      [_xOrd] x_ x_ boolean,
+    prim1 _equality_identity Equality.identity [_x]    x_ x_,
     prim2 _equality_lt       Equality.lt       [_xOrd] x_ x_ boolean,
     prim2 _equality_lte      Equality.lte      [_xOrd] x_ x_ boolean,
     prim2 _equality_max      Equality.max      [_xOrd] x_ x_ x_,
@@ -462,9 +462,9 @@ hydraLibLists = standardLibrary _hydra_lib_lists [
     prim1     _lists_reverse     Lists.reverse       [_x]         (list x_) (list x_),
     prim1     _lists_safeHead    Lists.safeHead      [_x]         (list x_) (optional x_),
     prim1     _lists_singleton   Lists.singleton     [_x]         x_ (list x_),
+    prim1     _lists_sort        Lists.sort          [_xOrd]      (list x_) (list x_),
     prim2     _lists_sortOn      Lists.sortOn        [_x, _yOrd]  (fun x_ y_) (list x_) (list x_),
     prim2     _lists_span        Lists.span          [_x]         (fun x_ boolean) (list x_) (pair (list x_) (list x_)),
-    prim1     _lists_sort        Lists.sort          [_xOrd]      (list x_) (list x_),
     prim1     _lists_tail        Lists.tail          [_x]         (list x_) (list x_),
     prim2     _lists_take        Lists.take          [_x]         int32 (list x_) (list x_),
     prim1     _lists_transpose   Lists.transpose     [_x]         (list (list x_)) (list (list x_)),
@@ -516,11 +516,11 @@ hydraLibLiterals = standardLibrary _hydra_lib_literals [
   prim1 _literals_showInt16         Literals.showInt16         [] int16 string,
   prim1 _literals_showInt32         Literals.showInt32         [] int32 string,
   prim1 _literals_showInt64         Literals.showInt64         [] int64 string,
+  prim1 _literals_showString        Literals.showString        [] string string,
   prim1 _literals_showUint8         Literals.showUint8         [] uint8 string,
   prim1 _literals_showUint16        Literals.showUint16        [] uint16 string,
   prim1 _literals_showUint32        Literals.showUint32        [] uint32 string,
   prim1 _literals_showUint64        Literals.showUint64        [] uint64 string,
-  prim1 _literals_showString        Literals.showString        [] string string,
   prim1 _literals_stringToBinary    Literals.stringToBinary    [] string binary,
   prim1 _literals_uint8ToBigint     Literals.uint8ToBigint     [] uint8 bigint,
   prim1 _literals_uint16ToBigint    Literals.uint16ToBigint    [] uint16 bigint,
@@ -538,8 +538,8 @@ hydraLibMaps :: Library
 hydraLibMaps = standardLibrary _hydra_lib_maps [
     prim3     _maps_alter           Maps.alter             [_v, _kOrd]                  (fun (optional v_) (optional v_)) k_ mapKv mapKv,
     prim3     _maps_bimap           Maps.bimap             [_k1Ord, _k2Ord, _v1, _v2]   (fun k1_ k2_) (fun v1_ v2_) (Prims.map k1_ v1_) (Prims.map k2_ v2_),
-    prim1     _maps_elems           Maps.elems             [_kOrd, _v]                  mapKv (list v_),
     prim2     _maps_delete          Maps.delete            [_kOrd, _v]                  k_ mapKv mapKv,
+    prim1     _maps_elems           Maps.elems             [_kOrd, _v]                  mapKv (list v_),
     prim0     _maps_empty           Maps.empty             [_kOrd, _v]                  mapKv,
     prim2     _maps_filter          Maps.filter            [_v, _kOrd]                  (fun v_ boolean) mapKv mapKv,
     prim2     _maps_filterWithKey   Maps.filterWithKey     [_kOrd, _v]                  (fun k_ (fun v_ boolean)) mapKv mapKv,
@@ -552,8 +552,8 @@ hydraLibMaps = standardLibrary _hydra_lib_maps [
     prim2     _maps_mapKeys         Maps.mapKeys           [_k1Ord, _k2Ord, _v]         (fun k1_ k2_) (Prims.map k1_ v_) (Prims.map k2_ v_),
     prim2     _maps_member          Maps.member            [_kOrd, _v]                  k_ mapKv boolean,
     prim1     _maps_null            Maps.null              [_kOrd, _v]                  mapKv boolean,
-    prim1     _maps_size            Maps.size              [_kOrd, _v]                  mapKv int32,
     prim2     _maps_singleton       Maps.singleton         [_kOrd, _v]                  k_ v_ mapKv,
+    prim1     _maps_size            Maps.size              [_kOrd, _v]                  mapKv int32,
     prim1     _maps_toList          Maps.toList            [_kOrd, _v]                  mapKv (list $ pair k_ v_),
     prim2     _maps_union           Maps.union             [_kOrd, _v]                  mapKv mapKv mapKv]
   where

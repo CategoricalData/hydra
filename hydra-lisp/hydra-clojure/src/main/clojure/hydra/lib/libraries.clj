@@ -42,25 +42,6 @@
      (qname ns_ "toUpper")    (p/prim1 (qname ns_ "toUpper")    chars/hydra_lib_chars_to_upper    [] (p/tc-int32) (p/tc-int32))}))
 
 ;; ============================================================
-;; Equality
-;; ============================================================
-
-(defn register-equality []
-  (let [ns_ "hydra.lib.equality"
-        x (p/tc-variable "x")
-        ord-x {"x" ["ordering"]}
-        eq-x {"x" ["equality"]}]
-    {(qname ns_ "compare")  (p/prim2 (qname ns_ "compare")  (fn [a b] ((equality/hydra_lib_equality_compare a) b))  [] x x (p/tc-comparison) ord-x)
-     (qname ns_ "equal")    (p/prim2 (qname ns_ "equal")    (fn [a b] ((equality/hydra_lib_equality_equal a) b))    [] x x (p/tc-boolean) eq-x)
-     (qname ns_ "identity") (p/prim1 (qname ns_ "identity") identity                             [] x x)
-     (qname ns_ "gt")       (p/prim2 (qname ns_ "gt")       (fn [a b] ((equality/hydra_lib_equality_gt a) b))       [] x x (p/tc-boolean) ord-x)
-     (qname ns_ "gte")      (p/prim2 (qname ns_ "gte")      (fn [a b] ((equality/hydra_lib_equality_gte a) b))      [] x x (p/tc-boolean) ord-x)
-     (qname ns_ "lt")       (p/prim2 (qname ns_ "lt")       (fn [a b] ((equality/hydra_lib_equality_lt a) b))       [] x x (p/tc-boolean) ord-x)
-     (qname ns_ "lte")      (p/prim2 (qname ns_ "lte")      (fn [a b] ((equality/hydra_lib_equality_lte a) b))      [] x x (p/tc-boolean) ord-x)
-     (qname ns_ "max")      (p/prim2 (qname ns_ "max")      (fn [a b] ((equality/hydra_lib_equality_max a) b))      [] x x x ord-x)
-     (qname ns_ "min")      (p/prim2 (qname ns_ "min")      (fn [a b] ((equality/hydra_lib_equality_min a) b))      [] x x x ord-x)}))
-
-;; ============================================================
 ;; Eithers
 ;; ============================================================
 
@@ -107,6 +88,25 @@
                                               eithers/hydra_lib_eithers_partition_eithers
                                               [] (p/tc-list (p/tc-either x y)) (p/tc-pair (p/tc-list x) (p/tc-list y)))
      (qname ns_ "rights")  (p/prim1 (qname ns_ "rights")  eithers/hydra_lib_eithers_rights  [] (p/tc-list (p/tc-either x y)) (p/tc-list y))}))
+
+;; ============================================================
+;; Equality
+;; ============================================================
+
+(defn register-equality []
+  (let [ns_ "hydra.lib.equality"
+        x (p/tc-variable "x")
+        ord-x {"x" ["ordering"]}
+        eq-x {"x" ["equality"]}]
+    {(qname ns_ "compare")  (p/prim2 (qname ns_ "compare")  (fn [a b] ((equality/hydra_lib_equality_compare a) b))  [] x x (p/tc-comparison) ord-x)
+     (qname ns_ "equal")    (p/prim2 (qname ns_ "equal")    (fn [a b] ((equality/hydra_lib_equality_equal a) b))    [] x x (p/tc-boolean) eq-x)
+     (qname ns_ "gt")       (p/prim2 (qname ns_ "gt")       (fn [a b] ((equality/hydra_lib_equality_gt a) b))       [] x x (p/tc-boolean) ord-x)
+     (qname ns_ "gte")      (p/prim2 (qname ns_ "gte")      (fn [a b] ((equality/hydra_lib_equality_gte a) b))      [] x x (p/tc-boolean) ord-x)
+     (qname ns_ "identity") (p/prim1 (qname ns_ "identity") identity                             [] x x)
+     (qname ns_ "lt")       (p/prim2 (qname ns_ "lt")       (fn [a b] ((equality/hydra_lib_equality_lt a) b))       [] x x (p/tc-boolean) ord-x)
+     (qname ns_ "lte")      (p/prim2 (qname ns_ "lte")      (fn [a b] ((equality/hydra_lib_equality_lte a) b))      [] x x (p/tc-boolean) ord-x)
+     (qname ns_ "max")      (p/prim2 (qname ns_ "max")      (fn [a b] ((equality/hydra_lib_equality_max a) b))      [] x x x ord-x)
+     (qname ns_ "min")      (p/prim2 (qname ns_ "min")      (fn [a b] ((equality/hydra_lib_equality_min a) b))      [] x x x ord-x)}))
 
 ;; ============================================================
 ;; Lists
@@ -667,8 +667,8 @@
   []
   (merge
    (register-chars)
-   (register-equality)
    (register-eithers)
+   (register-equality)
    (register-lists)
    (register-literals)
    (register-logic)
