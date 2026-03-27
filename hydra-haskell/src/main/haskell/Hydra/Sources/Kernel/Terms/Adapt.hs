@@ -211,9 +211,8 @@ adaptDataGraph = define "adaptDataGraph" $
     "prim1" <<~ adaptPrimitive @@ var "constraints" @@ var "litmap" @@ (Pairs.second $ var "kv") $
     right $ pair (Pairs.first $ var "kv") (var "prim1")) (Maps.toList (var "prims0")) $
   "prims1" <~ Maps.fromList (var "primPairs") $
-  "adaptedGraph" <~ Graph.graphWithSchemaTypes
-    (Lexical.buildGraph @@ var "els1" @@ Maps.empty @@ var "prims1")
-    (var "adaptedSchemaTypes") $
+  "adaptedGraphRaw" <~ (Lexical.buildGraph @@ var "els1" @@ Maps.empty @@ var "prims1") $
+  "adaptedGraph" <~ Graph.graphWithSchemaTypes (var "adaptedGraphRaw") (var "adaptedSchemaTypes") $
   right $ pair (var "adaptedGraph") (var "els1")
 
 -- | Rewrite callback for adapting lambda domains in a term.

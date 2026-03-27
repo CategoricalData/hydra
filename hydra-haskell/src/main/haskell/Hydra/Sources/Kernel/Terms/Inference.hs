@@ -313,9 +313,8 @@ inferGraphTypes = define "inferGraphTypes" $
     "bindings" <~ Core.letBindings (var "l") $
     "prims" <~ Graph.graphPrimitives (var "g0") $
     "schemaTypes" <~ Graph.graphSchemaTypes (var "g0") $
-    "g" <~ Graph.graphWithSchemaTypes
-      (Lexical.buildGraph @@ var "bindings" @@ Maps.empty @@ var "prims")
-      (var "schemaTypes") $
+    "rawG" <~ (Lexical.buildGraph @@ var "bindings" @@ Maps.empty @@ var "prims") $
+    "g" <~ Graph.graphWithSchemaTypes (var "rawG") (var "schemaTypes") $
     pair (var "g") (var "bindings")) $
   "result" <<~ inferTypeOfTerm @@ var "fcx" @@ var "g0" @@ (Core.termLet $ var "let0") @@ (string "graph term") $
   "fcx2" <~ Typing.inferenceResultContext (var "result") $

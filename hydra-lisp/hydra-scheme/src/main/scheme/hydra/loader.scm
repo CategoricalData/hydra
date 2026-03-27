@@ -6,6 +6,25 @@
 
 (import (scheme base) (scheme read) (scheme eval) (scheme file)
         (scheme write) (scheme process-context))
+(use-modules (system base compile))
+
+;; ============================================================================
+;; Bytecode compilation
+;; ============================================================================
+
+(define (compile-define-value form)
+  "If form is (define name (lambda ...)), try to compile the lambda to bytecode.
+   Falls back to the original form if compilation fails."
+  (if (and (pair? form) (eq? (car form) 'define)
+           (pair? (cdr form)) (symbol? (cadr form))
+           (pair? (cddr form)) (null? (cdddr form))
+           (pair? (caddr form)) (eq? (car (caddr form)) 'lambda))
+      (catch #t
+        (lambda ()
+          (let ((compiled (compile (caddr form) #:env (current-module))))
+            `(define ,(cadr form) ,compiled)))
+        (lambda args form))
+      form))
 
 ;; ============================================================================
 ;; Module name to prefix conversion
@@ -434,6 +453,10 @@
        (if (and
              ;; Only trigger if param is NOT already bound by an outer scope
              (not (memq param outer-bound))
+             ;; Never trigger when init is just a bare symbol (including param itself).
+             ;; ((lambda (x) body) x) is identity substitution, not self-reference.
+             ;; ((lambda (x) body) y) where y is a variable is also not recursive.
+             (not (symbol? init))
              (or
                ;; Pattern 1: init has a free reference to param
                (has-free-ref? init param '())
@@ -563,11 +586,28 @@
 
 (define (fix-if-else form)
   "Walk form and transform (((hydra_lib_logic_if_else C) T) E) into (if C T E).
+   Also transforms ((hydra_lib_logic_and A) B) -> (and A B) and
+   ((hydra_lib_logic_or A) B) -> (or A B) for short-circuit evaluation.
    Also fixes cond else clauses where literals are called as functions:
    (else (LITERAL expr)) -> (else LITERAL) when LITERAL is #t, #f, a number, or '()."
   (cond
     ((not (pair? form)) form)
     ((eq? (car form) 'quote) form)
+    ;; Detect ((hydra_lib_logic_and A) B) -> (and A B)
+    ;; and ((hydra_lib_logic_or A) B) -> (or A B)
+    ;; Structure: form = (X B) where X = (hydra_lib_logic_and A)
+    ((and (pair? (car form))
+          (pair? (cdr form))
+          (null? (cddr form))                 ;; exactly one arg (B)
+          (symbol? (caar form))
+          (or (eq? (caar form) 'hydra_lib_logic_and)
+              (eq? (caar form) 'hydra_lib_logic_or))
+          (pair? (cdar form))
+          (null? (cddar form)))               ;; exactly one arg for X (A)
+     (let ((op (if (eq? (caar form) 'hydra_lib_logic_and) 'and 'or))
+           (a (fix-if-else (cadar form)))
+           (b (fix-if-else (cadr form))))
+       (list op a b)))
     ;; Detect (((hydra_lib_logic_if_else C) T) E)
     ;; Structure: form = (X E) where X = (Y T) where Y = (hydra_lib_logic_if_else C)
     ;; So: form = (((hydra_lib_logic_if_else C) T) E)
@@ -593,6 +633,22 @@
     ;; The else branch incorrectly calls EXPR as a function with VAR.
     ;; We detect the pattern by checking if non-else branches apply a lambda to a common variable,
     ;; and if the else branch applies a non-lambda to that same variable.
+    ;; Lambda: recurse into body forms only, NOT the parameter list
+    ((eq? (car form) 'lambda)
+     (if (and (pair? (cdr form)) (pair? (cddr form)))
+         (cons* 'lambda (cadr form) (map fix-if-else (cddr form)))
+         form))
+    ;; Letrec: recurse into binding values and body, not binding names
+    ((eq? (car form) 'letrec)
+     (if (and (pair? (cdr form)) (pair? (cadr form)))
+         (cons* 'letrec
+                (map (lambda (binding)
+                       (if (and (pair? binding) (pair? (cdr binding)))
+                           (cons (car binding) (map fix-if-else (cdr binding)))
+                           binding))
+                     (cadr form))
+                (map fix-if-else (cddr form)))
+         form))
     ((eq? (car form) 'cond)
      (let* ((clauses (cdr form))
             ;; Find the common "dispatch variable" from non-else branches
@@ -832,7 +888,8 @@
                              (shadow-fixed (map (lambda (f) (rename-definition-only f shadow-map)) rewritten))
                              (fixed (map fix-letrec shadow-fixed))
                              (if-fixed (map fix-if-else fixed))
-                             (map-fixed (map fix-quoted-maps if-fixed)))
+                             (map-fixed (map fix-quoted-maps if-fixed))
+                             )
                         (hydra-eval-with-retry map-fixed)))
                      (else (find-begin (cdr rest)))))))
               ;; Non-library forms: evaluate directly
