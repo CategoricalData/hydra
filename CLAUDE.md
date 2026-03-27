@@ -147,6 +147,7 @@ Each has build/test commands and code organization details:
 
 | Page | Description |
 |------|-------------|
+| [Coding style](https://github.com/CategoricalData/hydra/wiki/Coding-style) | Guiding principles, error handling, definition ordering, import conventions |
 | [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) | Core concepts, type system (System F + HM), design principles |
 | [Testing](https://github.com/CategoricalData/hydra/wiki/Testing) | Test suite, test runners, test categories |
 | [Benchmarking](https://github.com/CategoricalData/hydra/wiki/Benchmarking) | Cross-implementation performance measurement |
