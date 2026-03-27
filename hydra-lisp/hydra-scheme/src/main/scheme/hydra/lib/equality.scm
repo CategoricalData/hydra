@@ -42,7 +42,7 @@
         (else (let ((sa (obj->string a)) (sb (obj->string b)))
                 (cond ((string<? sa sb) -1) ((string=? sa sb) 0) (else 1))))))
 
-    ;; compare :: a -> a -> Comparison
+    ;; Compare two values and return a Comparison.
     (define hydra_lib_equality_compare
       (lambda (a)
         (lambda (b)
@@ -52,47 +52,47 @@
               ((= c 0) (list 'equal_to '()))
               (else    (list 'greater_than '())))))))
 
-    ;; equal :: a -> a -> Bool
+    ;; Check if two values are equal.
     (define hydra_lib_equality_equal
       (lambda (a)
         (lambda (b)
           (equal? a b))))
 
-    ;; gt :: a -> a -> Bool
+    ;; Check if first value is greater than second.
     (define hydra_lib_equality_gt
       (lambda (a)
         (lambda (b)
           (> (generic-compare a b) 0))))
 
-    ;; gte :: a -> a -> Bool
+    ;; Check if first value is greater than or equal to second.
     (define hydra_lib_equality_gte
       (lambda (a)
         (lambda (b)
           (>= (generic-compare a b) 0))))
 
-    ;; identity :: a -> a
+    ;; Return a value unchanged.
     (define hydra_lib_equality_identity
       (lambda (x) x))
 
-    ;; lt :: a -> a -> Bool
+    ;; Check if first value is less than second.
     (define hydra_lib_equality_lt
       (lambda (a)
         (lambda (b)
           (< (generic-compare a b) 0))))
 
-    ;; lte :: a -> a -> Bool
+    ;; Check if first value is less than or equal to second.
     (define hydra_lib_equality_lte
       (lambda (a)
         (lambda (b)
           (<= (generic-compare a b) 0))))
 
-    ;; max :: a -> a -> a
+    ;; Return the maximum of two values.
     (define hydra_lib_equality_max
       (lambda (a)
         (lambda (b)
           (if (>= (generic-compare a b) 0) a b))))
 
-    ;; min :: a -> a -> a
+    ;; Return the minimum of two values.
     (define hydra_lib_equality_min
       (lambda (a)
         (lambda (b)

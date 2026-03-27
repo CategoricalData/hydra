@@ -8,11 +8,14 @@ import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Sources.Libraries
 
 
+-- | Map over both elements of a pair.
 bimap :: TTerm (a -> c) -> TTerm (b -> d) -> TTerm (a, b) -> TTerm (c, d)
 bimap = primitive3 _pairs_bimap
 
+-- | Get the first element of a pair.
 first :: TTerm (a, b) -> TTerm a
 first = primitive1 _pairs_first
 
+-- | Get the second element of a pair.
 second :: TTerm (a, b) -> TTerm b
 second = primitive1 _pairs_second

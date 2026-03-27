@@ -1,4 +1,4 @@
--- | Haskell implementations of hydra.lib.equality primitives. These simply make use of derived Eq.
+-- | Haskell implementations of hydra.lib.equality primitives.
 
 module Hydra.Lib.Equality where
 
@@ -26,7 +26,7 @@ gt = (>)
 gte :: Ord a => a -> a -> Bool
 gte = (>=)
 
--- | Return the identity of a value.
+-- | Return a value unchanged.
 identity :: a -> a
 identity = id
 

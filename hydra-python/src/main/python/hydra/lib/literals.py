@@ -43,16 +43,12 @@ def _format_float_like_haskell(x: float) -> str:
 
 
 def bigfloat_to_bigint(x: Decimal) -> int:
-    """Convert a Decimal to an int."""
+    """Convert a bigfloat (Double) to a bigint (Integer)."""
     return round(x)
 
 
 def bigfloat_to_float32(x: Decimal) -> float:
-    """Convert a Decimal to a float32 (single precision).
-
-    Python's float is float64, so we need to explicitly convert through
-    float32 to get the correct precision.
-    """
+    """Convert a bigfloat (Double) to a float32 (Float)."""
     import struct
     # Pack as float32, unpack as float32 to get proper rounding
     f64 = float(x)
@@ -62,57 +58,57 @@ def bigfloat_to_float32(x: Decimal) -> float:
 
 
 def bigfloat_to_float64(x: Decimal) -> float:
-    """Convert a Decimal to a float."""
+    """Convert a bigfloat (Double) to a float64 (Double)."""
     return float(x)
 
 
 def bigint_to_bigfloat(x: int) -> Decimal:
-    """Convert an int to a Decimal."""
+    """Convert a bigint (Integer) to a bigfloat (Double)."""
     return Decimal(x)
 
 
 def bigint_to_int8(x: int) -> int:
-    """Convert an int to int8 (identity in Python)."""
+    """Convert a bigint (Integer) to an int8."""
     return x
 
 
 def bigint_to_int16(x: int) -> int:
-    """Convert an int to int16 (identity in Python)."""
+    """Convert a bigint (Integer) to an int16."""
     return x
 
 
 def bigint_to_int32(x: int) -> int:
-    """Convert an int to int32 (identity in Python)."""
+    """Convert a bigint (Integer) to an int32."""
     return x
 
 
 def bigint_to_int64(x: int) -> int:
-    """Convert an int to int64 (identity in Python)."""
+    """Convert a bigint (Integer) to an int64."""
     return x
 
 
 def bigint_to_uint8(x: int) -> int:
-    """Convert an int to uint8 (identity in Python)."""
+    """Convert a bigint (Integer) to a uint8."""
     return x
 
 
 def bigint_to_uint16(x: int) -> int:
-    """Convert an int to uint16 (identity in Python)."""
+    """Convert a bigint (Integer) to a uint16."""
     return x
 
 
 def bigint_to_uint32(x: int) -> int:
-    """Convert an int to uint32 (identity in Python)."""
+    """Convert a bigint (Integer) to a uint32."""
     return x
 
 
 def bigint_to_uint64(x: int) -> int:
-    """Convert an int to uint64 (identity in Python)."""
+    """Convert a bigint (Integer) to a uint64."""
     return x
 
 
 def binary_to_bytes(s: bytes) -> tuple[int, ...]:
-    """Convert binary to a tuple of byte values (0-255)."""
+    """Convert binary to a list of byte values (0-255)."""
     return tuple(s)
 
 
@@ -123,37 +119,37 @@ def binary_to_string(s: bytes) -> str:
 
 
 def float32_to_bigfloat(x: float) -> Decimal:
-    """Convert a float to a Decimal."""
+    """Convert a float32 (Float) to a bigfloat (Double)."""
     return Decimal(str(x))
 
 
 def float64_to_bigfloat(x: float) -> Decimal:
-    """Convert a float to a Decimal."""
+    """Convert a float64 (Double) to a bigfloat (Double)."""
     return Decimal(str(x))
 
 
 def int8_to_bigint(x: int) -> int:
-    """Convert int8 to int (identity in Python)."""
+    """Convert an int8 to a bigint (Integer)."""
     return x
 
 
 def int16_to_bigint(x: int) -> int:
-    """Convert int16 to int (identity in Python)."""
+    """Convert an int16 to a bigint (Integer)."""
     return x
 
 
 def int32_to_bigint(x: int) -> int:
-    """Convert int32 to int (identity in Python)."""
+    """Convert an int32 to a bigint (Integer)."""
     return x
 
 
 def int64_to_bigint(x: int) -> int:
-    """Convert int64 to int (identity in Python)."""
+    """Convert an int64 to a bigint (Integer)."""
     return x
 
 
 def read_bigfloat(s: str) -> Maybe[Decimal]:
-    """Parse a string to a Decimal."""
+    """Parse a string to a bigfloat (Double)."""
     try:
         return Just(Decimal(s))
     except:
@@ -161,7 +157,7 @@ def read_bigfloat(s: str) -> Maybe[Decimal]:
 
 
 def read_bigint(s: str) -> Maybe[int]:
-    """Parse a string to an integer."""
+    """Parse a string to a bigint (Integer)."""
     try:
         return Just(int(s))
     except:
@@ -179,7 +175,7 @@ def read_boolean(s: str) -> Maybe[bool]:
 
 
 def read_float32(s: str) -> Maybe[float]:
-    """Parse a string to a float32 (single precision)."""
+    """Parse a string to a float32 (Float)."""
     import struct
     try:
         f64 = float(s)
@@ -192,7 +188,7 @@ def read_float32(s: str) -> Maybe[float]:
 
 
 def read_float64(s: str) -> Maybe[float]:
-    """Parse a string to a float."""
+    """Parse a string to a float64 (Double)."""
     try:
         return Just(float(s))
     except:
@@ -224,7 +220,7 @@ def read_int16(s: str) -> Maybe[int]:
 
 
 def read_int32(s: str) -> Maybe[int]:
-    """Parse a string to an int."""
+    """Parse a string to an int32."""
     try:
         return Just(int(s))
     except:
@@ -232,7 +228,7 @@ def read_int32(s: str) -> Maybe[int]:
 
 
 def read_int64(s: str) -> Maybe[int]:
-    """Parse a string to an int."""
+    """Parse a string to an int64."""
     try:
         return Just(int(s))
     except:
@@ -298,12 +294,12 @@ def read_uint64(s: str) -> Maybe[int]:
 
 
 def show_bigfloat(x: Decimal) -> str:
-    """Convert a Decimal to string, matching Haskell's show behavior."""
+    """Convert a bigfloat (Double) to string."""
     return _format_float_like_haskell(float(x))
 
 
 def show_bigint(x: int) -> str:
-    """Convert an int to string."""
+    """Convert a bigint (Integer) to string."""
     return str(x)
 
 
@@ -313,11 +309,7 @@ def show_boolean(b: bool) -> str:
 
 
 def show_float32(x: float) -> str:
-    """Convert a float32 to string, matching Haskell's show behavior.
-
-    Float32 has about 6-7 significant decimal digits of precision.
-    We need to round to this precision before formatting.
-    """
+    """Convert a float32 (Float) to string."""
     import struct
     # Round-trip through float32 to get proper precision
     f32_bytes = struct.pack('f', x)
@@ -348,52 +340,32 @@ def show_float32(x: float) -> str:
 
 
 def show_float64(x: float) -> str:
-    """Convert a float64 to string, matching Haskell's show behavior."""
+    """Convert a float64 (Double) to string."""
     return _format_float_like_haskell(x)
 
 
 def show_int8(x: int) -> str:
-    """Convert an int to string."""
+    """Convert an int8 to string."""
     return str(x)
 
 
 def show_int16(x: int) -> str:
-    """Convert an int to string."""
+    """Convert an int16 to string."""
     return str(x)
 
 
 def show_int32(x: int) -> str:
-    """Convert an int to string."""
+    """Convert an int32 to string."""
     return str(x)
 
 
 def show_int64(x: int) -> str:
-    """Convert an int to string."""
-    return str(x)
-
-
-def show_uint8(x: int) -> str:
-    """Convert an int to string."""
-    return str(x)
-
-
-def show_uint16(x: int) -> str:
-    """Convert an int to string."""
-    return str(x)
-
-
-def show_uint32(x: int) -> str:
-    """Convert an int to string."""
-    return str(x)
-
-
-def show_uint64(x: int) -> str:
-    """Convert an int to string."""
+    """Convert an int64 to string."""
     return str(x)
 
 
 def show_string(s: str) -> str:
-    """Convert a string to a quoted string representation matching Haskell's show."""
+    """Convert a string to a quoted string representation."""
     # ASCII control character names matching Haskell's show for Char
     _ASCII_CONTROL_NAMES = [
         "NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK", "a",
@@ -426,6 +398,26 @@ def show_string(s: str) -> str:
     return '"' + ''.join(sb) + '"'
 
 
+def show_uint8(x: int) -> str:
+    """Convert a uint8 to string."""
+    return str(x)
+
+
+def show_uint16(x: int) -> str:
+    """Convert a uint16 to string."""
+    return str(x)
+
+
+def show_uint32(x: int) -> str:
+    """Convert a uint32 to string."""
+    return str(x)
+
+
+def show_uint64(x: int) -> str:
+    """Convert a uint64 to string."""
+    return str(x)
+
+
 def string_to_binary(s: str) -> bytes:
     """Convert string to binary by base64 decoding."""
     import base64
@@ -433,20 +425,20 @@ def string_to_binary(s: str) -> bytes:
 
 
 def uint8_to_bigint(x: int) -> int:
-    """Convert uint8 to int (identity in Python)."""
+    """Convert a uint8 to a bigint (Integer)."""
     return x
 
 
 def uint16_to_bigint(x: int) -> int:
-    """Convert uint16 to int (identity in Python)."""
+    """Convert a uint16 to a bigint (Integer)."""
     return x
 
 
 def uint32_to_bigint(x: int) -> int:
-    """Convert uint32 to int (identity in Python)."""
+    """Convert a uint32 to a bigint (Integer)."""
     return x
 
 
 def uint64_to_bigint(x: int) -> int:
-    """Convert uint64 to int (identity in Python)."""
+    """Convert a uint64 to a bigint (Integer)."""
     return x

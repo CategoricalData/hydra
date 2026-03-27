@@ -33,7 +33,7 @@ def gte(a: Any, b: Any) -> bool:
 
 
 def identity(a: A) -> A:
-    """Return the identity of a value."""
+    """Return a value unchanged."""
     return a
 
 

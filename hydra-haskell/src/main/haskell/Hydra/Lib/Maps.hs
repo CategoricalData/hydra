@@ -5,8 +5,7 @@ module Hydra.Lib.Maps where
 import qualified Data.Map as M
 
 
--- | Alter a value at a key using a function. The function receives Nothing if the key is absent,
--- or Just the current value if present. Return Nothing to delete, Just to insert/update.
+-- | Alter a value at a key using a function.
 alter :: Ord k => (Maybe v -> Maybe v) -> k -> M.Map k v -> M.Map k v
 alter = M.alter
 

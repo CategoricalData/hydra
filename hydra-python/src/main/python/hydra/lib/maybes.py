@@ -11,7 +11,7 @@ C = TypeVar('C')
 
 
 def apply(f: Maybe[Callable[[A], B]], x: Maybe[A]) -> Maybe[B]:
-    """Apply a function to an argument."""
+    """Apply a function to an argument (applicative)."""
     match f:
         case Nothing():
             return NOTHING
@@ -33,11 +33,7 @@ def bind(x: Maybe[A], f: Callable[[A], Maybe[B]]) -> Maybe[B]:
 
 
 def cases(m: Maybe[A], n: B | Callable[[], B], j: Callable[[A], B]) -> B:
-    """Handle an optional value with different parameter order than maybe.
-
-    When n is callable (a thunk/lambda), it is only evaluated if m is Nothing.
-    This enables lazy evaluation matching Haskell semantics.
-    """
+    """Handle an optional value with the maybe value as the first argument."""
     match m:
         case Nothing():
             return n() if callable(n) else n  # type: ignore[return-value]
@@ -58,15 +54,12 @@ def cat(xs: Sequence[Maybe[A]]) -> frozenlist[A]:
 
 
 def compose(f: Callable[[A], Maybe[B]], g: Callable[[B], Maybe[C]], x: A) -> Maybe[C]:
-    """Compose two Maybe-returning functions and apply to a value.
-
-    This is Kleisli composition: (f >=> g) x = f x >>= g
-    """
+    """Compose two Maybe-returning functions (Kleisli composition)."""
     return bind(f(x), g)
 
 
 def from_just(x: Maybe[A]) -> A:
-    """Extract value from Maybe, assuming it's Just (unsafe)."""
+    """Extract value from a Just, or error on Nothing (partial function)."""
     match x:
         case Just(val):
             return val
@@ -75,10 +68,7 @@ def from_just(x: Maybe[A]) -> A:
 
 
 def from_maybe(default: A | Callable[[], A], x: Maybe[A]) -> A:
-    """Get a value from an optional value, or return a default value.
-
-    When default is callable (a thunk/lambda), it is only evaluated if x is Nothing.
-    """
+    """Get a value from an optional value, or return a default value."""
     match x:
         case Just(val):
             return val
@@ -119,10 +109,7 @@ def map_maybe(f: Callable[[A], Maybe[B]], xs: Sequence[A]) -> frozenlist[B]:
 
 
 def maybe(default: B | Callable[[], B], f: Callable[[A], B], x: Maybe[A]) -> B:
-    """Handle an optional value, with transformation.
-
-    When default is callable (a thunk/lambda), it is only evaluated if x is Nothing.
-    """
+    """Eliminate an optional value with a default and a function."""
     match x:
         case Nothing():
             return default() if callable(default) else default  # type: ignore[return-value]

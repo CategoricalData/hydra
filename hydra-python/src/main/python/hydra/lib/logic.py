@@ -16,12 +16,7 @@ def if_else(b: bool, x: Callable[[], A], y: Callable[[], A]) -> A: ...
 @overload
 def if_else(b: bool, x: A, y: A) -> A: ...
 def if_else(b: bool, x: A | Callable[[], A], y: A | Callable[[], A]) -> A:
-    """Compute a conditional expression with lazy evaluation of branches.
-
-    When x and y are callable (lambdas), only the chosen branch is called.
-    This enables lazy evaluation for expensive computations or side-effecting operations,
-    which is critical for correct evaluation semantics.
-    """
+    """Compute a conditional expression."""
     if b:
         return x() if callable(x) else x  # type: ignore[return-value]
     else:

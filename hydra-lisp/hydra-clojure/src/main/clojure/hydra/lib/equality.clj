@@ -1,6 +1,8 @@
 (ns hydra.lib.equality)
 
-(defn generic-compare [a b]
+(defn generic-compare
+  "Generic comparison function for arbitrary Clojure values, returning -1, 0, or 1."
+  [a b]
   (cond
     (identical? a b) 0
     (nil? a) (if (nil? b) 0 -1)
@@ -54,6 +56,7 @@
 ;; compare :: a -> a -> Comparison
 ;; Returns a Comparison union: (list :less_than nil), (list :equal_to nil), (list :greater_than nil)
 (def hydra_lib_equality_compare
+  "Compare two values and return a Comparison."
   (fn [a] (fn [b]
     (let [c (generic-compare a b)]
       (cond
@@ -63,32 +66,40 @@
 
 ;; equal :: a -> a -> Bool
 (def hydra_lib_equality_equal
+  "Check if two values are equal."
   (fn [a] (fn [b] (= a b))))
 
 ;; gt :: a -> a -> Bool
 (def hydra_lib_equality_gt
+  "Check if first value is greater than second."
   (fn [a] (fn [b] (> (generic-compare a b) 0))))
 
 ;; gte :: a -> a -> Bool
 (def hydra_lib_equality_gte
+  "Check if first value is greater than or equal to second."
   (fn [a] (fn [b] (>= (generic-compare a b) 0))))
 
 ;; identity :: a -> a
 (def hydra_lib_equality_identity
+  "Return a value unchanged."
   (fn [x] x))
 
 ;; lt :: a -> a -> Bool
 (def hydra_lib_equality_lt
+  "Check if first value is less than second."
   (fn [a] (fn [b] (< (generic-compare a b) 0))))
 
 ;; lte :: a -> a -> Bool
 (def hydra_lib_equality_lte
+  "Check if first value is less than or equal to second."
   (fn [a] (fn [b] (<= (generic-compare a b) 0))))
 
 ;; max :: a -> a -> a
 (def hydra_lib_equality_max
+  "Return the maximum of two values."
   (fn [a] (fn [b] (if (>= (generic-compare a b) 0) a b))))
 
 ;; min :: a -> a -> a
 (def hydra_lib_equality_min
+  "Return the minimum of two values."
   (fn [a] (fn [b] (if (<= (generic-compare a b) 0) a b))))

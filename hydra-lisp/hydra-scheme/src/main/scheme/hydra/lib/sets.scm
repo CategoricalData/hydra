@@ -11,9 +11,9 @@
           hydra_lib_sets_member
           hydra_lib_sets_null
           hydra_lib_sets_singleton
+          hydra_lib_sets_size
           hydra_lib_sets_to_list
           hydra_lib_sets_union
-          hydra_lib_sets_size
           hydra_lib_sets_unions)
   (begin
 
@@ -68,13 +68,13 @@
         ((< (generic-compare x (car s)) 0) #f)
         (else (set-member? x (cdr s)))))
 
-    ;; delete :: a -> Set a -> Set a
+    ;; Delete an element from a set.
     (define hydra_lib_sets_delete
       (lambda (x)
         (lambda (s)
           (set-delete x s))))
 
-    ;; difference :: Set a -> Set a -> Set a
+    ;; Compute the difference of two sets.
     (define hydra_lib_sets_difference
       (lambda (s1)
         (lambda (s2)
@@ -85,10 +85,10 @@
                     (loop (cdr rest) acc)
                     (loop (cdr rest) (cons (car rest) acc))))))))
 
-    ;; empty :: Set a
+    ;; Create an empty set.
     (define hydra_lib_sets_empty '())
 
-    ;; from_list :: [a] -> Set a
+    ;; Create a set from a list.
     (define hydra_lib_sets_from_list
       (lambda (xs)
         (let loop ((rest xs) (acc '()))
@@ -96,13 +96,13 @@
               acc
               (loop (cdr rest) (set-insert (car rest) acc))))))
 
-    ;; insert :: a -> Set a -> Set a
+    ;; Insert an element into a set.
     (define hydra_lib_sets_insert
       (lambda (x)
         (lambda (s)
           (set-insert x s))))
 
-    ;; intersection :: Set a -> Set a -> Set a
+    ;; Compute the intersection of two sets.
     (define hydra_lib_sets_intersection
       (lambda (s1)
         (lambda (s2)
@@ -113,7 +113,7 @@
                     (loop (cdr rest) (cons (car rest) acc))
                     (loop (cdr rest) acc)))))))
 
-    ;; map :: (a -> b) -> Set a -> Set b
+    ;; Map a function over a set.
     (define hydra_lib_sets_map
       (lambda (f)
         (lambda (s)
@@ -122,28 +122,33 @@
                 acc
                 (loop (cdr rest) (set-insert (f (car rest)) acc)))))))
 
-    ;; member :: a -> Set a -> Bool
+    ;; Check if an element is in a set.
     (define hydra_lib_sets_member
       (lambda (x)
         (lambda (s)
           (set-member? x s))))
 
-    ;; null :: Set a -> Bool
+    ;; Check if a set is empty.
     (define hydra_lib_sets_null
       (lambda (s)
         (null? s)))
 
-    ;; singleton :: a -> Set a
+    ;; Create a singleton set.
     (define hydra_lib_sets_singleton
       (lambda (x)
         (list x)))
 
-    ;; to_list :: Set a -> [a]
+    ;; Get the size of a set.
+    (define hydra_lib_sets_size
+      (lambda (s)
+        (length s)))
+
+    ;; Convert a set to a list.
     (define hydra_lib_sets_to_list
       (lambda (s)
         s))
 
-    ;; union :: Set a -> Set a -> Set a
+    ;; Compute the union of two sets.
     (define hydra_lib_sets_union
       (lambda (s1)
         (lambda (s2)
@@ -152,12 +157,7 @@
                 acc
                 (loop (cdr rest) (set-insert (car rest) acc)))))))
 
-    ;; size :: Set a -> Int
-    (define hydra_lib_sets_size
-      (lambda (s)
-        (length s)))
-
-    ;; unions :: [Set a] -> Set a
+    ;; Compute the union of multiple sets.
     (define hydra_lib_sets_unions
       (lambda (sets)
         (let loop ((rest sets) (acc '()))

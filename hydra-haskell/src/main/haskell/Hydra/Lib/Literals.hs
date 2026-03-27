@@ -210,6 +210,10 @@ showInt32 = show
 showInt64 :: Int64 -> String
 showInt64 = show
 
+-- | Convert a string to a quoted string representation.
+showString :: String -> String
+showString = show
+
 -- | Convert a uint8 to string.
 showUint8 :: Int16 -> String
 showUint8 = show
@@ -225,10 +229,6 @@ showUint32 = show
 -- | Convert a uint64 to string.
 showUint64 :: Integer -> String
 showUint64 = show
-
--- | Convert a string to a quoted string representation.
-showString :: String -> String
-showString = show
 
 -- | Convert string to binary by base64 decoding.
 -- Returns an empty ByteString if decoding fails.

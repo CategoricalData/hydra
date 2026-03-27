@@ -13,8 +13,7 @@ apply = (<*>)
 bind :: Y.Maybe a -> (a -> Y.Maybe b) -> Y.Maybe b
 bind = (>>=)
 
--- | Handle an optional value with different parameter order than maybe.
--- Arguments are: the Maybe value, the default for Nothing, and the function to apply for Just.
+-- | Handle an optional value with the maybe value as the first argument.
 cases :: Y.Maybe a -> b -> (a -> b) -> b
 cases m n j = Y.maybe n j m
 
@@ -26,8 +25,7 @@ cat = Y.catMaybes
 compose :: (a -> Y.Maybe b) -> (b -> Y.Maybe c) -> (a -> Y.Maybe c)
 compose f g = \x -> f x >>= g
 
--- | Extract value from Maybe, assuming it's Just (unsafe).
--- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
+-- | Extract value from a Just, or error on Nothing (partial function).
 fromJust :: Y.Maybe a -> a
 fromJust = Y.fromJust
 
@@ -51,7 +49,7 @@ map = fmap
 mapMaybe :: (a -> Y.Maybe b) -> [a] -> [b]
 mapMaybe = Y.mapMaybe
 
--- | Handle an optional value, with transformation.
+-- | Eliminate an optional value with a default and a function.
 maybe :: b -> (a -> b) -> Y.Maybe a -> b
 maybe = Y.maybe
 

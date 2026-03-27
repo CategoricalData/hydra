@@ -4,30 +4,30 @@ from __future__ import annotations
 
 
 def is_alpha_num(value: int) -> bool:
-    """Check if a character (as int) is alphanumeric."""
+    """Check whether a character is alphanumeric."""
     return chr(value).isalnum()
 
 
 def is_lower(value: int) -> bool:
-    """Check if a character (as int) is lowercase."""
+    """Check whether a character is lowercase."""
     return chr(value).islower()
 
 
 def is_space(value: int) -> bool:
-    """Check if a character (as int) is whitespace."""
+    """Check whether a character is a whitespace character."""
     return chr(value).isspace()
 
 
 def is_upper(value: int) -> bool:
-    """Check if a character (as int) is uppercase."""
+    """Check whether a character is uppercase."""
     return chr(value).isupper()
 
 
 def to_lower(value: int) -> int:
-    """Convert a character (as int) to lowercase, returning the int value."""
+    """Convert a character to lowercase."""
     return ord(chr(value).lower())
 
 
 def to_upper(value: int) -> int:
-    """Convert a character (as int) to uppercase, returning the int value."""
+    """Convert a character to uppercase."""
     return ord(chr(value).upper())

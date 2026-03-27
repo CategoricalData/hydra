@@ -8,13 +8,13 @@ import qualified Data.Either as E
 import qualified Data.Set as S
 
 
--- | Bind (flatMap) for Either: if Right, apply the function; if Left, return unchanged.
-bind :: Either a b -> (b -> Either a c) -> Either a c
-bind = (>>=)
-
 -- | Map over both sides of an Either value.
 bimap :: (a -> c) -> (b -> d) -> Either a b -> Either c d
 bimap = BF.bimap
+
+-- | Bind (flatMap) for Either: if Right, apply the function; if Left, return unchanged.
+bind :: Either a b -> (b -> Either a c) -> Either a c
+bind = (>>=)
 
 -- | Eliminate an Either value by applying one of two functions.
 either :: (a -> c) -> (b -> c) -> Either a b -> c

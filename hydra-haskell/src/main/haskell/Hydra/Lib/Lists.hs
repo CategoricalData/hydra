@@ -14,7 +14,7 @@ import qualified Data.List as L
 apply :: [a -> b] -> [a] -> [b]
 apply = (<*>)
 
--- | Get the element at specified index of a list.
+-- | Get the element at a specified index in a list.
 -- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
 at :: Int -> [a] -> a
 at i l = l !! i
@@ -106,14 +106,13 @@ nub = L.nub
 null :: [a] -> Bool
 null = L.null
 
+-- | Partition a list into elements that satisfy a predicate and elements that do not.
+partition :: (a -> Bool) -> [a] -> ([a], [a])
+partition = L.partition
+
 -- | Create a list with a single element.
 pure :: a -> [a]
 pure e = [e]
-
--- | Partition a list based on a predicate.
--- Returns (elements satisfying predicate, elements not satisfying predicate).
-partition :: (a -> Bool) -> [a] -> ([a], [a])
-partition = L.partition
 
 -- | Create a list with n copies of a value.
 replicate :: Int -> a -> [a]

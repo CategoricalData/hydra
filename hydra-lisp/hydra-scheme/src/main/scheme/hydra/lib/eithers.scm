@@ -4,6 +4,7 @@
   (export hydra_lib_eithers_bimap
           hydra_lib_eithers_bind
           hydra_lib_eithers_either
+          hydra_lib_eithers_foldl
           hydra_lib_eithers_from_left
           hydra_lib_eithers_from_right
           hydra_lib_eithers_is_left
@@ -14,7 +15,6 @@
           hydra_lib_eithers_map_maybe
           hydra_lib_eithers_map_set
           hydra_lib_eithers_partition_eithers
-          hydra_lib_eithers_foldl
           hydra_lib_eithers_rights)
   (begin
 
@@ -30,7 +30,7 @@
         ((< (generic-compare x (car s)) 0) (cons x s))
         (else (cons (car s) (set-insert x (cdr s))))))
 
-    ;; bimap :: (a -> c) -> (b -> d) -> Either a b -> Either c d
+    ;; Map over both sides of an Either value.
     (define hydra_lib_eithers_bimap
       (lambda (f)
         (lambda (g)
@@ -39,7 +39,7 @@
                 (list 'left (f (either-val e)))
                 (list 'right (g (either-val e))))))))
 
-    ;; bind :: Either a b -> (b -> Either a c) -> Either a c
+    ;; Bind (flatMap) for Either: if Right, apply the function; if Left, return unchanged.
     (define hydra_lib_eithers_bind
       (lambda (e)
         (lambda (f)
@@ -47,7 +47,7 @@
               e
               (f (either-val e))))))
 
-    ;; either :: (a -> c) -> (b -> c) -> Either a b -> c
+    ;; Eliminate an Either value by applying one of two functions.
     (define hydra_lib_eithers_either
       (lambda (f)
         (lambda (g)
@@ -56,7 +56,20 @@
                 (f (either-val e))
                 (g (either-val e)))))))
 
-    ;; fromLeft :: a -> Either a b -> a
+    ;; Left-fold over a list with an Either-returning function, short-circuiting on Left.
+    (define hydra_lib_eithers_foldl
+      (lambda (f)
+        (lambda (init)
+          (lambda (xs)
+            (let loop ((rest xs) (acc init))
+              (if (null? rest)
+                  (list 'right acc)
+                  (let ((result ((f acc) (car rest))))
+                    (if (eq? (either-tag result) 'left)
+                        result
+                        (loop (cdr rest) (either-val result))))))))))
+
+    ;; Extract the Left value, or return a default.
     ;; Thunk-aware: if def is a zero-arg procedure (thunk), only called when Either is Right
     (define hydra_lib_eithers_from_left
       (lambda (def)
@@ -65,7 +78,7 @@
               (either-val e)
               (if (procedure? def) (def) def)))))
 
-    ;; fromRight :: b -> Either a b -> b
+    ;; Extract the Right value, or return a default.
     ;; Thunk-aware: if def is a zero-arg procedure (thunk), only called when Either is Left
     (define hydra_lib_eithers_from_right
       (lambda (def)
@@ -74,17 +87,17 @@
               (either-val e)
               (if (procedure? def) (def) def)))))
 
-    ;; isLeft :: Either a b -> Bool
+    ;; Check if an Either is a Left value.
     (define hydra_lib_eithers_is_left
       (lambda (e)
         (eq? (either-tag e) 'left)))
 
-    ;; isRight :: Either a b -> Bool
+    ;; Check if an Either is a Right value.
     (define hydra_lib_eithers_is_right
       (lambda (e)
         (eq? (either-tag e) 'right)))
 
-    ;; lefts :: [Either a b] -> [a]
+    ;; Extract all Left values from a list of Eithers.
     (define hydra_lib_eithers_lefts
       (lambda (es)
         (let loop ((rest es) (acc '()))
@@ -94,7 +107,7 @@
                   (loop (cdr rest) (cons (either-val (car rest)) acc))
                   (loop (cdr rest) acc))))))
 
-    ;; map :: (b -> c) -> Either a b -> Either a c
+    ;; Map a function over the Right side of an Either (standard functor map).
     (define hydra_lib_eithers_map
       (lambda (f)
         (lambda (e)
@@ -102,7 +115,7 @@
               e
               (list 'right (f (either-val e)))))))
 
-    ;; map_list :: (a -> Either e b) -> [a] -> Either e [b]
+    ;; Map a function returning Either over a list, collecting results or short-circuiting on Left.
     (define hydra_lib_eithers_map_list
       (lambda (f)
         (lambda (xs)
@@ -114,7 +127,7 @@
                       result
                       (loop (cdr rest) (cons (either-val result) acc)))))))))
 
-    ;; map_maybe :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)
+    ;; Map a function returning Either over a Maybe, or return Right Nothing if Nothing.
     (define hydra_lib_eithers_map_maybe
       (lambda (f)
         (lambda (m)
@@ -127,7 +140,7 @@
                       result
                       (list 'right (list 'just (either-val result))))))))))
 
-    ;; map_set :: (a -> Either e b) -> Set a -> Either e (Set b)
+    ;; Map a function returning Either over a Set, collecting results or short-circuiting on Left.
     (define hydra_lib_eithers_map_set
       (lambda (f)
         (lambda (s)
@@ -142,7 +155,7 @@
                       result
                       (loop (cdr rest) (cons (either-val result) acc)))))))))
 
-    ;; partitionEithers :: [Either a b] -> Pair [a] [b]
+    ;; Partition a list of Eithers into lefts and rights.
     (define hydra_lib_eithers_partition_eithers
       (lambda (es)
         (let loop ((rest es) (lefts '()) (rights '()))
@@ -153,20 +166,7 @@
                     (loop (cdr rest) (cons (either-val e) lefts) rights)
                     (loop (cdr rest) lefts (cons (either-val e) rights))))))))
 
-    ;; foldl :: (a -> b -> Either c a) -> a -> [b] -> Either c a
-    (define hydra_lib_eithers_foldl
-      (lambda (f)
-        (lambda (init)
-          (lambda (xs)
-            (let loop ((rest xs) (acc init))
-              (if (null? rest)
-                  (list 'right acc)
-                  (let ((result ((f acc) (car rest))))
-                    (if (eq? (either-tag result) 'left)
-                        result
-                        (loop (cdr rest) (either-val result))))))))))
-
-    ;; rights :: [Either a b] -> [b]
+    ;; Extract all Right values from a list of Eithers.
     (define hydra_lib_eithers_rights
       (lambda (es)
         (let loop ((rest es) (acc '()))
