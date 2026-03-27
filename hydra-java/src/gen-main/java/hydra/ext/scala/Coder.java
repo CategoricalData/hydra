@@ -621,7 +621,7 @@ public interface Coder {
 
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.scala.syntax.Lit> visit(hydra.core.Literal.Binary b) {
-        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.scala.syntax.Lit>right(new hydra.ext.scala.syntax.Lit.String_(hydra.lib.literals.BinaryToString.apply((b).value)));
+        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.scala.syntax.Lit>right(new hydra.ext.scala.syntax.Lit.Bytes(hydra.lib.literals.BinaryToBytes.apply((b).value)));
       }
 
       @Override

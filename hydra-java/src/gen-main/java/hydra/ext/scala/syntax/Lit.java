@@ -29,6 +29,8 @@ public abstract class Lit implements Serializable, Comparable<Lit> {
 
   public static final hydra.core.Name STRING = new hydra.core.Name("string");
 
+  public static final hydra.core.Name BYTES = new hydra.core.Name("bytes");
+
   public static final hydra.core.Name SYMBOL = new hydra.core.Name("symbol");
 
   private Lit () {
@@ -59,6 +61,8 @@ public abstract class Lit implements Serializable, Comparable<Lit> {
     R visit(Unit instance) ;
 
     R visit(String_ instance) ;
+
+    R visit(Bytes instance) ;
 
     R visit(Symbol instance) ;
   }
@@ -109,6 +113,10 @@ public abstract class Lit implements Serializable, Comparable<Lit> {
     }
 
     default R visit(String_ instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Bytes instance) {
       return otherwise(instance);
     }
 
@@ -538,6 +546,46 @@ public abstract class Lit implements Serializable, Comparable<Lit> {
         return tagCmp;
       }
       String_ o = (String_) other;
+      return ((Comparable) value).compareTo(o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class Bytes extends hydra.ext.scala.syntax.Lit implements Serializable {
+    public final hydra.util.ConsList<Integer> value;
+
+    public Bytes (hydra.util.ConsList<Integer> value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Bytes)) {
+        return false;
+      }
+      Bytes o = (Bytes) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Lit other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Bytes o = (Bytes) other;
       return ((Comparable) value).compareTo(o.value);
     }
 

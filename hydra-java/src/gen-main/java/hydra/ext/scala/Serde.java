@@ -456,6 +456,21 @@ public interface Serde {
             hydra.ext.java.Serde.escapeJavaString((s).value),
             "\"")));
       }
+
+      @Override
+      public hydra.ast.Expr visit(hydra.ext.scala.syntax.Lit.Bytes bs) {
+        return hydra.Serialization.cst(hydra.lib.strings.Cat2.apply(
+          "Array[Byte](",
+          hydra.lib.strings.Cat2.apply(
+            hydra.lib.strings.Intercalate.apply(
+              ", ",
+              hydra.lib.lists.Map.apply(
+                (java.util.function.Function<Integer, String>) (b -> hydra.lib.strings.Cat2.apply(
+                  hydra.lib.literals.ShowInt32.apply(b),
+                  ".toByte")),
+                (bs).value)),
+            ")")));
+      }
     });
   }
 

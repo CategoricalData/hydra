@@ -290,7 +290,7 @@ def encode_literal(cx: hydra.context.Context, g: T0, av: hydra.core.Literal):
                 return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unexpected integer value"))), cx))
     match av:
         case hydra.core.LiteralBinary(value=b):
-            return Right(cast(hydra.ext.scala.syntax.Lit, hydra.ext.scala.syntax.LitString(hydra.lib.literals.binary_to_string(b))))
+            return Right(cast(hydra.ext.scala.syntax.Lit, hydra.ext.scala.syntax.LitBytes(hydra.lib.literals.binary_to_bytes(b))))
 
         case hydra.core.LiteralBoolean(value=b2):
             return Right(cast(hydra.ext.scala.syntax.Lit, hydra.ext.scala.syntax.LitBoolean(b2)))

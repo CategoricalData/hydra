@@ -136,6 +136,9 @@ def write_lit(lit: hydra.ext.scala.syntax.Lit) -> hydra.ast.Expr:
         case hydra.ext.scala.syntax.LitString(value=s):
             return hydra.serialization.cst(hydra.lib.strings.cat2("\"", hydra.lib.strings.cat2(hydra.ext.java.serde.escape_java_string(s), "\"")))
 
+        case hydra.ext.scala.syntax.LitBytes(value=bs):
+            return hydra.serialization.cst(hydra.lib.strings.cat2("Array[Byte](", hydra.lib.strings.cat2(hydra.lib.strings.intercalate(", ", hydra.lib.lists.map((lambda b: hydra.lib.strings.cat2(hydra.lib.literals.show_int32(b), ".toByte")), bs)), ")")))
+
         case _:
             return hydra.serialization.cst("TODO:literal")
 
