@@ -30,44 +30,12 @@ module_ = Module ns elements
     Just "Type preparation functions for Scala code generation"
   where
     elements = [
-      toTermDefinition prepareLiteralType,
       toTermDefinition prepareFloatType,
       toTermDefinition prepareIntegerType,
+      toTermDefinition prepareLiteralType,
       toTermDefinition prepareType,
       toTermDefinition same]
 
-
-prepareLiteralType :: TBinding (LiteralType -> (LiteralType, Literal -> Literal, S.Set String))
-prepareLiteralType = def "prepareLiteralType" $
-  doc "Prepare a literal type for Scala, substituting unsupported types" $
-  lambda "at" $
-    (cases _LiteralType (var "at") (Just (same @@ var "at")) [
-      _LiteralType_binary>>: (constant $
-        triple
-          (Core.literalTypeString)
-          ("v" ~> cases _Literal (var "v") (Just (var "v")) [
-            _Literal_binary>>: ("b" ~> inject _Literal _Literal_string (Literals.binaryToString (var "b")))])
-          (Sets.fromList $ list [string "replace binary strings with character strings"])),
-      _LiteralType_float>>: ("ft" ~> lets [
-        "result">: prepareFloatType @@ var "ft",
-        "rtyp">: Pairs.first (var "result"),
-        "rep">: Pairs.first (Pairs.second (var "result")),
-        "msgs">: Pairs.second (Pairs.second (var "result"))] $
-        triple
-          (Core.literalTypeFloat (var "rtyp"))
-          ("v" ~> cases _Literal (var "v") (Just (var "v")) [
-            _Literal_float>>: ("fv" ~> inject _Literal _Literal_float (var "rep" @@ var "fv"))])
-          (var "msgs")),
-      _LiteralType_integer>>: ("it" ~> lets [
-        "result">: prepareIntegerType @@ var "it",
-        "rtyp">: Pairs.first (var "result"),
-        "rep">: Pairs.first (Pairs.second (var "result")),
-        "msgs">: Pairs.second (Pairs.second (var "result"))] $
-        triple
-          (Core.literalTypeInteger (var "rtyp"))
-          ("v" ~> cases _Literal (var "v") (Just (var "v")) [
-            _Literal_integer>>: ("iv" ~> inject _Literal _Literal_integer (var "rep" @@ var "iv"))])
-          (var "msgs"))])
 
 prepareFloatType :: TBinding (FloatType -> (FloatType, FloatValue -> FloatValue, S.Set String))
 prepareFloatType = def "prepareFloatType" $
@@ -110,6 +78,38 @@ prepareIntegerType = def "prepareIntegerType" $
           ("v" ~> cases _IntegerValue (var "v") (Just (var "v")) [
             _IntegerValue_uint64>>: ("i" ~> inject _IntegerValue _IntegerValue_int64 (Literals.bigintToInt64 (Literals.uint64ToBigint (var "i"))))])
           (Sets.fromList $ list [string "replace unsigned 64-bit integers with signed 64-bit integers"]))])
+
+prepareLiteralType :: TBinding (LiteralType -> (LiteralType, Literal -> Literal, S.Set String))
+prepareLiteralType = def "prepareLiteralType" $
+  doc "Prepare a literal type for Scala, substituting unsupported types" $
+  lambda "at" $
+    (cases _LiteralType (var "at") (Just (same @@ var "at")) [
+      _LiteralType_binary>>: (constant $
+        triple
+          (Core.literalTypeString)
+          ("v" ~> cases _Literal (var "v") (Just (var "v")) [
+            _Literal_binary>>: ("b" ~> inject _Literal _Literal_string (Literals.binaryToString (var "b")))])
+          (Sets.fromList $ list [string "replace binary strings with character strings"])),
+      _LiteralType_float>>: ("ft" ~> lets [
+        "result">: prepareFloatType @@ var "ft",
+        "rtyp">: Pairs.first (var "result"),
+        "rep">: Pairs.first (Pairs.second (var "result")),
+        "msgs">: Pairs.second (Pairs.second (var "result"))] $
+        triple
+          (Core.literalTypeFloat (var "rtyp"))
+          ("v" ~> cases _Literal (var "v") (Just (var "v")) [
+            _Literal_float>>: ("fv" ~> inject _Literal _Literal_float (var "rep" @@ var "fv"))])
+          (var "msgs")),
+      _LiteralType_integer>>: ("it" ~> lets [
+        "result">: prepareIntegerType @@ var "it",
+        "rtyp">: Pairs.first (var "result"),
+        "rep">: Pairs.first (Pairs.second (var "result")),
+        "msgs">: Pairs.second (Pairs.second (var "result"))] $
+        triple
+          (Core.literalTypeInteger (var "rtyp"))
+          ("v" ~> cases _Literal (var "v") (Just (var "v")) [
+            _Literal_integer>>: ("iv" ~> inject _Literal _Literal_integer (var "rep" @@ var "iv"))])
+          (var "msgs"))])
 
 prepareType :: TBinding (Graph -> Type -> (Type, Term -> Term, S.Set String))
 prepareType = def "prepareType" $

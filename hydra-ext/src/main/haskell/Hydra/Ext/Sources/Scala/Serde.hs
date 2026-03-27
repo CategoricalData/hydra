@@ -103,25 +103,25 @@ module_ = Module ns elements
       toTermDefinition functionArrowOp,
       toTermDefinition matchOp,
       toTermDefinition writeCase,
-      toTermDefinition writeDefn,
-      toTermDefinition writeImportExportStat,
-      toTermDefinition writeImporter,
-      toTermDefinition writeLit,
-      toTermDefinition writeName,
-      toTermDefinition writePat,
-      toTermDefinition writePkg,
-      toTermDefinition writeStat,
-      toTermDefinition writeTerm,
       toTermDefinition writeData_FunctionData,
       toTermDefinition writeData_Name,
       toTermDefinition writeData_Param,
       toTermDefinition writeData_Ref,
       toTermDefinition writeData_Select,
+      toTermDefinition writeDefn,
+      toTermDefinition writeImportExportStat,
+      toTermDefinition writeImporter,
+      toTermDefinition writeInit,
+      toTermDefinition writeLit,
+      toTermDefinition writeMod,
+      toTermDefinition writeName,
+      toTermDefinition writePat,
+      toTermDefinition writePkg,
+      toTermDefinition writeStat,
+      toTermDefinition writeTerm,
       toTermDefinition writeType,
       toTermDefinition writeType_Name,
-      toTermDefinition writeType_Param,
-      toTermDefinition writeInit,
-      toTermDefinition writeMod]
+      toTermDefinition writeType_Param]
 
 
 dotOp :: TBinding Op
@@ -150,6 +150,62 @@ writeCase = define "writeCase" $
       writePat @@ var "pat",
       Serialization.cst @@ string "=>",
       writeTerm @@ var "term"]
+
+writeData_FunctionData :: TBinding (Scala.Data_FunctionData -> Expr)
+writeData_FunctionData = define "writeData_FunctionData" $
+  doc "Convert function data to an expression" $
+  lambda "ft" $
+    cases Scala._Data_FunctionData (var "ft") Nothing [
+      Scala._Data_FunctionData_function>>: lambda "f" $ lets [
+        "params">: project Scala._Data_Function Scala._Data_Function_params @@ var "f",
+        "body">: project Scala._Data_Function Scala._Data_Function_body @@ var "f",
+        "bodyExpr">: writeTerm @@ var "body",
+        "bodyLen">: Serialization.expressionLength @@ var "bodyExpr"] $
+        -- For long lambda bodies (>60 chars), put body on indented new line
+        Logic.ifElse (Equality.gt (var "bodyLen") (int32 60))
+          (Serialization.noSep @@ list [
+            Serialization.parenList @@ false @@ (Lists.map writeData_Param (var "params")),
+            Serialization.cst @@ string " =>\n  ",
+            var "bodyExpr"])
+          (Serialization.spaceSep @@ list [
+            Serialization.parenList @@ false @@ (Lists.map writeData_Param (var "params")),
+            Serialization.cst @@ string "=>",
+            var "bodyExpr"])]
+
+writeData_Name :: TBinding (Scala.Data_Name -> Expr)
+writeData_Name = define "writeData_Name" $
+  doc "Convert a data name to an expression" $
+  lambda "dn" $
+    Serialization.cst @@ (unwrap Scala._PredefString @@ (project Scala._Data_Name Scala._Data_Name_value @@ var "dn"))
+
+writeData_Param :: TBinding (Scala.Data_Param -> Expr)
+writeData_Param = define "writeData_Param" $
+  doc "Convert a data parameter to an expression" $
+  lambda "dp" $ lets [
+    "name">: project Scala._Data_Param Scala._Data_Param_name @@ var "dp",
+    "stype">: project Scala._Data_Param Scala._Data_Param_decltpe @@ var "dp"] $
+    Serialization.noSep @@ (Maybes.cat $ list [
+      Maybes.pure (writeName @@ var "name"),
+      Maybes.map
+        (lambda "t" $ Serialization.spaceSep @@ list [Serialization.cst @@ string ":", writeType @@ var "t"])
+        (var "stype")])
+
+writeData_Ref :: TBinding (Scala.Data_Ref -> Expr)
+writeData_Ref = define "writeData_Ref" $
+  doc "Convert a data reference to an expression" $
+  lambda "ref" $
+    cases Scala._Data_Ref (var "ref") Nothing [
+      Scala._Data_Ref_name>>: lambda "name" $ writeData_Name @@ var "name",
+      Scala._Data_Ref_select>>: lambda "sel" $ writeData_Select @@ var "sel"]
+
+writeData_Select :: TBinding (Scala.Data_Select -> Expr)
+writeData_Select = define "writeData_Select" $
+  doc "Convert a data select to an expression" $
+  lambda "sel" $ lets [
+    "arg">: project Scala._Data_Select Scala._Data_Select_qual @@ var "sel",
+    "name">: project Scala._Data_Select Scala._Data_Select_name @@ var "sel"] $
+    Serialization.ifx @@ dotOp @@ (writeTerm @@ var "arg") @@
+      (writeTerm @@ (inject Scala._Data Scala._Data_ref (inject Scala._Data_Ref Scala._Data_Ref_name (var "name"))))
 
 writeDefn :: TBinding (Scala.Defn -> Expr)
 writeDefn = define "writeDefn" $
@@ -322,6 +378,12 @@ writeImporter = define "writeImporter" $
       Serialization.cst @@ string "import",
       Serialization.noSep @@ list [Serialization.cst @@ var "refName", var "forImportees"]]
 
+writeInit :: TBinding (Scala.Init -> Expr)
+writeInit = define "writeInit" $
+  doc "Convert an init to an expression" $
+  lambda "init" $
+    writeType @@ (project Scala._Init Scala._Init_tpe @@ var "init")
+
 writeLit :: TBinding (Scala.Lit -> Expr)
 writeLit = define "writeLit" $
   doc "Convert a literal to an expression" $
@@ -341,6 +403,21 @@ writeLit = define "writeLit" $
           (Strings.cat2
             (Strings.intercalate (string ", ") (Lists.map (lambda "b" $ Strings.cat2 (Literals.showInt32 (var "b")) (string ".toByte")) (var "bs")))
             (string ")"))]
+
+writeMod :: TBinding (Scala.Mod -> Expr)
+writeMod = define "writeMod" $
+  doc "Convert a modifier to an expression" $
+  lambda "m" $
+    cases Scala._Mod (var "m") Nothing [
+      Scala._Mod_case>>: constant $ Serialization.cst @@ string "case",
+      Scala._Mod_sealed>>: constant $ Serialization.cst @@ string "sealed",
+      Scala._Mod_abstract>>: constant $ Serialization.cst @@ string "abstract",
+      Scala._Mod_final>>: constant $ Serialization.cst @@ string "final",
+      Scala._Mod_override>>: constant $ Serialization.cst @@ string "override",
+      Scala._Mod_implicit>>: constant $ Serialization.cst @@ string "implicit",
+      Scala._Mod_lazy>>: constant $ Serialization.cst @@ string "lazy",
+      Scala._Mod_private>>: lambda "_" $ Serialization.cst @@ string "private",
+      Scala._Mod_protected>>: lambda "_" $ Serialization.cst @@ string "protected"]
 
 writeName :: TBinding (Scala.Name -> Expr)
 writeName = define "writeName" $
@@ -416,62 +493,6 @@ writeTerm = define "writeTerm" $
         "stats">: project Scala._Data_Block Scala._Data_Block_stats @@ var "blk"] $
         Serialization.curlyBlock @@ Serialization.fullBlockStyle @@ (Serialization.newlineSep @@ (Lists.map writeStat (var "stats")))]
 
-writeData_FunctionData :: TBinding (Scala.Data_FunctionData -> Expr)
-writeData_FunctionData = define "writeData_FunctionData" $
-  doc "Convert function data to an expression" $
-  lambda "ft" $
-    cases Scala._Data_FunctionData (var "ft") Nothing [
-      Scala._Data_FunctionData_function>>: lambda "f" $ lets [
-        "params">: project Scala._Data_Function Scala._Data_Function_params @@ var "f",
-        "body">: project Scala._Data_Function Scala._Data_Function_body @@ var "f",
-        "bodyExpr">: writeTerm @@ var "body",
-        "bodyLen">: Serialization.expressionLength @@ var "bodyExpr"] $
-        -- For long lambda bodies (>60 chars), put body on indented new line
-        Logic.ifElse (Equality.gt (var "bodyLen") (int32 60))
-          (Serialization.noSep @@ list [
-            Serialization.parenList @@ false @@ (Lists.map writeData_Param (var "params")),
-            Serialization.cst @@ string " =>\n  ",
-            var "bodyExpr"])
-          (Serialization.spaceSep @@ list [
-            Serialization.parenList @@ false @@ (Lists.map writeData_Param (var "params")),
-            Serialization.cst @@ string "=>",
-            var "bodyExpr"])]
-
-writeData_Name :: TBinding (Scala.Data_Name -> Expr)
-writeData_Name = define "writeData_Name" $
-  doc "Convert a data name to an expression" $
-  lambda "dn" $
-    Serialization.cst @@ (unwrap Scala._PredefString @@ (project Scala._Data_Name Scala._Data_Name_value @@ var "dn"))
-
-writeData_Param :: TBinding (Scala.Data_Param -> Expr)
-writeData_Param = define "writeData_Param" $
-  doc "Convert a data parameter to an expression" $
-  lambda "dp" $ lets [
-    "name">: project Scala._Data_Param Scala._Data_Param_name @@ var "dp",
-    "stype">: project Scala._Data_Param Scala._Data_Param_decltpe @@ var "dp"] $
-    Serialization.noSep @@ (Maybes.cat $ list [
-      Maybes.pure (writeName @@ var "name"),
-      Maybes.map
-        (lambda "t" $ Serialization.spaceSep @@ list [Serialization.cst @@ string ":", writeType @@ var "t"])
-        (var "stype")])
-
-writeData_Ref :: TBinding (Scala.Data_Ref -> Expr)
-writeData_Ref = define "writeData_Ref" $
-  doc "Convert a data reference to an expression" $
-  lambda "ref" $
-    cases Scala._Data_Ref (var "ref") Nothing [
-      Scala._Data_Ref_name>>: lambda "name" $ writeData_Name @@ var "name",
-      Scala._Data_Ref_select>>: lambda "sel" $ writeData_Select @@ var "sel"]
-
-writeData_Select :: TBinding (Scala.Data_Select -> Expr)
-writeData_Select = define "writeData_Select" $
-  doc "Convert a data select to an expression" $
-  lambda "sel" $ lets [
-    "arg">: project Scala._Data_Select Scala._Data_Select_qual @@ var "sel",
-    "name">: project Scala._Data_Select Scala._Data_Select_name @@ var "sel"] $
-    Serialization.ifx @@ dotOp @@ (writeTerm @@ var "arg") @@
-      (writeTerm @@ (inject Scala._Data Scala._Data_ref (inject Scala._Data_Ref Scala._Data_Ref_name (var "name"))))
-
 writeType :: TBinding (Scala.Type -> Expr)
 writeType = define "writeType" $
   doc "Convert a type to an expression" $
@@ -512,24 +533,3 @@ writeType_Param = define "writeType_Param" $
   doc "Convert a type parameter to an expression" $
   lambda "tp" $
     writeName @@ (project Scala._Type_Param Scala._Type_Param_name @@ var "tp")
-
-writeInit :: TBinding (Scala.Init -> Expr)
-writeInit = define "writeInit" $
-  doc "Convert an init to an expression" $
-  lambda "init" $
-    writeType @@ (project Scala._Init Scala._Init_tpe @@ var "init")
-
-writeMod :: TBinding (Scala.Mod -> Expr)
-writeMod = define "writeMod" $
-  doc "Convert a modifier to an expression" $
-  lambda "m" $
-    cases Scala._Mod (var "m") Nothing [
-      Scala._Mod_case>>: constant $ Serialization.cst @@ string "case",
-      Scala._Mod_sealed>>: constant $ Serialization.cst @@ string "sealed",
-      Scala._Mod_abstract>>: constant $ Serialization.cst @@ string "abstract",
-      Scala._Mod_final>>: constant $ Serialization.cst @@ string "final",
-      Scala._Mod_override>>: constant $ Serialization.cst @@ string "override",
-      Scala._Mod_implicit>>: constant $ Serialization.cst @@ string "implicit",
-      Scala._Mod_lazy>>: constant $ Serialization.cst @@ string "lazy",
-      Scala._Mod_private>>: lambda "_" $ Serialization.cst @@ string "private",
-      Scala._Mod_protected>>: lambda "_" $ Serialization.cst @@ string "protected"]

@@ -68,10 +68,10 @@ module_ = Module ns elements
   where
    elements = [
      toTermDefinition adjacencyListsToGraph,
-     toTermDefinition stronglyConnectedComponents,
      toTermDefinition initialState,
      toTermDefinition popStackUntil,
-     toTermDefinition strongConnect]
+     toTermDefinition strongConnect,
+     toTermDefinition stronglyConnectedComponents]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

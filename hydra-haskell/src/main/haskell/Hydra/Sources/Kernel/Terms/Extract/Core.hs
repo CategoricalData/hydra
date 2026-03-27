@@ -89,6 +89,8 @@ module_ = Module ns elements
      toTermDefinition booleanLiteral,
      toTermDefinition caseField,
      toTermDefinition cases,
+     toTermDefinition eitherTerm,
+     toTermDefinition eitherType,
      toTermDefinition field,
      toTermDefinition float32,
      toTermDefinition float32Value,
@@ -96,8 +98,6 @@ module_ = Module ns elements
      toTermDefinition float64Value,
      toTermDefinition floatLiteral,
      toTermDefinition floatValue,
-     toTermDefinition eitherTerm,
-     toTermDefinition eitherType,
      toTermDefinition functionType,
      toTermDefinition injection,
      toTermDefinition int16,
@@ -110,10 +110,10 @@ module_ = Module ns elements
      toTermDefinition int8Value,
      toTermDefinition integerLiteral,
      toTermDefinition integerValue,
-     toTermDefinition lambdaBody,
      toTermDefinition lambda,
-     toTermDefinition letBinding,
+     toTermDefinition lambdaBody,
      toTermDefinition let_,
+     toTermDefinition letBinding,
      toTermDefinition list,
      toTermDefinition listHead,
      toTermDefinition listOf,
@@ -121,9 +121,9 @@ module_ = Module ns elements
      toTermDefinition literal,
      toTermDefinition map,
      toTermDefinition mapType,
-     toTermDefinition nArgs,
      toTermDefinition maybeTerm,
      toTermDefinition maybeType,
+     toTermDefinition nArgs,
      toTermDefinition pair,
      toTermDefinition record,
      toTermDefinition recordType,
@@ -241,6 +241,29 @@ cases = define "cases" $
               (Phantoms.string "case statement for type " ++ (Core.unName (var "name")))
               (ShowCore.term @@ var "term"))]]]
 
+eitherTerm :: TBinding (Context -> (Term -> Prelude.Either (InContext Error) x) -> (Term -> Prelude.Either (InContext Error) y) -> Graph -> Term -> Prelude.Either (InContext Error) (Either x y))
+eitherTerm = define "eitherTerm" $
+  doc "Extract an either value from a term, applying functions to the left and right values" $
+  "cx" ~> "leftFun" ~> "rightFun" ~> "graph" ~> "term0" ~>
+  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
+  Phantoms.cases _Term (var "term")
+    (Just (unexpected (var "cx")
+      (Phantoms.string "either value")
+      (ShowCore.term @@ var "term"))) [
+    _Term_either>>: "et" ~> Eithers.either_
+      ("l" ~> Eithers.map (unaryFunction left) (var "leftFun" @@ var "l"))
+      ("r" ~> Eithers.map (unaryFunction right) (var "rightFun" @@ var "r"))
+      (var "et")]
+
+eitherType :: TBinding (Context -> Type -> Prelude.Either (InContext Error) EitherType)
+eitherType = define "eitherType" $
+  doc "Extract the left and right types from an either type" $
+  "cx" ~> "typ" ~>
+  "stripped" <~ Rewriting.deannotateType @@ var "typ" $
+  Phantoms.cases _Type (var "stripped")
+    (Just (unexpected (var "cx") (Phantoms.string "either type") (ShowCore.type_ @@ var "typ"))) [
+    _Type_either>>: "et" ~> right (var "et")]
+
 -- TODO: nonstandard; move me
 field :: TBinding (Context -> Name -> (Term -> Prelude.Either (InContext Error) x) -> Graph -> [Field] -> Prelude.Either (InContext Error) x)
 field = define "field" $
@@ -299,29 +322,6 @@ floatValue = define "floatValue" $
   "cx" ~> "graph" ~> "t" ~>
   "l" <<~ literal @@ var "cx" @@ var "graph" @@ var "t" $
   floatLiteral @@ var "cx" @@ var "l"
-
-eitherTerm :: TBinding (Context -> (Term -> Prelude.Either (InContext Error) x) -> (Term -> Prelude.Either (InContext Error) y) -> Graph -> Term -> Prelude.Either (InContext Error) (Either x y))
-eitherTerm = define "eitherTerm" $
-  doc "Extract an either value from a term, applying functions to the left and right values" $
-  "cx" ~> "leftFun" ~> "rightFun" ~> "graph" ~> "term0" ~>
-  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
-  Phantoms.cases _Term (var "term")
-    (Just (unexpected (var "cx")
-      (Phantoms.string "either value")
-      (ShowCore.term @@ var "term"))) [
-    _Term_either>>: "et" ~> Eithers.either_
-      ("l" ~> Eithers.map (unaryFunction left) (var "leftFun" @@ var "l"))
-      ("r" ~> Eithers.map (unaryFunction right) (var "rightFun" @@ var "r"))
-      (var "et")]
-
-eitherType :: TBinding (Context -> Type -> Prelude.Either (InContext Error) EitherType)
-eitherType = define "eitherType" $
-  doc "Extract the left and right types from an either type" $
-  "cx" ~> "typ" ~>
-  "stripped" <~ Rewriting.deannotateType @@ var "typ" $
-  Phantoms.cases _Type (var "stripped")
-    (Just (unexpected (var "cx") (Phantoms.string "either type") (ShowCore.type_ @@ var "typ"))) [
-    _Type_either>>: "et" ~> right (var "et")]
 
 functionType :: TBinding (Context -> Type -> Prelude.Either (InContext Error) FunctionType)
 functionType = define "functionType" $
@@ -421,11 +421,6 @@ integerValue = define "integerValue" $
   "l" <<~ literal @@ var "cx" @@ var "graph" @@ var "t" $
   integerLiteral @@ var "cx" @@ var "l"
 
-lambdaBody :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext Error) Term)
-lambdaBody = define "lambdaBody" $
-  doc "Extract the body of a lambda term" $
-  "cx" ~> "graph" ~> "term" ~> Eithers.map (unaryFunction Core.lambdaBody) (lambda @@ var "cx" @@ var "graph" @@ var "term")
-
 lambda :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext Error) Lambda)
 lambda = define "lambda" $
   doc "Extract a lambda from a term" $
@@ -436,6 +431,20 @@ lambda = define "lambda" $
     _Term_function>>: "function" ~> Phantoms.cases _Function (var "function")
       (Just (unexpected (var "cx") (Phantoms.string "lambda") (ShowCore.term @@ var "term"))) [
       _Function_lambda>>: "l" ~> right (var "l")]]
+
+lambdaBody :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext Error) Term)
+lambdaBody = define "lambdaBody" $
+  doc "Extract the body of a lambda term" $
+  "cx" ~> "graph" ~> "term" ~> Eithers.map (unaryFunction Core.lambdaBody) (lambda @@ var "cx" @@ var "graph" @@ var "term")
+
+let_ :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext Error) Let)
+let_ = define "let" $
+  doc "Extract a let expression from a term" $
+  "cx" ~> "graph" ~> "term0" ~>
+  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
+  Phantoms.cases _Term (var "term")
+    (Just (unexpected (var "cx") (Phantoms.string "let term") (ShowCore.term @@ var "term"))) [
+    _Term_let>>: "lt" ~> right (var "lt")]
 
 -- TODO: nonstandard; move me
 letBinding :: TBinding (Context -> String -> Graph -> Term -> Prelude.Either (InContext Error) Term)
@@ -452,15 +461,6 @@ letBinding = define "letBinding" $
     (Logic.ifElse (Equality.equal (Lists.length (var "matchingBindings")) $ Phantoms.int32 1)
       (right (Core.bindingTerm (Lists.head (var "matchingBindings"))))
       (Ctx.failInContext (Error.errorOther $ Error.otherError (Phantoms.string "multiple bindings named " ++ var "n")) (var "cx")))
-
-let_ :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext Error) Let)
-let_ = define "let" $
-  doc "Extract a let expression from a term" $
-  "cx" ~> "graph" ~> "term0" ~>
-  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
-  Phantoms.cases _Term (var "term")
-    (Just (unexpected (var "cx") (Phantoms.string "let term") (ShowCore.term @@ var "term"))) [
-    _Term_let>>: "lt" ~> right (var "lt")]
 
 list :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext Error) [Term])
 list = define "list" $
@@ -531,18 +531,6 @@ mapType = define "mapType" $
     (Just (unexpected (var "cx") (Phantoms.string "map type") (ShowCore.type_ @@ var "typ"))) [
     _Type_map>>: "mt" ~> right (var "mt")]
 
--- TODO: nonstandard; move me
-nArgs :: TBinding (Context -> Name -> Int -> [a] -> Prelude.Either (InContext Error) ())
-nArgs = define "nArgs" $
-  doc "Ensure a function has the expected number of arguments" $
-  "cx" ~> "name" ~> "n" ~> "args" ~>
-  Logic.ifElse (Equality.equal (Lists.length (var "args")) (var "n"))
-    (right Phantoms.unit)
-    (unexpected (var "cx") (Strings.concat [
-      Literals.showInt32 (var "n"),
-      Phantoms.string " arguments to primitive ",
-      Literals.showString (Core.unName (var "name"))]) (Literals.showInt32 (Lists.length (var "args"))))
-
 maybeTerm :: TBinding (Context -> (Term -> Prelude.Either (InContext Error) x) -> Graph -> Term -> Prelude.Either (InContext Error) (Maybe x))
 maybeTerm = define "maybeTerm" $
   doc "Extract an optional value from a term, applying a function to the value if present" $
@@ -565,6 +553,18 @@ maybeType = define "maybeType" $
   Phantoms.cases _Type (var "stripped")
     (Just (unexpected (var "cx") (Phantoms.string "maybe type") (ShowCore.type_ @@ var "typ"))) [
     _Type_maybe>>: "t" ~> right (var "t")]
+
+-- TODO: nonstandard; move me
+nArgs :: TBinding (Context -> Name -> Int -> [a] -> Prelude.Either (InContext Error) ())
+nArgs = define "nArgs" $
+  doc "Ensure a function has the expected number of arguments" $
+  "cx" ~> "name" ~> "n" ~> "args" ~>
+  Logic.ifElse (Equality.equal (Lists.length (var "args")) (var "n"))
+    (right Phantoms.unit)
+    (unexpected (var "cx") (Strings.concat [
+      Literals.showInt32 (var "n"),
+      Phantoms.string " arguments to primitive ",
+      Literals.showString (Core.unName (var "name"))]) (Literals.showInt32 (Lists.length (var "args"))))
 
 pair :: TBinding (Context -> (Term -> Prelude.Either (InContext Error) k) -> (Term -> Prelude.Either (InContext Error) v) -> Graph -> Term -> Prelude.Either (InContext Error) (k, v))
 pair = define "pair" $

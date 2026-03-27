@@ -108,7 +108,6 @@ module_ = Module ns elements
     Just "Python naming utilities: encoding Hydra names as Python names"
   where
     elements = [
-      toTermDefinition useFutureAnnotations,
       toTermDefinition encodeConstantForFieldName,
       toTermDefinition encodeConstantForTypeName,
       toTermDefinition encodeEnumValue,
@@ -120,14 +119,9 @@ module_ = Module ns elements
       toTermDefinition sanitizePythonName,
       toTermDefinition termVariableReference,
       toTermDefinition typeVariableReference,
-      toTermDefinition variantName,
-      toTermDefinition variableReference]
-
--- | Temporary flag for Python code generation - use __future__ annotations.
-useFutureAnnotations :: TBinding Bool
-useFutureAnnotations = def "useFutureAnnotations" $
-  doc "Whether to use __future__ annotations for forward references" $
-  true
+      toTermDefinition useFutureAnnotations,
+      toTermDefinition variableReference,
+      toTermDefinition variantName]
 
 -- | Encode a constant name for a field (e.g., FIELD_NAME as a class-level attribute).
 encodeConstantForFieldName :: TBinding (PyHelpers.PythonEnvironment -> Name -> Name -> Py.Name)
@@ -259,13 +253,11 @@ typeVariableReference = def "typeVariableReference" $
   doc "Reference a type variable as a Python expression" $
   variableReference @@ Util.caseConventionPascal @@ false
 
--- | Generate a variant name by combining type name and field name.
-variantName :: TBinding (Bool -> PyHelpers.PythonEnvironment -> Name -> Name -> Py.Name)
-variantName = def "variantName" $
-  doc "Generate a variant name from type name and field name" $
-  lambdas ["isQualified", "env", "tname", "fname"] $
-    encodeName @@ var "isQualified" @@ Util.caseConventionPascal @@ var "env" @@
-      (wrap _Name $ Strings.cat2 (Core.unName $ var "tname") (Formatting.capitalize @@ (Core.unName $ var "fname")))
+-- | Temporary flag for Python code generation - use __future__ annotations.
+useFutureAnnotations :: TBinding Bool
+useFutureAnnotations = def "useFutureAnnotations" $
+  doc "Whether to use __future__ annotations for forward references" $
+  true
 
 -- | Reference a variable as a Python expression with optional quoting.
 variableReference :: TBinding (CaseConvention -> Bool -> PyHelpers.PythonEnvironment -> Name -> Py.Expression)
@@ -283,3 +275,11 @@ variableReference = def "variableReference" $
     Logic.ifElse (Logic.and (var "quoted") (var "sameNamespace"))
       (PyDsl.pyStringToPyExpression $ PyDsl.doubleQuotedString (unwrap Py._Name @@ var "pyName"))
       (var "unquoted")
+
+-- | Generate a variant name by combining type name and field name.
+variantName :: TBinding (Bool -> PyHelpers.PythonEnvironment -> Name -> Name -> Py.Name)
+variantName = def "variantName" $
+  doc "Generate a variant name from type name and field name" $
+  lambdas ["isQualified", "env", "tname", "fname"] $
+    encodeName @@ var "isQualified" @@ Util.caseConventionPascal @@ var "env" @@
+      (wrap _Name $ Strings.cat2 (Core.unName $ var "tname") (Formatting.capitalize @@ (Core.unName $ var "fname")))

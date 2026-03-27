@@ -111,13 +111,13 @@ module_ = Module ns elements
     Just "Mappings from property graph schemas to SHACL shapes graphs, and from property graph data to RDF graphs"
   where
     elements = [
-      toTermDefinition encodeVertex,
+      toTermDefinition edgeTypesToPropertyShapes,
       toTermDefinition encodeEdge,
       toTermDefinition encodeLazyGraph,
+      toTermDefinition encodeVertex,
+      toTermDefinition graphSchemaToShapesGraph,
       toTermDefinition propertyTypeToPropertyShape,
-      toTermDefinition vertexTypeToNodeShape,
-      toTermDefinition edgeTypesToPropertyShapes,
-      toTermDefinition graphSchemaToShapesGraph]
+      toTermDefinition vertexTypeToNodeShape]
 
 
 -- PgRdfEnvironment field accessors (not yet code-generated)
@@ -138,156 +138,6 @@ envEncodePropertyKey env = project _PgRdfEnvironment (Name "encodePropertyKey") 
 
 envEncodePropertyValue :: TTerm a -> TTerm b
 envEncodePropertyValue env = project _PgRdfEnvironment (Name "encodePropertyValue") @@ env
-
-
---------------------------------------------------------------------------------
--- Instance-level mappings: property graph data to RDF
-
--- | Encode a property graph vertex as an RDF description.
--- The vertex id becomes the subject IRI, the vertex label becomes an rdf:type triple,
--- and each property becomes a triple with the property key as predicate and value as object.
-encodeVertex :: TBinding (env -> PG.Vertex v -> Rdf.Description)
-encodeVertex = define "encodeVertex" $
-  doc "Encode a property graph vertex as an RDF description" $
-  lambda "env" $ lambda "vertex" $
-    lets [
-      "vlab">: PgDsl.vertexLabel (var "vertex"),
-      "vid">: PgDsl.vertexId (var "vertex"),
-      "vprops">: PgDsl.vertexProperties (var "vertex"),
-      "subj">: RdfDsl.resourceIri (envEncodeVertexId (var "env") @@ var "vid"),
-      "rtype">: RdfDsl.nodeIri (envEncodeVertexLabel (var "env") @@ var "vlab"),
-      "typeTriple">: RdfDsl.triple (var "subj") (asTerm RdfUtils.rdfIri @@ string "type") (var "rtype"),
-      "propTriples">: Lists.map
-        (lambda "kv" $
-          lets [
-            "key">: Pairs.first (var "kv"),
-            "val">: Pairs.second (var "kv"),
-            "pred">: envEncodePropertyKey (var "env") @@ var "key",
-            "obj">: RdfDsl.nodeLiteral (envEncodePropertyValue (var "env") @@ var "val")
-          ] $
-          RdfDsl.triple (var "subj") (var "pred") (var "obj"))
-        (Maps.toList (var "vprops")),
-      "allTriples">: Lists.cons (var "typeTriple") (var "propTriples")
-    ] $
-    RdfDsl.description
-      (asTerm RdfUtils.resourceToNode @@ var "subj")
-      (RdfDsl.graph (Sets.fromList (var "allTriples")))
-
-
--- | Encode a property graph edge as an RDF description.
--- The out-vertex becomes the subject, the edge label becomes the predicate,
--- and the in-vertex becomes the object. Edge id and properties are discarded.
-encodeEdge :: TBinding (env -> PG.Edge v -> Rdf.Description)
-encodeEdge = define "encodeEdge" $
-  doc "Encode a property graph edge as an RDF description" $
-  lambda "env" $ lambda "edge" $
-    lets [
-      "elab">: PgDsl.edgeLabel (var "edge"),
-      "eout">: PgDsl.edgeOut (var "edge"),
-      "ein">: PgDsl.edgeIn (var "edge"),
-      "subj">: RdfDsl.resourceIri (envEncodeVertexId (var "env") @@ var "eout"),
-      "obj">: RdfDsl.nodeIri (envEncodeVertexId (var "env") @@ var "ein"),
-      "pred">: envEncodeEdgeLabel (var "env") @@ var "elab"
-    ] $
-    RdfDsl.description
-      (asTerm RdfUtils.resourceToNode @@ var "subj")
-      (RdfDsl.graph (Sets.singleton (RdfDsl.triple (var "subj") (var "pred") (var "obj"))))
-
-
--- | Encode an entire lazy property graph as an RDF graph.
--- Encodes all vertices and edges as descriptions, then merges them into a single graph.
-encodeLazyGraph :: TBinding (env -> PG.LazyGraph v -> Rdf.Graph)
-encodeLazyGraph = define "encodeLazyGraph" $
-  doc "Encode a lazy property graph as an RDF graph" $
-  lambda "env" $ lambda "lg" $
-    lets [
-      "vertexDescs">: Lists.map (encodeVertex @@ var "env") (PgDsl.lazyGraphVertices (var "lg")),
-      "edgeDescs">: Lists.map (encodeEdge @@ var "env") (PgDsl.lazyGraphEdges (var "lg")),
-      "allDescs">: Lists.concat (list [var "vertexDescs", var "edgeDescs"])
-    ] $
-    asTerm RdfUtils.descriptionsToGraph @@ var "allDescs"
-
-
---------------------------------------------------------------------------------
--- Schema-level mappings: property graph schema to SHACL shapes
-
--- | A helper for creating empty SHACL common properties with only constraints specified.
-emptyCommonWith :: TTerm (S.Set Shacl.CommonConstraint) -> TTerm (S.Set Rdf.RdfsClass) -> TTerm Shacl.CommonProperties
-emptyCommonWith constraints targetClasses = ShaclDsl.commonProperties
-  constraints                               -- constraints
-  nothing                                   -- deactivated
-  (asTerm RdfUtils.emptyLangStrings)        -- message
-  ShaclDsl.severityViolation                -- severity
-  targetClasses                             -- targetClass
-  Sets.empty                                -- targetNode
-  Sets.empty                                -- targetObjectsOf
-  Sets.empty                                -- targetSubjectsOf
-
--- | A helper for creating a SHACL property shape with minimal fields.
-simplePropertyShape :: TTerm Shacl.CommonProperties -> TTerm (S.Set Shacl.PropertyShapeConstraint)
-  -> TTerm Rdf.Iri -> TTerm Shacl.PropertyShape
-simplePropertyShape common constraints path = ShaclDsl.propertyShape
-  common                                    -- common
-  constraints                               -- constraints
-  nothing                                   -- defaultValue
-  (asTerm RdfUtils.emptyLangStrings)        -- description
-  (asTerm RdfUtils.emptyLangStrings)        -- name
-  nothing                                   -- order
-  path                                      -- path
-
-
--- | Convert a PropertyType to a SHACL PropertyShape.
--- The property key becomes the sh:path, and the type becomes a sh:datatype constraint.
--- If the property is required, sh:minCount is set to 1.
-propertyTypeToPropertyShape
-  :: TBinding ((t -> Rdf.Iri) -> (PG.PropertyKey -> Rdf.Iri) -> PG.PropertyType t -> Shacl.PropertyShape)
-propertyTypeToPropertyShape = define "propertyTypeToPropertyShape" $
-  doc "Convert a property type to a SHACL property shape" $
-  lambda "encodeType" $ lambda "encodeKey" $ lambda "pt" $
-    lets [
-      "key">: PgDsl.propertyTypeKey (var "pt"),
-      "path">: var "encodeKey" @@ var "key",
-      "required_">: PgDsl.propertyTypeRequired (var "pt"),
-      "dtIri">: var "encodeType" @@ PgDsl.propertyTypeValue (var "pt"),
-      "constraints">: Sets.singleton (ShaclDsl.commonConstraintDatatype (var "dtIri")),
-      "propConstraints">:
-        Logic.ifElse (var "required_")
-          (Sets.singleton (ShaclDsl.propertyShapeConstraintMinCount (bigint 1)))
-          Sets.empty
-    ] $
-    simplePropertyShape
-      (emptyCommonWith (var "constraints") Sets.empty)
-      (var "propConstraints")
-      (var "path")
-
-
--- | Convert a VertexType to a SHACL Definition<Shape>, producing a NodeShape
--- with sh:targetClass set to the vertex label IRI, and property shapes for
--- each property type in the vertex type.
-vertexTypeToNodeShape
-  :: TBinding ((t -> Rdf.Iri) -> (PG.VertexLabel -> Rdf.Iri) -> (PG.PropertyKey -> Rdf.Iri)
-    -> PG.VertexType t -> Shacl.Definition Shacl.Shape)
-vertexTypeToNodeShape = define "vertexTypeToNodeShape" $
-  doc "Convert a vertex type to a SHACL node shape definition" $
-  lambda "encodeType" $ lambda "encodeLabel" $ lambda "encodeKey" $ lambda "vt" $
-    lets [
-      "label">: PgDsl.vertexTypeLabel (var "vt"),
-      "labelIri">: var "encodeLabel" @@ var "label",
-      "propTypes">: PgDsl.vertexTypeProperties (var "vt"),
-      "propShapes">: Lists.map
-        (lambda "pt" $
-          ShaclDsl.commonConstraintProperty (Sets.singleton
-            (ShaclDsl.referenceAnonymous
-              (propertyTypeToPropertyShape
-                @@ var "encodeType" @@ var "encodeKey" @@ var "pt"))))
-        (var "propTypes"),
-      "common">: emptyCommonWith
-        (Sets.fromList (var "propShapes"))
-        (Sets.singleton (RdfDsl.rdfsClass unit))
-    ] $
-    ShaclDsl.definition
-      (var "labelIri")
-      (ShaclDsl.shapeNode (ShaclDsl.nodeShape (var "common")))
 
 
 -- | Convert a list of edge types into property shape constraints for a given vertex type.
@@ -323,6 +173,67 @@ edgeTypesToPropertyShapes = define "edgeTypesToPropertyShapes" $
           (TTerm (TermList []) :: TTerm [Shacl.CommonConstraint]))
       (var "edgeTypes"))
 
+-- | Encode a property graph edge as an RDF description.
+-- The out-vertex becomes the subject, the edge label becomes the predicate,
+-- and the in-vertex becomes the object. Edge id and properties are discarded.
+encodeEdge :: TBinding (env -> PG.Edge v -> Rdf.Description)
+encodeEdge = define "encodeEdge" $
+  doc "Encode a property graph edge as an RDF description" $
+  lambda "env" $ lambda "edge" $
+    lets [
+      "elab">: PgDsl.edgeLabel (var "edge"),
+      "eout">: PgDsl.edgeOut (var "edge"),
+      "ein">: PgDsl.edgeIn (var "edge"),
+      "subj">: RdfDsl.resourceIri (envEncodeVertexId (var "env") @@ var "eout"),
+      "obj">: RdfDsl.nodeIri (envEncodeVertexId (var "env") @@ var "ein"),
+      "pred">: envEncodeEdgeLabel (var "env") @@ var "elab"
+    ] $
+    RdfDsl.description
+      (asTerm RdfUtils.resourceToNode @@ var "subj")
+      (RdfDsl.graph (Sets.singleton (RdfDsl.triple (var "subj") (var "pred") (var "obj"))))
+
+-- | Encode an entire lazy property graph as an RDF graph.
+-- Encodes all vertices and edges as descriptions, then merges them into a single graph.
+encodeLazyGraph :: TBinding (env -> PG.LazyGraph v -> Rdf.Graph)
+encodeLazyGraph = define "encodeLazyGraph" $
+  doc "Encode a lazy property graph as an RDF graph" $
+  lambda "env" $ lambda "lg" $
+    lets [
+      "vertexDescs">: Lists.map (encodeVertex @@ var "env") (PgDsl.lazyGraphVertices (var "lg")),
+      "edgeDescs">: Lists.map (encodeEdge @@ var "env") (PgDsl.lazyGraphEdges (var "lg")),
+      "allDescs">: Lists.concat (list [var "vertexDescs", var "edgeDescs"])
+    ] $
+    asTerm RdfUtils.descriptionsToGraph @@ var "allDescs"
+
+-- | Encode a property graph vertex as an RDF description.
+-- The vertex id becomes the subject IRI, the vertex label becomes an rdf:type triple,
+-- and each property becomes a triple with the property key as predicate and value as object.
+encodeVertex :: TBinding (env -> PG.Vertex v -> Rdf.Description)
+encodeVertex = define "encodeVertex" $
+  doc "Encode a property graph vertex as an RDF description" $
+  lambda "env" $ lambda "vertex" $
+    lets [
+      "vlab">: PgDsl.vertexLabel (var "vertex"),
+      "vid">: PgDsl.vertexId (var "vertex"),
+      "vprops">: PgDsl.vertexProperties (var "vertex"),
+      "subj">: RdfDsl.resourceIri (envEncodeVertexId (var "env") @@ var "vid"),
+      "rtype">: RdfDsl.nodeIri (envEncodeVertexLabel (var "env") @@ var "vlab"),
+      "typeTriple">: RdfDsl.triple (var "subj") (asTerm RdfUtils.rdfIri @@ string "type") (var "rtype"),
+      "propTriples">: Lists.map
+        (lambda "kv" $
+          lets [
+            "key">: Pairs.first (var "kv"),
+            "val">: Pairs.second (var "kv"),
+            "pred">: envEncodePropertyKey (var "env") @@ var "key",
+            "obj">: RdfDsl.nodeLiteral (envEncodePropertyValue (var "env") @@ var "val")
+          ] $
+          RdfDsl.triple (var "subj") (var "pred") (var "obj"))
+        (Maps.toList (var "vprops")),
+      "allTriples">: Lists.cons (var "typeTriple") (var "propTriples")
+    ] $
+    RdfDsl.description
+      (asTerm RdfUtils.resourceToNode @@ var "subj")
+      (RdfDsl.graph (Sets.fromList (var "allTriples")))
 
 -- | Convert a GraphSchema to a SHACL ShapesGraph.
 -- Each VertexType becomes a NodeShape definition with property shapes from
@@ -345,7 +256,6 @@ graphSchemaToShapesGraph = define "graphSchemaToShapesGraph" $
             "edgeShapes">: edgeTypesToPropertyShapes
               @@ var "encodeVertexLabel" @@ var "encodeEdgeLabel"
               @@ PgDsl.vertexTypeLabel (var "vt") @@ var "edgeTypes",
-            -- Extract the node shape's common properties, merge in edge constraints
             "baseShape">: ShaclDsl.definitionTarget (var "baseDef"),
             "baseNode">:
               cases Shacl._Shape (var "baseShape") Nothing [
@@ -364,3 +274,79 @@ graphSchemaToShapesGraph = define "graphSchemaToShapesGraph" $
         (var "vertexTypes")
     ] $
     ShaclDsl.shapesGraph (Sets.fromList (var "defs"))
+
+-- | A helper for creating empty SHACL common properties with only constraints specified.
+emptyCommonWith :: TTerm (S.Set Shacl.CommonConstraint) -> TTerm (S.Set Rdf.RdfsClass) -> TTerm Shacl.CommonProperties
+emptyCommonWith constraints targetClasses = ShaclDsl.commonProperties
+  constraints                               -- constraints
+  nothing                                   -- deactivated
+  (asTerm RdfUtils.emptyLangStrings)        -- message
+  ShaclDsl.severityViolation                -- severity
+  targetClasses                             -- targetClass
+  Sets.empty                                -- targetNode
+  Sets.empty                                -- targetObjectsOf
+  Sets.empty                                -- targetSubjectsOf
+
+-- | A helper for creating a SHACL property shape with minimal fields.
+simplePropertyShape :: TTerm Shacl.CommonProperties -> TTerm (S.Set Shacl.PropertyShapeConstraint)
+  -> TTerm Rdf.Iri -> TTerm Shacl.PropertyShape
+simplePropertyShape common constraints path = ShaclDsl.propertyShape
+  common                                    -- common
+  constraints                               -- constraints
+  nothing                                   -- defaultValue
+  (asTerm RdfUtils.emptyLangStrings)        -- description
+  (asTerm RdfUtils.emptyLangStrings)        -- name
+  nothing                                   -- order
+  path                                      -- path
+
+-- | Convert a PropertyType to a SHACL PropertyShape.
+-- The property key becomes the sh:path, and the type becomes a sh:datatype constraint.
+-- If the property is required, sh:minCount is set to 1.
+propertyTypeToPropertyShape
+  :: TBinding ((t -> Rdf.Iri) -> (PG.PropertyKey -> Rdf.Iri) -> PG.PropertyType t -> Shacl.PropertyShape)
+propertyTypeToPropertyShape = define "propertyTypeToPropertyShape" $
+  doc "Convert a property type to a SHACL property shape" $
+  lambda "encodeType" $ lambda "encodeKey" $ lambda "pt" $
+    lets [
+      "key">: PgDsl.propertyTypeKey (var "pt"),
+      "path">: var "encodeKey" @@ var "key",
+      "required_">: PgDsl.propertyTypeRequired (var "pt"),
+      "dtIri">: var "encodeType" @@ PgDsl.propertyTypeValue (var "pt"),
+      "constraints">: Sets.singleton (ShaclDsl.commonConstraintDatatype (var "dtIri")),
+      "propConstraints">:
+        Logic.ifElse (var "required_")
+          (Sets.singleton (ShaclDsl.propertyShapeConstraintMinCount (bigint 1)))
+          Sets.empty
+    ] $
+    simplePropertyShape
+      (emptyCommonWith (var "constraints") Sets.empty)
+      (var "propConstraints")
+      (var "path")
+
+-- | Convert a VertexType to a SHACL Definition<Shape>, producing a NodeShape
+-- with sh:targetClass set to the vertex label IRI, and property shapes for
+-- each property type in the vertex type.
+vertexTypeToNodeShape
+  :: TBinding ((t -> Rdf.Iri) -> (PG.VertexLabel -> Rdf.Iri) -> (PG.PropertyKey -> Rdf.Iri)
+    -> PG.VertexType t -> Shacl.Definition Shacl.Shape)
+vertexTypeToNodeShape = define "vertexTypeToNodeShape" $
+  doc "Convert a vertex type to a SHACL node shape definition" $
+  lambda "encodeType" $ lambda "encodeLabel" $ lambda "encodeKey" $ lambda "vt" $
+    lets [
+      "label">: PgDsl.vertexTypeLabel (var "vt"),
+      "labelIri">: var "encodeLabel" @@ var "label",
+      "propTypes">: PgDsl.vertexTypeProperties (var "vt"),
+      "propShapes">: Lists.map
+        (lambda "pt" $
+          ShaclDsl.commonConstraintProperty (Sets.singleton
+            (ShaclDsl.referenceAnonymous
+              (propertyTypeToPropertyShape
+                @@ var "encodeType" @@ var "encodeKey" @@ var "pt"))))
+        (var "propTypes"),
+      "common">: emptyCommonWith
+        (Sets.fromList (var "propShapes"))
+        (Sets.singleton (RdfDsl.rdfsClass unit))
+    ] $
+    ShaclDsl.definition
+      (var "labelIri")
+      (ShaclDsl.shapeNode (ShaclDsl.nodeShape (var "common")))

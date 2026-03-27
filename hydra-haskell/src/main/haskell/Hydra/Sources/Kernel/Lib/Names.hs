@@ -45,8 +45,8 @@ module_ = Module ns elements
       toTermDefinition charsToUpper,
 
       -- eithers primitives
-      toTermDefinition eithersBind,
       toTermDefinition eithersBimap,
+      toTermDefinition eithersBind,
       toTermDefinition eithersEither,
       toTermDefinition eithersFoldl,
       toTermDefinition eithersFromLeft,
@@ -116,55 +116,55 @@ module_ = Module ns elements
       toTermDefinition literalsBigfloatToFloat32,
       toTermDefinition literalsBigfloatToFloat64,
       toTermDefinition literalsBigintToBigfloat,
-      toTermDefinition literalsBigintToInt8,
       toTermDefinition literalsBigintToInt16,
       toTermDefinition literalsBigintToInt32,
       toTermDefinition literalsBigintToInt64,
-      toTermDefinition literalsBigintToUint8,
+      toTermDefinition literalsBigintToInt8,
       toTermDefinition literalsBigintToUint16,
       toTermDefinition literalsBigintToUint32,
       toTermDefinition literalsBigintToUint64,
+      toTermDefinition literalsBigintToUint8,
       toTermDefinition literalsBinaryToBytes,
       toTermDefinition literalsBinaryToString,
       toTermDefinition literalsFloat32ToBigfloat,
       toTermDefinition literalsFloat64ToBigfloat,
-      toTermDefinition literalsInt8ToBigint,
       toTermDefinition literalsInt16ToBigint,
       toTermDefinition literalsInt32ToBigint,
       toTermDefinition literalsInt64ToBigint,
+      toTermDefinition literalsInt8ToBigint,
       toTermDefinition literalsReadBigfloat,
       toTermDefinition literalsReadBigint,
       toTermDefinition literalsReadBoolean,
       toTermDefinition literalsReadFloat32,
       toTermDefinition literalsReadFloat64,
-      toTermDefinition literalsReadInt8,
       toTermDefinition literalsReadInt16,
       toTermDefinition literalsReadInt32,
       toTermDefinition literalsReadInt64,
+      toTermDefinition literalsReadInt8,
       toTermDefinition literalsReadString,
-      toTermDefinition literalsReadUint8,
       toTermDefinition literalsReadUint16,
       toTermDefinition literalsReadUint32,
       toTermDefinition literalsReadUint64,
+      toTermDefinition literalsReadUint8,
       toTermDefinition literalsShowBigfloat,
       toTermDefinition literalsShowBigint,
       toTermDefinition literalsShowBoolean,
       toTermDefinition literalsShowFloat32,
       toTermDefinition literalsShowFloat64,
-      toTermDefinition literalsShowInt8,
       toTermDefinition literalsShowInt16,
       toTermDefinition literalsShowInt32,
       toTermDefinition literalsShowInt64,
-      toTermDefinition literalsShowUint8,
+      toTermDefinition literalsShowInt8,
+      toTermDefinition literalsShowString,
       toTermDefinition literalsShowUint16,
       toTermDefinition literalsShowUint32,
       toTermDefinition literalsShowUint64,
-      toTermDefinition literalsShowString,
+      toTermDefinition literalsShowUint8,
       toTermDefinition literalsStringToBinary,
-      toTermDefinition literalsUint8ToBigint,
       toTermDefinition literalsUint16ToBigint,
       toTermDefinition literalsUint32ToBigint,
       toTermDefinition literalsUint64ToBigint,
+      toTermDefinition literalsUint8ToBigint,
 
       -- logic primitives
       toTermDefinition logicAnd,
@@ -290,8 +290,8 @@ module_ = Module ns elements
       toTermDefinition stringsCharAt,
       toTermDefinition stringsFromList,
       toTermDefinition stringsIntercalate,
-      toTermDefinition stringsNull,
       toTermDefinition stringsLength,
+      toTermDefinition stringsNull,
       toTermDefinition stringsLines,
       toTermDefinition stringsSplitOn,
       toTermDefinition stringsToList,
@@ -371,8 +371,8 @@ charsToUpper    = defineName "charsToUpper" "hydra.lib.chars" "toUpper"
 
 -- Eithers primitives
 
-eithersBind             = defineName "eithersBind" "hydra.lib.eithers" "bind"
 eithersBimap            = defineName "eithersBimap" "hydra.lib.eithers" "bimap"
+eithersBind             = defineName "eithersBind" "hydra.lib.eithers" "bind"
 eithersEither           = defineName "eithersEither" "hydra.lib.eithers" "either"
 eithersFoldl            = defineName "eithersFoldl" "hydra.lib.eithers" "foldl"
 eithersFromLeft         = defineName "eithersFromLeft" "hydra.lib.eithers" "fromLeft"
@@ -445,55 +445,55 @@ literalsBigfloatToBigint  = defineName "literalsBigfloatToBigint" "hydra.lib.lit
 literalsBigfloatToFloat32 = defineName "literalsBigfloatToFloat32" "hydra.lib.literals" "bigfloatToFloat32"
 literalsBigfloatToFloat64 = defineName "literalsBigfloatToFloat64" "hydra.lib.literals" "bigfloatToFloat64"
 literalsBigintToBigfloat  = defineName "literalsBigintToBigfloat" "hydra.lib.literals" "bigintToBigfloat"
-literalsBigintToInt8      = defineName "literalsBigintToInt8" "hydra.lib.literals" "bigintToInt8"
 literalsBigintToInt16     = defineName "literalsBigintToInt16" "hydra.lib.literals" "bigintToInt16"
 literalsBigintToInt32     = defineName "literalsBigintToInt32" "hydra.lib.literals" "bigintToInt32"
 literalsBigintToInt64     = defineName "literalsBigintToInt64" "hydra.lib.literals" "bigintToInt64"
-literalsBigintToUint8     = defineName "literalsBigintToUint8" "hydra.lib.literals" "bigintToUint8"
+literalsBigintToInt8      = defineName "literalsBigintToInt8" "hydra.lib.literals" "bigintToInt8"
 literalsBigintToUint16    = defineName "literalsBigintToUint16" "hydra.lib.literals" "bigintToUint16"
 literalsBigintToUint32    = defineName "literalsBigintToUint32" "hydra.lib.literals" "bigintToUint32"
 literalsBigintToUint64    = defineName "literalsBigintToUint64" "hydra.lib.literals" "bigintToUint64"
+literalsBigintToUint8     = defineName "literalsBigintToUint8" "hydra.lib.literals" "bigintToUint8"
 literalsBinaryToBytes     = defineName "literalsBinaryToBytes" "hydra.lib.literals" "binaryToBytes"
 literalsBinaryToString    = defineName "literalsBinaryToString" "hydra.lib.literals" "binaryToString"
 literalsFloat32ToBigfloat = defineName "literalsFloat32ToBigfloat" "hydra.lib.literals" "float32ToBigfloat"
 literalsFloat64ToBigfloat = defineName "literalsFloat64ToBigfloat" "hydra.lib.literals" "float64ToBigfloat"
-literalsInt8ToBigint      = defineName "literalsInt8ToBigint" "hydra.lib.literals" "int8ToBigint"
 literalsInt16ToBigint     = defineName "literalsInt16ToBigint" "hydra.lib.literals" "int16ToBigint"
 literalsInt32ToBigint     = defineName "literalsInt32ToBigint" "hydra.lib.literals" "int32ToBigint"
 literalsInt64ToBigint     = defineName "literalsInt64ToBigint" "hydra.lib.literals" "int64ToBigint"
+literalsInt8ToBigint      = defineName "literalsInt8ToBigint" "hydra.lib.literals" "int8ToBigint"
 literalsReadBigfloat      = defineName "literalsReadBigfloat" "hydra.lib.literals" "readBigfloat"
 literalsReadBigint        = defineName "literalsReadBigint" "hydra.lib.literals" "readBigint"
 literalsReadBoolean       = defineName "literalsReadBoolean" "hydra.lib.literals" "readBoolean"
 literalsReadFloat32       = defineName "literalsReadFloat32" "hydra.lib.literals" "readFloat32"
 literalsReadFloat64       = defineName "literalsReadFloat64" "hydra.lib.literals" "readFloat64"
-literalsReadInt8          = defineName "literalsReadInt8" "hydra.lib.literals" "readInt8"
 literalsReadInt16         = defineName "literalsReadInt16" "hydra.lib.literals" "readInt16"
 literalsReadInt32         = defineName "literalsReadInt32" "hydra.lib.literals" "readInt32"
 literalsReadInt64         = defineName "literalsReadInt64" "hydra.lib.literals" "readInt64"
+literalsReadInt8          = defineName "literalsReadInt8" "hydra.lib.literals" "readInt8"
 literalsReadString        = defineName "literalsReadString" "hydra.lib.literals" "readString"
-literalsReadUint8         = defineName "literalsReadUint8" "hydra.lib.literals" "readUint8"
 literalsReadUint16        = defineName "literalsReadUint16" "hydra.lib.literals" "readUint16"
 literalsReadUint32        = defineName "literalsReadUint32" "hydra.lib.literals" "readUint32"
 literalsReadUint64        = defineName "literalsReadUint64" "hydra.lib.literals" "readUint64"
+literalsReadUint8         = defineName "literalsReadUint8" "hydra.lib.literals" "readUint8"
 literalsShowBigfloat      = defineName "literalsShowBigfloat" "hydra.lib.literals" "showBigfloat"
 literalsShowBigint        = defineName "literalsShowBigint" "hydra.lib.literals" "showBigint"
 literalsShowBoolean       = defineName "literalsShowBoolean" "hydra.lib.literals" "showBoolean"
 literalsShowFloat32       = defineName "literalsShowFloat32" "hydra.lib.literals" "showFloat32"
 literalsShowFloat64       = defineName "literalsShowFloat64" "hydra.lib.literals" "showFloat64"
-literalsShowInt8          = defineName "literalsShowInt8" "hydra.lib.literals" "showInt8"
 literalsShowInt16         = defineName "literalsShowInt16" "hydra.lib.literals" "showInt16"
 literalsShowInt32         = defineName "literalsShowInt32" "hydra.lib.literals" "showInt32"
 literalsShowInt64         = defineName "literalsShowInt64" "hydra.lib.literals" "showInt64"
-literalsShowUint8         = defineName "literalsShowUint8" "hydra.lib.literals" "showUint8"
+literalsShowInt8          = defineName "literalsShowInt8" "hydra.lib.literals" "showInt8"
+literalsShowString        = defineName "literalsShowString" "hydra.lib.literals" "showString"
 literalsShowUint16        = defineName "literalsShowUint16" "hydra.lib.literals" "showUint16"
 literalsShowUint32        = defineName "literalsShowUint32" "hydra.lib.literals" "showUint32"
 literalsShowUint64        = defineName "literalsShowUint64" "hydra.lib.literals" "showUint64"
-literalsShowString        = defineName "literalsShowString" "hydra.lib.literals" "showString"
+literalsShowUint8         = defineName "literalsShowUint8" "hydra.lib.literals" "showUint8"
 literalsStringToBinary    = defineName "literalsStringToBinary" "hydra.lib.literals" "stringToBinary"
-literalsUint8ToBigint     = defineName "literalsUint8ToBigint" "hydra.lib.literals" "uint8ToBigint"
 literalsUint16ToBigint    = defineName "literalsUint16ToBigint" "hydra.lib.literals" "uint16ToBigint"
 literalsUint32ToBigint    = defineName "literalsUint32ToBigint" "hydra.lib.literals" "uint32ToBigint"
 literalsUint64ToBigint    = defineName "literalsUint64ToBigint" "hydra.lib.literals" "uint64ToBigint"
+literalsUint8ToBigint     = defineName "literalsUint8ToBigint" "hydra.lib.literals" "uint8ToBigint"
 
 -- Logic primitives
 
@@ -627,8 +627,8 @@ stringsCat2        = defineName "stringsCat2" "hydra.lib.strings" "cat2"
 stringsCharAt      = defineName "stringsCharAt" "hydra.lib.strings" "charAt"
 stringsFromList    = defineName "stringsFromList" "hydra.lib.strings" "fromList"
 stringsIntercalate = defineName "stringsIntercalate" "hydra.lib.strings" "intercalate"
-stringsNull        = defineName "stringsNull" "hydra.lib.strings" "null"
 stringsLength      = defineName "stringsLength" "hydra.lib.strings" "length"
+stringsNull        = defineName "stringsNull" "hydra.lib.strings" "null"
 stringsLines       = defineName "stringsLines" "hydra.lib.strings" "lines"
 stringsSplitOn     = defineName "stringsSplitOn" "hydra.lib.strings" "splitOn"
 stringsToList      = defineName "stringsToList" "hydra.lib.strings" "toList"
