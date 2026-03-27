@@ -4,16 +4,21 @@ This recipe explains how to export Hydra modules to JSON and verify the export i
 
 ## Background
 
-Hydra's kernel (types, modules, and test data) is defined in Haskell as the source of truth. To make this data available to other implementations (Python, Java, etc.) without embedding Haskell-specific code, the modules are exported to JSON format.
+Hydra's kernel (types, modules, and test data) is defined in Haskell as the source of truth.
+To make this data available to other implementations (Python, Java, etc.) without embedding Haskell-specific code,
+the modules are exported to JSON format.
 
 The JSON export provides a language-agnostic representation of:
 - All kernel modules (types, terms, dependencies)
 - Module metadata (namespace, descriptions)
 - Type definitions and term bindings with inferred types
 
-Type inference is performed on modules before export, so the JSON files contain type-annotated terms (see [issue #253](https://github.com/CategoricalData/hydra/issues/253)). This eliminates the need for downstream consumers to run inference themselves.
+Type inference is performed on modules before export,
+so the JSON files contain type-annotated terms (see [issue #253](https://github.com/CategoricalData/hydra/issues/253)).
+This eliminates the need for downstream consumers to run inference themselves.
 
-This supports [issue #243](https://github.com/CategoricalData/hydra/issues/243) - enabling introspection and testing in non-Haskell implementations.
+This supports [issue #243](https://github.com/CategoricalData/hydra/issues/243)
+- enabling introspection and testing in non-Haskell implementations.
 
 ## Generated Files
 
@@ -78,7 +83,8 @@ All scripts build the necessary executables automatically.
 
 ### Update JSON
 
-- **update-json-kernel**: Run after changes to kernel type definitions (`Hydra.Sources.*`), module structure, or term encodings
+- **update-json-kernel**: Run after changes to kernel type definitions (`Hydra.Sources.*`), module structure,
+  or term encodings
 - **update-json-main**: Run after changes to any main modules (kernel + encoders, decoders, JSON support, etc.)
 - **update-json-test**: Run after changes to test modules (`Hydra.Sources.Test.*`)
 
@@ -156,7 +162,8 @@ The verification process:
    - Decodes the Term to a Module structure
    - Compares with the original source module
 
-Type-directed decoding uses the schema map to resolve type references (`TypeVariable`) and handle wrapped types (`TypeWrap`).
+Type-directed decoding uses the schema map to resolve type references (`TypeVariable`)
+and handle wrapped types (`TypeWrap`).
 
 ## Troubleshooting
 
@@ -179,7 +186,8 @@ Check that the referenced type exists in `kernelModules`.
 
 ### "unknown wrapped type" errors
 
-Similar to type variable errors, but for newtype/wrapped types. Ensure the wrapped type's definition is included in the kernel modules.
+Similar to type variable errors, but for newtype/wrapped types.
+Ensure the wrapped type's definition is included in the kernel modules.
 
 ### "content mismatch" errors
 
@@ -194,7 +202,8 @@ Debug by:
 
 ### Verification is slow
 
-Verification builds the full module graph and schema, which takes time. This is expected for 100+ modules. The tool uses Aeson for fast JSON parsing to minimize overhead.
+Verification builds the full module graph and schema, which takes time. This is expected for 100+ modules.
+The tool uses Aeson for fast JSON parsing to minimize overhead.
 
 ## Architecture
 

@@ -39,7 +39,7 @@ file.
 | Java | `hydra-java/src/main/java/hydra/lib/Libraries.java` |
 | Python | `hydra-python/src/main/python/hydra/lib/libraries.py` |
 | Scala | `hydra-scala/src/main/scala/hydra/lib/Libraries.scala` |
-| Clojure | `hydra-lisp/hydra-clojure/src/main/clojure/hydra/lib/libraries.clj` |
+| Lisp (Clojure) | `hydra-lisp/hydra-clojure/src/main/clojure/hydra/lib/libraries.clj` |
 
 **Fix**: Add the primitive to the appropriate `*Primitives()` method (Java) or equivalent
 in the registration file. See [adding primitives](recipes/adding-primitives.md) for the

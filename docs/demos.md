@@ -21,18 +21,22 @@ transactions) and a **Health** domain (doctors, patients, appointments, prescrip
 An LLM-assisted workflow lets users generate schemas for new domains by feeding example CSV data
 and reference schemas into a structured prompt.
 
-There is a [demo video](https://drive.google.com/file/d/10HCElcG7n0tprOTdtX4bSa5yWYs08nV-/view?usp=sharing)
-walking through the LLM-assisted workflow.
+Demo videos:
+[Part 1](https://www.linkedin.com/posts/joshuashinavier_in-case-you-were-wondering-what-i-have-been-activity-7358601538463830017-U5YE) and
+[Part 2](https://www.linkedin.com/posts/joshuashinavier_here-is-part-2-of-the-hydra-property-graph-activity-7358601988755910657-HnCh)
+walk through the LLM-assisted workflow.
 
-See the [GenPG README](../../hydra-ext/demos/genpg/README.md) for setup, usage, and code generation instructions.
+See the [GenPG README](../hydra-ext/demos/genpg/README.md) for setup, usage, and code generation instructions.
 
 ## Bootstrapping (everything-to-everything code generation)
 
 The bootstrapping demo validates Hydra's self-hosting capability.
-All five complete implementations (Haskell, Java, Python, Scala, Clojure) independently load Hydra modules from a
-language-independent JSON representation and regenerate code for any target language.
-The default demo uses Haskell, Java, and Python as both hosts and targets, producing 9 bootstrapping paths.
-Scala and Clojure can also be included as hosts and targets.
+All five complete implementations (Haskell, Java, Python, Scala, and Lisp) independently load
+Hydra modules from a language-independent JSON representation and regenerate code for any
+target language.
+The default demo uses Haskell, Java, and Python as both hosts and targets,
+producing 9 bootstrapping paths.
+Scala and Lisp can also be included as hosts and targets.
 
 The pipeline works in four steps:
 
@@ -46,7 +50,7 @@ The pipeline works in four steps:
 The `bin/bootstrap-all.sh` script runs all paths and diffs the output against the canonical baselines
 in the repository, reporting pass/diff/fail per path.
 
-See the [Bootstrapping README](../../hydra-ext/demos/bootstrapping/README.md) for prerequisites,
+See the [Bootstrapping README](../hydra-ext/demos/bootstrapping/README.md) for prerequisites,
 usage, architecture details, and known limitations.
 
 ## ValidatePG (property graph validation)
@@ -60,7 +64,7 @@ as JSON via `hydra.encode.pg.model`) is consumed by drivers in Haskell, Java, an
 Each driver decodes the JSON, runs `hydra.pg.validation.validateGraph`, and prints the results.
 An orchestrator script runs all three, compares their output, and displays a timing summary.
 
-See the [ValidatePG README](../../hydra-ext/demos/validatepg/README.md) for setup and usage.
+See the [ValidatePG README](../hydra-ext/demos/validatepg/README.md) for setup and usage.
 
 ## SHACL (RDF data generation and validation)
 
@@ -78,7 +82,7 @@ are decoded back into `Module` terms and encoded as RDF data conforming to those
 The demo currently runs in Haskell. The SHACL coder and RDF serde are generated into Java and
 Python as well, so translingual support is feasible.
 
-See the [SHACL README](../../hydra-ext/demos/shacl/README.md) for setup and usage.
+See the [SHACL README](../hydra-ext/demos/shacl/README.md) for setup and usage.
 
 ## Avro to property graphs
 

@@ -1,20 +1,24 @@
 # Adding new primitives to Hydra
 
-A step-by-step guide for adding new primitive functions and constants to Hydra's standard library across all implementations.
+A step-by-step guide for adding new primitive functions and constants to Hydra's standard library
+across all implementations.
 
 ## Prerequisites
 
 - Familiarity with Hydra's type system (see [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts))
-- Understanding of the target language implementations (Haskell, Java, Python, Scala, Clojure)
+- Understanding of the target language implementations (Haskell, Java, Python, Scala, Lisp)
 - Knowledge of which library the primitive belongs to (e.g. `hydra.lib.strings`, `hydra.lib.math`)
 
-**Important:** Every new primitive must include test cases in the common test suite. Tests ensure consistent behavior across all language implementations and catch regressions. Adding a primitive without tests is incomplete work.
+**Important:** Every new primitive must include test cases in the common test suite.
+Tests ensure consistent behavior across all language implementations and catch regressions.
+Adding a primitive without tests is incomplete work.
 
 ## Overview
 
-Primitive functions are native implementations of operations which may not be expressible in Hydra's term language. They bridge Hydra to the host language's capabilities. Each primitive must be:
+Primitive functions are native implementations of operations which may not be expressible in Hydra's term language.
+They bridge Hydra to the host language's capabilities. Each primitive must be:
 
-1. Implemented natively in each language (Haskell, Java, Python, Scala, Clojure)
+1. Implemented natively in each language (Haskell, Java, Python, Scala, Lisp)
 2. Registered in each language's primitive registry
 3. Exposed through a typed DSL wrapper
 
@@ -28,7 +32,8 @@ they are based on functions from Haskell's Prelude and base package.
 Before adding a new primitive, check whether an appropriate function exists in Haskell already,
 and adopt its name and semantics if possible.
 This ensures consistency and leverages well-understood behavior.
-It also helps generate more error-free code, as typical large language models have been trained on large amounts of Haskell code.
+It also helps generate more error-free code,
+as typical large language models have been trained on large amounts of Haskell code.
 
 ### Naming conventions
 
@@ -37,15 +42,20 @@ Primitive functions should conform to the case convention of the implementation 
 - **Java**: PascalCase for class names (e.g. `IsAlphaNum`, `ToLower`)
 - **Python**: snake_case (e.g. `is_alpha_num`, `to_lower`)
 
-Note that every primitive has a native Hydra name which is always in camelCase (e.g. `hydra.lib.chars.isAlphaNum`), regardless of the implementation language's convention.
+Note that every primitive has a native Hydra name which is always in camelCase
+(e.g. `hydra.lib.chars.isAlphaNum`), regardless of the implementation language's convention.
 
 ### Implementation guidelines
 
-Keep primitive implementations simple - they should typically delegate to the host language's standard library functions. The implementation should be straightforward and readable, as it bridges Hydra's abstract operations to the concrete capabilities of each language.
+Keep primitive implementations simple -- they should typically delegate to the host language's standard library
+functions. The implementation should be straightforward and readable,
+as it bridges Hydra's abstract operations to the concrete capabilities of each language.
 
 ### Library DSLs
 
-Each primitive must be exposed through a typed DSL wrapper. In Haskell, these use phantom types to provide compile-time type safety when constructing Hydra terms. Python also requires DSL wrappers for type-safe term construction.
+Each primitive must be exposed through a typed DSL wrapper.
+In Haskell, these use phantom types to provide compile-time type safety when constructing Hydra terms.
+Python also requires DSL wrappers for type-safe term construction.
 
 ## Adding a primitive to Haskell
 
@@ -71,14 +81,16 @@ toLower = C.ord . C.toLower . C.chr
 
 ### 2. Add the name constant
 
-Add the name constant in `/hydra-haskell/src/main/haskell/Hydra/Staging/Lib/Names.hs`, in the appropriate section (alphabetically):
+Add the name constant in `/hydra-haskell/src/main/haskell/Hydra/Staging/Lib/Names.hs`,
+in the appropriate section (alphabetically):
 
 ```haskell
 _chars_isAlphaNum = qname _hydra_lib_chars "isAlphaNum" :: Name
 _chars_toLower    = qname _hydra_lib_chars "toLower" :: Name
 ```
 
-These name constants are imported and used throughout the codebase: in `Libraries.hs`, in DSL wrappers, and in test files.
+These name constants are imported and used throughout the codebase:
+in `Libraries.hs`, in DSL wrappers, and in test files.
 
 ### 3. Register the primitive
 
@@ -102,11 +114,17 @@ hydraLibChars = standardLibrary _hydra_lib_chars [
 
 ### Higher-order primitives and eval elements
 
-Higher-order primitives (functions that take other functions as arguments) may have associated "eval elements." These eval elements provide term-level implementations of the primitive — they construct unevaluated application terms rather than calling native code.
+Higher-order primitives (functions that take other functions as arguments) may have associated "eval elements."
+These eval elements provide term-level implementations of the primitive --
+they construct unevaluated application terms rather than calling native code.
 
 **Why do eval elements exist?**
 
-Eval elements are not required for the main interpreter, which can call all primitives natively. They exist to support *minimal Hydra implementations* (sometimes called "minimal heads") that may choose not to implement every primitive natively. A minimal head can fall back to an eval element to get correct behavior using only basic term reduction, without needing a native implementation of the primitive.
+Eval elements are not required for the main interpreter, which can call all primitives natively.
+They exist to support *minimal Hydra implementations* (sometimes called "minimal heads") that may choose
+not to implement every primitive natively.
+A minimal head can fall back to an eval element to get correct behavior using only basic term reduction,
+without needing a native implementation of the primitive.
 
 **When should you add an eval element?**
 - Any higher-order primitive (one that accepts function arguments, e.g., `map`, `filter`, `foldl`, `foldr`)
@@ -165,9 +183,13 @@ evalLibModules = [
   ]
 ```
 
-3. Generate the Haskell runtime code. The generated module goes in `/hydra-haskell/src/gen-main/haskell/Hydra/Eval/Lib/<Library>.hs`.
+3. Generate the Haskell runtime code.
+   The generated module goes in `/hydra-haskell/src/gen-main/haskell/Hydra/Eval/Lib/<Library>.hs`.
 
-   **Note:** The generated eval module is a bootstrap file. If you add a new eval element, you may need to manually add the function to the generated file initially, then regenerate. The export list in the generated file must include your new function for the `Libraries.hs` import to work.
+   **Note:** The generated eval module is a bootstrap file. If you add a new eval element,
+   you may need to manually add the function to the generated file initially, then regenerate.
+   The export list in the generated file must include your new function
+   for the `Libraries.hs` import to work.
 
 4. Update the primitive registration in `Libraries.hs` to use `prim3Eval` instead of `prim3`:
 
@@ -185,7 +207,12 @@ hydraLibEithers = standardLibrary _hydra_lib_eithers [
 - `prim3` uses the native Haskell implementation directly
 - `prim3Eval` uses the eval element, which returns unevaluated application terms
 
-**Important nuance:** Not all higher-order primitives use `primNEval`. Some higher-order primitives (e.g., `foldl`, `foldr`) are registered with `prim3` even though they have eval elements. The eval element exists as a fallback for minimal implementations, but the primitive registration itself uses the native implementation. Follow the pattern of similar existing primitives when deciding which to use.
+**Important nuance:** Not all higher-order primitives use `primNEval`.
+Some higher-order primitives (e.g., `foldl`, `foldr`) are registered with `prim3`
+even though they have eval elements.
+The eval element exists as a fallback for minimal implementations,
+but the primitive registration itself uses the native implementation.
+Follow the pattern of similar existing primitives when deciding which to use.
 
 ### 4. Create DSL wrapper
 
@@ -266,10 +293,15 @@ public class IsAlphaNum extends PrimitiveFunction {
 **Structure:**
 - `name()`: Returns the fully qualified Hydra name
 - `type()`: Declares the type scheme (use type parameters for polymorphic functions)
-- `implementation()`: Either-based wrapper that extracts arguments and wraps results, taking `Context` and `Graph` parameters
+- `implementation()`: Either-based wrapper that extracts arguments and wraps results,
+  taking `Context` and `Graph` parameters
 - `apply()`: Static method(s) for direct Java usage
 
-**Higher-order primitives in Java:** When the primitive takes function arguments, the `implementation()` method must use `Reduction.reduceTerm()` to evaluate function applications. The `apply()` method receives Java `Function` objects that can be called directly. See `hydra/lib/lists/Foldr.java` for an example that iterates in reverse and calls `reduceTerm` on each application.
+**Higher-order primitives in Java:** When the primitive takes function arguments,
+the `implementation()` method must use `Reduction.reduceTerm()` to evaluate function applications.
+The `apply()` method receives Java `Function` objects that can be called directly.
+See `hydra/lib/lists/Foldr.java` for an example that iterates in reverse
+and calls `reduceTerm` on each application.
 
 ### 2. Register in Libraries
 
@@ -367,7 +399,10 @@ primitives[qname(namespace, "map")] = prims.prim2_interp(
 )
 ```
 
-**Curried lambda wrapping:** For higher-order primitives registered with `prim2` or `prim3` (not `_interp`), the function argument arrives as a curried Hydra function but your Python implementation expects an uncurried function. Bridge the gap with a lambda wrapper:
+**Curried lambda wrapping:** For higher-order primitives registered with `prim2` or `prim3` (not `_interp`),
+the function argument arrives as a curried Hydra function
+but your Python implementation expects an uncurried function.
+Bridge the gap with a lambda wrapper:
 
 ```python
 # foldr :: (a -> b -> b) -> b -> [a] -> b
@@ -382,7 +417,8 @@ Note `f(el)(acc)` — each application is separate because Hydra functions are c
 
 ### 3. Create DSL wrapper
 
-DSL wrappers for Python are still being developed. The pattern and implementation details will be finalized as the Python DSL matures.
+DSL wrappers for Python are still being developed.
+The pattern and implementation details will be finalized as the Python DSL matures.
 
 ## Testing
 
@@ -407,7 +443,9 @@ pytest
 
 ### Common test suite
 
-**All primitives must have test cases in the common test suite.** This ensures consistent behavior across all language implementations and prevents regressions. Tests are defined in `/hydra-haskell/src/main/haskell/Hydra/Sources/Test/Lib/<Library>.hs`.
+**All primitives must have test cases in the common test suite.**
+This ensures consistent behavior across all language implementations and prevents regressions.
+Tests are defined in `/hydra-haskell/src/main/haskell/Hydra/Sources/Test/Lib/<Library>.hs`.
 
 **Adding test cases:**
 
@@ -442,7 +480,8 @@ stack exec update-generation-tests
 
 ### Final verification
 
-After running `sync-all.sh` (or the individual sync scripts), verify that your new tests actually executed in all implementations. Do not assume that a passing build means your tests ran -- confirm explicitly:
+After running `sync-all.sh` (or the individual sync scripts), verify that your new tests actually executed
+in all implementations. Do not assume that a passing build means your tests ran -- confirm explicitly:
 
 ```bash
 # Haskell: check that your test group appears in the output
@@ -457,7 +496,8 @@ cd hydra-python
 pytest -v 2>&1 | grep -i '<your_primitive_name>'
 ```
 
-If your test cases do not appear in the output of any implementation, the tests were not properly registered or regenerated. Go back and check:
+If your test cases do not appear in the output of any implementation,
+the tests were not properly registered or regenerated. Go back and check:
 - The test group is listed in `allTests` in the Haskell test source
 - Kernel and generation tests were regenerated (`stack exec update-kernel-tests && stack exec update-generation-tests`)
 - Java and Python test artifacts were regenerated via sync scripts
@@ -496,7 +536,8 @@ When adding a new primitive function:
 
 ## Common pitfalls
 
-1. **Mismatched names**: Ensure the primitive's Hydra name (always camelCase) is exactly the same across all implementations, even though the implementation follows each language's naming convention
+1. **Mismatched names**: Ensure the primitive's Hydra name (always camelCase) is exactly the same
+   across all implementations, even though the implementation follows each language's naming convention
 
 2. **Type mismatches**: The type signature must be identical across languages
    - Use Hydra's type constructors consistently
@@ -506,11 +547,20 @@ When adding a new primitive function:
 
 4. **Registry order**: List primitives in alphabetical order for consistency
 
-5. **Forgetting test group registration**: After adding test cases to a subgroup (e.g., `listsFind`), remember to also add it to the `allTests` list in the same file. Both steps are required for tests to run.
+5. **Forgetting test group registration**: After adding test cases to a subgroup (e.g., `listsFind`),
+   remember to also add it to the `allTests` list in the same file.
+   Both steps are required for tests to run.
 
-6. **Type variable ordering**: When registering polymorphic primitives, the order of type variables in the `[_x, _y]` list must match the order they appear in the type signature. For example, `foldr :: (a -> b -> b) -> b -> [a] -> b` uses `[_x, _y]` where `x` corresponds to `a` (element type) and `y` to `b` (accumulator type). Compare with `foldl :: (b -> a -> b) -> b -> [a] -> b` which uses `[_y, _x]` because the accumulator type appears first.
+6. **Type variable ordering**: When registering polymorphic primitives,
+   the order of type variables in the `[_x, _y]` list must match the order they appear in the type signature.
+   For example, `foldr :: (a -> b -> b) -> b -> [a] -> b` uses `[_x, _y]`
+   where `x` corresponds to `a` (element type) and `y` to `b` (accumulator type).
+   Compare with `foldl :: (b -> a -> b) -> b -> [a] -> b` which uses `[_y, _x]`
+   because the accumulator type appears first.
 
-7. **Python curried vs uncurried**: Python's native functions are uncurried, but Hydra dispatches arguments in curried form. For higher-order primitives, wrap the function argument: `lambda f, init, xs: impl(lambda a, b: f(a)(b), init, xs)`.
+7. **Python curried vs uncurried**: Python's native functions are uncurried,
+   but Hydra dispatches arguments in curried form. For higher-order primitives,
+   wrap the function argument: `lambda f, init, xs: impl(lambda a, b: f(a)(b), init, xs)`.
 
 ## Example: Adding a complete primitive
 

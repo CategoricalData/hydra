@@ -2,7 +2,7 @@
 
 This demo demonstrates Hydra's self-hosting capability by regenerating all
 generated code from a language-independent JSON representation. Each of Hydra's
-five complete implementations (Haskell, Java, Python, Clojure, Scala) can independently load
+five complete implementations (Haskell, Java, Python, Scala, and Lisp) can independently load
 Hydra modules from JSON and generate code for any target language, producing a
 matrix of bootstrapping paths — all of which produce functionally equivalent
 output that passes the common test suite.
@@ -19,7 +19,7 @@ Each bootstrapping path proceeds as follows:
 4. Build and test the generated project
 
 By default, the demo runs the 3x3 matrix of Haskell, Java, and Python as both hosts
-and targets. Scala and Clojure can be included with `--hosts` and `--targets` flags.
+and targets. Scala and Lisp can be included with `--hosts` and `--targets` flags.
 All output goes to `/tmp/hydra-bootstrapping-demo/` (override with `--output`):
 
 ```

@@ -8,12 +8,18 @@ a property graph. Two output formats are supported:
 
 Both output paths are translingual: they run in Haskell, Java, and Python.
 
-There is a demo video [here](https://drive.google.com/file/d/10HCElcG7n0tprOTdtX4bSa5yWYs08nV-/view?usp=sharing).
+Demo videos:
+- [Part 1: Introducing Hydra](https://www.linkedin.com/posts/joshuashinavier_in-case-you-were-wondering-what-i-have-been-activity-7358601538463830017-U5YE)
+  (10 min, August 2025)
+- [Part 2: Property graph generation](https://www.linkedin.com/posts/joshuashinavier_here-is-part-2-of-the-hydra-property-graph-activity-7358601988755910657-HnCh)
+  (10 min, August 2025)
+- [Full walkthrough](https://drive.google.com/file/d/10HCElcG7n0tprOTdtX4bSa5yWYs08nV-/view?usp=sharing) (Google Drive)
 
 ## Overview
 
 The GenPG demo:
-1. Defines database schemas (table structures), graph schemas (vertex/edge types), mappings from tables to graph elements in a Haskell-based DSL
+1. Defines database schemas (table structures), graph schemas (vertex/edge types),
+   mappings from tables to graph elements in a Haskell-based DSL
 2. Generates executable Haskell and Python code from these definitions
 3. Executes the transformation pipeline in either Haskell or Python
 
@@ -95,7 +101,8 @@ generateHealthGraphSON   -- processes health data
 
 ### Python mode
 
-Python 3.10+ is required (for `match` statement support). Set up a virtual environment from the `hydra-python` directory:
+Python 3.10+ is required (for `match` statement support).
+Set up a virtual environment from the `hydra-python` directory:
 
 ```bash
 cd hydra-python
@@ -146,8 +153,10 @@ demos/genpg/bin/run.sh sales
 ## RDF/SHACL output
 
 The RDF output path converts the same property graph to:
-- **SHACL shapes** (`*-shapes.nt`) derived from the graph schema, with property constraints (datatypes, cardinality) and edge constraints (target vertex classes)
-- **RDF instance data** (`*-data.nt`) encoding vertices as typed resources with property triples, and edges as relationship triples
+- **SHACL shapes** (`*-shapes.nt`) derived from the graph schema,
+  with property constraints (datatypes, cardinality) and edge constraints (target vertex classes)
+- **RDF instance data** (`*-data.nt`) encoding vertices as typed resources with property triples,
+  and edges as relationship triples
 - **Invalid test data** (`*-invalid.nt`) with intentional violations for negative validation
 
 ### Running the RDF demo
@@ -205,7 +214,8 @@ property triples with XSD-typed literals. Edges become direct triples from sourc
 
 ## LLM-assisted schema generation
 
-This demo also provides an example of a hands-off graph generation workflow using an LLM for schema and transform design.
+This demo also provides an example of a hands-off graph generation workflow
+using an LLM for schema and transform design.
 See the demo video linked above to understand how the demo works.
 
 To run it yourself, you will need a small tabular dataset which illustrates the structure of your data.
@@ -242,7 +252,8 @@ stack ghci
 
 You will need to have installed [Haskell Tool Stack](https://docs.haskellstack.org/en/stable) first.
 Once in the REPL, there are two built-in demo routines you can use,
-both of which run a Hydra transform to generate graph data in [GraphSON](https://github.com/apache/tinkerpop/blob/master/docs/src/dev/io/graphson.asciidoc):
+both of which run a Hydra transform to generate graph data in
+[GraphSON](https://github.com/apache/tinkerpop/blob/master/docs/src/dev/io/graphson.asciidoc):
 
 ```haskell
 generateSalesGraphSON    -- generates graph from the built-in sales dataset

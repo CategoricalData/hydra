@@ -4,7 +4,9 @@ This guide explains how to keep Hydra-Python synchronized with the source of tru
 
 ## Overview
 
-Hydra-Haskell is the bootstrapping implementation and source of truth for Hydra. When you make changes to the Hydra kernel, test suite, or eval lib in Hydra-Haskell, you need to regenerate the corresponding Python artifacts.
+Hydra-Haskell is the bootstrapping implementation and source of truth for Hydra.
+When you make changes to the Hydra kernel, test suite, or eval lib in Hydra-Haskell,
+you need to regenerate the corresponding Python artifacts.
 
 The synchronization process generates four categories of Python code:
 
@@ -72,7 +74,8 @@ stack build hydra-ext:exe:bootstrap-from-json
 
 ### Step 2: Generate all Python artifacts
 
-The `bootstrap-from-json` executable generates kernel modules, eval lib, coder modules, kernel tests, and generation tests in a single invocation:
+The `bootstrap-from-json` executable generates kernel modules, eval lib, coder modules, kernel tests,
+and generation tests in a single invocation:
 
 ```bash
 stack exec bootstrap-from-json -- --target python --include-coders --include-tests --include-gentests +RTS -K256M -A32M -RTS
@@ -126,11 +129,13 @@ If you encounter stack overflow, increase these values.
 
 ### "Unknown variable: x" errors
 
-This usually means a lambda variable wasn't properly tracked. Check that `Coder.hs` handles both typed and untyped lambda variables.
+This usually means a lambda variable wasn't properly tracked.
+Check that `Coder.hs` handles both typed and untyped lambda variables.
 
 ### Generation stops on first failure
 
-By default, the generator continues past module failures. Check the output for "Skipping" messages to identify problematic modules.
+By default, the generator continues past module failures.
+Check the output for "Skipping" messages to identify problematic modules.
 
 ### Test failures after sync
 

@@ -2,7 +2,7 @@
 
 This guide explains Hydra's domain-specific language (DSL) utilities for constructing types and terms in Python.
 
-**Note**: Hydra provides DSLs in all four implementation languages (Haskell, Java, Python, and Clojure).
+**Note**: Hydra provides DSLs in all five implementation languages (Haskell, Java, Python, Scala, and Lisp).
 This guide focuses on the Python DSLs.
 For the comprehensive Haskell DSL guide (including kernel development context), see [DSL Guide (Haskell)](dsl-guide.md).
 For the Java DSLs, see [DSL Guide (Java)](dsl-guide-java.md).
@@ -12,7 +12,8 @@ For the Java DSLs, see [DSL Guide (Java)](dsl-guide-java.md).
 **Before using the DSL utilities**, you should:
 - Understand Hydra's core concepts: [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts)
 - Know basic Python syntax
-- Have set up Hydra-Python locally (see [Hydra-Python README](https://github.com/CategoricalData/hydra/tree/main/hydra-python))
+- Have set up Hydra-Python locally
+  (see [Hydra-Python README](https://github.com/CategoricalData/hydra/tree/main/hydra-python))
 - Python 3.12+ required (for `match` statement support in generated code)
 
 ## Table of Contents
@@ -717,7 +718,8 @@ TERM__VARIABLE__NAME = Name("variable")
 
 ## Error handling
 
-Hydra computations use `Either[InContext[OtherError], A]` for error handling, where `InContext` carries execution state such as a trace stack, messages, and metadata via a `Context` object.
+Hydra computations use `Either[InContext[OtherError], A]` for error handling.
+`InContext` carries execution state such as a trace stack, messages, and metadata via a `Context` object.
 
 ```python
 from hydra.util import Either

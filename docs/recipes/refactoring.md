@@ -1,6 +1,7 @@
 # Refactoring the Hydra Kernel
 
-This recipe documents how to create, rename, move, or delete kernel elements (definitions) and modules (namespaces), and propagate the changes across all implementations.
+This recipe documents how to create, rename, move, or delete kernel elements (definitions) and modules (namespaces),
+and propagate the changes across all implementations.
 
 ## Overview
 
@@ -114,7 +115,8 @@ kernelPrimaryTermsModules = [
 
 ### Step 4: Build and Regenerate
 
-The simplest approach is to run `bin/sync-all.sh` from the repo root, which handles all regeneration steps in the correct order. For incremental work, you can run the steps individually:
+The simplest approach is to run `bin/sync-all.sh` from the repo root,
+which handles all regeneration steps in the correct order. For incremental work, you can run the steps individually:
 
 ```bash
 cd hydra-haskell
@@ -300,7 +302,9 @@ grep -rn 'hydra.mymodule.myOldName' src/
 
 ## Moving or Renaming Modules
 
-> **Note**: This section provides an overview of namespace refactoring. For a comprehensive, step-by-step guide with detailed examples (especially for decoder/encoder modules and multi-repository coordination), see [Refactoring Hydra Namespaces](refactoring-namespaces.md).
+> **Note**: This section provides an overview of namespace refactoring.
+> For a comprehensive, step-by-step guide with detailed examples (especially for decoder/encoder modules and
+> multi-repository coordination), see [Refactoring Hydra Namespaces](refactoring-namespaces.md).
 
 This is the most complex refactoring operation. A Hydra namespace like `hydra.foo` corresponds to:
 - A Haskell source module (e.g., `Hydra/Sources/Kernel/Terms/Foo.hs`)
@@ -418,7 +422,8 @@ rm -f ../hydra-python/src/gen-main/python/hydra/foo.py
 
 ## Consolidating or Replacing Types
 
-When a refactoring eliminates types or merges multiple types into one, the scope goes beyond renaming — you need to rewrite every consumer of the old types to use the new one, often with different field names and semantics.
+When a refactoring eliminates types or merges multiple types into one, the scope goes beyond renaming —
+you need to rewrite every consumer of the old types to use the new one, often with different field names and semantics.
 
 ### When You Might Need This
 
@@ -428,9 +433,13 @@ When a refactoring eliminates types or merges multiple types into one, the scope
 
 ### General Approach
 
-1. **Introduce the new type alongside the old one**. If the new type doesn't exist yet, add it to the type definition source. If replacing type A with existing type B, this step is already done.
+1. **Introduce the new type alongside the old one**.
+   If the new type doesn't exist yet, add it to the type definition source.
+   If replacing type A with existing type B, this step is already done.
 
-2. **Add a transitional bridge** (optional but recommended for large changes). Add a field or helper function that converts between old and new representations. This lets you migrate consumers incrementally rather than all at once.
+2. **Add a transitional bridge** (optional but recommended for large changes).
+   Add a field or helper function that converts between old and new representations.
+   This lets you migrate consumers incrementally rather than all at once.
 
 3. **Migrate consumers module by module**. Update each Source file that references the old type:
    - Change function signatures to use the new type
@@ -439,7 +448,8 @@ When a refactoring eliminates types or merges multiple types into one, the scope
 
 4. **Update DSL helpers** in `Dsl/Meta/`. Delete old constructors and accessors, add new ones or rename as appropriate.
 
-5. **Delete the old type** once no consumers remain. Remove it from the type definition source and the module's element list.
+5. **Delete the old type** once no consumers remain.
+   Remove it from the type definition source and the module's element list.
 
 6. **Remove the transitional bridge** if one was used.
 
@@ -449,10 +459,13 @@ When a refactoring eliminates types or merges multiple types into one, the scope
 
 Type consolidation affects not only Sources and gen-main, but also hand-written code that references the old types:
 
-- **Test infrastructure**: Test runners in Java (`TestSuiteRunner.java`), Python, and Haskell (`TestUtils.hs`, `TestSuiteSpec.hs`) construct kernel types directly. These need manual updates to use new constructors and field names.
+- **Test infrastructure**: Test runners in Java (`TestSuiteRunner.java`), Python, and Haskell (`TestUtils.hs`,
+  `TestSuiteSpec.hs`) construct kernel types directly.
+  These need manual updates to use new constructors and field names.
 - **Executables**: `verify-json-kernel/Main.hs` and `Generation.hs` use kernel types directly.
 - **DSL bootstrap**: `Dsl/Bootstrap.hs` constructs initial graphs using Haskell record syntax on kernel types.
-- **hydra-ext coders**: Language coders in `hydra-ext` (Java, Python, Haskell coders) reference kernel types in their state management.
+- **hydra-ext coders**: Language coders in `hydra-ext` (Java, Python,
+  Haskell coders) reference kernel types in their state management.
 
 Search broadly for the old type name:
 ```bash
@@ -462,11 +475,19 @@ grep -rn 'OldTypeName' hydra-haskell/ hydra-java/ hydra-python/ hydra-ext/
 
 ### Pitfalls Specific to Type Consolidation
 
-- **Silent semantic mismatches**: When a field changes meaning (not just name), consumers may compile but produce wrong results. For example, if a field changes from `Type` to `TypeScheme`, code that previously stored a bare type must now properly extract/wrap forall binders. Tests are essential for catching these.
+- **Silent semantic mismatches**: When a field changes meaning (not just name),
+  consumers may compile but produce wrong results.
+  For example, if a field changes from `Type` to `TypeScheme`,
+  code that previously stored a bare type must now properly extract/wrap forall binders.
+  Tests are essential for catching these.
 
-- **Types threaded through computations**: If the old type was passed as a `Context` or `Graph` parameter through computations, every call site must be updated. These are easy to miss because the compiler may not flag them if the new type happens to unify.
+- **Types threaded through computations**: If the old type was passed as a `Context` or `Graph` parameter through
+  computations, every call site must be updated.
+  These are easy to miss because the compiler may not flag them if the new type happens to unify.
 
-- **Multiple types with similar roles**: When consolidating types like `TypeContext`, `InferenceContext`, and `Graph` into a single `Graph`, different consumers may have used different subsets of the old types' fields. Map each consumer's actual field usage to the new type's fields rather than doing a mechanical rename.
+- **Multiple types with similar roles**: When consolidating types like `TypeContext`, `InferenceContext`,
+  and `Graph` into a single `Graph`, different consumers may have used different subsets of the old types' fields.
+  Map each consumer's actual field usage to the new type's fields rather than doing a mechanical rename.
 
 ---
 
@@ -481,7 +502,8 @@ Generated Haskell code depends on modules that need to be generated. Solution:
 **Adding a field to a kernel type** (e.g., adding `transitionalGraf` to `Graph`):
 1. Add the field to the type definition in Sources (e.g., `Sources/Kernel/Types/Graph.hs`)
 2. Regenerate just the types module into gen-main (e.g., via `writeHaskell` in ghci)
-3. Manually patch **all** record construction sites in gen-main to supply the new field — search for `TypeName {` across gen-main
+3. Manually patch **all** record construction sites in gen-main to supply the new field —
+   search for `TypeName {` across gen-main
 4. If the new field's type needs a default value (like `emptyGraf`), add that helper manually to the generated file
 5. Update the DSL helpers (e.g., `Dsl/Meta/Graph.hs`) — constructor, accessors, and all `with*` helpers
 6. Update all Source-level constructor calls to supply the new field
@@ -489,38 +511,54 @@ Generated Haskell code depends on modules that need to be generated. Solution:
 8. Regenerate cleanly — the generated files will now replace your manual patches
 9. `stack build` again and run tests to confirm
 
-The key insight: gen-main patches in step 3 are temporary scaffolding. They only need to be correct enough for the build to succeed so that regeneration can produce the real versions.
+The key insight: gen-main patches in step 3 are temporary scaffolding.
+They only need to be correct enough for the build to succeed so that regeneration can produce the real versions.
 
 ### Silent State Pipeline Bugs
-When refactoring types that are threaded through computations (e.g., as `Context` or `Graph` parameters), a function may compile but produce wrong results because a field is empty or has the wrong representation. For example:
-- A graph passed through computations might have an empty `schemaTypes` map, causing type alias lookups to silently fail and generate wrapper classes instead of transparent aliases.
-- A function that previously read schema types from a nested `Maybe Graph` field might now need to read from a flat `Map Name TypeScheme` field -- the code compiles either way, but one path returns nothing.
+When refactoring types that are threaded through computations (e.g., as `Context` or `Graph` parameters),
+a function may compile but produce wrong results because a field is empty or has the wrong representation. For example:
+- A graph passed through computations might have an empty `schemaTypes` map,
+  causing type alias lookups to silently fail and generate wrapper classes instead of transparent aliases.
+- A function that previously read schema types from a nested `Maybe Graph` field might now need to read from a flat
+  `Map Name TypeScheme` field -- the code compiles either way, but one path returns nothing.
 
-These bugs don't cause compilation errors or even runtime exceptions — they produce subtly wrong output. The defense is to run the full test suite after every regeneration and investigate any new failures carefully, even if they seem unrelated to the change.
+These bugs don't cause compilation errors or even runtime exceptions — they produce subtly wrong output.
+The defense is to run the full test suite after every regeneration and investigate any new failures carefully,
+even if they seem unrelated to the change.
 
 ### Orphan Files
-When modules or elements are moved, renamed, or deleted, stale generated files may be left behind. The sync scripts generate new files but do not delete old ones.
+When modules or elements are moved, renamed, or deleted, stale generated files may be left behind.
+The sync scripts generate new files but do not delete old ones.
 
-**Haskell**: One `.hs` file per module. If you rename module `hydra.foo` to `hydra.foo.bar`, delete the old `src/gen-main/haskell/Hydra/Foo.hs`.
+**Haskell**: One `.hs` file per module. If you rename module `hydra.foo` to `hydra.foo.bar`,
+delete the old `src/gen-main/haskell/Hydra/Foo.hs`.
 
-**Python**: One `.py` file (or `__init__.py` in a package directory) per module. If you rename or delete a module, delete the old `.py` file or package directory.
+**Python**: One `.py` file (or `__init__.py` in a package directory) per module.
+If you rename or delete a module, delete the old `.py` file or package directory.
 
-**Java**: Java generates **one file per type** in addition to one file per module. For example, a module `hydra.foo` containing types `Bar` and `Baz` generates:
+**Java**: Java generates **one file per type** in addition to one file per module.
+For example, a module `hydra.foo` containing types `Bar` and `Baz` generates:
 - `hydra-java/src/gen-main/java/hydra/foo/Bar.java`
 - `hydra-java/src/gen-main/java/hydra/foo/Baz.java`
 - (plus files for any term-level definitions)
 
-When deleting or moving a module, you must delete the entire directory (e.g., `rm -rf hydra-java/src/gen-main/java/hydra/foo/`). When removing individual types or elements from a module, delete the corresponding `.java` files. Stale Java files will still compile and be on the classpath, potentially causing conflicts or confusion.
+When deleting or moving a module, you must delete the entire directory (e.g.,
+`rm -rf hydra-java/src/gen-main/java/hydra/foo/`).
+When removing individual types or elements from a module, delete the corresponding `.java` files.
+Stale Java files will still compile and be on the classpath, potentially causing conflicts or confusion.
 
-**JSON**: One `.json` file per module in `src/gen-main/json/`. Delete stale `.json` files when modules are renamed or removed.
+**JSON**: One `.json` file per module in `src/gen-main/json/`.
+Delete stale `.json` files when modules are renamed or removed.
 
 Additional cases where orphan files appear:
 - After moving `Foo.hs` to `Foo/Bar.hs`, delete the old `Foo.hs`
 - After regenerating Python, delete old `.py` files that are now packages
-- After a type change causes a previously-generated class to no longer be generated (e.g., a type alias that was incorrectly generating a wrapper class), the stale file remains and must be deleted manually
+- After a type change causes a previously-generated class to no longer be generated (e.g.,
+  a type alias that was incorrectly generating a wrapper class), the stale file remains and must be deleted manually
 
 ### Python Module/Package Conflicts
-Python can't have both `foo.py` and `foo/` directory. Use a structure like `hydra/foo/bar.py` instead of `hydra/foo.py` alongside `hydra/foo/baz.py`.
+Python can't have both `foo.py` and `foo/` directory.
+Use a structure like `hydra/foo/bar.py` instead of `hydra/foo.py` alongside `hydra/foo/baz.py`.
 
 ### Decoder/Encoder Module Paths
 When renaming `hydra.foo` to `hydra.foo.bar`, the decoder/encoder modules also move:
@@ -531,7 +569,9 @@ When renaming `hydra.foo` to `hydra.foo.bar`, the decoder/encoder modules also m
 
 ## The Sync Pipeline
 
-After making changes to Sources and rebuilding Haskell, regeneration must propagate through several stages. The `bin/sync-all.sh` script runs all of these in the correct order (use `--quick` to skip tests at each stage). However, it's useful to understand the individual stages, especially when debugging failures.
+After making changes to Sources and rebuilding Haskell, regeneration must propagate through several stages.
+The `bin/sync-all.sh` script runs all of these in the correct order (use `--quick` to skip tests at each stage).
+However, it's useful to understand the individual stages, especially when debugging failures.
 
 ### Pipeline Order
 
@@ -561,7 +601,9 @@ Phase 4: sync-python.sh (Python from JSON)
 
 ### Key Principle
 
-Fix errors at the earliest stage before moving to the next. A Haskell compilation error in hydra-ext will cascade into meaningless sync-java failures. Similarly, if Haskell tests fail, investigate before regenerating Java/Python — the generated code may be wrong.
+Fix errors at the earliest stage before moving to the next.
+A Haskell compilation error in hydra-ext will cascade into meaningless sync-java failures.
+Similarly, if Haskell tests fail, investigate before regenerating Java/Python — the generated code may be wrong.
 
 ---
 
@@ -587,7 +629,9 @@ This section documents the creation of `hydra.hoisting` by extracting hoisting f
 
 ### Context
 
-The `hydra.reduction` module contained hoisting functions (`hoistSubterms`, `hoistCaseStatements`, etc.) that conceptually belong in a dedicated module focused on term hoisting. We created `hydra.hoisting` to separate these concerns.
+The `hydra.reduction` module contained hoisting functions (`hoistSubterms`, `hoistCaseStatements`,
+etc.) that conceptually belong in a dedicated module focused on term hoisting.
+We created `hydra.hoisting` to separate these concerns.
 
 ### Steps Performed
 
@@ -669,11 +713,15 @@ The `hydra.reduction` module contained hoisting functions (`hoistSubterms`, `hoi
 
 ## Example: Changing Graph.elements from Map to List
 
-This section documents a deep type change to the Hydra kernel: changing `Graph.elements` from `map<Name, Binding>` to `list<Binding>` to preserve element order in graphs.
+This section documents a deep type change to the Hydra kernel: changing `Graph.elements` from `map<Name,
+Binding>` to `list<Binding>` to preserve element order in graphs.
 
 ### Context
 
-The `Graph` type had an `elements` field of type `Map<Name, Binding>`. This caused element order to be non-deterministic (sorted by Name), which was undesirable when element ordering matters (e.g., for code generation output stability). The change preserves insertion order by using a list instead.
+The `Graph` type had an `elements` field of type `Map<Name, Binding>`.
+This caused element order to be non-deterministic (sorted by Name),
+which was undesirable when element ordering matters (e.g., for code generation output stability).
+The change preserves insertion order by using a list instead.
 
 ### The Bootstrap Challenge
 
@@ -689,7 +737,8 @@ The solution is to update files in the correct order:
 
 ### Adding a New Primitive
 
-When changing from `Map.lookup` to a list-based lookup, we needed a `Lists.find` primitive that didn't exist. Adding a primitive requires updates to **six files**:
+When changing from `Map.lookup` to a list-based lookup, we needed a `Lists.find` primitive that didn't exist.
+Adding a primitive requires updates to **six files**:
 
 1. **`Hydra.Lib.Lists`** - The actual Haskell implementation:
    ```haskell
@@ -820,16 +869,21 @@ Lists.find ("b" ~> (Core.bindingName (var "b")) `eq` (var "name")) elements
 
 ### Key Lessons
 
-1. **Update gen-main first**: When changing fundamental types, update generated files first so the project compiles, then update source files.
+1. **Update gen-main first**: When changing fundamental types, update generated files first so the project compiles,
+   then update source files.
 
 2. **Adding primitives is multi-file**: Plan for updating 6 files when adding a new primitive function.
 
-3. **Watch for transitive dependencies**: A type change in `Graph` propagates through many modules that use `graphElements`.
+3. **Watch for transitive dependencies**: A type change in `Graph` propagates through many modules that use
+   `graphElements`.
 
 4. **DSL has its own syntax**: The Hydra DSL uses `Equality.equal` and similar functions, not Haskell infix operators.
 
-5. **Return types matter**: Functions like `typesToElements` that return the changed type need signature updates in both source and generated files.
+5. **Return types matter**: Functions like `typesToElements` that return the changed type need signature updates in
+   both source and generated files.
 
-6. **Test incrementally**: Build after each major file change to catch errors early rather than facing many errors at once.
+6. **Test incrementally**: Build after each major file change to catch errors early rather than facing many errors at
+   once.
 
-7. **Pre-existing bugs may surface**: Regeneration may reveal pre-existing issues (e.g., missing type constraints). Be prepared to restore files from git if regeneration introduces unrelated problems.
+7. **Pre-existing bugs may surface**: Regeneration may reveal pre-existing issues (e.g., missing type constraints).
+   Be prepared to restore files from git if regeneration introduces unrelated problems.

@@ -5,7 +5,8 @@ A guide to generating source code in target languages from Hydra module definiti
 ## Prerequisites
 
 - Familiarity with Hydra's module system (see [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts))
-- A working build environment for at least one host language (see [build instructions](../../CLAUDE.md#build-and-test-commands))
+- A working build environment for at least one host language (see [build
+  instructions](../../CLAUDE.md#build-and-test-commands))
 
 ## Overview
 

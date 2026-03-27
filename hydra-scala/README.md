@@ -80,6 +80,7 @@ hydra-scala/
 
 Hydra is an open-source project and welcomes contributors. Resources:
 
-- **[Creating a new Hydra implementation](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/new-implementation.md)** — step-by-step guide
+- **[Creating a new Hydra implementation](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/new-implementation.md)** —
+  step-by-step guide
 - **[LambdaGraph Discord](https://bit.ly/lg-discord)** — community discussion
 - **[Main README](https://github.com/CategoricalData/hydra)** — project overview

@@ -1,7 +1,8 @@
 # Hydra Emacs Lisp
 
-Experimental Hydra implementation for Emacs Lisp, generated from the Hydra
-kernel via the Lisp coder.
+Hydra implementation for Emacs Lisp, generated from the Hydra kernel via the Lisp coder.
+This is one of four Lisp dialects supported by
+[Hydra-Lisp](https://github.com/CategoricalData/hydra/tree/main/hydra-lisp).
 
 ## Quick start
 

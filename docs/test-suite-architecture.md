@@ -1,10 +1,14 @@
 # Hydra Test Suite Architecture
 
-This document explains the architecture of Hydra's common test suite, including the test kernel pattern and how test modules are structured for code generation.
+This document explains the architecture of Hydra's common test suite,
+including the test kernel pattern and how test modules are structured for code generation.
 
 ## Overview
 
-Hydra's test suite is designed to ensure parity across all Hydra language implementations (Haskell, Java, Python, Clojure). The test suite uses the same module-based code generation approach as the main Hydra kernel, allowing tests to be written once in Haskell and automatically translated to other languages.
+Hydra's test suite is designed to ensure parity across all Hydra language implementations
+(Haskell, Java, Python, Scala, and Lisp).
+The test suite uses the same module-based code generation approach as the main Hydra kernel,
+allowing tests to be written once in Haskell and automatically translated to other languages.
 
 ## Key Concepts
 
@@ -17,7 +21,8 @@ The **test kernel** or **test graph** (`Hydra/Sources/Test/TestGraph.hs`) define
 - **Test Namespace** - The namespace for test resources
 - **Test Schema Namespace** - The namespace for test schemas
 
-The test kernel provides a centralized repository of test resources that can be referenced from any test module using `ref`. This ensures consistency and eliminates duplication across test cases.
+The test kernel provides a centralized repository of test resources that can be referenced from any test module
+using `ref`. This ensures consistency and eliminates duplication across test cases.
 
 **Example from TestGraph.hs:**
 ```haskell
@@ -51,7 +56,9 @@ Tests are organized as proper Hydra modules with:
 3. **Module Dependencies** - References to other test modules
 4. **Schema Dependencies** - Type schemas needed for test construction
 
-When you run `writeHaskell "src/gen-test/haskell" allModules baseTestModules` (where `allModules = mainModules ++ testModules`), each module generates a separate file based on its namespace:
+When you run `writeHaskell "src/gen-test/haskell" allModules baseTestModules`
+(where `allModules = mainModules ++ testModules`),
+each module generates a separate file based on its namespace:
 - `hydra.test.checking.fundamentals` → `Hydra/Test/Checking/Fundamentals.hs`
 - `hydra.test.inference.algebraicTypes` → `Hydra/Test/Inference/AlgebraicTypes.hs`
 - `hydra.test.etaExpansion` → `Hydra/Test/EtaExpansion.hs`
@@ -209,7 +216,8 @@ Testing.testGroup (Phantoms.string "name") ...  -- TTerm TestGroup
 
 ### Converting Between Levels
 
-For tests that construct `Term` values (like eta expansion tests), use the `TTerm` constructor to lift terms to the meta-level:
+For tests that construct `Term` values (like eta expansion tests),
+use the `TTerm` constructor to lift terms to the meta-level:
 
 ```haskell
 -- Helper to convert Term to TTerm Term
@@ -491,5 +499,6 @@ To add a new test module:
 ## See Also
 
 - [Testing Wiki](https://github.com/CategoricalData/hydra/wiki/Testing) - Overview of Hydra's testing approach
-- [Implementation Wiki](https://github.com/CategoricalData/hydra/blob/main/docs/implementation.md) - Details on the DSL system
+- [Implementation Wiki](https://github.com/CategoricalData/hydra/blob/main/docs/implementation.md) -
+  Details on the DSL system
 - [Test Suite Source](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources/Test)
