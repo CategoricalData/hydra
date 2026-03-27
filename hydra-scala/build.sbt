@@ -13,6 +13,10 @@ lazy val root = project
     // Test sources include generated tests
     Test / unmanagedSourceDirectories += baseDirectory.value / "src" / "gen-test" / "scala",
 
+    // Exclude generation tests (Scala coder output tests) which require Array[Byte] binary support
+    Test / unmanagedSources / excludeFilter := HiddenFileFilter || new SimpleFileFilter(
+      _.getAbsolutePath.contains("/generation/")),
+
     // Lib dependencies
     libraryDependencies += "org.apache.commons" % "commons-text" % "1.12.0",
 

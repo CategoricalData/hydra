@@ -88,7 +88,7 @@ jobs:
             ~/.cache/coursier
           key: sbt-${{ hashFiles('hydra-scala/build.sbt', 'hydra-scala/project/build.properties') }}
           restore-keys: sbt-
-      - run: sbt 'set Test / unmanagedSources / excludeFilter := HiddenFileFilter || new SimpleFileFilter(_.getAbsolutePath.contains("/generation/"))' test
+      - run: sbt test
         working-directory: hydra-scala
 
   common-lisp:
