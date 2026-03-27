@@ -2208,7 +2208,62 @@
                                                     "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
                                             "function": {"variable": "hydra.serialization.cst"}}},
                                         "domain": [{"literal": {"string": {}}}],
-                                        "parameter": "s"}}}}],
+                                        "parameter": "s"}}}},
+                                {
+                                  "name": "bytes",
+                                  "term": {
+                                    "function": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"literal": {"string": ")"}},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "bs"},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "function": {
+                                                                        "lambda": {
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "argument": {"literal": {"string": ".toByte"}},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "b"},
+                                                                                      "function": {"function": {"primitive": "hydra.lib.literals.showInt32"}}}},
+                                                                                  "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                                                          "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                                          "parameter": "b"}}},
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                        "type": {"literal": {"string": {}}}}}}}}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"literal": {"string": ", "}},
+                                                                "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}},
+                                                        "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"literal": {"string": "Array[Byte]("}},
+                                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                            "function": {"variable": "hydra.serialization.cst"}}},
+                                        "domain": [{"list": {"literal": {"integer": {"int32": {}}}}}],
+                                        "parameter": "bs"}}}}],
                               "default": [
                                 {
                                   "application": {

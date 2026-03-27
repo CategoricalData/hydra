@@ -3944,11 +3944,11 @@
                                                                     "@right": {
                                                                       "union": {
                                                                         "field": {
-                                                                          "name": "string",
+                                                                          "name": "bytes",
                                                                           "term": {
                                                                             "application": {
                                                                               "argument": {"variable": "b"},
-                                                                              "function": {"function": {"primitive": "hydra.lib.literals.binaryToString"}}}}},
+                                                                              "function": {"function": {"primitive": "hydra.lib.literals.binaryToBytes"}}}}},
                                                                         "typeName": "hydra.ext.scala.syntax.Lit"}}}},
                                                                 "type": {
                                                                   "application": {

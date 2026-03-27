@@ -132,6 +132,7 @@ data Lit =
   LitBoolean Bool |
   LitUnit  |
   LitString String |
+  LitBytes [Int] |
   LitSymbol ScalaSymbol
   deriving (Eq, Ord, Read, Show)
 
@@ -158,6 +159,8 @@ _Lit_boolean = Core.Name "boolean"
 _Lit_unit = Core.Name "unit"
 
 _Lit_string = Core.Name "string"
+
+_Lit_bytes = Core.Name "bytes"
 
 _Lit_symbol = Core.Name "symbol"
 

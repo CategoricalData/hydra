@@ -979,7 +979,7 @@ encodeLiteral = def "encodeLiteral" $
   doc "Encode a literal value as a Scala literal" $
   lambda "cx" $ lambda "g" $ lambda "av" $
     (cases _Literal (var "av") (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError (string "unexpected literal")) (var "cx"))) [
-      _Literal_binary>>: ("b" ~> right (inject _Lit _Lit_string (Literals.binaryToString (var "b")))),
+      _Literal_binary>>: ("b" ~> right (inject _Lit (Name "bytes") (Literals.binaryToBytes (var "b")))),
       _Literal_boolean>>: ("b" ~> right (inject _Lit _Lit_boolean (var "b"))),
       _Literal_float>>: ("fv" ~> cases _FloatValue (var "fv") (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError (string "unexpected float value")) (var "cx"))) [
         _FloatValue_bigfloat>>: ("bf" ~> right (inject _Lit _Lit_double (Literals.bigfloatToFloat64 (var "bf")))),

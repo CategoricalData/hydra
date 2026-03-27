@@ -288,6 +288,7 @@ writeLit lit =
       Syntax.LitDouble v0 -> Serialization.cst (Literals.showFloat64 v0)
       Syntax.LitUnit -> Serialization.cst "()"
       Syntax.LitString v0 -> Serialization.cst (Strings.cat2 "\"" (Strings.cat2 (Serde.escapeJavaString v0) "\""))
+      Syntax.LitBytes v0 -> Serialization.cst (Strings.cat2 "Array[Byte](" (Strings.cat2 (Strings.intercalate ", " (Lists.map (\b -> Strings.cat2 (Literals.showInt32 b) ".toByte") v0)) ")"))
       _ -> Serialization.cst "TODO:literal"
 
 -- | Convert a modifier to an expression

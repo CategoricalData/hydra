@@ -335,7 +335,12 @@ writeLit = define "writeLit" $
       Scala._Lit_float>>: lambda "f" $ Serialization.cst @@ (Strings.cat2 (Literals.showFloat32 (var "f")) (string "f")),
       Scala._Lit_double>>: lambda "f" $ Serialization.cst @@ (Literals.showFloat64 (var "f")),
       Scala._Lit_unit>>: constant $ Serialization.cst @@ string "()",
-      Scala._Lit_string>>: lambda "s" $ Serialization.cst @@ Strings.cat2 (string "\"") (Strings.cat2 (JavaSerdeSource.escapeJavaString @@ var "s") (string "\""))]
+      Scala._Lit_string>>: lambda "s" $ Serialization.cst @@ Strings.cat2 (string "\"") (Strings.cat2 (JavaSerdeSource.escapeJavaString @@ var "s") (string "\"")),
+      Name "bytes">>: lambda "bs" $
+        Serialization.cst @@ Strings.cat2 (string "Array[Byte](")
+          (Strings.cat2
+            (Strings.intercalate (string ", ") (Lists.map (lambda "b" $ Strings.cat2 (Literals.showInt32 (var "b")) (string ".toByte")) (var "bs")))
+            (string ")"))]
 
 writeName :: TBinding (Scala.Name -> Expr)
 writeName = define "writeName" $

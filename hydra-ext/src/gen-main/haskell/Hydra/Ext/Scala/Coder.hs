@@ -281,7 +281,7 @@ encodeLetBinding cx g outerTypeVars b =
 encodeLiteral :: Context.Context -> t0 -> Core.Literal -> Either (Context.InContext Errors.Error) Syntax.Lit
 encodeLiteral cx g av =
     case av of
-      Core.LiteralBinary v0 -> Right (Syntax.LitString (Literals.binaryToString v0))
+      Core.LiteralBinary v0 -> Right (Syntax.LitBytes (Literals.binaryToBytes v0))
       Core.LiteralBoolean v0 -> Right (Syntax.LitBoolean v0)
       Core.LiteralFloat v0 -> case v0 of
         Core.FloatValueBigfloat v1 -> Right (Syntax.LitDouble (Literals.bigfloatToFloat64 v1))

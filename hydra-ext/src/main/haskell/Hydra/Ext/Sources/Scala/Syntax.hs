@@ -241,6 +241,7 @@ lit = def "Lit" $
     "boolean">: T.boolean,
     "unit">: T.unit,
     "string">: T.string,
+    "bytes">: T.list T.int32,
     "symbol">: meta "ScalaSymbol"]
 
 data_ :: Binding

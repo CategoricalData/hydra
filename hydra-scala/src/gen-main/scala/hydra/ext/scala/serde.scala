@@ -206,6 +206,9 @@ def writeLit(lit: hydra.ext.scala.syntax.Lit): hydra.ast.Expr =
   case hydra.ext.scala.syntax.Lit.double(v_Lit_double_f) => hydra.serialization.cst(hydra.lib.literals.showFloat64(v_Lit_double_f))
   case hydra.ext.scala.syntax.Lit.unit => hydra.serialization.cst("()")
   case hydra.ext.scala.syntax.Lit.string(v_Lit_string_s) => hydra.serialization.cst(hydra.lib.strings.cat2("\"")(hydra.lib.strings.cat2(hydra.ext.java.serde.escapeJavaString(v_Lit_string_s))("\"")))
+  case hydra.ext.scala.syntax.Lit.bytes(v_Lit_bytes_bs) => hydra.serialization.cst(hydra.lib.strings.cat2("Array[Byte](")(hydra.lib.strings.cat2(hydra.lib.strings.intercalate(", ")(hydra.lib.lists.map[Int,
+     scala.Predef.String]((b: Int) =>
+    hydra.lib.strings.cat2(hydra.lib.literals.showInt32(b))(".toByte"))(v_Lit_bytes_bs)))(")")))
   case _ => hydra.serialization.cst("TODO:literal")
 
 def writeMod(m: hydra.ext.scala.syntax.Mod): hydra.ast.Expr =
