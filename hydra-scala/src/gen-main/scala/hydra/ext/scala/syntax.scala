@@ -50,6 +50,7 @@ enum Lit :
    case boolean(value: Boolean) extends Lit
    case unit extends Lit
    case string(value: scala.Predef.String) extends Lit
+   case bytes(value: Seq[Int]) extends Lit
    case symbol(value: hydra.ext.scala.syntax.ScalaSymbol) extends Lit
 
 enum Data :

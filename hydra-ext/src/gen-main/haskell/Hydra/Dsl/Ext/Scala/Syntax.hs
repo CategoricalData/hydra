@@ -7770,6 +7770,14 @@ litByte x =
         Core.fieldName = (Core.Name "byte"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
+litBytes :: Phantoms.TTerm [Int] -> Phantoms.TTerm Syntax.Lit
+litBytes x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.scala.syntax.Lit"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "bytes"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
 litChar :: Phantoms.TTerm Int -> Phantoms.TTerm Syntax.Lit
 litChar x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {

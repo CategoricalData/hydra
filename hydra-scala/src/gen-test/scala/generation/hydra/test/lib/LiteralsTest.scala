@@ -1705,7 +1705,7 @@ class LiteralsTest extends AnyFunSuite {
 
       hydra.lib.literals.stringToBinary("aGVsbG8=")) == (
 
-      "aGVsbG8="))
+      Array[Byte](104.toByte, 101.toByte, 108.toByte, 108.toByte, 111.toByte)))
 
   }
 
@@ -1715,7 +1715,7 @@ class LiteralsTest extends AnyFunSuite {
 
       hydra.lib.literals.stringToBinary("")) == (
 
-      ""))
+      Array[Byte]()))
 
   }
 
@@ -1725,7 +1725,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.binaryToString("aGVsbG8=")) == (
+      hydra.lib.literals.binaryToString(Array[Byte](104.toByte, 101.toByte, 108.toByte, 108.toByte, 111.toByte))) == (
 
       "aGVsbG8="))
 
@@ -1735,7 +1735,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.binaryToString("")) == (
+      hydra.lib.literals.binaryToString(Array[Byte]())) == (
 
       ""))
 

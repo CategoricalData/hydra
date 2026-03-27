@@ -240,6 +240,9 @@ def main():
                         write_java(os.path.join(out_main_sub, "java"), all_universe, ext_mods_for_tests)
                     elif args.target == "python":
                         write_python(os.path.join(out_main_sub, "python"), all_universe, ext_mods_for_tests)
+                    elif args.target == "scala":
+                        from hydra.generation import write_scala
+                        write_scala(os.path.join(out_main_sub, "scala"), all_universe, ext_mods_for_tests)
                     elif args.target in _lisp_dialects:
                         d, e = _lisp_dialects[args.target]
                         write_lisp_dialect(os.path.join(out_main_sub, args.target), d, e,
@@ -260,6 +263,9 @@ def main():
             write_java(os.path.join(out_test, "java"), all_universe, test_mods)
         elif args.target == "python":
             write_python(os.path.join(out_test, "python"), all_universe, test_mods)
+        elif args.target == "scala":
+            from hydra.generation import write_scala
+            write_scala(os.path.join(out_test, "scala"), all_universe, test_mods)
         elif args.target in _lisp_dialects:
             d, e = _lisp_dialects[args.target]
             write_lisp_dialect(os.path.join(out_test, args.target), d, e,

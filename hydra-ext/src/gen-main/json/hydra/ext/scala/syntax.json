@@ -91,6 +91,9 @@
             {"name": "unit", "type": {"unit": {}}},
             {"name": "string", "type": {"literal": {"string": {}}}},
             {
+              "name": "bytes",
+              "type": {"list": {"literal": {"integer": {"int32": {}}}}}},
+            {
               "name": "symbol",
               "type": {"variable": "hydra.ext.scala.syntax.ScalaSymbol"}}]}}},
     {

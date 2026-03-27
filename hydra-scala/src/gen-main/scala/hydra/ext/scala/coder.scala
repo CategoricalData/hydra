@@ -285,7 +285,7 @@ def encodeLetBinding(cx: hydra.context.Context)(g: hydra.graph.Graph)(outerTypeV
 def encodeLiteral[T0](cx: hydra.context.Context)(g: T0)(av: hydra.core.Literal): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.ext.scala.syntax.Lit] =
   av match
-  case hydra.core.Literal.binary(v_Literal_binary_b) => Right(hydra.ext.scala.syntax.Lit.string(hydra.lib.literals.binaryToString(v_Literal_binary_b)))
+  case hydra.core.Literal.binary(v_Literal_binary_b) => Right(hydra.ext.scala.syntax.Lit.bytes(hydra.lib.literals.binaryToBytes(v_Literal_binary_b)))
   case hydra.core.Literal.boolean(v_Literal_boolean_b) => Right(hydra.ext.scala.syntax.Lit.boolean(v_Literal_boolean_b))
   case hydra.core.Literal.float(v_Literal_float_fv) => v_Literal_float_fv match
     case hydra.core.FloatValue.bigfloat(v_FloatValue_bigfloat_bf) => Right(hydra.ext.scala.syntax.Lit.double(hydra.lib.literals.bigfloatToFloat64(v_FloatValue_bigfloat_bf)))

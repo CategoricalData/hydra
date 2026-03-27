@@ -46,6 +46,45 @@ object Generation:
   /**
    * Decode a single module from a JSON value.
    */
+  /**
+   * Decode binary literals from base64. JSON stores binary as base64 strings.
+   * The generic decode/core module extracts the raw string without decoding.
+   * This post-processor walks terms to apply stringToBinary to binary literals.
+   */
+  private def decodeBinaryLiterals(term: Term): Term =
+    decodeBinaryLiteralsDepth(term, 100)
+
+  private def decodeBinaryLiteralsDepth(term: Term, depth: Int): Term =
+    if depth <= 0 then return term
+    val d = depth - 1
+    term match
+      case Term.literal(Literal.binary(b)) =>
+        Term.literal(Literal.binary(hydra.lib.literals.stringToBinary(b)))
+      case Term.application(app) =>
+        Term.application(Application(decodeBinaryLiteralsDepth(app.function, d), decodeBinaryLiteralsDepth(app.argument, d)))
+      case Term.function(Function.lambda(lam)) =>
+        Term.function(Function.lambda(Lambda(lam.parameter, lam.domain, decodeBinaryLiteralsDepth(lam.body, d))))
+      case Term.let(lt) =>
+        Term.let(Let(lt.bindings.map(b => Binding(b.name, decodeBinaryLiteralsDepth(b.term, d), b.`type`)),
+          decodeBinaryLiteralsDepth(lt.body, d)))
+      case Term.list(elems) => Term.list(elems.map(e => decodeBinaryLiteralsDepth(e, d)))
+      case Term.record(rec) =>
+        Term.record(Record(rec.typeName, rec.fields.map(f => Field(f.name, decodeBinaryLiteralsDepth(f.term, d)))))
+      case Term.union(inj) =>
+        Term.union(Injection(inj.typeName, Field(inj.field.name, decodeBinaryLiteralsDepth(inj.field.term, d))))
+      case Term.annotated(ann) =>
+        Term.annotated(AnnotatedTerm(decodeBinaryLiteralsDepth(ann.body, d), ann.annotation))
+      case Term.wrap(w) =>
+        Term.wrap(WrappedTerm(w.typeName, decodeBinaryLiteralsDepth(w.body, d)))
+      case other => other
+
+  private def decodeBinaryInModule(mod: Module): Module =
+    Module(mod.namespace, mod.definitions.map {
+      case Definition.term(td) =>
+        Definition.term(hydra.module.TermDefinition(td.name, decodeBinaryLiterals(td.term), td.`type`))
+      case other => other
+    }, mod.termDependencies, mod.typeDependencies, mod.description)
+
   def decodeModuleFromJson(bsGraph: Graph, schemaMap: Map[String, Type], jsonVal: Value): Module =
     val modName: String = "hydra.module.Module"
     val modType: Type = Type.variable(modName)
