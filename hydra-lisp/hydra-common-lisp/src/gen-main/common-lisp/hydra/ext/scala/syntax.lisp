@@ -16,7 +16,7 @@
 
 (cl:defvar hydra_ext_scala_syntax_name-variants (cl:list :value :anonymous :indeterminate))
 
-(cl:defvar hydra_ext_scala_syntax_lit-variants (cl:list :null :int :double :float :byte :short :char :long :boolean :unit :string :symbol))
+(cl:defvar hydra_ext_scala_syntax_lit-variants (cl:list :null :int :double :float :byte :short :char :long :boolean :unit :string :bytes :symbol))
 
 (cl:defvar hydra_ext_scala_syntax_data-variants (cl:list :lit :ref :interpolate :xml :apply :apply_using :apply_type :assign :return :throw :ascribe :annotate :tuple :block :end_marker :if :quoted_macro_expr :quoted_macro_type :spliced_macro_expr :match :try :try_with_handler :function_data :poly_function :partial_function :while :do :for :for_yield :new :new_anonymous :placeholder :eta :repeated :param))
 

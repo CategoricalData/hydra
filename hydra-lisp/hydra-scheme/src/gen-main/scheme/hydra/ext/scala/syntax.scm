@@ -8,7 +8,7 @@
 (define hydra_ext_scala_syntax_ref-variants (list 'name 'init))
 (define hydra_ext_scala_syntax_stat-variants (list 'term 'decl 'defn 'import_export))
 (define hydra_ext_scala_syntax_name-variants (list 'value 'anonymous 'indeterminate))
-(define hydra_ext_scala_syntax_lit-variants (list 'null 'int 'double 'float 'byte 'short 'char 'long 'boolean 'unit 'string 'symbol))
+(define hydra_ext_scala_syntax_lit-variants (list 'null 'int 'double 'float 'byte 'short 'char 'long 'boolean 'unit 'string 'bytes 'symbol))
 (define hydra_ext_scala_syntax_data-variants (list 'lit 'ref 'interpolate 'xml 'apply 'apply_using 'apply_type 'assign 'return 'throw 'ascribe 'annotate 'tuple 'block 'end_marker 'if 'quoted_macro_expr 'quoted_macro_type 'spliced_macro_expr 'match 'try 'try_with_handler 'function_data 'poly_function 'partial_function 'while 'do 'for 'for_yield 'new 'new_anonymous 'placeholder 'eta 'repeated 'param))
 (define hydra_ext_scala_syntax_data_ref-variants (list 'this 'super 'name 'anonymous 'select 'apply_unary))
 (define-record-type hydra_ext_scala_syntax_data_this (make-hydra_ext_scala_syntax_data_this value) hydra_ext_scala_syntax_data_this? (value hydra_ext_scala_syntax_data_this-value))

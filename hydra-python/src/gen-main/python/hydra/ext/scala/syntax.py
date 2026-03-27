@@ -198,6 +198,9 @@ class LitUnit:
 class LitString(Node[str]):
     ...
 
+class LitBytes(Node[frozenlist[int]]):
+    ...
+
 class LitSymbol(Node["ScalaSymbol"]):
     ...
 
@@ -206,7 +209,7 @@ class _LitMeta(type):
         return object
 
 class Lit(metaclass=_LitMeta):
-    r"""LitNull | LitInt | LitDouble | LitFloat | LitByte | LitShort | LitChar | LitLong | LitBoolean | LitUnit | LitString | LitSymbol"""
+    r"""LitNull | LitInt | LitDouble | LitFloat | LitByte | LitShort | LitChar | LitLong | LitBoolean | LitUnit | LitString | LitBytes | LitSymbol"""
 
     TYPE_ = hydra.core.Name("hydra.ext.scala.syntax.Lit")
     NULL = hydra.core.Name("null")
@@ -220,6 +223,7 @@ class Lit(metaclass=_LitMeta):
     BOOLEAN = hydra.core.Name("boolean")
     UNIT = hydra.core.Name("unit")
     STRING = hydra.core.Name("string")
+    BYTES = hydra.core.Name("bytes")
     SYMBOL = hydra.core.Name("symbol")
 
 class DataLit(Node["Lit"]):
