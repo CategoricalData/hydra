@@ -1284,12 +1284,100 @@ safeDivide = "x" ~> "y" ~>
     (right (Math.div (var "x") (var "y")))
 ```
 
+## Consolidated import conventions
+
+The various DSL modules have different import styles. This section provides a single reference
+for the most common patterns, covering all DSL levels.
+
+### Type modules
+
+```haskell
+import qualified Hydra.Dsl.Types as T
+import Hydra.Dsl.ShorthandTypes  -- unqualified: string, int32, list, etc.
+```
+
+### Term modules (phantom-typed)
+
+```haskell
+import Hydra.Dsl.Meta.Phantoms
+```
+
+### Generated DSL modules
+
+Generated DSL modules provide constructors, accessors, and updaters for Hydra types:
+
+```haskell
+import qualified Hydra.Dsl.Core as Gen          -- or via Hydra.Dsl.Meta.Core
+import qualified Hydra.Dsl.Coders as Coders
+import qualified Hydra.Dsl.Module as Module
+```
+
+### Meta-level DSL wrappers
+
+These re-export generated DSL modules and add custom helpers:
+
+```haskell
+import qualified Hydra.Dsl.Meta.Core as Core    -- preferred over Hydra.Dsl.Core directly
+import qualified Hydra.Dsl.Meta.Context as Ctx
+import qualified Hydra.Dsl.Meta.Graph as Graph
+```
+
+### Library DSLs
+
+```haskell
+import qualified Hydra.Dsl.Meta.Lib.Lists as Lists
+import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
+import qualified Hydra.Dsl.Meta.Lib.Math as Math
+import qualified Hydra.Dsl.Meta.Lib.Maybes as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Logic as Logic
+```
+
+## Application styles
+
+There are three distinct ways to apply functions in Hydra DSLs, and confusing them is
+a common source of errors.
+
+### DSL helpers (direct Haskell application)
+
+Functions from `Hydra.Dsl.Meta.Lib.*` and `Hydra.Dsl.Meta.Phantoms` are Haskell functions
+on `TTerm` values. They take arguments directly via Haskell function application -- no `@@`
+needed. This includes all primitive function wrappers (`Lists.concat`, `Strings.cat`,
+`Maybes.maybe`, `Logic.ifElse`, etc.) and DSL combinators (`list`, `lambda`, `cases`,
+`project`, `lets`, etc.).
+
+```haskell
+Strings.cat2 (string "foo") (string "bar")
+Lists.concat (list [var "xs", var "ys"])
+```
+
+### Element definitions (apply with `@@`)
+
+`TBinding`s created with `define` are applied using the `@@` operator:
+
+```haskell
+myAddDef @@ int32 1 @@ int32 2
+Serialization.cst @@ string "hello"   -- Serialization helpers are TBindings
+```
+
+### Passing primitives as arguments
+
+When a primitive needs to be passed as a function argument (not called directly),
+use `unaryFunction` or `binaryFunction`:
+
+```haskell
+Lists.foldl (binaryFunction Math.add) (int32 0) (var "numbers")
+```
+
 ## Related topics
 
 - [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) - Core Hydra concepts
 - [Implementation](implementation.md) - Detailed implementation guide
 - [Code organization](https://github.com/CategoricalData/hydra/wiki/Code-organization) - Project structure
+- [Java DSL guide](dsl-guide-java.md) - Java-specific DSL reference
+- [Python DSL guide](dsl-guide-python.md) - Python-specific DSL reference
 
 ---
 
-This guide covers the essential aspects of Hydra's DSLs. For more examples, explore the `Hydra/Sources/` directory in the codebase, which contains extensive real-world usage of these DSLs.
+This guide covers the essential aspects of Hydra's DSLs. For more examples, explore the
+`Hydra/Sources/` directory in the codebase, which contains extensive real-world usage of
+these DSLs.
