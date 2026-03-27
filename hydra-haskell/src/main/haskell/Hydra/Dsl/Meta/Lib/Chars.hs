@@ -8,26 +8,26 @@ import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Sources.Libraries
 
 
--- Follow's GHC.s Data.Char.isAlphaNum
+-- | Check whether a character is alphanumeric.
 isAlphaNum :: TTerm Int -> TTerm Bool
 isAlphaNum = primitive1 _chars_isAlphaNum
 
--- Follows GHC's Data.Char.isLower (GHC.Internal.Unicode.isLower)
+-- | Check whether a character is lowercase.
 isLower :: TTerm Int -> TTerm Bool
 isLower = primitive1 _chars_isLower
 
--- Follow's GHC.s Data.Char.isSpace
+-- | Check whether a character is a whitespace character.
 isSpace :: TTerm Int -> TTerm Bool
 isSpace = primitive1 _chars_isSpace
 
--- Follows GHC's Data.Char.isUpper (GHC.Internal.Unicode.isUpper)
+-- | Check whether a character is uppercase.
 isUpper :: TTerm Int -> TTerm Bool
 isUpper = primitive1 _chars_isUpper
 
--- Follows GHC's toLower (GHC.Internal.Unicode.Char.UnicodeData.SimpleLowerCaseMapping.toSimpleLowerCase)
+-- | Convert a character to lowercase.
 toLower :: TTerm Int -> TTerm Int
 toLower = primitive1 _chars_toLower
 
--- Follows GHC's toUpper (GHC.Internal.Unicode.Char.UnicodeData.SimpleUpperCaseMapping.toSimpleUpperCase)
+-- | Convert a character to uppercase.
 toUpper :: TTerm Int -> TTerm Int
 toUpper = primitive1 _chars_toUpper

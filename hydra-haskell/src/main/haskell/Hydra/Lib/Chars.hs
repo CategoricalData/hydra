@@ -6,26 +6,26 @@ module Hydra.Lib.Chars where
 import qualified Data.Char as C
 
 
--- | Check if a character (as int) is alphanumeric.
+-- | Check whether a character is alphanumeric.
 isAlphaNum :: Int -> Bool
 isAlphaNum = C.isAlphaNum . C.chr
 
--- | Check if a character (as int) is lowercase.
+-- | Check whether a character is lowercase.
 isLower :: Int -> Bool
 isLower = C.isLower . C.chr
 
--- | Check if a character (as int) is whitespace.
+-- | Check whether a character is a whitespace character.
 isSpace :: Int -> Bool
 isSpace = C.isSpace . C.chr
 
--- | Check if a character (as int) is uppercase.
+-- | Check whether a character is uppercase.
 isUpper :: Int -> Bool
 isUpper = C.isUpper . C.chr
 
--- | Convert a character (as int) to lowercase, returning the int value.
+-- | Convert a character to lowercase.
 toLower :: Int -> Int
 toLower = C.ord . C.toLower . C.chr
 
--- | Convert a character (as int) to uppercase, returning the int value.
+-- | Convert a character to uppercase.
 toUpper :: Int -> Int
 toUpper = C.ord . C.toUpper . C.chr

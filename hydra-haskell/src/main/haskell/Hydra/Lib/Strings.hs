@@ -7,7 +7,7 @@ import qualified Data.List as L
 import qualified Data.List.Split as LS
 
 
--- | Concatenate a list of strings.
+-- | Concatenate a list of strings into a single string.
 cat :: [String] -> String
 cat = L.concat
 
@@ -15,7 +15,7 @@ cat = L.concat
 cat2 :: String -> String -> String
 cat2 s1 s2 = s1 ++ s2
 
--- | Get the character code at a specific index in a string.
+-- | Get the Unicode code point of the character at a specific index in a string.
 -- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
 charAt :: Int -> String -> Int
 charAt i s = C.ord (s !! i)
@@ -24,7 +24,7 @@ charAt i s = C.ord (s !! i)
 fromList :: [Int] -> String
 fromList = fmap C.chr
 
--- | Intercalate a string between a list of strings.
+-- | Join a list of strings with a separator between each element.
 intercalate :: String -> [String] -> String
 intercalate = L.intercalate
 
@@ -36,11 +36,11 @@ length = L.length
 lines :: String -> [String]
 lines = L.lines
 
--- | Check if a string is null/empty.
+-- | Check whether a string is empty.
 null :: String -> Bool
 null = L.null
 
--- | Split a string on a delimiter.
+-- | Split a string on a delimiter string.
 splitOn :: String -> String -> [String]
 splitOn = LS.splitOn
 
@@ -56,6 +56,6 @@ toLower = fmap C.toLower
 toUpper :: String -> String
 toUpper = fmap C.toUpper
 
--- | Join strings with newlines, adding trailing newline.
+-- | Join a list of strings with newlines, appending a trailing newline.
 unlines :: [String] -> String
 unlines = L.unlines

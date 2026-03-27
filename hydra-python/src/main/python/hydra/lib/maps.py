@@ -123,7 +123,7 @@ def delete(key: K, mapping: Mapping[K, V]) -> FrozenDict[K, V]:
 
 
 def elems(mapping: Mapping[Any, V]) -> frozenlist[V]:
-    """Get the values of a map, in sorted key order."""
+    """Get the values of a map."""
     return tuple(v for _, v in _sorted_by_key(mapping.items()))
 
 
@@ -163,7 +163,7 @@ def insert(key: K, value: V, mapping: Mapping[K, V]) -> FrozenDict[K, V]:
 
 
 def keys(mapping: Mapping[K, Any]) -> frozenlist[K]:
-    """Get the keys of a map, in sorted order."""
+    """Get the keys of a map."""
     return tuple(k for k, _ in _sorted_by_key((k, None) for k in mapping.keys()))
 
 
@@ -209,7 +209,7 @@ def size(mapping: Mapping[Any, Any]) -> int:
 
 
 def to_list(mapping: Mapping[K, V]) -> frozenlist[tuple[K, V]]:
-    """Convert a map to a list of key-value pairs, sorted by key."""
+    """Convert a map to a list of key-value pairs."""
     return tuple(_sorted_by_key(mapping.items()))
 
 

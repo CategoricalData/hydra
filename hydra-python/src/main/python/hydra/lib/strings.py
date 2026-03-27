@@ -7,7 +7,7 @@ from hydra.dsl.python import frozenlist
 
 
 def cat(xs: Sequence[str]) -> str:
-    """Concatenate a list of strings."""
+    """Concatenate a list of strings into a single string."""
     return "".join(xs)
 
 
@@ -17,17 +17,17 @@ def cat2(s1: str, s2: str) -> str:
 
 
 def char_at(i: int, s: str) -> int:
-    """Get the character code at a specific index in a string."""
+    """Get the Unicode code point of the character at a specific index in a string."""
     return ord(s[i])
 
 
 def from_list(values: Sequence[int]) -> str:
-    """Convert a list of integers to a string."""
+    """Convert a list of Unicode code points to a string."""
     return "".join(chr(v) for v in values)
 
 
 def intercalate(separator: str, values: Sequence[str]) -> str:
-    """Intercalate a string between a list of strings."""
+    """Join a list of strings with a separator between each element."""
     return separator.join(values)
 
 
@@ -48,16 +48,12 @@ def lines(s: str) -> frozenlist[str]:
 
 
 def null(s: str) -> bool:
-    """Check if a string is null/empty."""
+    """Check whether a string is empty."""
     return len(s) == 0
 
 
 def split_on(delimiter: str, x: str) -> frozenlist[str]:
-    """Split a string on a delimiter.
-
-    With empty delimiter, splits into individual characters with leading empty string
-    (Haskell semantics: splitOn "" "abc" == ["", "a", "b", "c"]).
-    """
+    """Split a string on a delimiter string."""
     if not delimiter:
         # Haskell: splitOn "" "abc" == ["", "a", "b", "c"]
         # splitOn "" "" == [""]
@@ -68,7 +64,7 @@ def split_on(delimiter: str, x: str) -> frozenlist[str]:
 
 
 def to_list(x: str) -> frozenlist[int]:
-    """Convert a string to a list of integers."""
+    """Convert a string to a list of Unicode code points."""
     return tuple(ord(c) for c in x)
 
 
@@ -83,10 +79,7 @@ def to_upper(s: str) -> str:
 
 
 def unlines(xs: Sequence[str]) -> str:
-    """Join strings with newlines, adding trailing newline.
-
-    Haskell semantics: unlines ["a", "b"] == "a\nb\n"
-    """
+    """Join a list of strings with newlines, appending a trailing newline."""
     if not xs:
         return ""
     return '\n'.join(xs) + '\n'

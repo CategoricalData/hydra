@@ -48,26 +48,6 @@
           (cons (qname ns "toUpper")    (prim1 (qname ns "toUpper")    hydra_lib_chars_to_upper    #f (tc-int32) (tc-int32))))))
 
     ;; ============================================================================
-    ;; Equality
-    ;; ============================================================================
-
-    (define (register-equality)
-      (let ((ns "hydra.lib.equality")
-            (x (tc-variable "x"))
-            (ord-x (list (cons "x" (make-hydra_core_type_variable_metadata (list "ordering")))))
-            (eq-x  (list (cons "x" (make-hydra_core_type_variable_metadata (list "equality"))))))
-        (list
-          (cons (qname ns "compare")  (prim2 (qname ns "compare")  hydra_lib_equality_compare  #f x x (tc-comparison) ord-x))
-          (cons (qname ns "equal")    (prim2 (qname ns "equal")    hydra_lib_equality_equal    #f x x (tc-boolean) eq-x))
-          (cons (qname ns "identity") (prim1 (qname ns "identity") (lambda (x) x)             #f x x))
-          (cons (qname ns "gt")       (prim2 (qname ns "gt")       hydra_lib_equality_gt       #f x x (tc-boolean) ord-x))
-          (cons (qname ns "gte")      (prim2 (qname ns "gte")      hydra_lib_equality_gte      #f x x (tc-boolean) ord-x))
-          (cons (qname ns "lt")       (prim2 (qname ns "lt")       hydra_lib_equality_lt       #f x x (tc-boolean) ord-x))
-          (cons (qname ns "lte")      (prim2 (qname ns "lte")      hydra_lib_equality_lte      #f x x (tc-boolean) ord-x))
-          (cons (qname ns "max")      (prim2 (qname ns "max")      hydra_lib_equality_max      #f x x x ord-x))
-          (cons (qname ns "min")      (prim2 (qname ns "min")      hydra_lib_equality_min      #f x x x ord-x)))))
-
-    ;; ============================================================================
     ;; Eithers
     ;; ============================================================================
 
@@ -115,6 +95,26 @@
                                                       hydra_lib_eithers_partition_eithers
                                                       #f (tc-list (tc-either x y)) (tc-pair (tc-list x) (tc-list y))))
           (cons (qname ns "rights")  (prim1 (qname ns "rights")  hydra_lib_eithers_rights  #f (tc-list (tc-either x y)) (tc-list y))))))
+
+    ;; ============================================================================
+    ;; Equality
+    ;; ============================================================================
+
+    (define (register-equality)
+      (let ((ns "hydra.lib.equality")
+            (x (tc-variable "x"))
+            (ord-x (list (cons "x" (make-hydra_core_type_variable_metadata (list "ordering")))))
+            (eq-x  (list (cons "x" (make-hydra_core_type_variable_metadata (list "equality"))))))
+        (list
+          (cons (qname ns "compare")  (prim2 (qname ns "compare")  hydra_lib_equality_compare  #f x x (tc-comparison) ord-x))
+          (cons (qname ns "equal")    (prim2 (qname ns "equal")    hydra_lib_equality_equal    #f x x (tc-boolean) eq-x))
+          (cons (qname ns "gt")       (prim2 (qname ns "gt")       hydra_lib_equality_gt       #f x x (tc-boolean) ord-x))
+          (cons (qname ns "gte")      (prim2 (qname ns "gte")      hydra_lib_equality_gte      #f x x (tc-boolean) ord-x))
+          (cons (qname ns "identity") (prim1 (qname ns "identity") (lambda (x) x)             #f x x))
+          (cons (qname ns "lt")       (prim2 (qname ns "lt")       hydra_lib_equality_lt       #f x x (tc-boolean) ord-x))
+          (cons (qname ns "lte")      (prim2 (qname ns "lte")      hydra_lib_equality_lte      #f x x (tc-boolean) ord-x))
+          (cons (qname ns "max")      (prim2 (qname ns "max")      hydra_lib_equality_max      #f x x x ord-x))
+          (cons (qname ns "min")      (prim2 (qname ns "min")      hydra_lib_equality_min      #f x x x ord-x)))))
 
     ;; ============================================================================
     ;; Lists
@@ -612,8 +612,8 @@
     (define (standard-library)
       (append
         (register-chars)
-        (register-equality)
         (register-eithers)
+        (register-equality)
         (register-lists)
         (register-literals)
         (register-logic)

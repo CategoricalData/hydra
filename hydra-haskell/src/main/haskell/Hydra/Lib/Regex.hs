@@ -5,10 +5,6 @@ module Hydra.Lib.Regex where
 import qualified Text.Regex.TDFA as R
 
 
--- | Check whether an entire string matches a regex pattern.
-matches :: String -> String -> Bool
-matches pattern input = input R.=~ ("^(" ++ pattern ++ ")$" :: String) :: Bool
-
 -- | Find the first substring matching a regex pattern.
 find :: String -> String -> Maybe String
 find pattern input = case (input R.=~ pattern :: (String, String, String)) of
@@ -19,6 +15,10 @@ find pattern input = case (input R.=~ pattern :: (String, String, String)) of
 -- | Find all non-overlapping substrings matching a regex pattern.
 findAll :: String -> String -> [String]
 findAll pattern input = R.getAllTextMatches (input R.=~ pattern :: R.AllTextMatches [] String)
+
+-- | Check whether an entire string matches a regex pattern.
+matches :: String -> String -> Bool
+matches pattern input = input R.=~ ("^(" ++ pattern ++ ")$" :: String) :: Bool
 
 -- | Replace the first occurrence of a regex pattern with a replacement string.
 replace :: String -> String -> String -> String

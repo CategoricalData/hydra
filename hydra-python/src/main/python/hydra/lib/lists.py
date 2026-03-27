@@ -18,7 +18,7 @@ def apply(fs: Sequence[Callable[[A], B]], values: Sequence[A]) -> frozenlist[B]:
 
 
 def at(i: int, values: Sequence[A]) -> A:
-    """Get the element at specified index of a list."""
+    """Get the element at a specified index in a list."""
     return values[i]
 
 
@@ -110,14 +110,14 @@ def group(values: Sequence[A]) -> frozenlist[frozenlist[A]]:
     return tuple(result)
 
 
-def init(values: Sequence[A]) -> frozenlist[A]:
-    """Return all elements except the last one."""
-    return tuple(values[:-1])
-
-
 def head(values: Sequence[A]) -> A:
     """Get the first element of a list."""
     return values[0]
+
+
+def init(values: Sequence[A]) -> frozenlist[A]:
+    """Return all elements except the last one."""
+    return tuple(values[:-1])
 
 
 def intercalate(
@@ -168,10 +168,7 @@ def null(values: Sequence[Any]) -> bool:
 
 
 def partition(predicate: Callable[[A], bool], values: Sequence[A]) -> tuple[frozenlist[A], frozenlist[A]]:
-    """Partition a list based on a predicate.
-
-    Returns (elements satisfying predicate, elements not satisfying predicate).
-    """
+    """Partition a list into elements that satisfy a predicate and elements that do not."""
     yes: list[A] = []
     no: list[A] = []
     for v in values:
@@ -211,6 +208,7 @@ def singleton(value: A) -> frozenlist[A]:
 def sort(values: Sequence[A]) -> frozenlist[A]:
     """Sort a list."""
     return tuple(sorted(values))  # type: ignore[type-var]
+
 
 # TODO: ensure that Hydra's native comparison primitives are used for sorting
 def sort_on(key: Callable[[A], B], values: Sequence[A]) -> frozenlist[A]:

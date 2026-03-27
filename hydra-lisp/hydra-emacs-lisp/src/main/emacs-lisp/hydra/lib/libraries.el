@@ -40,26 +40,6 @@
       (cons (qname ns_ "toUpper")    (prim1 (qname ns_ "toUpper")    hydra_lib_chars_to_upper    nil (tc-int32) (tc-int32))))))
 
 ;; ============================================================================
-;; Equality
-;; ============================================================================
-
-(defun register-equality ()
-  (let ((ns_ "hydra.lib.equality")
-        (x (tc-variable "x"))
-        (ord-x '(("x" . ("ordering"))))
-        (eq-x '(("x" . ("equality")))))
-    (list
-      (cons (qname ns_ "compare")  (prim2 (qname ns_ "compare")  hydra_lib_equality_compare  nil x x (tc-comparison) ord-x))
-      (cons (qname ns_ "equal")    (prim2 (qname ns_ "equal")    hydra_lib_equality_equal    nil x x (tc-boolean) eq-x))
-      (cons (qname ns_ "identity") (prim1 (qname ns_ "identity") #'identity                 nil x x))
-      (cons (qname ns_ "gt")       (prim2 (qname ns_ "gt")       hydra_lib_equality_gt       nil x x (tc-boolean) ord-x))
-      (cons (qname ns_ "gte")      (prim2 (qname ns_ "gte")      hydra_lib_equality_gte      nil x x (tc-boolean) ord-x))
-      (cons (qname ns_ "lt")       (prim2 (qname ns_ "lt")       hydra_lib_equality_lt       nil x x (tc-boolean) ord-x))
-      (cons (qname ns_ "lte")      (prim2 (qname ns_ "lte")      hydra_lib_equality_lte      nil x x (tc-boolean) ord-x))
-      (cons (qname ns_ "max")      (prim2 (qname ns_ "max")      hydra_lib_equality_max      nil x x x ord-x))
-      (cons (qname ns_ "min")      (prim2 (qname ns_ "min")      hydra_lib_equality_min      nil x x x ord-x)))))
-
-;; ============================================================================
 ;; Eithers
 ;; ============================================================================
 
@@ -107,6 +87,26 @@
                                                    hydra_lib_eithers_partition_eithers
                                                    nil (tc-list (tc-either x y)) (tc-pair (tc-list x) (tc-list y))))
       (cons (qname ns_ "rights")  (prim1 (qname ns_ "rights")  hydra_lib_eithers_rights  nil (tc-list (tc-either x y)) (tc-list y))))))
+
+;; ============================================================================
+;; Equality
+;; ============================================================================
+
+(defun register-equality ()
+  (let ((ns_ "hydra.lib.equality")
+        (x (tc-variable "x"))
+        (ord-x '(("x" . ("ordering"))))
+        (eq-x '(("x" . ("equality")))))
+    (list
+      (cons (qname ns_ "compare")  (prim2 (qname ns_ "compare")  hydra_lib_equality_compare  nil x x (tc-comparison) ord-x))
+      (cons (qname ns_ "equal")    (prim2 (qname ns_ "equal")    hydra_lib_equality_equal    nil x x (tc-boolean) eq-x))
+      (cons (qname ns_ "gt")       (prim2 (qname ns_ "gt")       hydra_lib_equality_gt       nil x x (tc-boolean) ord-x))
+      (cons (qname ns_ "gte")      (prim2 (qname ns_ "gte")      hydra_lib_equality_gte      nil x x (tc-boolean) ord-x))
+      (cons (qname ns_ "identity") (prim1 (qname ns_ "identity") #'identity                 nil x x))
+      (cons (qname ns_ "lt")       (prim2 (qname ns_ "lt")       hydra_lib_equality_lt       nil x x (tc-boolean) ord-x))
+      (cons (qname ns_ "lte")      (prim2 (qname ns_ "lte")      hydra_lib_equality_lte      nil x x (tc-boolean) ord-x))
+      (cons (qname ns_ "max")      (prim2 (qname ns_ "max")      hydra_lib_equality_max      nil x x x ord-x))
+      (cons (qname ns_ "min")      (prim2 (qname ns_ "min")      hydra_lib_equality_min      nil x x x ord-x)))))
 
 ;; ============================================================================
 ;; Lists
@@ -691,8 +691,8 @@
   "Returns an alist from primitive name (string) to Primitive record."
   (append
     (register-chars)
-    (register-equality)
     (register-eithers)
+    (register-equality)
     (register-lists)
     (register-literals)
     (register-logic)

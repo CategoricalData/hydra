@@ -18,6 +18,10 @@ acos = Prelude.acos
 acosh :: Double -> Double
 acosh = Prelude.acosh
 
+-- | Add two numbers.
+add :: Num a => a -> a -> a
+add x y = x + y
+
 -- | Return the arc sine of x in radians.
 asin :: Double -> Double
 asin = Prelude.asin
@@ -49,10 +53,6 @@ cos = Prelude.cos
 -- | Return the hyperbolic cosine of x.
 cosh :: Double -> Double
 cosh = Prelude.cosh
-
--- | Add two numbers.
-add :: Num a => a -> a -> a
-add x y = x + y
 
 -- | Divide two integers using integer division.
 -- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
@@ -116,6 +116,23 @@ pi = Prelude.pi
 pow :: Double -> Double -> Double
 pow = (Prelude.**)
 
+-- | Return the predecessor (x - 1).
+pred :: Enum a => a -> a
+pred = Prelude.pred
+
+-- | Generate a range of values from start to end (inclusive).
+range :: Enum a => a -> a -> [a]
+range start end = [start .. end]
+
+-- | Integer remainder.
+-- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
+rem :: Integral a => a -> a -> a
+rem = Prelude.rem
+
+-- | Return x rounded to the nearest integer.
+round :: Double -> Integer
+round = Prelude.round
+
 -- | Round a bigfloat to n significant digits.
 roundBigfloat :: Int -> Double -> Double
 roundBigfloat = roundFloat64
@@ -135,23 +152,6 @@ roundFloat64 n x
   | Prelude.otherwise =
       let factor = 10 Prelude.^^ (n - 1 - Prelude.floor (Prelude.logBase 10 (Prelude.abs x)))
       in Prelude.fromIntegral (Prelude.round (x * factor) :: Integer) Prelude./ factor
-
--- | Return the predecessor (x - 1).
-pred :: Enum a => a -> a
-pred = Prelude.pred
-
--- | Generate a range of values from start to end (inclusive).
-range :: Enum a => a -> a -> [a]
-range start end = [start .. end]
-
--- | Integer remainder.
--- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
-rem :: Integral a => a -> a -> a
-rem = Prelude.rem
-
--- | Return x rounded to the nearest integer.
-round :: Double -> Integer
-round = Prelude.round
 
 -- | Return the sign of a number (-1, 0, or 1).
 signum :: Num a => a -> a

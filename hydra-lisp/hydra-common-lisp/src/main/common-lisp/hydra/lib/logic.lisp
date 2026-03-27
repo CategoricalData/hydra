@@ -1,12 +1,14 @@
 (in-package :cl-user)
 
 ;; and :: Bool -> Bool -> Bool
+;; Compute the logical AND of two boolean values.
 (defvar hydra_lib_logic_and
   (lambda (a)
     (lambda (b)
       (and a b t))))
 
 ;; if_else :: Bool -> a -> a -> a
+;; Compute a conditional expression.
 (defvar hydra_lib_logic_if_else
   (lambda (cond-val)
     (lambda (then-val)
@@ -14,11 +16,13 @@
         (if cond-val then-val else-val)))))
 
 ;; not :: Bool -> Bool
+;; Compute the logical NOT of a boolean value.
 (defvar hydra_lib_logic_not
   (lambda (x)
     (not x)))
 
 ;; or :: Bool -> Bool -> Bool
+;; Compute the logical OR of two boolean values.
 (defvar hydra_lib_logic_or
   (lambda (a)
     (lambda (b)
