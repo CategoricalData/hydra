@@ -37,9 +37,9 @@
     `(unless (gethash ',name hydra--defined-structs)
        (puthash ',name t hydra--defined-structs)
        (defun ,constructor (&rest args)
-         (if (and args (keywordp (car args)))
-             (cl-loop for (k v) on args by #'cddr collect (cons k v))
-           (cl-mapcar #'cons ',field-keywords args)))
+         ;; Always use positional args — keyword detection is unreliable because
+         ;; Hydra values can be keyword symbols like :source, :record, etc.
+         (cl-mapcar #'cons ',field-keywords args))
        ,@(cl-mapcar
           (lambda (field kw)
             `(defun ,(intern (format "%s-%s" name field)) (rec)
@@ -284,6 +284,10 @@
    ;; cl-defstruct → hydra-defstruct
    ((and (consp form) (eq (car form) 'cl-defstruct))
     (cons 'hydra-defstruct (cdr form)))
+   ;; defvar → setq so pre-declared symbols get their actual values
+   ((and (consp form) (eq (car form) 'defvar) (cddr form))
+    (let ((fixed (hydra-fix-curried-calls (cons 'setq (cdr form)))))
+      fixed))
    ;; letrec at top level
    ((and (consp form) (eq (car form) 'letrec))
     (hydra-transform-letrec (hydra-fix-curried-calls form)))
@@ -405,13 +409,19 @@
                      "json/parser.el" "json/writer.el"
                      "json/encode.el" "json/decode.el" "json/bootstrap.el"))
          (all-files (hydra-collect-el-files base))
-         (remaining (cl-remove-if (lambda (f) (member f priority)) all-files))
+         (remaining (cl-remove-if (lambda (f) (or (member f priority)
+                                                   ;; Skip eval/lib modules — deeply nested closures
+                                                   ;; that overflow the C stack during loading
+                                                   (string-prefix-p "eval/lib/" f)))
+                                  all-files))
          (ordered (append priority (sort (copy-sequence remaining) #'string<))))
     (dolist (f ordered)
       (let ((path (expand-file-name f base)))
         (when (file-exists-p path)
           (message "Loading %s..." f)
           (hydra-load-file path))))
+    ;; Set function bindings and resolve symbol chains
+    (hydra-set-function-bindings)
     ;; Byte-compile all loaded functions for ~13x speedup on curried calls
     (hydra-byte-compile-all)))
 
