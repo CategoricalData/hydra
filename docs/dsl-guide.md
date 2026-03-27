@@ -1284,53 +1284,14 @@ safeDivide = "x" ~> "y" ~>
     (right (Math.div (var "x") (var "y")))
 ```
 
-## Consolidated import conventions
+## Import conventions
 
-The various DSL modules have different import styles. This section provides a single reference
-for the most common patterns, covering all DSL levels.
-
-### Type modules
-
-```haskell
-import qualified Hydra.Dsl.Types as T
-import Hydra.Dsl.ShorthandTypes  -- unqualified: string, int32, list, etc.
-```
-
-### Term modules (phantom-typed)
-
-```haskell
-import Hydra.Dsl.Meta.Phantoms
-```
-
-### Generated DSL modules
-
-Generated DSL modules provide constructors, accessors, and updaters for Hydra types:
-
-```haskell
-import qualified Hydra.Dsl.Core as Gen          -- or via Hydra.Dsl.Meta.Core
-import qualified Hydra.Dsl.Coders as Coders
-import qualified Hydra.Dsl.Module as Module
-```
-
-### Meta-level DSL wrappers
-
-These re-export generated DSL modules and add custom helpers:
-
-```haskell
-import qualified Hydra.Dsl.Meta.Core as Core    -- preferred over Hydra.Dsl.Core directly
-import qualified Hydra.Dsl.Meta.Context as Ctx
-import qualified Hydra.Dsl.Meta.Graph as Graph
-```
-
-### Library DSLs
-
-```haskell
-import qualified Hydra.Dsl.Meta.Lib.Lists as Lists
-import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
-import qualified Hydra.Dsl.Meta.Lib.Math as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes as Maybes
-import qualified Hydra.Dsl.Meta.Lib.Logic as Logic
-```
+For the full import conventions (including the distinction between type modules, term modules,
+and test group modules), see the
+[Coding style](https://github.com/CategoricalData/hydra/wiki/Coding-style#import-conventions)
+wiki page. Each class of kernel module has a conventional import block that is copied verbatim
+into every source file of that class. When creating a new module, copy the import block from
+an existing module of the same kind.
 
 ## Application styles
 
