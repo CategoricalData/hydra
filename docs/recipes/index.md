@@ -33,6 +33,10 @@ Step-by-step guides for common Hydra development tasks. These recipes provide pr
 
 - **[LLM-assisted development](llm-assisted-development.md)** - Best practices for using AI assistants when working with Hydra
 
+### Troubleshooting
+
+- **[Troubleshooting guide](../troubleshooting.md)** - Debugging strategies, primitive dispatch tracing, and common errors across all implementations
+
 ## About Recipes
 
 Recipes are practical, task-oriented guides that walk through specific development scenarios. Each recipe includes:
