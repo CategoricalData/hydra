@@ -10,12 +10,14 @@ and releases can be found on Maven Central [here](https://central.sonatype.com/a
 
 ## Code organization
 
-Hydra-Ext uses the **src/main vs src/gen-main** separation pattern (see [Code organization wiki page](https://github.com/CategoricalData/hydra/wiki/Code-organization) for details).
+Hydra-Ext uses the **src/main vs src/gen-main** separation pattern
+(see [Code organization wiki page](https://github.com/CategoricalData/hydra/wiki/Code-organization) for details).
 
 - **`src/main/haskell/`** - Hand-written source code
   - `Hydra/Ext/Demos/` - Demo applications
   - `Hydra/Ext/Sources/` - Domain models, language syntax definitions, and native Hydra code
-  - `Hydra/Ext/Staging/` - Language coders (Java, Python, C++, Scala, etc.) and other code which is written in "raw" Haskell rather than the Hydra DSL
+  - `Hydra/Ext/Staging/` - Language coders (Java, Python, C++, Scala, etc.)
+    and other code which is written in "raw" Haskell rather than the Hydra DSL
   - `Hydra/Ext/Tools/` - Analysis and transformation utilities
 
 - **`src/gen-main/haskell/`** - Generated Haskell APIs
@@ -25,7 +27,8 @@ Hydra-Ext uses the **src/main vs src/gen-main** separation pattern (see [Code or
 - **`src/gen-main/java/`** (not checked in) - Generated Java APIs
   - Can be generated using `writeJava "src/gen-main/java" hydraKernelModules hydraExtModules`
 
-Note: Only generated Haskell is checked into version control for space reasons. Java and Python can be generated on demand.
+Note: Only generated Haskell is checked into version control for space reasons.
+Java and Python can be generated on demand.
 
 ## Coders
 
@@ -36,18 +39,23 @@ These coders vary in their capabilities and maturity levels.
 
 #### Full implementation (types + terms)
 
-These coders generate complete, runnable code including type definitions and term-level implementations (functions, values, pattern matching):
+These coders generate complete, runnable code including type definitions
+and term-level implementations (functions, values, pattern matching):
 
 | Coder | Status | Notes |
 |-------|--------|-------|
 | **Python** | Production-ready | Complete Hydra implementation; generates full Python modules with generation tests |
 | **Java** | Production-ready | Complete Hydra implementation; generates full Java classes with visitor pattern for ADTs and generation tests |
 
-Both Python and Java coders support **generation tests** - tests where Hydra terms are generated to the target language and executed to verify correctness. Use `sync-all.sh` (from the repo root) or `sync-python.sh` / `sync-java.sh` (from hydra-ext) to regenerate code and run all tests.
+Both Python and Java coders support **generation tests** -
+tests where Hydra terms are generated to the target language and executed to verify correctness.
+Use `sync-all.sh` (from the repo root) or `sync-python.sh` / `sync-java.sh` (from hydra-ext)
+to regenerate code and run all tests.
 
 #### Type generation only
 
-These coders generate type/schema definitions but not term-level code. They are suitable for defining data structures that will be populated by other means:
+These coders generate type/schema definitions but not term-level code.
+They are suitable for defining data structures that will be populated by other means:
 
 | Coder | Status | Notes |
 |-------|--------|-------|
@@ -79,7 +87,8 @@ These coders serve specific purposes beyond general-purpose code generation:
 - **For graph databases**: Use Property Graph or GraphSON
 - **For semantic web**: Use RDF or SHACL
 
-Code generation is similar to Haskell generation (see the [Hydra-Haskell README](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/README.md)).
+Code generation is similar to Haskell generation
+(see the [Hydra-Haskell README](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/README.md)).
 
 ### Java
 
@@ -101,7 +110,8 @@ writeJava "../hydra-java/src/gen-test/java" allModules baseTestModules
 
 ### Python
 
-[Hydra-Python](https://github.com/CategoricalData/hydra/tree/main/hydra-python), like Hydra-Java and Hydra-Haskell, is a complete Hydra implementation.
+[Hydra-Python](https://github.com/CategoricalData/hydra/tree/main/hydra-python),
+like Hydra-Java and Hydra-Haskell, is a complete Hydra implementation.
 You can update the Python image of the Hydra kernel with:
 
 ```haskell
@@ -116,13 +126,16 @@ For Python tests, use:
 writePython "../hydra-python/src/gen-test/python" mainModules testModules
 ```
 
-Note: Python generation currently requires extra memory when generating the entire kernel (see [Issue #209](https://github.com/CategoricalData/hydra/issues/209)).
+Note: Python generation currently requires extra memory when generating the entire kernel
+(see [Issue #209](https://github.com/CategoricalData/hydra/issues/209)).
 Instead of `stack ghci`, you can enter the REPL with `stack ghci --ghci-options='+RTS -K256M -A32M -RTS'`.
 
 ### C++
 
-The C++ coder operates on schemas only, generating header files (`.h`) with class and enum definitions.
-The coder does not support polymorphic models at this time; type parameters are replaced with their bounds or `std::string`.
+The C++ coder operates on schemas only,
+generating header files (`.h`) with class and enum definitions.
+The coder does not support polymorphic models at this time;
+type parameters are replaced with their bounds or `std::string`.
 
 ```haskell
 import qualified Hydra.Sources.Kernel.Types.Core as Core
@@ -153,11 +166,15 @@ writeCpp "/tmp/cpp" [Core.module_] [Core.module_]
 | Unit | `std::tuple<>` |
 | Wrap | Class with `value` field |
 
-Note: Union types with values use the visitor pattern for type-safe case analysis. Each variant becomes a subclass of the union's base class.
+Note: Union types with values use the visitor pattern for type-safe case analysis.
+Each variant becomes a subclass of the union's base class.
 
 ### Protobuf
 
-Protobuf (Proto3) does not support polymorphic models, so type parameters are replaced with `string`. The generated `.proto` files follow the [Protobuf Style Guide](https://protobuf.dev/programming-guides/style).
+Protobuf (Proto3) does not support polymorphic models,
+so type parameters are replaced with `string`.
+The generated `.proto` files follow the
+[Protobuf Style Guide](https://protobuf.dev/programming-guides/style).
 
 ```haskell
 import qualified Hydra.Sources.Kernel.Types.Core as Core
@@ -183,12 +200,15 @@ writeProtobuf "/tmp/protobuf" [Core.module_] [Core.module_]
 | Pair | Helper message with `first`/`second` fields |
 | Unit | `google.protobuf.Empty` |
 
-Note: Structural types like `Either<A, B>` and `Pair<A, B>` generate helper message types (e.g., `Either_Term_Term`, `Pair_Term_Term`) since Protobuf doesn't support nested `oneof` blocks.
+Note: Structural types like `Either<A, B>` and `Pair<A, B>` generate helper message types
+(e.g., `Either_Term_Term`, `Pair_Term_Term`) since Protobuf doesn't support nested `oneof` blocks.
 
 ### JSON Schema
 
-The JSON Schema coder generates [JSON Schema](https://json-schema.org/) files (`.json`) following the 2020-12 specification.
-This coder operates at the type level only, and can be used in connection with Hydra's built-in JSON coder at the term level.
+The JSON Schema coder generates [JSON Schema](https://json-schema.org/) files (`.json`)
+following the 2020-12 specification.
+This coder operates at the type level only,
+and can be used in connection with Hydra's built-in JSON coder at the term level.
 
 ```haskell
 import qualified Hydra.Sources.Kernel.Types.Core as Core
@@ -227,7 +247,8 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 writeGraphql "/tmp/graphql" [Core.module_] [Core.module_]
 ```
 
-Because GraphQL does not support imports, the GraphQL coder will gather all of the dependencies of a given module together and map them to a single `.graphql` file.
+Because GraphQL does not support imports, the GraphQL coder will gather all of the dependencies
+of a given module together and map them to a single `.graphql` file.
 
 **Type mappings:**
 
@@ -244,13 +265,16 @@ Because GraphQL does not support imports, the GraphQL coder will gather all of t
 | Either | Object with optional `left`/`right` fields |
 | Pair | Object with `first`/`second` fields |
 
-Note: GraphQL doesn't natively support maps, sets, or sum types with values. These are approximated using the mappings above.
+Note: GraphQL doesn't natively support maps, sets, or sum types with values.
+These are approximated using the mappings above.
 
 ### PDL (Pegasus)
 
-LinkedIn's PDL ([Pegasus Data Language](https://linkedin.github.io/rest.li/pdl_schema)) is supported in hydra-ext for historical reasons.
+LinkedIn's PDL ([Pegasus Data Language](https://linkedin.github.io/rest.li/pdl_schema))
+is supported in hydra-ext for historical reasons.
 It is a fairly limited data language, supporting neither polymorphism nor cyclic type dependencies.
-For example, modules like `hydra.core` cannot be expressed in PDL, because the `Term` and `Type` types reference each other.
+For example, modules like `hydra.core` cannot be expressed in PDL,
+because the `Term` and `Type` types reference each other.
 The PDL coder generates PDL schema files (`.pdl`). 
 
 ```haskell
@@ -325,7 +349,8 @@ type parameter inference, and lazy evaluation patterns via Scala's by-name param
 
 ### Language syntax models
 
-Hydra-Ext includes syntax models for various programming languages and data formats. These can be used to generate or parse code in the target language:
+Hydra-Ext includes syntax models for various programming languages and data formats.
+These can be used to generate or parse code in the target language:
 
 * [Avro Schema](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Avro/Schema.hs)
 * [C++](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Cpp/Syntax.hs)
@@ -359,9 +384,12 @@ The following domain-specific models are also included:
 * [OSV](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Other/Osv.hs)
 * [STAC Items](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Other/StacItems.hs)
 
-All extensions are listed [here](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/All.hs),
-and the generated Haskell APIs for all of these models can be found [here](https://github.com/CategoricalData/hydra/tree/main/hydra-ext/src/gen-main/haskell).
-For the sake of space, only generated Haskell is checked in to the repository, but Java APIs can be generated from GHCi (use `stack ghci`) as follows:
+All extensions are listed
+[here](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/All.hs),
+and the generated Haskell APIs for all of these models can be found
+[here](https://github.com/CategoricalData/hydra/tree/main/hydra-ext/src/gen-main/haskell).
+For the sake of space, only generated Haskell is checked in to the repository,
+but Java APIs can be generated from GHCi (use `stack ghci`) as follows:
 
 ```haskell
 -- Universe provides all modules for dependency resolution
@@ -381,7 +409,8 @@ Miscellaneous tools include:
 * **Analysis**: utilities for analyzing the Hydra kernel or other Hydra graphs
   * **Dependencies**: creates a property graph out of the dependency structure of a Hydra graph
   * **Summaries**: creates textual summaries of a Hydra graph, e.g. for training an LLM
-* **AvroWorkflows**: transform Avro schemas and matching JSON data to one of multiple targets (RDF with SHACL, property graphs with schemas)
+* **AvroWorkflows**: transform Avro schemas and matching JSON data to one of multiple targets
+  (RDF with SHACL, property graphs with schemas)
 * **Csv**: utilities for working with CSV data
 * **Tabular**: utilities for working with tabular data
 
@@ -411,7 +440,10 @@ These are the primary scripts for regenerating implementations:
 ./bin/sync-python.sh --quick
 ```
 
-All sync scripts use `bootstrap-from-json` under the hood, which generates all artifacts (kernel modules, eval lib, coder modules, kernel tests, generation tests) from JSON in a single invocation. The scripts include RTS flags (`-K256M -A32M`) to avoid stack overflow during generation.
+All sync scripts use `bootstrap-from-json` under the hood, which generates all artifacts
+(kernel modules, eval lib, coder modules, kernel tests, generation tests) from JSON
+in a single invocation.
+The scripts include RTS flags (`-K256M -A32M`) to avoid stack overflow during generation.
 
 ### Hydra-Haskell Scripts
 
@@ -427,8 +459,12 @@ The following scripts in `hydra-haskell/bin/` are used for the bootstrapping imp
 
 ## Demos
 
-* **[GenPG](demos/genpg/README.md)**: transforms CSV tables to property graphs using Hydra schemas and mappings. Includes an LLM-assisted workflow for generating schemas. Can be run in either Haskell or Python. [Demo video](https://drive.google.com/file/d/10HCElcG7n0tprOTdtX4bSa5yWYs08nV-/view?usp=sharing).
-* **AvroToPropertyGraphs**: transforms a specific Avro schema and matching sample JSON to a property graph representation
+* **[GenPG](demos/genpg/README.md)**: transforms CSV tables to property graphs using Hydra schemas
+  and mappings. Includes an LLM-assisted workflow for generating schemas.
+  Can be run in either Haskell or Python.
+  [Demo video](https://drive.google.com/file/d/10HCElcG7n0tprOTdtX4bSa5yWYs08nV-/view?usp=sharing).
+* **AvroToPropertyGraphs**: transforms a specific Avro schema and matching sample JSON
+  to a property graph representation
 * **MeteredEvaluation**: demonstrates term reduction with logging, e.g. for tracking usage or estimating cost
 
 ### AvroToPropertyGraphs

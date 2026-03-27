@@ -113,7 +113,7 @@ for the Hydra kernel.
 Use relative links for internal documentation:
 
 ```markdown
-See the [Concepts](concepts.md) documentation for more details.
+See the [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) documentation for more details.
 ```
 
 ## Code formatting

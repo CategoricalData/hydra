@@ -1,6 +1,9 @@
 # Adding new type and term constructors to Hydra Core
 
-This guide documents the process of adding native support for new type constructors and corresponding term constructors to Hydra Core. This was documented while adding `Either` type support and serves as a reference for adding other constructs like pairs, sum types, etc.
+This guide documents the process of adding native support for new type constructors
+and corresponding term constructors to Hydra Core.
+This was documented while adding `Either` type support
+and serves as a reference for adding other constructs like pairs, sum types, etc.
 
 ---
 
@@ -34,7 +37,11 @@ This guide documents the process of adding native support for new type construct
 
 ## Overview
 
-This guide documents how the `Either` type was added to Hydra Core and serves as a template for adding other constructors in the future. While `Either` is now built-in (available as `hydra.core.EitherType` and `Term.either`), the process described here can be followed for adding new type/term constructors like pairs, sum types, or other constructs.
+This guide documents how the `Either` type was added to Hydra Core
+and serves as a template for adding other constructors in the future.
+While `Either` is now built-in (available as `hydra.core.EitherType` and `Term.either`),
+the process described here can be followed for adding new type/term constructors
+like pairs, sum types, or other constructs.
 
 Adding a new type/term constructor to Hydra Core involves:
 
@@ -44,7 +51,8 @@ Adding a new type/term constructor to Hydra Core involves:
 4. **Code generation** - Adding target language encoding support
 5. **Bootstrap patching** - Manually patching generated files to break circular dependencies
 
-The most challenging aspect is the **bootstrap problem**: the code generator needs to understand the new constructors to generate itself.
+The most challenging aspect is the **bootstrap problem**:
+the code generator needs to understand the new constructors to generate itself.
 
 ---
 
@@ -60,7 +68,8 @@ The most challenging aspect is the **bootstrap problem**: the code generator nee
 
 ## The Bootstrap Problem
 
-Hydra uses **self-generation**: the schema definitions in `Hydra.Sources` generate Haskell code that includes the code generator itself. When adding new constructors:
+Hydra uses **self-generation**: the schema definitions in `Hydra.Sources` generate Haskell code
+that includes the code generator itself. When adding new constructors:
 
 ```
 New DSL Code → Needs Generator → Generator Needs New Code → ⚠️  Circular Dependency
@@ -192,7 +201,8 @@ Place in alphabetical order among the other `termVariantX` helpers.
 
 **File:** `src/main/haskell/Hydra/Sources/Kernel/Types/Meta.hs`
 
-> **⚠️ CRITICAL:** You MUST add your new constructor to the TermVariant and TypeVariant enum definitions in the Meta module. This is the source of the "No such field: X" error during code generation.
+> **⚠️ CRITICAL:** You MUST add your new constructor to the TermVariant and TypeVariant enum definitions
+> in the Meta module. This is the source of the "No such field: X" error during code generation.
 
 Add to the `TermVariant` enum (around line 70-91):
 ```haskell
@@ -221,7 +231,12 @@ def "TypeVariant" $
   ]
 ```
 
-**Why this is necessary:** The `Variants` module uses these enums to map between Term/Type constructors and their metadata. The enums are defined in the `hydra.meta` module (in the source file [`Hydra/Sources/Kernel/Types/Meta.hs`](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/Meta.hs)), which provides metadata and reflection types that describe the structure of Hydra core types and terms. Without adding your constructor here, code generation will fail with "No such field: X".
+**Why this is necessary:** The `Variants` module uses these enums to map between Term/Type constructors
+and their metadata. The enums are defined in the `hydra.meta` module
+(in the source file
+[`Hydra/Sources/Kernel/Types/Meta.hs`](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/Meta.hs)),
+which provides metadata and reflection types that describe the structure of Hydra core types and terms.
+Without adding your constructor here, code generation will fail with "No such field: X".
 
 ---
 
@@ -231,7 +246,10 @@ def "TypeVariant" $
 
 #### 3.1: Create Inference Function
 
-> **⚠️ Variable Naming:** Avoid using variable names that clash with Prelude functions (`fst`, `snd`, `head`, `tail`, `map`, `filter`, etc.). The DSL code generates Haskell that imports Prelude, so these names will cause compilation errors. Use descriptive names like `pairFst`, `pairSnd`, `listHead`, etc.
+> **⚠️ Variable Naming:** Avoid using variable names that clash with Prelude functions
+> (`fst`, `snd`, `head`, `tail`, `map`, `filter`, etc.).
+> The DSL code generates Haskell that imports Prelude, so these names will cause compilation errors.
+> Use descriptive names like `pairFst`, `pairSnd`, `listHead`, etc.
 
 ```haskell
 inferTypeOfEitherDef :: TBinding (InferenceContext -> Prelude.Either Term Term -> Either (InContext OtherError) InferenceResult)
@@ -337,9 +355,15 @@ Add case to main checking function and register in elements list, similar to inf
 
 **File:** `src/main/haskell/Hydra/Sources/Kernel/Terms/Rewriting.hs`
 
-> **⚠️ Critical Distinction:** Use library elimination functions (`Eithers.either_`) for Haskell's **built-in** types like `Prelude.Either`, `Prelude.Maybe`, etc. The DSL `cases` construct only works on Hydra union types (union types defined with the `union` combinator in Core.hs), not Haskell's native algebraic data types.
+> **⚠️ Critical Distinction:** Use library elimination functions (`Eithers.either_`) for Haskell's
+> **built-in** types like `Prelude.Either`, `Prelude.Maybe`, etc.
+> The DSL `cases` construct only works on Hydra union types
+> (union types defined with the `union` combinator in Core.hs),
+> not Haskell's native algebraic data types.
 
-> **⚠️ Important:** This file contains multiple rewriting functions with different characteristics (pure vs monadic, with/without context, with/without accumulator). Add your constructor case to **all of them**, following the existing patterns.
+> **⚠️ Important:** This file contains multiple rewriting functions with different characteristics
+> (pure vs monadic, with/without context, with/without accumulator).
+> Add your constructor case to **all of them**, following the existing patterns.
 
 **Key functions to update:**
 - `rewriteTermDef` - Pure rewriting
@@ -490,7 +514,8 @@ Add case to `inferTypeOfTerm` (around line 734):
 Core.TermEither v1 -> (inferTypeOfEither cx v1)
 ```
 
-> **Note:** The inference function shown above is simplified. The actual implementation should include type applications as shown in Step 3.
+> **Note:** The inference function shown above is simplified.
+> The actual implementation should include type applications as shown in Step 3.
 
 #### 8.2: Patch `src/gen-main/haskell/Hydra/Checking.hs`
 
@@ -546,7 +571,8 @@ stack build
 
 **Expected Result:** Build succeeds with manually patched files
 
-**If build fails:** Check error messages carefully - they usually indicate which generated file needs additional patching
+**If build fails:** Check error messages carefully --
+they usually indicate which generated file needs additional patching
 
 ---
 
@@ -592,7 +618,8 @@ stack build
 
 ### Step 11.5: Update Language Support (Optional)
 
-If you want target languages (Python, Java, Scala, etc.) to support the new constructor, update their language definitions and regenerate code.
+If you want target languages (Python, Java, Scala, etc.) to support the new constructor,
+update their language definitions and regenerate code.
 
 #### 11.5.1: Update Python Language Definition
 
@@ -744,7 +771,8 @@ expectTermWithType "nested eithers"
 
 **File:** `src/test/haskell/Hydra/InferenceSpec.hs`
 
-Add inference test cases following the same patterns. Inference tests verify that types are correctly inferred without explicit type annotations.
+Add inference test cases following the same patterns.
+Inference tests verify that types are correctly inferred without explicit type annotations.
 
 #### 12.3: Run Tests
 
@@ -797,7 +825,8 @@ stack test
 
 4. **Understand the distinction:**
    - **Hydra union types** (defined with `union` combinator in DSL) → use `cases`
-   - **Haskell built-in types** (like `Prelude.Either`, `Prelude.Maybe`) → use library functions (`Eithers.either_`, `Maybes.maybe`)
+   - **Haskell built-in types** (like `Prelude.Either`, `Prelude.Maybe`) →
+     use library functions (`Eithers.either_`, `Maybes.maybe`)
 
 5. **Don't skip bootstrap patching** - Manual patching is necessary to break the circular dependency
 
@@ -805,9 +834,13 @@ stack test
 
 7. **Follow alphabetical order** - Makes code easier to navigate and maintain
 
-8. **Check all rewrite functions** - The `Rewriting.hs` file has multiple variants (pure/monadic, with/without context, with/without accumulator). Search the file for existing constructors like `_Term_maybe` to see all the places you need to add your constructor.
+8. **Check all rewrite functions** - The `Rewriting.hs` file has multiple variants
+   (pure/monadic, with/without context, with/without accumulator).
+   Search the file for existing constructors like `_Term_maybe`
+   to see all the places you need to add your constructor.
 
-9. **Update variants metadata** - Both `Hydra.Variants` and `Hydra.Dsl.Mantle` need updates for language support and introspection
+9. **Update variants metadata** - Both `Hydra.Variants` and `Hydra.Dsl.Mantle` need updates
+   for language support and introspection
 
 10. **Test target languages** - If you regenerate Python/Java/Scala, verify the generated code compiles
 
@@ -940,7 +973,9 @@ See commit history for the complete implementation of Either type support, which
 
 ## Adding Fields to Existing Record Types
 
-This section documents the process of adding a new field to an existing record type in Hydra Core. This was documented while adding the `letVariables` field to `TypeContext` and serves as a reference for similar changes.
+This section documents the process of adding a new field to an existing record type in Hydra Core.
+This was documented while adding the `letVariables` field to `TypeContext`
+and serves as a reference for similar changes.
 
 ### Overview
 
@@ -950,13 +985,16 @@ Adding a field to an existing record type requires updates to:
 3. **DSL source files** - All places that construct the record
 4. **Generated files** - The output files that use the record
 
-The key insight is that **both generated files AND DSL source files must be updated** - this is different from adding new type/term constructors where bootstrap patching of generated files is the main challenge.
+The key insight is that **both generated files AND DSL source files must be updated** --
+this is different from adding new type/term constructors
+where bootstrap patching of generated files is the main challenge.
 
 ### Step-by-Step Guide
 
 #### Step 1: Update the Type Definition
 
-**File:** The schema file where the record is defined (e.g., `src/main/haskell/Hydra/Sources/Kernel/Types/Typing.hs` for `TypeContext`)
+**File:** The schema file where the record is defined
+(e.g., `src/main/haskell/Hydra/Sources/Kernel/Types/Typing.hs` for `TypeContext`)
 
 Add the new field to the record definition:
 
@@ -988,7 +1026,8 @@ def "TypeContext" $
 
 **File:** `src/main/haskell/Hydra/Dsl/Meta/Typing.hs` (or the appropriate `Hydra.Dsl.Meta.*` module)
 
-This is the **critical step** that is often missed. The DSL helper module provides functions used by all `Hydra.Sources.*` files to construct records.
+This is the **critical step** that is often missed.
+The DSL helper module provides functions used by all `Hydra.Sources.*` files to construct records.
 
 **2.1: Update the constructor function signature:**
 
@@ -1052,7 +1091,8 @@ grep -r "Typing.typeContext" src/main/haskell/Hydra/Sources/
 ```
 
 **Common locations for TypeContext:**
-- `src/main/haskell/Hydra/Sources/Kernel/Terms/Schemas.hs` - `graphToTypeContext`, `extendTypeContextForLet`, `extendTypeContextForLambda`
+- `src/main/haskell/Hydra/Sources/Kernel/Terms/Schemas.hs` -
+  `graphToTypeContext`, `extendTypeContextForLet`, `extendTypeContextForLambda`
 - `src/main/haskell/Hydra/Sources/Kernel/Terms/Hoisting.hs` - Empty TypeContext constructions
 - `src/main/haskell/Hydra/Sources/Kernel/Terms/Inference.hs` - `initialTypeContext`
 
@@ -1194,4 +1234,6 @@ stack build
 
 ---
 
-**Questions or Issues?** Open an issue on the [Hydra repository](https://github.com/CategoricalData/hydra/issues) or ask on the [LambdaGraph Discord](https://bit.ly/lg-discord).
+**Questions or Issues?**
+Open an issue on the [Hydra repository](https://github.com/CategoricalData/hydra/issues)
+or ask on the [LambdaGraph Discord](https://bit.ly/lg-discord).

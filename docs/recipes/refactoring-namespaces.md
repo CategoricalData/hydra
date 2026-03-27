@@ -1,8 +1,10 @@
 # Refactoring Hydra Namespaces
 
-This recipe documents the process for renaming or moving a Hydra namespace (module) across all implementations. This is a comprehensive task that affects multiple repositories and requires careful coordination.
+This recipe documents the process for renaming or moving a Hydra namespace (module) across all implementations.
+This is a comprehensive task that affects multiple repositories and requires careful coordination.
 
-> **See also**: For simpler refactoring operations (creating, deleting, or renaming individual elements), see [Refactoring the Hydra Kernel](refactoring.md).
+> **See also**: For simpler refactoring operations (creating, deleting, or renaming individual elements),
+> see [Refactoring the Hydra Kernel](refactoring.md).
 
 ## Overview
 
@@ -159,7 +161,8 @@ Renaming a namespace requires updating all of these, plus any code that imports 
      src/gen-main/haskell/Hydra/Testing.hs
 
    # Then update the type references
-   perl -i -pe 's/Json\.Value/Model.Value/g; s/Json\.ValueNull/Model.ValueNull/g; s/Json\.ValueArray/Model.ValueArray/g' \
+   perl -i -pe 's/Json\.Value/Model.Value/g; s/Json\.ValueNull/Model.ValueNull/g;
+   s/Json\.ValueArray/Model.ValueArray/g' \
      src/gen-main/haskell/Hydra/Json/Decode.hs \
      src/gen-main/haskell/Hydra/Testing.hs
    ```
@@ -197,7 +200,8 @@ Renaming a namespace requires updating all of these, plus any code that imports 
     writeEncoderSourceHaskell "src/gen-main/haskell" mainModules kernelTypesModules
     :quit
     ```
-    This regenerates the `Hydra.Sources.Decode.*` and `Hydra.Sources.Encode.*` modules with correct namespace references.
+    This regenerates the `Hydra.Sources.Decode.*` and `Hydra.Sources.Encode.*` modules with correct namespace
+    references.
 
 12. **Clean up orphan files**
     After regeneration, remove any orphan files left at the old locations:
@@ -308,7 +312,9 @@ Generated Haskell code depends on modules that need to be generated. Solution:
 3. Regenerate fully once the build works
 
 ### Stale Generated Files
-The decoder/encoder modules (`Hydra.Sources.Decode.*`, `Hydra.Sources.Encode.*`) contain hardcoded namespace strings in error messages and type references. To properly regenerate them, use GHCI:
+The decoder/encoder modules (`Hydra.Sources.Decode.*`,
+`Hydra.Sources.Encode.*`) contain hardcoded namespace strings in error messages and type references.
+To properly regenerate them, use GHCI:
 ```haskell
 import Hydra.Sources.All
 import Hydra.Generation
@@ -331,7 +337,9 @@ When renaming `hydra.foo` to `hydra.foo.bar`, the decoder/encoder modules also m
 The Terms/All.hs module registry needs to be updated to import from the new paths.
 
 ### Python Module/Package Conflicts
-Python can't have both `foo.py` and `foo/` directory. This is often the motivation for namespace refactoring. The new namespace should use a structure that avoids this (e.g., `hydra/json/model.py` instead of `hydra/json.py` with `hydra/json/decode.py`).
+Python can't have both `foo.py` and `foo/` directory. This is often the motivation for namespace refactoring.
+The new namespace should use a structure that avoids this (e.g.,
+`hydra/json/model.py` instead of `hydra/json.py` with `hydra/json/decode.py`).
 
 ### Import Alias Conventions
 In **generated implementation code** (e.g., `Hydra/Json/Decode.hs`), the type module is typically imported as `Model`:
@@ -345,7 +353,8 @@ import qualified Hydra.Json.Model as Json
 ```
 
 ### Function Reference Updates
-Generated code contains function references that include the namespace, like `hydra.decode.json.value`. When renaming, these become `hydra.decode.json.model.value`. Look for these patterns:
+Generated code contains function references that include the namespace, like `hydra.decode.json.value`.
+When renaming, these become `hydra.decode.json.model.value`. Look for these patterns:
 - `hydra.decode.<namespace>.value` → `hydra.decode.<new-namespace>.value`
 - `hydra.encode.<namespace>.value` → `hydra.encode.<new-namespace>.value`
 

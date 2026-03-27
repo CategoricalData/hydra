@@ -2,7 +2,11 @@
 
 A JavaScript implementation of the [Hydra](https://github.com/CategoricalData/hydra) type system and kernel.
 
-Hydra-JavaScript provides the same core functionality as [Hydra-Haskell](../hydra-haskell), [Hydra-Java](../hydra-java), and [Hydra-Python](../hydra-python): a runtime for Hydra's type system (System F with Hindley-Milner inference), the Flow monad for stateful computation, bidirectional Coders for type-aware transformations, and the full standard library of primitive functions.
+Hydra-JavaScript provides the same core functionality as
+[Hydra-Haskell](../hydra-haskell), [Hydra-Java](../hydra-java), and [Hydra-Python](../hydra-python):
+a runtime for Hydra's type system (System F with Hindley-Milner inference),
+the Flow monad for stateful computation, bidirectional Coders for type-aware transformations,
+and the full standard library of primitive functions.
 
 ## Project Structure
 
@@ -68,7 +72,8 @@ JavaScript lacks native algebraic data types, so Hydra types are represented usi
 
 ### Flow Monad
 
-The Flow monad follows the same pattern as Python and Java: `Flow<S, V>` is a function `(state, trace) => FlowState(maybeValue, state, trace)`.
+The Flow monad follows the same pattern as Python and Java:
+`Flow<S, V>` is a function `(state, trace) => FlowState(maybeValue, state, trace)`.
 
 ## Prerequisites
 

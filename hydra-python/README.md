@@ -3,10 +3,10 @@
 This directory contains a Python implementation of Hydra.
 
 Hydra is a type-aware data transformation toolkit which aims to be highly flexible and portable.
-It has its roots in graph databases and type theory, and provides APIs in Haskell, Java, Python, and Clojure.
+It has its roots in graph databases and type theory, and provides APIs in Haskell, Java, Python, Scala, and Lisp.
 See the main Hydra [README](https://github.com/CategoricalData/hydra) for more details.
 
-## Getting Started
+## Getting started
 
 Hydra-Python requires Python 3.12 or later.
 
@@ -35,18 +35,26 @@ For comprehensive documentation about Hydra's architecture and usage, see:
 
 - **[Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts)** - Core concepts and type system
 - **[Implementation](https://github.com/CategoricalData/hydra/blob/main/docs/implementation.md)** - Implementation guide
-- **[Code Organization](https://github.com/CategoricalData/hydra/wiki/Code-organization)** - The src/main vs src/gen-main pattern
-- **[Testing](https://github.com/CategoricalData/hydra/wiki/Testing)** - Common test suite documentation
-- **[Developer Recipes](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/index.md)** - Step-by-step guides
-- **[Syncing Hydra-Python](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/syncing-python.md)** - Regenerating Python from Haskell
+- **[Code Organization](https://github.com/CategoricalData/hydra/wiki/Code-organization)** -
+  The src/main vs src/gen-main pattern
+- **[Testing](https://github.com/CategoricalData/hydra/wiki/Testing)** -
+  Common test suite documentation
+- **[Developer Recipes](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/index.md)** -
+  Step-by-step guides
+- **[Syncing Hydra-Python](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/syncing-python.md)** -
+  Regenerating Python from Haskell
 
 ## Testing
 
-Hydra-Python has two types of tests: the **common test suite** (shared across all Hydra implementations) and **Python-specific tests**. See the [Testing wiki page](https://github.com/CategoricalData/hydra/wiki/Testing) for comprehensive documentation.
+Hydra-Python has two types of tests: the **common test suite** (shared across all Hydra implementations)
+and **Python-specific tests**.
+See the [Testing wiki page](https://github.com/CategoricalData/hydra/wiki/Testing)
+for comprehensive documentation.
 
-### Common Test Suite
+### Common test suite
 
-The common test suite (`hydra.test.testSuite`) ensures parity across all Hydra implementations. **Passing all common test suite cases is the criterion for a true Hydra implementation.**
+The common test suite (`hydra.test.testSuite`) ensures parity across all Hydra implementations.
+**Passing all common test suite cases is the criterion for a true Hydra implementation.**
 
 To run all tests:
 
@@ -69,9 +77,10 @@ The test suite is generated from Hydra DSL sources and includes:
 - JSON coder tests
 - Rewriting and hoisting tests
 
-### Python-Specific Tests
+### Python-specific tests
 
-Python-specific tests validate implementation details and Python-specific functionality. These are located in `src/test/python/` alongside the common test suite runner.
+Python-specific tests validate implementation details and Python-specific functionality.
+These are located in `src/test/python/` alongside the common test suite runner.
 
 To run a specific test file:
 
@@ -97,9 +106,10 @@ To generate a categorized summary report:
 python src/test/python/test_summary_report.py
 ```
 
-## Code Organization
+## Code organization
 
-Hydra-Python uses the **src/main vs src/gen-main** separation pattern (see [Code organization wiki page](https://github.com/CategoricalData/hydra/wiki/Code-organization) for details).
+Hydra-Python uses the **src/main vs src/gen-main** separation pattern
+(see [Code organization wiki page](https://github.com/CategoricalData/hydra/wiki/Code-organization) for details).
 
 - **`src/main/python/`** - Hand-written Python code
   - `hydra/lib/` - Primitive function implementations
@@ -118,10 +128,12 @@ Hydra-Python uses the **src/main vs src/gen-main** separation pattern (see [Code
   - `hydra/test/` - Common tests ensuring parity with Haskell and Java
   - `generation/` - Generation tests (terms generated to Python and executed)
 
-## Generate Python Code
+## Generate Python code
 
-The Python code in `src/gen-main/python` and `src/gen-test/python` is generated from sources in Hydra's bootstrapping implementation, Hydra-Haskell.
-See the [Hydra-Haskell README](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell) for more information on how this works.
+The Python code in `src/gen-main/python` and `src/gen-test/python` is generated from sources
+in Hydra's bootstrapping implementation, Hydra-Haskell.
+See the [Hydra-Haskell README](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell)
+for more information on how this works.
 
 The recommended way to regenerate all Python code is to use the sync script:
 
@@ -153,7 +165,7 @@ let allModules = mainModules ++ testModules
 writePython "../hydra-python/src/gen-test/python" allModules baseTestModules
 ```
 
-### Validate Generated Code
+### Validate generated code
 
 The generated Hydra kernel code is in `src/gen-main/python` and `src/gen-test/python`.
 From the `hydra-python` directory, you can validate this code with:
@@ -163,7 +175,7 @@ find src/gen-main/ -name "*.py" -exec python3 -m py_compile {} +
 find src/gen-test/ -name "*.py" -exec python3 -m py_compile {} +
 ```
 
-## Formatting, Linting, and Type Checking
+## Formatting, linting, and type checking
 
 Install [Ruff](https://github.com/astral-sh/ruff),
 [pyright](https://github.com/microsoft/pyright), and
@@ -175,7 +187,8 @@ brew install pyright
 brew install pytest
 ```
 
-All of these commands can run from the `hydra-python` root directory, but files/directories can be specified as arguments as well.
+All of these commands can run from the `hydra-python` root directory,
+but files/directories can be specified as arguments as well.
 
 ### Formatting
 
@@ -199,7 +212,7 @@ Fix fixable linting errors (e.g. removing unused imports):
 ruff check --fix
 ```
 
-### Static Type Checking
+### Static type checking
 
 Run the type checker:
 

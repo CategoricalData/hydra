@@ -2,7 +2,7 @@
 
 This guide explains Hydra's domain-specific languages (DSLs) for constructing types and terms in Haskell.
 
-**Note**: Hydra provides DSLs in all four implementation languages (Haskell, Java, Python, and Clojure).
+**Note**: Hydra provides DSLs in all five implementation languages (Haskell, Java, Python, Scala, and Lisp).
 This guide focuses on the Haskell DSLs.
 Haskell is Hydra's bootstrapping language—the Hydra kernel itself is written in Haskell—so this guide is
 particularly intended for Hydra developers working on the kernel or extending Hydra's core functionality.
@@ -42,7 +42,9 @@ For Java and Python DSL usage, see:
 
 ## Introduction
 
-Hydra provides DSLs in all three implementation languages (Haskell, Java, and Python) for working with its core data structures (types and terms). The Haskell DSLs, described in this guide, make it easier to write Hydra programs by providing:
+Hydra provides DSLs in all five implementation languages (Haskell, Java, Python, Scala, and Lisp) for working
+with its core data structures (types and terms).
+The Haskell DSLs, described in this guide, make it easier to write Hydra programs by providing:
 
 - Concise syntax for common operations
 - Operator-based notation reducing boilerplate
@@ -241,7 +243,7 @@ provide the standard constructors and accessors. Hand-written `Hydra.Dsl.Meta.*`
 modules re-export these and add custom helpers; prefer importing via the wrapper
 (e.g., `Hydra.Dsl.Meta.Core`) when one exists.
 
-Generated DSL modules are available in all three languages (Haskell, Java, Python)
+Generated DSL modules are available in all five languages (Haskell, Java, Python, Scala, and Lisp)
 and are kept in sync by the `sync-all` pipeline. In Java, they appear as static methods
 in classes under `hydra.dsl.*`; in Python, as functions in `hydra.dsl.*` modules.
 
@@ -257,13 +259,15 @@ in classes under `hydra.dsl.*`; in Python, as functions in `hydra.dsl.*` modules
 | Runtime AST manipulation | Generated code | Direct access to data structures |
 
 **Rule of thumb**:
-- **Type modules**: Use the direct Types DSL (`qualified Hydra.Dsl.Types as T`) with unqualified operators (`>:`, `@@`, `~>`)
+- **Type modules**: Use the direct Types DSL (`qualified Hydra.Dsl.Types as T`)
+  with unqualified operators (`>:`, `@@`, `~>`)
 - **Term modules**: Use the phantom-typed DSL for type safety, or Meta DSLs for kernel work
 - **Metaprogramming**: Use the Meta DSLs to treat Hydra programs as data
 
 **See also:**
 - [Implementation](implementation.md#dsl-system) - Detailed DSL architecture and module organization
-- [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) - Understanding Types, Terms, and the Hydra type system
+- [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) -
+  Understanding Types, Terms, and the Hydra type system
 
 ## Direct DSLs (untyped)
 
@@ -465,7 +469,8 @@ Math.add (int32 2) (int32 3)
 
 ### Built-in vs. user-defined functions
 
-**Important distinction**: Built-in helper functions use simplified application syntax, while user-defined functions require explicit application with `@@`:
+**Important distinction**: Built-in helper functions use simplified application syntax,
+while user-defined functions require explicit application with `@@`:
 
 ```haskell
 import Hydra.Dsl.Meta.Lib.Math as Math
@@ -666,12 +671,14 @@ Use the meta DSLs when writing programs that construct Hydra terms or types:
 
 The entire Hydra kernel is defined using the meta DSLs.
 
-**Type modules** (see [Sources/Kernel/Types](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types)):
+**Type modules**
+(see [Sources/Kernel/Types](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types)):
 - `Hydra/Sources/Kernel/Types/Core.hs` - Core type definitions (Type, Term, etc.)
 - `Hydra/Sources/Kernel/Types/Graph.hs` - Graph and module types
 - These modules import `qualified Hydra.Dsl.Types as T` along with unqualified operators `(>:)`, `(@@)`, `(~>)`
 
-**Term modules** (see [Sources/Kernel/Terms](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms)):
+**Term modules**
+(see [Sources/Kernel/Terms](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms)):
 - `Hydra/Sources/Kernel/Terms/Inference.hs` - Type inference algorithm
 - `Hydra/Sources/Kernel/Terms/Reduction.hs` - Term reduction logic
 - `Hydra/Sources/Libraries.hs` - Primitive function signatures

@@ -11,8 +11,10 @@ It explores an isomorphism between typed lambda calculus and labeled hypergraphs
 **programs are graphs, and graphs are programs.**
 
 Hydra is self-hosting: the kernel is defined in Haskell-based DSLs and code-generated
-into Haskell, Java, Python, Clojure, and Scala. All five implementations are complete
-and pass the common test suite. Version is tracked in the `VERSION` file at the repo root.
+into five complete implementations: Haskell, Java, Python, Scala, and Lisp.
+The Lisp implementation covers four dialects: Clojure, Scheme, Common Lisp, and Emacs Lisp.
+All five implementations pass the common test suite.
+Version is tracked in the `VERSION` file at the repo root.
 
 Key use cases: graph construction (TinkerPop, RDF, SHACL, GQL), data integration
 (coders for Protobuf, Avro, JSON, YAML, GraphQL, PDL, CSV/TSV, RDF), and computational
@@ -77,7 +79,7 @@ hydra/
   hydra-haskell/    # Bootstrap implementation (Haskell). Source of truth.
   hydra-java/       # Complete Java implementation
   hydra-python/     # Complete Python implementation
-  hydra-lisp/       # Complete Clojure implementation
+  hydra-lisp/       # Complete Lisp implementation (Clojure, Scheme, Common Lisp, Emacs Lisp)
   hydra-ext/        # Code generators, coders, demos, tools (Haskell)
   hydra-scala/      # Complete Scala implementation
   hydra-rust/       # Early-stage Rust
@@ -142,6 +144,7 @@ Each has build/test commands and code organization details:
 | [hydra-python/README.md](hydra-python/README.md) | uv setup, pytest, ruff, pyright |
 | [hydra-ext/README.md](hydra-ext/README.md) | All coders with type mapping tables, sync scripts, demos |
 | [hydra-scala/README.md](hydra-scala/README.md) | sbt build, bootstrapping host |
+| [hydra-lisp/README.md](hydra-lisp/README.md) | Four Lisp dialects, shared coder, per-dialect test runners |
 
 ### Wiki pages
 
@@ -221,6 +224,33 @@ These are hard-won lessons. Read the linked docs for full context.
    or let the sync scripts handle it.
 
 ---
+
+## Scope of user documentation
+
+"User documentation" includes all of the following:
+- READMEs: top-level, demo, and per-package/implementation READMEs
+- Everything in the `docs/` directory that is checked in (ignore unstaged/temporary files)
+- Everything in the wiki (separate Git repo; see [project structure](#project-structure))
+- Code comments, to the extent they document public APIs or non-obvious behavior
+  (you are not expected to scan all source files on every documentation review)
+
+## Writing style for documentation
+
+When writing or editing any user documentation, follow these conventions.
+See [docs/documentation-style-guide.md](docs/documentation-style-guide.md) for the full guide.
+
+- **Line length**: Keep lines under 120 characters.
+  Split at sentence boundaries -- put each sentence on its own line.
+  Break long sentences at natural clauses.
+- **Headings**: Use sentence case (capitalize only the first word and proper nouns).
+- **Links**: Use relative links for internal docs.
+  Use absolute GitHub URLs for wiki pages.
+- **Code formatting**: Use backticks for function names, type names, file names,
+  module names, and language keywords.
+  Use fenced code blocks with language specification.
+- **Voice**: Active voice preferred.
+  Second person ("you") for recipes and tutorials.
+  Third person for reference documentation.
 
 ## Maintaining this file
 

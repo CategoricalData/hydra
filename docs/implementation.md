@@ -1,7 +1,8 @@
 # Hydra Implementation Overview
 
 This document provides a detailed look at Hydra's implementation, from type modules to coders to primitives to DSLs.
-It complements the [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) documentation by focusing on the concrete architecture and code
+It complements the [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) documentation
+by focusing on the concrete architecture and code
 organization rather than abstract foundations.
 
 ## Prerequisites
@@ -16,7 +17,8 @@ organization rather than abstract foundations.
 - Developers implementing new language coders
 - Anyone curious about Hydra's internal architecture
 
-**If you just want to use Hydra**, start with [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) and the main README instead.
+**If you just want to use Hydra**, start with
+[Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) and the main README instead.
 
 ## Table of contents
 
@@ -389,7 +391,8 @@ These modules re-export the corresponding generated DSL module and add non-stand
 helpers such as `AsTerm`-flexible overrides, expression conversion pipelines, and
 compatibility shims.
 
-- **Meta/Core.hs** - Wraps `Hydra.Dsl.Core`; adds `AsTerm` overrides for `binding`, `injection`, `typeVariable`; helpers like `equalName_`, `false`
+- **Meta/Core.hs** - Wraps `Hydra.Dsl.Core`; adds `AsTerm` overrides for `binding`, `injection`,
+  `typeVariable`; helpers like `equalName_`, `false`
 - **Meta/Context.hs** - Wraps `Hydra.Dsl.Context`; adds `withContext`, `pushTrace`, `failInContext`
 - **Meta/Graph.hs** - Wraps `Hydra.Dsl.Graph`; adds graph construction helpers
 - **Meta/Phantoms.hs** - Phantom-typed term construction (`TTerm a`), operators (`@@`, `~>`, `<~`)
@@ -749,7 +752,8 @@ They transform Hydra modules (types and terms) from one language's representatio
 to write Hydra code in their preferred language and compile it to any other supported language.
 
 **See also:**
-- [Property Graphs](https://github.com/CategoricalData/hydra/wiki/Property-graphs) - Mapping Hydra schemas to property graphs with annotations
+- [Property Graphs](https://github.com/CategoricalData/hydra/wiki/Property-graphs) -
+  Mapping Hydra schemas to property graphs with annotations
 - [Testing](https://github.com/CategoricalData/hydra/wiki/Testing) - How the common test suite validates coder parity
 
 ### Coder locations
@@ -1100,7 +1104,8 @@ ensures the Haskell compiler picks up the newly generated source files.
 - `writeDecoderHaskell` / `writeEncoderHaskell` — Convenience functions that generate
   encoder/decoder modules and immediately compile them to executable Haskell in one step.
 
-For detailed context on encoder/decoder modules, see [Issue #47: Per-Type Term Coders](https://github.com/CategoricalData/hydra/blob/main/docs/work/issues/issue-47-per-type-term-coders.md).
+For detailed context on encoder/decoder modules, see
+[Issue #47: Per-Type Term Coders](https://github.com/CategoricalData/hydra/blob/main/docs/work/issues/issue-47-per-type-term-coders.md).
 
 ### The bootstrap challenge
 
@@ -1204,17 +1209,20 @@ hydra-haskell/
 ## Extending Hydra
 
 Hydra's modular architecture provides clear extension points for adding new functionality.
-For detailed step-by-step guides, see the [Developer Recipes](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/index.md).
+For detailed step-by-step guides, see the
+[Developer Recipes](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/index.md).
 
 ### Key extension points
 
 **Primitive functions**: Add new standard library functions by defining native implementations in Haskell,
 registering them in `Sources/Libraries.hs`, and regenerating code for all target languages.
-See the [Adding primitives recipe](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/adding-primitives.md).
+See the
+[Adding primitives recipe](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/adding-primitives.md).
 
 **Core types**: Extend the kernel type system by adding new type definitions to `Core.hs`, updating DSL constructors,
 and following the bootstrap process to regenerate the system.
-See the [Extending Hydra Core recipe](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/extending-hydra-core.md).
+See the
+[Extending Hydra Core recipe](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/extending-hydra-core.md).
 
 **Target languages**: Add support for new programming languages by implementing a coder (term/type encoding),
 serializer (AST to text), and language constraint definitions in `hydra-ext/src/main/haskell/Hydra/Ext/Staging/`.
@@ -1310,7 +1318,8 @@ for code generation and synchronization. The main sync scripts orchestrate the i
 in the correct order; the individual scripts and executables are useful during development when you
 need to rerun a single phase.
 
-For how these fit into the release workflow, see [Hydra release process](https://github.com/CategoricalData/hydra/wiki/Release-process).
+For how these fit into the release workflow,
+see [Hydra release process](https://github.com/CategoricalData/hydra/wiki/Release-process).
 
 ### Top-level (`bin/`)
 

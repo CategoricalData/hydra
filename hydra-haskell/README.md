@@ -4,12 +4,14 @@ Hydra is a functional programming language based on the [LambdaGraph](https://bi
 exploring an isomorphism between typed lambda calculus and labeled hypergraphs.
 See the main Hydra [README](https://github.com/CategoricalData/hydra) for project overview and use cases.
 
-This package contains Hydra's **Haskell implementation**, which serves as the bootstrapping implementation for the entire Hydra project.
+This package contains Hydra's **Haskell implementation**,
+which serves as the bootstrapping implementation for the entire Hydra project.
 Releases are available [on Hackage](https://hackage.haskell.org/package/hydra).
 
 ## Code Organization
 
-Hydra-Haskell uses the **src/main vs src/gen-main** separation pattern (see [Code organization wiki page](https://github.com/CategoricalData/hydra/wiki/Code-organization) for details).
+Hydra-Haskell uses the **src/main vs src/gen-main** separation pattern
+(see [Code organization wiki page](https://github.com/CategoricalData/hydra/wiki/Code-organization) for details).
 
 - **`src/main/haskell/`** - Hand-written source code
   - `Hydra/Dsl/` - DSL syntax definitions
@@ -26,30 +28,50 @@ Hydra-Haskell uses the **src/main vs src/gen-main** separation pattern (see [Cod
   - Generation tests created using language-specific test generators
   - See [Testing](#test) section for details
 
-Haskell serves as the **bootstrapping implementation** - the DSL sources here generate code for Java, Python, Clojure, and other languages.
+Haskell serves as the **bootstrapping implementation** -
+the DSL sources here generate code for Java, Python, Scala, Lisp, and other languages.
 
 ## Documentation
 
-For comprehensive documentation about Hydra's architecture, type system, and implementation details, see:
+For comprehensive documentation about Hydra's architecture, type system,
+and implementation details, see:
 
-- **[Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts)** - Core concepts: Type, Term, Graph, Flow monad, primitives, coders
-- **[Implementation](https://github.com/CategoricalData/hydra/blob/main/docs/implementation.md)** - Detailed guide covering type modules, DSLs, primitives, coders, and the bootstrap process
-- **[DSL Guide](https://github.com/CategoricalData/hydra/blob/main/docs/dsl-guide.md)** - Comprehensive guide to Hydra's domain-specific languages
-- **[Code Organization](https://github.com/CategoricalData/hydra/wiki/Code-organization)** - The src/main vs src/gen-main pattern
-- **[Testing](https://github.com/CategoricalData/hydra/wiki/Testing)** - Common test suite and language-specific testing
-- **[Developer Recipes](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/index.md)** - Step-by-step guides for extending Hydra
+- **[Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts)** -
+  Core concepts: Type, Term, Graph, Flow monad, primitives, coders
+- **[Implementation](https://github.com/CategoricalData/hydra/blob/main/docs/implementation.md)** -
+  Detailed guide covering type modules, DSLs, primitives, coders, and the bootstrap process
+- **[DSL Guide](https://github.com/CategoricalData/hydra/blob/main/docs/dsl-guide.md)** -
+  Comprehensive guide to Hydra's domain-specific languages
+- **[Code Organization](https://github.com/CategoricalData/hydra/wiki/Code-organization)** -
+  The src/main vs src/gen-main pattern
+- **[Testing](https://github.com/CategoricalData/hydra/wiki/Testing)** -
+  Common test suite and language-specific testing
+- **[Developer Recipes](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/index.md)** -
+  Step-by-step guides for extending Hydra
 
 This README focuses on practical instructions for building, testing, and generating code with Hydra-Haskell.
 
 ## Build
 
-Haskell is Hydra's **bootstrapping language**. The entire Hydra kernel is written using Haskell-based domain-specific languages (DSLs):
-- **DSL syntax**: [src/main/haskell/Hydra/Dsl](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Dsl) - Specify the syntax for Hydra programs written in Haskell
-- **DSL-based sources**: [src/main/haskell/Hydra/Sources](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources) - Type definitions and core logic written in Haskell DSL
-- **Generated code**: [src/gen-main/haskell](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/gen-main/haskell) - Haskell code generated from DSL sources
-- **Primitives**: [src/main/haskell/Hydra/Lib](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Lib) - Hydra's standard libraries of primitive functions and constants, implemented in Haskell. These libraries are registered in [Libraries.hs](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs).
+Haskell is Hydra's **bootstrapping language**.
+The entire Hydra kernel is written using Haskell-based domain-specific languages (DSLs):
+- **DSL syntax**:
+  [src/main/haskell/Hydra/Dsl](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Dsl) -
+  Specify the syntax for Hydra programs written in Haskell
+- **DSL-based sources**:
+  [src/main/haskell/Hydra/Sources](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources) -
+  Type definitions and core logic written in Haskell DSL
+- **Generated code**:
+  [src/gen-main/haskell](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/gen-main/haskell) -
+  Haskell code generated from DSL sources
+- **Primitives**:
+  [src/main/haskell/Hydra/Lib](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Lib) -
+  Hydra's standard libraries of primitive functions and constants, implemented in Haskell.
+  These libraries are registered in
+  [Libraries.hs](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs).
 
-The DSL sources are also used to generate Java and Python implementations, ensuring parity across each Hydra language variant.
+The DSL sources are also used to generate Java and Python implementations,
+ensuring parity across each Hydra language variant.
 
 ### Build and REPL
 
@@ -68,7 +90,9 @@ Then build and enter the GHCi REPL:
 stack ghci hydra:lib
 ```
 
-Note: The `hydra:lib` target is required to avoid loading test modules. Running `stack ghci` without a target will load all components including test dependencies, which you may not need.
+Note: The `hydra:lib` target is required to avoid loading test modules.
+Running `stack ghci` without a target will load all components including test dependencies,
+which you may not need.
 
 ## Test
 
@@ -90,7 +114,8 @@ Then in the REPL, you can run individual tests:
 Test.Hspec.hspec Hydra.TestSuiteSpec.spec
 ```
 
-See the [Testing wiki page](https://github.com/CategoricalData/hydra/wiki/Testing) for details on Hydra's common test suite, which ensures parity across all Hydra language variants.
+See the [Testing wiki page](https://github.com/CategoricalData/hydra/wiki/Testing)
+for details on Hydra's common test suite, which ensures parity across all Hydra language variants.
 
 ## Code generation
 
@@ -155,7 +180,8 @@ Note `src/gen-test` as opposed to `src/gen-main`.
 
 ### Generate code for other languages
 
-Java and Python code generation is handled by the [Hydra-Ext](https://github.com/CategoricalData/hydra/tree/main/hydra-ext) package.
+Java and Python code generation is handled by the
+[Hydra-Ext](https://github.com/CategoricalData/hydra/tree/main/hydra-ext) package.
 From the `hydra-ext` directory:
 
 ```bash
@@ -177,7 +203,8 @@ writeJava "../hydra-java/src/gen-main/java" kernelModules kernelModules
 ```
 
 And similar for test artifacts. See the Hydra-Ext README for more details.
-Hydra-Ext also includes coders for many other languages and formats: Avro, Protobuf, C++, C#, Scala, GraphQL, JSON Schema, RDF, and more.
+Hydra-Ext also includes coders for many other languages and formats:
+Avro, Protobuf, C++, C#, Scala, GraphQL, JSON Schema, RDF, and more.
 
 ## Working with Hydra
 
@@ -191,8 +218,10 @@ Some of the fundamental types in Hydra are:
 - **`Graph`** - A collection of elements with an environment, types, primitives, and schema graph
 - **`Module`** - A namespace containing elements with dependencies on other modules
 
-These are defined in [Hydra/Sources/Kernel/Types](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types)
-and code-generated into [Hydra.Core](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/gen-main/haskell/Hydra/Core.hs),
+These are defined in
+[Hydra/Sources/Kernel/Types](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types)
+and code-generated into
+[Hydra.Core](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/gen-main/haskell/Hydra/Core.hs),
 [Hydra.Graph](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/gen-main/haskell/Hydra/Graph.hs), and
 [Hydra.Module](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/gen-main/haskell/Hydra/Module.hs).
 
@@ -228,13 +257,16 @@ data Coder v1 v2 = Coder {
 
 **Adapters** also transform types, enabling schema evolution and language mapping.
 
-See the [Implementation wiki](https://github.com/CategoricalData/hydra/blob/main/docs/implementation.md#cross-language-compilation-coders) for details.
+See the
+[Implementation wiki](https://github.com/CategoricalData/hydra/blob/main/docs/implementation.md#cross-language-compilation-coders)
+for details.
 
 ### DSLs
 
 Hydra provides multiple domain-specific languages for constructing types and terms:
 
-**Untyped DSLs** ([Hydra/Dsl/Types.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Dsl/Types.hs),
+**Untyped DSLs**
+([Hydra/Dsl/Types.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Dsl/Types.hs),
 [Hydra/Dsl/Terms.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Dsl/Terms.hs)):
 ```haskell
 import qualified Hydra.Dsl.Types as Types
@@ -249,7 +281,9 @@ alice = Terms.record [
   "age" >: Terms.int32 30]
 ```
 
-**Phantom-typed DSLs** ([Hydra/Dsl/Meta/Phantoms.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Dsl/Meta/Phantoms.hs)) - Compile-time type safety:
+**Phantom-typed DSLs**
+([Hydra/Dsl/Meta/Phantoms.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Dsl/Meta/Phantoms.hs)) -
+Compile-time type safety:
 ```haskell
 import Hydra.Dsl.Meta.Phantoms
 
@@ -257,7 +291,9 @@ safeFn :: TTerm (Int -> String)
 safeFn = lambda "x" (Strings.toUpper (var "x"))  -- Type-checked at compile time
 ```
 
-**Library DSLs** ([Hydra/Dsl/Meta/Lib](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Dsl/Meta/Lib)) - Wrappers for primitive functions:
+**Library DSLs**
+([Hydra/Dsl/Meta/Lib](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Dsl/Meta/Lib)) -
+Wrappers for primitive functions:
 ```haskell
 import Hydra.Dsl.Meta.Lib.Lists as Lists
 import Hydra.Dsl.Meta.Lib.Strings as Strings
@@ -265,7 +301,8 @@ import Hydra.Dsl.Meta.Lib.Strings as Strings
 example = Lists.map (Strings.toUpper) (list ["hello", "world"])
 ```
 
-See the [DSL system section](https://github.com/CategoricalData/hydra/blob/main/docs/implementation.md#dsl-system) in the Implementation wiki for comprehensive coverage.
+See the [DSL system section](https://github.com/CategoricalData/hydra/blob/main/docs/implementation.md#dsl-system)
+in the Implementation wiki for comprehensive coverage.
 
 ### JSON and YAML serialization
 
@@ -297,7 +334,8 @@ putStrLn result
 
 ## Self-hosting demonstration
 
-Hydra-Haskell is a [self-hosting compiler](https://en.wikipedia.org/wiki/Self-hosting_(compilers)) - it can generate its own source code.
+Hydra-Haskell is a [self-hosting compiler](https://en.wikipedia.org/wiki/Self-hosting_(compilers)) -
+it can generate its own source code.
 
 Complete self-hosting cycle:
 
@@ -346,7 +384,9 @@ What remains hand-written:
 - `Hydra.Generation` - I/O and generation utilities
 - Test runners
 
-See the [Bootstrap process](https://github.com/CategoricalData/hydra/blob/main/docs/implementation.md#the-bootstrap-process) section for details on extending Hydra.
+See the
+[Bootstrap process](https://github.com/CategoricalData/hydra/blob/main/docs/implementation.md#the-bootstrap-process)
+section for details on extending Hydra.
 For example:
 - [Adding new primitive functions](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/adding-primitives.md)
 - [Extending Hydra Core](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/extending-hydra-core.md)
@@ -368,4 +408,7 @@ stack upgrade
 brew upgrade stack
 ```
 
-**Explanation:** These are compatibility warnings that appear when using newer GHC/Cabal versions. If your builds complete successfully, the warnings are harmless - Stack works fine with newer versions even before official testing. Upgrading Stack eliminates the warnings.
+**Explanation:** These are compatibility warnings that appear when using newer GHC/Cabal versions.
+If your builds complete successfully, the warnings are harmless -
+Stack works fine with newer versions even before official testing.
+Upgrading Stack eliminates the warnings.
