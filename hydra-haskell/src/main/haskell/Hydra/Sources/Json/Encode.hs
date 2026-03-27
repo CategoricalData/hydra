@@ -97,10 +97,50 @@ module_ = Module ns elements
     Just "JSON encoding for Hydra terms. Converts Terms to JSON Values using Either for error handling."
   where
     elements = [
-      toTermDefinition toJson,
-      toTermDefinition encodeLiteral,
       toTermDefinition encodeFloat,
-      toTermDefinition encodeInteger]
+      toTermDefinition encodeInteger,
+      toTermDefinition encodeLiteral,
+      toTermDefinition toJson]
+
+-- | Encode a float value to JSON
+-- Float64 and Bigfloat use native JSON numbers; Float32 uses string to preserve exact precision
+encodeFloat :: TBinding (FloatValue -> Either String Value)
+encodeFloat = define "encodeFloat" $
+  doc "Encode a float value to JSON. Float64/Bigfloat use native numbers; Float32 uses string." $
+  "fv" ~> cases _FloatValue (var "fv") Nothing [
+    _FloatValue_bigfloat>>: "bf" ~> right $ Json.valueNumber $ var "bf",
+    _FloatValue_float32>>: "f" ~> right $ Json.valueString $ Literals.showFloat32 $ var "f",
+    _FloatValue_float64>>: "f" ~> right $ Json.valueNumber $ Literals.float64ToBigfloat $ var "f"]
+
+-- | Encode an integer value to JSON
+-- Small integers (int8, int16, int32, uint8, uint16) use native JSON numbers
+-- Large integers (int64, uint32, uint64, bigint) use strings to preserve precision
+encodeInteger :: TBinding (IntegerValue -> Either String Value)
+encodeInteger = define "encodeInteger" $
+  doc "Encode an integer value to JSON. Small ints use native numbers; large ints use strings." $
+  "iv" ~> cases _IntegerValue (var "iv") Nothing [
+    -- Large integers: use strings to preserve precision
+    _IntegerValue_bigint>>: "bi" ~> right $ Json.valueString $ Literals.showBigint $ var "bi",
+    _IntegerValue_int64>>: "i" ~> right $ Json.valueString $ Literals.showInt64 $ var "i",
+    _IntegerValue_uint32>>: "i" ~> right $ Json.valueString $ Literals.showUint32 $ var "i",
+    _IntegerValue_uint64>>: "i" ~> right $ Json.valueString $ Literals.showUint64 $ var "i",
+    -- Small integers: use native JSON numbers (convert to bigfloat for JSON)
+    _IntegerValue_int8>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToBigfloat $ Literals.int8ToBigint $ var "i",
+    _IntegerValue_int16>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToBigfloat $ Literals.int16ToBigint $ var "i",
+    _IntegerValue_int32>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToBigfloat $ Literals.int32ToBigint $ var "i",
+    _IntegerValue_uint8>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToBigfloat $ Literals.uint8ToBigint $ var "i",
+    _IntegerValue_uint16>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToBigfloat $ Literals.uint16ToBigint $ var "i"]
+
+-- | Encode a literal value to JSON
+encodeLiteral :: TBinding (Literal -> Either String Value)
+encodeLiteral = define "encodeLiteral" $
+  doc "Encode a Hydra literal to a JSON value" $
+  "lit" ~> cases _Literal (var "lit") Nothing [
+    _Literal_binary>>: "b" ~> right $ Json.valueString $ Literals.binaryToString $ var "b",
+    _Literal_boolean>>: "b" ~> right $ Json.valueBoolean $ var "b",
+    _Literal_float>>: "f" ~> encodeFloat @@ var "f",
+    _Literal_integer>>: "i" ~> encodeInteger @@ var "i",
+    _Literal_string>>: "s" ~> right $ Json.valueString $ var "s"]
 
 -- | Encode a Term to a JSON Value.
 -- Returns Left with an error message for unsupported term constructs.
@@ -209,43 +249,3 @@ toJson = define "toJson" $
             ("v" ~> Json.valueObject $ Maps.fromList $ list [pair (string "@right") (var "v")])
             (var "encodedR"))
         (var "e")]
-
--- | Encode a literal value to JSON
-encodeLiteral :: TBinding (Literal -> Either String Value)
-encodeLiteral = define "encodeLiteral" $
-  doc "Encode a Hydra literal to a JSON value" $
-  "lit" ~> cases _Literal (var "lit") Nothing [
-    _Literal_binary>>: "b" ~> right $ Json.valueString $ Literals.binaryToString $ var "b",
-    _Literal_boolean>>: "b" ~> right $ Json.valueBoolean $ var "b",
-    _Literal_float>>: "f" ~> encodeFloat @@ var "f",
-    _Literal_integer>>: "i" ~> encodeInteger @@ var "i",
-    _Literal_string>>: "s" ~> right $ Json.valueString $ var "s"]
-
--- | Encode a float value to JSON
--- Float64 and Bigfloat use native JSON numbers; Float32 uses string to preserve exact precision
-encodeFloat :: TBinding (FloatValue -> Either String Value)
-encodeFloat = define "encodeFloat" $
-  doc "Encode a float value to JSON. Float64/Bigfloat use native numbers; Float32 uses string." $
-  "fv" ~> cases _FloatValue (var "fv") Nothing [
-    _FloatValue_bigfloat>>: "bf" ~> right $ Json.valueNumber $ var "bf",
-    _FloatValue_float32>>: "f" ~> right $ Json.valueString $ Literals.showFloat32 $ var "f",
-    _FloatValue_float64>>: "f" ~> right $ Json.valueNumber $ Literals.float64ToBigfloat $ var "f"]
-
--- | Encode an integer value to JSON
--- Small integers (int8, int16, int32, uint8, uint16) use native JSON numbers
--- Large integers (int64, uint32, uint64, bigint) use strings to preserve precision
-encodeInteger :: TBinding (IntegerValue -> Either String Value)
-encodeInteger = define "encodeInteger" $
-  doc "Encode an integer value to JSON. Small ints use native numbers; large ints use strings." $
-  "iv" ~> cases _IntegerValue (var "iv") Nothing [
-    -- Large integers: use strings to preserve precision
-    _IntegerValue_bigint>>: "bi" ~> right $ Json.valueString $ Literals.showBigint $ var "bi",
-    _IntegerValue_int64>>: "i" ~> right $ Json.valueString $ Literals.showInt64 $ var "i",
-    _IntegerValue_uint32>>: "i" ~> right $ Json.valueString $ Literals.showUint32 $ var "i",
-    _IntegerValue_uint64>>: "i" ~> right $ Json.valueString $ Literals.showUint64 $ var "i",
-    -- Small integers: use native JSON numbers (convert to bigfloat for JSON)
-    _IntegerValue_int8>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToBigfloat $ Literals.int8ToBigint $ var "i",
-    _IntegerValue_int16>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToBigfloat $ Literals.int16ToBigint $ var "i",
-    _IntegerValue_int32>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToBigfloat $ Literals.int32ToBigint $ var "i",
-    _IntegerValue_uint8>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToBigfloat $ Literals.uint8ToBigint $ var "i",
-    _IntegerValue_uint16>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToBigfloat $ Literals.uint16ToBigint $ var "i"]

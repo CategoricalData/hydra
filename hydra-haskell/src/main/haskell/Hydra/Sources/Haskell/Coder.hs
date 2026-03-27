@@ -112,9 +112,6 @@ module_ = Module ns elements
   where
     ns = Namespace "hydra.ext.haskell.coder"
     elements = [
-      toTermDefinition includeTypeDefinitions,
-      toTermDefinition useCoreImport,
-      toTermDefinition keyHaskellVar,
       toTermDefinition adaptTypeToHaskellAndEncode,
       toTermDefinition constantForFieldName,
       toTermDefinition constantForTypeName,
@@ -127,29 +124,16 @@ module_ = Module ns elements
       toTermDefinition encodeTypeWithClassAssertions,
       toTermDefinition findOrdVariables,
       toTermDefinition getImplicitTypeClasses,
-      toTermDefinition moduleToHaskellModule,
+      toTermDefinition includeTypeDefinitions,
+      toTermDefinition keyHaskellVar,
       toTermDefinition moduleToHaskell,
+      toTermDefinition moduleToHaskellModule,
       toTermDefinition nameDecls,
       toTermDefinition toDataDeclaration,
---      toTermDefinition toTypeDeclarations,
       toTermDefinition toTypeDeclarationsFrom,
       toTermDefinition typeDecl,
-      toTermDefinition typeSchemeConstraintsToClassMap]
-
--- TODO: make these settings configurable
-includeTypeDefinitions :: TBinding Bool
-includeTypeDefinitions = haskellCoderDefinition "includeTypeDefinitions" $
-  doc "Whether to include type definitions in generated Haskell modules" $
-  false
-useCoreImport :: TBinding Bool
-useCoreImport = haskellCoderDefinition "useCoreImport" $
-  doc "Whether to use the Hydra core import in generated modules" $
-  true
-
-keyHaskellVar :: TBinding Name
-keyHaskellVar = haskellCoderDefinition "keyHaskellVar" $
-  doc "The key used to track Haskell variable depth in annotations" $
-  wrap _Name $ string "haskellVar"
+      toTermDefinition typeSchemeConstraintsToClassMap,
+      toTermDefinition useCoreImport]
 
 adaptTypeToHaskellAndEncode :: TBinding (HaskellNamespaces -> Type -> Context -> Graph -> Either (InContext Error) H.Type)
 adaptTypeToHaskellAndEncode = haskellCoderDefinition "adaptTypeToHaskellAndEncode" $
@@ -682,12 +666,15 @@ getImplicitTypeClasses = haskellCoderDefinition "getImplicitTypeClasses" $
       pair (var "name") (Sets.fromList $ list [Graph.typeClassOrdering])] $
     Maps.fromList $ Lists.map (var "toPair") (Sets.toList $ findOrdVariables @@ var "typ")
 
-moduleToHaskellModule :: TBinding (Module -> [Definition] -> Context -> Graph -> Prelude.Either (InContext Error) H.Module)
-moduleToHaskellModule = haskellCoderDefinition "moduleToHaskellModule" $
-  doc "Convert a Hydra module and definitions to a Haskell module AST" $
-  "mod" ~> "defs" ~> "cx" ~> "g" ~>
-    "namespaces" <<~ HaskellUtils.namespacesForModule @@ var "mod" @@ var "cx" @@ var "g" $
-      constructModule @@ var "namespaces" @@ var "mod" @@ var "defs" @@ var "cx" @@ var "g"
+includeTypeDefinitions :: TBinding Bool
+includeTypeDefinitions = haskellCoderDefinition "includeTypeDefinitions" $
+  doc "Whether to include type definitions in generated Haskell modules" $
+  false
+
+keyHaskellVar :: TBinding Name
+keyHaskellVar = haskellCoderDefinition "keyHaskellVar" $
+  doc "The key used to track Haskell variable depth in annotations" $
+  wrap _Name $ string "haskellVar"
 
 moduleToHaskell :: TBinding (Module -> [Definition] -> Context -> Graph -> Prelude.Either (InContext Error) (M.Map String String))
 moduleToHaskell = haskellCoderDefinition "moduleToHaskell" $
@@ -697,6 +684,13 @@ moduleToHaskell = haskellCoderDefinition "moduleToHaskell" $
   "s">: Serialization.printExpr @@ (Serialization.parenthesize @@ (HaskellSerde.moduleToExpr @@ var "hsmod")),
   "filepath">: Names.namespaceToFilePath @@ Util.caseConventionPascal @@ (wrap _FileExtension $ string "hs") @@ (Module.moduleNamespace $ var "mod")] $
   right $ Maps.singleton (var "filepath") (var "s")
+
+moduleToHaskellModule :: TBinding (Module -> [Definition] -> Context -> Graph -> Prelude.Either (InContext Error) H.Module)
+moduleToHaskellModule = haskellCoderDefinition "moduleToHaskellModule" $
+  doc "Convert a Hydra module and definitions to a Haskell module AST" $
+  "mod" ~> "defs" ~> "cx" ~> "g" ~>
+    "namespaces" <<~ HaskellUtils.namespacesForModule @@ var "mod" @@ var "cx" @@ var "g" $
+      constructModule @@ var "namespaces" @@ var "mod" @@ var "defs" @@ var "cx" @@ var "g"
 
 nameDecls :: TBinding (HaskellNamespaces -> Name -> Type -> [H.DeclarationWithComments])
 nameDecls = haskellCoderDefinition "nameDecls" $
@@ -990,3 +984,8 @@ typeSchemeConstraintsToClassMap = haskellCoderDefinition "typeSchemeConstraintsT
             Maybes.cat $ Lists.map (var "nameToTypeClass") $ Sets.toList $ Core.typeVariableMetadataClasses (var "meta"))
           (var "constraints"))
       (var "maybeConstraints")
+
+useCoreImport :: TBinding Bool
+useCoreImport = haskellCoderDefinition "useCoreImport" $
+  doc "Whether to use the Hydra core import in generated modules" $
+  true

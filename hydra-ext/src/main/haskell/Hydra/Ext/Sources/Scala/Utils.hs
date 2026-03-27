@@ -104,22 +104,22 @@ module_ = Module ns elements
     elements = [
       toTermDefinition nameOfType,
       toTermDefinition qualifyUnionFieldName,
-      toTermDefinition scalaTypeName,
-      toTermDefinition scalaEscapeName,
       toTermDefinition sapply,
+      toTermDefinition sapplyTypes,
       toTermDefinition sassign,
+      toTermDefinition scalaEscapeName,
+      toTermDefinition scalaReservedWordsRef,
+      toTermDefinition scalaTypeName,
       toTermDefinition slambda,
       toTermDefinition sname,
       toTermDefinition sprim,
-      toTermDefinition sapplyTypes,
-      toTermDefinition typeToString,
       toTermDefinition stapply,
       toTermDefinition stapply1,
       toTermDefinition stapply2,
       toTermDefinition stparam,
       toTermDefinition stref,
       toTermDefinition svar,
-      toTermDefinition scalaReservedWordsRef]
+      toTermDefinition typeToString]
 
 
 nameOfType :: TBinding (Graph -> Type -> Y.Maybe Name)
@@ -141,14 +141,41 @@ qualifyUnionFieldName = def "qualifyUnionFieldName" $
       (var "sname")
     ++ (scalaEscapeName @@ (Core.unName $ var "fname"))
 
-scalaTypeName :: TBinding (Bool -> Name -> String)
-scalaTypeName = def "scalaTypeName" $
-  doc "Convert a Hydra name to a Scala type name" $
-  lambda "qualify" $ lambda "name" $
-    Logic.ifElse
-      (Logic.or (var "qualify") (Sets.member (Names.localNameOf @@ var "name") (asTerm scalaReservedWordsRef)))
-      (Core.unName $ var "name")
-      (Names.localNameOf @@ var "name")
+sapply :: TBinding (Scala.Data -> [Scala.Data] -> Scala.Data)
+sapply = def "sapply" $
+  doc "Apply a Scala data expression to a list of arguments" $
+  lambda "fun" $ lambda "args" $
+    inject _Data _Data_apply (
+      record _Data_Apply [
+        _Data_Apply_fun>>: var "fun",
+        _Data_Apply_args>>: var "args"])
+
+sapplyTypes :: TBinding (Scala.Data -> [Scala.Type] -> Scala.Data)
+sapplyTypes = def "sapplyTypes" $
+  doc "Apply explicit type parameters to a Scala expression (e.g. f[A, B])" $
+  lambda "fun" $ lambda "typeArgs" $ lets [
+    -- Convert each Scala type to its string representation
+    "typeToStr">: ("t" ~> asTerm typeToString @@ var "t"),
+    "typeStrings">: Lists.map (var "typeToStr") (var "typeArgs"),
+    "typeArgStr">: Strings.cat (list [string "[", Strings.intercalate (string ", ") (var "typeStrings"), string "]"])] $
+    -- Combine function with type args: extract name from fun, append type args
+    cases _Data (var "fun")
+      (Just $ var "fun") -- If not a name ref, can't add type args
+      [_Data_ref>>: ("ref" ~> cases _Data_Ref (var "ref")
+        (Just $ var "fun")
+        [_Data_Ref_name>>: ("dn" ~> lets [
+          "nameStr">: project _Data_Name _Data_Name_value @@ var "dn",
+          "rawName">: unwrap Scala._PredefString @@ var "nameStr"] $
+          sname @@ (var "rawName" ++ var "typeArgStr"))])]
+
+sassign :: TBinding (Scala.Data -> Scala.Data -> Scala.Data)
+sassign = def "sassign" $
+  doc "Create a Scala assignment expression" $
+  lambda "lhs" $ lambda "rhs" $
+    inject _Data _Data_assign (
+      record _Data_Assign [
+        _Data_Assign_lhs>>: var "lhs",
+        _Data_Assign_rhs>>: var "rhs"])
 
 scalaEscapeName :: TBinding (String -> String)
 scalaEscapeName = def "scalaEscapeName" $
@@ -181,62 +208,14 @@ scalaReservedWordsRef = def "scalaReservedWords" $
   doc "Reference to scalaReservedWords from the language module" $
   TTerm $ TermVariable $ Name "hydra.ext.scala.language.scalaReservedWords"
 
-sapplyTypes :: TBinding (Scala.Data -> [Scala.Type] -> Scala.Data)
-sapplyTypes = def "sapplyTypes" $
-  doc "Apply explicit type parameters to a Scala expression (e.g. f[A, B])" $
-  lambda "fun" $ lambda "typeArgs" $ lets [
-    -- Convert each Scala type to its string representation
-    "typeToStr">: ("t" ~> asTerm typeToString @@ var "t"),
-    "typeStrings">: Lists.map (var "typeToStr") (var "typeArgs"),
-    "typeArgStr">: Strings.cat (list [string "[", Strings.intercalate (string ", ") (var "typeStrings"), string "]"])] $
-    -- Combine function with type args: extract name from fun, append type args
-    cases _Data (var "fun")
-      (Just $ var "fun") -- If not a name ref, can't add type args
-      [_Data_ref>>: ("ref" ~> cases _Data_Ref (var "ref")
-        (Just $ var "fun")
-        [_Data_Ref_name>>: ("dn" ~> lets [
-          "nameStr">: project _Data_Name _Data_Name_value @@ var "dn",
-          "rawName">: unwrap Scala._PredefString @@ var "nameStr"] $
-          sname @@ (var "rawName" ++ var "typeArgStr"))])]
-
-typeToString :: TBinding (Scala.Type -> String)
-typeToString = def "typeToString" $
-  doc "Convert a Scala type to its string representation" $
-  lambda "t" $
-    cases Scala._Type (var "t")
-      (Just $ string "Any") [
-      Scala._Type_ref>>: ("tr" ~> cases Scala._Type_Ref (var "tr")
-        (Just $ string "Any")
-        [Scala._Type_Ref_name>>: ("tn" ~> project Scala._Type_Name Scala._Type_Name_value @@ var "tn")]),
-      Scala._Type_var>>: ("tv" ~> project Scala._Type_Name Scala._Type_Name_value @@ (project Scala._Type_Var Scala._Type_Var_name @@ var "tv")),
-      Scala._Type_functionType>>: ("ft" ~> cases Scala._Type_FunctionType (var "ft")
-        (Just $ string "Any") [
-        Scala._Type_FunctionType_function>>: ("fn" ~> lets [
-          "params">: Lists.map (asTerm typeToString) (project Scala._Type_Function Scala._Type_Function_params @@ var "fn"),
-          "res">: asTerm typeToString @@ (project Scala._Type_Function Scala._Type_Function_res @@ var "fn")] $
-          Strings.cat (list [string "(", Strings.intercalate (string ", ") (var "params"), string ") => ", var "res"]))]),
-      Scala._Type_apply>>: ("ta" ~> lets [
-        "base">: asTerm typeToString @@ (project Scala._Type_Apply Scala._Type_Apply_tpe @@ var "ta"),
-        "argStrs">: Lists.map (asTerm typeToString) (project Scala._Type_Apply Scala._Type_Apply_args @@ var "ta")] $
-        Strings.cat (list [var "base", string "[", Strings.intercalate (string ", ") (var "argStrs"), string "]"]))]
-
-sapply :: TBinding (Scala.Data -> [Scala.Data] -> Scala.Data)
-sapply = def "sapply" $
-  doc "Apply a Scala data expression to a list of arguments" $
-  lambda "fun" $ lambda "args" $
-    inject _Data _Data_apply (
-      record _Data_Apply [
-        _Data_Apply_fun>>: var "fun",
-        _Data_Apply_args>>: var "args"])
-
-sassign :: TBinding (Scala.Data -> Scala.Data -> Scala.Data)
-sassign = def "sassign" $
-  doc "Create a Scala assignment expression" $
-  lambda "lhs" $ lambda "rhs" $
-    inject _Data _Data_assign (
-      record _Data_Assign [
-        _Data_Assign_lhs>>: var "lhs",
-        _Data_Assign_rhs>>: var "rhs"])
+scalaTypeName :: TBinding (Bool -> Name -> String)
+scalaTypeName = def "scalaTypeName" $
+  doc "Convert a Hydra name to a Scala type name" $
+  lambda "qualify" $ lambda "name" $
+    Logic.ifElse
+      (Logic.or (var "qualify") (Sets.member (Names.localNameOf @@ var "name") (asTerm scalaReservedWordsRef)))
+      (Core.unName $ var "name")
+      (Names.localNameOf @@ var "name")
 
 slambda :: TBinding (String -> Scala.Data -> Y.Maybe Scala.Type -> Scala.Data)
 slambda = def "slambda" $
@@ -323,6 +302,27 @@ svar = def "svar" $
       record _Pat_Var [
         _Pat_Var_name>>: record _Data_Name [
           _Data_Name_value>>: wrap _PredefString (var "v")]])
+
+typeToString :: TBinding (Scala.Type -> String)
+typeToString = def "typeToString" $
+  doc "Convert a Scala type to its string representation" $
+  lambda "t" $
+    cases Scala._Type (var "t")
+      (Just $ string "Any") [
+      Scala._Type_ref>>: ("tr" ~> cases Scala._Type_Ref (var "tr")
+        (Just $ string "Any")
+        [Scala._Type_Ref_name>>: ("tn" ~> project Scala._Type_Name Scala._Type_Name_value @@ var "tn")]),
+      Scala._Type_var>>: ("tv" ~> project Scala._Type_Name Scala._Type_Name_value @@ (project Scala._Type_Var Scala._Type_Var_name @@ var "tv")),
+      Scala._Type_functionType>>: ("ft" ~> cases Scala._Type_FunctionType (var "ft")
+        (Just $ string "Any") [
+        Scala._Type_FunctionType_function>>: ("fn" ~> lets [
+          "params">: Lists.map (asTerm typeToString) (project Scala._Type_Function Scala._Type_Function_params @@ var "fn"),
+          "res">: asTerm typeToString @@ (project Scala._Type_Function Scala._Type_Function_res @@ var "fn")] $
+          Strings.cat (list [string "(", Strings.intercalate (string ", ") (var "params"), string ") => ", var "res"]))]),
+      Scala._Type_apply>>: ("ta" ~> lets [
+        "base">: asTerm typeToString @@ (project Scala._Type_Apply Scala._Type_Apply_tpe @@ var "ta"),
+        "argStrs">: Lists.map (asTerm typeToString) (project Scala._Type_Apply Scala._Type_Apply_args @@ var "ta")] $
+        Strings.cat (list [var "base", string "[", Strings.intercalate (string ", ") (var "argStrs"), string "]"]))]
 
 
 -- Scala Meta type/constructor name references

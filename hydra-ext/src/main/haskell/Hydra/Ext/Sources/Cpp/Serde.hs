@@ -223,252 +223,6 @@ module_ = Module ns elements
       toTermDefinition encodeWhileStatement]
 
 
--- Program structure
-
-encodeProgram :: TBinding (Cpp.Program -> Expr)
-encodeProgram = define "encodeProgram" $
-  doc "Convert a program to an expression" $
-  lambda "prog" $ lets [
-    "preps">: project Cpp._Program Cpp._Program_preprocessorDirectives @@ var "prog",
-    "includes">: project Cpp._Program Cpp._Program_includes @@ var "prog",
-    "decls">: project Cpp._Program Cpp._Program_declarations @@ var "prog",
-    "separate">: lambda "sep" $ lambda "defs" $
-      Logic.ifElse (Lists.null (var "defs"))
-        nothing
-        (just (var "sep" @@ var "defs"))] $
-    Serialization.doubleNewlineSep @@ (Maybes.cat $ list [
-      var "separate" @@ Serialization.newlineSep @@ (Lists.map encodePreprocessorDirective (var "preps")),
-      var "separate" @@ Serialization.newlineSep @@ (Lists.map encodeIncludeDirective (var "includes")),
-      var "separate" @@ Serialization.doubleNewlineSep @@ (Lists.map encodeDeclaration (var "decls"))])
-
-encodePreprocessorDirective :: TBinding (Cpp.PreprocessorDirective -> Expr)
-encodePreprocessorDirective = define "encodePreprocessorDirective" $
-  doc "Convert a preprocessor directive to an expression" $
-  lambda "d" $
-    cases Cpp._PreprocessorDirective (var "d") Nothing [
-      Cpp._PreprocessorDirective_include>>: lambda "i" $ encodeIncludeDirective @@ var "i",
-      Cpp._PreprocessorDirective_pragma>>: lambda "p" $ encodePragmaDirective @@ var "p",
-      Cpp._PreprocessorDirective_define>>: lambda "d" $ encodeDefineDirective @@ var "d",
-      Cpp._PreprocessorDirective_undef>>: lambda "u" $ encodeUndefDirective @@ var "u",
-      Cpp._PreprocessorDirective_ifdef>>: lambda "i" $ encodeIfdefDirective @@ var "i",
-      Cpp._PreprocessorDirective_ifndef>>: lambda "i" $ encodeIfndefDirective @@ var "i",
-      Cpp._PreprocessorDirective_if>>: lambda "i" $ encodeIfDirective @@ var "i",
-      Cpp._PreprocessorDirective_elif>>: lambda "e" $ encodeElifDirective @@ var "e",
-      Cpp._PreprocessorDirective_else>>: lambda "e" $ encodeElseDirective @@ var "e",
-      Cpp._PreprocessorDirective_endif>>: lambda "e" $ encodeEndifDirective @@ var "e",
-      Cpp._PreprocessorDirective_line>>: lambda "l" $ encodeLineDirective @@ var "l",
-      Cpp._PreprocessorDirective_error>>: lambda "e" $ encodeErrorDirective @@ var "e",
-      Cpp._PreprocessorDirective_warning>>: lambda "w" $ encodeWarningDirective @@ var "w"]
-
-encodePragmaDirective :: TBinding (Cpp.PragmaDirective -> Expr)
-encodePragmaDirective = define "encodePragmaDirective" $
-  doc "Convert a pragma directive to an expression" $
-  lambda "pd" $
-    Serialization.cst @@ (Strings.cat2 (string "#pragma ") (project Cpp._PragmaDirective Cpp._PragmaDirective_content @@ var "pd"))
-
-encodeDefineDirective :: TBinding (Cpp.DefineDirective -> Expr)
-encodeDefineDirective = define "encodeDefineDirective" $
-  doc "Convert a define directive to an expression" $
-  lambda "dd" $ lets [
-    "name">: project Cpp._DefineDirective Cpp._DefineDirective_name @@ var "dd",
-    "params">: project Cpp._DefineDirective Cpp._DefineDirective_parameters @@ var "dd",
-    "replacement">: project Cpp._DefineDirective Cpp._DefineDirective_replacement @@ var "dd"] $
-    Serialization.spaceSep @@ (Lists.concat $ list [
-      list [Serialization.cst @@ string "#define", Serialization.cst @@ var "name"],
-      Maybes.maybe
-        (list ([] :: [TTerm Expr]))
-        (lambda "ps" $ list [Serialization.parens @@ (Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map (lambda "p" $ Serialization.cst @@ var "p") (var "ps")))])
-        (var "params"),
-      Maybes.maybe
-        (list ([] :: [TTerm Expr]))
-        (lambda "r" $ list [Serialization.cst @@ var "r"])
-        (var "replacement")])
-
-encodeUndefDirective :: TBinding (Cpp.UndefDirective -> Expr)
-encodeUndefDirective = define "encodeUndefDirective" $
-  doc "Convert an undef directive to an expression" $
-  lambda "ud" $
-    Serialization.spaceSep @@ list [
-      Serialization.cst @@ string "#undef",
-      Serialization.cst @@ (project Cpp._UndefDirective Cpp._UndefDirective_name @@ var "ud")]
-
-encodeIfdefDirective :: TBinding (Cpp.IfdefDirective -> Expr)
-encodeIfdefDirective = define "encodeIfdefDirective" $
-  doc "Convert an ifdef directive to an expression" $
-  lambda "id" $
-    Serialization.spaceSep @@ list [
-      Serialization.cst @@ string "#ifdef",
-      Serialization.cst @@ (project Cpp._IfdefDirective Cpp._IfdefDirective_identifier @@ var "id")]
-
-encodeIfndefDirective :: TBinding (Cpp.IfndefDirective -> Expr)
-encodeIfndefDirective = define "encodeIfndefDirective" $
-  doc "Convert an ifndef directive to an expression" $
-  lambda "ind" $
-    Serialization.spaceSep @@ list [
-      Serialization.cst @@ string "#ifndef",
-      Serialization.cst @@ (project Cpp._IfndefDirective Cpp._IfndefDirective_identifier @@ var "ind")]
-
-encodeIfDirective :: TBinding (Cpp.IfDirective -> Expr)
-encodeIfDirective = define "encodeIfDirective" $
-  doc "Convert an if directive to an expression" $
-  lambda "ifd" $
-    Serialization.spaceSep @@ list [
-      Serialization.cst @@ string "#if",
-      Serialization.cst @@ (project Cpp._IfDirective Cpp._IfDirective_condition @@ var "ifd")]
-
-encodeElifDirective :: TBinding (Cpp.ElifDirective -> Expr)
-encodeElifDirective = define "encodeElifDirective" $
-  doc "Convert an elif directive to an expression" $
-  lambda "ed" $
-    Serialization.spaceSep @@ list [
-      Serialization.cst @@ string "#elif",
-      Serialization.cst @@ (project Cpp._ElifDirective Cpp._ElifDirective_condition @@ var "ed")]
-
-encodeElseDirective :: TBinding (Cpp.ElseDirective -> Expr)
-encodeElseDirective = define "encodeElseDirective" $
-  doc "Convert an else directive to an expression" $
-  lambda "ed" $ Serialization.cst @@ string "#else"
-
-encodeEndifDirective :: TBinding (Cpp.EndifDirective -> Expr)
-encodeEndifDirective = define "encodeEndifDirective" $
-  doc "Convert an endif directive to an expression" $
-  lambda "ed" $ Serialization.cst @@ string "#endif"
-
-encodeLineDirective :: TBinding (Cpp.LineDirective -> Expr)
-encodeLineDirective = define "encodeLineDirective" $
-  doc "Convert a line directive to an expression" $
-  lambda "ld" $ lets [
-    "lineNumber">: project Cpp._LineDirective Cpp._LineDirective_lineNumber @@ var "ld",
-    "filename">: project Cpp._LineDirective Cpp._LineDirective_filename @@ var "ld"] $
-    Serialization.spaceSep @@ (Lists.concat $ list [
-      list [Serialization.cst @@ string "#line", Serialization.cst @@ (Literals.showInt32 (var "lineNumber"))],
-      Maybes.maybe
-        (list ([] :: [TTerm Expr]))
-        (lambda "f" $ list [Serialization.cst @@ (Strings.cat $ list [string "\"", var "f", string "\""])])
-        (var "filename")])
-
-encodeErrorDirective :: TBinding (Cpp.ErrorDirective -> Expr)
-encodeErrorDirective = define "encodeErrorDirective" $
-  doc "Convert an error directive to an expression" $
-  lambda "ed" $
-    Serialization.spaceSep @@ list [
-      Serialization.cst @@ string "#error",
-      Serialization.cst @@ (project Cpp._ErrorDirective Cpp._ErrorDirective_message @@ var "ed")]
-
-encodeWarningDirective :: TBinding (Cpp.WarningDirective -> Expr)
-encodeWarningDirective = define "encodeWarningDirective" $
-  doc "Convert a warning directive to an expression" $
-  lambda "wd" $
-    Serialization.spaceSep @@ list [
-      Serialization.cst @@ string "#warning",
-      Serialization.cst @@ (project Cpp._WarningDirective Cpp._WarningDirective_message @@ var "wd")]
-
-encodeIncludeDirective :: TBinding (Cpp.IncludeDirective -> Expr)
-encodeIncludeDirective = define "encodeIncludeDirective" $
-  doc "Convert an include directive to an expression" $
-  lambda "incl" $ lets [
-    "name">: project Cpp._IncludeDirective Cpp._IncludeDirective_name @@ var "incl",
-    "isSystem">: project Cpp._IncludeDirective Cpp._IncludeDirective_isSystem @@ var "incl"] $
-    Logic.ifElse (var "isSystem")
-      (Serialization.cst @@ (Strings.cat $ list [string "#include <", var "name", string ">"]))
-      (Serialization.cst @@ (Strings.cat $ list [string "#include \"", var "name", string "\""]))
-
-encodeDeclaration :: TBinding (Cpp.Declaration -> Expr)
-encodeDeclaration = define "encodeDeclaration" $
-  doc "Convert a declaration to an expression" $
-  lambda "d" $
-    cases Cpp._Declaration (var "d") Nothing [
-      Cpp._Declaration_preprocessor>>: lambda "p" $ encodePreprocessorDirective @@ var "p",
-      Cpp._Declaration_class>>: lambda "c" $ encodeClassDeclaration @@ var "c",
-      Cpp._Declaration_function>>: lambda "f" $ encodeFunctionDeclaration @@ var "f",
-      Cpp._Declaration_variable>>: lambda "v" $ encodeVariableDeclaration @@ false @@ var "v",
-      Cpp._Declaration_typedef>>: lambda "t" $ encodeTypedefDeclaration @@ var "t",
-      Cpp._Declaration_namespace>>: lambda "n" $ encodeNamespaceDeclaration @@ var "n",
-      Cpp._Declaration_template>>: lambda "t" $ encodeTemplateDeclaration @@ var "t"]
-
-encodeNamespaceDeclaration :: TBinding (Cpp.NamespaceDeclaration -> Expr)
-encodeNamespaceDeclaration = define "encodeNamespaceDeclaration" $
-  doc "Convert a namespace declaration to an expression" $
-  lambda "nd" $ lets [
-    "name">: project Cpp._NamespaceDeclaration Cpp._NamespaceDeclaration_name @@ var "nd",
-    "decls">: project Cpp._NamespaceDeclaration Cpp._NamespaceDeclaration_declarations @@ var "nd"] $
-    Serialization.spaceSep @@ list [
-      Serialization.cst @@ (Strings.cat2 (string "namespace ") (var "name")),
-      Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
-        (Serialization.doubleNewlineSep @@ (Lists.map encodeDeclaration (var "decls")))]
-
-encodeTypedefDeclaration :: TBinding (Cpp.TypedefDeclaration -> Expr)
-encodeTypedefDeclaration = define "encodeTypedefDeclaration" $
-  doc "Convert a typedef declaration to an expression" $
-  lambda "td" $ lets [
-    "name">: project Cpp._TypedefDeclaration Cpp._TypedefDeclaration_name @@ var "td",
-    "typ">: project Cpp._TypedefDeclaration Cpp._TypedefDeclaration_type @@ var "td",
-    "isUsing">: project Cpp._TypedefDeclaration Cpp._TypedefDeclaration_isUsing @@ var "td"] $
-    Logic.ifElse (var "isUsing")
-      (Serialization.withSemi @@ (Serialization.spaceSep @@ list [
-        Serialization.cst @@ (Strings.cat2 (string "using ") (var "name")),
-        Serialization.cst @@ string "=",
-        encodeTypeExpression @@ var "typ"]))
-      (Serialization.withSemi @@ (Serialization.spaceSep @@ list [
-        Serialization.cst @@ string "typedef",
-        encodeTypeExpression @@ var "typ",
-        Serialization.cst @@ var "name"]))
-
--- Class-related encoders
-
-encodeClassBody :: TBinding (Bool -> Cpp.ClassBody -> Expr)
-encodeClassBody = define "encodeClassBody" $
-  doc "Convert a class body to an expression" $
-  lambda "commas" $ lambda "cb" $
-    Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
-      (Serialization.doubleNewlineSep @@ (Lists.map (encodeMemberSpecification @@ var "commas") (unwrap Cpp._ClassBody @@ var "cb")))
-
-encodeClassDeclaration :: TBinding (Cpp.ClassDeclaration -> Expr)
-encodeClassDeclaration = define "encodeClassDeclaration" $
-  doc "Convert a class declaration to an expression" $
-  lambda "cd" $ lets [
-    "spec">: project Cpp._ClassDeclaration Cpp._ClassDeclaration_specifier @@ var "cd",
-    "mbody">: project Cpp._ClassDeclaration Cpp._ClassDeclaration_body @@ var "cd",
-    "key">: project Cpp._ClassSpecifier Cpp._ClassSpecifier_key @@ var "spec",
-    "isEnum">: Logic.or
-      (Equality.equal (var "key") (inject Cpp._ClassKey Cpp._ClassKey_enum unit))
-      (Equality.equal (var "key") (inject Cpp._ClassKey Cpp._ClassKey_enumClass unit))] $
-    Serialization.withSemi @@ (Serialization.spaceSep @@ (Maybes.cat $ list [
-      just (encodeClassSpecifier @@ var "spec"),
-      Maybes.map (lambda "body" $ encodeClassBody @@ var "isEnum" @@ var "body") (var "mbody")]))
-
-encodeClassSpecifier :: TBinding (Cpp.ClassSpecifier -> Expr)
-encodeClassSpecifier = define "encodeClassSpecifier" $
-  doc "Convert a class specifier to an expression" $
-  lambda "cs" $ lets [
-    "key">: project Cpp._ClassSpecifier Cpp._ClassSpecifier_key @@ var "cs",
-    "name">: project Cpp._ClassSpecifier Cpp._ClassSpecifier_name @@ var "cs",
-    "inheritance">: project Cpp._ClassSpecifier Cpp._ClassSpecifier_inheritance @@ var "cs"] $
-    Serialization.spaceSep @@ (Lists.concat $ list [
-      list [encodeClassKey @@ var "key", Serialization.cst @@ var "name"],
-      Logic.ifElse (Lists.null (var "inheritance"))
-        (list ([] :: [TTerm Expr]))
-        (list [Serialization.cst @@ string ":",
-          Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map encodeBaseSpecifier (var "inheritance"))])])
-
-encodeClassKey :: TBinding (Cpp.ClassKey -> Expr)
-encodeClassKey = define "encodeClassKey" $
-  doc "Convert a class key to an expression" $
-  lambda "k" $
-    cases Cpp._ClassKey (var "k") Nothing [
-      Cpp._ClassKey_class>>: constant $ Serialization.cst @@ string "class",
-      Cpp._ClassKey_enum>>: constant $ Serialization.cst @@ string "enum",
-      Cpp._ClassKey_enumClass>>: constant $ Serialization.cst @@ string "enum class",
-      Cpp._ClassKey_struct>>: constant $ Serialization.cst @@ string "struct"]
-
-encodeBaseSpecifier :: TBinding (Cpp.BaseSpecifier -> Expr)
-encodeBaseSpecifier = define "encodeBaseSpecifier" $
-  doc "Convert a base specifier to an expression" $
-  lambda "bs" $ lets [
-    "access">: project Cpp._BaseSpecifier Cpp._BaseSpecifier_access @@ var "bs",
-    "name">: project Cpp._BaseSpecifier Cpp._BaseSpecifier_name @@ var "bs"] $
-    Serialization.spaceSep @@ list [encodeAccessSpecifier @@ var "access", Serialization.cst @@ var "name"]
-
 encodeAccessSpecifier :: TBinding (Cpp.AccessSpecifier -> Expr)
 encodeAccessSpecifier = define "encodeAccessSpecifier" $
   doc "Convert an access specifier to an expression" $
@@ -479,176 +233,66 @@ encodeAccessSpecifier = define "encodeAccessSpecifier" $
       Cpp._AccessSpecifier_private>>: constant $ Serialization.cst @@ string "private",
       Cpp._AccessSpecifier_none>>: constant $ Serialization.cst @@ string ""]
 
-encodeMemberSpecification :: TBinding (Bool -> Cpp.MemberSpecification -> Expr)
-encodeMemberSpecification = define "encodeMemberSpecification" $
-  doc "Convert a member specification to an expression" $
-  lambda "commas" $ lambda "m" $
-    cases Cpp._MemberSpecification (var "m") Nothing [
-      Cpp._MemberSpecification_accessLabel>>: lambda "a" $
-        Serialization.noSep @@ list [encodeAccessSpecifier @@ var "a", Serialization.cst @@ string ":"],
-      Cpp._MemberSpecification_member>>: lambda "d" $ encodeMemberDeclaration @@ var "commas" @@ var "d"]
+encodeAddOperation :: TBinding (Cpp.AddOperation -> Expr)
+encodeAddOperation = define "encodeAddOperation" $
+  doc "Convert an add operation to an expression" $
+  lambda "op" $ lets [
+    "left">: project Cpp._AddOperation Cpp._AddOperation_left @@ var "op",
+    "right">: project Cpp._AddOperation Cpp._AddOperation_right @@ var "op"] $
+    Serialization.spaceSep @@ list [
+      encodeAdditiveExpression @@ var "left",
+      Serialization.cst @@ string "+",
+      encodeMultiplicativeExpression @@ var "right"]
 
-encodeMemberDeclaration :: TBinding (Bool -> Cpp.MemberDeclaration -> Expr)
-encodeMemberDeclaration = define "encodeMemberDeclaration" $
-  doc "Convert a member declaration to an expression" $
-  lambda "commas" $ lambda "m" $
-    cases Cpp._MemberDeclaration (var "m") Nothing [
-      Cpp._MemberDeclaration_function>>: lambda "f" $ encodeFunctionDeclaration @@ var "f",
-      Cpp._MemberDeclaration_variable>>: lambda "v" $ encodeVariableDeclaration @@ var "commas" @@ var "v",
-      Cpp._MemberDeclaration_constructor>>: lambda "c" $ encodeConstructorDeclaration @@ var "c",
-      Cpp._MemberDeclaration_destructor>>: lambda "d" $ encodeDestructorDeclaration @@ var "d",
-      Cpp._MemberDeclaration_nestedClass>>: lambda "c" $ encodeClassDeclaration @@ var "c",
-      Cpp._MemberDeclaration_template>>: lambda "t" $ encodeTemplateDeclaration @@ var "t"]
+encodeAdditiveExpression :: TBinding (Cpp.AdditiveExpression -> Expr)
+encodeAdditiveExpression = define "encodeAdditiveExpression" $
+  doc "Convert an additive expression to an expression" $
+  lambda "e" $
+    cases Cpp._AdditiveExpression (var "e") Nothing [
+      Cpp._AdditiveExpression_multiplicative>>: lambda "m" $ encodeMultiplicativeExpression @@ var "m",
+      Cpp._AdditiveExpression_add>>: lambda "a" $ encodeAddOperation @@ var "a",
+      Cpp._AdditiveExpression_subtract>>: lambda "s" $ encodeSubtractOperation @@ var "s"]
 
-encodeConstructorDeclaration :: TBinding (Cpp.ConstructorDeclaration -> Expr)
-encodeConstructorDeclaration = define "encodeConstructorDeclaration" $
-  doc "Convert a constructor declaration to an expression" $
-  lambda "cd" $ lets [
-    "name">: project Cpp._ConstructorDeclaration Cpp._ConstructorDeclaration_name @@ var "cd",
-    "params">: project Cpp._ConstructorDeclaration Cpp._ConstructorDeclaration_parameters @@ var "cd",
-    "inits">: project Cpp._ConstructorDeclaration Cpp._ConstructorDeclaration_initializers @@ var "cd",
-    "body">: project Cpp._ConstructorDeclaration Cpp._ConstructorDeclaration_body @@ var "cd"] $
-    Serialization.spaceSep @@ (Maybes.cat $ list [
-      just (Serialization.noSep @@ list [
-        Serialization.cst @@ var "name",
-        Serialization.parens @@ (Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map encodeParameter (var "params")))]),
-      Logic.ifElse (Lists.null (var "inits"))
-        nothing
-        (just (Serialization.spaceSep @@ list [
-          Serialization.cst @@ string ":",
-          Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map encodeMemInitializer (var "inits"))])),
-      just (encodeFunctionBody @@ var "body")])
+encodeAndExpression :: TBinding (Cpp.AndExpression -> Expr)
+encodeAndExpression = define "encodeAndExpression" $
+  doc "Convert an and expression to an expression" $
+  lambda "e" $
+    cases Cpp._AndExpression (var "e") Nothing [
+      Cpp._AndExpression_equality>>: lambda "eq" $ encodeEqualityExpression @@ var "eq",
+      Cpp._AndExpression_bitwiseAnd>>: lambda "a" $ encodeBitwiseAndOperation @@ var "a"]
 
-encodeMemInitializer :: TBinding (Cpp.MemInitializer -> Expr)
-encodeMemInitializer = define "encodeMemInitializer" $
-  doc "Convert a member initializer to an expression" $
-  lambda "mi" $ lets [
-    "name">: project Cpp._MemInitializer Cpp._MemInitializer_name @@ var "mi",
-    "args">: project Cpp._MemInitializer Cpp._MemInitializer_arguments @@ var "mi"] $
-    Serialization.noSep @@ list [
-      Serialization.cst @@ var "name",
-      Serialization.parens @@ (Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map encodeExpression (var "args")))]
+encodeAssignmentExpression :: TBinding (Cpp.AssignmentExpression -> Expr)
+encodeAssignmentExpression = define "encodeAssignmentExpression" $
+  doc "Convert an assignment expression to an expression" $
+  lambda "a" $
+    cases Cpp._AssignmentExpression (var "a") Nothing [
+      Cpp._AssignmentExpression_conditional>>: lambda "c" $ encodeConditionalExpression @@ var "c",
+      Cpp._AssignmentExpression_assignment>>: lambda "e" $ encodeExplicitAssignment @@ var "e"]
 
-encodeDestructorDeclaration :: TBinding (Cpp.DestructorDeclaration -> Expr)
-encodeDestructorDeclaration = define "encodeDestructorDeclaration" $
-  doc "Convert a destructor declaration to an expression" $
-  lambda "dd" $ lets [
-    "prefixSpecs">: project Cpp._DestructorDeclaration Cpp._DestructorDeclaration_prefixSpecifiers @@ var "dd",
-    "name">: project Cpp._DestructorDeclaration Cpp._DestructorDeclaration_name @@ var "dd",
-    "suffixSpecs">: project Cpp._DestructorDeclaration Cpp._DestructorDeclaration_suffixSpecifiers @@ var "dd",
-    "body">: project Cpp._DestructorDeclaration Cpp._DestructorDeclaration_body @@ var "dd"] $
-    Serialization.spaceSep @@ (Lists.concat $ list [
-      Lists.map encodeFunctionSpecifierPrefix (var "prefixSpecs"),
-      list [Serialization.noSep @@ list [
-        Serialization.cst @@ (Strings.cat2 (string "~") (var "name")),
-        Serialization.parens @@ (Serialization.cst @@ string "")]],
-      Lists.map encodeFunctionSpecifierSuffix (var "suffixSpecs"),
-      list [encodeFunctionBody @@ var "body"]])
+encodeAssignmentOperator :: TBinding (Cpp.AssignmentOperator -> Expr)
+encodeAssignmentOperator = define "encodeAssignmentOperator" $
+  doc "Convert an assignment operator to an expression" $
+  lambda "op" $
+    cases Cpp._AssignmentOperator (var "op") Nothing [
+      Cpp._AssignmentOperator_assign>>: constant $ Serialization.cst @@ string "=",
+      Cpp._AssignmentOperator_plusAssign>>: constant $ Serialization.cst @@ string "+=",
+      Cpp._AssignmentOperator_minusAssign>>: constant $ Serialization.cst @@ string "-=",
+      Cpp._AssignmentOperator_multiplyAssign>>: constant $ Serialization.cst @@ string "*=",
+      Cpp._AssignmentOperator_divideAssign>>: constant $ Serialization.cst @@ string "/=",
+      Cpp._AssignmentOperator_moduloAssign>>: constant $ Serialization.cst @@ string "%=",
+      Cpp._AssignmentOperator_leftShiftAssign>>: constant $ Serialization.cst @@ string "<<=",
+      Cpp._AssignmentOperator_rightShiftAssign>>: constant $ Serialization.cst @@ string ">>=",
+      Cpp._AssignmentOperator_bitwiseAndAssign>>: constant $ Serialization.cst @@ string "&=",
+      Cpp._AssignmentOperator_bitwiseXorAssign>>: constant $ Serialization.cst @@ string "^=",
+      Cpp._AssignmentOperator_bitwiseOrAssign>>: constant $ Serialization.cst @@ string "|="]
 
-encodeFunctionDeclaration :: TBinding (Cpp.FunctionDeclaration -> Expr)
-encodeFunctionDeclaration = define "encodeFunctionDeclaration" $
-  doc "Convert a function declaration to an expression" $
-  lambda "fd" $ lets [
-    "prefixSpecs">: project Cpp._FunctionDeclaration Cpp._FunctionDeclaration_prefixSpecifiers @@ var "fd",
-    "retType">: project Cpp._FunctionDeclaration Cpp._FunctionDeclaration_returnType @@ var "fd",
-    "name">: project Cpp._FunctionDeclaration Cpp._FunctionDeclaration_name @@ var "fd",
-    "params">: project Cpp._FunctionDeclaration Cpp._FunctionDeclaration_parameters @@ var "fd",
-    "suffixSpecs">: project Cpp._FunctionDeclaration Cpp._FunctionDeclaration_suffixSpecifiers @@ var "fd",
-    "body">: project Cpp._FunctionDeclaration Cpp._FunctionDeclaration_body @@ var "fd"] $
-    Serialization.spaceSep @@ (Lists.concat $ list [
-      Lists.map encodeFunctionSpecifierPrefix (var "prefixSpecs"),
-      list [
-        encodeTypeExpression @@ var "retType",
-        Serialization.noSep @@ list [
-          Serialization.cst @@ var "name",
-          Serialization.parens @@ (Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map encodeParameter (var "params")))]],
-      Lists.map encodeFunctionSpecifierSuffix (var "suffixSpecs"),
-      list [encodeFunctionBody @@ var "body"]])
-
-encodeFunctionSpecifierPrefix :: TBinding (Cpp.FunctionSpecifierPrefix -> Expr)
-encodeFunctionSpecifierPrefix = define "encodeFunctionSpecifierPrefix" $
-  doc "Convert a function specifier prefix to an expression" $
-  lambda "s" $
-    cases Cpp._FunctionSpecifierPrefix (var "s") Nothing [
-      Cpp._FunctionSpecifierPrefix_inline>>: constant $ Serialization.cst @@ string "inline",
-      Cpp._FunctionSpecifierPrefix_virtual>>: constant $ Serialization.cst @@ string "virtual",
-      Cpp._FunctionSpecifierPrefix_static>>: constant $ Serialization.cst @@ string "static",
-      Cpp._FunctionSpecifierPrefix_explicit>>: constant $ Serialization.cst @@ string "explicit"]
-
-encodeFunctionSpecifierSuffix :: TBinding (Cpp.FunctionSpecifierSuffix -> Expr)
-encodeFunctionSpecifierSuffix = define "encodeFunctionSpecifierSuffix" $
-  doc "Convert a function specifier suffix to an expression" $
-  lambda "s" $
-    cases Cpp._FunctionSpecifierSuffix (var "s") Nothing [
-      Cpp._FunctionSpecifierSuffix_const>>: constant $ Serialization.cst @@ string "const",
-      Cpp._FunctionSpecifierSuffix_noexcept>>: constant $ Serialization.cst @@ string "noexcept",
-      Cpp._FunctionSpecifierSuffix_override>>: constant $ Serialization.cst @@ string "override",
-      Cpp._FunctionSpecifierSuffix_final>>: constant $ Serialization.cst @@ string "final"]
-
-encodeParameter :: TBinding (Cpp.Parameter -> Expr)
-encodeParameter = define "encodeParameter" $
-  doc "Convert a parameter to an expression" $
-  lambda "p" $ lets [
-    "typ">: project Cpp._Parameter Cpp._Parameter_type @@ var "p",
-    "name">: project Cpp._Parameter Cpp._Parameter_name @@ var "p",
-    "unnamed">: project Cpp._Parameter Cpp._Parameter_unnamed @@ var "p",
-    "defaultVal">: project Cpp._Parameter Cpp._Parameter_defaultValue @@ var "p",
-    "nameExpr">: Serialization.cst @@ (Logic.ifElse (var "unnamed")
-      (Strings.cat $ list [string "/*", var "name", string "*/"])
-      (var "name"))] $
-    Serialization.spaceSep @@ (Lists.concat $ list [
-      list [encodeTypeExpression @@ var "typ", var "nameExpr"],
-      Maybes.maybe
-        (list ([] :: [TTerm Expr]))
-        (lambda "expr" $ list [Serialization.cst @@ string "=", encodeExpression @@ var "expr"])
-        (var "defaultVal")])
-
-encodeFunctionBody :: TBinding (Cpp.FunctionBody -> Expr)
-encodeFunctionBody = define "encodeFunctionBody" $
-  doc "Convert a function body to an expression" $
-  lambda "b" $
-    cases Cpp._FunctionBody (var "b") Nothing [
-      Cpp._FunctionBody_compound>>: lambda "c" $ encodeCompoundStatement @@ var "c",
-      Cpp._FunctionBody_declaration>>: constant $ Serialization.cst @@ string ";",
-      Cpp._FunctionBody_pure>>: constant $ Serialization.withSemi @@ (Serialization.cst @@ string "= 0"),
-      Cpp._FunctionBody_default>>: constant $ Serialization.withSemi @@ (Serialization.cst @@ string "= default")]
-
--- Variable and type declarations
-
-encodeVariableDeclaration :: TBinding (Bool -> Cpp.VariableDeclaration -> Expr)
-encodeVariableDeclaration = define "encodeVariableDeclaration" $
-  doc "Convert a variable declaration to an expression" $
-  lambda "commas" $ lambda "vd" $ lets [
-    "typ">: project Cpp._VariableDeclaration Cpp._VariableDeclaration_type @@ var "vd",
-    "name">: project Cpp._VariableDeclaration Cpp._VariableDeclaration_name @@ var "vd",
-    "init">: project Cpp._VariableDeclaration Cpp._VariableDeclaration_initializer @@ var "vd",
-    "isAuto">: project Cpp._VariableDeclaration Cpp._VariableDeclaration_isAuto @@ var "vd",
-    "terminator">: Logic.ifElse (var "commas") Serialization.withComma Serialization.withSemi] $
-    var "terminator" @@ (Serialization.spaceSep @@ (Lists.concat $ list [
-      Logic.ifElse (var "isAuto")
-        (list [Serialization.cst @@ string "auto"])
-        (Maybes.maybe
-          (list ([] :: [TTerm Expr]))
-          (lambda "t" $ list [encodeTypeExpression @@ var "t"])
-          (var "typ")),
-      list [Serialization.cst @@ var "name"],
-      Maybes.maybe
-        (list ([] :: [TTerm Expr]))
-        (lambda "expr" $ list [Serialization.cst @@ string "=", encodeExpression @@ var "expr"])
-        (var "init")]))
-
--- Types
-
-encodeTypeExpression :: TBinding (Cpp.TypeExpression -> Expr)
-encodeTypeExpression = define "encodeTypeExpression" $
-  doc "Convert a type expression to an expression" $
-  lambda "t" $
-    cases Cpp._TypeExpression (var "t") Nothing [
-      Cpp._TypeExpression_basic>>: lambda "b" $ encodeBasicType @@ var "b",
-      Cpp._TypeExpression_qualified>>: lambda "q" $ encodeQualifiedType @@ var "q",
-      Cpp._TypeExpression_template>>: lambda "t" $ encodeTemplateType @@ var "t",
-      Cpp._TypeExpression_function>>: lambda "f" $ encodeFunctionType @@ var "f",
-      Cpp._TypeExpression_auto>>: constant $ Serialization.cst @@ string "auto"]
+encodeBaseSpecifier :: TBinding (Cpp.BaseSpecifier -> Expr)
+encodeBaseSpecifier = define "encodeBaseSpecifier" $
+  doc "Convert a base specifier to an expression" $
+  lambda "bs" $ lets [
+    "access">: project Cpp._BaseSpecifier Cpp._BaseSpecifier_access @@ var "bs",
+    "name">: project Cpp._BaseSpecifier Cpp._BaseSpecifier_name @@ var "bs"] $
+    Serialization.spaceSep @@ list [encodeAccessSpecifier @@ var "access", Serialization.cst @@ var "name"]
 
 encodeBasicType :: TBinding (Cpp.BasicType -> Expr)
 encodeBasicType = define "encodeBasicType" $
@@ -665,126 +309,65 @@ encodeBasicType = define "encodeBasicType" $
       Cpp._BasicType_auto>>: constant $ Serialization.cst @@ string "auto",
       Cpp._BasicType_named>>: lambda "name" $ Serialization.cst @@ var "name"]
 
-encodeQualifiedType :: TBinding (Cpp.QualifiedType -> Expr)
-encodeQualifiedType = define "encodeQualifiedType" $
-  doc "Convert a qualified type to an expression" $
-  lambda "qt" $ lets [
-    "baseType">: project Cpp._QualifiedType Cpp._QualifiedType_baseType @@ var "qt",
-    "qualifier">: project Cpp._QualifiedType Cpp._QualifiedType_qualifier @@ var "qt"] $
-    cases Cpp._TypeQualifier (var "qualifier") Nothing [
-      Cpp._TypeQualifier_const>>: constant $
-        Serialization.spaceSep @@ list [Serialization.cst @@ string "const", encodeTypeExpression @@ var "baseType"],
-      Cpp._TypeQualifier_lvalueRef>>: constant $
-        Serialization.noSep @@ list [encodeTypeExpression @@ var "baseType", Serialization.cst @@ string "&"],
-      Cpp._TypeQualifier_rvalueRef>>: constant $
-        Serialization.noSep @@ list [encodeTypeExpression @@ var "baseType", Serialization.cst @@ string "&&"],
-      Cpp._TypeQualifier_pointer>>: constant $
-        Serialization.noSep @@ list [encodeTypeExpression @@ var "baseType", Serialization.cst @@ string "*"]]
-
-encodeTemplateDeclaration :: TBinding (Cpp.TemplateDeclaration -> Expr)
-encodeTemplateDeclaration = define "encodeTemplateDeclaration" $
-  doc "Convert a template declaration to an expression" $
-  lambda "td" $ lets [
-    "inline">: project Cpp._TemplateDeclaration Cpp._TemplateDeclaration_inline @@ var "td",
-    "params">: project Cpp._TemplateDeclaration Cpp._TemplateDeclaration_parameters @@ var "td",
-    "declaration">: project Cpp._TemplateDeclaration Cpp._TemplateDeclaration_declaration @@ var "td",
-    "sep">: Logic.ifElse (var "inline") Serialization.spaceSep Serialization.newlineSep] $
-    var "sep" @@ list [
-      Serialization.noSep @@ list [
-        Serialization.cst @@ string "template",
-        Serialization.angleBracesList @@ Serialization.inlineStyle @@
-          (Lists.map (lambda "p" $ Serialization.cst @@ var "p") (var "params"))],
-      encodeDeclaration @@ var "declaration"]
-
-encodeTemplateType :: TBinding (Cpp.TemplateType -> Expr)
-encodeTemplateType = define "encodeTemplateType" $
-  doc "Convert a template type to an expression" $
-  lambda "tt" $ lets [
-    "name">: project Cpp._TemplateType Cpp._TemplateType_name @@ var "tt",
-    "args">: project Cpp._TemplateType Cpp._TemplateType_arguments @@ var "tt"] $
-    Serialization.noSep @@ list [
-      Serialization.cst @@ var "name",
-      Serialization.angleBracesList @@ Serialization.inlineStyle @@ (Lists.map encodeTemplateArgument (var "args"))]
-
-encodeTemplateArgument :: TBinding (Cpp.TemplateArgument -> Expr)
-encodeTemplateArgument = define "encodeTemplateArgument" $
-  doc "Convert a template argument to an expression" $
-  lambda "a" $
-    cases Cpp._TemplateArgument (var "a") Nothing [
-      Cpp._TemplateArgument_type>>: lambda "t" $ encodeTypeExpression @@ var "t",
-      Cpp._TemplateArgument_value>>: lambda "e" $ encodeExpression @@ var "e"]
-
-encodeFunctionType :: TBinding (Cpp.FunctionType -> Expr)
-encodeFunctionType = define "encodeFunctionType" $
-  doc "Convert a function type to an expression" $
-  lambda "ft" $ lets [
-    "retType">: project Cpp._FunctionType Cpp._FunctionType_returnType @@ var "ft",
-    "params">: project Cpp._FunctionType Cpp._FunctionType_parameters @@ var "ft"] $
+encodeBitwiseAndOperation :: TBinding (Cpp.BitwiseAndOperation -> Expr)
+encodeBitwiseAndOperation = define "encodeBitwiseAndOperation" $
+  doc "Convert a bitwise and operation to an expression" $
+  lambda "op" $ lets [
+    "left">: project Cpp._BitwiseAndOperation Cpp._BitwiseAndOperation_left @@ var "op",
+    "right">: project Cpp._BitwiseAndOperation Cpp._BitwiseAndOperation_right @@ var "op"] $
     Serialization.spaceSep @@ list [
-      encodeTypeExpression @@ var "retType",
-      Serialization.parens @@ (Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map encodeParameter (var "params")))]
+      encodeAndExpression @@ var "left",
+      Serialization.cst @@ string "&",
+      encodeEqualityExpression @@ var "right"]
 
--- Statements
-
-encodeStatement :: TBinding (Cpp.Statement -> Expr)
-encodeStatement = define "encodeStatement" $
-  doc "Convert a statement to an expression" $
-  lambda "s" $
-    cases Cpp._Statement (var "s") Nothing [
-      Cpp._Statement_labeled>>: lambda "l" $ encodeLabeledStatement @@ var "l",
-      Cpp._Statement_compound>>: lambda "c" $ encodeCompoundStatement @@ var "c",
-      Cpp._Statement_selection>>: lambda "s" $ encodeSelectionStatement @@ var "s",
-      Cpp._Statement_switch>>: lambda "s" $ encodeSwitchStatement @@ var "s",
-      Cpp._Statement_iteration>>: lambda "i" $ encodeIterationStatement @@ var "i",
-      Cpp._Statement_jump>>: lambda "j" $ encodeJumpStatement @@ var "j",
-      Cpp._Statement_declaration>>: lambda "v" $ Serialization.withSemi @@ (encodeVariableDeclaration @@ false @@ var "v"),
-      Cpp._Statement_expression>>: lambda "e" $ Serialization.withSemi @@ (encodeExpression @@ var "e")]
-
-encodeLabeledStatement :: TBinding (Cpp.LabeledStatement -> Expr)
-encodeLabeledStatement = define "encodeLabeledStatement" $
-  doc "Convert a labeled statement to an expression" $
-  lambda "ls" $ lets [
-    "label">: project Cpp._LabeledStatement Cpp._LabeledStatement_label @@ var "ls",
-    "stmt">: project Cpp._LabeledStatement Cpp._LabeledStatement_statement @@ var "ls"] $
-    Serialization.newlineSep @@ list [
-      Serialization.cst @@ (Strings.cat2 (var "label") (string ":")),
-      encodeStatement @@ var "stmt"]
-
-encodeCompoundStatement :: TBinding (Cpp.CompoundStatement -> Expr)
-encodeCompoundStatement = define "encodeCompoundStatement" $
-  doc "Convert a compound statement to an expression" $
-  lambda "cs" $
-    Serialization.curlyBracesList @@ (just (string "")) @@ Serialization.fullBlockStyle @@
-      (Lists.map encodeStatement (unwrap Cpp._CompoundStatement @@ var "cs"))
-
-encodeSelectionStatement :: TBinding (Cpp.SelectionStatement -> Expr)
-encodeSelectionStatement = define "encodeSelectionStatement" $
-  doc "Convert a selection statement to an expression" $
-  lambda "ss" $ lets [
-    "cond">: project Cpp._SelectionStatement Cpp._SelectionStatement_condition @@ var "ss",
-    "thenBranch">: project Cpp._SelectionStatement Cpp._SelectionStatement_thenBranch @@ var "ss",
-    "elseBranch">: project Cpp._SelectionStatement Cpp._SelectionStatement_elseBranch @@ var "ss"] $
-    Serialization.newlineSep @@ list [
-      Serialization.spaceSep @@ list [
-        Serialization.cst @@ string "if",
-        Serialization.parens @@ (encodeExpression @@ var "cond")],
-      encodeStatement @@ var "thenBranch",
-      Maybes.maybe
-        (Serialization.cst @@ string "")
-        (lambda "stmt" $ Serialization.newlineSep @@ list [Serialization.cst @@ string "else", encodeStatement @@ var "stmt"])
-        (var "elseBranch")]
-
-encodeSwitchStatement :: TBinding (Cpp.SwitchStatement -> Expr)
-encodeSwitchStatement = define "encodeSwitchStatement" $
-  doc "Convert a switch statement to an expression" $
-  lambda "ss" $ lets [
-    "value">: project Cpp._SwitchStatement Cpp._SwitchStatement_value @@ var "ss",
-    "cases">: project Cpp._SwitchStatement Cpp._SwitchStatement_cases @@ var "ss"] $
+encodeBitwiseOrOperation :: TBinding (Cpp.BitwiseOrOperation -> Expr)
+encodeBitwiseOrOperation = define "encodeBitwiseOrOperation" $
+  doc "Convert a bitwise or operation to an expression" $
+  lambda "op" $ lets [
+    "left">: project Cpp._BitwiseOrOperation Cpp._BitwiseOrOperation_left @@ var "op",
+    "right">: project Cpp._BitwiseOrOperation Cpp._BitwiseOrOperation_right @@ var "op"] $
     Serialization.spaceSep @@ list [
-      Serialization.cst @@ string "switch",
-      Serialization.parens @@ (encodeExpression @@ var "value"),
-      Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
-        (Serialization.newlineSep @@ (Lists.map encodeCaseStatement (var "cases")))]
+      encodeInclusiveOrExpression @@ var "left",
+      Serialization.cst @@ string "|",
+      encodeExclusiveOrExpression @@ var "right"]
+
+encodeBitwiseXorOperation :: TBinding (Cpp.BitwiseXorOperation -> Expr)
+encodeBitwiseXorOperation = define "encodeBitwiseXorOperation" $
+  doc "Convert a bitwise xor operation to an expression" $
+  lambda "op" $ lets [
+    "left">: project Cpp._BitwiseXorOperation Cpp._BitwiseXorOperation_left @@ var "op",
+    "right">: project Cpp._BitwiseXorOperation Cpp._BitwiseXorOperation_right @@ var "op"] $
+    Serialization.spaceSep @@ list [
+      encodeExclusiveOrExpression @@ var "left",
+      Serialization.cst @@ string "^",
+      encodeAndExpression @@ var "right"]
+
+encodeBooleanLiteral :: TBinding (Cpp.BooleanLiteral -> Expr)
+encodeBooleanLiteral = define "encodeBooleanLiteral" $
+  doc "Convert a boolean literal to an expression" $
+  lambda "bl" $
+    Logic.ifElse (unwrap Cpp._BooleanLiteral @@ var "bl")
+      (Serialization.cst @@ string "true")
+      (Serialization.cst @@ string "false")
+
+encodeCapture :: TBinding (Cpp.Capture -> Expr)
+encodeCapture = define "encodeCapture" $
+  doc "Convert a capture to an expression" $
+  lambda "cap" $ lets [
+    "name">: project Cpp._Capture Cpp._Capture_name @@ var "cap",
+    "byRef">: project Cpp._Capture Cpp._Capture_byReference @@ var "cap"] $
+    Logic.ifElse (var "byRef")
+      (Serialization.cst @@ (Strings.cat2 (string "&") (var "name")))
+      (Serialization.cst @@ var "name")
+
+encodeCaptureList :: TBinding (Cpp.CaptureList -> Expr)
+encodeCaptureList = define "encodeCaptureList" $
+  doc "Convert a capture list to an expression" $
+  lambda "cl" $
+    cases Cpp._CaptureList (var "cl") Nothing [
+      Cpp._CaptureList_captureByValue>>: constant $ Serialization.cst @@ string "[=]",
+      Cpp._CaptureList_captures>>: lambda "cs" $
+        Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map encodeCapture (var "cs"))]
 
 encodeCaseStatement :: TBinding (Cpp.CaseStatement -> Expr)
 encodeCaseStatement = define "encodeCaseStatement" $
@@ -808,27 +391,161 @@ encodeCaseValue = define "encodeCaseValue" $
       Serialization.noSep @@ list [encodeExpression @@ var "value", Serialization.cst @@ string ":"],
       encodeStatement @@ var "statement"]
 
-encodeIterationStatement :: TBinding (Cpp.IterationStatement -> Expr)
-encodeIterationStatement = define "encodeIterationStatement" $
-  doc "Convert an iteration statement to an expression" $
-  lambda "i" $
-    cases Cpp._IterationStatement (var "i") Nothing [
-      Cpp._IterationStatement_while>>: lambda "w" $ encodeWhileStatement @@ var "w",
-      Cpp._IterationStatement_do>>: lambda "d" $ encodeDoStatement @@ var "d",
-      Cpp._IterationStatement_for>>: lambda "f" $ encodeForStatement @@ var "f",
-      Cpp._IterationStatement_rangeFor>>: lambda "r" $ encodeRangeForStatement @@ var "r"]
+encodeClassBody :: TBinding (Bool -> Cpp.ClassBody -> Expr)
+encodeClassBody = define "encodeClassBody" $
+  doc "Convert a class body to an expression" $
+  lambda "commas" $ lambda "cb" $
+    Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
+      (Serialization.doubleNewlineSep @@ (Lists.map (encodeMemberSpecification @@ var "commas") (unwrap Cpp._ClassBody @@ var "cb")))
 
-encodeWhileStatement :: TBinding (Cpp.WhileStatement -> Expr)
-encodeWhileStatement = define "encodeWhileStatement" $
-  doc "Convert a while statement to an expression" $
-  lambda "ws" $ lets [
-    "cond">: project Cpp._WhileStatement Cpp._WhileStatement_condition @@ var "ws",
-    "body">: project Cpp._WhileStatement Cpp._WhileStatement_body @@ var "ws"] $
-    Serialization.newlineSep @@ list [
-      Serialization.spaceSep @@ list [
-        Serialization.cst @@ string "while",
-        Serialization.parens @@ (encodeExpression @@ var "cond")],
-      encodeStatement @@ var "body"]
+encodeClassDeclaration :: TBinding (Cpp.ClassDeclaration -> Expr)
+encodeClassDeclaration = define "encodeClassDeclaration" $
+  doc "Convert a class declaration to an expression" $
+  lambda "cd" $ lets [
+    "spec">: project Cpp._ClassDeclaration Cpp._ClassDeclaration_specifier @@ var "cd",
+    "mbody">: project Cpp._ClassDeclaration Cpp._ClassDeclaration_body @@ var "cd",
+    "key">: project Cpp._ClassSpecifier Cpp._ClassSpecifier_key @@ var "spec",
+    "isEnum">: Logic.or
+      (Equality.equal (var "key") (inject Cpp._ClassKey Cpp._ClassKey_enum unit))
+      (Equality.equal (var "key") (inject Cpp._ClassKey Cpp._ClassKey_enumClass unit))] $
+    Serialization.withSemi @@ (Serialization.spaceSep @@ (Maybes.cat $ list [
+      just (encodeClassSpecifier @@ var "spec"),
+      Maybes.map (lambda "body" $ encodeClassBody @@ var "isEnum" @@ var "body") (var "mbody")]))
+
+encodeClassKey :: TBinding (Cpp.ClassKey -> Expr)
+encodeClassKey = define "encodeClassKey" $
+  doc "Convert a class key to an expression" $
+  lambda "k" $
+    cases Cpp._ClassKey (var "k") Nothing [
+      Cpp._ClassKey_class>>: constant $ Serialization.cst @@ string "class",
+      Cpp._ClassKey_enum>>: constant $ Serialization.cst @@ string "enum",
+      Cpp._ClassKey_enumClass>>: constant $ Serialization.cst @@ string "enum class",
+      Cpp._ClassKey_struct>>: constant $ Serialization.cst @@ string "struct"]
+
+encodeClassSpecifier :: TBinding (Cpp.ClassSpecifier -> Expr)
+encodeClassSpecifier = define "encodeClassSpecifier" $
+  doc "Convert a class specifier to an expression" $
+  lambda "cs" $ lets [
+    "key">: project Cpp._ClassSpecifier Cpp._ClassSpecifier_key @@ var "cs",
+    "name">: project Cpp._ClassSpecifier Cpp._ClassSpecifier_name @@ var "cs",
+    "inheritance">: project Cpp._ClassSpecifier Cpp._ClassSpecifier_inheritance @@ var "cs"] $
+    Serialization.spaceSep @@ (Lists.concat $ list [
+      list [encodeClassKey @@ var "key", Serialization.cst @@ var "name"],
+      Logic.ifElse (Lists.null (var "inheritance"))
+        (list ([] :: [TTerm Expr]))
+        (list [Serialization.cst @@ string ":",
+          Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map encodeBaseSpecifier (var "inheritance"))])])
+
+encodeCommaExpression :: TBinding (Cpp.CommaExpression -> Expr)
+encodeCommaExpression = define "encodeCommaExpression" $
+  doc "Convert a comma expression to an expression" $
+  lambda "ce" $ lets [
+    "left">: project Cpp._CommaExpression Cpp._CommaExpression_left @@ var "ce",
+    "right">: project Cpp._CommaExpression Cpp._CommaExpression_right @@ var "ce"] $
+    Serialization.spaceSep @@ list [
+      encodeExpression @@ var "left",
+      Serialization.cst @@ string ",",
+      encodeAssignmentExpression @@ var "right"]
+
+encodeComment :: TBinding (Cpp.Comment -> Expr)
+encodeComment = define "encodeComment" $
+  doc "Convert a comment to an expression" $
+  lambda "c" $ lets [
+    "text">: project Cpp._Comment Cpp._Comment_text @@ var "c",
+    "isMultiline">: project Cpp._Comment Cpp._Comment_isMultiline @@ var "c"] $
+    Serialization.cst @@ (encodeToCppComments @@ var "text" @@ var "isMultiline")
+
+encodeCompoundStatement :: TBinding (Cpp.CompoundStatement -> Expr)
+encodeCompoundStatement = define "encodeCompoundStatement" $
+  doc "Convert a compound statement to an expression" $
+  lambda "cs" $
+    Serialization.curlyBracesList @@ (just (string "")) @@ Serialization.fullBlockStyle @@
+      (Lists.map encodeStatement (unwrap Cpp._CompoundStatement @@ var "cs"))
+
+encodeConditionalExpression :: TBinding (Cpp.ConditionalExpression -> Expr)
+encodeConditionalExpression = define "encodeConditionalExpression" $
+  doc "Convert a conditional expression to an expression" $
+  lambda "c" $
+    cases Cpp._ConditionalExpression (var "c") Nothing [
+      Cpp._ConditionalExpression_logicalOr>>: lambda "l" $ encodeLogicalOrExpression @@ var "l",
+      Cpp._ConditionalExpression_ternary>>: lambda "t" $ encodeTernaryExpression @@ var "t"]
+
+encodeConstructorDeclaration :: TBinding (Cpp.ConstructorDeclaration -> Expr)
+encodeConstructorDeclaration = define "encodeConstructorDeclaration" $
+  doc "Convert a constructor declaration to an expression" $
+  lambda "cd" $ lets [
+    "name">: project Cpp._ConstructorDeclaration Cpp._ConstructorDeclaration_name @@ var "cd",
+    "params">: project Cpp._ConstructorDeclaration Cpp._ConstructorDeclaration_parameters @@ var "cd",
+    "inits">: project Cpp._ConstructorDeclaration Cpp._ConstructorDeclaration_initializers @@ var "cd",
+    "body">: project Cpp._ConstructorDeclaration Cpp._ConstructorDeclaration_body @@ var "cd"] $
+    Serialization.spaceSep @@ (Maybes.cat $ list [
+      just (Serialization.noSep @@ list [
+        Serialization.cst @@ var "name",
+        Serialization.parens @@ (Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map encodeParameter (var "params")))]),
+      Logic.ifElse (Lists.null (var "inits"))
+        nothing
+        (just (Serialization.spaceSep @@ list [
+          Serialization.cst @@ string ":",
+          Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map encodeMemInitializer (var "inits"))])),
+      just (encodeFunctionBody @@ var "body")])
+
+encodeDeclaration :: TBinding (Cpp.Declaration -> Expr)
+encodeDeclaration = define "encodeDeclaration" $
+  doc "Convert a declaration to an expression" $
+  lambda "d" $
+    cases Cpp._Declaration (var "d") Nothing [
+      Cpp._Declaration_preprocessor>>: lambda "p" $ encodePreprocessorDirective @@ var "p",
+      Cpp._Declaration_class>>: lambda "c" $ encodeClassDeclaration @@ var "c",
+      Cpp._Declaration_function>>: lambda "f" $ encodeFunctionDeclaration @@ var "f",
+      Cpp._Declaration_variable>>: lambda "v" $ encodeVariableDeclaration @@ false @@ var "v",
+      Cpp._Declaration_typedef>>: lambda "t" $ encodeTypedefDeclaration @@ var "t",
+      Cpp._Declaration_namespace>>: lambda "n" $ encodeNamespaceDeclaration @@ var "n",
+      Cpp._Declaration_template>>: lambda "t" $ encodeTemplateDeclaration @@ var "t"]
+
+encodeDefineDirective :: TBinding (Cpp.DefineDirective -> Expr)
+encodeDefineDirective = define "encodeDefineDirective" $
+  doc "Convert a define directive to an expression" $
+  lambda "dd" $ lets [
+    "name">: project Cpp._DefineDirective Cpp._DefineDirective_name @@ var "dd",
+    "params">: project Cpp._DefineDirective Cpp._DefineDirective_parameters @@ var "dd",
+    "replacement">: project Cpp._DefineDirective Cpp._DefineDirective_replacement @@ var "dd"] $
+    Serialization.spaceSep @@ (Lists.concat $ list [
+      list [Serialization.cst @@ string "#define", Serialization.cst @@ var "name"],
+      Maybes.maybe
+        (list ([] :: [TTerm Expr]))
+        (lambda "ps" $ list [Serialization.parens @@ (Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map (lambda "p" $ Serialization.cst @@ var "p") (var "ps")))])
+        (var "params"),
+      Maybes.maybe
+        (list ([] :: [TTerm Expr]))
+        (lambda "r" $ list [Serialization.cst @@ var "r"])
+        (var "replacement")])
+
+encodeDestructorDeclaration :: TBinding (Cpp.DestructorDeclaration -> Expr)
+encodeDestructorDeclaration = define "encodeDestructorDeclaration" $
+  doc "Convert a destructor declaration to an expression" $
+  lambda "dd" $ lets [
+    "prefixSpecs">: project Cpp._DestructorDeclaration Cpp._DestructorDeclaration_prefixSpecifiers @@ var "dd",
+    "name">: project Cpp._DestructorDeclaration Cpp._DestructorDeclaration_name @@ var "dd",
+    "suffixSpecs">: project Cpp._DestructorDeclaration Cpp._DestructorDeclaration_suffixSpecifiers @@ var "dd",
+    "body">: project Cpp._DestructorDeclaration Cpp._DestructorDeclaration_body @@ var "dd"] $
+    Serialization.spaceSep @@ (Lists.concat $ list [
+      Lists.map encodeFunctionSpecifierPrefix (var "prefixSpecs"),
+      list [Serialization.noSep @@ list [
+        Serialization.cst @@ (Strings.cat2 (string "~") (var "name")),
+        Serialization.parens @@ (Serialization.cst @@ string "")]],
+      Lists.map encodeFunctionSpecifierSuffix (var "suffixSpecs"),
+      list [encodeFunctionBody @@ var "body"]])
+
+encodeDivideOperation :: TBinding (Cpp.DivideOperation -> Expr)
+encodeDivideOperation = define "encodeDivideOperation" $
+  doc "Convert a divide operation to an expression" $
+  lambda "op" $ lets [
+    "left">: project Cpp._DivideOperation Cpp._DivideOperation_left @@ var "op",
+    "right">: project Cpp._DivideOperation Cpp._DivideOperation_right @@ var "op"] $
+    Serialization.spaceSep @@ list [
+      encodeMultiplicativeExpression @@ var "left",
+      Serialization.cst @@ string "/",
+      encodeUnaryExpression @@ var "right"]
 
 encodeDoStatement :: TBinding (Cpp.DoStatement -> Expr)
 encodeDoStatement = define "encodeDoStatement" $
@@ -842,6 +559,89 @@ encodeDoStatement = define "encodeDoStatement" $
       Serialization.withSemi @@ (Serialization.spaceSep @@ list [
         Serialization.cst @@ string "while",
         Serialization.parens @@ (encodeExpression @@ var "cond")])]
+
+encodeElifDirective :: TBinding (Cpp.ElifDirective -> Expr)
+encodeElifDirective = define "encodeElifDirective" $
+  doc "Convert an elif directive to an expression" $
+  lambda "ed" $
+    Serialization.spaceSep @@ list [
+      Serialization.cst @@ string "#elif",
+      Serialization.cst @@ (project Cpp._ElifDirective Cpp._ElifDirective_condition @@ var "ed")]
+
+encodeElseDirective :: TBinding (Cpp.ElseDirective -> Expr)
+encodeElseDirective = define "encodeElseDirective" $
+  doc "Convert an else directive to an expression" $
+  lambda "ed" $ Serialization.cst @@ string "#else"
+
+encodeEndifDirective :: TBinding (Cpp.EndifDirective -> Expr)
+encodeEndifDirective = define "encodeEndifDirective" $
+  doc "Convert an endif directive to an expression" $
+  lambda "ed" $ Serialization.cst @@ string "#endif"
+
+encodeEqualOperation :: TBinding (Cpp.EqualOperation -> Expr)
+encodeEqualOperation = define "encodeEqualOperation" $
+  doc "Convert an equal operation to an expression" $
+  lambda "op" $ lets [
+    "left">: project Cpp._EqualOperation Cpp._EqualOperation_left @@ var "op",
+    "right">: project Cpp._EqualOperation Cpp._EqualOperation_right @@ var "op"] $
+    Serialization.spaceSep @@ list [
+      encodeEqualityExpression @@ var "left",
+      Serialization.cst @@ string "==",
+      encodeRelationalExpression @@ var "right"]
+
+encodeEqualityExpression :: TBinding (Cpp.EqualityExpression -> Expr)
+encodeEqualityExpression = define "encodeEqualityExpression" $
+  doc "Convert an equality expression to an expression" $
+  lambda "e" $
+    cases Cpp._EqualityExpression (var "e") Nothing [
+      Cpp._EqualityExpression_relational>>: lambda "r" $ encodeRelationalExpression @@ var "r",
+      Cpp._EqualityExpression_equal>>: lambda "eq" $ encodeEqualOperation @@ var "eq",
+      Cpp._EqualityExpression_notEqual>>: lambda "ne" $ encodeNotEqualOperation @@ var "ne"]
+
+encodeErrorDirective :: TBinding (Cpp.ErrorDirective -> Expr)
+encodeErrorDirective = define "encodeErrorDirective" $
+  doc "Convert an error directive to an expression" $
+  lambda "ed" $
+    Serialization.spaceSep @@ list [
+      Serialization.cst @@ string "#error",
+      Serialization.cst @@ (project Cpp._ErrorDirective Cpp._ErrorDirective_message @@ var "ed")]
+
+encodeExclusiveOrExpression :: TBinding (Cpp.ExclusiveOrExpression -> Expr)
+encodeExclusiveOrExpression = define "encodeExclusiveOrExpression" $
+  doc "Convert an exclusive or expression to an expression" $
+  lambda "e" $
+    cases Cpp._ExclusiveOrExpression (var "e") Nothing [
+      Cpp._ExclusiveOrExpression_and>>: lambda "a" $ encodeAndExpression @@ var "a",
+      Cpp._ExclusiveOrExpression_bitwiseXor>>: lambda "x" $ encodeBitwiseXorOperation @@ var "x"]
+
+encodeExplicitAssignment :: TBinding (Cpp.ExplicitAssignment -> Expr)
+encodeExplicitAssignment = define "encodeExplicitAssignment" $
+  doc "Convert an explicit assignment to an expression" $
+  lambda "ea" $ lets [
+    "left">: project Cpp._ExplicitAssignment Cpp._ExplicitAssignment_left @@ var "ea",
+    "op">: project Cpp._ExplicitAssignment Cpp._ExplicitAssignment_op @@ var "ea",
+    "right">: project Cpp._ExplicitAssignment Cpp._ExplicitAssignment_right @@ var "ea"] $
+    Serialization.spaceSep @@ list [
+      encodeLogicalOrExpression @@ var "left",
+      encodeAssignmentOperator @@ var "op",
+      encodeAssignmentExpression @@ var "right"]
+
+encodeExpression :: TBinding (Cpp.Expression -> Expr)
+encodeExpression = define "encodeExpression" $
+  doc "Convert an expression to an expression" $
+  lambda "e" $
+    cases Cpp._Expression (var "e") Nothing [
+      Cpp._Expression_assignment>>: lambda "a" $ encodeAssignmentExpression @@ var "a",
+      Cpp._Expression_comma>>: lambda "c" $ encodeCommaExpression @@ var "c"]
+
+encodeForInit :: TBinding (Cpp.ForInit -> Expr)
+encodeForInit = define "encodeForInit" $
+  doc "Convert a for-init to an expression" $
+  lambda "i" $
+    cases Cpp._ForInit (var "i") Nothing [
+      Cpp._ForInit_expression>>: lambda "e" $ encodeExpression @@ var "e",
+      Cpp._ForInit_declaration>>: lambda "d" $ encodeVariableDeclaration @@ false @@ var "d",
+      Cpp._ForInit_empty>>: constant $ Serialization.cst @@ string ""]
 
 encodeForStatement :: TBinding (Cpp.ForStatement -> Expr)
 encodeForStatement = define "encodeForStatement" $
@@ -862,32 +662,177 @@ encodeForStatement = define "encodeForStatement" $
           encodeExpression @@ var "inc"])],
       encodeStatement @@ var "body"]
 
-encodeForInit :: TBinding (Cpp.ForInit -> Expr)
-encodeForInit = define "encodeForInit" $
-  doc "Convert a for-init to an expression" $
-  lambda "i" $
-    cases Cpp._ForInit (var "i") Nothing [
-      Cpp._ForInit_expression>>: lambda "e" $ encodeExpression @@ var "e",
-      Cpp._ForInit_declaration>>: lambda "d" $ encodeVariableDeclaration @@ false @@ var "d",
-      Cpp._ForInit_empty>>: constant $ Serialization.cst @@ string ""]
+encodeFunctionApplication :: TBinding (Cpp.FunctionApplication -> Expr)
+encodeFunctionApplication = define "encodeFunctionApplication" $
+  doc "Convert a function application to an expression" $
+  lambda "fa" $ lets [
+    "func">: project Cpp._FunctionApplication Cpp._FunctionApplication_function @@ var "fa",
+    "args">: project Cpp._FunctionApplication Cpp._FunctionApplication_arguments @@ var "fa"] $
+    Serialization.spaceSep @@ list [
+      encodeFunctionIdentifier @@ var "func",
+      Serialization.parens @@ (Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map encodeExpression (var "args")))]
 
-encodeRangeForStatement :: TBinding (Cpp.RangeForStatement -> Expr)
-encodeRangeForStatement = define "encodeRangeForStatement" $
-  doc "Convert a range-for statement to an expression" $
-  lambda "rfs" $ lets [
-    "typ">: project Cpp._RangeForStatement Cpp._RangeForStatement_type @@ var "rfs",
-    "var">: project Cpp._RangeForStatement Cpp._RangeForStatement_variable @@ var "rfs",
-    "range">: project Cpp._RangeForStatement Cpp._RangeForStatement_range @@ var "rfs",
-    "body">: project Cpp._RangeForStatement Cpp._RangeForStatement_body @@ var "rfs"] $
-    Serialization.newlineSep @@ list [
-      Serialization.spaceSep @@ list [
-        Serialization.cst @@ string "for",
-        Serialization.parens @@ (Serialization.spaceSep @@ list [
-          encodeTypeExpression @@ var "typ",
-          Serialization.cst @@ var "var",
-          Serialization.cst @@ string ":",
-          encodeExpression @@ var "range"])],
-      encodeStatement @@ var "body"]
+encodeFunctionBody :: TBinding (Cpp.FunctionBody -> Expr)
+encodeFunctionBody = define "encodeFunctionBody" $
+  doc "Convert a function body to an expression" $
+  lambda "b" $
+    cases Cpp._FunctionBody (var "b") Nothing [
+      Cpp._FunctionBody_compound>>: lambda "c" $ encodeCompoundStatement @@ var "c",
+      Cpp._FunctionBody_declaration>>: constant $ Serialization.cst @@ string ";",
+      Cpp._FunctionBody_pure>>: constant $ Serialization.withSemi @@ (Serialization.cst @@ string "= 0"),
+      Cpp._FunctionBody_default>>: constant $ Serialization.withSemi @@ (Serialization.cst @@ string "= default")]
+
+encodeFunctionCallOperation :: TBinding (Cpp.FunctionCallOperation -> Expr)
+encodeFunctionCallOperation = define "encodeFunctionCallOperation" $
+  doc "Convert a function call operation to an expression" $
+  lambda "fco" $ lets [
+    "func">: project Cpp._FunctionCallOperation Cpp._FunctionCallOperation_function @@ var "fco",
+    "args">: project Cpp._FunctionCallOperation Cpp._FunctionCallOperation_arguments @@ var "fco"] $
+    Serialization.noSep @@ list [
+      encodePostfixExpression @@ var "func",
+      Serialization.parens @@ (Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map encodeExpression (var "args")))]
+
+encodeFunctionDeclaration :: TBinding (Cpp.FunctionDeclaration -> Expr)
+encodeFunctionDeclaration = define "encodeFunctionDeclaration" $
+  doc "Convert a function declaration to an expression" $
+  lambda "fd" $ lets [
+    "prefixSpecs">: project Cpp._FunctionDeclaration Cpp._FunctionDeclaration_prefixSpecifiers @@ var "fd",
+    "retType">: project Cpp._FunctionDeclaration Cpp._FunctionDeclaration_returnType @@ var "fd",
+    "name">: project Cpp._FunctionDeclaration Cpp._FunctionDeclaration_name @@ var "fd",
+    "params">: project Cpp._FunctionDeclaration Cpp._FunctionDeclaration_parameters @@ var "fd",
+    "suffixSpecs">: project Cpp._FunctionDeclaration Cpp._FunctionDeclaration_suffixSpecifiers @@ var "fd",
+    "body">: project Cpp._FunctionDeclaration Cpp._FunctionDeclaration_body @@ var "fd"] $
+    Serialization.spaceSep @@ (Lists.concat $ list [
+      Lists.map encodeFunctionSpecifierPrefix (var "prefixSpecs"),
+      list [
+        encodeTypeExpression @@ var "retType",
+        Serialization.noSep @@ list [
+          Serialization.cst @@ var "name",
+          Serialization.parens @@ (Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map encodeParameter (var "params")))]],
+      Lists.map encodeFunctionSpecifierSuffix (var "suffixSpecs"),
+      list [encodeFunctionBody @@ var "body"]])
+
+encodeFunctionIdentifier :: TBinding (Cpp.FunctionIdentifier -> Expr)
+encodeFunctionIdentifier = define "encodeFunctionIdentifier" $
+  doc "Convert a function identifier to an expression" $
+  lambda "f" $
+    cases Cpp._FunctionIdentifier (var "f") Nothing [
+      Cpp._FunctionIdentifier_simple>>: lambda "name" $ Serialization.cst @@ var "name",
+      Cpp._FunctionIdentifier_qualified>>: lambda "q" $ encodeQualifiedIdentifier @@ var "q"]
+
+encodeFunctionSpecifierPrefix :: TBinding (Cpp.FunctionSpecifierPrefix -> Expr)
+encodeFunctionSpecifierPrefix = define "encodeFunctionSpecifierPrefix" $
+  doc "Convert a function specifier prefix to an expression" $
+  lambda "s" $
+    cases Cpp._FunctionSpecifierPrefix (var "s") Nothing [
+      Cpp._FunctionSpecifierPrefix_inline>>: constant $ Serialization.cst @@ string "inline",
+      Cpp._FunctionSpecifierPrefix_virtual>>: constant $ Serialization.cst @@ string "virtual",
+      Cpp._FunctionSpecifierPrefix_static>>: constant $ Serialization.cst @@ string "static",
+      Cpp._FunctionSpecifierPrefix_explicit>>: constant $ Serialization.cst @@ string "explicit"]
+
+encodeFunctionSpecifierSuffix :: TBinding (Cpp.FunctionSpecifierSuffix -> Expr)
+encodeFunctionSpecifierSuffix = define "encodeFunctionSpecifierSuffix" $
+  doc "Convert a function specifier suffix to an expression" $
+  lambda "s" $
+    cases Cpp._FunctionSpecifierSuffix (var "s") Nothing [
+      Cpp._FunctionSpecifierSuffix_const>>: constant $ Serialization.cst @@ string "const",
+      Cpp._FunctionSpecifierSuffix_noexcept>>: constant $ Serialization.cst @@ string "noexcept",
+      Cpp._FunctionSpecifierSuffix_override>>: constant $ Serialization.cst @@ string "override",
+      Cpp._FunctionSpecifierSuffix_final>>: constant $ Serialization.cst @@ string "final"]
+
+encodeFunctionType :: TBinding (Cpp.FunctionType -> Expr)
+encodeFunctionType = define "encodeFunctionType" $
+  doc "Convert a function type to an expression" $
+  lambda "ft" $ lets [
+    "retType">: project Cpp._FunctionType Cpp._FunctionType_returnType @@ var "ft",
+    "params">: project Cpp._FunctionType Cpp._FunctionType_parameters @@ var "ft"] $
+    Serialization.spaceSep @@ list [
+      encodeTypeExpression @@ var "retType",
+      Serialization.parens @@ (Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map encodeParameter (var "params")))]
+
+encodeGreaterEqualOperation :: TBinding (Cpp.GreaterEqualOperation -> Expr)
+encodeGreaterEqualOperation = define "encodeGreaterEqualOperation" $
+  doc "Convert a greater-than-or-equal operation to an expression" $
+  lambda "op" $ lets [
+    "left">: project Cpp._GreaterEqualOperation Cpp._GreaterEqualOperation_left @@ var "op",
+    "right">: project Cpp._GreaterEqualOperation Cpp._GreaterEqualOperation_right @@ var "op"] $
+    Serialization.spaceSep @@ list [
+      encodeRelationalExpression @@ var "left",
+      Serialization.cst @@ string ">=",
+      encodeShiftExpression @@ var "right"]
+
+encodeGreaterOperation :: TBinding (Cpp.GreaterOperation -> Expr)
+encodeGreaterOperation = define "encodeGreaterOperation" $
+  doc "Convert a greater-than operation to an expression" $
+  lambda "op" $ lets [
+    "left">: project Cpp._GreaterOperation Cpp._GreaterOperation_left @@ var "op",
+    "right">: project Cpp._GreaterOperation Cpp._GreaterOperation_right @@ var "op"] $
+    Serialization.spaceSep @@ list [
+      encodeRelationalExpression @@ var "left",
+      Serialization.cst @@ string ">",
+      encodeShiftExpression @@ var "right"]
+
+encodeIfDirective :: TBinding (Cpp.IfDirective -> Expr)
+encodeIfDirective = define "encodeIfDirective" $
+  doc "Convert an if directive to an expression" $
+  lambda "ifd" $
+    Serialization.spaceSep @@ list [
+      Serialization.cst @@ string "#if",
+      Serialization.cst @@ (project Cpp._IfDirective Cpp._IfDirective_condition @@ var "ifd")]
+
+encodeIfdefDirective :: TBinding (Cpp.IfdefDirective -> Expr)
+encodeIfdefDirective = define "encodeIfdefDirective" $
+  doc "Convert an ifdef directive to an expression" $
+  lambda "id" $
+    Serialization.spaceSep @@ list [
+      Serialization.cst @@ string "#ifdef",
+      Serialization.cst @@ (project Cpp._IfdefDirective Cpp._IfdefDirective_identifier @@ var "id")]
+
+encodeIfndefDirective :: TBinding (Cpp.IfndefDirective -> Expr)
+encodeIfndefDirective = define "encodeIfndefDirective" $
+  doc "Convert an ifndef directive to an expression" $
+  lambda "ind" $
+    Serialization.spaceSep @@ list [
+      Serialization.cst @@ string "#ifndef",
+      Serialization.cst @@ (project Cpp._IfndefDirective Cpp._IfndefDirective_identifier @@ var "ind")]
+
+encodeIncludeDirective :: TBinding (Cpp.IncludeDirective -> Expr)
+encodeIncludeDirective = define "encodeIncludeDirective" $
+  doc "Convert an include directive to an expression" $
+  lambda "incl" $ lets [
+    "name">: project Cpp._IncludeDirective Cpp._IncludeDirective_name @@ var "incl",
+    "isSystem">: project Cpp._IncludeDirective Cpp._IncludeDirective_isSystem @@ var "incl"] $
+    Logic.ifElse (var "isSystem")
+      (Serialization.cst @@ (Strings.cat $ list [string "#include <", var "name", string ">"]))
+      (Serialization.cst @@ (Strings.cat $ list [string "#include \"", var "name", string "\""]))
+
+encodeInclusiveOrExpression :: TBinding (Cpp.InclusiveOrExpression -> Expr)
+encodeInclusiveOrExpression = define "encodeInclusiveOrExpression" $
+  doc "Convert an inclusive or expression to an expression" $
+  lambda "e" $
+    cases Cpp._InclusiveOrExpression (var "e") Nothing [
+      Cpp._InclusiveOrExpression_exclusiveOr>>: lambda "x" $ encodeExclusiveOrExpression @@ var "x",
+      Cpp._InclusiveOrExpression_bitwiseOr>>: lambda "o" $ encodeBitwiseOrOperation @@ var "o"]
+
+encodeIntegerLiteral :: TBinding (Cpp.IntegerLiteral -> Expr)
+encodeIntegerLiteral = define "encodeIntegerLiteral" $
+  doc "Convert an integer literal to an expression" $
+  lambda "i" $
+    cases Cpp._IntegerLiteral (var "i") Nothing [
+      Cpp._IntegerLiteral_decimal>>: lambda "n" $ Serialization.cst @@ (Literals.showBigint (var "n")),
+      Cpp._IntegerLiteral_hexadecimal>>: lambda "h" $ Serialization.cst @@ (Strings.cat2 (string "0x") (var "h")),
+      Cpp._IntegerLiteral_octal>>: lambda "o" $ Serialization.cst @@ (Strings.cat2 (string "0") (var "o")),
+      Cpp._IntegerLiteral_binary>>: lambda "b" $ Serialization.cst @@ (Strings.cat2 (string "0b") (var "b"))]
+
+encodeIterationStatement :: TBinding (Cpp.IterationStatement -> Expr)
+encodeIterationStatement = define "encodeIterationStatement" $
+  doc "Convert an iteration statement to an expression" $
+  lambda "i" $
+    cases Cpp._IterationStatement (var "i") Nothing [
+      Cpp._IterationStatement_while>>: lambda "w" $ encodeWhileStatement @@ var "w",
+      Cpp._IterationStatement_do>>: lambda "d" $ encodeDoStatement @@ var "d",
+      Cpp._IterationStatement_for>>: lambda "f" $ encodeForStatement @@ var "f",
+      Cpp._IterationStatement_rangeFor>>: lambda "r" $ encodeRangeForStatement @@ var "r"]
 
 encodeJumpStatement :: TBinding (Cpp.JumpStatement -> Expr)
 encodeJumpStatement = define "encodeJumpStatement" $
@@ -902,104 +847,94 @@ encodeJumpStatement = define "encodeJumpStatement" $
       Cpp._JumpStatement_throw>>: lambda "e" $
         Serialization.withSemi @@ (Serialization.spaceSep @@ list [Serialization.cst @@ string "throw", encodeExpression @@ var "e"])]
 
--- Expressions
+encodeLabeledStatement :: TBinding (Cpp.LabeledStatement -> Expr)
+encodeLabeledStatement = define "encodeLabeledStatement" $
+  doc "Convert a labeled statement to an expression" $
+  lambda "ls" $ lets [
+    "label">: project Cpp._LabeledStatement Cpp._LabeledStatement_label @@ var "ls",
+    "stmt">: project Cpp._LabeledStatement Cpp._LabeledStatement_statement @@ var "ls"] $
+    Serialization.newlineSep @@ list [
+      Serialization.cst @@ (Strings.cat2 (var "label") (string ":")),
+      encodeStatement @@ var "stmt"]
 
-encodeExpression :: TBinding (Cpp.Expression -> Expr)
-encodeExpression = define "encodeExpression" $
-  doc "Convert an expression to an expression" $
-  lambda "e" $
-    cases Cpp._Expression (var "e") Nothing [
-      Cpp._Expression_assignment>>: lambda "a" $ encodeAssignmentExpression @@ var "a",
-      Cpp._Expression_comma>>: lambda "c" $ encodeCommaExpression @@ var "c"]
-
-encodeCommaExpression :: TBinding (Cpp.CommaExpression -> Expr)
-encodeCommaExpression = define "encodeCommaExpression" $
-  doc "Convert a comma expression to an expression" $
-  lambda "ce" $ lets [
-    "left">: project Cpp._CommaExpression Cpp._CommaExpression_left @@ var "ce",
-    "right">: project Cpp._CommaExpression Cpp._CommaExpression_right @@ var "ce"] $
+encodeLambdaExpression :: TBinding (Cpp.LambdaExpression -> Expr)
+encodeLambdaExpression = define "encodeLambdaExpression" $
+  doc "Convert a lambda expression to an expression" $
+  lambda "le" $ lets [
+    "captures">: project Cpp._LambdaExpression Cpp._LambdaExpression_captures @@ var "le",
+    "params">: project Cpp._LambdaExpression Cpp._LambdaExpression_parameters @@ var "le",
+    "retType">: project Cpp._LambdaExpression Cpp._LambdaExpression_returnType @@ var "le",
+    "body">: project Cpp._LambdaExpression Cpp._LambdaExpression_body @@ var "le"] $
     Serialization.spaceSep @@ list [
-      encodeExpression @@ var "left",
-      Serialization.cst @@ string ",",
-      encodeAssignmentExpression @@ var "right"]
+      encodeCaptureList @@ var "captures",
+      Logic.ifElse (Lists.null (var "params"))
+        (Serialization.parens @@ (Serialization.cst @@ string ""))
+        (Serialization.parens @@ (Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map encodeParameter (var "params")))),
+      Maybes.maybe
+        (Serialization.cst @@ string "")
+        (lambda "t" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "->", encodeTypeExpression @@ var "t"])
+        (var "retType"),
+      encodeCompoundStatement @@ var "body"]
 
-encodeAssignmentExpression :: TBinding (Cpp.AssignmentExpression -> Expr)
-encodeAssignmentExpression = define "encodeAssignmentExpression" $
-  doc "Convert an assignment expression to an expression" $
-  lambda "a" $
-    cases Cpp._AssignmentExpression (var "a") Nothing [
-      Cpp._AssignmentExpression_conditional>>: lambda "c" $ encodeConditionalExpression @@ var "c",
-      Cpp._AssignmentExpression_assignment>>: lambda "e" $ encodeExplicitAssignment @@ var "e"]
-
-encodeExplicitAssignment :: TBinding (Cpp.ExplicitAssignment -> Expr)
-encodeExplicitAssignment = define "encodeExplicitAssignment" $
-  doc "Convert an explicit assignment to an expression" $
-  lambda "ea" $ lets [
-    "left">: project Cpp._ExplicitAssignment Cpp._ExplicitAssignment_left @@ var "ea",
-    "op">: project Cpp._ExplicitAssignment Cpp._ExplicitAssignment_op @@ var "ea",
-    "right">: project Cpp._ExplicitAssignment Cpp._ExplicitAssignment_right @@ var "ea"] $
-    Serialization.spaceSep @@ list [
-      encodeLogicalOrExpression @@ var "left",
-      encodeAssignmentOperator @@ var "op",
-      encodeAssignmentExpression @@ var "right"]
-
-encodeAssignmentOperator :: TBinding (Cpp.AssignmentOperator -> Expr)
-encodeAssignmentOperator = define "encodeAssignmentOperator" $
-  doc "Convert an assignment operator to an expression" $
-  lambda "op" $
-    cases Cpp._AssignmentOperator (var "op") Nothing [
-      Cpp._AssignmentOperator_assign>>: constant $ Serialization.cst @@ string "=",
-      Cpp._AssignmentOperator_plusAssign>>: constant $ Serialization.cst @@ string "+=",
-      Cpp._AssignmentOperator_minusAssign>>: constant $ Serialization.cst @@ string "-=",
-      Cpp._AssignmentOperator_multiplyAssign>>: constant $ Serialization.cst @@ string "*=",
-      Cpp._AssignmentOperator_divideAssign>>: constant $ Serialization.cst @@ string "/=",
-      Cpp._AssignmentOperator_moduloAssign>>: constant $ Serialization.cst @@ string "%=",
-      Cpp._AssignmentOperator_leftShiftAssign>>: constant $ Serialization.cst @@ string "<<=",
-      Cpp._AssignmentOperator_rightShiftAssign>>: constant $ Serialization.cst @@ string ">>=",
-      Cpp._AssignmentOperator_bitwiseAndAssign>>: constant $ Serialization.cst @@ string "&=",
-      Cpp._AssignmentOperator_bitwiseXorAssign>>: constant $ Serialization.cst @@ string "^=",
-      Cpp._AssignmentOperator_bitwiseOrAssign>>: constant $ Serialization.cst @@ string "|="]
-
-encodeConditionalExpression :: TBinding (Cpp.ConditionalExpression -> Expr)
-encodeConditionalExpression = define "encodeConditionalExpression" $
-  doc "Convert a conditional expression to an expression" $
-  lambda "c" $
-    cases Cpp._ConditionalExpression (var "c") Nothing [
-      Cpp._ConditionalExpression_logicalOr>>: lambda "l" $ encodeLogicalOrExpression @@ var "l",
-      Cpp._ConditionalExpression_ternary>>: lambda "t" $ encodeTernaryExpression @@ var "t"]
-
-encodeTernaryExpression :: TBinding (Cpp.TernaryExpression -> Expr)
-encodeTernaryExpression = define "encodeTernaryExpression" $
-  doc "Convert a ternary expression to an expression" $
-  lambda "te" $ lets [
-    "cond">: project Cpp._TernaryExpression Cpp._TernaryExpression_condition @@ var "te",
-    "trueExpr">: project Cpp._TernaryExpression Cpp._TernaryExpression_trueExpr @@ var "te",
-    "falseExpr">: project Cpp._TernaryExpression Cpp._TernaryExpression_falseExpr @@ var "te"] $
-    Serialization.spaceSep @@ list [
-      encodeLogicalOrExpression @@ var "cond",
-      Serialization.cst @@ string "?",
-      encodeExpression @@ var "trueExpr",
-      Serialization.cst @@ string ":",
-      encodeConditionalExpression @@ var "falseExpr"]
-
-encodeLogicalOrExpression :: TBinding (Cpp.LogicalOrExpression -> Expr)
-encodeLogicalOrExpression = define "encodeLogicalOrExpression" $
-  doc "Convert a logical or expression to an expression" $
-  lambda "e" $
-    cases Cpp._LogicalOrExpression (var "e") Nothing [
-      Cpp._LogicalOrExpression_logicalAnd>>: lambda "l" $ encodeLogicalAndExpression @@ var "l",
-      Cpp._LogicalOrExpression_logicalOr>>: lambda "o" $ encodeLogicalOrOperation @@ var "o"]
-
-encodeLogicalOrOperation :: TBinding (Cpp.LogicalOrOperation -> Expr)
-encodeLogicalOrOperation = define "encodeLogicalOrOperation" $
-  doc "Convert a logical or operation to an expression" $
+encodeLeftShiftOperation :: TBinding (Cpp.LeftShiftOperation -> Expr)
+encodeLeftShiftOperation = define "encodeLeftShiftOperation" $
+  doc "Convert a left shift operation to an expression" $
   lambda "op" $ lets [
-    "left">: project Cpp._LogicalOrOperation Cpp._LogicalOrOperation_left @@ var "op",
-    "right">: project Cpp._LogicalOrOperation Cpp._LogicalOrOperation_right @@ var "op"] $
+    "left">: project Cpp._LeftShiftOperation Cpp._LeftShiftOperation_left @@ var "op",
+    "right">: project Cpp._LeftShiftOperation Cpp._LeftShiftOperation_right @@ var "op"] $
     Serialization.spaceSep @@ list [
-      encodeLogicalOrExpression @@ var "left",
-      Serialization.cst @@ string "||",
-      encodeLogicalAndExpression @@ var "right"]
+      encodeShiftExpression @@ var "left",
+      Serialization.cst @@ string "<<",
+      encodeAdditiveExpression @@ var "right"]
+
+encodeLessEqualOperation :: TBinding (Cpp.LessEqualOperation -> Expr)
+encodeLessEqualOperation = define "encodeLessEqualOperation" $
+  doc "Convert a less-than-or-equal operation to an expression" $
+  lambda "op" $ lets [
+    "left">: project Cpp._LessEqualOperation Cpp._LessEqualOperation_left @@ var "op",
+    "right">: project Cpp._LessEqualOperation Cpp._LessEqualOperation_right @@ var "op"] $
+    Serialization.spaceSep @@ list [
+      encodeRelationalExpression @@ var "left",
+      Serialization.cst @@ string "<=",
+      encodeShiftExpression @@ var "right"]
+
+encodeLessOperation :: TBinding (Cpp.LessOperation -> Expr)
+encodeLessOperation = define "encodeLessOperation" $
+  doc "Convert a less-than operation to an expression" $
+  lambda "op" $ lets [
+    "left">: project Cpp._LessOperation Cpp._LessOperation_left @@ var "op",
+    "right">: project Cpp._LessOperation Cpp._LessOperation_right @@ var "op"] $
+    Serialization.spaceSep @@ list [
+      encodeRelationalExpression @@ var "left",
+      Serialization.cst @@ string "<",
+      encodeShiftExpression @@ var "right"]
+
+encodeLineDirective :: TBinding (Cpp.LineDirective -> Expr)
+encodeLineDirective = define "encodeLineDirective" $
+  doc "Convert a line directive to an expression" $
+  lambda "ld" $ lets [
+    "lineNumber">: project Cpp._LineDirective Cpp._LineDirective_lineNumber @@ var "ld",
+    "filename">: project Cpp._LineDirective Cpp._LineDirective_filename @@ var "ld"] $
+    Serialization.spaceSep @@ (Lists.concat $ list [
+      list [Serialization.cst @@ string "#line", Serialization.cst @@ (Literals.showInt32 (var "lineNumber"))],
+      Maybes.maybe
+        (list ([] :: [TTerm Expr]))
+        (lambda "f" $ list [Serialization.cst @@ (Strings.cat $ list [string "\"", var "f", string "\""])])
+        (var "filename")])
+
+encodeLiteral :: TBinding (Cpp.Literal -> Expr)
+encodeLiteral = define "encodeLiteral" $
+  doc "Convert a literal to an expression" $
+  lambda "l" $
+    cases Cpp._Literal (var "l") Nothing [
+      Cpp._Literal_integer>>: lambda "i" $ encodeIntegerLiteral @@ var "i",
+      Cpp._Literal_floating>>: lambda "f" $ Serialization.cst @@ (Literals.showBigfloat (unwrap Cpp._FloatingLiteral @@ var "f")),
+      Cpp._Literal_character>>: lambda "c" $
+        Serialization.cst @@ (Strings.cat $ list [string "'", unwrap Cpp._CharacterLiteral @@ var "c", string "'"]),
+      Cpp._Literal_string>>: lambda "s" $
+        Serialization.cst @@ (Strings.cat $ list [string "\"", unwrap Cpp._StringLiteral @@ var "s", string "\""]),
+      Cpp._Literal_boolean>>: lambda "b" $ encodeBooleanLiteral @@ var "b",
+      Cpp._Literal_null>>: constant $ Serialization.cst @@ string "nullptr"]
 
 encodeLogicalAndExpression :: TBinding (Cpp.LogicalAndExpression -> Expr)
 encodeLogicalAndExpression = define "encodeLogicalAndExpression" $
@@ -1020,210 +955,103 @@ encodeLogicalAndOperation = define "encodeLogicalAndOperation" $
       Serialization.cst @@ string "&&",
       encodeInclusiveOrExpression @@ var "right"]
 
-encodeInclusiveOrExpression :: TBinding (Cpp.InclusiveOrExpression -> Expr)
-encodeInclusiveOrExpression = define "encodeInclusiveOrExpression" $
-  doc "Convert an inclusive or expression to an expression" $
+encodeLogicalOrExpression :: TBinding (Cpp.LogicalOrExpression -> Expr)
+encodeLogicalOrExpression = define "encodeLogicalOrExpression" $
+  doc "Convert a logical or expression to an expression" $
   lambda "e" $
-    cases Cpp._InclusiveOrExpression (var "e") Nothing [
-      Cpp._InclusiveOrExpression_exclusiveOr>>: lambda "x" $ encodeExclusiveOrExpression @@ var "x",
-      Cpp._InclusiveOrExpression_bitwiseOr>>: lambda "o" $ encodeBitwiseOrOperation @@ var "o"]
+    cases Cpp._LogicalOrExpression (var "e") Nothing [
+      Cpp._LogicalOrExpression_logicalAnd>>: lambda "l" $ encodeLogicalAndExpression @@ var "l",
+      Cpp._LogicalOrExpression_logicalOr>>: lambda "o" $ encodeLogicalOrOperation @@ var "o"]
 
-encodeBitwiseOrOperation :: TBinding (Cpp.BitwiseOrOperation -> Expr)
-encodeBitwiseOrOperation = define "encodeBitwiseOrOperation" $
-  doc "Convert a bitwise or operation to an expression" $
+encodeLogicalOrOperation :: TBinding (Cpp.LogicalOrOperation -> Expr)
+encodeLogicalOrOperation = define "encodeLogicalOrOperation" $
+  doc "Convert a logical or operation to an expression" $
   lambda "op" $ lets [
-    "left">: project Cpp._BitwiseOrOperation Cpp._BitwiseOrOperation_left @@ var "op",
-    "right">: project Cpp._BitwiseOrOperation Cpp._BitwiseOrOperation_right @@ var "op"] $
+    "left">: project Cpp._LogicalOrOperation Cpp._LogicalOrOperation_left @@ var "op",
+    "right">: project Cpp._LogicalOrOperation Cpp._LogicalOrOperation_right @@ var "op"] $
     Serialization.spaceSep @@ list [
-      encodeInclusiveOrExpression @@ var "left",
-      Serialization.cst @@ string "|",
-      encodeExclusiveOrExpression @@ var "right"]
+      encodeLogicalOrExpression @@ var "left",
+      Serialization.cst @@ string "||",
+      encodeLogicalAndExpression @@ var "right"]
 
-encodeExclusiveOrExpression :: TBinding (Cpp.ExclusiveOrExpression -> Expr)
-encodeExclusiveOrExpression = define "encodeExclusiveOrExpression" $
-  doc "Convert an exclusive or expression to an expression" $
-  lambda "e" $
-    cases Cpp._ExclusiveOrExpression (var "e") Nothing [
-      Cpp._ExclusiveOrExpression_and>>: lambda "a" $ encodeAndExpression @@ var "a",
-      Cpp._ExclusiveOrExpression_bitwiseXor>>: lambda "x" $ encodeBitwiseXorOperation @@ var "x"]
-
-encodeBitwiseXorOperation :: TBinding (Cpp.BitwiseXorOperation -> Expr)
-encodeBitwiseXorOperation = define "encodeBitwiseXorOperation" $
-  doc "Convert a bitwise xor operation to an expression" $
-  lambda "op" $ lets [
-    "left">: project Cpp._BitwiseXorOperation Cpp._BitwiseXorOperation_left @@ var "op",
-    "right">: project Cpp._BitwiseXorOperation Cpp._BitwiseXorOperation_right @@ var "op"] $
+encodeMap :: TBinding (Cpp.Map -> Expr)
+encodeMap = define "encodeMap" $
+  doc "Convert a map to an expression" $
+  lambda "m" $ lets [
+    "keyType">: project Cpp._Map Cpp._Map_keyType @@ var "m",
+    "valType">: project Cpp._Map Cpp._Map_valueType @@ var "m",
+    "entries">: project Cpp._Map Cpp._Map_entries @@ var "m"] $
     Serialization.spaceSep @@ list [
-      encodeExclusiveOrExpression @@ var "left",
-      Serialization.cst @@ string "^",
-      encodeAndExpression @@ var "right"]
-
-encodeAndExpression :: TBinding (Cpp.AndExpression -> Expr)
-encodeAndExpression = define "encodeAndExpression" $
-  doc "Convert an and expression to an expression" $
-  lambda "e" $
-    cases Cpp._AndExpression (var "e") Nothing [
-      Cpp._AndExpression_equality>>: lambda "eq" $ encodeEqualityExpression @@ var "eq",
-      Cpp._AndExpression_bitwiseAnd>>: lambda "a" $ encodeBitwiseAndOperation @@ var "a"]
-
-encodeBitwiseAndOperation :: TBinding (Cpp.BitwiseAndOperation -> Expr)
-encodeBitwiseAndOperation = define "encodeBitwiseAndOperation" $
-  doc "Convert a bitwise and operation to an expression" $
-  lambda "op" $ lets [
-    "left">: project Cpp._BitwiseAndOperation Cpp._BitwiseAndOperation_left @@ var "op",
-    "right">: project Cpp._BitwiseAndOperation Cpp._BitwiseAndOperation_right @@ var "op"] $
-    Serialization.spaceSep @@ list [
-      encodeAndExpression @@ var "left",
-      Serialization.cst @@ string "&",
-      encodeEqualityExpression @@ var "right"]
-
-encodeEqualityExpression :: TBinding (Cpp.EqualityExpression -> Expr)
-encodeEqualityExpression = define "encodeEqualityExpression" $
-  doc "Convert an equality expression to an expression" $
-  lambda "e" $
-    cases Cpp._EqualityExpression (var "e") Nothing [
-      Cpp._EqualityExpression_relational>>: lambda "r" $ encodeRelationalExpression @@ var "r",
-      Cpp._EqualityExpression_equal>>: lambda "eq" $ encodeEqualOperation @@ var "eq",
-      Cpp._EqualityExpression_notEqual>>: lambda "ne" $ encodeNotEqualOperation @@ var "ne"]
-
-encodeEqualOperation :: TBinding (Cpp.EqualOperation -> Expr)
-encodeEqualOperation = define "encodeEqualOperation" $
-  doc "Convert an equal operation to an expression" $
-  lambda "op" $ lets [
-    "left">: project Cpp._EqualOperation Cpp._EqualOperation_left @@ var "op",
-    "right">: project Cpp._EqualOperation Cpp._EqualOperation_right @@ var "op"] $
-    Serialization.spaceSep @@ list [
-      encodeEqualityExpression @@ var "left",
-      Serialization.cst @@ string "==",
-      encodeRelationalExpression @@ var "right"]
-
-encodeNotEqualOperation :: TBinding (Cpp.NotEqualOperation -> Expr)
-encodeNotEqualOperation = define "encodeNotEqualOperation" $
-  doc "Convert a not-equal operation to an expression" $
-  lambda "op" $ lets [
-    "left">: project Cpp._NotEqualOperation Cpp._NotEqualOperation_left @@ var "op",
-    "right">: project Cpp._NotEqualOperation Cpp._NotEqualOperation_right @@ var "op"] $
-    Serialization.spaceSep @@ list [
-      encodeEqualityExpression @@ var "left",
-      Serialization.cst @@ string "!=",
-      encodeRelationalExpression @@ var "right"]
-
-encodeRelationalExpression :: TBinding (Cpp.RelationalExpression -> Expr)
-encodeRelationalExpression = define "encodeRelationalExpression" $
-  doc "Convert a relational expression to an expression" $
-  lambda "e" $
-    cases Cpp._RelationalExpression (var "e") Nothing [
-      Cpp._RelationalExpression_shift>>: lambda "s" $ encodeShiftExpression @@ var "s",
-      Cpp._RelationalExpression_less>>: lambda "l" $ encodeLessOperation @@ var "l",
-      Cpp._RelationalExpression_greater>>: lambda "g" $ encodeGreaterOperation @@ var "g",
-      Cpp._RelationalExpression_lessEqual>>: lambda "le" $ encodeLessEqualOperation @@ var "le",
-      Cpp._RelationalExpression_greaterEqual>>: lambda "ge" $ encodeGreaterEqualOperation @@ var "ge"]
-
-encodeLessOperation :: TBinding (Cpp.LessOperation -> Expr)
-encodeLessOperation = define "encodeLessOperation" $
-  doc "Convert a less-than operation to an expression" $
-  lambda "op" $ lets [
-    "left">: project Cpp._LessOperation Cpp._LessOperation_left @@ var "op",
-    "right">: project Cpp._LessOperation Cpp._LessOperation_right @@ var "op"] $
-    Serialization.spaceSep @@ list [
-      encodeRelationalExpression @@ var "left",
-      Serialization.cst @@ string "<",
-      encodeShiftExpression @@ var "right"]
-
-encodeGreaterOperation :: TBinding (Cpp.GreaterOperation -> Expr)
-encodeGreaterOperation = define "encodeGreaterOperation" $
-  doc "Convert a greater-than operation to an expression" $
-  lambda "op" $ lets [
-    "left">: project Cpp._GreaterOperation Cpp._GreaterOperation_left @@ var "op",
-    "right">: project Cpp._GreaterOperation Cpp._GreaterOperation_right @@ var "op"] $
-    Serialization.spaceSep @@ list [
-      encodeRelationalExpression @@ var "left",
+      Serialization.cst @@ string "std::map<",
+      Serialization.commaSep @@ Serialization.inlineStyle @@ list [
+        encodeTypeExpression @@ var "keyType",
+        encodeTypeExpression @@ var "valType"],
       Serialization.cst @@ string ">",
-      encodeShiftExpression @@ var "right"]
+      Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ (Lists.map encodeMapEntry (var "entries"))]
 
-encodeLessEqualOperation :: TBinding (Cpp.LessEqualOperation -> Expr)
-encodeLessEqualOperation = define "encodeLessEqualOperation" $
-  doc "Convert a less-than-or-equal operation to an expression" $
-  lambda "op" $ lets [
-    "left">: project Cpp._LessEqualOperation Cpp._LessEqualOperation_left @@ var "op",
-    "right">: project Cpp._LessEqualOperation Cpp._LessEqualOperation_right @@ var "op"] $
+encodeMapEntry :: TBinding (Cpp.MapEntry -> Expr)
+encodeMapEntry = define "encodeMapEntry" $
+  doc "Convert a map entry to an expression" $
+  lambda "me" $ lets [
+    "key">: project Cpp._MapEntry Cpp._MapEntry_key @@ var "me",
+    "val">: project Cpp._MapEntry Cpp._MapEntry_value @@ var "me"] $
     Serialization.spaceSep @@ list [
-      encodeRelationalExpression @@ var "left",
-      Serialization.cst @@ string "<=",
-      encodeShiftExpression @@ var "right"]
+      Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ list [encodeExpression @@ var "key"],
+      Serialization.cst @@ string "->",
+      encodeExpression @@ var "val"]
 
-encodeGreaterEqualOperation :: TBinding (Cpp.GreaterEqualOperation -> Expr)
-encodeGreaterEqualOperation = define "encodeGreaterEqualOperation" $
-  doc "Convert a greater-than-or-equal operation to an expression" $
+encodeMemberAccessOperation :: TBinding (Cpp.MemberAccessOperation -> Expr)
+encodeMemberAccessOperation = define "encodeMemberAccessOperation" $
+  doc "Convert a member access operation to an expression" $
+  lambda "mao" $ lets [
+    "obj">: project Cpp._MemberAccessOperation Cpp._MemberAccessOperation_object @@ var "mao",
+    "member">: project Cpp._MemberAccessOperation Cpp._MemberAccessOperation_member @@ var "mao"] $
+    Serialization.noSep @@ list [
+      encodePostfixExpression @@ var "obj",
+      Serialization.cst @@ string ".",
+      Serialization.cst @@ var "member"]
+
+encodeMemberDeclaration :: TBinding (Bool -> Cpp.MemberDeclaration -> Expr)
+encodeMemberDeclaration = define "encodeMemberDeclaration" $
+  doc "Convert a member declaration to an expression" $
+  lambda "commas" $ lambda "m" $
+    cases Cpp._MemberDeclaration (var "m") Nothing [
+      Cpp._MemberDeclaration_function>>: lambda "f" $ encodeFunctionDeclaration @@ var "f",
+      Cpp._MemberDeclaration_variable>>: lambda "v" $ encodeVariableDeclaration @@ var "commas" @@ var "v",
+      Cpp._MemberDeclaration_constructor>>: lambda "c" $ encodeConstructorDeclaration @@ var "c",
+      Cpp._MemberDeclaration_destructor>>: lambda "d" $ encodeDestructorDeclaration @@ var "d",
+      Cpp._MemberDeclaration_nestedClass>>: lambda "c" $ encodeClassDeclaration @@ var "c",
+      Cpp._MemberDeclaration_template>>: lambda "t" $ encodeTemplateDeclaration @@ var "t"]
+
+encodeMemberSpecification :: TBinding (Bool -> Cpp.MemberSpecification -> Expr)
+encodeMemberSpecification = define "encodeMemberSpecification" $
+  doc "Convert a member specification to an expression" $
+  lambda "commas" $ lambda "m" $
+    cases Cpp._MemberSpecification (var "m") Nothing [
+      Cpp._MemberSpecification_accessLabel>>: lambda "a" $
+        Serialization.noSep @@ list [encodeAccessSpecifier @@ var "a", Serialization.cst @@ string ":"],
+      Cpp._MemberSpecification_member>>: lambda "d" $ encodeMemberDeclaration @@ var "commas" @@ var "d"]
+
+encodeMemInitializer :: TBinding (Cpp.MemInitializer -> Expr)
+encodeMemInitializer = define "encodeMemInitializer" $
+  doc "Convert a member initializer to an expression" $
+  lambda "mi" $ lets [
+    "name">: project Cpp._MemInitializer Cpp._MemInitializer_name @@ var "mi",
+    "args">: project Cpp._MemInitializer Cpp._MemInitializer_arguments @@ var "mi"] $
+    Serialization.noSep @@ list [
+      Serialization.cst @@ var "name",
+      Serialization.parens @@ (Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map encodeExpression (var "args")))]
+
+encodeModuloOperation :: TBinding (Cpp.ModuloOperation -> Expr)
+encodeModuloOperation = define "encodeModuloOperation" $
+  doc "Convert a modulo operation to an expression" $
   lambda "op" $ lets [
-    "left">: project Cpp._GreaterEqualOperation Cpp._GreaterEqualOperation_left @@ var "op",
-    "right">: project Cpp._GreaterEqualOperation Cpp._GreaterEqualOperation_right @@ var "op"] $
+    "left">: project Cpp._ModuloOperation Cpp._ModuloOperation_left @@ var "op",
+    "right">: project Cpp._ModuloOperation Cpp._ModuloOperation_right @@ var "op"] $
     Serialization.spaceSep @@ list [
-      encodeRelationalExpression @@ var "left",
-      Serialization.cst @@ string ">=",
-      encodeShiftExpression @@ var "right"]
-
-encodeShiftExpression :: TBinding (Cpp.ShiftExpression -> Expr)
-encodeShiftExpression = define "encodeShiftExpression" $
-  doc "Convert a shift expression to an expression" $
-  lambda "e" $
-    cases Cpp._ShiftExpression (var "e") Nothing [
-      Cpp._ShiftExpression_additive>>: lambda "a" $ encodeAdditiveExpression @@ var "a",
-      Cpp._ShiftExpression_leftShift>>: lambda "ls" $ encodeLeftShiftOperation @@ var "ls",
-      Cpp._ShiftExpression_rightShift>>: lambda "rs" $ encodeRightShiftOperation @@ var "rs"]
-
-encodeLeftShiftOperation :: TBinding (Cpp.LeftShiftOperation -> Expr)
-encodeLeftShiftOperation = define "encodeLeftShiftOperation" $
-  doc "Convert a left shift operation to an expression" $
-  lambda "op" $ lets [
-    "left">: project Cpp._LeftShiftOperation Cpp._LeftShiftOperation_left @@ var "op",
-    "right">: project Cpp._LeftShiftOperation Cpp._LeftShiftOperation_right @@ var "op"] $
-    Serialization.spaceSep @@ list [
-      encodeShiftExpression @@ var "left",
-      Serialization.cst @@ string "<<",
-      encodeAdditiveExpression @@ var "right"]
-
-encodeRightShiftOperation :: TBinding (Cpp.RightShiftOperation -> Expr)
-encodeRightShiftOperation = define "encodeRightShiftOperation" $
-  doc "Convert a right shift operation to an expression" $
-  lambda "op" $ lets [
-    "left">: project Cpp._RightShiftOperation Cpp._RightShiftOperation_left @@ var "op",
-    "right">: project Cpp._RightShiftOperation Cpp._RightShiftOperation_right @@ var "op"] $
-    Serialization.spaceSep @@ list [
-      encodeShiftExpression @@ var "left",
-      Serialization.cst @@ string ">>",
-      encodeAdditiveExpression @@ var "right"]
-
-encodeAdditiveExpression :: TBinding (Cpp.AdditiveExpression -> Expr)
-encodeAdditiveExpression = define "encodeAdditiveExpression" $
-  doc "Convert an additive expression to an expression" $
-  lambda "e" $
-    cases Cpp._AdditiveExpression (var "e") Nothing [
-      Cpp._AdditiveExpression_multiplicative>>: lambda "m" $ encodeMultiplicativeExpression @@ var "m",
-      Cpp._AdditiveExpression_add>>: lambda "a" $ encodeAddOperation @@ var "a",
-      Cpp._AdditiveExpression_subtract>>: lambda "s" $ encodeSubtractOperation @@ var "s"]
-
-encodeAddOperation :: TBinding (Cpp.AddOperation -> Expr)
-encodeAddOperation = define "encodeAddOperation" $
-  doc "Convert an add operation to an expression" $
-  lambda "op" $ lets [
-    "left">: project Cpp._AddOperation Cpp._AddOperation_left @@ var "op",
-    "right">: project Cpp._AddOperation Cpp._AddOperation_right @@ var "op"] $
-    Serialization.spaceSep @@ list [
-      encodeAdditiveExpression @@ var "left",
-      Serialization.cst @@ string "+",
-      encodeMultiplicativeExpression @@ var "right"]
-
-encodeSubtractOperation :: TBinding (Cpp.SubtractOperation -> Expr)
-encodeSubtractOperation = define "encodeSubtractOperation" $
-  doc "Convert a subtract operation to an expression" $
-  lambda "op" $ lets [
-    "left">: project Cpp._SubtractOperation Cpp._SubtractOperation_left @@ var "op",
-    "right">: project Cpp._SubtractOperation Cpp._SubtractOperation_right @@ var "op"] $
-    Serialization.spaceSep @@ list [
-      encodeAdditiveExpression @@ var "left",
-      Serialization.cst @@ string "-",
-      encodeMultiplicativeExpression @@ var "right"]
+      encodeMultiplicativeExpression @@ var "left",
+      Serialization.cst @@ string "%",
+      encodeUnaryExpression @@ var "right"]
 
 encodeMultiplicativeExpression :: TBinding (Cpp.MultiplicativeExpression -> Expr)
 encodeMultiplicativeExpression = define "encodeMultiplicativeExpression" $
@@ -1246,27 +1074,261 @@ encodeMultiplyOperation = define "encodeMultiplyOperation" $
       Serialization.cst @@ string "*",
       encodeUnaryExpression @@ var "right"]
 
-encodeDivideOperation :: TBinding (Cpp.DivideOperation -> Expr)
-encodeDivideOperation = define "encodeDivideOperation" $
-  doc "Convert a divide operation to an expression" $
-  lambda "op" $ lets [
-    "left">: project Cpp._DivideOperation Cpp._DivideOperation_left @@ var "op",
-    "right">: project Cpp._DivideOperation Cpp._DivideOperation_right @@ var "op"] $
+encodeNamespaceDeclaration :: TBinding (Cpp.NamespaceDeclaration -> Expr)
+encodeNamespaceDeclaration = define "encodeNamespaceDeclaration" $
+  doc "Convert a namespace declaration to an expression" $
+  lambda "nd" $ lets [
+    "name">: project Cpp._NamespaceDeclaration Cpp._NamespaceDeclaration_name @@ var "nd",
+    "decls">: project Cpp._NamespaceDeclaration Cpp._NamespaceDeclaration_declarations @@ var "nd"] $
     Serialization.spaceSep @@ list [
-      encodeMultiplicativeExpression @@ var "left",
-      Serialization.cst @@ string "/",
-      encodeUnaryExpression @@ var "right"]
+      Serialization.cst @@ (Strings.cat2 (string "namespace ") (var "name")),
+      Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
+        (Serialization.doubleNewlineSep @@ (Lists.map encodeDeclaration (var "decls")))]
 
-encodeModuloOperation :: TBinding (Cpp.ModuloOperation -> Expr)
-encodeModuloOperation = define "encodeModuloOperation" $
-  doc "Convert a modulo operation to an expression" $
+encodeNotEqualOperation :: TBinding (Cpp.NotEqualOperation -> Expr)
+encodeNotEqualOperation = define "encodeNotEqualOperation" $
+  doc "Convert a not-equal operation to an expression" $
   lambda "op" $ lets [
-    "left">: project Cpp._ModuloOperation Cpp._ModuloOperation_left @@ var "op",
-    "right">: project Cpp._ModuloOperation Cpp._ModuloOperation_right @@ var "op"] $
+    "left">: project Cpp._NotEqualOperation Cpp._NotEqualOperation_left @@ var "op",
+    "right">: project Cpp._NotEqualOperation Cpp._NotEqualOperation_right @@ var "op"] $
     Serialization.spaceSep @@ list [
-      encodeMultiplicativeExpression @@ var "left",
-      Serialization.cst @@ string "%",
-      encodeUnaryExpression @@ var "right"]
+      encodeEqualityExpression @@ var "left",
+      Serialization.cst @@ string "!=",
+      encodeRelationalExpression @@ var "right"]
+
+encodeOptional :: TBinding (Cpp.Optional -> Expr)
+encodeOptional = define "encodeOptional" $
+  doc "Convert an optional to an expression" $
+  lambda "opt" $ lets [
+    "valType">: project Cpp._Optional Cpp._Optional_valueType @@ var "opt",
+    "val">: project Cpp._Optional Cpp._Optional_value @@ var "opt"] $
+    Serialization.spaceSep @@ list [
+      Serialization.cst @@ string "std::optional<",
+      encodeTypeExpression @@ var "valType",
+      Serialization.cst @@ string ">",
+      Maybes.maybe
+        (Serialization.cst @@ string "{}")
+        (lambda "v" $ Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ list [encodeExpression @@ var "v"])
+        (var "val")]
+
+encodeOverloadedLambdas :: TBinding (Cpp.OverloadedLambdas -> Expr)
+encodeOverloadedLambdas = define "encodeOverloadedLambdas" $
+  doc "Convert overloaded lambdas to an expression" $
+  lambda "ol" $
+    Serialization.spaceSep @@ list [
+      Serialization.cst @@ string "overloaded",
+      Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
+        (Serialization.newlineSep @@ (Lists.map encodeLambdaExpression (unwrap Cpp._OverloadedLambdas @@ var "ol")))]
+
+encodeParameter :: TBinding (Cpp.Parameter -> Expr)
+encodeParameter = define "encodeParameter" $
+  doc "Convert a parameter to an expression" $
+  lambda "p" $ lets [
+    "typ">: project Cpp._Parameter Cpp._Parameter_type @@ var "p",
+    "name">: project Cpp._Parameter Cpp._Parameter_name @@ var "p",
+    "unnamed">: project Cpp._Parameter Cpp._Parameter_unnamed @@ var "p",
+    "defaultVal">: project Cpp._Parameter Cpp._Parameter_defaultValue @@ var "p",
+    "nameExpr">: Serialization.cst @@ (Logic.ifElse (var "unnamed")
+      (Strings.cat $ list [string "/*", var "name", string "*/"])
+      (var "name"))] $
+    Serialization.spaceSep @@ (Lists.concat $ list [
+      list [encodeTypeExpression @@ var "typ", var "nameExpr"],
+      Maybes.maybe
+        (list ([] :: [TTerm Expr]))
+        (lambda "expr" $ list [Serialization.cst @@ string "=", encodeExpression @@ var "expr"])
+        (var "defaultVal")])
+
+encodePatternMatch :: TBinding (Cpp.PatternMatch -> Expr)
+encodePatternMatch = define "encodePatternMatch" $
+  doc "Convert a pattern match to an expression" $
+  lambda "pm" $ lets [
+    "visitor">: project Cpp._PatternMatch Cpp._PatternMatch_visitor @@ var "pm",
+    "variant">: project Cpp._PatternMatch Cpp._PatternMatch_variant @@ var "pm"] $
+    Serialization.spaceSep @@ list [
+      Serialization.cst @@ string "std::visit",
+      Serialization.parens @@ (Serialization.commaSep @@ Serialization.inlineStyle @@ list [
+        encodeVisitor @@ var "visitor",
+        encodeExpression @@ var "variant"])]
+
+encodePointerMemberAccessOperation :: TBinding (Cpp.PointerMemberAccessOperation -> Expr)
+encodePointerMemberAccessOperation = define "encodePointerMemberAccessOperation" $
+  doc "Convert a pointer member access operation to an expression" $
+  lambda "pmao" $ lets [
+    "ptr">: project Cpp._PointerMemberAccessOperation Cpp._PointerMemberAccessOperation_pointer @@ var "pmao",
+    "member">: project Cpp._PointerMemberAccessOperation Cpp._PointerMemberAccessOperation_member @@ var "pmao"] $
+    Serialization.noSep @@ list [
+      encodePostfixExpression @@ var "ptr",
+      Serialization.cst @@ string "->",
+      Serialization.cst @@ var "member"]
+
+encodePostfixExpression :: TBinding (Cpp.PostfixExpression -> Expr)
+encodePostfixExpression = define "encodePostfixExpression" $
+  doc "Convert a postfix expression to an expression" $
+  lambda "e" $
+    cases Cpp._PostfixExpression (var "e") Nothing [
+      Cpp._PostfixExpression_primary>>: lambda "p" $ encodePrimaryExpression @@ var "p",
+      Cpp._PostfixExpression_subscript>>: lambda "s" $ encodeSubscriptOperation @@ var "s",
+      Cpp._PostfixExpression_functionCall>>: lambda "f" $ encodeFunctionCallOperation @@ var "f",
+      Cpp._PostfixExpression_templateFunctionCall>>: lambda "t" $ encodeTemplateFunctionCallOperation @@ var "t",
+      Cpp._PostfixExpression_memberAccess>>: lambda "m" $ encodeMemberAccessOperation @@ var "m",
+      Cpp._PostfixExpression_pointerMemberAccess>>: lambda "p" $ encodePointerMemberAccessOperation @@ var "p",
+      Cpp._PostfixExpression_postIncrement>>: lambda "p" $
+        Serialization.noSep @@ list [encodePostfixExpression @@ var "p", Serialization.cst @@ string "++"],
+      Cpp._PostfixExpression_postDecrement>>: lambda "p" $
+        Serialization.noSep @@ list [encodePostfixExpression @@ var "p", Serialization.cst @@ string "--"]]
+
+encodePragmaDirective :: TBinding (Cpp.PragmaDirective -> Expr)
+encodePragmaDirective = define "encodePragmaDirective" $
+  doc "Convert a pragma directive to an expression" $
+  lambda "pd" $
+    Serialization.cst @@ (Strings.cat2 (string "#pragma ") (project Cpp._PragmaDirective Cpp._PragmaDirective_content @@ var "pd"))
+
+encodePreprocessorDirective :: TBinding (Cpp.PreprocessorDirective -> Expr)
+encodePreprocessorDirective = define "encodePreprocessorDirective" $
+  doc "Convert a preprocessor directive to an expression" $
+  lambda "d" $
+    cases Cpp._PreprocessorDirective (var "d") Nothing [
+      Cpp._PreprocessorDirective_include>>: lambda "i" $ encodeIncludeDirective @@ var "i",
+      Cpp._PreprocessorDirective_pragma>>: lambda "p" $ encodePragmaDirective @@ var "p",
+      Cpp._PreprocessorDirective_define>>: lambda "d" $ encodeDefineDirective @@ var "d",
+      Cpp._PreprocessorDirective_undef>>: lambda "u" $ encodeUndefDirective @@ var "u",
+      Cpp._PreprocessorDirective_ifdef>>: lambda "i" $ encodeIfdefDirective @@ var "i",
+      Cpp._PreprocessorDirective_ifndef>>: lambda "i" $ encodeIfndefDirective @@ var "i",
+      Cpp._PreprocessorDirective_if>>: lambda "i" $ encodeIfDirective @@ var "i",
+      Cpp._PreprocessorDirective_elif>>: lambda "e" $ encodeElifDirective @@ var "e",
+      Cpp._PreprocessorDirective_else>>: lambda "e" $ encodeElseDirective @@ var "e",
+      Cpp._PreprocessorDirective_endif>>: lambda "e" $ encodeEndifDirective @@ var "e",
+      Cpp._PreprocessorDirective_line>>: lambda "l" $ encodeLineDirective @@ var "l",
+      Cpp._PreprocessorDirective_error>>: lambda "e" $ encodeErrorDirective @@ var "e",
+      Cpp._PreprocessorDirective_warning>>: lambda "w" $ encodeWarningDirective @@ var "w"]
+
+encodePrimaryExpression :: TBinding (Cpp.PrimaryExpression -> Expr)
+encodePrimaryExpression = define "encodePrimaryExpression" $
+  doc "Convert a primary expression to an expression" $
+  lambda "e" $
+    cases Cpp._PrimaryExpression (var "e") Nothing [
+      Cpp._PrimaryExpression_identifier>>: lambda "id" $ Serialization.cst @@ var "id",
+      Cpp._PrimaryExpression_literal>>: lambda "l" $ encodeLiteral @@ var "l",
+      Cpp._PrimaryExpression_parenthesized>>: lambda "p" $ Serialization.parens @@ (encodeExpression @@ var "p"),
+      Cpp._PrimaryExpression_lambda>>: lambda "l" $ encodeLambdaExpression @@ var "l"]
+
+encodeProgram :: TBinding (Cpp.Program -> Expr)
+encodeProgram = define "encodeProgram" $
+  doc "Convert a program to an expression" $
+  lambda "prog" $ lets [
+    "preps">: project Cpp._Program Cpp._Program_preprocessorDirectives @@ var "prog",
+    "includes">: project Cpp._Program Cpp._Program_includes @@ var "prog",
+    "decls">: project Cpp._Program Cpp._Program_declarations @@ var "prog",
+    "separate">: lambda "sep" $ lambda "defs" $
+      Logic.ifElse (Lists.null (var "defs"))
+        nothing
+        (just (var "sep" @@ var "defs"))] $
+    Serialization.doubleNewlineSep @@ (Maybes.cat $ list [
+      var "separate" @@ Serialization.newlineSep @@ (Lists.map encodePreprocessorDirective (var "preps")),
+      var "separate" @@ Serialization.newlineSep @@ (Lists.map encodeIncludeDirective (var "includes")),
+      var "separate" @@ Serialization.doubleNewlineSep @@ (Lists.map encodeDeclaration (var "decls"))])
+
+encodeQualifiedIdentifier :: TBinding (Cpp.QualifiedIdentifier -> Expr)
+encodeQualifiedIdentifier = define "encodeQualifiedIdentifier" $
+  doc "Convert a qualified identifier to an expression" $
+  lambda "qi" $ lets [
+    "ns">: project Cpp._QualifiedIdentifier Cpp._QualifiedIdentifier_namespace @@ var "qi",
+    "name">: project Cpp._QualifiedIdentifier Cpp._QualifiedIdentifier_name @@ var "qi"] $
+    Serialization.cst @@ (Strings.cat $ list [var "ns", string "::", var "name"])
+
+encodeQualifiedType :: TBinding (Cpp.QualifiedType -> Expr)
+encodeQualifiedType = define "encodeQualifiedType" $
+  doc "Convert a qualified type to an expression" $
+  lambda "qt" $ lets [
+    "baseType">: project Cpp._QualifiedType Cpp._QualifiedType_baseType @@ var "qt",
+    "qualifier">: project Cpp._QualifiedType Cpp._QualifiedType_qualifier @@ var "qt"] $
+    cases Cpp._TypeQualifier (var "qualifier") Nothing [
+      Cpp._TypeQualifier_const>>: constant $
+        Serialization.spaceSep @@ list [Serialization.cst @@ string "const", encodeTypeExpression @@ var "baseType"],
+      Cpp._TypeQualifier_lvalueRef>>: constant $
+        Serialization.noSep @@ list [encodeTypeExpression @@ var "baseType", Serialization.cst @@ string "&"],
+      Cpp._TypeQualifier_rvalueRef>>: constant $
+        Serialization.noSep @@ list [encodeTypeExpression @@ var "baseType", Serialization.cst @@ string "&&"],
+      Cpp._TypeQualifier_pointer>>: constant $
+        Serialization.noSep @@ list [encodeTypeExpression @@ var "baseType", Serialization.cst @@ string "*"]]
+
+encodeRangeForStatement :: TBinding (Cpp.RangeForStatement -> Expr)
+encodeRangeForStatement = define "encodeRangeForStatement" $
+  doc "Convert a range-for statement to an expression" $
+  lambda "rfs" $ lets [
+    "typ">: project Cpp._RangeForStatement Cpp._RangeForStatement_type @@ var "rfs",
+    "var">: project Cpp._RangeForStatement Cpp._RangeForStatement_variable @@ var "rfs",
+    "range">: project Cpp._RangeForStatement Cpp._RangeForStatement_range @@ var "rfs",
+    "body">: project Cpp._RangeForStatement Cpp._RangeForStatement_body @@ var "rfs"] $
+    Serialization.newlineSep @@ list [
+      Serialization.spaceSep @@ list [
+        Serialization.cst @@ string "for",
+        Serialization.parens @@ (Serialization.spaceSep @@ list [
+          encodeTypeExpression @@ var "typ",
+          Serialization.cst @@ var "var",
+          Serialization.cst @@ string ":",
+          encodeExpression @@ var "range"])],
+      encodeStatement @@ var "body"]
+
+encodeRelationalExpression :: TBinding (Cpp.RelationalExpression -> Expr)
+encodeRelationalExpression = define "encodeRelationalExpression" $
+  doc "Convert a relational expression to an expression" $
+  lambda "e" $
+    cases Cpp._RelationalExpression (var "e") Nothing [
+      Cpp._RelationalExpression_shift>>: lambda "s" $ encodeShiftExpression @@ var "s",
+      Cpp._RelationalExpression_less>>: lambda "l" $ encodeLessOperation @@ var "l",
+      Cpp._RelationalExpression_greater>>: lambda "g" $ encodeGreaterOperation @@ var "g",
+      Cpp._RelationalExpression_lessEqual>>: lambda "le" $ encodeLessEqualOperation @@ var "le",
+      Cpp._RelationalExpression_greaterEqual>>: lambda "ge" $ encodeGreaterEqualOperation @@ var "ge"]
+
+encodeRightShiftOperation :: TBinding (Cpp.RightShiftOperation -> Expr)
+encodeRightShiftOperation = define "encodeRightShiftOperation" $
+  doc "Convert a right shift operation to an expression" $
+  lambda "op" $ lets [
+    "left">: project Cpp._RightShiftOperation Cpp._RightShiftOperation_left @@ var "op",
+    "right">: project Cpp._RightShiftOperation Cpp._RightShiftOperation_right @@ var "op"] $
+    Serialization.spaceSep @@ list [
+      encodeShiftExpression @@ var "left",
+      Serialization.cst @@ string ">>",
+      encodeAdditiveExpression @@ var "right"]
+
+encodeSelectionStatement :: TBinding (Cpp.SelectionStatement -> Expr)
+encodeSelectionStatement = define "encodeSelectionStatement" $
+  doc "Convert a selection statement to an expression" $
+  lambda "ss" $ lets [
+    "cond">: project Cpp._SelectionStatement Cpp._SelectionStatement_condition @@ var "ss",
+    "thenBranch">: project Cpp._SelectionStatement Cpp._SelectionStatement_thenBranch @@ var "ss",
+    "elseBranch">: project Cpp._SelectionStatement Cpp._SelectionStatement_elseBranch @@ var "ss"] $
+    Serialization.newlineSep @@ list [
+      Serialization.spaceSep @@ list [
+        Serialization.cst @@ string "if",
+        Serialization.parens @@ (encodeExpression @@ var "cond")],
+      encodeStatement @@ var "thenBranch",
+      Maybes.maybe
+        (Serialization.cst @@ string "")
+        (lambda "stmt" $ Serialization.newlineSep @@ list [Serialization.cst @@ string "else", encodeStatement @@ var "stmt"])
+        (var "elseBranch")]
+
+encodeSet :: TBinding (Cpp.Set -> Expr)
+encodeSet = define "encodeSet" $
+  doc "Convert a set to an expression" $
+  lambda "s" $ lets [
+    "elemType">: project Cpp._Set Cpp._Set_elementType @@ var "s",
+    "elems">: project Cpp._Set Cpp._Set_elements @@ var "s"] $
+    Serialization.spaceSep @@ list [
+      Serialization.cst @@ string "std::set<",
+      encodeTypeExpression @@ var "elemType",
+      Serialization.cst @@ string ">",
+      Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ (Lists.map encodeExpression (var "elems"))]
+
+encodeShiftExpression :: TBinding (Cpp.ShiftExpression -> Expr)
+encodeShiftExpression = define "encodeShiftExpression" $
+  doc "Convert a shift expression to an expression" $
+  lambda "e" $
+    cases Cpp._ShiftExpression (var "e") Nothing [
+      Cpp._ShiftExpression_additive>>: lambda "a" $ encodeAdditiveExpression @@ var "a",
+      Cpp._ShiftExpression_leftShift>>: lambda "ls" $ encodeLeftShiftOperation @@ var "ls",
+      Cpp._ShiftExpression_rightShift>>: lambda "rs" $ encodeRightShiftOperation @@ var "rs"]
 
 encodeSizeofExpression :: TBinding (Cpp.SizeofExpression -> Expr)
 encodeSizeofExpression = define "encodeSizeofExpression" $
@@ -1275,6 +1337,150 @@ encodeSizeofExpression = define "encodeSizeofExpression" $
     Serialization.spaceSep @@ list [
       Serialization.cst @@ string "sizeof",
       Serialization.parens @@ (encodeTypeExpression @@ (unwrap Cpp._SizeofExpression @@ var "se"))]
+
+encodeStatement :: TBinding (Cpp.Statement -> Expr)
+encodeStatement = define "encodeStatement" $
+  doc "Convert a statement to an expression" $
+  lambda "s" $
+    cases Cpp._Statement (var "s") Nothing [
+      Cpp._Statement_labeled>>: lambda "l" $ encodeLabeledStatement @@ var "l",
+      Cpp._Statement_compound>>: lambda "c" $ encodeCompoundStatement @@ var "c",
+      Cpp._Statement_selection>>: lambda "s" $ encodeSelectionStatement @@ var "s",
+      Cpp._Statement_switch>>: lambda "s" $ encodeSwitchStatement @@ var "s",
+      Cpp._Statement_iteration>>: lambda "i" $ encodeIterationStatement @@ var "i",
+      Cpp._Statement_jump>>: lambda "j" $ encodeJumpStatement @@ var "j",
+      Cpp._Statement_declaration>>: lambda "v" $ Serialization.withSemi @@ (encodeVariableDeclaration @@ false @@ var "v"),
+      Cpp._Statement_expression>>: lambda "e" $ Serialization.withSemi @@ (encodeExpression @@ var "e")]
+
+encodeSubscriptOperation :: TBinding (Cpp.SubscriptOperation -> Expr)
+encodeSubscriptOperation = define "encodeSubscriptOperation" $
+  doc "Convert a subscript operation to an expression" $
+  lambda "so" $ lets [
+    "array">: project Cpp._SubscriptOperation Cpp._SubscriptOperation_array @@ var "so",
+    "index">: project Cpp._SubscriptOperation Cpp._SubscriptOperation_index @@ var "so"] $
+    Serialization.noSep @@ list [
+      encodePostfixExpression @@ var "array",
+      Serialization.cst @@ string "[",
+      encodeExpression @@ var "index",
+      Serialization.cst @@ string "]"]
+
+encodeSubtractOperation :: TBinding (Cpp.SubtractOperation -> Expr)
+encodeSubtractOperation = define "encodeSubtractOperation" $
+  doc "Convert a subtract operation to an expression" $
+  lambda "op" $ lets [
+    "left">: project Cpp._SubtractOperation Cpp._SubtractOperation_left @@ var "op",
+    "right">: project Cpp._SubtractOperation Cpp._SubtractOperation_right @@ var "op"] $
+    Serialization.spaceSep @@ list [
+      encodeAdditiveExpression @@ var "left",
+      Serialization.cst @@ string "-",
+      encodeMultiplicativeExpression @@ var "right"]
+
+encodeSwitchStatement :: TBinding (Cpp.SwitchStatement -> Expr)
+encodeSwitchStatement = define "encodeSwitchStatement" $
+  doc "Convert a switch statement to an expression" $
+  lambda "ss" $ lets [
+    "value">: project Cpp._SwitchStatement Cpp._SwitchStatement_value @@ var "ss",
+    "cases">: project Cpp._SwitchStatement Cpp._SwitchStatement_cases @@ var "ss"] $
+    Serialization.spaceSep @@ list [
+      Serialization.cst @@ string "switch",
+      Serialization.parens @@ (encodeExpression @@ var "value"),
+      Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
+        (Serialization.newlineSep @@ (Lists.map encodeCaseStatement (var "cases")))]
+
+encodeTemplateArgument :: TBinding (Cpp.TemplateArgument -> Expr)
+encodeTemplateArgument = define "encodeTemplateArgument" $
+  doc "Convert a template argument to an expression" $
+  lambda "a" $
+    cases Cpp._TemplateArgument (var "a") Nothing [
+      Cpp._TemplateArgument_type>>: lambda "t" $ encodeTypeExpression @@ var "t",
+      Cpp._TemplateArgument_value>>: lambda "e" $ encodeExpression @@ var "e"]
+
+encodeTemplateDeclaration :: TBinding (Cpp.TemplateDeclaration -> Expr)
+encodeTemplateDeclaration = define "encodeTemplateDeclaration" $
+  doc "Convert a template declaration to an expression" $
+  lambda "td" $ lets [
+    "inline">: project Cpp._TemplateDeclaration Cpp._TemplateDeclaration_inline @@ var "td",
+    "params">: project Cpp._TemplateDeclaration Cpp._TemplateDeclaration_parameters @@ var "td",
+    "declaration">: project Cpp._TemplateDeclaration Cpp._TemplateDeclaration_declaration @@ var "td",
+    "sep">: Logic.ifElse (var "inline") Serialization.spaceSep Serialization.newlineSep] $
+    var "sep" @@ list [
+      Serialization.noSep @@ list [
+        Serialization.cst @@ string "template",
+        Serialization.angleBracesList @@ Serialization.inlineStyle @@
+          (Lists.map (lambda "p" $ Serialization.cst @@ var "p") (var "params"))],
+      encodeDeclaration @@ var "declaration"]
+
+encodeTemplateFunctionCallOperation :: TBinding (Cpp.TemplateFunctionCallOperation -> Expr)
+encodeTemplateFunctionCallOperation = define "encodeTemplateFunctionCallOperation" $
+  doc "Convert a template function call operation to an expression" $
+  lambda "tfco" $ lets [
+    "func">: project Cpp._TemplateFunctionCallOperation Cpp._TemplateFunctionCallOperation_function @@ var "tfco",
+    "templateArgs">: project Cpp._TemplateFunctionCallOperation Cpp._TemplateFunctionCallOperation_templateArguments @@ var "tfco",
+    "args">: project Cpp._TemplateFunctionCallOperation Cpp._TemplateFunctionCallOperation_arguments @@ var "tfco"] $
+    Serialization.noSep @@ list [
+      encodePostfixExpression @@ var "func",
+      Serialization.angleBracesList @@ Serialization.inlineStyle @@ (Lists.map encodeTemplateArgument (var "templateArgs")),
+      Serialization.parens @@ (Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map encodeExpression (var "args")))]
+
+encodeTemplateType :: TBinding (Cpp.TemplateType -> Expr)
+encodeTemplateType = define "encodeTemplateType" $
+  doc "Convert a template type to an expression" $
+  lambda "tt" $ lets [
+    "name">: project Cpp._TemplateType Cpp._TemplateType_name @@ var "tt",
+    "args">: project Cpp._TemplateType Cpp._TemplateType_arguments @@ var "tt"] $
+    Serialization.noSep @@ list [
+      Serialization.cst @@ var "name",
+      Serialization.angleBracesList @@ Serialization.inlineStyle @@ (Lists.map encodeTemplateArgument (var "args"))]
+
+encodeTernaryExpression :: TBinding (Cpp.TernaryExpression -> Expr)
+encodeTernaryExpression = define "encodeTernaryExpression" $
+  doc "Convert a ternary expression to an expression" $
+  lambda "te" $ lets [
+    "cond">: project Cpp._TernaryExpression Cpp._TernaryExpression_condition @@ var "te",
+    "trueExpr">: project Cpp._TernaryExpression Cpp._TernaryExpression_trueExpr @@ var "te",
+    "falseExpr">: project Cpp._TernaryExpression Cpp._TernaryExpression_falseExpr @@ var "te"] $
+    Serialization.spaceSep @@ list [
+      encodeLogicalOrExpression @@ var "cond",
+      Serialization.cst @@ string "?",
+      encodeExpression @@ var "trueExpr",
+      Serialization.cst @@ string ":",
+      encodeConditionalExpression @@ var "falseExpr"]
+
+encodeToCppComments :: TBinding (String -> Bool -> String)
+encodeToCppComments = define "toCppComments" $
+  doc "Convert a string to a C++ comment" $
+  lambda "s" $ lambda "isMultiline" $
+    Logic.ifElse (var "isMultiline")
+      (Strings.cat $ list [string "/* ", var "s", string " */"])
+      (Strings.cat2 (string "// ") (var "s"))
+
+encodeTypeExpression :: TBinding (Cpp.TypeExpression -> Expr)
+encodeTypeExpression = define "encodeTypeExpression" $
+  doc "Convert a type expression to an expression" $
+  lambda "t" $
+    cases Cpp._TypeExpression (var "t") Nothing [
+      Cpp._TypeExpression_basic>>: lambda "b" $ encodeBasicType @@ var "b",
+      Cpp._TypeExpression_qualified>>: lambda "q" $ encodeQualifiedType @@ var "q",
+      Cpp._TypeExpression_template>>: lambda "t" $ encodeTemplateType @@ var "t",
+      Cpp._TypeExpression_function>>: lambda "f" $ encodeFunctionType @@ var "f",
+      Cpp._TypeExpression_auto>>: constant $ Serialization.cst @@ string "auto"]
+
+encodeTypedefDeclaration :: TBinding (Cpp.TypedefDeclaration -> Expr)
+encodeTypedefDeclaration = define "encodeTypedefDeclaration" $
+  doc "Convert a typedef declaration to an expression" $
+  lambda "td" $ lets [
+    "name">: project Cpp._TypedefDeclaration Cpp._TypedefDeclaration_name @@ var "td",
+    "typ">: project Cpp._TypedefDeclaration Cpp._TypedefDeclaration_type @@ var "td",
+    "isUsing">: project Cpp._TypedefDeclaration Cpp._TypedefDeclaration_isUsing @@ var "td"] $
+    Logic.ifElse (var "isUsing")
+      (Serialization.withSemi @@ (Serialization.spaceSep @@ list [
+        Serialization.cst @@ (Strings.cat2 (string "using ") (var "name")),
+        Serialization.cst @@ string "=",
+        encodeTypeExpression @@ var "typ"]))
+      (Serialization.withSemi @@ (Serialization.spaceSep @@ list [
+        Serialization.cst @@ string "typedef",
+        encodeTypeExpression @@ var "typ",
+        Serialization.cst @@ var "name"]))
 
 encodeUnaryExpression :: TBinding (Cpp.UnaryExpression -> Expr)
 encodeUnaryExpression = define "encodeUnaryExpression" $
@@ -1309,218 +1515,35 @@ encodeUnaryOperator = define "encodeUnaryOperator" $
       Cpp._UnaryOperator_preIncrement>>: constant $ Serialization.cst @@ string "++",
       Cpp._UnaryOperator_preDecrement>>: constant $ Serialization.cst @@ string "--"]
 
-encodePostfixExpression :: TBinding (Cpp.PostfixExpression -> Expr)
-encodePostfixExpression = define "encodePostfixExpression" $
-  doc "Convert a postfix expression to an expression" $
-  lambda "e" $
-    cases Cpp._PostfixExpression (var "e") Nothing [
-      Cpp._PostfixExpression_primary>>: lambda "p" $ encodePrimaryExpression @@ var "p",
-      Cpp._PostfixExpression_subscript>>: lambda "s" $ encodeSubscriptOperation @@ var "s",
-      Cpp._PostfixExpression_functionCall>>: lambda "f" $ encodeFunctionCallOperation @@ var "f",
-      Cpp._PostfixExpression_templateFunctionCall>>: lambda "t" $ encodeTemplateFunctionCallOperation @@ var "t",
-      Cpp._PostfixExpression_memberAccess>>: lambda "m" $ encodeMemberAccessOperation @@ var "m",
-      Cpp._PostfixExpression_pointerMemberAccess>>: lambda "p" $ encodePointerMemberAccessOperation @@ var "p",
-      Cpp._PostfixExpression_postIncrement>>: lambda "p" $
-        Serialization.noSep @@ list [encodePostfixExpression @@ var "p", Serialization.cst @@ string "++"],
-      Cpp._PostfixExpression_postDecrement>>: lambda "p" $
-        Serialization.noSep @@ list [encodePostfixExpression @@ var "p", Serialization.cst @@ string "--"]]
-
-encodeSubscriptOperation :: TBinding (Cpp.SubscriptOperation -> Expr)
-encodeSubscriptOperation = define "encodeSubscriptOperation" $
-  doc "Convert a subscript operation to an expression" $
-  lambda "so" $ lets [
-    "array">: project Cpp._SubscriptOperation Cpp._SubscriptOperation_array @@ var "so",
-    "index">: project Cpp._SubscriptOperation Cpp._SubscriptOperation_index @@ var "so"] $
-    Serialization.noSep @@ list [
-      encodePostfixExpression @@ var "array",
-      Serialization.cst @@ string "[",
-      encodeExpression @@ var "index",
-      Serialization.cst @@ string "]"]
-
-encodeFunctionCallOperation :: TBinding (Cpp.FunctionCallOperation -> Expr)
-encodeFunctionCallOperation = define "encodeFunctionCallOperation" $
-  doc "Convert a function call operation to an expression" $
-  lambda "fco" $ lets [
-    "func">: project Cpp._FunctionCallOperation Cpp._FunctionCallOperation_function @@ var "fco",
-    "args">: project Cpp._FunctionCallOperation Cpp._FunctionCallOperation_arguments @@ var "fco"] $
-    Serialization.noSep @@ list [
-      encodePostfixExpression @@ var "func",
-      Serialization.parens @@ (Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map encodeExpression (var "args")))]
-
-encodeTemplateFunctionCallOperation :: TBinding (Cpp.TemplateFunctionCallOperation -> Expr)
-encodeTemplateFunctionCallOperation = define "encodeTemplateFunctionCallOperation" $
-  doc "Convert a template function call operation to an expression" $
-  lambda "tfco" $ lets [
-    "func">: project Cpp._TemplateFunctionCallOperation Cpp._TemplateFunctionCallOperation_function @@ var "tfco",
-    "templateArgs">: project Cpp._TemplateFunctionCallOperation Cpp._TemplateFunctionCallOperation_templateArguments @@ var "tfco",
-    "args">: project Cpp._TemplateFunctionCallOperation Cpp._TemplateFunctionCallOperation_arguments @@ var "tfco"] $
-    Serialization.noSep @@ list [
-      encodePostfixExpression @@ var "func",
-      Serialization.angleBracesList @@ Serialization.inlineStyle @@ (Lists.map encodeTemplateArgument (var "templateArgs")),
-      Serialization.parens @@ (Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map encodeExpression (var "args")))]
-
-encodeMemberAccessOperation :: TBinding (Cpp.MemberAccessOperation -> Expr)
-encodeMemberAccessOperation = define "encodeMemberAccessOperation" $
-  doc "Convert a member access operation to an expression" $
-  lambda "mao" $ lets [
-    "obj">: project Cpp._MemberAccessOperation Cpp._MemberAccessOperation_object @@ var "mao",
-    "member">: project Cpp._MemberAccessOperation Cpp._MemberAccessOperation_member @@ var "mao"] $
-    Serialization.noSep @@ list [
-      encodePostfixExpression @@ var "obj",
-      Serialization.cst @@ string ".",
-      Serialization.cst @@ var "member"]
-
-encodePointerMemberAccessOperation :: TBinding (Cpp.PointerMemberAccessOperation -> Expr)
-encodePointerMemberAccessOperation = define "encodePointerMemberAccessOperation" $
-  doc "Convert a pointer member access operation to an expression" $
-  lambda "pmao" $ lets [
-    "ptr">: project Cpp._PointerMemberAccessOperation Cpp._PointerMemberAccessOperation_pointer @@ var "pmao",
-    "member">: project Cpp._PointerMemberAccessOperation Cpp._PointerMemberAccessOperation_member @@ var "pmao"] $
-    Serialization.noSep @@ list [
-      encodePostfixExpression @@ var "ptr",
-      Serialization.cst @@ string "->",
-      Serialization.cst @@ var "member"]
-
-encodePrimaryExpression :: TBinding (Cpp.PrimaryExpression -> Expr)
-encodePrimaryExpression = define "encodePrimaryExpression" $
-  doc "Convert a primary expression to an expression" $
-  lambda "e" $
-    cases Cpp._PrimaryExpression (var "e") Nothing [
-      Cpp._PrimaryExpression_identifier>>: lambda "id" $ Serialization.cst @@ var "id",
-      Cpp._PrimaryExpression_literal>>: lambda "l" $ encodeLiteral @@ var "l",
-      Cpp._PrimaryExpression_parenthesized>>: lambda "p" $ Serialization.parens @@ (encodeExpression @@ var "p"),
-      Cpp._PrimaryExpression_lambda>>: lambda "l" $ encodeLambdaExpression @@ var "l"]
-
-encodeLambdaExpression :: TBinding (Cpp.LambdaExpression -> Expr)
-encodeLambdaExpression = define "encodeLambdaExpression" $
-  doc "Convert a lambda expression to an expression" $
-  lambda "le" $ lets [
-    "captures">: project Cpp._LambdaExpression Cpp._LambdaExpression_captures @@ var "le",
-    "params">: project Cpp._LambdaExpression Cpp._LambdaExpression_parameters @@ var "le",
-    "retType">: project Cpp._LambdaExpression Cpp._LambdaExpression_returnType @@ var "le",
-    "body">: project Cpp._LambdaExpression Cpp._LambdaExpression_body @@ var "le"] $
+encodeUndefDirective :: TBinding (Cpp.UndefDirective -> Expr)
+encodeUndefDirective = define "encodeUndefDirective" $
+  doc "Convert an undef directive to an expression" $
+  lambda "ud" $
     Serialization.spaceSep @@ list [
-      encodeCaptureList @@ var "captures",
-      Logic.ifElse (Lists.null (var "params"))
-        (Serialization.parens @@ (Serialization.cst @@ string ""))
-        (Serialization.parens @@ (Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map encodeParameter (var "params")))),
+      Serialization.cst @@ string "#undef",
+      Serialization.cst @@ (project Cpp._UndefDirective Cpp._UndefDirective_name @@ var "ud")]
+
+encodeVariableDeclaration :: TBinding (Bool -> Cpp.VariableDeclaration -> Expr)
+encodeVariableDeclaration = define "encodeVariableDeclaration" $
+  doc "Convert a variable declaration to an expression" $
+  lambda "commas" $ lambda "vd" $ lets [
+    "typ">: project Cpp._VariableDeclaration Cpp._VariableDeclaration_type @@ var "vd",
+    "name">: project Cpp._VariableDeclaration Cpp._VariableDeclaration_name @@ var "vd",
+    "init">: project Cpp._VariableDeclaration Cpp._VariableDeclaration_initializer @@ var "vd",
+    "isAuto">: project Cpp._VariableDeclaration Cpp._VariableDeclaration_isAuto @@ var "vd",
+    "terminator">: Logic.ifElse (var "commas") Serialization.withComma Serialization.withSemi] $
+    var "terminator" @@ (Serialization.spaceSep @@ (Lists.concat $ list [
+      Logic.ifElse (var "isAuto")
+        (list [Serialization.cst @@ string "auto"])
+        (Maybes.maybe
+          (list ([] :: [TTerm Expr]))
+          (lambda "t" $ list [encodeTypeExpression @@ var "t"])
+          (var "typ")),
+      list [Serialization.cst @@ var "name"],
       Maybes.maybe
-        (Serialization.cst @@ string "")
-        (lambda "t" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "->", encodeTypeExpression @@ var "t"])
-        (var "retType"),
-      encodeCompoundStatement @@ var "body"]
-
-encodeCaptureList :: TBinding (Cpp.CaptureList -> Expr)
-encodeCaptureList = define "encodeCaptureList" $
-  doc "Convert a capture list to an expression" $
-  lambda "cl" $
-    cases Cpp._CaptureList (var "cl") Nothing [
-      Cpp._CaptureList_captureByValue>>: constant $ Serialization.cst @@ string "[=]",
-      Cpp._CaptureList_captures>>: lambda "cs" $
-        Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map encodeCapture (var "cs"))]
-
-encodeCapture :: TBinding (Cpp.Capture -> Expr)
-encodeCapture = define "encodeCapture" $
-  doc "Convert a capture to an expression" $
-  lambda "cap" $ lets [
-    "name">: project Cpp._Capture Cpp._Capture_name @@ var "cap",
-    "byRef">: project Cpp._Capture Cpp._Capture_byReference @@ var "cap"] $
-    Logic.ifElse (var "byRef")
-      (Serialization.cst @@ (Strings.cat2 (string "&") (var "name")))
-      (Serialization.cst @@ var "name")
-
--- Pattern matching via visitor pattern
-
-encodePatternMatch :: TBinding (Cpp.PatternMatch -> Expr)
-encodePatternMatch = define "encodePatternMatch" $
-  doc "Convert a pattern match to an expression" $
-  lambda "pm" $ lets [
-    "visitor">: project Cpp._PatternMatch Cpp._PatternMatch_visitor @@ var "pm",
-    "variant">: project Cpp._PatternMatch Cpp._PatternMatch_variant @@ var "pm"] $
-    Serialization.spaceSep @@ list [
-      Serialization.cst @@ string "std::visit",
-      Serialization.parens @@ (Serialization.commaSep @@ Serialization.inlineStyle @@ list [
-        encodeVisitor @@ var "visitor",
-        encodeExpression @@ var "variant"])]
-
-encodeVisitor :: TBinding (Cpp.Visitor -> Expr)
-encodeVisitor = define "encodeVisitor" $
-  doc "Convert a visitor to an expression" $
-  lambda "v" $
-    cases Cpp._Visitor (var "v") Nothing [
-      Cpp._Visitor_lambda>>: lambda "l" $ encodeLambdaExpression @@ var "l",
-      Cpp._Visitor_overloaded>>: lambda "o" $ encodeOverloadedLambdas @@ var "o"]
-
-encodeOverloadedLambdas :: TBinding (Cpp.OverloadedLambdas -> Expr)
-encodeOverloadedLambdas = define "encodeOverloadedLambdas" $
-  doc "Convert overloaded lambdas to an expression" $
-  lambda "ol" $
-    Serialization.spaceSep @@ list [
-      Serialization.cst @@ string "overloaded",
-      Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
-        (Serialization.newlineSep @@ (Lists.map encodeLambdaExpression (unwrap Cpp._OverloadedLambdas @@ var "ol")))]
-
-encodeFunctionApplication :: TBinding (Cpp.FunctionApplication -> Expr)
-encodeFunctionApplication = define "encodeFunctionApplication" $
-  doc "Convert a function application to an expression" $
-  lambda "fa" $ lets [
-    "func">: project Cpp._FunctionApplication Cpp._FunctionApplication_function @@ var "fa",
-    "args">: project Cpp._FunctionApplication Cpp._FunctionApplication_arguments @@ var "fa"] $
-    Serialization.spaceSep @@ list [
-      encodeFunctionIdentifier @@ var "func",
-      Serialization.parens @@ (Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map encodeExpression (var "args")))]
-
-encodeFunctionIdentifier :: TBinding (Cpp.FunctionIdentifier -> Expr)
-encodeFunctionIdentifier = define "encodeFunctionIdentifier" $
-  doc "Convert a function identifier to an expression" $
-  lambda "f" $
-    cases Cpp._FunctionIdentifier (var "f") Nothing [
-      Cpp._FunctionIdentifier_simple>>: lambda "name" $ Serialization.cst @@ var "name",
-      Cpp._FunctionIdentifier_qualified>>: lambda "q" $ encodeQualifiedIdentifier @@ var "q"]
-
-encodeQualifiedIdentifier :: TBinding (Cpp.QualifiedIdentifier -> Expr)
-encodeQualifiedIdentifier = define "encodeQualifiedIdentifier" $
-  doc "Convert a qualified identifier to an expression" $
-  lambda "qi" $ lets [
-    "ns">: project Cpp._QualifiedIdentifier Cpp._QualifiedIdentifier_namespace @@ var "qi",
-    "name">: project Cpp._QualifiedIdentifier Cpp._QualifiedIdentifier_name @@ var "qi"] $
-    Serialization.cst @@ (Strings.cat $ list [var "ns", string "::", var "name"])
-
--- Literals
-
-encodeLiteral :: TBinding (Cpp.Literal -> Expr)
-encodeLiteral = define "encodeLiteral" $
-  doc "Convert a literal to an expression" $
-  lambda "l" $
-    cases Cpp._Literal (var "l") Nothing [
-      Cpp._Literal_integer>>: lambda "i" $ encodeIntegerLiteral @@ var "i",
-      Cpp._Literal_floating>>: lambda "f" $ Serialization.cst @@ (Literals.showBigfloat (unwrap Cpp._FloatingLiteral @@ var "f")),
-      Cpp._Literal_character>>: lambda "c" $
-        Serialization.cst @@ (Strings.cat $ list [string "'", unwrap Cpp._CharacterLiteral @@ var "c", string "'"]),
-      Cpp._Literal_string>>: lambda "s" $
-        Serialization.cst @@ (Strings.cat $ list [string "\"", unwrap Cpp._StringLiteral @@ var "s", string "\""]),
-      Cpp._Literal_boolean>>: lambda "b" $ encodeBooleanLiteral @@ var "b",
-      Cpp._Literal_null>>: constant $ Serialization.cst @@ string "nullptr"]
-
-encodeBooleanLiteral :: TBinding (Cpp.BooleanLiteral -> Expr)
-encodeBooleanLiteral = define "encodeBooleanLiteral" $
-  doc "Convert a boolean literal to an expression" $
-  lambda "bl" $
-    Logic.ifElse (unwrap Cpp._BooleanLiteral @@ var "bl")
-      (Serialization.cst @@ string "true")
-      (Serialization.cst @@ string "false")
-
-encodeIntegerLiteral :: TBinding (Cpp.IntegerLiteral -> Expr)
-encodeIntegerLiteral = define "encodeIntegerLiteral" $
-  doc "Convert an integer literal to an expression" $
-  lambda "i" $
-    cases Cpp._IntegerLiteral (var "i") Nothing [
-      Cpp._IntegerLiteral_decimal>>: lambda "n" $ Serialization.cst @@ (Literals.showBigint (var "n")),
-      Cpp._IntegerLiteral_hexadecimal>>: lambda "h" $ Serialization.cst @@ (Strings.cat2 (string "0x") (var "h")),
-      Cpp._IntegerLiteral_octal>>: lambda "o" $ Serialization.cst @@ (Strings.cat2 (string "0") (var "o")),
-      Cpp._IntegerLiteral_binary>>: lambda "b" $ Serialization.cst @@ (Strings.cat2 (string "0b") (var "b"))]
-
--- Container types
+        (list ([] :: [TTerm Expr]))
+        (lambda "expr" $ list [Serialization.cst @@ string "=", encodeExpression @@ var "expr"])
+        (var "init")]))
 
 encodeVector :: TBinding (Cpp.Vector -> Expr)
 encodeVector = define "encodeVector" $
@@ -1534,73 +1557,31 @@ encodeVector = define "encodeVector" $
       Serialization.cst @@ string ">",
       Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ (Lists.map encodeExpression (var "elems"))]
 
-encodeMap :: TBinding (Cpp.Map -> Expr)
-encodeMap = define "encodeMap" $
-  doc "Convert a map to an expression" $
-  lambda "m" $ lets [
-    "keyType">: project Cpp._Map Cpp._Map_keyType @@ var "m",
-    "valType">: project Cpp._Map Cpp._Map_valueType @@ var "m",
-    "entries">: project Cpp._Map Cpp._Map_entries @@ var "m"] $
+encodeVisitor :: TBinding (Cpp.Visitor -> Expr)
+encodeVisitor = define "encodeVisitor" $
+  doc "Convert a visitor to an expression" $
+  lambda "v" $
+    cases Cpp._Visitor (var "v") Nothing [
+      Cpp._Visitor_lambda>>: lambda "l" $ encodeLambdaExpression @@ var "l",
+      Cpp._Visitor_overloaded>>: lambda "o" $ encodeOverloadedLambdas @@ var "o"]
+
+encodeWarningDirective :: TBinding (Cpp.WarningDirective -> Expr)
+encodeWarningDirective = define "encodeWarningDirective" $
+  doc "Convert a warning directive to an expression" $
+  lambda "wd" $
     Serialization.spaceSep @@ list [
-      Serialization.cst @@ string "std::map<",
-      Serialization.commaSep @@ Serialization.inlineStyle @@ list [
-        encodeTypeExpression @@ var "keyType",
-        encodeTypeExpression @@ var "valType"],
-      Serialization.cst @@ string ">",
-      Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ (Lists.map encodeMapEntry (var "entries"))]
+      Serialization.cst @@ string "#warning",
+      Serialization.cst @@ (project Cpp._WarningDirective Cpp._WarningDirective_message @@ var "wd")]
 
-encodeMapEntry :: TBinding (Cpp.MapEntry -> Expr)
-encodeMapEntry = define "encodeMapEntry" $
-  doc "Convert a map entry to an expression" $
-  lambda "me" $ lets [
-    "key">: project Cpp._MapEntry Cpp._MapEntry_key @@ var "me",
-    "val">: project Cpp._MapEntry Cpp._MapEntry_value @@ var "me"] $
-    Serialization.spaceSep @@ list [
-      Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ list [encodeExpression @@ var "key"],
-      Serialization.cst @@ string "->",
-      encodeExpression @@ var "val"]
+encodeWhileStatement :: TBinding (Cpp.WhileStatement -> Expr)
+encodeWhileStatement = define "encodeWhileStatement" $
+  doc "Convert a while statement to an expression" $
+  lambda "ws" $ lets [
+    "cond">: project Cpp._WhileStatement Cpp._WhileStatement_condition @@ var "ws",
+    "body">: project Cpp._WhileStatement Cpp._WhileStatement_body @@ var "ws"] $
+    Serialization.newlineSep @@ list [
+      Serialization.spaceSep @@ list [
+        Serialization.cst @@ string "while",
+        Serialization.parens @@ (encodeExpression @@ var "cond")],
+      encodeStatement @@ var "body"]
 
-encodeSet :: TBinding (Cpp.Set -> Expr)
-encodeSet = define "encodeSet" $
-  doc "Convert a set to an expression" $
-  lambda "s" $ lets [
-    "elemType">: project Cpp._Set Cpp._Set_elementType @@ var "s",
-    "elems">: project Cpp._Set Cpp._Set_elements @@ var "s"] $
-    Serialization.spaceSep @@ list [
-      Serialization.cst @@ string "std::set<",
-      encodeTypeExpression @@ var "elemType",
-      Serialization.cst @@ string ">",
-      Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ (Lists.map encodeExpression (var "elems"))]
-
-encodeOptional :: TBinding (Cpp.Optional -> Expr)
-encodeOptional = define "encodeOptional" $
-  doc "Convert an optional to an expression" $
-  lambda "opt" $ lets [
-    "valType">: project Cpp._Optional Cpp._Optional_valueType @@ var "opt",
-    "val">: project Cpp._Optional Cpp._Optional_value @@ var "opt"] $
-    Serialization.spaceSep @@ list [
-      Serialization.cst @@ string "std::optional<",
-      encodeTypeExpression @@ var "valType",
-      Serialization.cst @@ string ">",
-      Maybes.maybe
-        (Serialization.cst @@ string "{}")
-        (lambda "v" $ Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ list [encodeExpression @@ var "v"])
-        (var "val")]
-
--- Utility functions
-
-encodeToCppComments :: TBinding (String -> Bool -> String)
-encodeToCppComments = define "toCppComments" $
-  doc "Convert a string to a C++ comment" $
-  lambda "s" $ lambda "isMultiline" $
-    Logic.ifElse (var "isMultiline")
-      (Strings.cat $ list [string "/* ", var "s", string " */"])
-      (Strings.cat2 (string "// ") (var "s"))
-
-encodeComment :: TBinding (Cpp.Comment -> Expr)
-encodeComment = define "encodeComment" $
-  doc "Convert a comment to an expression" $
-  lambda "c" $ lets [
-    "text">: project Cpp._Comment Cpp._Comment_text @@ var "c",
-    "isMultiline">: project Cpp._Comment Cpp._Comment_isMultiline @@ var "c"] $
-    Serialization.cst @@ (encodeToCppComments @@ var "text" @@ var "isMultiline")

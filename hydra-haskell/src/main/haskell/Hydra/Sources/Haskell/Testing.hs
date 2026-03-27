@@ -111,113 +111,198 @@ module_ = Module ns elements
     Just "Haskell test code generation codec for HSpec-based generation tests"
   where
     elements = [
-      toTermDefinition termToHaskell,
-      toTermDefinition typeToHaskell,
-      toTermDefinition haskellTestCodec,
-      toTermDefinition haskellTestCaseTemplate,
-      toTermDefinition haskellTestGroupTemplate,
-      toTermDefinition haskellModuleTemplate,
-      toTermDefinition haskellImportTemplate,
-      toTermDefinition findHaskellImports,
-      toTermDefinition namespaceToModuleName,
-      toTermDefinition generateTestGroupHierarchy,
-      toTermDefinition generateTestCaseWithCodec,
-      toTermDefinition indentContinuationLines,
-      toTermDefinition generateTypeAnnotationFor,
-      toTermDefinition tryInferTypeOf,
-      toTermDefinition containsTriviallyPolymorphic,
-      toTermDefinition buildTestModuleWithCodec,
-      toTermDefinition generateTestFileWithCodec,
-      toTermDefinition extractEncodedTermVariableNames,
-      toTermDefinition collectNames,
       toTermDefinition addNamespacesToNamespaces,
-      toTermDefinition generateHaskellTestFile,
       toTermDefinition buildNamespacesForTestGroup,
+      toTermDefinition buildTestModuleWithCodec,
+      toTermDefinition collectNames,
       toTermDefinition collectTestCases,
-      toTermDefinition extractTestTerms]
+      toTermDefinition containsTriviallyPolymorphic,
+      toTermDefinition extractEncodedTermVariableNames,
+      toTermDefinition extractTestTerms,
+      toTermDefinition findHaskellImports,
+      toTermDefinition generateHaskellTestFile,
+      toTermDefinition generateTestCaseWithCodec,
+      toTermDefinition generateTestFileWithCodec,
+      toTermDefinition generateTestGroupHierarchy,
+      toTermDefinition generateTypeAnnotationFor,
+      toTermDefinition haskellImportTemplate,
+      toTermDefinition haskellModuleTemplate,
+      toTermDefinition haskellTestCaseTemplate,
+      toTermDefinition haskellTestCodec,
+      toTermDefinition haskellTestGroupTemplate,
+      toTermDefinition indentContinuationLines,
+      toTermDefinition namespaceToModuleName,
+      toTermDefinition termToHaskell,
+      toTermDefinition tryInferTypeOf,
+      toTermDefinition typeToHaskell]
 
 
--- | Convert a Hydra term to a Haskell expression string
-termToHaskell :: TBinding (Namespaces H.ModuleName -> Term -> Graph -> Either String String)
-termToHaskell = define "termToHaskell" $
-  doc "Convert a Hydra term to a Haskell expression string" $
-  lambda "namespaces" $ lambda "term" $ lambda "g" $
-    Eithers.bimap
-      ("ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic"))
-      (Serialization.printExpr <.> Serialization.parenthesize <.> HaskellSerdeSource.expressionToExpr)
-      (HaskellCoderSource.encodeTerm @@ int32 0 @@ var "namespaces" @@ var "term" @@ asTerm Lexical.emptyContext @@ var "g")
+-- | Add namespaces from a set of names to existing namespaces
+addNamespacesToNamespaces :: TBinding (Namespaces H.ModuleName -> S.Set Name -> Namespaces H.ModuleName)
+addNamespacesToNamespaces = define "addNamespacesToNamespaces" $
+  doc "Add namespaces from a set of names to existing namespaces" $
+  lambda "ns0" $ lambda "names" $ lets [
+    "newNamespaces">: Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList (var "names")))),
+    "toModuleName">: lambda "namespace" $
+      wrap H._ModuleName (Formatting.capitalize @@ Lists.last (Strings.splitOn (string ".") (unwrap _Namespace @@ var "namespace"))),
+    "newMappings">: Maps.fromList (Lists.map (lambda "ns_" $ pair (var "ns_") (var "toModuleName" @@ var "ns_")) (Sets.toList (var "newNamespaces")))] $
+    record _Namespaces [
+      _Namespaces_focus>>: project _Namespaces _Namespaces_focus @@ var "ns0",
+      _Namespaces_mapping>>: Maps.union (project _Namespaces _Namespaces_mapping @@ var "ns0") (var "newMappings")]
 
 
--- | Convert a Hydra type to a Haskell type expression string
-typeToHaskell :: TBinding (Namespaces H.ModuleName -> Type -> Graph -> Either String String)
-typeToHaskell = define "typeToHaskell" $
-  doc "Convert a Hydra type to a Haskell type expression string" $
-  lambda "namespaces" $ lambda "typ" $ lambda "g" $
-    Eithers.bimap
-      ("ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic"))
-      (Serialization.printExpr <.> Serialization.parenthesize <.> HaskellSerdeSource.typeToExpr)
-      (HaskellCoderSource.encodeType @@ var "namespaces" @@ var "typ" @@ asTerm Lexical.emptyContext @@ var "g")
+-- | Build namespaces for a test group including encoded term references
+buildNamespacesForTestGroup :: TBinding (Module -> TestGroup -> Graph -> Either String (Namespaces H.ModuleName))
+buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
+  doc "Build namespaces for a test group including encoded term references" $
+  lambda "mod" $ lambda "tgroup" $ lambda "graph_" $ lets [
+    "testCases_">: collectTestCases @@ var "tgroup",
+    "testTerms">: Lists.concat (Lists.map extractTestTerms (var "testCases_")),
+    "testBindings">: Lists.map
+      (lambda "term" $
+        record _Binding [
+          _Binding_name>>: wrap _Name (string "_test_"),
+          _Binding_term>>: var "term",
+          _Binding_type>>: nothing])
+      (var "testTerms"),
+    "tempModule">: record _Module [
+      _Module_namespace>>: Module.moduleNamespace (var "mod"),
+      _Module_definitions>>: Lists.map ("b" ~> Module.definitionTerm (Module.termDefinition
+        (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
+        (Core.bindingType $ var "b")))
+        (var "testBindings"),
+      _Module_termDependencies>>: project _Module _Module_termDependencies @@ var "mod",
+      _Module_typeDependencies>>: project _Module _Module_typeDependencies @@ var "mod",
+      _Module_description>>: project _Module _Module_description @@ var "mod"]] $
+    Eithers.bind
+      (Eithers.bimap
+        (lambda "ic" $ ShowError.error_ @@ Ctx.inContextObject (var "ic"))
+        (lambda "a" $ var "a")
+        (HaskellUtilsSource.namespacesForModule @@ var "tempModule" @@ asTerm Lexical.emptyContext @@ var "graph_"))
+      (lambda "baseNamespaces" $ lets [
+        "encodedNames">: Sets.unions (Lists.map (lambda "t" $ extractEncodedTermVariableNames @@ var "graph_" @@ var "t") (var "testTerms"))] $
+        right (addNamespacesToNamespaces @@ var "baseNamespaces" @@ var "encodedNames"))
 
 
--- | Create a Haskell TestCodec that uses the real Haskell coder
-haskellTestCodec :: TBinding (Namespaces H.ModuleName -> TestCodec)
-haskellTestCodec = define "haskellTestCodec" $
-  doc "Create a Haskell TestCodec that uses the real Haskell coder" $
-  lambda "namespaces" $
-    record _TestCodec [
-      _TestCodec_language>>: Coders.languageName_ (string "haskell"),
-      _TestCodec_fileExtension>>: wrap _FileExtension (string "hs"),
-      _TestCodec_encodeTerm>>: termToHaskell @@ var "namespaces",
-      _TestCodec_encodeType>>: typeToHaskell @@ var "namespaces",
-      _TestCodec_formatTestName>>: lambda "n" $ var "n",  -- identity
-      _TestCodec_formatModuleName>>: namespaceToModuleName,
-      _TestCodec_testCaseTemplate>>: haskellTestCaseTemplate,
-      _TestCodec_testGroupTemplate>>: haskellTestGroupTemplate,
-      _TestCodec_moduleTemplate>>: haskellModuleTemplate,
-      _TestCodec_importTemplate>>: haskellImportTemplate,
-      _TestCodec_findImports>>: findHaskellImports @@ var "namespaces"]
+-- | Build the complete test module using a TestCodec
+buildTestModuleWithCodec :: TBinding (TestCodec -> Module -> TestGroup -> String -> Namespaces H.ModuleName -> String)
+buildTestModuleWithCodec = define "buildTestModuleWithCodec" $
+  doc "Build the complete test module using a TestCodec" $
+  lambda "codec" $ lambda "testModule" $ lambda "testGroup" $ lambda "testBody" $ lambda "namespaces" $ lets [
+    "ns_">: Module.moduleNamespace (var "testModule"),
+    "specNs">: wrap _Namespace (Strings.cat2 (unwrap _Namespace @@ var "ns_") (string "Spec")),
+    "moduleNameString">: project _TestCodec _TestCodec_formatModuleName @@ var "codec" @@ var "specNs",
+    "groupName_">: project _TestGroup _TestGroup_name @@ var "testGroup",
+    "domainImports">: project _TestCodec _TestCodec_findImports @@ var "codec" @@ Sets.empty,
+    "standardImports">: list [
+      string "import Hydra.Kernel",
+      string "import qualified Test.Hspec as H",
+      string "import qualified Data.List as L",
+      string "import qualified Data.Map as M",
+      string "import qualified Data.Set as S",
+      string "import qualified Data.Maybe as Y"],
+    "allImports">: Lists.concat2 (var "standardImports") (var "domainImports"),
+    "debugComments">: list [
+      string "-- DEBUG: Focus namespace = (see generated module)",
+      string "-- DEBUG: Namespace mappings: (see generated module)"],
+    "header">: Strings.intercalate (string "\n") (Lists.concat (list [
+      list [
+        Strings.cat2 (string "-- ") (asTerm Constants.warningAutoGeneratedFile),
+        string ""],
+      var "debugComments",
+      list [
+        string "",
+        Strings.cat (list [string "module ", var "moduleNameString", string " where"]),
+        string ""],
+      var "allImports",
+      list [
+        string "",
+        string "spec :: H.Spec",
+        Strings.cat (list [string "spec = H.describe ", Literals.showString (var "groupName_"), string " $ do"])]]))] $
+    Strings.cat (list [var "header", string "\n", var "testBody", string "\n"])
 
 
--- | Template for HSpec test case assertions
-haskellTestCaseTemplate :: TBinding String
-haskellTestCaseTemplate = define "haskellTestCaseTemplate" $
-  doc "Template for HSpec test case assertions" $
-  Strings.intercalate (string "\n") (list [
-    string "  H.it {name} $ H.shouldBe",
-    string "    ({input})",
-    string "    ({output})",
-    string ""])
+-- | Collect variable names from encoded terms within a single term node
+collectNames :: TBinding (Graph -> S.Set Name -> Term -> S.Set Name)
+collectNames = define "collectNames" $
+  doc "Collect variable names from encoded terms within a single term node" $
+  lambda "graf" $ lambda "names" $ lambda "t" $
+    Logic.ifElse (Schemas.isEncodedTerm @@ (Rewriting.deannotateTerm @@ var "t"))
+      (Eithers.either_
+        (lambda "_" $ var "names")
+        (lambda "decodedTerm" $
+          Sets.union (var "names") (Rewriting.termDependencyNames @@ true @@ true @@ true @@ var "decodedTerm"))
+        (Eithers.bimap
+          (lambda "_e" $ var "_e")
+          (lambda "_a" $ var "_a")
+          (decoderFor _Term @@ var "graf" @@ var "t")))
+      (var "names")
 
 
--- | Template for HSpec test group description
-haskellTestGroupTemplate :: TBinding String
-haskellTestGroupTemplate = define "haskellTestGroupTemplate" $
-  doc "Template for HSpec test group description" $
-  string "spec = H.describe {groupName} $ do"
+-- | Collect all test cases from a test group (recursively)
+collectTestCases :: TBinding (TestGroup -> [TestCaseWithMetadata])
+collectTestCases = define "collectTestCases" $
+  doc "Collect all test cases from a test group recursively" $
+  lambda "tg" $
+    Lists.concat2
+      (project _TestGroup _TestGroup_cases @@ var "tg")
+      (Lists.concat (Lists.map collectTestCases (project _TestGroup _TestGroup_subgroups @@ var "tg")))
 
 
--- | Template for Haskell test module structure
-haskellModuleTemplate :: TBinding String
-haskellModuleTemplate = define "haskellModuleTemplate" $
-  doc "Template for Haskell test module structure" $
-  Strings.intercalate (string "\n") (list [
-    Strings.cat2 (string "-- ") (asTerm Constants.warningAutoGeneratedFile),
-    string "",
-    string "module {moduleName} where",
-    string "",
-    string "{imports}",
-    string "",
-    string "spec :: H.Spec",
-    string "{testGroup}",
-    string "{testCases}",
-    string ""])
+-- | Check if a term contains any trivially polymorphic sub-terms
+containsTriviallyPolymorphic :: TBinding (Term -> Bool)
+containsTriviallyPolymorphic = define "containsTriviallyPolymorphic" $
+  doc "Check if a term contains any trivially polymorphic sub-terms" $
+  lambda "term" $
+    cases _Term (var "term") (Just false) [
+      _Term_list>>: lambda "xs" $
+        Logic.or (Lists.null (var "xs"))
+          (Lists.foldl (binaryFunction Logic.or) false (Lists.map containsTriviallyPolymorphic (var "xs"))),
+      _Term_set>>: lambda "s" $
+        Logic.or (Sets.null (var "s"))
+          (Lists.foldl (binaryFunction Logic.or) false (Lists.map containsTriviallyPolymorphic (Sets.toList (var "s")))),
+      _Term_map>>: lambda "m" $
+        Logic.or (Maps.null (var "m"))
+          (Logic.or
+            (Lists.foldl (binaryFunction Logic.or) false (Lists.map containsTriviallyPolymorphic (Maps.keys (var "m"))))
+            (Lists.foldl (binaryFunction Logic.or) false (Lists.map containsTriviallyPolymorphic (Lists.map (lambda "p" $ Pairs.second (var "p")) (Maps.toList (var "m")))))),
+      _Term_maybe>>: lambda "mx" $
+        Maybes.maybe true containsTriviallyPolymorphic (var "mx"),
+      _Term_either>>: lambda "_" $ true,
+      _Term_union>>: lambda "inj" $
+        containsTriviallyPolymorphic @@ (project _Field _Field_term @@ (project _Injection _Injection_field @@ var "inj")),
+      _Term_pair>>: lambda "p" $
+        Logic.or
+          (containsTriviallyPolymorphic @@ Pairs.first (var "p"))
+          (containsTriviallyPolymorphic @@ Pairs.second (var "p")),
+      _Term_record>>: lambda "rec" $
+        Lists.foldl (binaryFunction Logic.or) false
+          (Lists.map (lambda "f" $ containsTriviallyPolymorphic @@ (project _Field _Field_term @@ var "f"))
+            (project _Record _Record_fields @@ var "rec")),
+      _Term_application>>: lambda "app" $
+        Logic.or
+          (containsTriviallyPolymorphic @@ (Core.applicationFunction (var "app")))
+          (containsTriviallyPolymorphic @@ (Core.applicationArgument (var "app")))]
 
 
--- | Template for Haskell import statements
-haskellImportTemplate :: TBinding String
-haskellImportTemplate = define "haskellImportTemplate" $
-  doc "Template for Haskell import statements" $
-  string "import qualified {namespace} as {alias}"
+-- | Extract all variable names from term-encoded terms in a given term
+extractEncodedTermVariableNames :: TBinding (Graph -> Term -> S.Set Name)
+extractEncodedTermVariableNames = define "extractEncodedTermVariableNames" $
+  doc "Extract all variable names from term-encoded terms in a given term" $
+  lambda "graf" $ lambda "term" $
+    Rewriting.foldOverTerm @@ inject _TraversalOrder _TraversalOrder_pre unit @@ (collectNames @@ var "graf") @@ Sets.empty @@ var "term"
+
+
+-- | Extract terms from a test case
+extractTestTerms :: TBinding (TestCaseWithMetadata -> [Term])
+extractTestTerms = define "extractTestTerms" $
+  doc "Extract input and output terms from a test case" $
+  lambda "tcm" $
+    cases _TestCase (project _TestCaseWithMetadata _TestCaseWithMetadata_case @@ var "tcm") (Just (list ([] :: [TTerm Term]))) [
+      _TestCase_delegatedEvaluation>>: lambda "delCase" $
+        list [
+          project _DelegatedEvaluationTestCase _DelegatedEvaluationTestCase_input @@ var "delCase",
+          project _DelegatedEvaluationTestCase _DelegatedEvaluationTestCase_output @@ var "delCase"]]
 
 
 -- | Find necessary imports for Haskell based on referenced names
@@ -241,12 +326,64 @@ findHaskellImports = define "findHaskellImports" $
       (Maps.toList (var "filtered"))
 
 
--- | Convert namespace to Haskell module name
-namespaceToModuleName :: TBinding (Namespace -> String)
-namespaceToModuleName = define "namespaceToModuleName" $
-  doc "Convert namespace to Haskell module name" $
-  lambda "ns_" $
-    Strings.intercalate (string ".") (Lists.map Formatting.capitalize (Strings.splitOn (string ".") (unwrap _Namespace @@ var "ns_")))
+-- | Generate a Haskell test file for a test group, with type inference and namespace building
+generateHaskellTestFile :: TBinding (Module -> TestGroup -> Graph -> Either String (String, String))
+generateHaskellTestFile = define "generateHaskellTestFile" $
+  doc "Generate a Haskell test file for a test group, with type inference and namespace building" $
+  lambda "testModule" $ lambda "testGroup" $ lambda "g" $
+    Eithers.bind
+      (buildNamespacesForTestGroup @@ var "testModule" @@ var "testGroup" @@ var "g")
+      (lambda "namespaces" $
+        generateTestFileWithCodec @@ (haskellTestCodec @@ var "namespaces") @@ var "testModule" @@ var "testGroup" @@ var "namespaces" @@ var "g")
+
+
+-- | Generate a single test case using a TestCodec
+generateTestCaseWithCodec :: TBinding (Graph -> Namespaces H.ModuleName -> TestCodec -> Int -> TestCaseWithMetadata -> Either String [String])
+generateTestCaseWithCodec = define "generateTestCaseWithCodec" $
+  doc "Generate a single test case using a TestCodec" $
+  lambda "g" $ lambda "namespaces" $ lambda "codec" $ lambda "depth" $ lambda "tcm" $ lets [
+    "name_">: project _TestCaseWithMetadata _TestCaseWithMetadata_name @@ var "tcm",
+    "tcase">: project _TestCaseWithMetadata _TestCaseWithMetadata_case @@ var "tcm"] $
+    cases _TestCase (var "tcase") (Just (right (list ([] :: [TTerm String])))) [
+      _TestCase_delegatedEvaluation>>: lambda "delCase" $ lets [
+        "input_">: project _DelegatedEvaluationTestCase _DelegatedEvaluationTestCase_input @@ var "delCase",
+        "output_">: project _DelegatedEvaluationTestCase _DelegatedEvaluationTestCase_output @@ var "delCase",
+        "formattedName">: project _TestCodec _TestCodec_formatTestName @@ var "codec" @@ var "name_",
+        "continuationIndent">: Math.add (Math.mul (var "depth") (int32 2)) (int32 4)] $
+        Eithers.bind
+          (project _TestCodec _TestCodec_encodeTerm @@ var "codec" @@ var "input_" @@ var "g")
+          (lambda "inputCode" $
+            Eithers.bind
+              (project _TestCodec _TestCodec_encodeTerm @@ var "codec" @@ var "output_" @@ var "g")
+              (lambda "outputCode" $
+                Eithers.bind
+                  (generateTypeAnnotationFor @@ var "g" @@ var "namespaces" @@ var "input_" @@ var "output_")
+                  (lambda "typeAnnotation" $ lets [
+                    "indentedInputCode">: indentContinuationLines @@ var "continuationIndent" @@ var "inputCode",
+                    "indentedOutputCode">: indentContinuationLines @@ var "continuationIndent" @@ var "outputCode",
+                    "finalOutputCode">: Maybes.maybe (var "indentedOutputCode")
+                      (lambda "anno" $ Strings.cat2 (var "indentedOutputCode") (var "anno"))
+                      (var "typeAnnotation")] $
+                    right (list [
+                      Strings.cat (list [string "H.it ", Literals.showString (var "formattedName"), string " $ H.shouldBe"]),
+                      Strings.cat (list [string "  (", var "indentedInputCode", string ")"]),
+                      Strings.cat (list [string "  (", var "finalOutputCode", string ")"])]))))]
+
+
+-- | Generate a test file using a TestCodec
+generateTestFileWithCodec :: TBinding (TestCodec -> Module -> TestGroup -> Namespaces H.ModuleName -> Graph -> Either String (String, String))
+generateTestFileWithCodec = define "generateTestFileWithCodec" $
+  doc "Generate a complete test file using a TestCodec" $
+  lambda "codec" $ lambda "testModule" $ lambda "testGroup" $ lambda "namespaces" $ lambda "g" $
+    Eithers.map
+      (lambda "testBody" $ lets [
+        "testModuleContent">: buildTestModuleWithCodec @@ var "codec" @@ var "testModule" @@ var "testGroup" @@ var "testBody" @@ var "namespaces",
+        "ext">: unwrap _FileExtension @@ (project _TestCodec _TestCodec_fileExtension @@ var "codec"),
+        "ns_">: Module.moduleNamespace (var "testModule"),
+        "specNs">: wrap _Namespace (Strings.cat2 (unwrap _Namespace @@ var "ns_") (string "Spec")),
+        "filePath">: Names.namespaceToFilePath @@ Util.caseConventionPascal @@ (wrap _FileExtension (var "ext")) @@ var "specNs"] $
+        pair (var "filePath") (var "testModuleContent"))
+      (generateTestGroupHierarchy @@ var "g" @@ var "namespaces" @@ var "codec" @@ int32 1 @@ var "testGroup")
 
 
 -- | Generate test hierarchy preserving the structure with H.describe blocks for subgroups
@@ -291,49 +428,6 @@ generateTestGroupHierarchy = define "generateTestGroupHierarchy" $
               (var "subgroups"))))
 
 
--- | Generate a single test case using a TestCodec
-generateTestCaseWithCodec :: TBinding (Graph -> Namespaces H.ModuleName -> TestCodec -> Int -> TestCaseWithMetadata -> Either String [String])
-generateTestCaseWithCodec = define "generateTestCaseWithCodec" $
-  doc "Generate a single test case using a TestCodec" $
-  lambda "g" $ lambda "namespaces" $ lambda "codec" $ lambda "depth" $ lambda "tcm" $ lets [
-    "name_">: project _TestCaseWithMetadata _TestCaseWithMetadata_name @@ var "tcm",
-    "tcase">: project _TestCaseWithMetadata _TestCaseWithMetadata_case @@ var "tcm"] $
-    cases _TestCase (var "tcase") (Just (right (list ([] :: [TTerm String])))) [
-      _TestCase_delegatedEvaluation>>: lambda "delCase" $ lets [
-        "input_">: project _DelegatedEvaluationTestCase _DelegatedEvaluationTestCase_input @@ var "delCase",
-        "output_">: project _DelegatedEvaluationTestCase _DelegatedEvaluationTestCase_output @@ var "delCase",
-        "formattedName">: project _TestCodec _TestCodec_formatTestName @@ var "codec" @@ var "name_",
-        "continuationIndent">: Math.add (Math.mul (var "depth") (int32 2)) (int32 4)] $
-        Eithers.bind
-          (project _TestCodec _TestCodec_encodeTerm @@ var "codec" @@ var "input_" @@ var "g")
-          (lambda "inputCode" $
-            Eithers.bind
-              (project _TestCodec _TestCodec_encodeTerm @@ var "codec" @@ var "output_" @@ var "g")
-              (lambda "outputCode" $
-                Eithers.bind
-                  (generateTypeAnnotationFor @@ var "g" @@ var "namespaces" @@ var "input_" @@ var "output_")
-                  (lambda "typeAnnotation" $ lets [
-                    "indentedInputCode">: indentContinuationLines @@ var "continuationIndent" @@ var "inputCode",
-                    "indentedOutputCode">: indentContinuationLines @@ var "continuationIndent" @@ var "outputCode",
-                    "finalOutputCode">: Maybes.maybe (var "indentedOutputCode")
-                      (lambda "anno" $ Strings.cat2 (var "indentedOutputCode") (var "anno"))
-                      (var "typeAnnotation")] $
-                    right (list [
-                      Strings.cat (list [string "H.it ", Literals.showString (var "formattedName"), string " $ H.shouldBe"]),
-                      Strings.cat (list [string "  (", var "indentedInputCode", string ")"]),
-                      Strings.cat (list [string "  (", var "finalOutputCode", string ")"])]))))]
-
-
--- | Indent continuation lines of a multi-line string
-indentContinuationLines :: TBinding (Int -> String -> String)
-indentContinuationLines = define "indentContinuationLines" $
-  doc "Indent continuation lines of a multi-line string" $
-  lambda "n" $ lambda "s" $
-    Strings.intercalate
-      (Strings.cat2 (string "\n") (Strings.fromList (Lists.replicate (var "n") (int32 32))))
-      (Strings.splitOn (string "\n") (var "s"))
-
-
 -- | Generate a type annotation for polymorphic output values
 generateTypeAnnotationFor :: TBinding (Graph -> Namespaces H.ModuleName -> Term -> Term -> Either String (Maybe String))
 generateTypeAnnotationFor = define "generateTypeAnnotationFor" $
@@ -364,6 +458,96 @@ generateTypeAnnotationFor = define "generateTypeAnnotationFor" $
         (tryInferTypeOf @@ var "g" @@ var "inputTerm"))
 
 
+-- | Template for Haskell import statements
+haskellImportTemplate :: TBinding String
+haskellImportTemplate = define "haskellImportTemplate" $
+  doc "Template for Haskell import statements" $
+  string "import qualified {namespace} as {alias}"
+
+
+-- | Template for Haskell test module structure
+haskellModuleTemplate :: TBinding String
+haskellModuleTemplate = define "haskellModuleTemplate" $
+  doc "Template for Haskell test module structure" $
+  Strings.intercalate (string "\n") (list [
+    Strings.cat2 (string "-- ") (asTerm Constants.warningAutoGeneratedFile),
+    string "",
+    string "module {moduleName} where",
+    string "",
+    string "{imports}",
+    string "",
+    string "spec :: H.Spec",
+    string "{testGroup}",
+    string "{testCases}",
+    string ""])
+
+
+-- | Template for HSpec test case assertions
+haskellTestCaseTemplate :: TBinding String
+haskellTestCaseTemplate = define "haskellTestCaseTemplate" $
+  doc "Template for HSpec test case assertions" $
+  Strings.intercalate (string "\n") (list [
+    string "  H.it {name} $ H.shouldBe",
+    string "    ({input})",
+    string "    ({output})",
+    string ""])
+
+
+-- | Create a Haskell TestCodec that uses the real Haskell coder
+haskellTestCodec :: TBinding (Namespaces H.ModuleName -> TestCodec)
+haskellTestCodec = define "haskellTestCodec" $
+  doc "Create a Haskell TestCodec that uses the real Haskell coder" $
+  lambda "namespaces" $
+    record _TestCodec [
+      _TestCodec_language>>: Coders.languageName_ (string "haskell"),
+      _TestCodec_fileExtension>>: wrap _FileExtension (string "hs"),
+      _TestCodec_encodeTerm>>: termToHaskell @@ var "namespaces",
+      _TestCodec_encodeType>>: typeToHaskell @@ var "namespaces",
+      _TestCodec_formatTestName>>: lambda "n" $ var "n",  -- identity
+      _TestCodec_formatModuleName>>: namespaceToModuleName,
+      _TestCodec_testCaseTemplate>>: haskellTestCaseTemplate,
+      _TestCodec_testGroupTemplate>>: haskellTestGroupTemplate,
+      _TestCodec_moduleTemplate>>: haskellModuleTemplate,
+      _TestCodec_importTemplate>>: haskellImportTemplate,
+      _TestCodec_findImports>>: findHaskellImports @@ var "namespaces"]
+
+
+-- | Template for HSpec test group description
+haskellTestGroupTemplate :: TBinding String
+haskellTestGroupTemplate = define "haskellTestGroupTemplate" $
+  doc "Template for HSpec test group description" $
+  string "spec = H.describe {groupName} $ do"
+
+
+-- | Indent continuation lines of a multi-line string
+indentContinuationLines :: TBinding (Int -> String -> String)
+indentContinuationLines = define "indentContinuationLines" $
+  doc "Indent continuation lines of a multi-line string" $
+  lambda "n" $ lambda "s" $
+    Strings.intercalate
+      (Strings.cat2 (string "\n") (Strings.fromList (Lists.replicate (var "n") (int32 32))))
+      (Strings.splitOn (string "\n") (var "s"))
+
+
+-- | Convert namespace to Haskell module name
+namespaceToModuleName :: TBinding (Namespace -> String)
+namespaceToModuleName = define "namespaceToModuleName" $
+  doc "Convert namespace to Haskell module name" $
+  lambda "ns_" $
+    Strings.intercalate (string ".") (Lists.map Formatting.capitalize (Strings.splitOn (string ".") (unwrap _Namespace @@ var "ns_")))
+
+
+-- | Convert a Hydra term to a Haskell expression string
+termToHaskell :: TBinding (Namespaces H.ModuleName -> Term -> Graph -> Either String String)
+termToHaskell = define "termToHaskell" $
+  doc "Convert a Hydra term to a Haskell expression string" $
+  lambda "namespaces" $ lambda "term" $ lambda "g" $
+    Eithers.bimap
+      ("ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic"))
+      (Serialization.printExpr <.> Serialization.parenthesize <.> HaskellSerdeSource.expressionToExpr)
+      (HaskellCoderSource.encodeTerm @@ int32 0 @@ var "namespaces" @@ var "term" @@ asTerm Lexical.emptyContext @@ var "g")
+
+
 -- | Try to infer the type of a term, returning Nothing if inference fails
 tryInferTypeOf :: TBinding (Graph -> Term -> Maybe (Term, TypeScheme))
 tryInferTypeOf = define "tryInferTypeOf" $
@@ -375,196 +559,12 @@ tryInferTypeOf = define "tryInferTypeOf" $
       (Inference.inferTypeOf @@ asTerm Lexical.emptyContext @@ var "g" @@ var "term")
 
 
--- | Check if a term contains any trivially polymorphic sub-terms
-containsTriviallyPolymorphic :: TBinding (Term -> Bool)
-containsTriviallyPolymorphic = define "containsTriviallyPolymorphic" $
-  doc "Check if a term contains any trivially polymorphic sub-terms" $
-  lambda "term" $
-    cases _Term (var "term") (Just false) [
-      _Term_list>>: lambda "xs" $
-        Logic.or (Lists.null (var "xs"))
-          (Lists.foldl (binaryFunction Logic.or) false (Lists.map containsTriviallyPolymorphic (var "xs"))),
-      _Term_set>>: lambda "s" $
-        Logic.or (Sets.null (var "s"))
-          (Lists.foldl (binaryFunction Logic.or) false (Lists.map containsTriviallyPolymorphic (Sets.toList (var "s")))),
-      _Term_map>>: lambda "m" $
-        Logic.or (Maps.null (var "m"))
-          (Logic.or
-            (Lists.foldl (binaryFunction Logic.or) false (Lists.map containsTriviallyPolymorphic (Maps.keys (var "m"))))
-            (Lists.foldl (binaryFunction Logic.or) false (Lists.map containsTriviallyPolymorphic (Lists.map (lambda "p" $ Pairs.second (var "p")) (Maps.toList (var "m")))))),
-      _Term_maybe>>: lambda "mx" $
-        Maybes.maybe true containsTriviallyPolymorphic (var "mx"),
-      _Term_either>>: lambda "_" $ true,
-      _Term_union>>: lambda "inj" $
-        containsTriviallyPolymorphic @@ (project _Field _Field_term @@ (project _Injection _Injection_field @@ var "inj")),
-      _Term_pair>>: lambda "p" $
-        Logic.or
-          (containsTriviallyPolymorphic @@ Pairs.first (var "p"))
-          (containsTriviallyPolymorphic @@ Pairs.second (var "p")),
-      _Term_record>>: lambda "rec" $
-        Lists.foldl (binaryFunction Logic.or) false
-          (Lists.map (lambda "f" $ containsTriviallyPolymorphic @@ (project _Field _Field_term @@ var "f"))
-            (project _Record _Record_fields @@ var "rec")),
-      _Term_application>>: lambda "app" $
-        Logic.or
-          (containsTriviallyPolymorphic @@ (Core.applicationFunction (var "app")))
-          (containsTriviallyPolymorphic @@ (Core.applicationArgument (var "app")))]
-
-
--- | Build the complete test module using a TestCodec
-buildTestModuleWithCodec :: TBinding (TestCodec -> Module -> TestGroup -> String -> Namespaces H.ModuleName -> String)
-buildTestModuleWithCodec = define "buildTestModuleWithCodec" $
-  doc "Build the complete test module using a TestCodec" $
-  lambda "codec" $ lambda "testModule" $ lambda "testGroup" $ lambda "testBody" $ lambda "namespaces" $ lets [
-    "ns_">: Module.moduleNamespace (var "testModule"),
-    "specNs">: wrap _Namespace (Strings.cat2 (unwrap _Namespace @@ var "ns_") (string "Spec")),
-    "moduleNameString">: project _TestCodec _TestCodec_formatModuleName @@ var "codec" @@ var "specNs",
-    "groupName_">: project _TestGroup _TestGroup_name @@ var "testGroup",
-    "domainImports">: project _TestCodec _TestCodec_findImports @@ var "codec" @@ Sets.empty,
-    "standardImports">: list [
-      string "import Hydra.Kernel",
-      string "import qualified Test.Hspec as H",
-      string "import qualified Data.List as L",
-      string "import qualified Data.Map as M",
-      string "import qualified Data.Set as S",
-      string "import qualified Data.Maybe as Y"],
-    "allImports">: Lists.concat2 (var "standardImports") (var "domainImports"),
-    "debugComments">: list [
-      string "-- DEBUG: Focus namespace = (see generated module)",
-      string "-- DEBUG: Namespace mappings: (see generated module)"],
-    "header">: Strings.intercalate (string "\n") (Lists.concat (list [
-      list [
-        Strings.cat2 (string "-- ") (asTerm Constants.warningAutoGeneratedFile),
-        string ""],
-      var "debugComments",
-      list [
-        string "",
-        Strings.cat (list [string "module ", var "moduleNameString", string " where"]),
-        string ""],
-      var "allImports",
-      list [
-        string "",
-        string "spec :: H.Spec",
-        Strings.cat (list [string "spec = H.describe ", Literals.showString (var "groupName_"), string " $ do"])]]))] $
-    Strings.cat (list [var "header", string "\n", var "testBody", string "\n"])
-
-
--- | Generate a test file using a TestCodec
-generateTestFileWithCodec :: TBinding (TestCodec -> Module -> TestGroup -> Namespaces H.ModuleName -> Graph -> Either String (String, String))
-generateTestFileWithCodec = define "generateTestFileWithCodec" $
-  doc "Generate a complete test file using a TestCodec" $
-  lambda "codec" $ lambda "testModule" $ lambda "testGroup" $ lambda "namespaces" $ lambda "g" $
-    Eithers.map
-      (lambda "testBody" $ lets [
-        "testModuleContent">: buildTestModuleWithCodec @@ var "codec" @@ var "testModule" @@ var "testGroup" @@ var "testBody" @@ var "namespaces",
-        "ext">: unwrap _FileExtension @@ (project _TestCodec _TestCodec_fileExtension @@ var "codec"),
-        "ns_">: Module.moduleNamespace (var "testModule"),
-        "specNs">: wrap _Namespace (Strings.cat2 (unwrap _Namespace @@ var "ns_") (string "Spec")),
-        "filePath">: Names.namespaceToFilePath @@ Util.caseConventionPascal @@ (wrap _FileExtension (var "ext")) @@ var "specNs"] $
-        pair (var "filePath") (var "testModuleContent"))
-      (generateTestGroupHierarchy @@ var "g" @@ var "namespaces" @@ var "codec" @@ int32 1 @@ var "testGroup")
-
-
--- | Extract all variable names from term-encoded terms in a given term
-extractEncodedTermVariableNames :: TBinding (Graph -> Term -> S.Set Name)
-extractEncodedTermVariableNames = define "extractEncodedTermVariableNames" $
-  doc "Extract all variable names from term-encoded terms in a given term" $
-  lambda "graf" $ lambda "term" $
-    Rewriting.foldOverTerm @@ inject _TraversalOrder _TraversalOrder_pre unit @@ (collectNames @@ var "graf") @@ Sets.empty @@ var "term"
-
-
--- | Collect variable names from encoded terms within a single term node
-collectNames :: TBinding (Graph -> S.Set Name -> Term -> S.Set Name)
-collectNames = define "collectNames" $
-  doc "Collect variable names from encoded terms within a single term node" $
-  lambda "graf" $ lambda "names" $ lambda "t" $
-    Logic.ifElse (Schemas.isEncodedTerm @@ (Rewriting.deannotateTerm @@ var "t"))
-      (Eithers.either_
-        (lambda "_" $ var "names")
-        (lambda "decodedTerm" $
-          Sets.union (var "names") (Rewriting.termDependencyNames @@ true @@ true @@ true @@ var "decodedTerm"))
-        (Eithers.bimap
-          (lambda "_e" $ var "_e")
-          (lambda "_a" $ var "_a")
-          (decoderFor _Term @@ var "graf" @@ var "t")))
-      (var "names")
-
-
--- | Add namespaces from a set of names to existing namespaces
-addNamespacesToNamespaces :: TBinding (Namespaces H.ModuleName -> S.Set Name -> Namespaces H.ModuleName)
-addNamespacesToNamespaces = define "addNamespacesToNamespaces" $
-  doc "Add namespaces from a set of names to existing namespaces" $
-  lambda "ns0" $ lambda "names" $ lets [
-    "newNamespaces">: Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList (var "names")))),
-    "toModuleName">: lambda "namespace" $
-      wrap H._ModuleName (Formatting.capitalize @@ Lists.last (Strings.splitOn (string ".") (unwrap _Namespace @@ var "namespace"))),
-    "newMappings">: Maps.fromList (Lists.map (lambda "ns_" $ pair (var "ns_") (var "toModuleName" @@ var "ns_")) (Sets.toList (var "newNamespaces")))] $
-    record _Namespaces [
-      _Namespaces_focus>>: project _Namespaces _Namespaces_focus @@ var "ns0",
-      _Namespaces_mapping>>: Maps.union (project _Namespaces _Namespaces_mapping @@ var "ns0") (var "newMappings")]
-
-
--- | Generate a Haskell test file for a test group, with type inference and namespace building
-generateHaskellTestFile :: TBinding (Module -> TestGroup -> Graph -> Either String (String, String))
-generateHaskellTestFile = define "generateHaskellTestFile" $
-  doc "Generate a Haskell test file for a test group, with type inference and namespace building" $
-  lambda "testModule" $ lambda "testGroup" $ lambda "g" $
-    Eithers.bind
-      (buildNamespacesForTestGroup @@ var "testModule" @@ var "testGroup" @@ var "g")
-      (lambda "namespaces" $
-        generateTestFileWithCodec @@ (haskellTestCodec @@ var "namespaces") @@ var "testModule" @@ var "testGroup" @@ var "namespaces" @@ var "g")
-
-
--- | Build namespaces for a test group including encoded term references
-buildNamespacesForTestGroup :: TBinding (Module -> TestGroup -> Graph -> Either String (Namespaces H.ModuleName))
-buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
-  doc "Build namespaces for a test group including encoded term references" $
-  lambda "mod" $ lambda "tgroup" $ lambda "graph_" $ lets [
-    "testCases_">: collectTestCases @@ var "tgroup",
-    "testTerms">: Lists.concat (Lists.map extractTestTerms (var "testCases_")),
-    "testBindings">: Lists.map
-      (lambda "term" $
-        record _Binding [
-          _Binding_name>>: wrap _Name (string "_test_"),
-          _Binding_term>>: var "term",
-          _Binding_type>>: nothing])
-      (var "testTerms"),
-    "tempModule">: record _Module [
-      _Module_namespace>>: Module.moduleNamespace (var "mod"),
-      _Module_definitions>>: Lists.map ("b" ~> Module.definitionTerm (Module.termDefinition
-        (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
-        (Core.bindingType $ var "b")))
-        (var "testBindings"),
-      _Module_termDependencies>>: project _Module _Module_termDependencies @@ var "mod",
-      _Module_typeDependencies>>: project _Module _Module_typeDependencies @@ var "mod",
-      _Module_description>>: project _Module _Module_description @@ var "mod"]] $
-    Eithers.bind
-      (Eithers.bimap
-        (lambda "ic" $ ShowError.error_ @@ Ctx.inContextObject (var "ic"))
-        (lambda "a" $ var "a")
-        (HaskellUtilsSource.namespacesForModule @@ var "tempModule" @@ asTerm Lexical.emptyContext @@ var "graph_"))
-      (lambda "baseNamespaces" $ lets [
-        "encodedNames">: Sets.unions (Lists.map (lambda "t" $ extractEncodedTermVariableNames @@ var "graph_" @@ var "t") (var "testTerms"))] $
-        right (addNamespacesToNamespaces @@ var "baseNamespaces" @@ var "encodedNames"))
-
-
--- | Collect all test cases from a test group (recursively)
-collectTestCases :: TBinding (TestGroup -> [TestCaseWithMetadata])
-collectTestCases = define "collectTestCases" $
-  doc "Collect all test cases from a test group recursively" $
-  lambda "tg" $
-    Lists.concat2
-      (project _TestGroup _TestGroup_cases @@ var "tg")
-      (Lists.concat (Lists.map collectTestCases (project _TestGroup _TestGroup_subgroups @@ var "tg")))
-
-
--- | Extract terms from a test case
-extractTestTerms :: TBinding (TestCaseWithMetadata -> [Term])
-extractTestTerms = define "extractTestTerms" $
-  doc "Extract input and output terms from a test case" $
-  lambda "tcm" $
-    cases _TestCase (project _TestCaseWithMetadata _TestCaseWithMetadata_case @@ var "tcm") (Just (list ([] :: [TTerm Term]))) [
-      _TestCase_delegatedEvaluation>>: lambda "delCase" $
-        list [
-          project _DelegatedEvaluationTestCase _DelegatedEvaluationTestCase_input @@ var "delCase",
-          project _DelegatedEvaluationTestCase _DelegatedEvaluationTestCase_output @@ var "delCase"]]
+-- | Convert a Hydra type to a Haskell type expression string
+typeToHaskell :: TBinding (Namespaces H.ModuleName -> Type -> Graph -> Either String String)
+typeToHaskell = define "typeToHaskell" $
+  doc "Convert a Hydra type to a Haskell type expression string" $
+  lambda "namespaces" $ lambda "typ" $ lambda "g" $
+    Eithers.bimap
+      ("ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic"))
+      (Serialization.printExpr <.> Serialization.parenthesize <.> HaskellSerdeSource.typeToExpr)
+      (HaskellCoderSource.encodeType @@ var "namespaces" @@ var "typ" @@ asTerm Lexical.emptyContext @@ var "g")

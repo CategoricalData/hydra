@@ -55,190 +55,142 @@ module_ = Module ns elements
     Just "Java utilities for constructing Java syntax trees"
   where
     elements = [
-      -- Identifier/Name constructors
-      toTermDefinition javaIdentifier,
-      toTermDefinition javaTypeIdentifier,
-      toTermDefinition javaTypeName,
-      toTermDefinition javaDeclName,
-      toTermDefinition javaVariableName,
-      toTermDefinition javaVariableDeclaratorId,
-      toTermDefinition javaVariableDeclarator,
-      -- Literal constructors
-      toTermDefinition javaBoolean,
-      toTermDefinition javaInt,
-      toTermDefinition javaString,
-      -- Primary/Expression chain
-      toTermDefinition javaLiteralToJavaPrimary,
-      toTermDefinition javaExpressionToJavaPrimary,
-      toTermDefinition javaPrimaryToJavaUnaryExpression,
-      toTermDefinition javaPrimaryToJavaExpression,
-      toTermDefinition javaPostfixExpressionToJavaUnaryExpression,
-      toTermDefinition javaPostfixExpressionToJavaExpression,
-      toTermDefinition javaPostfixExpressionToJavaRelationalExpression,
-      toTermDefinition javaUnaryExpressionToJavaRelationalExpression,
-      toTermDefinition javaUnaryExpressionToJavaExpression,
-      toTermDefinition javaRelationalExpressionToJavaExpression,
-      toTermDefinition javaRelationalExpressionToJavaUnaryExpression,
-      toTermDefinition javaMultiplicativeExpressionToJavaRelationalExpression,
-      toTermDefinition javaLiteralToJavaMultiplicativeExpression,
-      toTermDefinition javaLiteralToJavaRelationalExpression,
-      toTermDefinition javaLiteralToJavaExpression,
-      toTermDefinition javaIdentifierToJavaExpressionName,
-      toTermDefinition javaIdentifierToJavaExpression,
-      toTermDefinition javaIdentifierToJavaRelationalExpression,
-      toTermDefinition javaIdentifierToJavaUnaryExpression,
-      toTermDefinition javaExpressionNameToJavaExpression,
-      toTermDefinition javaFieldAccessToJavaExpression,
-      toTermDefinition javaCastExpressionToJavaExpression,
-      toTermDefinition javaMethodInvocationToJavaPrimary,
-      toTermDefinition javaMethodInvocationToJavaExpression,
-      toTermDefinition javaMethodInvocationToJavaPostfixExpression,
-      toTermDefinition javaMethodInvocationToJavaStatement,
-      toTermDefinition javaConditionalAndExpressionToJavaExpression,
-      toTermDefinition javaEqualityExpressionToJavaInclusiveOrExpression,
-      toTermDefinition javaEqualityExpressionToJavaExpression,
-      toTermDefinition javaPostfixExpressionToJavaEqualityExpression,
-      toTermDefinition javaPostfixExpressionToJavaInclusiveOrExpression,
-      toTermDefinition javaAdditiveExpressionToJavaExpression,
-      -- Expression-to-unary
-      toTermDefinition javaExpressionToJavaUnaryExpression,
-      -- Type constructors
-      toTermDefinition javaPrimitiveTypeToJavaType,
-      toTermDefinition javaClassTypeToJavaType,
-      toTermDefinition javaTypeVariableToType,
-      toTermDefinition javaRefType,
-      toTermDefinition javaClassType,
-      toTermDefinition javaTypeVariable,
-      toTermDefinition javaBooleanType,
-      toTermDefinition javaIntType,
-      -- Literal expressions
-      toTermDefinition javaBooleanExpression,
-      toTermDefinition javaIntExpression,
-      -- Cast expressions
-      toTermDefinition javaCastExpression,
-      toTermDefinition javaCastPrimitive,
-      -- Statement constructors
-      toTermDefinition javaReturnStatement,
-      toTermDefinition javaThrowStatement,
-      toTermDefinition javaEmptyStatement,
-      toTermDefinition javaAssignmentStatement,
-      toTermDefinition javaStatementsToBlock,
-      -- Lambda constructors
-      toTermDefinition javaLambda,
-      toTermDefinition javaLambdaFromBlock,
-      -- Method/Constructor helpers
-      toTermDefinition javaMethodBody,
-      toTermDefinition javaMethodHeader,
-      toTermDefinition javaMethodDeclarationToJavaClassBodyDeclaration,
-      toTermDefinition javaInterfaceDeclarationToJavaClassBodyDeclaration,
-      toTermDefinition javaMemberField,
-      toTermDefinition javaTypeToJavaFormalParameter,
-      toTermDefinition javaTypeToJavaResult,
-      toTermDefinition javaTypeToJavaTypeArgument,
-      toTermDefinition referenceTypeToResult,
-      -- Constructor call
-      toTermDefinition javaConstructorName,
-      toTermDefinition javaConstructorCall,
-      -- This
-      toTermDefinition javaThis,
-      -- Type helpers
-      toTermDefinition javaTypeParameter,
-      toTermDefinition javaTypeIdentifierToJavaTypeArgument,
-      toTermDefinition typeParameterToTypeArgument,
-      toTermDefinition typeParameterToReferenceType,
-      -- Field helpers
-      toTermDefinition fieldNameToJavaIdentifier,
-      toTermDefinition fieldNameToJavaExpression,
-      toTermDefinition fieldNameToJavaVariableDeclaratorId,
-      toTermDefinition fieldNameToJavaVariableDeclarator,
-      toTermDefinition fieldExpression,
-      -- Variable helpers
-      toTermDefinition variableToJavaIdentifier,
-      toTermDefinition varDeclarationStatement,
-      -- Sanitization
-      toTermDefinition sanitizeJavaName,
-      toTermDefinition isEscaped,
-      toTermDefinition unescape,
-      -- Package
-      toTermDefinition javaPackageDeclaration,
-      -- Annotations
-      toTermDefinition overrideAnnotation,
-      -- Method invocations
-      toTermDefinition methodInvocation,
-      toTermDefinition methodInvocationStatic,
-      toTermDefinition methodDeclaration,
-      toTermDefinition interfaceMethodDeclaration,
-      -- Equals/instanceof
-      toTermDefinition javaEquals,
-      toTermDefinition javaEqualsNull,
-      toTermDefinition javaInstanceOf,
-      -- Throw helpers
-      toTermDefinition javaThrowIllegalArgumentException,
-      toTermDefinition javaThrowIllegalStateException,
-      -- Misc
       toTermDefinition addExpressions,
-      toTermDefinition javaRelationalExpressionToJavaEqualityExpression,
-      -- Name-to-Java mapping
-      toTermDefinition nameToQualifiedJavaName,
-      toTermDefinition nameToJavaClassType,
-      toTermDefinition nameToJavaReferenceType,
-      toTermDefinition nameToJavaName,
-      toTermDefinition nameToJavaTypeIdentifier,
-      -- Type from type name
-      toTermDefinition javaTypeFromTypeName,
-      -- Cast helpers
-      toTermDefinition javaDoubleCastExpression,
-      toTermDefinition javaDoubleCastExpressionToJavaExpression,
-      -- Primitive type constant
-      toTermDefinition javaBytePrimitiveType,
-      -- Visitor type variable
-      toTermDefinition visitorTypeVariable,
-      -- Variable name helpers
-      toTermDefinition lookupJavaVarName,
-      -- Variant class name
-      toTermDefinition variantClassName,
-      -- Variable declaration
-      toTermDefinition variableDeclarationStatement,
-      toTermDefinition finalVarDeclarationStatement,
-      -- String multiplicative expression
-      toTermDefinition javaStringMultiplicativeExpression,
-      -- Annotation helpers
-      toTermDefinition suppressWarningsUncheckedAnnotation,
-      -- Method invocation with type args
-      toTermDefinition methodInvocationStaticWithTypeArgs,
-      -- Array helpers
-      toTermDefinition javaArrayCreation,
-      toTermDefinition javaArrayInitializer,
-      -- Assignment helpers
-      toTermDefinition toAssignStmt,
-      -- Type parameter extraction
-      toTermDefinition unTypeParameter,
-      -- Aliases construction
-      toTermDefinition importAliasesForModule,
-      -- Class declaration
-      toTermDefinition javaClassDeclaration,
-      -- Constructor
-      toTermDefinition makeConstructor,
-      -- Accept method for visitor pattern
-      toTermDefinition toAcceptMethod,
-      -- Array type conversion
-      toTermDefinition toJavaArrayType,
-      -- Type to reference type
-      toTermDefinition javaTypeToJavaReferenceType,
-      -- Reference type to raw type
-      toTermDefinition javaReferenceTypeToRawType,
-      -- Type parameter add
-      toTermDefinition addJavaTypeParameter,
-      -- Aliases modifiers
-      toTermDefinition uniqueVarName,
-      toTermDefinition uniqueVarName_go,
       toTermDefinition addInScopeVar,
       toTermDefinition addInScopeVars,
-      toTermDefinition addVarRename]
+      toTermDefinition addJavaTypeParameter,
+      toTermDefinition addVarRename,
+      toTermDefinition fieldExpression,
+      toTermDefinition fieldNameToJavaExpression,
+      toTermDefinition fieldNameToJavaIdentifier,
+      toTermDefinition fieldNameToJavaVariableDeclarator,
+      toTermDefinition fieldNameToJavaVariableDeclaratorId,
+      toTermDefinition finalVarDeclarationStatement,
+      toTermDefinition importAliasesForModule,
+      toTermDefinition interfaceMethodDeclaration,
+      toTermDefinition isEscaped,
+      toTermDefinition javaAdditiveExpressionToJavaExpression,
+      toTermDefinition javaArrayCreation,
+      toTermDefinition javaArrayInitializer,
+      toTermDefinition javaAssignmentStatement,
+      toTermDefinition javaBoolean,
+      toTermDefinition javaBooleanExpression,
+      toTermDefinition javaBooleanType,
+      toTermDefinition javaBytePrimitiveType,
+      toTermDefinition javaCastExpression,
+      toTermDefinition javaCastExpressionToJavaExpression,
+      toTermDefinition javaCastPrimitive,
+      toTermDefinition javaClassDeclaration,
+      toTermDefinition javaClassType,
+      toTermDefinition javaClassTypeToJavaType,
+      toTermDefinition javaConditionalAndExpressionToJavaExpression,
+      toTermDefinition javaConstructorCall,
+      toTermDefinition javaConstructorName,
+      toTermDefinition javaDeclName,
+      toTermDefinition javaDoubleCastExpression,
+      toTermDefinition javaDoubleCastExpressionToJavaExpression,
+      toTermDefinition javaEmptyStatement,
+      toTermDefinition javaEqualityExpressionToJavaExpression,
+      toTermDefinition javaEqualityExpressionToJavaInclusiveOrExpression,
+      toTermDefinition javaEquals,
+      toTermDefinition javaEqualsNull,
+      toTermDefinition javaExpressionNameToJavaExpression,
+      toTermDefinition javaExpressionToJavaPrimary,
+      toTermDefinition javaExpressionToJavaUnaryExpression,
+      toTermDefinition javaFieldAccessToJavaExpression,
+      toTermDefinition javaIdentifier,
+      toTermDefinition javaIdentifierToJavaExpression,
+      toTermDefinition javaIdentifierToJavaExpressionName,
+      toTermDefinition javaIdentifierToJavaRelationalExpression,
+      toTermDefinition javaIdentifierToJavaUnaryExpression,
+      toTermDefinition javaInstanceOf,
+      toTermDefinition javaInt,
+      toTermDefinition javaIntExpression,
+      toTermDefinition javaIntType,
+      toTermDefinition javaInterfaceDeclarationToJavaClassBodyDeclaration,
+      toTermDefinition javaLambda,
+      toTermDefinition javaLambdaFromBlock,
+      toTermDefinition javaLiteralToJavaExpression,
+      toTermDefinition javaLiteralToJavaMultiplicativeExpression,
+      toTermDefinition javaLiteralToJavaPrimary,
+      toTermDefinition javaLiteralToJavaRelationalExpression,
+      toTermDefinition javaMemberField,
+      toTermDefinition javaMethodBody,
+      toTermDefinition javaMethodDeclarationToJavaClassBodyDeclaration,
+      toTermDefinition javaMethodHeader,
+      toTermDefinition javaMethodInvocationToJavaExpression,
+      toTermDefinition javaMethodInvocationToJavaPostfixExpression,
+      toTermDefinition javaMethodInvocationToJavaPrimary,
+      toTermDefinition javaMethodInvocationToJavaStatement,
+      toTermDefinition javaMultiplicativeExpressionToJavaRelationalExpression,
+      toTermDefinition javaPackageDeclaration,
+      toTermDefinition javaPostfixExpressionToJavaEqualityExpression,
+      toTermDefinition javaPostfixExpressionToJavaExpression,
+      toTermDefinition javaPostfixExpressionToJavaInclusiveOrExpression,
+      toTermDefinition javaPostfixExpressionToJavaRelationalExpression,
+      toTermDefinition javaPostfixExpressionToJavaUnaryExpression,
+      toTermDefinition javaPrimaryToJavaExpression,
+      toTermDefinition javaPrimaryToJavaUnaryExpression,
+      toTermDefinition javaPrimitiveTypeToJavaType,
+      toTermDefinition javaRefType,
+      toTermDefinition javaReferenceTypeToRawType,
+      toTermDefinition javaRelationalExpressionToJavaEqualityExpression,
+      toTermDefinition javaRelationalExpressionToJavaExpression,
+      toTermDefinition javaRelationalExpressionToJavaUnaryExpression,
+      toTermDefinition javaReturnStatement,
+      toTermDefinition javaStatementsToBlock,
+      toTermDefinition javaString,
+      toTermDefinition javaStringMultiplicativeExpression,
+      toTermDefinition javaThis,
+      toTermDefinition javaThrowIllegalArgumentException,
+      toTermDefinition javaThrowIllegalStateException,
+      toTermDefinition javaThrowStatement,
+      toTermDefinition javaTypeFromTypeName,
+      toTermDefinition javaTypeIdentifier,
+      toTermDefinition javaTypeIdentifierToJavaTypeArgument,
+      toTermDefinition javaTypeName,
+      toTermDefinition javaTypeParameter,
+      toTermDefinition javaTypeToJavaFormalParameter,
+      toTermDefinition javaTypeToJavaReferenceType,
+      toTermDefinition javaTypeToJavaResult,
+      toTermDefinition javaTypeToJavaTypeArgument,
+      toTermDefinition javaTypeVariable,
+      toTermDefinition javaTypeVariableToType,
+      toTermDefinition javaUnaryExpressionToJavaExpression,
+      toTermDefinition javaUnaryExpressionToJavaRelationalExpression,
+      toTermDefinition javaVariableDeclarator,
+      toTermDefinition javaVariableDeclaratorId,
+      toTermDefinition javaVariableName,
+      toTermDefinition lookupJavaVarName,
+      toTermDefinition makeConstructor,
+      toTermDefinition methodDeclaration,
+      toTermDefinition methodInvocation,
+      toTermDefinition methodInvocationStatic,
+      toTermDefinition methodInvocationStaticWithTypeArgs,
+      toTermDefinition nameToJavaClassType,
+      toTermDefinition nameToJavaName,
+      toTermDefinition nameToJavaReferenceType,
+      toTermDefinition nameToJavaTypeIdentifier,
+      toTermDefinition nameToQualifiedJavaName,
+      toTermDefinition overrideAnnotation,
+      toTermDefinition referenceTypeToResult,
+      toTermDefinition sanitizeJavaName,
+      toTermDefinition suppressWarningsUncheckedAnnotation,
+      toTermDefinition toAcceptMethod,
+      toTermDefinition toAssignStmt,
+      toTermDefinition toJavaArrayType,
+      toTermDefinition typeParameterToReferenceType,
+      toTermDefinition typeParameterToTypeArgument,
+      toTermDefinition unTypeParameter,
+      toTermDefinition unescape,
+      toTermDefinition uniqueVarName,
+      toTermDefinition uniqueVarName_go,
+      toTermDefinition varDeclarationStatement,
+      toTermDefinition variantClassName,
+      toTermDefinition variableDeclarationStatement,
+      toTermDefinition variableToJavaIdentifier,
+      toTermDefinition visitorTypeVariable]
 
--- =============================================================================
--- Identifier/Name constructors
--- =============================================================================
 
 javaIdentifier :: TBinding (String -> Java.Identifier)
 javaIdentifier = def "javaIdentifier" $
@@ -268,9 +220,6 @@ javaVariableDeclarator :: TBinding (Java.Identifier -> Maybe Java.VariableInitia
 javaVariableDeclarator = def "javaVariableDeclarator" $
   lambda "id" $ lambda "minit" $ JavaDsl.variableDeclarator (javaVariableDeclaratorId @@ var "id") (var "minit")
 
--- =============================================================================
--- Literal constructors
--- =============================================================================
 
 javaBoolean :: TBinding (Bool -> Java.Literal)
 javaBoolean = def "javaBoolean" $
@@ -284,9 +233,6 @@ javaString :: TBinding (String -> Java.Literal)
 javaString = def "javaString" $
   lambda "s" $ JavaDsl.literalString (JavaDsl.stringLiteral (var "s"))
 
--- =============================================================================
--- Primary/Expression conversion chain
--- =============================================================================
 
 javaLiteralToJavaPrimary :: TBinding (Java.Literal -> Java.Primary)
 javaLiteralToJavaPrimary = def "javaLiteralToJavaPrimary" $
@@ -475,9 +421,6 @@ javaExpressionToJavaUnaryExpression :: TBinding (Java.Expression -> Java.UnaryEx
 javaExpressionToJavaUnaryExpression = def "javaExpressionToJavaUnaryExpression" $
   lambda "e" $ JavaDsl.expressionToUnary (var "e")
 
--- =============================================================================
--- Type constructors
--- =============================================================================
 
 javaPrimitiveTypeToJavaType :: TBinding (Java.PrimitiveType -> Java.Type)
 javaPrimitiveTypeToJavaType = def "javaPrimitiveTypeToJavaType" $
@@ -529,9 +472,6 @@ javaIntType = def "javaIntType" $
   javaPrimitiveTypeToJavaType @@
     JavaDsl.primitiveTypeNumeric (JavaDsl.numericTypeIntegral JavaDsl.integralTypeInt)
 
--- =============================================================================
--- Literal expressions
--- =============================================================================
 
 javaBooleanExpression :: TBinding (Bool -> Java.Expression)
 javaBooleanExpression = def "javaBooleanExpression" $
@@ -541,9 +481,6 @@ javaIntExpression :: TBinding (Int -> Java.Expression)
 javaIntExpression = def "javaIntExpression" $
   lambda "i" $ javaPrimaryToJavaExpression @@ (javaLiteralToJavaPrimary @@ (javaInt @@ var "i"))
 
--- =============================================================================
--- Cast expressions
--- =============================================================================
 
 javaCastExpression :: TBinding (Java.ReferenceType -> Java.UnaryExpression -> Java.CastExpression)
 javaCastExpression = def "javaCastExpression" $
@@ -561,9 +498,6 @@ javaCastPrimitive = def "javaCastPrimitive" $
         (JavaDsl.primitiveTypeWithAnnotations (var "pt") (list ([] :: [TTerm Java.Annotation])))
         (var "expr"))
 
--- =============================================================================
--- Statement constructors
--- =============================================================================
 
 javaReturnStatement :: TBinding (Maybe Java.Expression -> Java.Statement)
 javaReturnStatement = def "javaReturnStatement" $
@@ -593,9 +527,6 @@ javaStatementsToBlock = def "javaStatementsToBlock" $
   lambda "stmts" $ JavaDsl.block
     (Lists.map (lambda "s" $ JavaDsl.blockStatementStatement (var "s")) (var "stmts"))
 
--- =============================================================================
--- Lambda constructors
--- =============================================================================
 
 javaLambda :: TBinding (Name -> Java.Expression -> Java.Expression)
 javaLambda = def "javaLambda" $
@@ -613,9 +544,6 @@ javaLambdaFromBlock = def "javaLambdaFromBlock" $
         (JavaDsl.lambdaParametersSingle (variableToJavaIdentifier @@ var "v"))
         (JavaDsl.lambdaBodyBlock (var "block")))
 
--- =============================================================================
--- Method/Constructor helpers
--- =============================================================================
 
 javaMethodBody :: TBinding (Maybe [Java.BlockStatement] -> Java.MethodBody)
 javaMethodBody = def "javaMethodBody" $
@@ -671,9 +599,6 @@ referenceTypeToResult :: TBinding (Java.ReferenceType -> Java.Result)
 referenceTypeToResult = def "referenceTypeToResult" $
   lambda "rt" $ javaTypeToJavaResult @@ JavaDsl.typeReference (var "rt")
 
--- =============================================================================
--- Constructor call
--- =============================================================================
 
 javaConstructorName :: TBinding (Java.Identifier -> Maybe Java.TypeArgumentsOrDiamond -> Java.ClassOrInterfaceTypeToInstantiate)
 javaConstructorName = def "javaConstructorName" $
@@ -692,18 +617,12 @@ javaConstructorCall = def "javaConstructorCall" $
             (JavaDsl.unqualifiedClassInstanceCreationExpression
               (list ([] :: [TTerm Java.TypeArgument])) (var "ci") (var "args") (var "mbody")))))
 
--- =============================================================================
--- This
--- =============================================================================
 
 javaThis :: TBinding Java.Expression
 javaThis = def "javaThis" $
   JavaDsl.primaryToExpression
     (JavaDsl.primaryNoNewArray JavaDsl.primaryThis)
 
--- =============================================================================
--- Type helpers
--- =============================================================================
 
 javaTypeParameter :: TBinding (String -> Java.TypeParameter)
 javaTypeParameter = def "javaTypeParameter" $
@@ -730,9 +649,6 @@ typeParameterToReferenceType = def "typeParameterToReferenceType" $
       (JavaDsl.unTypeIdentifier
         (JavaDsl.typeParameterIdentifier (var "tp"))))
 
--- =============================================================================
--- Field helpers
--- =============================================================================
 
 fieldNameToJavaIdentifier :: TBinding (Name -> Java.Identifier)
 fieldNameToJavaIdentifier = def "fieldNameToJavaIdentifier" $
@@ -757,9 +673,6 @@ fieldExpression = def "fieldExpression" $
   lambda "varId" $ lambda "fieldId" $
     JavaDsl.expressionName (just (JavaDsl.ambiguousName (list [var "varId"]))) (var "fieldId")
 
--- =============================================================================
--- Variable helpers
--- =============================================================================
 
 variableToJavaIdentifier :: TBinding (Name -> Java.Identifier)
 variableToJavaIdentifier = def "variableToJavaIdentifier" $
@@ -793,9 +706,6 @@ finalVarDeclarationStatement = def "finalVarDeclarationStatement" $
           (list [javaVariableDeclarator @@ var "id" @@
             (just $ JavaDsl.variableInitializerExpression (var "rhs"))])))
 
--- =============================================================================
--- Sanitization
--- =============================================================================
 
 sanitizeJavaName :: TBinding (String -> String)
 sanitizeJavaName = def "sanitizeJavaName" $
@@ -814,9 +724,6 @@ unescape :: TBinding (String -> String)
 unescape = def "unescape" $
   lambda "s" $ Strings.fromList (Lists.tail (Strings.toList (var "s")))
 
--- =============================================================================
--- Package
--- =============================================================================
 
 javaPackageDeclaration :: TBinding (Namespace -> Java.PackageDeclaration)
 javaPackageDeclaration = def "javaPackageDeclaration" $
@@ -824,18 +731,12 @@ javaPackageDeclaration = def "javaPackageDeclaration" $
     (list ([] :: [TTerm Java.PackageModifier]))
     (Lists.map (lambda "s" $ JavaDsl.identifier (var "s")) (Strings.splitOn (string ".") (Module.unNamespace $ var "ns")))
 
--- =============================================================================
--- Annotations
--- =============================================================================
 
 overrideAnnotation :: TBinding Java.Annotation
 overrideAnnotation = def "overrideAnnotation" $
   JavaDsl.annotationMarker
     (JavaDsl.markerAnnotation (javaTypeName @@ JavaDsl.identifier (string "Override")))
 
--- =============================================================================
--- Method invocations
--- =============================================================================
 
 methodInvocation :: TBinding (Maybe (Either Java.ExpressionName Java.Primary) -> Java.Identifier -> [Java.Expression] -> Java.MethodInvocation)
 methodInvocation = def "methodInvocation" $
@@ -878,9 +779,6 @@ interfaceMethodDeclaration = def "interfaceMethodDeclaration" $
         (javaMethodHeader @@ var "tparams" @@ var "methodName" @@ var "params" @@ var "result")
         (javaMethodBody @@ var "stmts"))
 
--- =============================================================================
--- Equals/instanceof
--- =============================================================================
 
 javaEquals :: TBinding (Java.EqualityExpression -> Java.RelationalExpression -> Java.EqualityExpression)
 javaEquals = def "javaEquals" $
@@ -899,9 +797,6 @@ javaInstanceOf = def "javaInstanceOf" $
     JavaDsl.relationalExpressionInstanceOf
       (JavaDsl.relationalExpressionInstanceOf_ (var "lhs") (var "rhs"))
 
--- =============================================================================
--- Throw helpers
--- =============================================================================
 
 javaThrowIllegalArgumentException :: TBinding ([Java.Expression] -> Java.Statement)
 javaThrowIllegalArgumentException = def "javaThrowIllegalArgumentException" $
@@ -917,9 +812,6 @@ javaThrowIllegalStateException = def "javaThrowIllegalStateException" $
       (javaConstructorName @@ JavaDsl.identifier (string "IllegalStateException") @@ nothing) @@
       var "args" @@ nothing)
 
--- =============================================================================
--- Misc
--- =============================================================================
 
 addExpressions :: TBinding ([Java.MultiplicativeExpression] -> Java.AdditiveExpression)
 addExpressions = def "addExpressions" $
@@ -932,9 +824,6 @@ addExpressions = def "addExpressions" $
       (var "first")
       (var "rest")
 
--- =============================================================================
--- Name-to-Java mapping
--- =============================================================================
 
 -- | Compute the qualified Java name (TypeIdentifier, ClassTypeQualifier) for a Hydra name.
 --   If qualify is True, the namespace is converted to a package qualifier.
@@ -1020,9 +909,6 @@ javaTypeFromTypeName = def "javaTypeFromTypeName" $
         (list ([] :: [TTerm Java.Annotation]))
         (nameToJavaTypeIdentifier @@ var "aliases" @@ boolean False @@ var "elName"))
 
--- =============================================================================
--- Cast helpers
--- =============================================================================
 
 -- | Create a double cast expression: first cast to raw type, then to target type
 javaDoubleCastExpression :: TBinding (Java.ReferenceType -> Java.ReferenceType -> Java.UnaryExpression -> Java.CastExpression)
@@ -1037,9 +923,6 @@ javaDoubleCastExpressionToJavaExpression = def "javaDoubleCastExpressionToJavaEx
   lambda "rawRt" $ lambda "targetRt" $ lambda "expr" $
     javaCastExpressionToJavaExpression @@ (javaDoubleCastExpression @@ var "rawRt" @@ var "targetRt" @@ var "expr")
 
--- =============================================================================
--- Primitive type constants
--- =============================================================================
 
 -- | Java byte primitive type
 javaBytePrimitiveType :: TBinding Java.PrimitiveTypeWithAnnotations
@@ -1048,18 +931,12 @@ javaBytePrimitiveType = def "javaBytePrimitiveType" $
     (JavaDsl.primitiveTypeNumeric (JavaDsl.numericTypeIntegral JavaDsl.integralTypeByte))
     (list ([] :: [TTerm Java.Annotation]))
 
--- =============================================================================
--- Visitor type variable
--- =============================================================================
 
 -- | The reference type for the visitor return type variable "r"
 visitorTypeVariable :: TBinding Java.ReferenceType
 visitorTypeVariable = def "visitorTypeVariable" $
   javaTypeVariable @@ string "r"
 
--- =============================================================================
--- Variable name helpers
--- =============================================================================
 
 -- | Look up the Java variable name for a Hydra variable, applying any renames
 lookupJavaVarName :: TBinding (JavaHelpers.Aliases -> Name -> Name)
@@ -1071,9 +948,6 @@ lookupJavaVarName = def "lookupJavaVarName" $
       (var "name")
       (lambda "renamed" $ var "renamed")
 
--- =============================================================================
--- Variant class name
--- =============================================================================
 
 -- | Compute the class name for a union variant
 variantClassName :: TBinding (Bool -> Name -> Name -> Name)
@@ -1090,9 +964,6 @@ variantClassName = def "variantClassName" $
         (var "flocal"))] $
     Names.unqualifyName @@ Module.qualifiedName (var "ns_") (var "local1")
 
--- =============================================================================
--- Variable declaration with explicit type
--- =============================================================================
 
 -- | Create a variable declaration statement with an explicit type
 variableDeclarationStatement :: TBinding (JavaHelpers.Aliases -> Java.Type -> Java.Identifier -> Java.Expression -> Java.BlockStatement)
@@ -1107,18 +978,12 @@ variableDeclarationStatement = def "variableDeclarationStatement" $
           (JavaDsl.localVariableTypeType (JavaDsl.unannType (var "jtype")))
           (list [var "vdec"])))
 
--- =============================================================================
--- String multiplicative expression
--- =============================================================================
 
 -- | Convert a string to a multiplicative expression (for string concatenation)
 javaStringMultiplicativeExpression :: TBinding (String -> Java.MultiplicativeExpression)
 javaStringMultiplicativeExpression = def "javaStringMultiplicativeExpression" $
   lambda "s" $ javaLiteralToJavaMultiplicativeExpression @@ (javaString @@ var "s")
 
--- =============================================================================
--- Annotation helpers
--- =============================================================================
 
 -- | The @SuppressWarnings("unchecked") annotation
 suppressWarningsUncheckedAnnotation :: TBinding Java.Annotation
@@ -1135,9 +1000,6 @@ suppressWarningsUncheckedAnnotation = def "suppressWarningsUncheckedAnnotation" 
                   (JavaDsl.postfixExpressionPrimary
                     (javaLiteralToJavaPrimary @@ (javaString @@ string "unchecked")))])]))))])
 
--- =============================================================================
--- Method invocation with type args
--- =============================================================================
 
 -- | Create a static method invocation with explicit type arguments
 methodInvocationStaticWithTypeArgs :: TBinding (Java.Identifier -> Java.Identifier -> [Java.TypeArgument] -> [Java.Expression] -> Java.MethodInvocation)
@@ -1151,9 +1013,6 @@ methodInvocationStaticWithTypeArgs = def "methodInvocationStaticWithTypeArgs" $
         (var "methodName"))] $
     JavaDsl.methodInvocation_ (var "header") (var "args")
 
--- =============================================================================
--- Array helpers
--- =============================================================================
 
 -- | Create an array creation expression for primitive byte arrays with an initializer
 javaArrayCreation :: TBinding (Java.PrimitiveTypeWithAnnotations -> Maybe Java.ArrayInitializer -> Java.Expression)
@@ -1177,9 +1036,6 @@ javaArrayInitializer = def "javaArrayInitializer" $
   lambda "exprs" $ wrap Java._ArrayInitializer
     (list [Lists.map (lambda "e" $ JavaDsl.variableInitializerExpression (var "e")) (var "exprs")])
 
--- =============================================================================
--- Assignment helpers
--- =============================================================================
 
 -- | Create an assignment statement that assigns a field name to 'this.fieldName'
 toAssignStmt :: TBinding (Name -> Java.Statement)
@@ -1194,9 +1050,6 @@ toAssignStmt = def "toAssignStmt" $
     "rhs">: fieldNameToJavaExpression @@ var "fname"] $
     javaAssignmentStatement @@ var "lhs" @@ var "rhs"
 
--- =============================================================================
--- Type parameter extraction
--- =============================================================================
 
 -- | Extract the string name from a TypeParameter
 unTypeParameter :: TBinding (Java.TypeParameter -> String)
@@ -1204,9 +1057,6 @@ unTypeParameter = def "unTypeParameter" $
   lambda "tp" $
     JavaDsl.unIdentifier (JavaDsl.unTypeIdentifier (JavaDsl.typeParameterIdentifier (var "tp")))
 
--- =============================================================================
--- Aliases construction
--- =============================================================================
 
 -- | Create an initial Aliases for a module with all fields set to empty/default
 importAliasesForModule :: TBinding (Module -> JavaHelpers.Aliases)
@@ -1227,9 +1077,6 @@ importAliasesForModule = def "importAliasesForModule" $
       JavaHelpers._Aliases_methodCodomain>>: (nothing :: TTerm (Maybe Type)),
       JavaHelpers._Aliases_thunkedVars>>: (Sets.empty :: TTerm (S.Set Name))]
 
--- =============================================================================
--- Class declaration
--- =============================================================================
 
 -- | Build a Java class declaration with optional superclass
 javaClassDeclaration :: TBinding (JavaHelpers.Aliases -> [Java.TypeParameter] -> Name -> [Java.ClassModifier]
@@ -1249,9 +1096,6 @@ javaClassDeclaration = def "javaClassDeclaration" $
         Java._NormalClassDeclaration_implements>>: var "impls",
         Java._NormalClassDeclaration_body>>: JavaDsl.classBody (var "bodyDecls")])
 
--- =============================================================================
--- Constructor
--- =============================================================================
 
 -- | Build a Java constructor declaration
 makeConstructor :: TBinding (JavaHelpers.Aliases -> Name -> Bool -> [Java.FormalParameter]
@@ -1267,9 +1111,6 @@ makeConstructor = def "makeConstructor" $
     inject Java._ClassBodyDeclaration Java._ClassBodyDeclaration_constructorDeclaration
       (JavaDsl.constructorDeclaration (var "mods") (var "cons") nothing (var "body"))
 
--- =============================================================================
--- Accept method for visitor pattern
--- =============================================================================
 
 -- | Build the accept method for the visitor pattern
 toAcceptMethod :: TBinding (Bool -> [Java.TypeParameter] -> Java.ClassBodyDeclaration)
@@ -1303,9 +1144,6 @@ toAcceptMethod = def "toAcceptMethod" $
     methodDeclaration @@ var "mods" @@ var "tparams" @@ var "anns"
       @@ asTerm JavaNamesSource.acceptMethodName @@ list [var "param"] @@ var "result" @@ var "body"
 
--- =============================================================================
--- Array type conversion
--- =============================================================================
 
 -- | Convert a Java Type to an array type
 toJavaArrayType :: TBinding (Java.Type -> Context -> Either (InContext Error) Java.Type)
@@ -1330,9 +1168,6 @@ toJavaArrayType = def "toJavaArrayType" $
     Java._Type_primitive>>: constant $
       Ctx.failInContext (Error.errorOther $ Error.otherError $ string "don't know how to make Java type into array type") (var "cx")]
 
--- =============================================================================
--- Type to reference type
--- =============================================================================
 
 -- | Extract the reference type from a Java type, failing if it's a primitive type
 javaTypeToJavaReferenceType :: TBinding (Java.Type -> Context -> Either (InContext Error) Java.ReferenceType)
@@ -1343,9 +1178,6 @@ javaTypeToJavaReferenceType = def "javaTypeToJavaReferenceType" $
     Java._Type_primitive>>: constant $
       Ctx.failInContext (Error.errorOther $ Error.otherError $ string "expected a Java reference type") (var "cx")]
 
--- =============================================================================
--- Reference type to raw type
--- =============================================================================
 
 -- | Extract the raw type (without type arguments) from a reference type
 javaReferenceTypeToRawType :: TBinding (Java.ReferenceType -> Java.ReferenceType)
@@ -1373,9 +1205,6 @@ javaReferenceTypeToRawType = def "javaReferenceTypeToRawType" $
                 (JavaDsl.classType (var "anns") (var "qual") (var "id")
                   (list ([] :: [TTerm Java.TypeArgument])))))]]
 
--- =============================================================================
--- Type parameter add
--- =============================================================================
 
 -- | Add a reference type as a type argument to an existing Java type
 addJavaTypeParameter :: TBinding (Java.ReferenceType -> Java.Type -> Context -> Either (InContext Error) Java.Type)
@@ -1405,9 +1234,6 @@ addJavaTypeParameter = def "addJavaTypeParameter" $
     Java._Type_primitive>>: constant $
       Ctx.failInContext (Error.errorOther $ Error.otherError $ string "expected a reference type") (var "cx")]
 
--- =============================================================================
--- Aliases modifiers
--- =============================================================================
 
 -- | Generate a unique variable name that doesn't conflict with in-scope names
 uniqueVarName :: TBinding (JavaHelpers.Aliases -> Name -> Name)

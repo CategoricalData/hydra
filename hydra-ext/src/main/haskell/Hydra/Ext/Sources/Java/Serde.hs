@@ -100,13 +100,14 @@ module_ = Module ns elements
     Just "Java serializer: converts Java AST to concrete syntax"
   where
     elements = [
-      -- Unicode escaping helpers
-      toTermDefinition hexDigit,
-      toTermDefinition padHex4,
-      toTermDefinition javaUnicodeEscape,
       toTermDefinition escapeJavaChar,
       toTermDefinition escapeJavaString,
-      -- Serialization functions
+      toTermDefinition hexDigit,
+      toTermDefinition javaUnicodeEscape,
+      toTermDefinition padHex4,
+      toTermDefinition sanitizeJavaComment,
+      toTermDefinition singleLineComment,
+      toTermDefinition withComments,
       toTermDefinition writeAdditionalBound,
       toTermDefinition writeAdditiveExpression,
       toTermDefinition writeAmbiguousName,
@@ -127,8 +128,8 @@ module_ = Module ns elements
       toTermDefinition writeCastExpression,
       toTermDefinition writeCastExpression_Lambda,
       toTermDefinition writeCastExpression_NotPlusMinus,
-      toTermDefinition writeCastExpression_RefAndBounds,
       toTermDefinition writeCastExpression_Primitive,
+      toTermDefinition writeCastExpression_RefAndBounds,
       toTermDefinition writeClassBody,
       toTermDefinition writeClassBodyDeclaration,
       toTermDefinition writeClassBodyDeclarationWithComments,
@@ -174,8 +175,8 @@ module_ = Module ns elements
       toTermDefinition writeFormalParameter,
       toTermDefinition writeFormalParameter_Simple,
       toTermDefinition writeIdentifier,
-      toTermDefinition writeIfThenStatement,
       toTermDefinition writeIfThenElseStatement,
+      toTermDefinition writeIfThenStatement,
       toTermDefinition writeImportDeclaration,
       toTermDefinition writeInclusiveOrExpression,
       toTermDefinition writeInstanceInitializer,
@@ -194,9 +195,9 @@ module_ = Module ns elements
       toTermDefinition writeLambdaParameters,
       toTermDefinition writeLeftHandSide,
       toTermDefinition writeLiteral,
+      toTermDefinition writeLocalName,
       toTermDefinition writeLocalVariableDeclaration,
       toTermDefinition writeLocalVariableDeclarationStatement,
-      toTermDefinition writeLocalName,
       toTermDefinition writeMarkerAnnotation,
       toTermDefinition writeMethodBody,
       toTermDefinition writeMethodDeclaration,
@@ -212,9 +213,9 @@ module_ = Module ns elements
       toTermDefinition writeNormalInterfaceDeclaration,
       toTermDefinition writeNumericType,
       toTermDefinition writePackageDeclaration,
+      toTermDefinition writePackageModifier,
       toTermDefinition writePackageName,
       toTermDefinition writePackageOrTypeName,
-      toTermDefinition writePackageModifier,
       toTermDefinition writePostDecrementExpression,
       toTermDefinition writePostIncrementExpression,
       toTermDefinition writePostfixExpression,
@@ -269,14 +270,36 @@ module_ = Module ns elements
       toTermDefinition writeVariableModifier,
       toTermDefinition writeWhileStatement,
       toTermDefinition writeWildcard,
-      toTermDefinition writeWildcardBounds,
-      toTermDefinition sanitizeJavaComment,
-      toTermDefinition singleLineComment,
-      toTermDefinition withComments]
+      toTermDefinition writeWildcardBounds]
 
--- =============================================================================
--- Unicode escaping helpers
--- =============================================================================
+-- | Escape a single character (given as its code point) for use in a Java string or char literal.
+escapeJavaChar :: TBinding (Int -> String)
+escapeJavaChar = def "escapeJavaChar" $
+  lambda "c" $
+    Logic.ifElse (Equality.equal (var "c") (int32 34))   -- '"'
+      (string "\\\"")
+      (Logic.ifElse (Equality.equal (var "c") (int32 92))  -- '\\'
+        (string "\\\\")
+        (Logic.ifElse (Equality.equal (var "c") (int32 10))  -- '\n'
+          (string "\\n")
+          (Logic.ifElse (Equality.equal (var "c") (int32 13))  -- '\r'
+            (string "\\r")
+            (Logic.ifElse (Equality.equal (var "c") (int32 9))  -- '\t'
+              (string "\\t")
+              (Logic.ifElse (Equality.equal (var "c") (int32 8))  -- '\b'
+                (string "\\b")
+                (Logic.ifElse (Equality.equal (var "c") (int32 12))  -- '\f'
+                  (string "\\f")
+                  (Logic.ifElse (Logic.and (Equality.gte (var "c") (int32 32))
+                                           (Equality.lt (var "c") (int32 127)))
+                    (Strings.fromList (list [var "c"]))
+                    (javaUnicodeEscape @@ var "c"))))))))
+
+-- | Escape a string for use in a Java string literal.
+escapeJavaString :: TBinding (String -> String)
+escapeJavaString = def "escapeJavaString" $
+  lambda "s" $
+    Strings.cat (Lists.map (lambda "c" $ escapeJavaChar @@ var "c") (Strings.toList (var "s")))
 
 -- | Convert a value 0-15 to an uppercase hex digit character code.
 hexDigit :: TBinding (Int -> Int)
@@ -314,39 +337,6 @@ javaUnicodeEscape = def "javaUnicodeEscape" $
       -- Basic multilingual plane
       (Strings.cat2 (string "\\u") (padHex4 @@ var "n"))
 
--- | Escape a single character (given as its code point) for use in a Java string or char literal.
-escapeJavaChar :: TBinding (Int -> String)
-escapeJavaChar = def "escapeJavaChar" $
-  lambda "c" $
-    Logic.ifElse (Equality.equal (var "c") (int32 34))   -- '"'
-      (string "\\\"")
-      (Logic.ifElse (Equality.equal (var "c") (int32 92))  -- '\\'
-        (string "\\\\")
-        (Logic.ifElse (Equality.equal (var "c") (int32 10))  -- '\n'
-          (string "\\n")
-          (Logic.ifElse (Equality.equal (var "c") (int32 13))  -- '\r'
-            (string "\\r")
-            (Logic.ifElse (Equality.equal (var "c") (int32 9))  -- '\t'
-              (string "\\t")
-              (Logic.ifElse (Equality.equal (var "c") (int32 8))  -- '\b'
-                (string "\\b")
-                (Logic.ifElse (Equality.equal (var "c") (int32 12))  -- '\f'
-                  (string "\\f")
-                  (Logic.ifElse (Logic.and (Equality.gte (var "c") (int32 32))
-                                           (Equality.lt (var "c") (int32 127)))
-                    (Strings.fromList (list [var "c"]))
-                    (javaUnicodeEscape @@ var "c"))))))))
-
--- | Escape a string for use in a Java string literal.
-escapeJavaString :: TBinding (String -> String)
-escapeJavaString = def "escapeJavaString" $
-  lambda "s" $
-    Strings.cat (Lists.map (lambda "c" $ escapeJavaChar @@ var "c") (Strings.toList (var "s")))
-
--- =============================================================================
--- Helper functions
--- =============================================================================
-
 sanitizeJavaComment :: TBinding (String -> String)
 sanitizeJavaComment = def "sanitizeJavaComment" $
   doc "Sanitize a string for use in a Java comment" $
@@ -377,10 +367,6 @@ withComments = def "withComments" $
             (string "\n */"))),
         var "expr"])
       (var "mc")
-
--- =============================================================================
--- Leaf functions (simple unwrap + cst)
--- =============================================================================
 
 writeIdentifier :: TBinding (Java.Identifier -> Expr)
 writeIdentifier = def "writeIdentifier" $
@@ -422,9 +408,6 @@ writeTypeParameterModifier = def "writeTypeParameterModifier" $
   lambda "tpm" $
     writeAnnotation @@ (unwrap Java._TypeParameterModifier @@ var "tpm")
 
--- =============================================================================
--- Stub functions
--- =============================================================================
 
 writeAnnotationTypeDeclaration :: TBinding (Java.AnnotationTypeDeclaration -> Expr)
 writeAnnotationTypeDeclaration = def "writeAnnotationTypeDeclaration" $
@@ -548,9 +531,6 @@ writeWhileStatement = def "writeWhileStatement" $
       Serialization.parenList @@ false @@ list [var "condSer"],
       Serialization.curlyBlock @@ Serialization.fullBlockStyle @@ (writeStatement @@ var "body")]
 
--- =============================================================================
--- Simple union dispatch functions
--- =============================================================================
 
 writeType :: TBinding (Java.Type -> Expr)
 writeType = def "writeType" $
@@ -758,9 +738,6 @@ writeTypeArgumentsOrDiamond = def "writeTypeArgumentsOrDiamond" $
         Serialization.angleBracesList @@ Serialization.inlineStyle @@ Lists.map writeTypeArgument (var "args"),
       Java._TypeArgumentsOrDiamond_diamond>>: constant $ Serialization.cst @@ string "<>"]
 
--- =============================================================================
--- Literals
--- =============================================================================
 
 writeFloatingPointLiteral :: TBinding (Java.FloatingPointLiteral -> Expr)
 writeFloatingPointLiteral = def "writeFloatingPointLiteral" $
@@ -816,9 +793,6 @@ writeLiteral = def "writeLiteral" $
             (string "'")),
       Java._Literal_string>>: lambda "sl" $ writeStringLiteral @@ var "sl"]
 
--- =============================================================================
--- Names and identifiers
--- =============================================================================
 
 writeAmbiguousName :: TBinding (Java.AmbiguousName -> Expr)
 writeAmbiguousName = def "writeAmbiguousName" $
@@ -869,9 +843,6 @@ writeTypeVariable = def "writeTypeVariable" $
         (just $ Serialization.spaceSep @@ Lists.map writeAnnotation (var "anns")),
       just $ writeTypeIdentifier @@ var "id"])
 
--- =============================================================================
--- Modifiers
--- =============================================================================
 
 writeClassModifier :: TBinding (Java.ClassModifier -> Expr)
 writeClassModifier = def "writeClassModifier" $
@@ -946,9 +917,6 @@ writeInterfaceMethodModifier = def "writeInterfaceMethodModifier" $
       Java._InterfaceMethodModifier_static>>: constant $ Serialization.cst @@ string "static",
       Java._InterfaceMethodModifier_strictfp>>: constant $ Serialization.cst @@ string "strictfp"]
 
--- =============================================================================
--- Expression hierarchy
--- =============================================================================
 
 writeAdditionalBound :: TBinding (Java.AdditionalBound -> Expr)
 writeAdditionalBound = def "writeAdditionalBound" $
@@ -1146,9 +1114,6 @@ writeAssignment = def "writeAssignment" $
       Java._AssignmentOperator_or>>: constant $ string "|="]] $
     Serialization.infixWs @@ var "ctop" @@ (writeLeftHandSide @@ var "lhs") @@ (writeExpression @@ var "rhs")
 
--- =============================================================================
--- Statements
--- =============================================================================
 
 writeStatement :: TBinding (Java.Statement -> Expr)
 writeStatement = def "writeStatement" $
@@ -1265,9 +1230,6 @@ writeIfThenStatement = def "writeIfThenStatement" $
       Serialization.parenList @@ false @@ list [writeExpression @@ var "cond"],
       Serialization.curlyBlock @@ Serialization.fullBlockStyle @@ (writeStatement @@ var "thn")]
 
--- =============================================================================
--- Primary expressions
--- =============================================================================
 
 writePrimaryNoNewArrayExpressionExpression :: TBinding (Java.PrimaryNoNewArrayExpression -> Expr)
 writePrimaryNoNewArrayExpressionExpression = def "writePrimaryNoNewArrayExpressionExpression" $
@@ -1294,9 +1256,6 @@ writeFieldAccess = def "writeFieldAccess" $
       Java._FieldAccess_Qualifier_super>>: constant $ Serialization.dotSep @@ list [Serialization.cst @@ string "super", writeIdentifier @@ var "id"],
       Java._FieldAccess_Qualifier_typed>>: lambda "tn" $ Serialization.dotSep @@ list [writeTypeName @@ var "tn", Serialization.cst @@ string "super", writeIdentifier @@ var "id"]]
 
--- =============================================================================
--- Annotations
--- =============================================================================
 
 writeMarkerAnnotation :: TBinding (Java.MarkerAnnotation -> Expr)
 writeMarkerAnnotation = def "writeMarkerAnnotation" $
@@ -1340,9 +1299,6 @@ writeElementValuePair = def "writeElementValuePair" $
     "v">: project Java._ElementValuePair Java._ElementValuePair_value @@ var "evp"] $
     Serialization.infixWs @@ string "=" @@ (writeIdentifier @@ var "k") @@ (writeElementValue @@ var "v")
 
--- =============================================================================
--- Type structures
--- =============================================================================
 
 writePrimitiveTypeWithAnnotations :: TBinding (Java.PrimitiveTypeWithAnnotations -> Expr)
 writePrimitiveTypeWithAnnotations = def "writePrimitiveTypeWithAnnotations" $
@@ -1419,9 +1375,6 @@ writeWildcard = def "writeWildcard" $
       just $ Serialization.cst @@ string "*",
       Maybes.map writeWildcardBounds (var "mbounds")])
 
--- =============================================================================
--- Declarations
--- =============================================================================
 
 writeClassBody :: TBinding (Java.ClassBody -> Expr)
 writeClassBody = def "writeClassBody" $
@@ -1566,9 +1519,6 @@ writeConstructorBody = def "writeConstructorBody" $
       Maybes.map writeExplicitConstructorInvocation (var "minvoc"),
       just $ Serialization.newlineSep @@ Lists.map writeBlockStatement (var "stmts")]))
 
--- =============================================================================
--- Interface declarations
--- =============================================================================
 
 writeInterfaceBody :: TBinding (Java.InterfaceBody -> Expr)
 writeInterfaceBody = def "writeInterfaceBody" $
@@ -1607,9 +1557,6 @@ writeConstantDeclaration = def "writeConstantDeclaration" $
       just $ writeUnannType @@ var "typ",
       just $ Serialization.commaSep @@ Serialization.inlineStyle @@ Lists.map writeVariableDeclarator (var "vars")]))
 
--- =============================================================================
--- Normal class and interface declarations
--- =============================================================================
 
 writeNormalClassDeclaration :: TBinding (Java.NormalClassDeclaration -> Expr)
 writeNormalClassDeclaration = def "writeNormalClassDeclaration" $
@@ -1656,9 +1603,6 @@ writeTypeDeclarationWithComments = def "writeTypeDeclarationWithComments" $
     "mc">: project Java._TypeDeclarationWithComments Java._TypeDeclarationWithComments_comments @@ var "tdwc"] $
     withComments @@ var "mc" @@ (writeTypeDeclaration @@ var "d")
 
--- =============================================================================
--- Imports and compilation unit
--- =============================================================================
 
 writePackageDeclaration :: TBinding (Java.PackageDeclaration -> Expr)
 writePackageDeclaration = def "writePackageDeclaration" $
@@ -1699,9 +1643,6 @@ writeCompilationUnit = def "writeCompilationUnit" $
           (just $ Serialization.doubleNewlineSep @@ Lists.map writeTypeDeclarationWithComments (var "types"))] $
         Serialization.doubleNewlineSep @@ Maybes.cat (list [var "warning", var "pkgSec", var "importsSec", var "typesSec"])]
 
--- =============================================================================
--- Method invocation
--- =============================================================================
 
 writeMethodInvocation :: TBinding (Java.MethodInvocation -> Expr)
 writeMethodInvocation = def "writeMethodInvocation" $
@@ -1727,9 +1668,6 @@ writeMethodInvocation = def "writeMethodInvocation" $
           Java._MethodInvocation_Variant_typeSuper>>: lambda "tname" $ Serialization.dotSep @@ list [writeTypeName @@ var "tname", Serialization.cst @@ string "super", var "idSec"]]]] $
     Serialization.noSep @@ list [var "headerSec", var "argSec"]
 
--- =============================================================================
--- Cast expressions
--- =============================================================================
 
 writeCastExpression_NotPlusMinus :: TBinding (Java.CastExpression_NotPlusMinus -> Expr)
 writeCastExpression_NotPlusMinus = def "writeCastExpression_NotPlusMinus" $
@@ -1756,9 +1694,6 @@ writeCastExpression_Primitive = def "writeCastExpression_Primitive" $
       Serialization.parenList @@ false @@ list [writePrimitiveTypeWithAnnotations @@ var "pt"],
       writeUnaryExpression @@ var "ex"]
 
--- =============================================================================
--- Class instance creation
--- =============================================================================
 
 writeClassInstanceCreationExpression :: TBinding (Java.ClassInstanceCreationExpression -> Expr)
 writeClassInstanceCreationExpression = def "writeClassInstanceCreationExpression" $
@@ -1799,9 +1734,6 @@ writeClassOrInterfaceTypeToInstantiate = def "writeClassOrInterfaceTypeToInstant
       just $ Serialization.dotSep @@ Lists.map writeAnnotatedIdentifier (var "ids"),
       Maybes.map writeTypeArgumentsOrDiamond (var "margs")])
 
--- =============================================================================
--- Array expressions
--- =============================================================================
 
 writeArrayCreationExpression :: TBinding (Java.ArrayCreationExpression -> Expr)
 writeArrayCreationExpression = def "writeArrayCreationExpression" $

@@ -120,8 +120,8 @@ module_ = Module ns elements
       toTermDefinition encodeClassPattern,
       toTermDefinition encodeClosedPattern,
       toTermDefinition encodeComparison,
-      toTermDefinition encodeConditional,
       toTermDefinition encodeCompoundStatement,
+      toTermDefinition encodeConditional,
       toTermDefinition encodeConjunction,
       toTermDefinition encodeDecorators,
       toTermDefinition encodeDict,
@@ -187,29 +187,26 @@ module_ = Module ns elements
       toTermDefinition encodeStarAtom,
       toTermDefinition encodeStarExpression,
       toTermDefinition encodeStarNamedExpression,
-      toTermDefinition encodeStarTarget,
       toTermDefinition encodeStarredExpression,
+      toTermDefinition encodeStarTarget,
       toTermDefinition encodeStatement,
       toTermDefinition encodeString,
       toTermDefinition encodeSubjectExpression,
       toTermDefinition encodeSum,
-      toTermDefinition encodeTerm_,
       toTermDefinition encodeTargetWithStarAtom,
-      toTermDefinition encodeTPrimaryAndName,
+      toTermDefinition encodeTerm_,
       toTermDefinition encodeTPrimary,
+      toTermDefinition encodeTPrimaryAndName,
       toTermDefinition encodeTuple,
       toTermDefinition encodeTypeAlias,
-      toTermDefinition encodeTypeParameter,
       toTermDefinition encodeTypedAssignment,
+      toTermDefinition encodeTypeParameter,
       toTermDefinition encodeUntypedAssignment,
       toTermDefinition encodeValuePattern,
       toTermDefinition encodeWhileStatement,
       toTermDefinition escapePythonString,
       toTermDefinition toPythonComments]
 
--- =============================================================================
--- Core serialization
--- =============================================================================
 
 encodeModule :: TBinding (Py.Module -> Expr)
 encodeModule = def "encodeModule" $
@@ -275,9 +272,6 @@ encodeCompoundStatement = def "encodeCompoundStatement" $
       Py._CompoundStatement_while>>: lambda "w" $ encodeWhileStatement @@ var "w",
       Py._CompoundStatement_match>>: lambda "m" $ encodeMatchStatement @@ var "m"]
 
--- =============================================================================
--- Expressions
--- =============================================================================
 
 encodeExpression :: TBinding (Py.Expression -> Expr)
 encodeExpression = def "encodeExpression" $
@@ -495,9 +489,6 @@ encodeAssignmentExpression = def "encodeAssignmentExpression" $
       Serialization.cst @@ string ":=",
       encodeExpression @@ var "expr"]
 
--- =============================================================================
--- Names and Identifiers
--- =============================================================================
 
 encodeName :: TBinding (Py.Name -> Expr)
 encodeName = def "encodeName" $
@@ -523,9 +514,6 @@ encodeNameOrAttribute = def "encodeNameOrAttribute" $
   lambda "noa" $
     Serialization.dotSep @@ Lists.map encodeName (unwrap Py._NameOrAttribute @@ var "noa")
 
--- =============================================================================
--- Literals
--- =============================================================================
 
 encodeNumber :: TBinding (Py.Number -> Expr)
 encodeNumber = def "encodeNumber" $
@@ -549,9 +537,6 @@ encodeString = def "encodeString" $
         Serialization.cst @@ var "content",
         Serialization.cst @@ string "\"\"\""]]
 
--- =============================================================================
--- Collections
--- =============================================================================
 
 encodeList :: TBinding (Py.List -> Expr)
 encodeList = def "encodeList" $
@@ -636,9 +621,6 @@ encodeStarredExpression = def "encodeStarredExpression" $
       Serialization.cst @@ string "*",
       encodeExpression @@ (unwrap Py._StarredExpression @@ var "se")]
 
--- =============================================================================
--- Slices
--- =============================================================================
 
 encodeSlices :: TBinding (Py.Slices -> Expr)
 encodeSlices = def "encodeSlices" $
@@ -665,9 +647,6 @@ encodeSliceOrStarredExpression = def "encodeSliceOrStarredExpression" $
       Py._SliceOrStarredExpression_slice>>: lambda "sl" $ encodeSlice @@ var "sl",
       Py._SliceOrStarredExpression_starred>>: lambda "se" $ encodeStarredExpression @@ var "se"]
 
--- =============================================================================
--- Lambda
--- =============================================================================
 
 encodeLambda :: TBinding (Py.Lambda -> Expr)
 encodeLambda = def "encodeLambda" $
@@ -704,9 +683,6 @@ encodeLambdaStarEtc = def "encodeLambdaStarEtc" $
       Py._LambdaStarEtc_paramMaybeDefault>>: lambda "_" $ Serialization.cst @@ string "...",
       Py._LambdaStarEtc_kwds>>: lambda "_" $ Serialization.cst @@ string "**..."]
 
--- =============================================================================
--- Function definitions
--- =============================================================================
 
 encodeFunctionDefinition :: TBinding (Py.FunctionDefinition -> Expr)
 encodeFunctionDefinition = def "encodeFunctionDefinition" $
@@ -798,9 +774,6 @@ encodeAnnotation = def "encodeAnnotation" $
       Serialization.cst @@ string ":",
       encodeExpression @@ (unwrap Py._Annotation @@ var "ann")]
 
--- =============================================================================
--- Class definitions
--- =============================================================================
 
 encodeClassDefinition :: TBinding (Py.ClassDefinition -> Expr)
 encodeClassDefinition = def "encodeClassDefinition" $
@@ -822,9 +795,6 @@ encodeClassDefinition = def "encodeClassDefinition" $
         just $ Serialization.cst @@ string ":"]),
       just $ encodeBlock @@ var "body"])
 
--- =============================================================================
--- Blocks
--- =============================================================================
 
 encodeBlock :: TBinding (Py.Block -> Expr)
 encodeBlock = def "encodeBlock" $
@@ -838,9 +808,6 @@ encodeBlock = def "encodeBlock" $
       Py._Block_simple>>: lambda "ss" $
         Serialization.semicolonSep @@ Lists.map encodeSimpleStatement (var "ss")]
 
--- =============================================================================
--- Imports
--- =============================================================================
 
 encodeImportStatement :: TBinding (Py.ImportStatement -> Expr)
 encodeImportStatement = def "encodeImportStatement" $
@@ -924,9 +891,6 @@ encodeRelativeImportPrefix = def "encodeRelativeImportPrefix" $
       Py._RelativeImportPrefix_dot>>: constant $ Serialization.cst @@ string ".",
       Py._RelativeImportPrefix_ellipsis>>: constant $ Serialization.cst @@ string "..."]
 
--- =============================================================================
--- Assignments
--- =============================================================================
 
 encodeAssignment :: TBinding (Py.Assignment -> Expr)
 encodeAssignment = def "encodeAssignment" $
@@ -1029,9 +993,6 @@ encodeStarAtom = def "encodeStarAtom" $
       Py._StarAtom_starTargetsTupleSeq>>: lambda "_" $ Serialization.cst @@ string "(...)",
       Py._StarAtom_starTargetsListSeq>>: lambda "_" $ Serialization.cst @@ string "[...]"]
 
--- =============================================================================
--- Type alias
--- =============================================================================
 
 encodeTypeAlias :: TBinding (Py.TypeAlias -> Expr)
 encodeTypeAlias = def "encodeTypeAlias" $
@@ -1066,9 +1027,6 @@ encodeSimpleTypeParameter = def "encodeSimpleTypeParameter" $
   lambda "stp" $
     encodeName @@ (project Py._SimpleTypeParameter Py._SimpleTypeParameter_name @@ var "stp")
 
--- =============================================================================
--- Return and Raise
--- =============================================================================
 
 encodeReturnStatement :: TBinding (Py.ReturnStatement -> Expr)
 encodeReturnStatement = def "encodeReturnStatement" $
@@ -1099,9 +1057,6 @@ encodeRaiseExpression = def "encodeRaiseExpression" $
         Serialization.spaceSep @@ list [Serialization.cst @@ string "from", encodeExpression @@ var "f"])
         (var "from_")])
 
--- =============================================================================
--- While statements
--- =============================================================================
 
 encodeWhileStatement :: TBinding (Py.WhileStatement -> Expr)
 encodeWhileStatement = def "encodeWhileStatement" $
@@ -1124,9 +1079,6 @@ encodeWhileStatement = def "encodeWhileStatement" $
           encodeBlock @@ var "eb"])
         (var "else_")])
 
--- =============================================================================
--- Match statements
--- =============================================================================
 
 encodeMatchStatement :: TBinding (Py.MatchStatement -> Expr)
 encodeMatchStatement = def "encodeMatchStatement" $
@@ -1266,9 +1218,6 @@ encodeKeywordPattern = def "encodeKeywordPattern" $
       Serialization.cst @@ string "=",
       encodePattern @@ var "pat"]
 
--- =============================================================================
--- Arguments
--- =============================================================================
 
 encodeArgs :: TBinding (Py.Args -> Expr)
 encodeArgs = def "encodeArgs" $
@@ -1319,9 +1268,6 @@ encodeKwarg = def "encodeKwarg" $
       Serialization.cst @@ string "=",
       encodeExpression @@ var "expr"]
 
--- =============================================================================
--- Utility functions
--- =============================================================================
 
 escapePythonString :: TBinding (Bool -> String -> String)
 escapePythonString = def "escapePythonString" $

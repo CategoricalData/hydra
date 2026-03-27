@@ -107,7 +107,13 @@ module_ = Module ns elements
       toTermDefinition equalsMethodName,
       toTermDefinition getMethodName,
       toTermDefinition hashCodeMethodName,
+      toTermDefinition hydraCorePackageName,
+      toTermDefinition hydraUtilPackageName,
       toTermDefinition instanceName,
+      toTermDefinition javaLangPackageName,
+      toTermDefinition javaPackageName,
+      toTermDefinition javaUtilFunctionPackageName,
+      toTermDefinition javaUtilPackageName,
       toTermDefinition otherInstanceName,
       toTermDefinition otherwiseMethodName,
       toTermDefinition partialVisitorName,
@@ -115,15 +121,7 @@ module_ = Module ns elements
       toTermDefinition valueFieldName,
       toTermDefinition visitMethodName,
       toTermDefinition visitorName,
-      toTermDefinition visitorReturnParameter,
-      toTermDefinition javaPackageName,
-      toTermDefinition hydraCorePackageName,
-      toTermDefinition hydraUtilPackageName,
-      toTermDefinition javaLangPackageName,
-      toTermDefinition javaUtilFunctionPackageName,
-      toTermDefinition javaUtilPackageName]
-
--- String constants for Java method and field names
+      toTermDefinition visitorReturnParameter]
 
 acceptMethodName :: TBinding String
 acceptMethodName = def "acceptMethodName" $ string "accept"
@@ -143,8 +141,40 @@ getMethodName = def "getMethodName" $ string "get"
 hashCodeMethodName :: TBinding String
 hashCodeMethodName = def "hashCodeMethodName" $ string "hashCode"
 
+hydraCorePackageName :: TBinding (Maybe Java.PackageName)
+hydraCorePackageName = def "hydraCorePackageName" $
+  doc "The hydra.core package name" $
+  just (javaPackageName @@ list [string "hydra", string "core"])
+
+hydraUtilPackageName :: TBinding (Maybe Java.PackageName)
+hydraUtilPackageName = def "hydraUtilPackageName" $
+  doc "The hydra.util package name" $
+  just (javaPackageName @@ list [string "hydra", string "util"])
+
 instanceName :: TBinding String
 instanceName = def "instanceName" $ string "instance"
+
+javaLangPackageName :: TBinding (Maybe Java.PackageName)
+javaLangPackageName = def "javaLangPackageName" $
+  doc "The java.lang package name" $
+  just (javaPackageName @@ list [string "java", string "lang"])
+
+javaPackageName :: TBinding ([String] -> Java.PackageName)
+javaPackageName = def "javaPackageName" $
+  doc "Construct a Java package name from a list of string parts" $
+  "parts" ~>
+    wrap Java._PackageName $
+      Lists.map ("p" ~> wrap Java._Identifier (var "p")) (var "parts")
+
+javaUtilFunctionPackageName :: TBinding (Maybe Java.PackageName)
+javaUtilFunctionPackageName = def "javaUtilFunctionPackageName" $
+  doc "The java.util.function package name" $
+  just (javaPackageName @@ list [string "java", string "util", string "function"])
+
+javaUtilPackageName :: TBinding (Maybe Java.PackageName)
+javaUtilPackageName = def "javaUtilPackageName" $
+  doc "The java.util package name" $
+  just (javaPackageName @@ list [string "java", string "util"])
 
 otherInstanceName :: TBinding String
 otherInstanceName = def "otherInstanceName" $ string "other"
@@ -169,37 +199,3 @@ visitorName = def "visitorName" $ string "Visitor"
 
 visitorReturnParameter :: TBinding String
 visitorReturnParameter = def "visitorReturnParameter" $ string "R"
-
--- Package name constructors
-
-javaPackageName :: TBinding ([String] -> Java.PackageName)
-javaPackageName = def "javaPackageName" $
-  doc "Construct a Java package name from a list of string parts" $
-  "parts" ~>
-    wrap Java._PackageName $
-      Lists.map ("p" ~> wrap Java._Identifier (var "p")) (var "parts")
-
-hydraCorePackageName :: TBinding (Maybe Java.PackageName)
-hydraCorePackageName = def "hydraCorePackageName" $
-  doc "The hydra.core package name" $
-  just (javaPackageName @@ list [string "hydra", string "core"])
-
-hydraUtilPackageName :: TBinding (Maybe Java.PackageName)
-hydraUtilPackageName = def "hydraUtilPackageName" $
-  doc "The hydra.util package name" $
-  just (javaPackageName @@ list [string "hydra", string "util"])
-
-javaLangPackageName :: TBinding (Maybe Java.PackageName)
-javaLangPackageName = def "javaLangPackageName" $
-  doc "The java.lang package name" $
-  just (javaPackageName @@ list [string "java", string "lang"])
-
-javaUtilFunctionPackageName :: TBinding (Maybe Java.PackageName)
-javaUtilFunctionPackageName = def "javaUtilFunctionPackageName" $
-  doc "The java.util.function package name" $
-  just (javaPackageName @@ list [string "java", string "util", string "function"])
-
-javaUtilPackageName :: TBinding (Maybe Java.PackageName)
-javaUtilPackageName = def "javaUtilPackageName" $
-  doc "The java.util package name" $
-  just (javaPackageName @@ list [string "java", string "util"])

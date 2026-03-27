@@ -95,19 +95,39 @@ module_ = Module (Namespace "hydra.pg.validation") elements
     Just "Utilities for validating property graphs against property graph schemas"
   where
    elements = [
+     toTermDefinition checkAll,
+     toTermDefinition edgeError,
+     toTermDefinition edgeLabelMismatch,
+     toTermDefinition prepend,
      toTermDefinition validateEdge,
      toTermDefinition validateElement,
      toTermDefinition validateGraph,
      toTermDefinition validateProperties,
      toTermDefinition validateVertex,
-     --
-     toTermDefinition checkAll,
-     toTermDefinition edgeError,
-     toTermDefinition edgeLabelMismatch,
-     toTermDefinition prepend,
      toTermDefinition verify,
      toTermDefinition vertexError,
      toTermDefinition vertexLabelMismatch]
+
+checkAll :: TBinding ([Y.Maybe a] -> Y.Maybe a)
+checkAll = validationDefinition "checkAll" $
+  "checks" ~> lets [
+    "errors">: Maybes.cat $ var "checks"]
+    $ Lists.safeHead $ var "errors"
+
+edgeError :: TBinding ((v -> String) -> PG.Edge v -> String -> String)
+edgeError = validationDefinition "edgeError" $
+  "showValue" ~> "e" ~>
+    prepend @@ (string "Invalid edge with id " ++ (var "showValue" @@ (project _Edge _Edge_id @@ var "e")))
+
+edgeLabelMismatch :: TBinding (PG.EdgeLabel -> PG.EdgeLabel -> String)
+edgeLabelMismatch = validationDefinition "edgeLabelMismatch" $
+  "expected" ~> "actual" ~>
+    string "expected " ++ (unwrap _EdgeLabel @@ var "expected") ++ string ", found " ++ (unwrap _EdgeLabel @@ var "actual")
+
+prepend :: TBinding (String -> String -> String)
+prepend = validationDefinition "prepend" $
+  "prefix" ~> "msg" ~>
+    (var "prefix") ++ string ": " ++ (var "msg")
 
 validateEdge :: TBinding (
      (t -> v -> Maybe String)
@@ -289,29 +309,6 @@ validateVertex = validationDefinition "validateVertex" $
         @@ (project _VertexType _VertexType_properties @@ var "typ")
         @@ (project _Vertex _Vertex_properties @@ var "el"))]
     $ checkAll @@ list [var "checkLabel", var "checkId", var "checkProperties"]
-
-----
-
-checkAll :: TBinding ([Y.Maybe a] -> Y.Maybe a)
-checkAll = validationDefinition "checkAll" $
-  "checks" ~> lets [
-    "errors">: Maybes.cat $ var "checks"]
-    $ Lists.safeHead $ var "errors"
-
-edgeError :: TBinding ((v -> String) -> PG.Edge v -> String -> String)
-edgeError = validationDefinition "edgeError" $
-  "showValue" ~> "e" ~>
-    prepend @@ (string "Invalid edge with id " ++ (var "showValue" @@ (project _Edge _Edge_id @@ var "e")))
-
-edgeLabelMismatch :: TBinding (PG.EdgeLabel -> PG.EdgeLabel -> String)
-edgeLabelMismatch = validationDefinition "edgeLabelMismatch" $
-  "expected" ~> "actual" ~>
-    string "expected " ++ (unwrap _EdgeLabel @@ var "expected") ++ string ", found " ++ (unwrap _EdgeLabel @@ var "actual")
-
-prepend :: TBinding (String -> String -> String)
-prepend = validationDefinition "prepend" $
-  "prefix" ~> "msg" ~>
-    (var "prefix") ++ string ": " ++ (var "msg")
 
 verify :: TBinding (Bool -> String -> Maybe String)
 verify = validationDefinition "verify" $
