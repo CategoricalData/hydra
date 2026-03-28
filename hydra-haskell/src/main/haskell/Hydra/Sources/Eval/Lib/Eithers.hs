@@ -27,6 +27,7 @@ import qualified Hydra.Dsl.Meta.Lib.Sets      as Sets
 import           Hydra.Dsl.Meta.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Literals      as Literals
 import qualified Hydra.Dsl.LiteralTypes  as LiteralTypes
+import qualified Hydra.Dsl.Meta.Literals as MetaLiterals
 import qualified Hydra.Dsl.Meta.Base     as MetaBase
 import qualified Hydra.Dsl.Meta.Terms    as MetaTerms
 import qualified Hydra.Dsl.Meta.Types    as MetaTypes
@@ -70,10 +71,17 @@ module_ = Module ns elements
       toTermDefinition bimap_,
       toTermDefinition either_,
       toTermDefinition foldl_,
+      toTermDefinition fromLeft_,
+      toTermDefinition fromRight_,
+      toTermDefinition isLeft_,
+      toTermDefinition isRight_,
+      toTermDefinition lefts_,
       toTermDefinition map_,
       toTermDefinition mapList_,
       toTermDefinition mapMaybe_,
-      toTermDefinition mapSet_]
+      toTermDefinition mapSet_,
+      toTermDefinition partitionEithers_,
+      toTermDefinition rights_]
 
 -- | Interpreter-friendly bind for Either terms.
 -- Takes an Either term and a function term, applies the function to the Right
@@ -153,6 +161,84 @@ foldl_ = define "foldl" $
         (var "acc"))
     -- Initial accumulator: Right initTerm
     (Core.termEither $ right $ var "initTerm")
+    (var "elements")
+
+-- | Interpreter-friendly fromLeft for Either terms.
+-- fromLeft default eitherTerm: returns the Left value, or default if Right.
+fromLeft_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+fromLeft_ = define "fromLeft" $
+  doc "Interpreter-friendly fromLeft for Either terms." $
+  "cx" ~> "g" ~>
+  "defaultTerm" ~> "eitherTerm" ~>
+  cases _Term (var "eitherTerm")
+    (Just (ExtractCore.unexpected (var "cx") (string "either value") (ShowCore.term @@ var "eitherTerm"))) [
+    _Term_either>>: "e" ~>
+      right $ Eithers.either_
+        ("val" ~> var "val")
+        ("_" ~> var "defaultTerm")
+        (var "e")]
+
+-- | Interpreter-friendly fromRight for Either terms.
+-- fromRight default eitherTerm: returns the Right value, or default if Left.
+fromRight_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+fromRight_ = define "fromRight" $
+  doc "Interpreter-friendly fromRight for Either terms." $
+  "cx" ~> "g" ~>
+  "defaultTerm" ~> "eitherTerm" ~>
+  cases _Term (var "eitherTerm")
+    (Just (ExtractCore.unexpected (var "cx") (string "either value") (ShowCore.term @@ var "eitherTerm"))) [
+    _Term_either>>: "e" ~>
+      right $ Eithers.either_
+        ("_" ~> var "defaultTerm")
+        ("val" ~> var "val")
+        (var "e")]
+
+-- | Interpreter-friendly isLeft for Either terms.
+isLeft_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+isLeft_ = define "isLeft" $
+  doc "Interpreter-friendly isLeft for Either terms." $
+  "cx" ~> "g" ~>
+  "eitherTerm" ~>
+  cases _Term (var "eitherTerm")
+    (Just (ExtractCore.unexpected (var "cx") (string "either value") (ShowCore.term @@ var "eitherTerm"))) [
+    _Term_either>>: "e" ~>
+      right $ Eithers.either_
+        ("_" ~> Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean True)
+        ("_" ~> Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean False)
+        (var "e")]
+
+-- | Interpreter-friendly isRight for Either terms.
+isRight_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+isRight_ = define "isRight" $
+  doc "Interpreter-friendly isRight for Either terms." $
+  "cx" ~> "g" ~>
+  "eitherTerm" ~>
+  cases _Term (var "eitherTerm")
+    (Just (ExtractCore.unexpected (var "cx") (string "either value") (ShowCore.term @@ var "eitherTerm"))) [
+    _Term_either>>: "e" ~>
+      right $ Eithers.either_
+        ("_" ~> Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean False)
+        ("_" ~> Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean True)
+        (var "e")]
+
+-- | Interpreter-friendly lefts for list of Either terms.
+-- Extracts all Left values from a list.
+lefts_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+lefts_ = define "lefts" $
+  doc "Interpreter-friendly lefts for list of Either terms." $
+  "cx" ~> "g" ~>
+  "listTerm" ~>
+  "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
+  right $ Core.termList $ Lists.foldl
+    ("acc" ~> "el" ~>
+      cases _Term (var "el")
+        (Just (var "acc")) [
+        _Term_either>>: "e" ~>
+          Eithers.either_
+            ("val" ~> Lists.concat2 (var "acc") (Lists.pure (var "val")))
+            ("_" ~> var "acc")
+            (var "e")])
+    (list ([] :: [TTerm Term]))
     (var "elements")
 
 map_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
@@ -286,3 +372,44 @@ mapMaybe_ = define "mapMaybe" $
             (Core.termApplication $ Core.application (var "funTerm") (var "val")))
         (var "opt")]
 
+-- | Interpreter-friendly partitionEithers for list of Either terms.
+-- Splits a list of Eithers into (lefts, rights).
+partitionEithers_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+partitionEithers_ = define "partitionEithers" $
+  doc "Interpreter-friendly partitionEithers for list of Either terms." $
+  "cx" ~> "g" ~>
+  "listTerm" ~>
+  "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
+  right $ Lists.foldl
+    ("acc" ~> "el" ~>
+      "ls" <~ Pairs.first (var "acc") $
+      "rs" <~ Pairs.second (var "acc") $
+      cases _Term (var "el")
+        (Just (var "acc")) [
+        _Term_either>>: "e" ~>
+          Eithers.either_
+            ("val" ~> pair (Lists.concat2 (var "ls") (Lists.pure (var "val"))) (var "rs"))
+            ("val" ~> pair (var "ls") (Lists.concat2 (var "rs") (Lists.pure (var "val"))))
+            (var "e")])
+    (pair (list ([] :: [TTerm Term])) (list ([] :: [TTerm Term])))
+    (var "elements")
+
+-- | Interpreter-friendly rights for list of Either terms.
+-- Extracts all Right values from a list.
+rights_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+rights_ = define "rights" $
+  doc "Interpreter-friendly rights for list of Either terms." $
+  "cx" ~> "g" ~>
+  "listTerm" ~>
+  "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
+  right $ Core.termList $ Lists.foldl
+    ("acc" ~> "el" ~>
+      cases _Term (var "el")
+        (Just (var "acc")) [
+        _Term_either>>: "e" ~>
+          Eithers.either_
+            ("_" ~> var "acc")
+            ("val" ~> Lists.concat2 (var "acc") (Lists.pure (var "val")))
+            (var "e")])
+    (list ([] :: [TTerm Term]))
+    (var "elements")

@@ -71,6 +71,7 @@ module_ = Module ns elements
       toTermDefinition bimap_,
       toTermDefinition filter_,
       toTermDefinition filterWithKey_,
+      toTermDefinition findWithDefault_,
       toTermDefinition map_,
       toTermDefinition mapKeys_]
 
@@ -194,6 +195,24 @@ filterWithKey_ = define "filterWithKey" $
                   (Core.termList $ Lists.pure $ Core.termPair $ pair (var "k") (var "v")))
                 (Core.termList $ list ([] :: [TTerm Term])))
             (var "pairs")))]
+
+-- | Interpreter-friendly findWithDefault for Map terms.
+-- findWithDefault default key map: returns the value at key, or default if not found.
+findWithDefault_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
+findWithDefault_ = define "findWithDefault" $
+  doc "Interpreter-friendly findWithDefault for Map terms." $
+  "cx" ~> "g" ~>
+  "defaultTerm" ~> "keyTerm" ~> "mapTerm" ~>
+  -- Build: fromMaybe default (lookup key map)
+  right $ Core.termApplication $ Core.application
+    (Core.termApplication $ Core.application
+      (Core.termFunction $ Core.functionPrimitive $ encodedName _maybes_fromMaybe)
+      (var "defaultTerm"))
+    (Core.termApplication $ Core.application
+      (Core.termApplication $ Core.application
+        (Core.termFunction $ Core.functionPrimitive $ encodedName _maps_lookup)
+        (var "keyTerm"))
+      (var "mapTerm"))
 
 -- | Interpreter-friendly map for Map terms.
 -- Applies valFun to each value.
