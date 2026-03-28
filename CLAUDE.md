@@ -191,6 +191,33 @@ Use this table to find the right doc for common tasks:
 
 ---
 
+## Shorthand commands
+
+The user may issue these shorthand commands prefixed with `!`:
+
+| Command | Action |
+|---------|--------|
+| `!SYNC-ALL` | Run `bin/sync-all.sh --targets all` from the repo root, propagating changes into all generated artifacts. If it fails on any step, investigate and fix the issue, then re-run the failing step and all subsequent steps. Do not re-run steps that have already succeeded. |
+| `!SYNC-HASKELL` | Run `hydra-haskell/bin/sync-haskell.sh` from the repo root. Same failure handling as `!SYNC-ALL`. |
+| `!SYNC-EXT` | Run `hydra-ext/bin/sync-ext.sh` from the repo root. Same failure handling as `!SYNC-ALL`. |
+| `!SYNC-JAVA` | Run `hydra-ext/bin/sync-java.sh` from the repo root. Same failure handling as `!SYNC-ALL`. |
+| `!SYNC-PYTHON` | Run `hydra-ext/bin/sync-python.sh` from the repo root. Same failure handling as `!SYNC-ALL`. |
+| `!SYNC-SCALA` | Run `hydra-ext/bin/sync-scala.sh` from the repo root. Same failure handling as `!SYNC-ALL`. |
+| `!SYNC-LISP` | Run `hydra-ext/bin/sync-lisp.sh` from the repo root. Same failure handling as `!SYNC-ALL`. |
+
+## Coding style (read the full guide!)
+
+Before writing any Hydra code, read the
+[Coding style](https://github.com/CategoricalData/hydra/wiki/Coding-style) wiki page.
+Key rules:
+
+- **Alphabetical ordering**: All definitions in the `elements` list and their
+  corresponding function implementations must be in alphabetical order. No exceptions.
+- **Fail immediately on errors**: Never silently return defaults or swallow failures.
+- **Consistent imports**: Copy the import block from an existing module of the same kind.
+  Use the standard aliases (`Lists`, `Maps`, `Core`, `Graph`, etc.).
+- **No post-generation patches**: If generated code is wrong, fix the generator.
+
 ## Critical pitfalls
 
 These are hard-won lessons. Read the linked docs for full context.
