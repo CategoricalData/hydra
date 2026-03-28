@@ -11,6 +11,7 @@ import Hydra.Generation (showError)
 import Hydra.ArbitraryCore()
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Terms
+import qualified Hydra.EvalPrimitives as EvalPrims
 import qualified Hydra.Sources.Kernel.Types.Coders as TypeCoders
 import qualified Hydra.Sources.Kernel.Types.Context as TypeContext
 import qualified Hydra.Sources.Kernel.Types.Core as TypeCore
@@ -109,6 +110,39 @@ checkSerialization mkSerdeStr (TypeApplicationTerm term typ) expected = do
 
 eval :: Term -> Either String Term
 eval term = case reduceTerm testContext testGraph True term of
+    Left ic -> Left (showError (inContextObject ic))
+    Right result -> Right result
+
+-- | A test graph where eval-mode primitives replace native ones where available.
+-- Eval primitives operate at the term level (building application terms) rather than
+-- using native Haskell implementations, testing that the eval approach is correct.
+evalTestGraph :: Graph
+evalTestGraph = elementsToGraph evalCoreGraph (decodeSchemaTypes testSchemaGraph) (kernelTermBindings ++ dataBindings)
+  where
+    kernelTermBindings = L.concat $ fmap moduleBindings
+      [ TermConstants.module_
+      , TermShowCore.module_
+      , TermExtractCore.module_
+      , TermLexical.module_
+      , TermRewriting.module_
+      , TermDecodeCore.module_
+      , TermEncodeCore.module_
+      , TermAnnotations.module_
+      ]
+    dataBindings = (\(name, term) -> Binding name term Nothing) <$> M.toList testTerms
+
+-- | A core graph with eval primitives merged over the standard ones.
+-- Standard primitives are kept for functions that don't have eval implementations.
+-- Eval primitives override the standard ones where they exist.
+evalCoreGraph :: Graph
+evalCoreGraph = hydraCoreGraph {
+  graphPrimitives = M.union evalPrimMap (graphPrimitives hydraCoreGraph)}
+  where
+    evalPrimMap = M.fromList $ fmap (\p -> (primitiveName p, p))
+      (L.concat (libraryPrimitives <$> EvalPrims.evalLibraries))
+
+evalEval :: Term -> Either String Term
+evalEval term = case reduceTerm testContext evalTestGraph True term of
     Left ic -> Left (showError (inContextObject ic))
     Right result -> Right result
 

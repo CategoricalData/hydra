@@ -27,6 +27,7 @@ import qualified Hydra.Dsl.Meta.Lib.Sets      as Sets
 import           Hydra.Dsl.Meta.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Literals      as Literals
 import qualified Hydra.Dsl.LiteralTypes  as LiteralTypes
+import qualified Hydra.Dsl.Meta.Literals as MetaLiterals
 import qualified Hydra.Dsl.Meta.Base     as MetaBase
 import qualified Hydra.Dsl.Meta.Terms    as MetaTerms
 import qualified Hydra.Dsl.Meta.Types    as MetaTypes
@@ -71,10 +72,17 @@ module_ = Module ns elements
       toTermDefinition apply_,
       toTermDefinition bind_,
       toTermDefinition cases_,
+      toTermDefinition cat_,
       toTermDefinition compose_,
+      toTermDefinition fromJust_,
+      toTermDefinition fromMaybe_,
+      toTermDefinition isJust_,
+      toTermDefinition isNothing_,
       toTermDefinition map_,
       toTermDefinition mapMaybe_,
-      toTermDefinition maybe_]
+      toTermDefinition maybe_,
+      toTermDefinition pure_,
+      toTermDefinition toList_]
 
 -- | Interpreter-friendly applicative apply for Maybe terms.
 -- apply (Just f) (Just x) = Just (f x); otherwise Nothing
@@ -110,6 +118,27 @@ bind_ = define "bind" $
         ("val" ~> Core.termApplication $ Core.application (var "funTerm") (var "val"))
         (var "m")]
 
+-- | Interpreter-friendly cat (catMaybes) for list of Maybe terms.
+-- Filters out Nothings and unwraps Justs.
+cat_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+cat_ = define "cat" $
+  doc "Interpreter-friendly cat for list of Maybe terms." $
+  "cx" ~> "g" ~>
+  "listTerm" ~>
+  "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
+  -- Build: foldl (\acc el -> case el of TermMaybe m -> maybe acc (\v -> concat2 acc [v]) m; _ -> acc) [] elements
+  right $ Lists.foldl
+    ("acc" ~> "el" ~>
+      cases _Term (var "el")
+        (Just (var "acc")) [
+        _Term_maybe>>: "m" ~>
+          Maybes.maybe
+            (var "acc")
+            ("v" ~> Lists.concat2 (var "acc") (Lists.pure (var "v")))
+            (var "m")])
+    (list ([] :: [TTerm Term]))
+    (var "elements")
+
 -- | Interpreter-friendly case analysis for Maybe terms (cases variant).
 -- Takes optTerm, defaultTerm, funTerm - returns defaultTerm if Nothing,
 -- or applies funTerm to the value if Just.
@@ -123,6 +152,64 @@ cases_ = define "cases" $
       right $ Maybes.maybe
         (var "defaultTerm")
         ("val" ~> Core.termApplication $ Core.application (var "funTerm") (var "val"))
+        (var "m")]
+
+-- | Interpreter-friendly fromJust for Maybe terms.
+-- Extracts the value from Just, or errors on Nothing.
+fromJust_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+fromJust_ = define "fromJust" $
+  doc "Interpreter-friendly fromJust for Maybe terms." $
+  "cx" ~> "g" ~>
+  "optTerm" ~>
+  cases _Term (var "optTerm")
+    (Just (ExtractCore.unexpected (var "cx") (string "optional value") (ShowCore.term @@ var "optTerm"))) [
+    _Term_maybe>>: "m" ~>
+      Maybes.maybe
+        (ExtractCore.unexpected (var "cx") (string "Just value") (ShowCore.term @@ var "optTerm"))
+        ("val" ~> right $ var "val")
+        (var "m")]
+
+-- | Interpreter-friendly fromMaybe for Maybe terms.
+-- Returns the contained value or a default.
+fromMaybe_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+fromMaybe_ = define "fromMaybe" $
+  doc "Interpreter-friendly fromMaybe for Maybe terms." $
+  "cx" ~> "g" ~>
+  "defaultTerm" ~> "optTerm" ~>
+  cases _Term (var "optTerm")
+    (Just (ExtractCore.unexpected (var "cx") (string "optional value") (ShowCore.term @@ var "optTerm"))) [
+    _Term_maybe>>: "m" ~>
+      right $ Maybes.maybe
+        (var "defaultTerm")
+        ("val" ~> var "val")
+        (var "m")]
+
+-- | Interpreter-friendly isJust for Maybe terms.
+isJust_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+isJust_ = define "isJust" $
+  doc "Interpreter-friendly isJust for Maybe terms." $
+  "cx" ~> "g" ~>
+  "optTerm" ~>
+  cases _Term (var "optTerm")
+    (Just (ExtractCore.unexpected (var "cx") (string "optional value") (ShowCore.term @@ var "optTerm"))) [
+    _Term_maybe>>: "m" ~>
+      right $ Maybes.maybe
+        (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean False)
+        ("_" ~> Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean True)
+        (var "m")]
+
+-- | Interpreter-friendly isNothing for Maybe terms.
+isNothing_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+isNothing_ = define "isNothing" $
+  doc "Interpreter-friendly isNothing for Maybe terms." $
+  "cx" ~> "g" ~>
+  "optTerm" ~>
+  cases _Term (var "optTerm")
+    (Just (ExtractCore.unexpected (var "cx") (string "optional value") (ShowCore.term @@ var "optTerm"))) [
+    _Term_maybe>>: "m" ~>
+      right $ Maybes.maybe
+        (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean True)
+        ("_" ~> Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean False)
         (var "m")]
 
 -- | Interpreter-friendly Kleisli composition for Maybe.
@@ -179,4 +266,28 @@ maybe_ = define "maybe" $
       right $ Maybes.maybe
         (var "defaultTerm")
         ("val" ~> Core.termApplication $ Core.application (var "funTerm") (var "val"))
+        (var "m")]
+
+-- | Interpreter-friendly pure for Maybe terms.
+-- Wraps a value in Just.
+pure_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+pure_ = define "pure" $
+  doc "Interpreter-friendly pure for Maybe terms." $
+  "cx" ~> "g" ~>
+  "x" ~>
+  right $ Core.termMaybe $ just $ var "x"
+
+-- | Interpreter-friendly toList for Maybe terms.
+-- Just x -> [x], Nothing -> []
+toList_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+toList_ = define "toList" $
+  doc "Interpreter-friendly toList for Maybe terms." $
+  "cx" ~> "g" ~>
+  "optTerm" ~>
+  cases _Term (var "optTerm")
+    (Just (ExtractCore.unexpected (var "cx") (string "optional value") (ShowCore.term @@ var "optTerm"))) [
+    _Term_maybe>>: "m" ~>
+      right $ Core.termList $ Maybes.maybe
+        (list ([] :: [TTerm Term]))
+        ("val" ~> Lists.pure (var "val"))
         (var "m")]
