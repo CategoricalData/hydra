@@ -57,7 +57,9 @@ At the beginning of every new session, follow these steps **before doing any oth
 - **Save progress periodically**: Update the branch plan at milestones or approach changes.
 - **Commit workflow**: Make frequent `WIP:` checkpoint commits when code is stable.
   All commit messages must be short (120 characters or less), single-line, no
-  "Co-Authored-By:" line. When ready to finalize, ask the user about squashing:
+  "Co-Authored-By:" line. Include the issue number at the end of the message
+  when on a feature branch (e.g., `Regenerated hydra-haskell after kernel changes. For #137`).
+  When ready to finalize, ask the user about squashing:
   soft-reset WIP commits, re-commit as focused topic groups, source changes first,
   generated files last.
 
