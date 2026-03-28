@@ -1,5 +1,5 @@
 
-module Hydra.Sources.Eval.Lib.All where
+module Hydra.Sources.Eval.Lib.Logic where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
@@ -27,6 +27,7 @@ import qualified Hydra.Dsl.Meta.Lib.Sets      as Sets
 import           Hydra.Dsl.Meta.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Literals      as Literals
 import qualified Hydra.Dsl.LiteralTypes  as LiteralTypes
+import qualified Hydra.Dsl.Meta.Literals as MetaLiterals
 import qualified Hydra.Dsl.Meta.Base     as MetaBase
 import qualified Hydra.Dsl.Meta.Terms    as MetaTerms
 import qualified Hydra.Dsl.Meta.Types    as MetaTypes
@@ -50,50 +51,65 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
-import qualified Hydra.Sources.Eval.Lib.Eithers as EvalEithers
-import qualified Hydra.Sources.Eval.Lib.Equality as EvalEquality
-import qualified Hydra.Sources.Eval.Lib.Lists as EvalLists
-import qualified Hydra.Sources.Eval.Lib.Logic as EvalLogic
-import qualified Hydra.Sources.Eval.Lib.Maps as EvalMaps
-import qualified Hydra.Sources.Eval.Lib.Math as EvalMath
-import qualified Hydra.Sources.Eval.Lib.Maybes as EvalMaybes
-import qualified Hydra.Sources.Eval.Lib.Pairs as EvalPairs
-import qualified Hydra.Sources.Eval.Lib.Sets as EvalSets
-
 
 ns :: Namespace
-ns = Namespace "hydra.eval.lib"
+ns = Namespace "hydra.eval.lib.logic"
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInNamespace ns
 
--- | All eval library modules
--- Note: Eithers, Lists, Maps, Maybes, and Sets modules cannot currently be code-generated
--- due to DSL type inference limitations. The eval primitive implementations in those modules
--- use meta-level DSL functions (Maybes.maybe, Eithers.either_, etc.) applied to Term-level
--- values, which causes unification errors. These modules still work at runtime via the
--- native Haskell implementations in EvalPrimitives.hs.
-evalLibModules :: [Module]
-evalLibModules = [
-  EvalEithers.module_,
-  EvalEquality.module_,
-  EvalLists.module_,
-  EvalLogic.module_,
-  EvalMaps.module_,
-  EvalMath.module_,
-  EvalMaybes.module_,
-  EvalPairs.module_,
-  EvalSets.module_
-  ]
-
--- | Namespaces of all eval library modules
-evalLibNamespaces :: [Namespace]
-evalLibNamespaces = Prelude.map moduleNamespace evalLibModules
-
 module_ :: Module
 module_ = Module ns elements
-    evalLibNamespaces
+    []
     kernelTypesNamespaces $
-    Just ("Registry of evaluation-level primitive implementations for the Hydra interpreter.")
+    Just ("Evaluation-level implementations of Logic functions for the Hydra interpreter.")
   where
-    elements = []
+    elements = [
+      toTermDefinition and_,
+      toTermDefinition not_,
+      toTermDefinition or_]
+
+-- | Interpreter-friendly logical AND.
+-- and a b = ifElse a b false
+and_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+and_ = define "and" $
+  doc "Interpreter-friendly logical AND." $
+  "cx" ~> "g" ~>
+  "a" ~> "b" ~>
+  right $ Core.termApplication $ Core.application
+    (Core.termApplication $ Core.application
+      (Core.termApplication $ Core.application
+        (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+        (var "a"))
+      (var "b"))
+    (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean False)
+
+-- | Interpreter-friendly logical NOT.
+-- not a = ifElse a false true
+not_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+not_ = define "not" $
+  doc "Interpreter-friendly logical NOT." $
+  "cx" ~> "g" ~>
+  "a" ~>
+  right $ Core.termApplication $ Core.application
+    (Core.termApplication $ Core.application
+      (Core.termApplication $ Core.application
+        (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+        (var "a"))
+      (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean False))
+    (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean True)
+
+-- | Interpreter-friendly logical OR.
+-- or a b = ifElse a true b
+or_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+or_ = define "or" $
+  doc "Interpreter-friendly logical OR." $
+  "cx" ~> "g" ~>
+  "a" ~> "b" ~>
+  right $ Core.termApplication $ Core.application
+    (Core.termApplication $ Core.application
+      (Core.termApplication $ Core.application
+        (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+        (var "a"))
+      (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean True))
+    (var "b")
