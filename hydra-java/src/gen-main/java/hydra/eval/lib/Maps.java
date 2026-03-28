@@ -110,6 +110,10 @@ public interface Maps {
     });
   }
 
+  static <T0, T1, T2> hydra.util.Either<T2, hydra.core.Term> findWithDefault(T0 cx, T1 g, hydra.core.Term defaultTerm, hydra.core.Term keyTerm, hydra.core.Term mapTerm) {
+    return hydra.util.Either.<T2, hydra.core.Term>right(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.maybes.fromMaybe"))), defaultTerm)), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.maps.lookup"))), keyTerm)), mapTerm)))));
+  }
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> map(hydra.context.Context cx, T0 g, hydra.core.Term valFun, hydra.core.Term mapTerm) {
     return (mapTerm).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override

@@ -25,8 +25,11 @@
     "hydra.dsl.variants"],
   "evalLibModules": [
     "hydra.eval.lib.eithers",
+    "hydra.eval.lib.equality",
     "hydra.eval.lib.lists",
+    "hydra.eval.lib.logic",
     "hydra.eval.lib.maps",
+    "hydra.eval.lib.math",
     "hydra.eval.lib.maybes",
     "hydra.eval.lib.pairs",
     "hydra.eval.lib.sets"],
