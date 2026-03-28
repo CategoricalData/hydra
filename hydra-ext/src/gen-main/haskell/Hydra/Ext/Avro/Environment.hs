@@ -75,3 +75,17 @@ _AvroEnvironment_namedAdapters = Core.Name "namedAdapters"
 _AvroEnvironment_namespace = Core.Name "namespace"
 
 _AvroEnvironment_elements = Core.Name "elements"
+
+-- | Environment for Hydra-to-Avro encoding, tracking which named types have been emitted
+data EncodeEnvironment =
+  EncodeEnvironment {
+    -- | All named types available for reference
+    encodeEnvironmentTypeMap :: (M.Map Core.Name Core.Type),
+    -- | Adapters for types that have already been fully emitted (emit references for these)
+    encodeEnvironmentEmitted :: (M.Map Core.Name (Util.Adapter Core.Type Schema.Schema Core.Term Model.Value))}
+
+_EncodeEnvironment = Core.Name "hydra.ext.avro.environment.EncodeEnvironment"
+
+_EncodeEnvironment_typeMap = Core.Name "typeMap"
+
+_EncodeEnvironment_emitted = Core.Name "emitted"
