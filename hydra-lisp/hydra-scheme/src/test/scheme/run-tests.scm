@@ -124,7 +124,6 @@
   (hydra sorting)
   (hydra substitution)
   (hydra tabular)
-  (hydra tarjan)
   (hydra templates)
   (hydra testing)
   (hydra topology)

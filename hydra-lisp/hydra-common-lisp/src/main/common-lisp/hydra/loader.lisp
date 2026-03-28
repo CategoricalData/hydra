@@ -391,7 +391,7 @@
                      "parsing.lisp" "query.lisp" "relational.lisp" "tabular.lisp" "testing.lisp"
                      "topology.lisp" "typing.lisp" "util.lisp" "variants.lisp"
                      "json/model.lisp" "classes.lisp" "constants.lisp" "paths.lisp"
-                     "formatting.lisp" "tarjan.lisp" "rewriting.lisp" "sorting.lisp"
+                     "formatting.lisp" "rewriting.lisp" "sorting.lisp"
                      "names.lisp" "schemas.lisp" "arity.lisp" "lexical.lisp"
                      "literals.lisp" "reflect.lisp" "languages.lisp" "parsers.lisp"
                      "templates.lisp" "encoding.lisp" "decoding.lisp" "code_generation.lisp"

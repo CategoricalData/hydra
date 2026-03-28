@@ -42,7 +42,6 @@ writePython "../hydra-python/src/gen-main/python" [Hydra.Sources.Kernel.Terms.Sc
 writePython "../hydra-python/src/gen-main/python" [Hydra.Sources.Kernel.Terms.Serialization.module_]
 writePython "../hydra-python/src/gen-main/python" [Hydra.Sources.Kernel.Terms.Sorting.module_]
 writePython "../hydra-python/src/gen-main/python" [Hydra.Sources.Kernel.Terms.Substitution.module_]
-writePython "../hydra-python/src/gen-main/python" [Hydra.Sources.Kernel.Terms.Tarjan.module_]
 writePython "../hydra-python/src/gen-main/python" [Hydra.Sources.Kernel.Terms.Templates.module_]
 writePython "../hydra-python/src/gen-main/python" [Hydra.Sources.Kernel.Terms.Unification.module_]
 writePython "../hydra-python/src/gen-main/python" [Hydra.Sources.Kernel.Terms.Variants.module_]
@@ -125,7 +124,6 @@ pyright src/gen-main/python/hydra/schemas.py
 pyright src/gen-main/python/hydra/serialization.py
 pyright src/gen-main/python/hydra/sorting.py
 pyright src/gen-main/python/hydra/substitution.py
-pyright src/gen-main/python/hydra/tarjan.py
 pyright src/gen-main/python/hydra/templates.py
 pyright src/gen-main/python/hydra/unification.py
 pyright src/gen-main/python/hydra/variants.py
