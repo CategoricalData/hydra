@@ -47,6 +47,7 @@ spec = do
   errorCaseSpec
   complexRealisticSpec
   kernelTypeSpec
+  edgeCaseSpec
 
 
 -- Avro schema helpers
@@ -1714,6 +1715,97 @@ kernelTypeSpec = H.describe "Hydra kernel types as Avro schemas" $ do
         case Util.coderEncode (Util.adapterCoder adapter) emptyContext term of
           Left e -> H.expectationFailure $ "encode failed: " ++ show e
           Right json -> do
+            case Util.coderDecode (Util.adapterCoder adapter) emptyContext json of
+              Left e -> H.expectationFailure $ "decode failed: " ++ show e
+              Right term' -> term' `H.shouldBe` term
+
+
+-- ============================================================
+-- Edge case tests
+-- ============================================================
+
+edgeCaseSpec :: H.Spec
+edgeCaseSpec = H.describe "Edge cases" $ do
+
+  H.it "empty list term round-trips" $ do
+    case Encoder.hydraAvroAdapter emptyContext M.empty (Types.list Types.int32) of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right adapter -> do
+        let term = Terms.list []
+        case Util.coderEncode (Util.adapterCoder adapter) emptyContext term of
+          Left e -> H.expectationFailure $ "encode failed: " ++ show e
+          Right json -> do
+            json `H.shouldBe` Json.ValueArray []
+            case Util.coderDecode (Util.adapterCoder adapter) emptyContext json of
+              Left e -> H.expectationFailure $ "decode failed: " ++ show e
+              Right term' -> term' `H.shouldBe` term
+
+  H.it "empty map term round-trips" $ do
+    case Encoder.hydraAvroAdapter emptyContext M.empty (Types.map Types.string Types.string) of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right adapter -> do
+        let term = Core.TermMap M.empty
+        case Util.coderEncode (Util.adapterCoder adapter) emptyContext term of
+          Left e -> H.expectationFailure $ "encode failed: " ++ show e
+          Right json -> do
+            json `H.shouldBe` Json.ValueObject M.empty
+            case Util.coderDecode (Util.adapterCoder adapter) emptyContext json of
+              Left e -> H.expectationFailure $ "decode failed: " ++ show e
+              Right term' -> term' `H.shouldBe` term
+
+  H.it "int32 boundary values" $ do
+    case Encoder.hydraAvroAdapter emptyContext M.empty Types.int32 of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right adapter -> do
+        let maxTerm = Terms.int32 2147483647
+        case Util.coderEncode (Util.adapterCoder adapter) emptyContext maxTerm of
+          Left e -> H.expectationFailure $ "encode max failed: " ++ show e
+          Right json -> do
+            json `H.shouldBe` Json.ValueNumber 2147483647.0
+            case Util.coderDecode (Util.adapterCoder adapter) emptyContext json of
+              Left e -> H.expectationFailure $ "decode max failed: " ++ show e
+              Right term' -> term' `H.shouldBe` maxTerm
+        let minTerm = Terms.int32 (-2147483648)
+        case Util.coderEncode (Util.adapterCoder adapter) emptyContext minTerm of
+          Left e -> H.expectationFailure $ "encode min failed: " ++ show e
+          Right json -> case Util.coderDecode (Util.adapterCoder adapter) emptyContext json of
+            Left e -> H.expectationFailure $ "decode min failed: " ++ show e
+            Right term' -> term' `H.shouldBe` minTerm
+
+  H.it "unicode strings round-trip" $ do
+    case Encoder.hydraAvroAdapter emptyContext M.empty Types.string of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right adapter -> do
+        let unicodeTerm = Terms.string "\19990\30028"
+        case Util.coderEncode (Util.adapterCoder adapter) emptyContext unicodeTerm of
+          Left e -> H.expectationFailure $ "encode failed: " ++ show e
+          Right json -> case Util.coderDecode (Util.adapterCoder adapter) emptyContext json of
+            Left e -> H.expectationFailure $ "decode failed: " ++ show e
+            Right term' -> term' `H.shouldBe` unicodeTerm
+
+  H.it "deeply nested type: list of map of optional of int" $ do
+    let hydraType = Types.list (Types.map Types.string (Types.optional Types.int32))
+    case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right adapter -> do
+        case Util.adapterTarget adapter of
+          Avro.SchemaArray (Avro.Array items) -> case items of
+            Avro.SchemaMap (Avro.Map vals) -> case vals of
+              Avro.SchemaUnion (Avro.Union schemas) -> length schemas `H.shouldBe` 2
+              other -> H.expectationFailure $ "expected union, got: " ++ show other
+            other -> H.expectationFailure $ "expected map, got: " ++ show other
+          other -> H.expectationFailure $ "expected array, got: " ++ show other
+
+  H.it "unit type term round-trip" $ do
+    case Encoder.hydraAvroAdapter emptyContext M.empty Types.unit of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right adapter -> do
+        Util.adapterTarget adapter `H.shouldBe` avroPrim Avro.PrimitiveNull
+        let term = Core.TermUnit
+        case Util.coderEncode (Util.adapterCoder adapter) emptyContext term of
+          Left e -> H.expectationFailure $ "encode failed: " ++ show e
+          Right json -> do
+            json `H.shouldBe` Json.ValueNull
             case Util.coderDecode (Util.adapterCoder adapter) emptyContext json of
               Left e -> H.expectationFailure $ "decode failed: " ++ show e
               Right term' -> term' `H.shouldBe` term
