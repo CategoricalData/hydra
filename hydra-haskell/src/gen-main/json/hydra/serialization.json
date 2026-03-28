@@ -358,6 +358,31 @@
             "variables": []}]}},
     {
       "term": {
+        "name": "hydra.serialization.cst",
+        "term": {
+          "function": {
+            "lambda": {
+              "body": {
+                "union": {
+                  "field": {
+                    "name": "const",
+                    "term": {
+                      "application": {
+                        "argument": {"variable": "s"},
+                        "function": {"variable": "hydra.serialization.sym"}}}},
+                  "typeName": "hydra.ast.Expr"}},
+              "domain": [{"literal": {"string": {}}}],
+              "parameter": "s"}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {"variable": "hydra.ast.Expr"},
+                "domain": {"literal": {"string": {}}}}},
+            "variables": []}]}},
+    {
+      "term": {
         "name": "hydra.serialization.curlyBlock",
         "term": {
           "function": {
@@ -491,31 +516,6 @@
                         "domain": {"list": {"variable": "hydra.ast.Expr"}}}},
                     "domain": {"variable": "hydra.ast.BlockStyle"}}},
                 "domain": {"maybe": {"literal": {"string": {}}}}}},
-            "variables": []}]}},
-    {
-      "term": {
-        "name": "hydra.serialization.cst",
-        "term": {
-          "function": {
-            "lambda": {
-              "body": {
-                "union": {
-                  "field": {
-                    "name": "const",
-                    "term": {
-                      "application": {
-                        "argument": {"variable": "s"},
-                        "function": {"variable": "hydra.serialization.sym"}}}},
-                  "typeName": "hydra.ast.Expr"}},
-              "domain": [{"literal": {"string": {}}}],
-              "parameter": "s"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ast.Expr"},
-                "domain": {"literal": {"string": {}}}}},
             "variables": []}]}},
     {
       "term": {
@@ -4499,6 +4499,26 @@
             "variables": []}]}},
     {
       "term": {
+        "name": "hydra.serialization.squareBrackets",
+        "term": {
+          "record": {
+            "fields": [
+              {
+                "name": "open",
+                "term": {
+                  "wrap": {"body": {"literal": {"string": "["}}, "typeName": "hydra.ast.Symbol"}}},
+              {
+                "name": "close",
+                "term": {
+                  "wrap": {"body": {"literal": {"string": "]"}}, "typeName": "hydra.ast.Symbol"}}}],
+            "typeName": "hydra.ast.Brackets"}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {"variable": "hydra.ast.Brackets"},
+            "variables": []}]}},
+    {
+      "term": {
         "name": "hydra.serialization.structuralSep",
         "term": {
           "annotated": {
@@ -4655,26 +4675,6 @@
               "function": {
                 "codomain": {"variable": "hydra.ast.Expr"},
                 "domain": {"list": {"variable": "hydra.ast.Expr"}}}},
-            "variables": []}]}},
-    {
-      "term": {
-        "name": "hydra.serialization.squareBrackets",
-        "term": {
-          "record": {
-            "fields": [
-              {
-                "name": "open",
-                "term": {
-                  "wrap": {"body": {"literal": {"string": "["}}, "typeName": "hydra.ast.Symbol"}}},
-              {
-                "name": "close",
-                "term": {
-                  "wrap": {"body": {"literal": {"string": "]"}}, "typeName": "hydra.ast.Symbol"}}}],
-            "typeName": "hydra.ast.Brackets"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.ast.Brackets"},
             "variables": []}]}},
     {
       "term": {
@@ -5274,11 +5274,12 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
-    "hydra.error.module",
+    "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",
     "hydra.json.model",
     "hydra.module",
+    "hydra.packaging",
     "hydra.parsing",
     "hydra.phantoms",
     "hydra.query",

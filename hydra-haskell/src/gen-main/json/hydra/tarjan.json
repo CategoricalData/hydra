@@ -557,160 +557,6 @@
             "variables": ["t0"]}]}},
     {
       "term": {
-        "name": "hydra.tarjan.stronglyConnectedComponents",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "Compute the strongly connected components of the given graph. The components are returned in reverse topological order"}}}],
-            "body": {
-              "function": {
-                "lambda": {
-                  "body": {
-                    "let": {
-                      "bindings": [
-                        {
-                          "name": "verts",
-                          "term": {
-                            "application": {
-                              "argument": {"variable": "graph"},
-                              "function": {
-                                "typeApplication": {
-                                  "body": {
-                                    "typeApplication": {
-                                      "body": {"function": {"primitive": "hydra.lib.maps.keys"}},
-                                      "type": {"variable": "hydra.topology.Vertex"}}},
-                                  "type": {"list": {"variable": "hydra.topology.Vertex"}}}}}},
-                          "type": [
-                            {
-                              "constraints": null,
-                              "type": {"list": {"variable": "hydra.topology.Vertex"}},
-                              "variables": []}]}],
-                      "body": {
-                        "let": {
-                          "bindings": [
-                            {
-                              "name": "finalState",
-                              "term": {
-                                "application": {
-                                  "argument": {"variable": "verts"},
-                                  "function": {
-                                    "application": {
-                                      "argument": {"variable": "hydra.tarjan.initialState"},
-                                      "function": {
-                                        "application": {
-                                          "argument": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "function": {
-                                                    "lambda": {
-                                                      "body": {
-                                                        "application": {
-                                                          "argument": {
-                                                            "application": {
-                                                              "argument": {"variable": "st"},
-                                                              "function": {
-                                                                "application": {
-                                                                  "argument": {"variable": "v"},
-                                                                  "function": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "graph"},
-                                                                      "function": {"variable": "hydra.tarjan.strongConnect"}}}}}}},
-                                                          "function": {
-                                                            "application": {
-                                                              "argument": {"variable": "st"},
-                                                              "function": {
-                                                                "application": {
-                                                                  "argument": {
-                                                                    "application": {
-                                                                      "argument": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "st"},
-                                                                          "function": {
-                                                                            "function": {
-                                                                              "elimination": {
-                                                                                "record": {"field": "indices", "typeName": "hydra.topology.TarjanState"}}}}}},
-                                                                      "function": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "v"},
-                                                                          "function": {
-                                                                            "typeApplication": {
-                                                                              "body": {
-                                                                                "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.maps.member"}},
-                                                                                  "type": {"variable": "hydra.topology.Vertex"}}},
-                                                                              "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                                  "function": {
-                                                                    "typeApplication": {
-                                                                      "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
-                                                                      "type": {"variable": "hydra.topology.TarjanState"}}}}}}}}},
-                                                      "domain": [{"variable": "hydra.topology.Vertex"}],
-                                                      "parameter": "v"}}},
-                                                "domain": [{"variable": "hydra.topology.TarjanState"}],
-                                                "parameter": "st"}}},
-                                          "function": {
-                                            "typeApplication": {
-                                              "body": {
-                                                "typeApplication": {
-                                                  "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
-                                                  "type": {"variable": "hydra.topology.TarjanState"}}},
-                                              "type": {"variable": "hydra.topology.Vertex"}}}}}}}}},
-                              "type": [
-                                {
-                                  "constraints": null,
-                                  "type": {"variable": "hydra.topology.TarjanState"},
-                                  "variables": []}]}],
-                          "body": {
-                            "application": {
-                              "argument": {
-                                "application": {
-                                  "argument": {
-                                    "application": {
-                                      "argument": {"variable": "finalState"},
-                                      "function": {
-                                        "function": {
-                                          "elimination": {
-                                            "record": {"field": "sccs", "typeName": "hydra.topology.TarjanState"}}}}}},
-                                  "function": {
-                                    "application": {
-                                      "argument": {
-                                        "typeApplication": {
-                                          "body": {"function": {"primitive": "hydra.lib.lists.sort"}},
-                                          "type": {"variable": "hydra.topology.Vertex"}}},
-                                      "function": {
-                                        "typeApplication": {
-                                          "body": {
-                                            "typeApplication": {
-                                              "body": {"function": {"primitive": "hydra.lib.lists.map"}},
-                                              "type": {"list": {"variable": "hydra.topology.Vertex"}}}},
-                                          "type": {"list": {"variable": "hydra.topology.Vertex"}}}}}}}},
-                              "function": {
-                                "typeApplication": {
-                                  "body": {"function": {"primitive": "hydra.lib.lists.reverse"}},
-                                  "type": {"list": {"variable": "hydra.topology.Vertex"}}}}}}}}}},
-                  "domain": [
-                    {
-                      "map": {
-                        "keys": {"variable": "hydra.topology.Vertex"},
-                        "values": {"list": {"variable": "hydra.topology.Vertex"}}}}],
-                  "parameter": "graph"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"list": {"list": {"variable": "hydra.topology.Vertex"}}},
-                "domain": {
-                  "map": {
-                    "keys": {"variable": "hydra.topology.Vertex"},
-                    "values": {"list": {"variable": "hydra.topology.Vertex"}}}}}},
-            "variables": []}]}},
-    {
-      "term": {
         "name": "hydra.tarjan.initialState",
         "term": {
           "annotated": {
@@ -1941,6 +1787,160 @@
                   "map": {
                     "keys": {"variable": "hydra.topology.Vertex"},
                     "values": {"list": {"variable": "hydra.topology.Vertex"}}}}}},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.tarjan.stronglyConnectedComponents",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "Compute the strongly connected components of the given graph. The components are returned in reverse topological order"}}}],
+            "body": {
+              "function": {
+                "lambda": {
+                  "body": {
+                    "let": {
+                      "bindings": [
+                        {
+                          "name": "verts",
+                          "term": {
+                            "application": {
+                              "argument": {"variable": "graph"},
+                              "function": {
+                                "typeApplication": {
+                                  "body": {
+                                    "typeApplication": {
+                                      "body": {"function": {"primitive": "hydra.lib.maps.keys"}},
+                                      "type": {"variable": "hydra.topology.Vertex"}}},
+                                  "type": {"list": {"variable": "hydra.topology.Vertex"}}}}}},
+                          "type": [
+                            {
+                              "constraints": null,
+                              "type": {"list": {"variable": "hydra.topology.Vertex"}},
+                              "variables": []}]}],
+                      "body": {
+                        "let": {
+                          "bindings": [
+                            {
+                              "name": "finalState",
+                              "term": {
+                                "application": {
+                                  "argument": {"variable": "verts"},
+                                  "function": {
+                                    "application": {
+                                      "argument": {"variable": "hydra.tarjan.initialState"},
+                                      "function": {
+                                        "application": {
+                                          "argument": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "application": {
+                                                              "argument": {"variable": "st"},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {"variable": "v"},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "graph"},
+                                                                      "function": {"variable": "hydra.tarjan.strongConnect"}}}}}}},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {"variable": "st"},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "st"},
+                                                                          "function": {
+                                                                            "function": {
+                                                                              "elimination": {
+                                                                                "record": {"field": "indices", "typeName": "hydra.topology.TarjanState"}}}}}},
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "v"},
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"function": {"primitive": "hydra.lib.maps.member"}},
+                                                                                  "type": {"variable": "hydra.topology.Vertex"}}},
+                                                                              "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                      "type": {"variable": "hydra.topology.TarjanState"}}}}}}}}},
+                                                      "domain": [{"variable": "hydra.topology.Vertex"}],
+                                                      "parameter": "v"}}},
+                                                "domain": [{"variable": "hydra.topology.TarjanState"}],
+                                                "parameter": "st"}}},
+                                          "function": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "typeApplication": {
+                                                  "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
+                                                  "type": {"variable": "hydra.topology.TarjanState"}}},
+                                              "type": {"variable": "hydra.topology.Vertex"}}}}}}}}},
+                              "type": [
+                                {
+                                  "constraints": null,
+                                  "type": {"variable": "hydra.topology.TarjanState"},
+                                  "variables": []}]}],
+                          "body": {
+                            "application": {
+                              "argument": {
+                                "application": {
+                                  "argument": {
+                                    "application": {
+                                      "argument": {"variable": "finalState"},
+                                      "function": {
+                                        "function": {
+                                          "elimination": {
+                                            "record": {"field": "sccs", "typeName": "hydra.topology.TarjanState"}}}}}},
+                                  "function": {
+                                    "application": {
+                                      "argument": {
+                                        "typeApplication": {
+                                          "body": {"function": {"primitive": "hydra.lib.lists.sort"}},
+                                          "type": {"variable": "hydra.topology.Vertex"}}},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                              "type": {"list": {"variable": "hydra.topology.Vertex"}}}},
+                                          "type": {"list": {"variable": "hydra.topology.Vertex"}}}}}}}},
+                              "function": {
+                                "typeApplication": {
+                                  "body": {"function": {"primitive": "hydra.lib.lists.reverse"}},
+                                  "type": {"list": {"variable": "hydra.topology.Vertex"}}}}}}}}}},
+                  "domain": [
+                    {
+                      "map": {
+                        "keys": {"variable": "hydra.topology.Vertex"},
+                        "values": {"list": {"variable": "hydra.topology.Vertex"}}}}],
+                  "parameter": "graph"}}}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {"list": {"list": {"variable": "hydra.topology.Vertex"}}},
+                "domain": {
+                  "map": {
+                    "keys": {"variable": "hydra.topology.Vertex"},
+                    "values": {"list": {"variable": "hydra.topology.Vertex"}}}}}},
             "variables": []}]}}],
   "description": [
     "This implementation of Tarjan's algorithm was originally based on GraphSCC by Iavor S. Diatchki: https://hackage.haskell.org/package/GraphSCC."],
@@ -1955,11 +1955,12 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
-    "hydra.error.module",
+    "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",
     "hydra.json.model",
     "hydra.module",
+    "hydra.packaging",
     "hydra.parsing",
     "hydra.phantoms",
     "hydra.query",

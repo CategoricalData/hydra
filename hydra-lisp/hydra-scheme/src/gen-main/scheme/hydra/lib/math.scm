@@ -55,84 +55,84 @@
     (define (acosh x) (log (+ x (sqrt (- (* x x) 1)))))
     (define (atanh x) (/ (log (/ (+ 1 x) (- 1 x))) 2))
 
-    ;; abs :: Int -> Int
+    ;; Return the absolute value.
     (define hydra_lib_math_abs
       (lambda (n) (abs n)))
 
-    ;; acos :: Double -> Double
+    ;; Return the arc cosine of x in radians.
     (define hydra_lib_math_acos
       (lambda (x) (acos x)))
 
-    ;; acosh :: Double -> Double
+    ;; Return the inverse hyperbolic cosine of x.
     (define hydra_lib_math_acosh
       (lambda (x) (acosh x)))
 
-    ;; add :: Int -> Int -> Int
+    ;; Add two numbers.
     (define hydra_lib_math_add
       (lambda (a)
         (lambda (b)
           (+ a b))))
 
-    ;; asin :: Double -> Double
+    ;; Return the arc sine of x in radians.
     (define hydra_lib_math_asin
       (lambda (x) (asin x)))
 
-    ;; asinh :: Double -> Double
+    ;; Return the inverse hyperbolic sine of x.
     (define hydra_lib_math_asinh
       (lambda (x) (asinh x)))
 
-    ;; atan :: Double -> Double
+    ;; Return the arc tangent of x in radians.
     (define hydra_lib_math_atan
       (lambda (x) (atan x)))
 
-    ;; atan2 :: Double -> Double -> Double
+    ;; Return the arc tangent of y/x in radians, using signs to determine quadrant.
     (define hydra_lib_math_atan2
       (lambda (y)
         (lambda (x)
           (atan y x))))
 
-    ;; atanh :: Double -> Double
+    ;; Return the inverse hyperbolic tangent of x.
     (define hydra_lib_math_atanh
       (lambda (x) (atanh x)))
 
-    ;; ceiling :: Double -> BigInt
+    ;; Return the ceiling of x as an integer.
     (define hydra_lib_math_ceiling
       (lambda (x) (exact (ceiling x))))
 
-    ;; cos :: Double -> Double
+    ;; Return the cosine of x radians.
     (define hydra_lib_math_cos
       (lambda (x) (cos x)))
 
-    ;; cosh :: Double -> Double
+    ;; Return the hyperbolic cosine of x.
     (define hydra_lib_math_cosh
       (lambda (x) (cosh x)))
 
-    ;; div :: Int -> Int -> Int  (floor division)
+    ;; Divide two integers using integer division.
     (define hydra_lib_math_div
       (lambda (a)
         (lambda (b)
           (floor-quotient a b))))
 
-    ;; e :: Double
+    ;; Euler's number (e ~ 2.71828).
     (define hydra_lib_math_e (exp 1))
 
-    ;; even :: Int -> Bool
+    ;; Check if an integer is even.
     (define hydra_lib_math_even
       (lambda (n) (even? n)))
 
-    ;; exp :: Double -> Double
+    ;; Return e raised to the power x.
     (define hydra_lib_math_exp
       (lambda (x) (exp x)))
 
-    ;; floor :: Double -> BigInt
+    ;; Return the floor of x as an integer.
     (define hydra_lib_math_floor
       (lambda (x) (exact (floor x))))
 
-    ;; log :: Double -> Double
+    ;; Return the natural logarithm of x.
     (define hydra_lib_math_log
       (lambda (x) (log x)))
 
-    ;; logBase :: Double -> Double -> Double
+    ;; Return the logarithm of x to the given base.
     (define hydra_lib_math_logBase
       (lambda (base)
         (lambda (x)
@@ -140,53 +140,53 @@
 
     (define hydra_lib_math_log_base hydra_lib_math_logBase)
 
-    ;; max :: Int -> Int -> Int
+    ;; Return the maximum of two values.
     (define hydra_lib_math_max
       (lambda (a)
         (lambda (b)
           (max a b))))
 
-    ;; min :: Int -> Int -> Int
+    ;; Return the minimum of two values.
     (define hydra_lib_math_min
       (lambda (a)
         (lambda (b)
           (min a b))))
 
-    ;; mod :: Int -> Int -> Int  (floor mod)
+    ;; Mathematical modulo.
     (define hydra_lib_math_mod
       (lambda (a)
         (lambda (b)
           (floor-remainder a b))))
 
-    ;; mul :: Int -> Int -> Int
+    ;; Multiply two numbers.
     (define hydra_lib_math_mul
       (lambda (a)
         (lambda (b)
           (* a b))))
 
-    ;; negate :: Int -> Int
+    ;; Negate a number.
     (define hydra_lib_math_negate
       (lambda (a)
         (- a)))
 
-    ;; odd :: Int -> Bool
+    ;; Check if an integer is odd.
     (define hydra_lib_math_odd
       (lambda (n) (odd? n)))
 
-    ;; pi :: Double
+    ;; Pi (~ 3.14159).
     (define hydra_lib_math_pi (* 4 (atan 1)))
 
-    ;; pow :: Double -> Double -> Double
+    ;; Return x raised to the power y.
     (define hydra_lib_math_pow
       (lambda (base)
         (lambda (exp_)
           (expt base exp_))))
 
-    ;; pred :: Int -> Int
+    ;; Return the predecessor (x - 1).
     (define hydra_lib_math_pred
       (lambda (n) (- n 1)))
 
-    ;; range :: Int -> Int -> [Int]  (inclusive both ends)
+    ;; Generate a range of values from start to end (inclusive).
     (define hydra_lib_math_range
       (lambda (start)
         (lambda (end)
@@ -195,17 +195,27 @@
                 (reverse acc)
                 (loop (+ i 1) (cons i acc)))))))
 
-    ;; rem :: Int -> Int -> Int  (truncating remainder)
+    ;; Integer remainder.
     (define hydra_lib_math_rem
       (lambda (a)
         (lambda (b)
           (truncate-remainder a b))))
 
-    ;; round :: Double -> BigInt
+    ;; Return x rounded to the nearest integer.
     (define hydra_lib_math_round
       (lambda (x) (exact (round x))))
 
-    ;; roundFloat64 :: Int -> Double -> Double
+    ;; Round a bigfloat to n significant digits.
+    (define hydra_lib_math_round_bigfloat hydra_lib_math_round_float64)
+
+    ;; Round a float32 to n significant digits.
+    ;; Rounds to N significant digits, then snaps through IEEE float32
+    (define hydra_lib_math_round_float32
+      (lambda (n)
+        (lambda (x)
+          (snap-to-float32 ((hydra_lib_math_round_float64 n) x)))))
+
+    ;; Round a float64 to n significant digits.
     (define hydra_lib_math_round_float64
       (lambda (n)
         (lambda (x)
@@ -214,50 +224,40 @@
               (let ((factor (expt 10.0 (- n 1 (exact (floor (/ (log (abs x)) (log 10))))))))
                 (/ (inexact (round (* x factor))) factor))))))
 
-    ;; roundFloat32 :: Int -> Float -> Float
-    ;; Rounds to N significant digits, then snaps through IEEE float32
-    (define hydra_lib_math_round_float32
-      (lambda (n)
-        (lambda (x)
-          (snap-to-float32 ((hydra_lib_math_round_float64 n) x)))))
-
-    ;; roundBigfloat :: Int -> Double -> Double  (alias for roundFloat64)
-    (define hydra_lib_math_round_bigfloat hydra_lib_math_round_float64)
-
-    ;; signum :: Int -> Int
+    ;; Return the sign of a number (-1, 0, or 1).
     (define hydra_lib_math_signum
       (lambda (n) (cond ((positive? n) 1) ((negative? n) -1) (else 0))))
 
-    ;; sin :: Double -> Double
+    ;; Return the sine of x radians.
     (define hydra_lib_math_sin
       (lambda (x) (sin x)))
 
-    ;; sinh :: Double -> Double
+    ;; Return the hyperbolic sine of x.
     (define hydra_lib_math_sinh
       (lambda (x) (sinh x)))
 
-    ;; sqrt :: Double -> Double
+    ;; Return the square root of x.
     (define hydra_lib_math_sqrt
       (lambda (x) (sqrt x)))
 
-    ;; sub :: Int -> Int -> Int
+    ;; Subtract two numbers.
     (define hydra_lib_math_sub
       (lambda (a)
         (lambda (b)
           (- a b))))
 
-    ;; succ :: Int -> Int
+    ;; Return the successor (x + 1).
     (define hydra_lib_math_succ
       (lambda (n) (+ n 1)))
 
-    ;; tan :: Double -> Double
+    ;; Return the tangent of x radians.
     (define hydra_lib_math_tan
       (lambda (x) (tan x)))
 
-    ;; tanh :: Double -> Double
+    ;; Return the hyperbolic tangent of x.
     (define hydra_lib_math_tanh
       (lambda (x) (tanh x)))
 
-    ;; truncate :: Double -> BigInt
+    ;; Return x truncated to an integer (towards zero).
     (define hydra_lib_math_truncate
       (lambda (x) (exact (truncate x))))))

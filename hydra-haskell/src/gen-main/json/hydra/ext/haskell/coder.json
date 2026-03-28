@@ -2,60 +2,6 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.ext.haskell.coder.includeTypeDefinitions",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "Whether to include type definitions in generated Haskell modules"}}}],
-            "body": {"literal": {"boolean": false}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"literal": {"boolean": {}}},
-            "variables": []}]}},
-    {
-      "term": {
-        "name": "hydra.ext.haskell.coder.useCoreImport",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "Whether to use the Hydra core import in generated modules"}}}],
-            "body": {"literal": {"boolean": true}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"literal": {"boolean": {}}},
-            "variables": []}]}},
-    {
-      "term": {
-        "name": "hydra.ext.haskell.coder.keyHaskellVar",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "The key used to track Haskell variable depth in annotations"}}}],
-            "body": {
-              "wrap": {
-                "body": {"literal": {"string": "haskellVar"}},
-                "typeName": "hydra.core.Name"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
-    {
-      "term": {
         "name": "hydra.ext.haskell.coder.adaptTypeToHaskellAndEncode",
         "term": {
           "typeLambda": {
@@ -8157,7 +8103,7 @@
             "variables": []}]}},
     {
       "term": {
-        "name": "hydra.ext.haskell.coder.moduleToHaskellModule",
+        "name": "hydra.ext.haskell.coder.includeTypeDefinitions",
         "term": {
           "annotated": {
             "annotation": [
@@ -8165,104 +8111,32 @@
                 "@key": "description",
                 "@value": {
                   "literal": {
-                    "string": "Convert a Hydra module and definitions to a Haskell module AST"}}}],
-            "body": {
-              "function": {
-                "lambda": {
-                  "body": {
-                    "function": {
-                      "lambda": {
-                        "body": {
-                          "function": {
-                            "lambda": {
-                              "body": {
-                                "function": {
-                                  "lambda": {
-                                    "body": {
-                                      "application": {
-                                        "argument": {
-                                          "function": {
-                                            "lambda": {
-                                              "body": {
-                                                "application": {
-                                                  "argument": {"variable": "g"},
-                                                  "function": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "application": {
-                                                          "argument": {"variable": "defs"},
-                                                          "function": {
-                                                            "application": {
-                                                              "argument": {"variable": "mod"},
-                                                              "function": {
-                                                                "application": {
-                                                                  "argument": {"variable": "namespaces"},
-                                                                  "function": {"variable": "hydra.ext.haskell.coder.constructModule"}}}}}}}}}}},
-                                              "domain": [
-                                                {
-                                                  "application": {
-                                                    "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                                                    "function": {"variable": "hydra.module.Namespaces"}}}],
-                                              "parameter": "namespaces"}}},
-                                        "function": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"variable": "g"},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {"variable": "cx"},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {"variable": "mod"},
-                                                        "function": {"variable": "hydra.ext.haskell.utils.namespacesForModule"}}}}}}},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {
-                                                  "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {
-                                                        "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
-                                                        "type": {
-                                                          "application": {
-                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                            "function": {"variable": "hydra.context.InContext"}}}}},
-                                                    "type": {
-                                                      "application": {
-                                                        "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                                                        "function": {"variable": "hydra.module.Namespaces"}}}}},
-                                                "type": {"variable": "hydra.ext.haskell.syntax.Module"}}}}}}},
-                                    "domain": [{"variable": "hydra.graph.Graph"}],
-                                    "parameter": "g"}}},
-                              "domain": [{"variable": "hydra.context.Context"}],
-                              "parameter": "cx"}}},
-                        "domain": [{"list": {"variable": "hydra.module.Definition"}}],
-                        "parameter": "defs"}}},
-                  "domain": [{"variable": "hydra.module.Module"}],
-                  "parameter": "mod"}}}}},
+                    "string": "Whether to include type definitions in generated Haskell modules"}}}],
+            "body": {"literal": {"boolean": false}}}},
         "type": [
           {
             "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "function": {
-                        "codomain": {
-                          "function": {
-                            "codomain": {
-                              "either": {
-                                "left": {
-                                  "application": {
-                                    "argument": {"variable": "hydra.errors.Error"},
-                                    "function": {"variable": "hydra.context.InContext"}}},
-                                "right": {"variable": "hydra.ext.haskell.syntax.Module"}}},
-                            "domain": {"variable": "hydra.graph.Graph"}}},
-                        "domain": {"variable": "hydra.context.Context"}}},
-                    "domain": {"list": {"variable": "hydra.module.Definition"}}}},
-                "domain": {"variable": "hydra.module.Module"}}},
+            "type": {"literal": {"boolean": {}}},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.ext.haskell.coder.keyHaskellVar",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "The key used to track Haskell variable depth in annotations"}}}],
+            "body": {
+              "wrap": {
+                "body": {"literal": {"string": "haskellVar"}},
+                "typeName": "hydra.core.Name"}}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {"variable": "hydra.core.Name"},
             "variables": []}]}},
     {
       "term": {
@@ -8429,6 +8303,115 @@
                                   "map": {
                                     "keys": {"literal": {"string": {}}},
                                     "values": {"literal": {"string": {}}}}}}},
+                            "domain": {"variable": "hydra.graph.Graph"}}},
+                        "domain": {"variable": "hydra.context.Context"}}},
+                    "domain": {"list": {"variable": "hydra.module.Definition"}}}},
+                "domain": {"variable": "hydra.module.Module"}}},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.ext.haskell.coder.moduleToHaskellModule",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "Convert a Hydra module and definitions to a Haskell module AST"}}}],
+            "body": {
+              "function": {
+                "lambda": {
+                  "body": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "function": {
+                            "lambda": {
+                              "body": {
+                                "function": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "application": {
+                                                  "argument": {"variable": "g"},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"variable": "cx"},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {"variable": "defs"},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {"variable": "mod"},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {"variable": "namespaces"},
+                                                                  "function": {"variable": "hydra.ext.haskell.coder.constructModule"}}}}}}}}}}},
+                                              "domain": [
+                                                {
+                                                  "application": {
+                                                    "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
+                                                    "function": {"variable": "hydra.module.Namespaces"}}}],
+                                              "parameter": "namespaces"}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "g"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "cx"},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {"variable": "mod"},
+                                                        "function": {"variable": "hydra.ext.haskell.utils.namespacesForModule"}}}}}}},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                        "type": {
+                                                          "application": {
+                                                            "argument": {"variable": "hydra.errors.Error"},
+                                                            "function": {"variable": "hydra.context.InContext"}}}}},
+                                                    "type": {
+                                                      "application": {
+                                                        "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
+                                                        "function": {"variable": "hydra.module.Namespaces"}}}}},
+                                                "type": {"variable": "hydra.ext.haskell.syntax.Module"}}}}}}},
+                                    "domain": [{"variable": "hydra.graph.Graph"}],
+                                    "parameter": "g"}}},
+                              "domain": [{"variable": "hydra.context.Context"}],
+                              "parameter": "cx"}}},
+                        "domain": [{"list": {"variable": "hydra.module.Definition"}}],
+                        "parameter": "defs"}}},
+                  "domain": [{"variable": "hydra.module.Module"}],
+                  "parameter": "mod"}}}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {
+                  "function": {
+                    "codomain": {
+                      "function": {
+                        "codomain": {
+                          "function": {
+                            "codomain": {
+                              "either": {
+                                "left": {
+                                  "application": {
+                                    "argument": {"variable": "hydra.errors.Error"},
+                                    "function": {"variable": "hydra.context.InContext"}}},
+                                "right": {"variable": "hydra.ext.haskell.syntax.Module"}}},
                             "domain": {"variable": "hydra.graph.Graph"}}},
                         "domain": {"variable": "hydra.context.Context"}}},
                     "domain": {"list": {"variable": "hydra.module.Definition"}}}},
@@ -12622,7 +12605,24 @@
                     "map": {
                       "keys": {"variable": "t0"},
                       "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}},
-            "variables": ["t0"]}]}}],
+            "variables": ["t0"]}]}},
+    {
+      "term": {
+        "name": "hydra.ext.haskell.coder.useCoreImport",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "Whether to use the Hydra core import in generated modules"}}}],
+            "body": {"literal": {"boolean": true}}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {"literal": {"boolean": {}}},
+            "variables": []}]}}],
   "description": ["Functions for encoding Hydra modules as Haskell modules"],
   "namespace": "hydra.ext.haskell.coder",
   "termDependencies": [
@@ -12642,11 +12642,12 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
-    "hydra.error.module",
+    "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",
     "hydra.json.model",
     "hydra.module",
+    "hydra.packaging",
     "hydra.parsing",
     "hydra.phantoms",
     "hydra.query",

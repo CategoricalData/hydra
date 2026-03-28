@@ -242,10 +242,10 @@
             "variables": []}]}},
     {
       "term": {
-        "name": "hydra.lib.names.eithersBind",
+        "name": "hydra.lib.names.eithersBimap",
         "term": {
           "wrap": {
-            "body": {"literal": {"string": "hydra.lib.eithers.bind"}},
+            "body": {"literal": {"string": "hydra.lib.eithers.bimap"}},
             "typeName": "hydra.core.Name"}},
         "type": [
           {
@@ -254,10 +254,10 @@
             "variables": []}]}},
     {
       "term": {
-        "name": "hydra.lib.names.eithersBimap",
+        "name": "hydra.lib.names.eithersBind",
         "term": {
           "wrap": {
-            "body": {"literal": {"string": "hydra.lib.eithers.bimap"}},
+            "body": {"literal": {"string": "hydra.lib.eithers.bind"}},
             "typeName": "hydra.core.Name"}},
         "type": [
           {
@@ -1022,18 +1022,6 @@
             "variables": []}]}},
     {
       "term": {
-        "name": "hydra.lib.names.literalsBigintToInt8",
-        "term": {
-          "wrap": {
-            "body": {"literal": {"string": "hydra.lib.literals.bigintToInt8"}},
-            "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
-    {
-      "term": {
         "name": "hydra.lib.names.literalsBigintToInt16",
         "term": {
           "wrap": {
@@ -1070,10 +1058,10 @@
             "variables": []}]}},
     {
       "term": {
-        "name": "hydra.lib.names.literalsBigintToUint8",
+        "name": "hydra.lib.names.literalsBigintToInt8",
         "term": {
           "wrap": {
-            "body": {"literal": {"string": "hydra.lib.literals.bigintToUint8"}},
+            "body": {"literal": {"string": "hydra.lib.literals.bigintToInt8"}},
             "typeName": "hydra.core.Name"}},
         "type": [
           {
@@ -1110,6 +1098,18 @@
         "term": {
           "wrap": {
             "body": {"literal": {"string": "hydra.lib.literals.bigintToUint64"}},
+            "typeName": "hydra.core.Name"}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {"variable": "hydra.core.Name"},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.lib.names.literalsBigintToUint8",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.literals.bigintToUint8"}},
             "typeName": "hydra.core.Name"}},
         "type": [
           {
@@ -1166,18 +1166,6 @@
             "variables": []}]}},
     {
       "term": {
-        "name": "hydra.lib.names.literalsInt8ToBigint",
-        "term": {
-          "wrap": {
-            "body": {"literal": {"string": "hydra.lib.literals.int8ToBigint"}},
-            "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
-    {
-      "term": {
         "name": "hydra.lib.names.literalsInt16ToBigint",
         "term": {
           "wrap": {
@@ -1206,6 +1194,18 @@
         "term": {
           "wrap": {
             "body": {"literal": {"string": "hydra.lib.literals.int64ToBigint"}},
+            "typeName": "hydra.core.Name"}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {"variable": "hydra.core.Name"},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.lib.names.literalsInt8ToBigint",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.literals.int8ToBigint"}},
             "typeName": "hydra.core.Name"}},
         "type": [
           {
@@ -1274,18 +1274,6 @@
             "variables": []}]}},
     {
       "term": {
-        "name": "hydra.lib.names.literalsReadInt8",
-        "term": {
-          "wrap": {
-            "body": {"literal": {"string": "hydra.lib.literals.readInt8"}},
-            "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
-    {
-      "term": {
         "name": "hydra.lib.names.literalsReadInt16",
         "term": {
           "wrap": {
@@ -1322,10 +1310,10 @@
             "variables": []}]}},
     {
       "term": {
-        "name": "hydra.lib.names.literalsReadString",
+        "name": "hydra.lib.names.literalsReadInt8",
         "term": {
           "wrap": {
-            "body": {"literal": {"string": "hydra.lib.literals.readString"}},
+            "body": {"literal": {"string": "hydra.lib.literals.readInt8"}},
             "typeName": "hydra.core.Name"}},
         "type": [
           {
@@ -1334,10 +1322,10 @@
             "variables": []}]}},
     {
       "term": {
-        "name": "hydra.lib.names.literalsReadUint8",
+        "name": "hydra.lib.names.literalsReadString",
         "term": {
           "wrap": {
-            "body": {"literal": {"string": "hydra.lib.literals.readUint8"}},
+            "body": {"literal": {"string": "hydra.lib.literals.readString"}},
             "typeName": "hydra.core.Name"}},
         "type": [
           {
@@ -1374,6 +1362,18 @@
         "term": {
           "wrap": {
             "body": {"literal": {"string": "hydra.lib.literals.readUint64"}},
+            "typeName": "hydra.core.Name"}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {"variable": "hydra.core.Name"},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.lib.names.literalsReadUint8",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.literals.readUint8"}},
             "typeName": "hydra.core.Name"}},
         "type": [
           {
@@ -1442,18 +1442,6 @@
             "variables": []}]}},
     {
       "term": {
-        "name": "hydra.lib.names.literalsShowInt8",
-        "term": {
-          "wrap": {
-            "body": {"literal": {"string": "hydra.lib.literals.showInt8"}},
-            "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
-    {
-      "term": {
         "name": "hydra.lib.names.literalsShowInt16",
         "term": {
           "wrap": {
@@ -1490,10 +1478,22 @@
             "variables": []}]}},
     {
       "term": {
-        "name": "hydra.lib.names.literalsShowUint8",
+        "name": "hydra.lib.names.literalsShowInt8",
         "term": {
           "wrap": {
-            "body": {"literal": {"string": "hydra.lib.literals.showUint8"}},
+            "body": {"literal": {"string": "hydra.lib.literals.showInt8"}},
+            "typeName": "hydra.core.Name"}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {"variable": "hydra.core.Name"},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.lib.names.literalsShowString",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.literals.showString"}},
             "typeName": "hydra.core.Name"}},
         "type": [
           {
@@ -1538,10 +1538,10 @@
             "variables": []}]}},
     {
       "term": {
-        "name": "hydra.lib.names.literalsShowString",
+        "name": "hydra.lib.names.literalsShowUint8",
         "term": {
           "wrap": {
-            "body": {"literal": {"string": "hydra.lib.literals.showString"}},
+            "body": {"literal": {"string": "hydra.lib.literals.showUint8"}},
             "typeName": "hydra.core.Name"}},
         "type": [
           {
@@ -1554,18 +1554,6 @@
         "term": {
           "wrap": {
             "body": {"literal": {"string": "hydra.lib.literals.stringToBinary"}},
-            "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
-    {
-      "term": {
-        "name": "hydra.lib.names.literalsUint8ToBigint",
-        "term": {
-          "wrap": {
-            "body": {"literal": {"string": "hydra.lib.literals.uint8ToBigint"}},
             "typeName": "hydra.core.Name"}},
         "type": [
           {
@@ -1602,6 +1590,18 @@
         "term": {
           "wrap": {
             "body": {"literal": {"string": "hydra.lib.literals.uint64ToBigint"}},
+            "typeName": "hydra.core.Name"}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {"variable": "hydra.core.Name"},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.lib.names.literalsUint8ToBigint",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.literals.uint8ToBigint"}},
             "typeName": "hydra.core.Name"}},
         "type": [
           {
@@ -2918,10 +2918,10 @@
             "variables": []}]}},
     {
       "term": {
-        "name": "hydra.lib.names.stringsNull",
+        "name": "hydra.lib.names.stringsLength",
         "term": {
           "wrap": {
-            "body": {"literal": {"string": "hydra.lib.strings.null"}},
+            "body": {"literal": {"string": "hydra.lib.strings.length"}},
             "typeName": "hydra.core.Name"}},
         "type": [
           {
@@ -2930,10 +2930,10 @@
             "variables": []}]}},
     {
       "term": {
-        "name": "hydra.lib.names.stringsLength",
+        "name": "hydra.lib.names.stringsNull",
         "term": {
           "wrap": {
-            "body": {"literal": {"string": "hydra.lib.strings.length"}},
+            "body": {"literal": {"string": "hydra.lib.strings.null"}},
             "typeName": "hydra.core.Name"}},
         "type": [
           {
@@ -3048,11 +3048,12 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
-    "hydra.error.module",
+    "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",
     "hydra.json.model",
     "hydra.module",
+    "hydra.packaging",
     "hydra.parsing",
     "hydra.phantoms",
     "hydra.query",

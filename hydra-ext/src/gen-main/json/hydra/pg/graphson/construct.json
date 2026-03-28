@@ -2,181 +2,6 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.pg.graphson.construct.aggregateMap",
-        "term": {
-          "typeLambda": {
-            "body": {
-              "typeLambda": {
-                "body": {
-                  "annotated": {
-                    "annotation": [
-                      {
-                        "@key": "description",
-                        "@value": {
-                          "literal": {
-                            "string": "Aggregate a list of key-value pairs into a map where each key maps to a list of values"}}}],
-                    "body": {
-                      "function": {
-                        "lambda": {
-                          "body": {
-                            "application": {
-                              "argument": {"variable": "pairs"},
-                              "function": {
-                                "application": {
-                                  "argument": {
-                                    "typeApplication": {
-                                      "body": {
-                                        "typeApplication": {
-                                          "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
-                                          "type": {"variable": "t0"}}},
-                                      "type": {"list": {"variable": "t1"}}}},
-                                  "function": {
-                                    "application": {
-                                      "argument": {
-                                        "function": {
-                                          "lambda": {
-                                            "body": {
-                                              "function": {
-                                                "lambda": {
-                                                  "body": {
-                                                    "let": {
-                                                      "bindings": [
-                                                        {
-                                                          "name": "k",
-                                                          "term": {
-                                                            "application": {
-                                                              "argument": {"variable": "p"},
-                                                              "function": {
-                                                                "typeApplication": {
-                                                                  "body": {
-                                                                    "typeApplication": {
-                                                                      "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
-                                                                      "type": {"variable": "t0"}}},
-                                                                  "type": {"variable": "t1"}}}}},
-                                                          "type": [{"constraints": null, "type": {"variable": "t0"}, "variables": []}]}],
-                                                      "body": {
-                                                        "let": {
-                                                          "bindings": [
-                                                            {
-                                                              "name": "v",
-                                                              "term": {
-                                                                "application": {
-                                                                  "argument": {"variable": "p"},
-                                                                  "function": {
-                                                                    "typeApplication": {
-                                                                      "body": {
-                                                                        "typeApplication": {
-                                                                          "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
-                                                                          "type": {"variable": "t0"}}},
-                                                                      "type": {"variable": "t1"}}}}},
-                                                              "type": [{"constraints": null, "type": {"variable": "t1"}, "variables": []}]}],
-                                                          "body": {
-                                                            "let": {
-                                                              "bindings": [
-                                                                {
-                                                                  "name": "existing",
-                                                                  "term": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "m"},
-                                                                      "function": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "k"},
-                                                                          "function": {
-                                                                            "typeApplication": {
-                                                                              "body": {
-                                                                                "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
-                                                                                  "type": {"variable": "t0"}}},
-                                                                              "type": {"list": {"variable": "t1"}}}}}}}},
-                                                                  "type": [
-                                                                    {
-                                                                      "constraints": null,
-                                                                      "type": {"maybe": {"list": {"variable": "t1"}}},
-                                                                      "variables": []}]}],
-                                                              "body": {
-                                                                "application": {
-                                                                  "argument": {"variable": "m"},
-                                                                  "function": {
-                                                                    "application": {
-                                                                      "argument": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "existing"},
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "argument": {
-                                                                                "function": {
-                                                                                  "lambda": {
-                                                                                    "body": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "vs"},
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "v"},
-                                                                                            "function": {
-                                                                                              "typeApplication": {
-                                                                                                "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
-                                                                                                "type": {"variable": "t1"}}}}}}},
-                                                                                    "domain": [{"list": {"variable": "t1"}}],
-                                                                                    "parameter": "vs"}}},
-                                                                              "function": {
-                                                                                "application": {
-                                                                                  "argument": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "v"},
-                                                                                      "function": {
-                                                                                        "typeApplication": {
-                                                                                          "body": {"function": {"primitive": "hydra.lib.lists.pure"}},
-                                                                                          "type": {"variable": "t1"}}}}},
-                                                                                  "function": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {
-                                                                                        "typeApplication": {
-                                                                                          "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
-                                                                                          "type": {"list": {"variable": "t1"}}}},
-                                                                                      "type": {"list": {"variable": "t1"}}}}}}}}}},
-                                                                      "function": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "k"},
-                                                                          "function": {
-                                                                            "typeApplication": {
-                                                                              "body": {
-                                                                                "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.maps.insert"}},
-                                                                                  "type": {"variable": "t0"}}},
-                                                                              "type": {"list": {"variable": "t1"}}}}}}}}}}}}}}}},
-                                                  "domain": [
-                                                    {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}],
-                                                  "parameter": "p"}}},
-                                            "domain": [
-                                              {
-                                                "map": {"keys": {"variable": "t0"}, "values": {"list": {"variable": "t1"}}}}],
-                                            "parameter": "m"}}},
-                                      "function": {
-                                        "typeApplication": {
-                                          "body": {
-                                            "typeApplication": {
-                                              "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
-                                              "type": {
-                                                "map": {"keys": {"variable": "t0"}, "values": {"list": {"variable": "t1"}}}}}},
-                                          "type": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}}}}}}}},
-                          "domain": [
-                            {
-                              "list": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}],
-                          "parameter": "pairs"}}}}},
-                "parameter": "t1"}},
-            "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": [[{"@key": "t0", "@value": {"classes": ["ordering"]}}]],
-            "type": {
-              "function": {
-                "codomain": {
-                  "map": {"keys": {"variable": "t0"}, "values": {"list": {"variable": "t1"}}}},
-                "domain": {
-                  "list": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}}},
-            "variables": ["t0", "t1"]}]}},
-    {
-      "term": {
         "name": "hydra.pg.graphson.construct.adjacentEdgeToGraphson",
         "term": {
           "typeLambda": {
@@ -482,6 +307,181 @@
                         "left": {"variable": "t1"},
                         "right": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                     "domain": {"variable": "t0"}}}}},
+            "variables": ["t0", "t1"]}]}},
+    {
+      "term": {
+        "name": "hydra.pg.graphson.construct.aggregateMap",
+        "term": {
+          "typeLambda": {
+            "body": {
+              "typeLambda": {
+                "body": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {
+                          "literal": {
+                            "string": "Aggregate a list of key-value pairs into a map where each key maps to a list of values"}}}],
+                    "body": {
+                      "function": {
+                        "lambda": {
+                          "body": {
+                            "application": {
+                              "argument": {"variable": "pairs"},
+                              "function": {
+                                "application": {
+                                  "argument": {
+                                    "typeApplication": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
+                                          "type": {"variable": "t0"}}},
+                                      "type": {"list": {"variable": "t1"}}}},
+                                  "function": {
+                                    "application": {
+                                      "argument": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "let": {
+                                                      "bindings": [
+                                                        {
+                                                          "name": "k",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {"variable": "p"},
+                                                              "function": {
+                                                                "typeApplication": {
+                                                                  "body": {
+                                                                    "typeApplication": {
+                                                                      "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                      "type": {"variable": "t0"}}},
+                                                                  "type": {"variable": "t1"}}}}},
+                                                          "type": [{"constraints": null, "type": {"variable": "t0"}, "variables": []}]}],
+                                                      "body": {
+                                                        "let": {
+                                                          "bindings": [
+                                                            {
+                                                              "name": "v",
+                                                              "term": {
+                                                                "application": {
+                                                                  "argument": {"variable": "p"},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "typeApplication": {
+                                                                          "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                          "type": {"variable": "t0"}}},
+                                                                      "type": {"variable": "t1"}}}}},
+                                                              "type": [{"constraints": null, "type": {"variable": "t1"}, "variables": []}]}],
+                                                          "body": {
+                                                            "let": {
+                                                              "bindings": [
+                                                                {
+                                                                  "name": "existing",
+                                                                  "term": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "m"},
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "k"},
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                                  "type": {"variable": "t0"}}},
+                                                                              "type": {"list": {"variable": "t1"}}}}}}}},
+                                                                  "type": [
+                                                                    {
+                                                                      "constraints": null,
+                                                                      "type": {"maybe": {"list": {"variable": "t1"}}},
+                                                                      "variables": []}]}],
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {"variable": "m"},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "existing"},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "function": {
+                                                                                  "lambda": {
+                                                                                    "body": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "vs"},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "v"},
+                                                                                            "function": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
+                                                                                                "type": {"variable": "t1"}}}}}}},
+                                                                                    "domain": [{"list": {"variable": "t1"}}],
+                                                                                    "parameter": "vs"}}},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "v"},
+                                                                                      "function": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"function": {"primitive": "hydra.lib.lists.pure"}},
+                                                                                          "type": {"variable": "t1"}}}}},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                          "type": {"list": {"variable": "t1"}}}},
+                                                                                      "type": {"list": {"variable": "t1"}}}}}}}}}},
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "k"},
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"function": {"primitive": "hydra.lib.maps.insert"}},
+                                                                                  "type": {"variable": "t0"}}},
+                                                                              "type": {"list": {"variable": "t1"}}}}}}}}}}}}}}}},
+                                                  "domain": [
+                                                    {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}],
+                                                  "parameter": "p"}}},
+                                            "domain": [
+                                              {
+                                                "map": {"keys": {"variable": "t0"}, "values": {"list": {"variable": "t1"}}}}],
+                                            "parameter": "m"}}},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
+                                              "type": {
+                                                "map": {"keys": {"variable": "t0"}, "values": {"list": {"variable": "t1"}}}}}},
+                                          "type": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}}}}}}}},
+                          "domain": [
+                            {
+                              "list": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}],
+                          "parameter": "pairs"}}}}},
+                "parameter": "t1"}},
+            "parameter": "t0"}},
+        "type": [
+          {
+            "constraints": [[{"@key": "t0", "@value": {"classes": ["ordering"]}}]],
+            "type": {
+              "function": {
+                "codomain": {
+                  "map": {"keys": {"variable": "t0"}, "values": {"list": {"variable": "t1"}}}},
+                "domain": {
+                  "list": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}}},
             "variables": ["t0", "t1"]}]}},
     {
       "term": {
@@ -1421,11 +1421,12 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
-    "hydra.error.module",
+    "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",
     "hydra.json.model",
     "hydra.module",
+    "hydra.packaging",
     "hydra.parsing",
     "hydra.phantoms",
     "hydra.query",

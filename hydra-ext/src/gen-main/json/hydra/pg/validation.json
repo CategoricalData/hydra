@@ -2,6 +2,200 @@
   "definitions": [
     {
       "term": {
+        "name": "hydra.pg.validation.checkAll",
+        "term": {
+          "typeLambda": {
+            "body": {
+              "function": {
+                "lambda": {
+                  "body": {
+                    "let": {
+                      "bindings": [
+                        {
+                          "name": "errors",
+                          "term": {
+                            "application": {
+                              "argument": {"variable": "checks"},
+                              "function": {
+                                "typeApplication": {
+                                  "body": {"function": {"primitive": "hydra.lib.maybes.cat"}},
+                                  "type": {"variable": "t0"}}}}},
+                          "type": [
+                            {
+                              "constraints": null,
+                              "type": {"list": {"variable": "t0"}},
+                              "variables": []}]}],
+                      "body": {
+                        "application": {
+                          "argument": {"variable": "errors"},
+                          "function": {
+                            "typeApplication": {
+                              "body": {"function": {"primitive": "hydra.lib.lists.safeHead"}},
+                              "type": {"variable": "t0"}}}}}}},
+                  "domain": [{"list": {"maybe": {"variable": "t0"}}}],
+                  "parameter": "checks"}}},
+            "parameter": "t0"}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {"maybe": {"variable": "t0"}},
+                "domain": {"list": {"maybe": {"variable": "t0"}}}}},
+            "variables": ["t0"]}]}},
+    {
+      "term": {
+        "name": "hydra.pg.validation.edgeError",
+        "term": {
+          "typeLambda": {
+            "body": {
+              "function": {
+                "lambda": {
+                  "body": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "e"},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "function": {
+                                                "elimination": {"record": {"field": "id", "typeName": "hydra.pg.model.Edge"}}}},
+                                            "type": {"variable": "t0"}}}}},
+                                    "function": {"variable": "showValue"}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {"literal": {"string": "Invalid edge with id "}},
+                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                            "function": {"variable": "hydra.pg.validation.prepend"}}},
+                        "domain": [
+                          {
+                            "application": {
+                              "argument": {"variable": "t0"},
+                              "function": {"variable": "hydra.pg.model.Edge"}}}],
+                        "parameter": "e"}}},
+                  "domain": [
+                    {
+                      "function": {
+                        "codomain": {"literal": {"string": {}}},
+                        "domain": {"variable": "t0"}}}],
+                  "parameter": "showValue"}}},
+            "parameter": "t0"}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {
+                  "function": {
+                    "codomain": {
+                      "function": {
+                        "codomain": {"literal": {"string": {}}},
+                        "domain": {"literal": {"string": {}}}}},
+                    "domain": {
+                      "application": {
+                        "argument": {"variable": "t0"},
+                        "function": {"variable": "hydra.pg.model.Edge"}}}}},
+                "domain": {
+                  "function": {
+                    "codomain": {"literal": {"string": {}}},
+                    "domain": {"variable": "t0"}}}}},
+            "variables": ["t0"]}]}},
+    {
+      "term": {
+        "name": "hydra.pg.validation.edgeLabelMismatch",
+        "term": {
+          "function": {
+            "lambda": {
+              "body": {
+                "function": {
+                  "lambda": {
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "application": {
+                            "argument": {"variable": "actual"},
+                            "function": {"function": {"elimination": {"wrap": "hydra.pg.model.EdgeLabel"}}}}},
+                        "function": {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {"literal": {"string": ", found "}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "expected"},
+                                            "function": {"function": {"elimination": {"wrap": "hydra.pg.model.EdgeLabel"}}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"literal": {"string": "expected "}},
+                                            "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                            "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                    "domain": [{"variable": "hydra.pg.model.EdgeLabel"}],
+                    "parameter": "actual"}}},
+              "domain": [{"variable": "hydra.pg.model.EdgeLabel"}],
+              "parameter": "expected"}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {
+                  "function": {
+                    "codomain": {"literal": {"string": {}}},
+                    "domain": {"variable": "hydra.pg.model.EdgeLabel"}}},
+                "domain": {"variable": "hydra.pg.model.EdgeLabel"}}},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.pg.validation.prepend",
+        "term": {
+          "function": {
+            "lambda": {
+              "body": {
+                "function": {
+                  "lambda": {
+                    "body": {
+                      "application": {
+                        "argument": {"variable": "msg"},
+                        "function": {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {"literal": {"string": ": "}},
+                                "function": {
+                                  "application": {
+                                    "argument": {"variable": "prefix"},
+                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                            "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                    "domain": [{"literal": {"string": {}}}],
+                    "parameter": "msg"}}},
+              "domain": [{"literal": {"string": {}}}],
+              "parameter": "prefix"}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {
+                  "function": {
+                    "codomain": {"literal": {"string": {}}},
+                    "domain": {"literal": {"string": {}}}}},
+                "domain": {"literal": {"string": {}}}}},
+            "variables": []}]}},
+    {
+      "term": {
         "name": "hydra.pg.validation.validateEdge",
         "term": {
           "typeLambda": {
@@ -2201,200 +2395,6 @@
                         "domain": {"variable": "t1"}}},
                     "domain": {"variable": "t0"}}}}},
             "variables": ["t0", "t1"]}]}},
-    {
-      "term": {
-        "name": "hydra.pg.validation.checkAll",
-        "term": {
-          "typeLambda": {
-            "body": {
-              "function": {
-                "lambda": {
-                  "body": {
-                    "let": {
-                      "bindings": [
-                        {
-                          "name": "errors",
-                          "term": {
-                            "application": {
-                              "argument": {"variable": "checks"},
-                              "function": {
-                                "typeApplication": {
-                                  "body": {"function": {"primitive": "hydra.lib.maybes.cat"}},
-                                  "type": {"variable": "t0"}}}}},
-                          "type": [
-                            {
-                              "constraints": null,
-                              "type": {"list": {"variable": "t0"}},
-                              "variables": []}]}],
-                      "body": {
-                        "application": {
-                          "argument": {"variable": "errors"},
-                          "function": {
-                            "typeApplication": {
-                              "body": {"function": {"primitive": "hydra.lib.lists.safeHead"}},
-                              "type": {"variable": "t0"}}}}}}},
-                  "domain": [{"list": {"maybe": {"variable": "t0"}}}],
-                  "parameter": "checks"}}},
-            "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"maybe": {"variable": "t0"}},
-                "domain": {"list": {"maybe": {"variable": "t0"}}}}},
-            "variables": ["t0"]}]}},
-    {
-      "term": {
-        "name": "hydra.pg.validation.edgeError",
-        "term": {
-          "typeLambda": {
-            "body": {
-              "function": {
-                "lambda": {
-                  "body": {
-                    "function": {
-                      "lambda": {
-                        "body": {
-                          "application": {
-                            "argument": {
-                              "application": {
-                                "argument": {
-                                  "application": {
-                                    "argument": {
-                                      "application": {
-                                        "argument": {"variable": "e"},
-                                        "function": {
-                                          "typeApplication": {
-                                            "body": {
-                                              "function": {
-                                                "elimination": {"record": {"field": "id", "typeName": "hydra.pg.model.Edge"}}}},
-                                            "type": {"variable": "t0"}}}}},
-                                    "function": {"variable": "showValue"}}},
-                                "function": {
-                                  "application": {
-                                    "argument": {"literal": {"string": "Invalid edge with id "}},
-                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                            "function": {"variable": "hydra.pg.validation.prepend"}}},
-                        "domain": [
-                          {
-                            "application": {
-                              "argument": {"variable": "t0"},
-                              "function": {"variable": "hydra.pg.model.Edge"}}}],
-                        "parameter": "e"}}},
-                  "domain": [
-                    {
-                      "function": {
-                        "codomain": {"literal": {"string": {}}},
-                        "domain": {"variable": "t0"}}}],
-                  "parameter": "showValue"}}},
-            "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "function": {
-                        "codomain": {"literal": {"string": {}}},
-                        "domain": {"literal": {"string": {}}}}},
-                    "domain": {
-                      "application": {
-                        "argument": {"variable": "t0"},
-                        "function": {"variable": "hydra.pg.model.Edge"}}}}},
-                "domain": {
-                  "function": {
-                    "codomain": {"literal": {"string": {}}},
-                    "domain": {"variable": "t0"}}}}},
-            "variables": ["t0"]}]}},
-    {
-      "term": {
-        "name": "hydra.pg.validation.edgeLabelMismatch",
-        "term": {
-          "function": {
-            "lambda": {
-              "body": {
-                "function": {
-                  "lambda": {
-                    "body": {
-                      "application": {
-                        "argument": {
-                          "application": {
-                            "argument": {"variable": "actual"},
-                            "function": {"function": {"elimination": {"wrap": "hydra.pg.model.EdgeLabel"}}}}},
-                        "function": {
-                          "application": {
-                            "argument": {
-                              "application": {
-                                "argument": {"literal": {"string": ", found "}},
-                                "function": {
-                                  "application": {
-                                    "argument": {
-                                      "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {"variable": "expected"},
-                                            "function": {"function": {"elimination": {"wrap": "hydra.pg.model.EdgeLabel"}}}}},
-                                        "function": {
-                                          "application": {
-                                            "argument": {"literal": {"string": "expected "}},
-                                            "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                            "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                    "domain": [{"variable": "hydra.pg.model.EdgeLabel"}],
-                    "parameter": "actual"}}},
-              "domain": [{"variable": "hydra.pg.model.EdgeLabel"}],
-              "parameter": "expected"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"literal": {"string": {}}},
-                    "domain": {"variable": "hydra.pg.model.EdgeLabel"}}},
-                "domain": {"variable": "hydra.pg.model.EdgeLabel"}}},
-            "variables": []}]}},
-    {
-      "term": {
-        "name": "hydra.pg.validation.prepend",
-        "term": {
-          "function": {
-            "lambda": {
-              "body": {
-                "function": {
-                  "lambda": {
-                    "body": {
-                      "application": {
-                        "argument": {"variable": "msg"},
-                        "function": {
-                          "application": {
-                            "argument": {
-                              "application": {
-                                "argument": {"literal": {"string": ": "}},
-                                "function": {
-                                  "application": {
-                                    "argument": {"variable": "prefix"},
-                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                            "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                    "domain": [{"literal": {"string": {}}}],
-                    "parameter": "msg"}}},
-              "domain": [{"literal": {"string": {}}}],
-              "parameter": "prefix"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"literal": {"string": {}}},
-                    "domain": {"literal": {"string": {}}}}},
-                "domain": {"literal": {"string": {}}}}},
-            "variables": []}]}},
     {
       "term": {
         "name": "hydra.pg.validation.verify",
