@@ -153,7 +153,9 @@ evalLibLists = standardLibrary _hydra_lib_lists [
   mkPrim _lists_foldr 3 $ \cx g args -> case args of
     [f, init_, lt] -> EvalLists.foldr cx g f init_ lt
     _ -> unexpected cx "lists.foldr" 3,
-  -- group is not an eval primitive (requires intermediate reduction within fold)
+  mkPrim _lists_group 1 $ \cx g args -> case args of
+    [lt] -> EvalLists.group cx g lt
+    _ -> unexpected cx "lists.group" 1,
   mkPrim _lists_intercalate 2 $ \cx g args -> case args of
     [sep, xss] -> coerceError $ EvalLists.intercalate cx g sep xss
     _ -> unexpected cx "lists.intercalate" 2,

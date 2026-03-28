@@ -79,7 +79,7 @@ module_ = Module ns elements
       toTermDefinition find_,
       toTermDefinition foldl_,
       toTermDefinition foldr_,
---      toTermDefinition group_,  -- TODO: requires intermediate reduction within fold; needs more work
+      toTermDefinition group_,
       toTermDefinition intercalate_,
       toTermDefinition intersperse_,
       toTermDefinition map_,
@@ -466,96 +466,64 @@ elem_ = define "elem" $
 
 -- | Interpreter-friendly group for List terms.
 -- Groups consecutive equal elements: group [1,1,2,2,2,3] = [[1,1],[2,2,2],[3]]
--- Uses meta-level foldl with reduceTerm at each step to keep the accumulator reduced.
+-- Returns a term that delegates to the lists.foldl primitive with a term-level lambda.
+-- The interpreter's native foldl uses functionWithReduce, which reduces each step
+-- via reduceTerm — so the accumulator is always a value, not an unreduced expression.
+-- Uses safeHead+maybe instead of null+head+ifElse to avoid eager evaluation of head on empty lists.
 group_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
 group_ = define "group" $
   doc "Interpreter-friendly group for List terms." $
   "cx" ~> "g" ~>
   "listTerm" ~>
-  "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
-  -- State: Either (InContext Error) (pair(currentGroup, resultGroups))
-  -- Fold with reduction at each step via the enclosing foldl_ which uses reduceTerm
-  "finalState" <<~ (Lists.foldl
-    ("acc" ~> "el" ~>
-      Eithers.bind (var "acc") $
-        "state" ~>
-          "curGroup" <<~ (Reduction.reduceTerm @@ var "cx" @@ var "g" @@ MetaLiterals.boolean True @@
-            (Core.termApplication $ Core.application
-              (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_first)
-              (var "state"))) $
-          "result" <<~ (Reduction.reduceTerm @@ var "cx" @@ var "g" @@ MetaLiterals.boolean True @@
-            (Core.termApplication $ Core.application
-              (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_second)
-              (var "state"))) $
-          Reduction.reduceTerm @@ var "cx" @@ var "g" @@ MetaLiterals.boolean True @@
-            (Core.termApplication $ Core.application
-              (Core.termApplication $ Core.application
-                (Core.termApplication $ Core.application
-                  (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
-                  (Core.termApplication $ Core.application
-                    (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_null)
-                    (var "curGroup")))
-                -- Empty group: start new group with [el]
-                (Core.termPair $ pair
-                  (Core.termList $ list [var "el"])
-                  (var "result")))
-              -- Non-empty: check if el equals head of current group
-              (Core.termApplication $ Core.application
-                (Core.termApplication $ Core.application
-                  (Core.termApplication $ Core.application
-                    (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
-                    (Core.termApplication $ Core.application
-                      (Core.termApplication $ Core.application
-                        (Core.termFunction $ Core.functionPrimitive $ encodedName _equality_equal)
-                        (var "el"))
-                      (Core.termApplication $ Core.application
-                        (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_head)
-                        (var "curGroup"))))
-                  -- Same: extend current group
-                  (Core.termPair $ pair
-                    (Core.termApplication $ Core.application
-                      (Core.termApplication $ Core.application
-                        (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat2)
-                        (var "curGroup"))
-                      (Core.termList $ list [var "el"]))
-                    (var "result")))
-                -- Different: flush current group, start new
-                (Core.termPair $ pair
-                  (Core.termList $ list [var "el"])
-                  (Core.termApplication $ Core.application
-                    (Core.termApplication $ Core.application
-                      (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat2)
-                      (var "result"))
-                    (Core.termList $ list [var "curGroup"]))))))
-    (right $ Core.termPair $ pair
+  right $ Core.termApplication $ Core.application flushFn foldExpr
+  where
+    -- Helper: build a primitive application
+    prim1 n x = Core.termApplication $ Core.application (Core.termFunction $ Core.functionPrimitive $ encodedName n) x
+    prim2 n x y = Core.termApplication $ Core.application (Core.termApplication $ Core.application (Core.termFunction $ Core.functionPrimitive $ encodedName n) x) y
+    prim3 n x y z = Core.termApplication $ Core.application (Core.termApplication $ Core.application (Core.termApplication $ Core.application (Core.termFunction $ Core.functionPrimitive $ encodedName n) x) y) z
+    -- Helper: term-level variable
+    tv s = Core.termVariable $ wrap _Name $ string s
+    -- Helper: term-level lambda
+    lam s body = Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string s) nothing body
+
+    -- stepFn: \acc el -> maybe ([el], snd acc) (\h -> ifElse (equal el h) (extend) (flush)) (safeHead (fst acc))
+    stepFn = lam "acc" $ lam "el" $
+      prim3 _maybes_maybe
+        -- Nothing (empty group): start new with [el]
+        (Core.termPair $ pair
+          (Core.termList $ list [tv "el"])
+          (prim1 _pairs_second (tv "acc")))
+        -- Just h: check equality
+        (lam "h" $
+          prim3 _logic_ifElse
+            (prim2 _equality_equal (tv "el") (tv "h"))
+            -- Same: extend current group
+            (Core.termPair $ pair
+              (prim2 _lists_concat2 (prim1 _pairs_first (tv "acc")) (Core.termList $ list [tv "el"]))
+              (prim1 _pairs_second (tv "acc")))
+            -- Different: flush and start new
+            (Core.termPair $ pair
+              (Core.termList $ list [tv "el"])
+              (prim2 _lists_concat2
+                (prim1 _pairs_second (tv "acc"))
+                (Core.termList $ list [prim1 _pairs_first (tv "acc")]))))
+        -- safeHead (fst acc)
+        (prim1 _lists_safeHead (prim1 _pairs_first (tv "acc")))
+
+    initState = Core.termPair $ pair
       (Core.termList $ list ([] :: [TTerm Term]))
-      (Core.termList $ list ([] :: [TTerm Term])))
-    (var "elements")) $
-  -- Flush final group
-  Eithers.bind (var "finalState") $
-    "state" ~>
-      "lastGroup" <<~ (Reduction.reduceTerm @@ var "cx" @@ var "g" @@ MetaLiterals.boolean True @@
-        (Core.termApplication $ Core.application
-          (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_first)
-          (var "state"))) $
-      "groups" <<~ (Reduction.reduceTerm @@ var "cx" @@ var "g" @@ MetaLiterals.boolean True @@
-        (Core.termApplication $ Core.application
-          (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_second)
-          (var "state"))) $
-      Reduction.reduceTerm @@ var "cx" @@ var "g" @@ MetaLiterals.boolean True @@
-        (Core.termApplication $ Core.application
-          (Core.termApplication $ Core.application
-            (Core.termApplication $ Core.application
-              (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
-              (Core.termApplication $ Core.application
-                (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_null)
-                (var "lastGroup")))
-            (var "groups"))
-          (Core.termApplication $ Core.application
-            (Core.termApplication $ Core.application
-              (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat2)
-              (var "groups"))
-            (Core.termList $ list [var "lastGroup"])))
+      (Core.termList $ list ([] :: [TTerm Term]))
+
+    foldExpr = prim3 _lists_foldl stepFn initState (var "listTerm")
+
+    -- Flush: \foldResult -> ifElse (null (fst r)) (snd r) (concat2 (snd r) [fst r])
+    flushFn = lam "foldResult" $
+      prim3 _logic_ifElse
+        (prim1 _lists_null (prim1 _pairs_first (tv "foldResult")))
+        (prim1 _pairs_second (tv "foldResult"))
+        (prim2 _lists_concat2
+          (prim1 _pairs_second (tv "foldResult"))
+          (Core.termList $ list [prim1 _pairs_first (tv "foldResult")]))
 
 -- | Interpreter-friendly intercalate for List terms.
 -- intercalate sep xss = concat (intersperse sep xss)
