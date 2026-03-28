@@ -160,7 +160,58 @@
                       "body": {
                         "map": {
                           "keys": {"variable": "hydra.core.Name"},
-                          "values": {"variable": "hydra.core.Binding"}}}}}}]}}}}}],
+                          "values": {"variable": "hydra.core.Binding"}}}}}}]}}}}},
+    {
+      "type": {
+        "name": "hydra.ext.avro.environment.EncodeEnvironment",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "Environment for Hydra-to-Avro encoding, tracking which named types have been emitted"}}}],
+            "body": {
+              "record": [
+                {
+                  "name": "typeMap",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "All named types available for reference"}}}],
+                      "body": {
+                        "map": {
+                          "keys": {"variable": "hydra.core.Name"},
+                          "values": {"variable": "hydra.core.Type"}}}}}},
+                {
+                  "name": "emitted",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "Adapters for types that have already been fully emitted (emit references for these)"}}}],
+                      "body": {
+                        "map": {
+                          "keys": {"variable": "hydra.core.Name"},
+                          "values": {
+                            "application": {
+                              "argument": {"variable": "hydra.json.model.Value"},
+                              "function": {
+                                "application": {
+                                  "argument": {"variable": "hydra.core.Term"},
+                                  "function": {
+                                    "application": {
+                                      "argument": {"variable": "hydra.ext.org.apache.avro.schema.Schema"},
+                                      "function": {
+                                        "application": {
+                                          "argument": {"variable": "hydra.core.Type"},
+                                          "function": {"variable": "hydra.util.Adapter"}}}}}}}}}}}}}}]}}}}}],
   "description": ["Type definitions for the Avro code generation environment"],
   "namespace": "hydra.ext.avro.environment",
   "termDependencies": [],
