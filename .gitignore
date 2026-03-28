@@ -38,5 +38,6 @@ node_modules/
 
 # Other
 *.swp
+.claude
 # Hydra branch plan files (see CLAUDE.md)
 *-plan.md
