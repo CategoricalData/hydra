@@ -26,6 +26,10 @@ jsonValueType = typeref (Namespace "hydra.json.model") "Value"
 avroHydraAdapterType :: Type
 avroHydraAdapterType = T.apply (T.apply (T.apply (T.apply (computeType "Adapter") avroSchemaType) (coreType "Type")) jsonValueType) (coreType "Term")
 
+-- | HydraAvroAdapter = Adapter Type Avro.Schema Term Json.Value (reverse direction)
+hydraAvroAdapterType :: Type
+hydraAvroAdapterType = T.apply (T.apply (T.apply (T.apply (computeType "Adapter") (coreType "Type")) avroSchemaType) (coreType "Term")) jsonValueType
+
 define :: String -> Type -> Binding
 define = defineType ns
 
@@ -44,7 +48,8 @@ module_ = Module ns (map toTypeDef elements) []
       avroQualifiedNameType,
       avroForeignKeyType,
       avroPrimaryKeyType,
-      avroEnvironmentType]
+      avroEnvironmentType,
+      encodeEnvironmentType]
 
 -- | An Avro qualified name with optional namespace
 avroQualifiedNameType :: Binding
@@ -96,3 +101,15 @@ avroEnvironmentType = define "AvroEnvironment" $
     "elements" >:
       doc "Generated Hydra elements" $
       T.map (coreType "Name") (coreType "Binding")]
+
+-- | Environment for encoding Hydra types to Avro schemas
+encodeEnvironmentType :: Binding
+encodeEnvironmentType = define "EncodeEnvironment" $
+  doc "Environment for Hydra-to-Avro encoding, tracking which named types have been emitted" $
+  T.record [
+    "typeMap" >:
+      doc "All named types available for reference" $
+      T.map (coreType "Name") (coreType "Type"),
+    "emitted" >:
+      doc "Adapters for types that have already been fully emitted (emit references for these)" $
+      T.map (coreType "Name") hydraAvroAdapterType]
