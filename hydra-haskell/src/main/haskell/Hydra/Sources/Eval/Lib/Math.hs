@@ -1,5 +1,5 @@
 
-module Hydra.Sources.Eval.Lib.Pairs where
+module Hydra.Sources.Eval.Lib.Math where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
@@ -27,6 +27,7 @@ import qualified Hydra.Dsl.Meta.Lib.Sets      as Sets
 import           Hydra.Dsl.Meta.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Literals      as Literals
 import qualified Hydra.Dsl.LiteralTypes  as LiteralTypes
+import qualified Hydra.Dsl.Meta.Literals as MetaLiterals
 import qualified Hydra.Dsl.Meta.Base     as MetaBase
 import qualified Hydra.Dsl.Meta.Terms    as MetaTerms
 import qualified Hydra.Dsl.Meta.Types    as MetaTypes
@@ -50,63 +51,77 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
-import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-
 
 ns :: Namespace
-ns = Namespace "hydra.eval.lib.pairs"
+ns = Namespace "hydra.eval.lib.math"
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [ExtractCore.ns, ShowCore.ns]
+    []
     kernelTypesNamespaces $
-    Just ("Evaluation-level implementations of Pair functions for the Hydra interpreter.")
+    Just ("Evaluation-level implementations of Math functions for the Hydra interpreter.")
   where
     elements = [
-      toTermDefinition bimap_,
-      toTermDefinition first_,
-      toTermDefinition second_]
+      toTermDefinition even_,
+      toTermDefinition odd_,
+      toTermDefinition pred_,
+      toTermDefinition succ_]
 
--- | Interpreter-friendly bimap for Pair terms.
--- Applies firstFun to the first element and secondFun to the second element.
-bimap_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
-bimap_ = define "bimap" $
-  doc "Interpreter-friendly bimap for Pair terms." $
+-- | Interpreter-friendly even.
+-- even x = equal (mod x 2) 0
+even_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+even_ = define "even" $
+  doc "Interpreter-friendly even." $
   "cx" ~> "g" ~>
-  "firstFun" ~> "secondFun" ~> "pairTerm" ~>
-  cases _Term (var "pairTerm")
-    (Just (ExtractCore.unexpected (var "cx") (string "pair value") (ShowCore.term @@ var "pairTerm"))) [
-    _Term_pair>>: "p" ~>
-      "fst" <~ Pairs.first (var "p") $
-      "snd" <~ Pairs.second (var "p") $
-      right $ Core.termPair $ pair
-        (Core.termApplication $ Core.application (var "firstFun") (var "fst"))
-        (Core.termApplication $ Core.application (var "secondFun") (var "snd"))]
+  "x" ~>
+  right $ Core.termApplication $ Core.application
+    (Core.termApplication $ Core.application
+      (Core.termFunction $ Core.functionPrimitive $ encodedName _equality_equal)
+      (Core.termApplication $ Core.application
+        (Core.termApplication $ Core.application
+          (Core.termFunction $ Core.functionPrimitive $ encodedName _math_mod)
+          (var "x"))
+        (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ MetaLiterals.int32 2)))
+    (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ MetaLiterals.int32 0)
 
--- | Interpreter-friendly first for Pair terms.
--- Extracts the first element of a pair.
-first_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
-first_ = define "first" $
-  doc "Interpreter-friendly first for Pair terms." $
+-- | Interpreter-friendly odd.
+-- odd x = not (even x)
+odd_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+odd_ = define "odd" $
+  doc "Interpreter-friendly odd." $
   "cx" ~> "g" ~>
-  "pairTerm" ~>
-  cases _Term (var "pairTerm")
-    (Just (ExtractCore.unexpected (var "cx") (string "pair value") (ShowCore.term @@ var "pairTerm"))) [
-    _Term_pair>>: "p" ~>
-      right $ Pairs.first (var "p")]
+  "x" ~>
+  right $ Core.termApplication $ Core.application
+    (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_not)
+    (Core.termApplication $ Core.application
+      (Core.termFunction $ Core.functionPrimitive $ encodedName _math_even)
+      (var "x"))
 
--- | Interpreter-friendly second for Pair terms.
--- Extracts the second element of a pair.
-second_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
-second_ = define "second" $
-  doc "Interpreter-friendly second for Pair terms." $
+-- | Interpreter-friendly predecessor.
+-- pred x = sub x 1
+pred_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+pred_ = define "pred" $
+  doc "Interpreter-friendly predecessor." $
   "cx" ~> "g" ~>
-  "pairTerm" ~>
-  cases _Term (var "pairTerm")
-    (Just (ExtractCore.unexpected (var "cx") (string "pair value") (ShowCore.term @@ var "pairTerm"))) [
-    _Term_pair>>: "p" ~>
-      right $ Pairs.second (var "p")]
+  "x" ~>
+  right $ Core.termApplication $ Core.application
+    (Core.termApplication $ Core.application
+      (Core.termFunction $ Core.functionPrimitive $ encodedName _math_sub)
+      (var "x"))
+    (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ MetaLiterals.int32 1)
+
+-- | Interpreter-friendly successor.
+-- succ x = add x 1
+succ_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+succ_ = define "succ" $
+  doc "Interpreter-friendly successor." $
+  "cx" ~> "g" ~>
+  "x" ~>
+  right $ Core.termApplication $ Core.application
+    (Core.termApplication $ Core.application
+      (Core.termFunction $ Core.functionPrimitive $ encodedName _math_add)
+      (var "x"))
+    (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ MetaLiterals.int32 1)

@@ -66,7 +66,69 @@ module_ = Module ns elements
     Just ("Evaluation-level implementations of Set functions for the Hydra interpreter.")
   where
     elements = [
-      toTermDefinition map_]
+      toTermDefinition difference_,
+      toTermDefinition intersection_,
+      toTermDefinition map_,
+      toTermDefinition union_,
+      toTermDefinition unions_]
+
+-- | Interpreter-friendly set difference.
+-- difference s1 s2: elements in s1 that are not in s2.
+difference_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+difference_ = define "difference" $
+  doc "Interpreter-friendly set difference." $
+  "cx" ~> "g" ~>
+  "set1Term" ~> "set2Term" ~>
+  "elements" <<~ (ExtractCore.set @@ var "cx" @@ var "g" @@ var "set1Term") $
+  -- Build: foldl (\acc el -> ifElse (member el set2) acc (insert el acc)) empty (toList set1)
+  right $ Lists.foldl
+    ("acc" ~> "el" ~>
+      Core.termApplication $ Core.application
+        (Core.termApplication $ Core.application
+          (Core.termApplication $ Core.application
+            (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+            (Core.termApplication $ Core.application
+              (Core.termApplication $ Core.application
+                (Core.termFunction $ Core.functionPrimitive $ encodedName _sets_member)
+                (var "el"))
+              (var "set2Term")))
+          (var "acc"))
+        (Core.termApplication $ Core.application
+          (Core.termApplication $ Core.application
+            (Core.termFunction $ Core.functionPrimitive $ encodedName _sets_insert)
+            (var "el"))
+          (var "acc")))
+    (Core.termSet $ Sets.fromList (list ([] :: [TTerm Term])))
+    (Sets.toList $ var "elements")
+
+-- | Interpreter-friendly set intersection.
+-- intersection s1 s2: elements in both s1 and s2.
+intersection_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+intersection_ = define "intersection" $
+  doc "Interpreter-friendly set intersection." $
+  "cx" ~> "g" ~>
+  "set1Term" ~> "set2Term" ~>
+  "elements" <<~ (ExtractCore.set @@ var "cx" @@ var "g" @@ var "set1Term") $
+  -- Build: foldl (\acc el -> ifElse (member el set2) (insert el acc) acc) empty (toList set1)
+  right $ Lists.foldl
+    ("acc" ~> "el" ~>
+      Core.termApplication $ Core.application
+        (Core.termApplication $ Core.application
+          (Core.termApplication $ Core.application
+            (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+            (Core.termApplication $ Core.application
+              (Core.termApplication $ Core.application
+                (Core.termFunction $ Core.functionPrimitive $ encodedName _sets_member)
+                (var "el"))
+              (var "set2Term")))
+          (Core.termApplication $ Core.application
+            (Core.termApplication $ Core.application
+              (Core.termFunction $ Core.functionPrimitive $ encodedName _sets_insert)
+              (var "el"))
+            (var "acc")))
+        (var "acc"))
+    (Core.termSet $ Sets.fromList (list ([] :: [TTerm Term])))
+    (Sets.toList $ var "elements")
 
 -- | Interpreter-friendly map for Set terms.
 -- Applies fun to each element.
@@ -82,3 +144,41 @@ map_ = define "map" $
     (Core.termList $ Lists.map
       ("el" ~> Core.termApplication $ Core.application (var "fun") (var "el"))
       (Sets.toList $ var "elements"))
+
+-- | Interpreter-friendly set union.
+-- union s1 s2: elements in either s1 or s2.
+union_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+union_ = define "union" $
+  doc "Interpreter-friendly set union." $
+  "cx" ~> "g" ~>
+  "set1Term" ~> "set2Term" ~>
+  "elements" <<~ (ExtractCore.set @@ var "cx" @@ var "g" @@ var "set1Term") $
+  -- Build: foldl (\acc el -> insert el acc) set2 (toList set1)
+  right $ Lists.foldl
+    ("acc" ~> "el" ~>
+      Core.termApplication $ Core.application
+        (Core.termApplication $ Core.application
+          (Core.termFunction $ Core.functionPrimitive $ encodedName _sets_insert)
+          (var "el"))
+        (var "acc"))
+    (var "set2Term")
+    (Sets.toList $ var "elements")
+
+-- | Interpreter-friendly unions for list of Set terms.
+-- unions [s1, s2, ...]: union of all sets.
+unions_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+unions_ = define "unions" $
+  doc "Interpreter-friendly unions for list of Set terms." $
+  "cx" ~> "g" ~>
+  "listTerm" ~>
+  "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
+  -- Build: foldl union empty sets
+  right $ Lists.foldl
+    ("acc" ~> "s" ~>
+      Core.termApplication $ Core.application
+        (Core.termApplication $ Core.application
+          (Core.termFunction $ Core.functionPrimitive $ encodedName _sets_union)
+          (var "acc"))
+        (var "s"))
+    (Core.termSet $ Sets.fromList (list ([] :: [TTerm Term])))
+    (var "elements")

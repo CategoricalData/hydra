@@ -54,6 +54,7 @@ import qualified Data.Maybe              as Y
 import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Errors       as Error
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
+import qualified Hydra.Sources.Kernel.Terms.Reduction as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
 ns :: Namespace
@@ -64,20 +65,31 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [ExtractCore.ns, ShowCore.ns]
+    [ExtractCore.ns, Reduction.ns, ShowCore.ns]
     kernelTypesNamespaces $
     Just ("Evaluation-level implementations of List functions for the Hydra interpreter.")
   where
     elements = [
       toTermDefinition apply_,
       toTermDefinition bind_,
+      toTermDefinition concat2_,
       toTermDefinition dropWhile_,
+      toTermDefinition elem_,
       toTermDefinition filter_,
       toTermDefinition find_,
       toTermDefinition foldl_,
       toTermDefinition foldr_,
+--      toTermDefinition group_,  -- TODO: requires intermediate reduction within fold; needs more work
+      toTermDefinition intercalate_,
+      toTermDefinition intersperse_,
       toTermDefinition map_,
+      toTermDefinition nub_,
       toTermDefinition partition_,
+      toTermDefinition pure_,
+      toTermDefinition replicate_,
+      toTermDefinition safeHead_,
+      toTermDefinition singleton_,
+      toTermDefinition sort_,
       toTermDefinition sortOn_,
       toTermDefinition span_,
       toTermDefinition zipWith_]
@@ -109,6 +121,18 @@ bind_ = define "bind" $
     (Core.termList $ Lists.map
       ("el" ~> Core.termApplication $ Core.application (var "funTerm") (var "el"))
       (var "elements"))
+
+-- | Interpreter-friendly concat2 for List terms.
+-- Concatenates two lists.
+concat2_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+concat2_ = define "concat2" $
+  doc "Interpreter-friendly concat2 for List terms." $
+  "cx" ~> "g" ~>
+  "list1" ~> "list2" ~>
+  -- Build: concat [list1, list2]
+  right $ Core.termApplication $ Core.application
+    (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat)
+    (Core.termList $ list [var "list1", var "list2"])
 
 -- | Interpreter-friendly dropWhile for List terms.
 -- Drops elements from the front while predTerm returns true.
@@ -165,34 +189,45 @@ find_ = define "find" $
 
 -- | Interpreter-friendly left fold for List terms.
 -- Folds from the left: foldl f init [e1,e2,e3] = f (f (f init e1) e2) e3
+-- Each step is reduced through the interpreter so that the accumulator is always a value.
 foldl_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
 foldl_ = define "foldl" $
   doc "Interpreter-friendly left fold for List terms." $
   "cx" ~> "g" ~>
   "funTerm" ~> "initTerm" ~> "listTerm" ~>
   "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
-  -- Build nested applications: f (f (f init e1) e2) e3
-  right $ Lists.foldl
-    ("acc" ~> "el" ~> Core.termApplication $ Core.application
-      (Core.termApplication $ Core.application (var "funTerm") (var "acc"))
-      (var "el"))
-    (var "initTerm")
+  -- Fold with reduction at each step: reduce f(acc, el) before next iteration.
+  -- The accumulator is Either (InContext Error) Term to thread errors through.
+  Lists.foldl
+    ("acc" ~> "el" ~>
+      Eithers.bind (var "acc") $
+        "reducedAcc" ~>
+          Reduction.reduceTerm @@ var "cx" @@ var "g" @@ MetaLiterals.boolean True @@
+            (Core.termApplication $ Core.application
+              (Core.termApplication $ Core.application (var "funTerm") (var "reducedAcc"))
+              (var "el")))
+    (right $ var "initTerm")
     (var "elements")
 
 -- | Interpreter-friendly right fold for List terms.
 -- Folds from the right: foldr f init [e1,e2,e3] = f e1 (f e2 (f e3 init))
-foldr_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext OtherError) Term)
+-- Each step is reduced through the interpreter so that the accumulator is always a value.
+foldr_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
 foldr_ = define "foldr" $
   doc "Interpreter-friendly right fold for List terms." $
   "cx" ~> "g" ~>
   "funTerm" ~> "initTerm" ~> "listTerm" ~>
   "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
-  -- Build nested applications: f e1 (f e2 (f e3 init))
-  right $ Lists.foldr
-    ("el" ~> "acc" ~> Core.termApplication $ Core.application
-      (Core.termApplication $ Core.application (var "funTerm") (var "el"))
-      (var "acc"))
-    (var "initTerm")
+  -- Fold with reduction at each step
+  Lists.foldr
+    ("el" ~> "acc" ~>
+      Eithers.bind (var "acc") $
+        "reducedAcc" ~>
+          Reduction.reduceTerm @@ var "cx" @@ var "g" @@ MetaLiterals.boolean True @@
+            (Core.termApplication $ Core.application
+              (Core.termApplication $ Core.application (var "funTerm") (var "el"))
+              (var "reducedAcc")))
+    (right $ var "initTerm")
     (var "elements")
 
 -- | Interpreter-friendly map for List terms.
@@ -410,3 +445,248 @@ zipWith_ = define "zipWith" $
         (Core.termApplication $ Core.application (var "funTerm") (var "a"))
         (var "b"))
     (Lists.zip (var "elements1") (var "elements2"))
+
+-- | Interpreter-friendly elem for List terms.
+-- Tests whether an element is in the list: elem x xs = isJust (find (equal x) xs)
+elem_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+elem_ = define "elem" $
+  doc "Interpreter-friendly elem for List terms." $
+  "cx" ~> "g" ~>
+  "x" ~> "listTerm" ~>
+  -- Build: isJust (find (equal x) listTerm)
+  right $ Core.termApplication $ Core.application
+    (Core.termFunction $ Core.functionPrimitive $ encodedName _maybes_isJust)
+    (Core.termApplication $ Core.application
+      (Core.termApplication $ Core.application
+        (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_find)
+        (Core.termApplication $ Core.application
+          (Core.termFunction $ Core.functionPrimitive $ encodedName _equality_equal)
+          (var "x")))
+      (var "listTerm"))
+
+-- | Interpreter-friendly group for List terms.
+-- Groups consecutive equal elements: group [1,1,2,2,2,3] = [[1,1],[2,2,2],[3]]
+-- Uses meta-level foldl with reduceTerm at each step to keep the accumulator reduced.
+group_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+group_ = define "group" $
+  doc "Interpreter-friendly group for List terms." $
+  "cx" ~> "g" ~>
+  "listTerm" ~>
+  "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
+  -- State: Either (InContext Error) (pair(currentGroup, resultGroups))
+  -- Fold with reduction at each step via the enclosing foldl_ which uses reduceTerm
+  "finalState" <<~ (Lists.foldl
+    ("acc" ~> "el" ~>
+      Eithers.bind (var "acc") $
+        "state" ~>
+          "curGroup" <<~ (Reduction.reduceTerm @@ var "cx" @@ var "g" @@ MetaLiterals.boolean True @@
+            (Core.termApplication $ Core.application
+              (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_first)
+              (var "state"))) $
+          "result" <<~ (Reduction.reduceTerm @@ var "cx" @@ var "g" @@ MetaLiterals.boolean True @@
+            (Core.termApplication $ Core.application
+              (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_second)
+              (var "state"))) $
+          Reduction.reduceTerm @@ var "cx" @@ var "g" @@ MetaLiterals.boolean True @@
+            (Core.termApplication $ Core.application
+              (Core.termApplication $ Core.application
+                (Core.termApplication $ Core.application
+                  (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+                  (Core.termApplication $ Core.application
+                    (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_null)
+                    (var "curGroup")))
+                -- Empty group: start new group with [el]
+                (Core.termPair $ pair
+                  (Core.termList $ list [var "el"])
+                  (var "result")))
+              -- Non-empty: check if el equals head of current group
+              (Core.termApplication $ Core.application
+                (Core.termApplication $ Core.application
+                  (Core.termApplication $ Core.application
+                    (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+                    (Core.termApplication $ Core.application
+                      (Core.termApplication $ Core.application
+                        (Core.termFunction $ Core.functionPrimitive $ encodedName _equality_equal)
+                        (var "el"))
+                      (Core.termApplication $ Core.application
+                        (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_head)
+                        (var "curGroup"))))
+                  -- Same: extend current group
+                  (Core.termPair $ pair
+                    (Core.termApplication $ Core.application
+                      (Core.termApplication $ Core.application
+                        (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat2)
+                        (var "curGroup"))
+                      (Core.termList $ list [var "el"]))
+                    (var "result")))
+                -- Different: flush current group, start new
+                (Core.termPair $ pair
+                  (Core.termList $ list [var "el"])
+                  (Core.termApplication $ Core.application
+                    (Core.termApplication $ Core.application
+                      (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat2)
+                      (var "result"))
+                    (Core.termList $ list [var "curGroup"]))))))
+    (right $ Core.termPair $ pair
+      (Core.termList $ list ([] :: [TTerm Term]))
+      (Core.termList $ list ([] :: [TTerm Term])))
+    (var "elements")) $
+  -- Flush final group
+  Eithers.bind (var "finalState") $
+    "state" ~>
+      "lastGroup" <<~ (Reduction.reduceTerm @@ var "cx" @@ var "g" @@ MetaLiterals.boolean True @@
+        (Core.termApplication $ Core.application
+          (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_first)
+          (var "state"))) $
+      "groups" <<~ (Reduction.reduceTerm @@ var "cx" @@ var "g" @@ MetaLiterals.boolean True @@
+        (Core.termApplication $ Core.application
+          (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_second)
+          (var "state"))) $
+      Reduction.reduceTerm @@ var "cx" @@ var "g" @@ MetaLiterals.boolean True @@
+        (Core.termApplication $ Core.application
+          (Core.termApplication $ Core.application
+            (Core.termApplication $ Core.application
+              (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+              (Core.termApplication $ Core.application
+                (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_null)
+                (var "lastGroup")))
+            (var "groups"))
+          (Core.termApplication $ Core.application
+            (Core.termApplication $ Core.application
+              (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat2)
+              (var "groups"))
+            (Core.termList $ list [var "lastGroup"])))
+
+-- | Interpreter-friendly intercalate for List terms.
+-- intercalate sep xss = concat (intersperse sep xss)
+intercalate_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+intercalate_ = define "intercalate" $
+  doc "Interpreter-friendly intercalate for List terms." $
+  "cx" ~> "g" ~>
+  "sep" ~> "listsTerm" ~>
+  -- Build: concat (intersperse sep listsTerm)
+  right $ Core.termApplication $ Core.application
+    (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat)
+    (Core.termApplication $ Core.application
+      (Core.termApplication $ Core.application
+        (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_intersperse)
+        (var "sep"))
+      (var "listsTerm"))
+
+-- | Interpreter-friendly intersperse for List terms.
+-- intersperse sep [a,b,c] = [a,sep,b,sep,c]
+intersperse_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+intersperse_ = define "intersperse" $
+  doc "Interpreter-friendly intersperse for List terms." $
+  "cx" ~> "g" ~>
+  "sep" ~> "listTerm" ~>
+  "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
+  right $ Logic.ifElse
+    (Lists.null (var "elements"))
+    (Core.termList $ list ([] :: [TTerm Term]))
+    (Core.termList $ Lists.cons
+      (Lists.head (var "elements"))
+      (Lists.concat $ Lists.map
+        ("el" ~> list [var "sep", var "el"])
+        (Lists.tail (var "elements"))))
+
+-- | Interpreter-friendly nub for List terms.
+-- Removes duplicates using equality. nub xs = foldl (\acc x -> ifElse (elem x acc) acc (concat2 acc [x])) [] xs
+nub_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+nub_ = define "nub" $
+  doc "Interpreter-friendly nub for List terms." $
+  "cx" ~> "g" ~>
+  "listTerm" ~>
+  "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
+  -- Build: foldl (\acc x -> ifElse (elem x acc) acc (concat2 acc [x])) [] xs
+  -- This must be entirely at the term level since we need runtime equality checks
+  right $ Core.termApplication $ Core.application
+    (Core.termApplication $ Core.application
+      (Core.termApplication $ Core.application
+        (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_foldl)
+        -- fold function: \acc x -> ifElse (elem x acc) acc (concat2 acc [x])
+        (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "acc") nothing $
+          Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "x") nothing $
+            Core.termApplication $ Core.application
+              (Core.termApplication $ Core.application
+                (Core.termApplication $ Core.application
+                  (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+                  (Core.termApplication $ Core.application
+                    (Core.termApplication $ Core.application
+                      (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_elem)
+                      (Core.termVariable $ wrap _Name $ string "x"))
+                    (Core.termVariable $ wrap _Name $ string "acc")))
+                (Core.termVariable $ wrap _Name $ string "acc"))
+              (Core.termApplication $ Core.application
+                (Core.termApplication $ Core.application
+                  (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat2)
+                  (Core.termVariable $ wrap _Name $ string "acc"))
+                (Core.termList $ list [Core.termVariable $ wrap _Name $ string "x"]))))
+      -- initial: []
+      (Core.termList $ list ([] :: [TTerm Term])))
+    -- list
+    (var "listTerm")
+
+-- | Interpreter-friendly pure for List terms.
+-- Wraps a single element in a list: pure x = [x]
+pure_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+pure_ = define "pure" $
+  doc "Interpreter-friendly pure for List terms." $
+  "cx" ~> "g" ~>
+  "x" ~>
+  right $ Core.termList $ list [var "x"]
+
+-- | Interpreter-friendly replicate for List terms.
+-- replicate n x = map (const x) (range 0 n)
+replicate_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+replicate_ = define "replicate" $
+  doc "Interpreter-friendly replicate for List terms." $
+  "cx" ~> "g" ~>
+  "n" ~> "x" ~>
+  -- Build: map (\_ -> x) (range 1 n)  -- range is inclusive, so range 1 n has n elements
+  right $ Core.termApplication $ Core.application
+    (Core.termApplication $ Core.application
+      (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_map)
+      (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "_") nothing $
+        var "x"))
+    (Core.termApplication $ Core.application
+      (Core.termApplication $ Core.application
+        (Core.termFunction $ Core.functionPrimitive $ encodedName _math_range)
+        (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ MetaLiterals.int32 1))
+      (var "n"))
+
+-- | Interpreter-friendly safeHead for List terms.
+-- safeHead xs = if null xs then Nothing else Just (head xs)
+safeHead_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+safeHead_ = define "safeHead" $
+  doc "Interpreter-friendly safeHead for List terms." $
+  "cx" ~> "g" ~>
+  "listTerm" ~>
+  "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
+  right $ Logic.ifElse
+    (Lists.null (var "elements"))
+    (Core.termMaybe nothing)
+    (Core.termMaybe $ just $ Lists.head (var "elements"))
+
+-- | Interpreter-friendly singleton for List terms.
+-- singleton x = [x]
+singleton_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+singleton_ = define "singleton" $
+  doc "Interpreter-friendly singleton for List terms." $
+  "cx" ~> "g" ~>
+  "x" ~>
+  right $ Core.termList $ list [var "x"]
+
+-- | Interpreter-friendly sort for List terms.
+-- sort xs = sortOn identity xs
+sort_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+sort_ = define "sort" $
+  doc "Interpreter-friendly sort for List terms." $
+  "cx" ~> "g" ~>
+  "listTerm" ~>
+  -- Build: sortOn identity listTerm
+  right $ Core.termApplication $ Core.application
+    (Core.termApplication $ Core.application
+      (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_sortOn)
+      (Core.termFunction $ Core.functionPrimitive $ encodedName _equality_identity))
+    (var "listTerm")
