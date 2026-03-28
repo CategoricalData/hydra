@@ -28,34 +28,34 @@
           hydra_lib_strings_words)
   (begin
 
-    ;; cat :: [String] -> String
+    ;; Hydra represents characters as integer code points (int32).
+    (define (int->char c) (if (char? c) c (integer->char c)))
+    (define (char->int c) (if (char? c) (char->integer c) c))
+
+    ;; Concatenate a list of strings into a single string.
     (define hydra_lib_strings_cat
       (lambda (strs)
         (apply string-append strs)))
 
-    ;; cat2 :: String -> String -> String
+    ;; Concatenate two strings.
     (define hydra_lib_strings_cat2
       (lambda (a)
         (lambda (b)
           (string-append a b))))
 
-    ;; Hydra represents characters as integer code points (int32).
-    (define (int->char c) (if (char? c) c (integer->char c)))
-    (define (char->int c) (if (char? c) (char->integer c) c))
-
-    ;; char_at :: Int -> String -> Char (as int32 code point)
+    ;; Get the Unicode code point of the character at a specific index in a string.
     (define hydra_lib_strings_char_at
       (lambda (n)
         (lambda (s)
           (char->int (string-ref s n)))))
 
-    ;; cons :: Char (as int32) -> String -> String
+    ;; Prepend a character (as code point) to a string.
     (define hydra_lib_strings_cons
       (lambda (c)
         (lambda (s)
           (string-append (string (int->char c)) s))))
 
-    ;; drop :: Int -> String -> String
+    ;; Drop the first n characters from a string.
     (define hydra_lib_strings_drop
       (lambda (n)
         (lambda (s)
@@ -63,17 +63,17 @@
               ""
               (substring s n (string-length s))))))
 
-    ;; from_list :: [Char (as int32)] -> String
+    ;; Convert a list of Unicode code points to a string.
     (define hydra_lib_strings_from_list
       (lambda (chars)
         (list->string (map int->char chars))))
 
-    ;; head :: String -> Char (as int32 code point)
+    ;; Get the first character of a string as a code point.
     (define hydra_lib_strings_head
       (lambda (s)
         (char->int (string-ref s 0))))
 
-    ;; intercalate :: String -> [String] -> String
+    ;; Join a list of strings with a separator between each element.
     (define hydra_lib_strings_intercalate
       (lambda (sep)
         (lambda (strs)
@@ -85,7 +85,7 @@
                     (loop (cdr rest)
                           (string-append acc sep (car rest)))))))))
 
-    ;; isInfixOf :: String -> String -> Bool
+    ;; Check whether a string contains another string as a substring.
     (define hydra_lib_strings_is_infix_of
       (lambda (needle)
         (lambda (haystack)
@@ -99,7 +99,7 @@
                     ((string=? (substring haystack i (+ i nlen)) needle) #t)
                     (else (loop (+ i 1))))))))))
 
-    ;; isPrefixOf :: String -> String -> Bool
+    ;; Check whether a string starts with a given prefix.
     (define hydra_lib_strings_is_prefix_of
       (lambda (prefix)
         (lambda (s)
@@ -107,7 +107,7 @@
             (and (<= plen (string-length s))
                  (string=? (substring s 0 plen) prefix))))))
 
-    ;; isSuffixOf :: String -> String -> Bool
+    ;; Check whether a string ends with a given suffix.
     (define hydra_lib_strings_is_suffix_of
       (lambda (suffix)
         (lambda (s)
@@ -116,12 +116,12 @@
             (and (<= slen len)
                  (string=? (substring s (- len slen) len) suffix))))))
 
-    ;; length :: String -> Int
+    ;; Return the length of a string.
     (define hydra_lib_strings_length
       (lambda (s)
         (string-length s)))
 
-    ;; lines :: String -> [String]
+    ;; Split a string into lines.
     ;; Haskell behavior: lines "" = [], lines "hello\n" = ["hello"]
     (define hydra_lib_strings_lines
       (lambda (s)
@@ -140,12 +140,12 @@
                   (else
                    (loop (+ i 1) start acc))))))))
 
-    ;; null :: String -> Bool
+    ;; Check whether a string is empty.
     (define hydra_lib_strings_null
       (lambda (s)
         (= (string-length s) 0)))
 
-    ;; replicate :: Int -> String -> String
+    ;; Replicate a string n times.
     (define hydra_lib_strings_replicate
       (lambda (n)
         (lambda (s)
@@ -154,12 +154,12 @@
                 acc
                 (loop (- k 1) (string-append acc s)))))))
 
-    ;; reverse :: String -> String
+    ;; Reverse a string.
     (define hydra_lib_strings_reverse
       (lambda (s)
         (list->string (reverse (string->list s)))))
 
-    ;; split_on :: String -> String -> [String]
+    ;; Split a string on a delimiter string.
     ;; Haskell behavior: splitOn "" "abc" = ["", "a", "b", "c"]
     ;;                   splitOn "" "" = [""]
     (define hydra_lib_strings_split_on
@@ -181,40 +181,40 @@
                     (else
                      (loop (+ i 1) start acc)))))))))
 
-    ;; tail :: String -> String
+    ;; Get all characters of a string except the first.
     (define hydra_lib_strings_tail
       (lambda (s)
         (substring s 1 (string-length s))))
 
-    ;; take :: Int -> String -> String
+    ;; Take the first n characters from a string.
     (define hydra_lib_strings_take
       (lambda (n)
         (lambda (s)
           (substring s 0 (min n (string-length s))))))
 
-    ;; to_list :: String -> [Char (as int32 code points)]
+    ;; Convert a string to a list of Unicode code points.
     (define hydra_lib_strings_to_list
       (lambda (s)
         (map char->int (string->list s))))
 
-    ;; to_lower :: String -> String
+    ;; Convert a string to lowercase.
     (define hydra_lib_strings_to_lower
       (lambda (s)
         (list->string
           (map char-downcase (string->list s)))))
 
-    ;; to_upper :: String -> String
+    ;; Convert a string to uppercase.
     (define hydra_lib_strings_to_upper
       (lambda (s)
         (list->string
           (map char-upcase (string->list s)))))
 
-    ;; unlines :: [String] -> String
+    ;; Join a list of strings with newlines, appending a trailing newline.
     (define hydra_lib_strings_unlines
       (lambda (strs)
         (apply string-append (map (lambda (s) (string-append s "\n")) strs))))
 
-    ;; unwords :: [String] -> String
+    ;; Join a list of strings with spaces.
     (define hydra_lib_strings_unwords
       (lambda (strs)
         (if (null? strs)
@@ -224,7 +224,7 @@
                   acc
                   (loop (cdr rest) (string-append acc " " (car rest))))))))
 
-    ;; words :: String -> [String]
+    ;; Split a string into words (separated by whitespace).
     (define hydra_lib_strings_words
       (lambda (s)
         (let ((chars (string->list s)))

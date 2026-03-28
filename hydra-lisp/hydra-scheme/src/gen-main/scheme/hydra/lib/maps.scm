@@ -13,12 +13,12 @@
           hydra_lib_maps_keys
           hydra_lib_maps_lookup
           hydra_lib_maps_map
+          hydra_lib_maps_map_keys
           hydra_lib_maps_member
           hydra_lib_maps_null
           hydra_lib_maps_singleton
           hydra_lib_maps_size
           hydra_lib_maps_to_list
-          hydra_lib_maps_map_keys
           hydra_lib_maps_union)
   (begin
 
@@ -75,7 +75,7 @@
         ((equal? key (caar alist)) (cdr alist))
         (else (cons (car alist) (alist-delete key (cdr alist))))))
 
-    ;; alter :: (Maybe v -> Maybe v) -> k -> Map k v -> Map k v
+    ;; Alter a value at a key using a function.
     ;; Handle multiple Maybe representations: (nothing), (just v), (maybe '()), (maybe v), '()
     (define (alter-is-nothing? m)
       (or (null? m)
@@ -104,7 +104,7 @@
                   (alist-delete k m)
                   (alist-insert k (alter-get-value new-maybe) m)))))))
 
-    ;; bimap :: (k1 -> k2) -> (v1 -> v2) -> Map k1 v1 -> Map k2 v2
+    ;; Map a function over the keys and values of a map.
     (define hydra_lib_maps_bimap
       (lambda (fk)
         (lambda (fv)
@@ -120,21 +120,21 @@
                   (loop (cdr rest)
                         (cons (cons (fk (caar rest)) (fv (cdar rest))) acc))))))))
 
-    ;; delete :: k -> Map k v -> Map k v
+    ;; Remove a key from a map.
     (define hydra_lib_maps_delete
       (lambda (k)
         (lambda (m)
           (alist-delete k m))))
 
-    ;; elems :: Map k v -> [v]
+    ;; Get the values of a map.
     (define hydra_lib_maps_elems
       (lambda (m)
         (map cdr m)))
 
-    ;; empty :: Map k v
+    ;; Create an empty map.
     (define hydra_lib_maps_empty '())
 
-    ;; filter :: (v -> Bool) -> Map k v -> Map k v
+    ;; Filter a map based on values.
     (define hydra_lib_maps_filter
       (lambda (pred)
         (lambda (m)
@@ -145,7 +145,7 @@
                     (loop (cdr rest) (cons (car rest) acc))
                     (loop (cdr rest) acc)))))))
 
-    ;; filter_with_key :: (k -> v -> Bool) -> Map k v -> Map k v
+    ;; Filter a map based on key-value pairs.
     (define hydra_lib_maps_filter_with_key
       (lambda (pred)
         (lambda (m)
@@ -156,7 +156,7 @@
                     (loop (cdr rest) (cons (car rest) acc))
                     (loop (cdr rest) acc)))))))
 
-    ;; find_with_default :: v -> k -> Map k v -> v
+    ;; Lookup a value with a default.
     (define hydra_lib_maps_find_with_default
       (lambda (def)
         (lambda (k)
@@ -164,7 +164,7 @@
             (let ((entry (alist-lookup k m)))
               (if entry (cdr entry) def))))))
 
-    ;; from_list :: [Pair k v] -> Map k v
+    ;; Create a map from a list of key-value pairs.
     ;; Input is list of (list k v) pairs
     (define hydra_lib_maps_from_list
       (lambda (pairs)
@@ -175,19 +175,19 @@
                 (loop (cdr rest)
                       (alist-insert (car p) (cadr p) acc)))))))
 
-    ;; insert :: k -> v -> Map k v -> Map k v
+    ;; Insert a key-value pair into a map.
     (define hydra_lib_maps_insert
       (lambda (k)
         (lambda (v)
           (lambda (m)
             (alist-insert k v m)))))
 
-    ;; keys :: Map k v -> [k]
+    ;; Get the keys of a map.
     (define hydra_lib_maps_keys
       (lambda (m)
         (map car m)))
 
-    ;; lookup :: k -> Map k v -> Maybe v
+    ;; Lookup a value in a map.
     (define hydra_lib_maps_lookup
       (lambda (k)
         (lambda (m)
@@ -196,40 +196,13 @@
                 (list 'just (cdr entry))
                 (list 'nothing))))))
 
-    ;; map :: (v1 -> v2) -> Map k v1 -> Map k v2
+    ;; Map a function over a map.
     (define hydra_lib_maps_map
       (lambda (f)
         (lambda (m)
           (map (lambda (entry) (cons (car entry) (f (cdr entry)))) m))))
 
-    ;; member :: k -> Map k v -> Bool
-    (define hydra_lib_maps_member
-      (lambda (k)
-        (lambda (m)
-          (if (alist-lookup k m) #t #f))))
-
-    ;; null :: Map k v -> Bool
-    (define hydra_lib_maps_null
-      (lambda (m)
-        (null? m)))
-
-    ;; singleton :: k -> v -> Map k v
-    (define hydra_lib_maps_singleton
-      (lambda (k)
-        (lambda (v)
-          (list (cons k v)))))
-
-    ;; size :: Map k v -> Int
-    (define hydra_lib_maps_size
-      (lambda (m)
-        (length m)))
-
-    ;; to_list :: Map k v -> [Pair k v]
-    (define hydra_lib_maps_to_list
-      (lambda (m)
-        (map (lambda (entry) (list (car entry) (cdr entry))) m)))
-
-    ;; map_keys :: (k1 -> k2) -> Map k1 v -> Map k2 v
+    ;; Map a function over the keys of a map.
     (define hydra_lib_maps_map_keys
       (lambda (f)
         (lambda (m)
@@ -239,7 +212,34 @@
                 (loop (cdr rest)
                       (alist-insert (f (caar rest)) (cdar rest) acc)))))))
 
-    ;; union :: Map k v -> Map k v -> Map k v
+    ;; Check if a key is present in a map.
+    (define hydra_lib_maps_member
+      (lambda (k)
+        (lambda (m)
+          (if (alist-lookup k m) #t #f))))
+
+    ;; Check if a map is empty.
+    (define hydra_lib_maps_null
+      (lambda (m)
+        (null? m)))
+
+    ;; Create a map with a single key-value pair.
+    (define hydra_lib_maps_singleton
+      (lambda (k)
+        (lambda (v)
+          (list (cons k v)))))
+
+    ;; Get the size of a map.
+    (define hydra_lib_maps_size
+      (lambda (m)
+        (length m)))
+
+    ;; Convert a map to a list of key-value pairs.
+    (define hydra_lib_maps_to_list
+      (lambda (m)
+        (map (lambda (entry) (list (car entry) (cdr entry))) m)))
+
+    ;; Union two maps, with the first taking precedence.
     ;; Left-biased: entries from first map take precedence
     (define hydra_lib_maps_union
       (lambda (m1)

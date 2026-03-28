@@ -5262,4 +5262,4 @@ wrapLazyArguments = def "wrapLazyArguments" $
             wrapInSupplierLambda @@ (Lists.at (int32 0) (var "args")),
             Lists.at (int32 1) (var "args")])
           (just (string "applyLazy")))
-        (pair (var "args") (nothing :: TTerm (Maybe String))))))
+        (pair (var "args") (nothing :: TTerm (Maybe String)))))))

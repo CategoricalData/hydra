@@ -1,0 +1,68 @@
+{
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.packaging.Package",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "A package, which is a named collection of modules with metadata and dependencies"}}}],
+            "body": {
+              "record": [
+                {
+                  "name": "name",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The name of the package"}}}],
+                      "body": {"variable": "hydra.packaging.PackageName"}}}},
+                {
+                  "name": "modules",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The modules in this package"}}}],
+                      "body": {"list": {"variable": "hydra.module.Module"}}}}},
+                {
+                  "name": "dependencies",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The packages which this package depends on"}}}],
+                      "body": {"list": {"variable": "hydra.packaging.PackageName"}}}}},
+                {
+                  "name": "description",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "An optional human-readable description of the package"}}}],
+                      "body": {"maybe": {"literal": {"string": {}}}}}}}]}}}}},
+    {
+      "type": {
+        "name": "hydra.packaging.PackageName",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "The unique name of a package, e.g. \"hydra-kernel\" or \"hydra-python\""}}}],
+            "body": {"wrap": {"literal": {"string": {}}}}}}}}],
+  "description": ["A model for Hydra packages"],
+  "namespace": "hydra.packaging",
+  "termDependencies": ["hydra.module"],
+  "typeDependencies": []}
