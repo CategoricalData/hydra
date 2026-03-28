@@ -5,13 +5,15 @@ r"""Evaluation-level implementations of List functions for the Hydra interpreter
 from __future__ import annotations
 from collections.abc import Callable
 from functools import lru_cache
-from hydra.dsl.python import Either, Nothing, Right, frozenlist
+from hydra.dsl.python import Either, Just, Nothing, Right, frozenlist
 from typing import TypeVar, cast
 import hydra.core
 import hydra.extract.core
 import hydra.lib.eithers
 import hydra.lib.lists
+import hydra.lib.logic
 import hydra.lib.pairs
+import hydra.reduction
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
@@ -27,10 +29,20 @@ def bind(cx: hydra.context.Context, g: hydra.graph.Graph, list_term: hydra.core.
 
     return hydra.lib.eithers.bind(hydra.extract.core.list(cx, g, list_term), (lambda elements: Right(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.lists.concat"))))), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda el: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, el)))), elements)))))))))
 
+def concat2(cx: T0, g: T1, list1: hydra.core.Term, list2: hydra.core.Term) -> Either[T2, hydra.core.Term]:
+    r"""Interpreter-friendly concat2 for List terms."""
+
+    return Right(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.lists.concat"))))), cast(hydra.core.Term, hydra.core.TermList((list1, list2)))))))
+
 def drop_while(cx: T0, g: T1, pred_term: hydra.core.Term, list_term: hydra.core.Term) -> Either[T2, hydra.core.Term]:
     r"""Interpreter-friendly dropWhile for List terms."""
 
     return Right(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.pairs.second"))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.lists.span"))))), pred_term))), list_term)))))))
+
+def elem(cx: T0, g: T1, x: hydra.core.Term, list_term: hydra.core.Term) -> Either[T2, hydra.core.Term]:
+    r"""Interpreter-friendly elem for List terms."""
+
+    return Right(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.maybes.isJust"))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.lists.find"))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.equality.equal"))))), x)))))), list_term)))))))
 
 def filter(cx: hydra.context.Context, g: hydra.graph.Graph, pred_term: hydra.core.Term, list_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
     r"""Interpreter-friendly filter for List terms."""
@@ -45,22 +57,62 @@ def find(cx: T0, g: T1, pred_term: hydra.core.Term, list_term: hydra.core.Term) 
 def foldl(cx: hydra.context.Context, g: hydra.graph.Graph, fun_term: hydra.core.Term, init_term: hydra.core.Term, list_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
     r"""Interpreter-friendly left fold for List terms."""
 
-    return hydra.lib.eithers.bind(hydra.extract.core.list(cx, g, list_term), (lambda elements: Right(hydra.lib.lists.foldl((lambda acc, el: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, acc))), el)))), init_term, elements))))
+    return hydra.lib.eithers.bind(hydra.extract.core.list(cx, g, list_term), (lambda elements: hydra.lib.lists.foldl((lambda acc, el: hydra.lib.eithers.bind(acc, (lambda reduced_acc: hydra.reduction.reduce_term(cx, g, True, cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, reduced_acc))), el))))))), Right(init_term), elements)))
 
 def foldr(cx: hydra.context.Context, g: hydra.graph.Graph, fun_term: hydra.core.Term, init_term: hydra.core.Term, list_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
     r"""Interpreter-friendly right fold for List terms."""
 
-    return hydra.lib.eithers.bind(hydra.extract.core.list(cx, g, list_term), (lambda elements: Right(hydra.lib.lists.foldr((lambda el, acc: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, el))), acc)))), init_term, elements))))
+    return hydra.lib.eithers.bind(hydra.extract.core.list(cx, g, list_term), (lambda elements: hydra.lib.lists.foldr((lambda el, acc: hydra.lib.eithers.bind(acc, (lambda reduced_acc: hydra.reduction.reduce_term(cx, g, True, cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, el))), reduced_acc))))))), Right(init_term), elements)))
+
+def intercalate(cx: T0, g: T1, sep: hydra.core.Term, lists_term: hydra.core.Term) -> Either[T2, hydra.core.Term]:
+    r"""Interpreter-friendly intercalate for List terms."""
+
+    return Right(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.lists.concat"))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.lists.intersperse"))))), sep))), lists_term)))))))
+
+def intersperse(cx: hydra.context.Context, g: hydra.graph.Graph, sep: hydra.core.Term, list_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
+    r"""Interpreter-friendly intersperse for List terms."""
+
+    return hydra.lib.eithers.bind(hydra.extract.core.list(cx, g, list_term), (lambda elements: Right(hydra.lib.logic.if_else(hydra.lib.lists.null(elements), (lambda : cast(hydra.core.Term, hydra.core.TermList(()))), (lambda : cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.cons(hydra.lib.lists.head(elements), hydra.lib.lists.concat(hydra.lib.lists.map((lambda el: (sep, el)), hydra.lib.lists.tail(elements)))))))))))
 
 def map(cx: hydra.context.Context, g: hydra.graph.Graph, fun_term: hydra.core.Term, list_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
     r"""Interpreter-friendly map for List terms."""
 
     return hydra.lib.eithers.bind(hydra.extract.core.list(cx, g, list_term), (lambda elements: Right(cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.reverse(hydra.lib.lists.foldl((lambda acc, el: hydra.lib.lists.cons(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, el))), acc)), (), elements)))))))
 
+def nub(cx: hydra.context.Context, g: hydra.graph.Graph, list_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
+    r"""Interpreter-friendly nub for List terms."""
+
+    return hydra.lib.eithers.bind(hydra.extract.core.list(cx, g, list_term), (lambda elements: Right(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.lists.foldl"))))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("acc"), Nothing(), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.logic.ifElse"))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.lists.elem"))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x")))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("acc"))))))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("acc")))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.lists.concat2"))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("acc")))))), cast(hydra.core.Term, hydra.core.TermList((cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))),)))))))))))))))))))))), cast(hydra.core.Term, hydra.core.TermList(()))))), list_term))))))
+
 def partition(cx: hydra.context.Context, g: hydra.graph.Graph, pred_term: hydra.core.Term, list_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
     r"""Interpreter-friendly partition for List terms."""
 
     return hydra.lib.eithers.bind(hydra.extract.core.list(cx, g, list_term), (lambda elements: (initial_state := cast(hydra.core.Term, hydra.core.TermPair((cast(hydra.core.Term, hydra.core.TermList(())), cast(hydra.core.Term, hydra.core.TermList(()))))), final_state := hydra.lib.lists.foldl((lambda acc, el: (yeses := cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.pairs.first"))))), acc))), nos := cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.pairs.second"))))), acc))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.logic.ifElse"))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(pred_term, el)))))), cast(hydra.core.Term, hydra.core.TermPair((cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.lists.concat2"))))), yeses))), cast(hydra.core.Term, hydra.core.TermList((el,)))))), nos)))))), cast(hydra.core.Term, hydra.core.TermPair((yeses, cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.lists.concat2"))))), nos))), cast(hydra.core.Term, hydra.core.TermList((el,)))))))))))))[2]), initial_state, elements), Right(final_state))[2]))
+
+def pure(cx: T0, g: T1, x: hydra.core.Term) -> Either[T2, hydra.core.Term]:
+    r"""Interpreter-friendly pure for List terms."""
+
+    return Right(cast(hydra.core.Term, hydra.core.TermList((x,))))
+
+def replicate(cx: T0, g: T1, n: hydra.core.Term, x: hydra.core.Term) -> Either[T2, hydra.core.Term]:
+    r"""Interpreter-friendly replicate for List terms."""
+
+    return Right(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.lists.map"))))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("_"), Nothing(), x)))))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.math.range"))))), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(1))))))))), n)))))))
+
+def safe_head(cx: hydra.context.Context, g: hydra.graph.Graph, list_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
+    r"""Interpreter-friendly safeHead for List terms."""
+
+    return hydra.lib.eithers.bind(hydra.extract.core.list(cx, g, list_term), (lambda elements: Right(hydra.lib.logic.if_else(hydra.lib.lists.null(elements), (lambda : cast(hydra.core.Term, hydra.core.TermMaybe(Nothing()))), (lambda : cast(hydra.core.Term, hydra.core.TermMaybe(Just(hydra.lib.lists.head(elements)))))))))
+
+def singleton(cx: T0, g: T1, x: hydra.core.Term) -> Either[T2, hydra.core.Term]:
+    r"""Interpreter-friendly singleton for List terms."""
+
+    return Right(cast(hydra.core.Term, hydra.core.TermList((x,))))
+
+def sort(cx: T0, g: T1, list_term: hydra.core.Term) -> Either[T2, hydra.core.Term]:
+    r"""Interpreter-friendly sort for List terms."""
+
+    return Right(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.lists.sortOn"))))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.equality.identity")))))))), list_term))))
 
 def sort_on(cx: hydra.context.Context, g: hydra.graph.Graph, proj_term: hydra.core.Term, list_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
     r"""Interpreter-friendly sortOn for List terms."""

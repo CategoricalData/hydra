@@ -27,4 +27,44 @@ public interface Pairs {
       }
     });
   }
+
+  static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> first(hydra.context.Context cx, T0 g, hydra.core.Term pairTerm) {
+    return (pairTerm).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> otherwise(hydra.core.Term instance) {
+        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
+          hydra.lib.strings.Cat2.apply(
+            hydra.lib.strings.Cat2.apply(
+              "expected ",
+              "pair value"),
+            " but found "),
+          hydra.show.Core.term(pairTerm)))), cx)));
+      }
+
+      @Override
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> visit(hydra.core.Term.Pair p) {
+        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(hydra.lib.pairs.First.apply((p).value));
+      }
+    });
+  }
+
+  static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> second(hydra.context.Context cx, T0 g, hydra.core.Term pairTerm) {
+    return (pairTerm).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> otherwise(hydra.core.Term instance) {
+        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
+          hydra.lib.strings.Cat2.apply(
+            hydra.lib.strings.Cat2.apply(
+              "expected ",
+              "pair value"),
+            " but found "),
+          hydra.show.Core.term(pairTerm)))), cx)));
+      }
+
+      @Override
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> visit(hydra.core.Term.Pair p) {
+        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(hydra.lib.pairs.Second.apply((p).value));
+      }
+    });
+  }
 }

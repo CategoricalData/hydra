@@ -17,6 +17,8 @@ import hydra.lib.strings
 import hydra.show.core
 
 T0 = TypeVar("T0")
+T1 = TypeVar("T1")
+T2 = TypeVar("T2")
 
 def alter(cx: hydra.context.Context, g: T0, fun_term: hydra.core.Term, key_term: hydra.core.Term, map_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
     r"""Interpreter-friendly alter for Map terms."""
@@ -72,6 +74,11 @@ def filter_with_key(cx: hydra.context.Context, g: T0, pred: hydra.core.Term, map
 
         case _:
             return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "map value"), " but found "), hydra.show.core.term(map_term))))), cx))
+
+def find_with_default(cx: T0, g: T1, default_term: hydra.core.Term, key_term: hydra.core.Term, map_term: hydra.core.Term) -> Either[T2, hydra.core.Term]:
+    r"""Interpreter-friendly findWithDefault for Map terms."""
+
+    return Right(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.maybes.fromMaybe"))))), default_term))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.maps.lookup"))))), key_term))), map_term)))))))
 
 def map(cx: hydra.context.Context, g: T0, val_fun: hydra.core.Term, map_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
     r"""Interpreter-friendly map for Map terms."""

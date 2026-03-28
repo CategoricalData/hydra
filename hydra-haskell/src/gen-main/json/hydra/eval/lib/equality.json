@@ -1,0 +1,394 @@
+{
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.eval.lib.equality.identity",
+        "term": {
+          "typeLambda": {
+            "body": {
+              "typeLambda": {
+                "body": {
+                  "typeLambda": {
+                    "body": {
+                      "typeLambda": {
+                        "body": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "@key": "description",
+                                "@value": {"literal": {"string": "Interpreter-friendly identity function."}}}],
+                            "body": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "function": {
+                                      "lambda": {
+                                        "body": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "typeApplication": {
+                                                      "body": {"either": {"@right": {"variable": "x"}}},
+                                                      "type": {"variable": "t3"}}},
+                                                  "type": {"variable": "t2"}}},
+                                              "domain": [{"variable": "t2"}],
+                                              "parameter": "x"}}},
+                                        "domain": [{"variable": "t1"}],
+                                        "parameter": "g"}}},
+                                  "domain": [{"variable": "t0"}],
+                                  "parameter": "cx"}}}}},
+                        "parameter": "t3"}},
+                    "parameter": "t2"}},
+                "parameter": "t1"}},
+            "parameter": "t0"}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {
+                  "function": {
+                    "codomain": {
+                      "function": {
+                        "codomain": {"either": {"left": {"variable": "t3"}, "right": {"variable": "t2"}}},
+                        "domain": {"variable": "t2"}}},
+                    "domain": {"variable": "t1"}}},
+                "domain": {"variable": "t0"}}},
+            "variables": ["t0", "t1", "t2", "t3"]}]}},
+    {
+      "term": {
+        "name": "hydra.eval.lib.equality.max",
+        "term": {
+          "typeLambda": {
+            "body": {
+              "typeLambda": {
+                "body": {
+                  "typeLambda": {
+                    "body": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "Interpreter-friendly max."}}}],
+                        "body": {
+                          "function": {
+                            "lambda": {
+                              "body": {
+                                "function": {
+                                  "lambda": {
+                                    "body": {
+                                      "function": {
+                                        "lambda": {
+                                          "body": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "either": {
+                                                            "@right": {
+                                                              "union": {
+                                                                "field": {
+                                                                  "name": "application",
+                                                                  "term": {
+                                                                    "record": {
+                                                                      "fields": [
+                                                                        {
+                                                                          "name": "function",
+                                                                          "term": {
+                                                                            "union": {
+                                                                              "field": {
+                                                                                "name": "application",
+                                                                                "term": {
+                                                                                  "record": {
+                                                                                    "fields": [
+                                                                                      {
+                                                                                        "name": "function",
+                                                                                        "term": {
+                                                                                          "union": {
+                                                                                            "field": {
+                                                                                              "name": "application",
+                                                                                              "term": {
+                                                                                                "record": {
+                                                                                                  "fields": [
+                                                                                                    {
+                                                                                                      "name": "function",
+                                                                                                      "term": {
+                                                                                                        "union": {
+                                                                                                          "field": {
+                                                                                                            "name": "function",
+                                                                                                            "term": {
+                                                                                                              "union": {
+                                                                                                                "field": {
+                                                                                                                  "name": "primitive",
+                                                                                                                  "term": {
+                                                                                                                    "wrap": {
+                                                                                                                      "body": {"literal": {"string": "hydra.lib.logic.ifElse"}},
+                                                                                                                      "typeName": "hydra.core.Name"}}},
+                                                                                                                "typeName": "hydra.core.Function"}}},
+                                                                                                          "typeName": "hydra.core.Term"}}},
+                                                                                                    {
+                                                                                                      "name": "argument",
+                                                                                                      "term": {
+                                                                                                        "union": {
+                                                                                                          "field": {
+                                                                                                            "name": "application",
+                                                                                                            "term": {
+                                                                                                              "record": {
+                                                                                                                "fields": [
+                                                                                                                  {
+                                                                                                                    "name": "function",
+                                                                                                                    "term": {
+                                                                                                                      "union": {
+                                                                                                                        "field": {
+                                                                                                                          "name": "application",
+                                                                                                                          "term": {
+                                                                                                                            "record": {
+                                                                                                                              "fields": [
+                                                                                                                                {
+                                                                                                                                  "name": "function",
+                                                                                                                                  "term": {
+                                                                                                                                    "union": {
+                                                                                                                                      "field": {
+                                                                                                                                        "name": "function",
+                                                                                                                                        "term": {
+                                                                                                                                          "union": {
+                                                                                                                                            "field": {
+                                                                                                                                              "name": "primitive",
+                                                                                                                                              "term": {
+                                                                                                                                                "wrap": {
+                                                                                                                                                  "body": {"literal": {"string": "hydra.lib.equality.gte"}},
+                                                                                                                                                  "typeName": "hydra.core.Name"}}},
+                                                                                                                                            "typeName": "hydra.core.Function"}}},
+                                                                                                                                      "typeName": "hydra.core.Term"}}},
+                                                                                                                                {"name": "argument", "term": {"variable": "x"}}],
+                                                                                                                              "typeName": "hydra.core.Application"}}},
+                                                                                                                        "typeName": "hydra.core.Term"}}},
+                                                                                                                  {"name": "argument", "term": {"variable": "y"}}],
+                                                                                                                "typeName": "hydra.core.Application"}}},
+                                                                                                          "typeName": "hydra.core.Term"}}}],
+                                                                                                  "typeName": "hydra.core.Application"}}},
+                                                                                            "typeName": "hydra.core.Term"}}},
+                                                                                      {"name": "argument", "term": {"variable": "x"}}],
+                                                                                    "typeName": "hydra.core.Application"}}},
+                                                                              "typeName": "hydra.core.Term"}}},
+                                                                        {"name": "argument", "term": {"variable": "y"}}],
+                                                                      "typeName": "hydra.core.Application"}}},
+                                                                "typeName": "hydra.core.Term"}}}},
+                                                        "type": {"variable": "t2"}}},
+                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                "domain": [{"variable": "hydra.core.Term"}],
+                                                "parameter": "y"}}},
+                                          "domain": [{"variable": "hydra.core.Term"}],
+                                          "parameter": "x"}}},
+                                    "domain": [{"variable": "t1"}],
+                                    "parameter": "g"}}},
+                              "domain": [{"variable": "t0"}],
+                              "parameter": "cx"}}}}},
+                    "parameter": "t2"}},
+                "parameter": "t1"}},
+            "parameter": "t0"}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {
+                  "function": {
+                    "codomain": {
+                      "function": {
+                        "codomain": {
+                          "function": {
+                            "codomain": {
+                              "either": {"left": {"variable": "t2"}, "right": {"variable": "hydra.core.Term"}}},
+                            "domain": {"variable": "hydra.core.Term"}}},
+                        "domain": {"variable": "hydra.core.Term"}}},
+                    "domain": {"variable": "t1"}}},
+                "domain": {"variable": "t0"}}},
+            "variables": ["t0", "t1", "t2"]}]}},
+    {
+      "term": {
+        "name": "hydra.eval.lib.equality.min",
+        "term": {
+          "typeLambda": {
+            "body": {
+              "typeLambda": {
+                "body": {
+                  "typeLambda": {
+                    "body": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "Interpreter-friendly min."}}}],
+                        "body": {
+                          "function": {
+                            "lambda": {
+                              "body": {
+                                "function": {
+                                  "lambda": {
+                                    "body": {
+                                      "function": {
+                                        "lambda": {
+                                          "body": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "either": {
+                                                            "@right": {
+                                                              "union": {
+                                                                "field": {
+                                                                  "name": "application",
+                                                                  "term": {
+                                                                    "record": {
+                                                                      "fields": [
+                                                                        {
+                                                                          "name": "function",
+                                                                          "term": {
+                                                                            "union": {
+                                                                              "field": {
+                                                                                "name": "application",
+                                                                                "term": {
+                                                                                  "record": {
+                                                                                    "fields": [
+                                                                                      {
+                                                                                        "name": "function",
+                                                                                        "term": {
+                                                                                          "union": {
+                                                                                            "field": {
+                                                                                              "name": "application",
+                                                                                              "term": {
+                                                                                                "record": {
+                                                                                                  "fields": [
+                                                                                                    {
+                                                                                                      "name": "function",
+                                                                                                      "term": {
+                                                                                                        "union": {
+                                                                                                          "field": {
+                                                                                                            "name": "function",
+                                                                                                            "term": {
+                                                                                                              "union": {
+                                                                                                                "field": {
+                                                                                                                  "name": "primitive",
+                                                                                                                  "term": {
+                                                                                                                    "wrap": {
+                                                                                                                      "body": {"literal": {"string": "hydra.lib.logic.ifElse"}},
+                                                                                                                      "typeName": "hydra.core.Name"}}},
+                                                                                                                "typeName": "hydra.core.Function"}}},
+                                                                                                          "typeName": "hydra.core.Term"}}},
+                                                                                                    {
+                                                                                                      "name": "argument",
+                                                                                                      "term": {
+                                                                                                        "union": {
+                                                                                                          "field": {
+                                                                                                            "name": "application",
+                                                                                                            "term": {
+                                                                                                              "record": {
+                                                                                                                "fields": [
+                                                                                                                  {
+                                                                                                                    "name": "function",
+                                                                                                                    "term": {
+                                                                                                                      "union": {
+                                                                                                                        "field": {
+                                                                                                                          "name": "application",
+                                                                                                                          "term": {
+                                                                                                                            "record": {
+                                                                                                                              "fields": [
+                                                                                                                                {
+                                                                                                                                  "name": "function",
+                                                                                                                                  "term": {
+                                                                                                                                    "union": {
+                                                                                                                                      "field": {
+                                                                                                                                        "name": "function",
+                                                                                                                                        "term": {
+                                                                                                                                          "union": {
+                                                                                                                                            "field": {
+                                                                                                                                              "name": "primitive",
+                                                                                                                                              "term": {
+                                                                                                                                                "wrap": {
+                                                                                                                                                  "body": {"literal": {"string": "hydra.lib.equality.lte"}},
+                                                                                                                                                  "typeName": "hydra.core.Name"}}},
+                                                                                                                                            "typeName": "hydra.core.Function"}}},
+                                                                                                                                      "typeName": "hydra.core.Term"}}},
+                                                                                                                                {"name": "argument", "term": {"variable": "x"}}],
+                                                                                                                              "typeName": "hydra.core.Application"}}},
+                                                                                                                        "typeName": "hydra.core.Term"}}},
+                                                                                                                  {"name": "argument", "term": {"variable": "y"}}],
+                                                                                                                "typeName": "hydra.core.Application"}}},
+                                                                                                          "typeName": "hydra.core.Term"}}}],
+                                                                                                  "typeName": "hydra.core.Application"}}},
+                                                                                            "typeName": "hydra.core.Term"}}},
+                                                                                      {"name": "argument", "term": {"variable": "x"}}],
+                                                                                    "typeName": "hydra.core.Application"}}},
+                                                                              "typeName": "hydra.core.Term"}}},
+                                                                        {"name": "argument", "term": {"variable": "y"}}],
+                                                                      "typeName": "hydra.core.Application"}}},
+                                                                "typeName": "hydra.core.Term"}}}},
+                                                        "type": {"variable": "t2"}}},
+                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                "domain": [{"variable": "hydra.core.Term"}],
+                                                "parameter": "y"}}},
+                                          "domain": [{"variable": "hydra.core.Term"}],
+                                          "parameter": "x"}}},
+                                    "domain": [{"variable": "t1"}],
+                                    "parameter": "g"}}},
+                              "domain": [{"variable": "t0"}],
+                              "parameter": "cx"}}}}},
+                    "parameter": "t2"}},
+                "parameter": "t1"}},
+            "parameter": "t0"}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {
+                  "function": {
+                    "codomain": {
+                      "function": {
+                        "codomain": {
+                          "function": {
+                            "codomain": {
+                              "either": {"left": {"variable": "t2"}, "right": {"variable": "hydra.core.Term"}}},
+                            "domain": {"variable": "hydra.core.Term"}}},
+                        "domain": {"variable": "hydra.core.Term"}}},
+                    "domain": {"variable": "t1"}}},
+                "domain": {"variable": "t0"}}},
+            "variables": ["t0", "t1", "t2"]}]}}],
+  "description": [
+    "Evaluation-level implementations of Equality functions for the Hydra interpreter."],
+  "namespace": "hydra.eval.lib.equality",
+  "termDependencies": [],
+  "typeDependencies": [
+    "hydra.paths",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.context",
+    "hydra.core",
+    "hydra.error.checking",
+    "hydra.error.core",
+    "hydra.error.packaging",
+    "hydra.errors",
+    "hydra.graph",
+    "hydra.json.model",
+    "hydra.module",
+    "hydra.packaging",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants"]}
