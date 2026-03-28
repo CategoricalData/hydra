@@ -43,7 +43,8 @@ import qualified Hydra.Sources.Kernel.Terms.Substitution    as Substitution
 import qualified Hydra.Sources.Kernel.Terms.Tarjan          as Tarjan
 import qualified Hydra.Sources.Kernel.Terms.Templates       as Templates
 import qualified Hydra.Sources.Kernel.Terms.Unification     as Unification
-import qualified Hydra.Sources.Kernel.Terms.Validate.Core  as ValidateCore
+import qualified Hydra.Sources.Kernel.Terms.Validate.Core      as ValidateCore
+import qualified Hydra.Sources.Kernel.Terms.Validate.Packaging as ValidatePackaging
 
 -- Secondary, generated decoding modules
 import qualified Hydra.Sources.Decode.Paths          as DecodePaths
@@ -137,7 +138,8 @@ kernelPrimaryTermsModules = [
   Tarjan.module_,
   Templates.module_,
   Unification.module_,
-  ValidateCore.module_]
+  ValidateCore.module_,
+  ValidatePackaging.module_]
 
 kernelDecodingModules :: [Module]
 kernelDecodingModules = [
