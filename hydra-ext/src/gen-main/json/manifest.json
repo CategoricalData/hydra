@@ -120,10 +120,12 @@
   "hydraExtModules": [
     "hydra.ext.org.apache.atlas",
     "hydra.ext.avro.coder",
+    "hydra.ext.avro.encoder",
     "hydra.ext.avro.environment",
     "hydra.ext.avro.language",
     "hydra.ext.org.apache.avro.schema",
     "hydra.ext.avro.schemaJson",
+    "hydra.ext.avro.testing",
     "hydra.ext.com.microsoft.azure.dtld",
     "hydra.ext.fr.inria.coq.syntax",
     "hydra.ext.datalog.syntax",
