@@ -18,10 +18,12 @@ import qualified Hydra.Ext.Sources.Shex.Syntax                 as ShexSyntax
 import qualified Hydra.Ext.Sources.Sql.Ansi                    as SqlAnsi
 import qualified Hydra.Ext.Sources.TypeScript.Language          as TypeScriptLanguage
 import qualified Hydra.Ext.Sources.Avro.Coder                  as AvroCoder
+import qualified Hydra.Ext.Sources.Avro.Encoder                 as AvroEncoder
 import qualified Hydra.Ext.Sources.Avro.Environment             as AvroEnvironment
 import qualified Hydra.Ext.Sources.Avro.Language               as AvroLanguage
 import qualified Hydra.Ext.Sources.Avro.Schema                 as AvroSchema
 import qualified Hydra.Ext.Sources.Avro.SchemaJson             as AvroSchemaJson
+import qualified Hydra.Ext.Sources.Avro.Testing                as AvroTesting
 import qualified Hydra.Ext.Sources.Cpp.Coder                  as CppCoder
 import qualified Hydra.Ext.Sources.Cpp.Environment             as CppEnvironment
 import qualified Hydra.Ext.Sources.Cpp.Names                  as CppNames
@@ -191,10 +193,12 @@ otherExtModules :: [Module]
 otherExtModules = [
   Atlas.module_,
   AvroCoder.module_,
+  AvroEncoder.module_,
   AvroEnvironment.module_,
   AvroLanguage.module_,
   AvroSchema.module_,
   AvroSchemaJson.module_,
+  AvroTesting.module_,
   AzureDtld.module_,
   Coq.module_,
   Datalog.module_,
@@ -387,6 +391,7 @@ hydraExtEncodingModules = [
 hydraExtRecentlyPromotedModules :: [Module]
 hydraExtRecentlyPromotedModules = [
   AvroCoder.module_,
+  AvroEncoder.module_,
   AvroEnvironment.module_,
   AvroLanguage.module_,
   AvroSchemaJson.module_,
