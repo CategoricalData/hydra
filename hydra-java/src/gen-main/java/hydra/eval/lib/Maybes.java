@@ -92,8 +92,133 @@ public interface Maybes {
     });
   }
 
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.core.Term>> cat(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Term listTerm) {
+    return hydra.lib.eithers.Bind.apply(
+      hydra.extract.Core.list(
+        cx,
+        g,
+        listTerm),
+      (java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.core.Term>>>) (elements -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.core.Term>>right(hydra.lib.lists.Foldl.apply(
+        (java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>>) (acc -> (java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>) (el -> (el).accept(new hydra.core.Term.PartialVisitor<>() {
+          @Override
+          public hydra.util.ConsList<hydra.core.Term> otherwise(hydra.core.Term instance) {
+            return acc;
+          }
+
+          @Override
+          public hydra.util.ConsList<hydra.core.Term> visit(hydra.core.Term.Maybe m) {
+            return hydra.lib.maybes.Maybe.applyLazy(
+              () -> acc,
+              (java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>) (v -> hydra.lib.lists.Concat2.apply(
+                acc,
+                hydra.lib.lists.Pure.apply(v))),
+              (m).value);
+          }
+        }))),
+        (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()),
+        elements))));
+  }
+
   static <T0, T1, T2> hydra.util.Either<T2, hydra.core.Term> compose(T0 cx, T1 g, hydra.core.Term funF, hydra.core.Term funG, hydra.core.Term xTerm) {
     return hydra.util.Either.<T2, hydra.core.Term>right(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.maybes.bind"))), new hydra.core.Term.Application(new hydra.core.Application(funF, xTerm)))), funG)));
+  }
+
+  static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> fromJust(hydra.context.Context cx, T0 g, hydra.core.Term optTerm) {
+    return (optTerm).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> otherwise(hydra.core.Term instance) {
+        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
+          hydra.lib.strings.Cat2.apply(
+            hydra.lib.strings.Cat2.apply(
+              "expected ",
+              "optional value"),
+            " but found "),
+          hydra.show.Core.term(optTerm)))), cx)));
+      }
+
+      @Override
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> visit(hydra.core.Term.Maybe m) {
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
+            hydra.lib.strings.Cat2.apply(
+              hydra.lib.strings.Cat2.apply(
+                "expected ",
+                "Just value"),
+              " but found "),
+            hydra.show.Core.term(optTerm)))), cx))),
+          (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (val -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(val)),
+          (m).value);
+      }
+    });
+  }
+
+  static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> fromMaybe(hydra.context.Context cx, T0 g, hydra.core.Term defaultTerm, hydra.core.Term optTerm) {
+    return (optTerm).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> otherwise(hydra.core.Term instance) {
+        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
+          hydra.lib.strings.Cat2.apply(
+            hydra.lib.strings.Cat2.apply(
+              "expected ",
+              "optional value"),
+            " but found "),
+          hydra.show.Core.term(optTerm)))), cx)));
+      }
+
+      @Override
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> visit(hydra.core.Term.Maybe m) {
+        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(hydra.lib.maybes.Maybe.applyLazy(
+          () -> defaultTerm,
+          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (val -> val),
+          (m).value));
+      }
+    });
+  }
+
+  static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> isJust(hydra.context.Context cx, T0 g, hydra.core.Term optTerm) {
+    return (optTerm).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> otherwise(hydra.core.Term instance) {
+        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
+          hydra.lib.strings.Cat2.apply(
+            hydra.lib.strings.Cat2.apply(
+              "expected ",
+              "optional value"),
+            " but found "),
+          hydra.show.Core.term(optTerm)))), cx)));
+      }
+
+      @Override
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> visit(hydra.core.Term.Maybe m) {
+        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(hydra.lib.maybes.Maybe.applyLazy(
+          () -> new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(false)),
+          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (ignored -> new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(true))),
+          (m).value));
+      }
+    });
+  }
+
+  static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> isNothing(hydra.context.Context cx, T0 g, hydra.core.Term optTerm) {
+    return (optTerm).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> otherwise(hydra.core.Term instance) {
+        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
+          hydra.lib.strings.Cat2.apply(
+            hydra.lib.strings.Cat2.apply(
+              "expected ",
+              "optional value"),
+            " but found "),
+          hydra.show.Core.term(optTerm)))), cx)));
+      }
+
+      @Override
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> visit(hydra.core.Term.Maybe m) {
+        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(hydra.lib.maybes.Maybe.applyLazy(
+          () -> new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(true)),
+          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (ignored -> new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(false))),
+          (m).value));
+      }
+    });
   }
 
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> map(hydra.context.Context cx, T0 g, hydra.core.Term funTerm, hydra.core.Term optTerm) {
@@ -148,6 +273,33 @@ public interface Maybes {
           () -> defaultTerm,
           (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (val -> new hydra.core.Term.Application(new hydra.core.Application(funTerm, val))),
           (m).value));
+      }
+    });
+  }
+
+  static <T0, T1, T2> hydra.util.Either<T2, hydra.core.Term> pure(T0 cx, T1 g, hydra.core.Term x) {
+    return hydra.util.Either.<T2, hydra.core.Term>right(new hydra.core.Term.Maybe(hydra.util.Maybe.just(x)));
+  }
+
+  static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> toList(hydra.context.Context cx, T0 g, hydra.core.Term optTerm) {
+    return (optTerm).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> otherwise(hydra.core.Term instance) {
+        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
+          hydra.lib.strings.Cat2.apply(
+            hydra.lib.strings.Cat2.apply(
+              "expected ",
+              "optional value"),
+            " but found "),
+          hydra.show.Core.term(optTerm)))), cx)));
+      }
+
+      @Override
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> visit(hydra.core.Term.Maybe m) {
+        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(new hydra.core.Term.List(hydra.lib.maybes.Maybe.applyLazy(
+          () -> (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()),
+          (java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>) (val -> hydra.lib.lists.Pure.apply(val)),
+          (m).value)));
       }
     });
   }

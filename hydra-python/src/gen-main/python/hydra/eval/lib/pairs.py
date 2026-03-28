@@ -31,3 +31,23 @@ def bimap(cx: hydra.context.Context, g: T0, first_fun: hydra.core.Term, second_f
 
         case _:
             return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "pair value"), " but found "), hydra.show.core.term(pair_term))))), cx))
+
+def first(cx: hydra.context.Context, g: T0, pair_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
+    r"""Interpreter-friendly first for Pair terms."""
+
+    match pair_term:
+        case hydra.core.TermPair(value=p):
+            return Right(hydra.lib.pairs.first(p))
+
+        case _:
+            return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "pair value"), " but found "), hydra.show.core.term(pair_term))))), cx))
+
+def second(cx: hydra.context.Context, g: T0, pair_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
+    r"""Interpreter-friendly second for Pair terms."""
+
+    match pair_term:
+        case hydra.core.TermPair(value=p):
+            return Right(hydra.lib.pairs.second(p))
+
+        case _:
+            return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "pair value"), " but found "), hydra.show.core.term(pair_term))))), cx))
