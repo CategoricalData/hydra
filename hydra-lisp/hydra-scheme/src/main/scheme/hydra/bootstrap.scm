@@ -223,7 +223,6 @@
     "extract/helpers.scm"
     "extract/util.scm"
     "extract/json.scm"
-    "tarjan.scm"
     "coder_utils.scm"
     "adapt.scm"
     "code_generation.scm"

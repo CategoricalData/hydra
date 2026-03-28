@@ -948,7 +948,6 @@
            "formatting.scm"
            "rewriting.scm"
            "sorting.scm"
-           "tarjan.scm"
            "names.scm"
            "schemas.scm"
            "arity.scm"

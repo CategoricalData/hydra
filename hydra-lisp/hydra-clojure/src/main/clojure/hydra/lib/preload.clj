@@ -50,7 +50,7 @@
    "hydra.variants" "hydra.paths" "hydra.util" "hydra.constants"
    "hydra.literals" "hydra.reflect" "hydra.formatting"
    "hydra.serialization" "hydra.names" "hydra.languages" "hydra.parsers"
-   "hydra.sorting" "hydra.tarjan" "hydra.rewriting"
+   "hydra.sorting" "hydra.rewriting"
    "hydra.show.core" "hydra.show.graph" "hydra.show.typing"
    "hydra.show.meta" "hydra.show.paths" "hydra.show.util"
    "hydra.show.error.core" "hydra.show.errors"
@@ -119,7 +119,7 @@
    "hydra.paths" "hydra.util" "hydra.constants" "hydra.json.model"
    ;; Core operations (topological order based on cross-module deps)
    "hydra.formatting" "hydra.reflect" "hydra.names" "hydra.lib.names"
-   "hydra.sorting" "hydra.tarjan" "hydra.rewriting"
+   "hydra.sorting" "hydra.rewriting"
    "hydra.show.core" "hydra.show.error.core" "hydra.show.errors"
    "hydra.show.meta" "hydra.show.typing"
    "hydra.show.graph" "hydra.show.paths" "hydra.show.util"

@@ -395,7 +395,7 @@
                      "parsing.el" "query.el" "relational.el" "tabular.el" "testing.el"
                      "topology.el" "typing.el" "util.el" "variants.el"
                      "json/model.el" "classes.el" "constants.el" "paths.el"
-                     "formatting.el" "tarjan.el" "rewriting.el" "sorting.el"
+                     "formatting.el" "rewriting.el" "sorting.el"
                      "names.el" "schemas.el" "arity.el" "lexical.el"
                      "literals.el" "reflect.el" "languages.el" "parsers.el"
                      "templates.el" "encoding.el" "decoding.el" "code_generation.el"
