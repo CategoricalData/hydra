@@ -10,6 +10,7 @@ import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
+import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
@@ -23,6 +24,23 @@ import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
+
+-- | Check for module namespaces that conflict when mapped to target language paths
+checkConflictingModuleNamespaces :: Packaging_.Package -> Maybe Packaging.InvalidPackageError
+checkConflictingModuleNamespaces pkg =
+
+      let result =
+              Lists.foldl (\acc -> \mod ->
+                let seen = Pairs.first acc
+                    err = Pairs.second acc
+                in (Maybes.cases err (
+                  let ns = Module.moduleNamespace mod
+                      key = Strings.toLower (Module.unNamespace ns)
+                      existing = Maps.lookup key seen
+                  in (Maybes.cases existing (Maps.insert key ns seen, Nothing) (\first -> (seen, (Just (Packaging.InvalidPackageErrorConflictingModuleNamespace (Packaging.ConflictingModuleNamespaceError {
+                    Packaging.conflictingModuleNamespaceErrorFirst = first,
+                    Packaging.conflictingModuleNamespaceErrorSecond = ns}))))))) (\_ -> acc))) (Maps.empty, Nothing) (Packaging_.packageModules pkg)
+      in (Pairs.second result)
 
 -- | Check for union variant names that, when mapped to constructor names, conflict with other type definitions
 checkConflictingVariantNames :: Module.Module -> Maybe Packaging.InvalidModuleError
@@ -115,4 +133,6 @@ package :: Packaging_.Package -> Maybe Packaging.InvalidPackageError
 package pkg =
 
       let r1 = checkDuplicateModuleNamespaces pkg
-      in (Maybes.cases r1 (Lists.foldl (\acc -> \mod -> Maybes.cases acc (Maybes.map (\err -> Packaging.InvalidPackageErrorInvalidModule err) (module_ mod)) (\_ -> acc)) Nothing (Packaging_.packageModules pkg)) (\_ -> r1))
+      in (Maybes.cases r1 (
+        let r2 = checkConflictingModuleNamespaces pkg
+        in (Maybes.cases r2 (Lists.foldl (\acc -> \mod -> Maybes.cases acc (Maybes.map (\err -> Packaging.InvalidPackageErrorInvalidModule err) (module_ mod)) (\_ -> acc)) Nothing (Packaging_.packageModules pkg)) (\_ -> r2))) (\_ -> r1))

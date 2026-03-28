@@ -4,7 +4,7 @@ r"""Validation functions for modules and packages."""
 
 from __future__ import annotations
 from functools import lru_cache
-from hydra.dsl.python import Just, Maybe, Nothing, frozenlist
+from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing, frozenlist
 from typing import cast
 import hydra.core
 import hydra.error.packaging
@@ -12,6 +12,7 @@ import hydra.formatting
 import hydra.lib.equality
 import hydra.lib.lists
 import hydra.lib.logic
+import hydra.lib.maps
 import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.sets
@@ -19,6 +20,14 @@ import hydra.lib.strings
 import hydra.module
 import hydra.names
 import hydra.packaging
+
+def check_conflicting_module_namespaces(pkg: hydra.packaging.Package) -> Maybe[hydra.error.packaging.InvalidPackageError]:
+    r"""Check for module namespaces that conflict when mapped to target language paths."""
+
+    @lru_cache(1)
+    def result() -> tuple[FrozenDict[str, hydra.module.Namespace], Maybe[hydra.error.packaging.InvalidPackageError]]:
+        return hydra.lib.lists.foldl((lambda acc, mod: (seen := hydra.lib.pairs.first(acc), err := hydra.lib.pairs.second(acc), hydra.lib.maybes.cases(err, (lambda : (ns := mod.namespace, (key := hydra.lib.strings.to_lower(ns.value), (existing := hydra.lib.maps.lookup(key, seen), hydra.lib.maybes.cases(existing, (lambda : (hydra.lib.maps.insert(key, ns, seen), Nothing())), (lambda first: (seen, Just(cast(hydra.error.packaging.InvalidPackageError, hydra.error.packaging.InvalidPackageErrorConflictingModuleNamespace(hydra.error.packaging.ConflictingModuleNamespaceError(first, ns))))))))[1])[1])[1]), (lambda _: acc)))[2]), (hydra.lib.maps.empty(), Nothing()), pkg.modules)
+    return hydra.lib.pairs.second(result())
 
 def definition_name(def_: hydra.module.Definition) -> hydra.core.Name:
     r"""Extract the name from a definition."""
@@ -101,4 +110,4 @@ def package(pkg: hydra.packaging.Package) -> Maybe[hydra.error.packaging.Invalid
     @lru_cache(1)
     def r1() -> Maybe[hydra.error.packaging.InvalidPackageError]:
         return check_duplicate_module_namespaces(pkg)
-    return hydra.lib.maybes.cases(r1(), (lambda : hydra.lib.lists.foldl((lambda acc, mod: hydra.lib.maybes.cases(acc, (lambda : hydra.lib.maybes.map((lambda err: cast(hydra.error.packaging.InvalidPackageError, hydra.error.packaging.InvalidPackageErrorInvalidModule(err))), module(mod))), (lambda _: acc))), Nothing(), pkg.modules)), (lambda _: r1()))
+    return hydra.lib.maybes.cases(r1(), (lambda : (r2 := check_conflicting_module_namespaces(pkg), hydra.lib.maybes.cases(r2, (lambda : hydra.lib.lists.foldl((lambda acc, mod: hydra.lib.maybes.cases(acc, (lambda : hydra.lib.maybes.map((lambda err: cast(hydra.error.packaging.InvalidPackageError, hydra.error.packaging.InvalidPackageErrorInvalidModule(err))), module(mod))), (lambda _: acc))), Nothing(), pkg.modules)), (lambda _: r2)))[1]), (lambda _: r1()))

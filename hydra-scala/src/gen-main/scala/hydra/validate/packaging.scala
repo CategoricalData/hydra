@@ -14,6 +14,8 @@ import hydra.lib.lists
 
 import hydra.lib.logic
 
+import hydra.lib.maps
+
 import hydra.lib.maybes
 
 import hydra.lib.pairs
@@ -21,6 +23,38 @@ import hydra.lib.pairs
 import hydra.lib.sets
 
 import hydra.lib.strings
+
+def checkConflictingModuleNamespaces(pkg: hydra.packaging.Package): Option[hydra.error.packaging.InvalidPackageError] =
+  {
+  lazy val result: Tuple2[Map[scala.Predef.String, hydra.module.Namespace], Option[hydra.error.packaging.InvalidPackageError]] = hydra.lib.lists.foldl[Tuple2[Map[scala.Predef.String,
+     hydra.module.Namespace], Option[hydra.error.packaging.InvalidPackageError]], hydra.module.Module]((acc: Tuple2[Map[scala.Predef.String,
+     hydra.module.Namespace], Option[hydra.error.packaging.InvalidPackageError]]) =>
+    (mod: hydra.module.Module) =>
+    {
+    lazy val seen: Map[scala.Predef.String, hydra.module.Namespace] = hydra.lib.pairs.first[Map[scala.Predef.String,
+       hydra.module.Namespace], Option[hydra.error.packaging.InvalidPackageError]](acc)
+    {
+      lazy val err: Option[hydra.error.packaging.InvalidPackageError] = hydra.lib.pairs.second[Map[scala.Predef.String,
+         hydra.module.Namespace], Option[hydra.error.packaging.InvalidPackageError]](acc)
+      hydra.lib.maybes.cases[hydra.error.packaging.InvalidPackageError, Tuple2[Map[scala.Predef.String,
+         hydra.module.Namespace], Option[hydra.error.packaging.InvalidPackageError]]](err)({
+        lazy val ns: hydra.module.Namespace = (mod.namespace)
+        {
+          lazy val key: scala.Predef.String = hydra.lib.strings.toLower(ns)
+          {
+            lazy val existing: Option[hydra.module.Namespace] = hydra.lib.maps.lookup[scala.Predef.String, hydra.module.Namespace](key)(seen)
+            hydra.lib.maybes.cases[hydra.module.Namespace, Tuple2[Map[scala.Predef.String, hydra.module.Namespace],
+               Option[hydra.error.packaging.InvalidPackageError]]](existing)(Tuple2(hydra.lib.maps.insert[scala.Predef.String,
+               hydra.module.Namespace](key)(ns)(seen), None))((first: hydra.module.Namespace) =>
+              Tuple2(seen, Some(hydra.error.packaging.InvalidPackageError.conflictingModuleNamespace(hydra.error.packaging.ConflictingModuleNamespaceError(first,
+                 ns)))))
+          }
+        }
+      })((_x: hydra.error.packaging.InvalidPackageError) => acc)
+    }
+  })(Tuple2(hydra.lib.maps.empty[scala.Predef.String, hydra.module.Namespace], None))(pkg.modules)
+  hydra.lib.pairs.second[Map[scala.Predef.String, hydra.module.Namespace], Option[hydra.error.packaging.InvalidPackageError]](result)
+}
 
 def checkConflictingVariantNames(mod: hydra.module.Module): Option[hydra.error.packaging.InvalidModuleError] =
   {
@@ -147,9 +181,12 @@ def module(mod: hydra.module.Module): Option[hydra.error.packaging.InvalidModule
 def `package`(pkg: hydra.packaging.Package): Option[hydra.error.packaging.InvalidPackageError] =
   {
   lazy val r1: Option[hydra.error.packaging.InvalidPackageError] = hydra.validate.packaging.checkDuplicateModuleNamespaces(pkg)
-  hydra.lib.maybes.cases[hydra.error.packaging.InvalidPackageError, Option[hydra.error.packaging.InvalidPackageError]](r1)(hydra.lib.lists.foldl[Option[hydra.error.packaging.InvalidPackageError],
-     hydra.module.Module]((acc: Option[hydra.error.packaging.InvalidPackageError]) =>
-    (mod: hydra.module.Module) =>
-    hydra.lib.maybes.cases[hydra.error.packaging.InvalidPackageError, Option[hydra.error.packaging.InvalidPackageError]](acc)(hydra.lib.maybes.map[hydra.error.packaging.InvalidModuleError,
-       hydra.error.packaging.InvalidPackageError]((err: hydra.error.packaging.InvalidModuleError) => hydra.error.packaging.InvalidPackageError.invalidModule(err))(hydra.validate.packaging.module(mod)))((_x: hydra.error.packaging.InvalidPackageError) => acc))(None)(pkg.modules))((_x: hydra.error.packaging.InvalidPackageError) => r1)
+  hydra.lib.maybes.cases[hydra.error.packaging.InvalidPackageError, Option[hydra.error.packaging.InvalidPackageError]](r1)({
+    lazy val r2: Option[hydra.error.packaging.InvalidPackageError] = hydra.validate.packaging.checkConflictingModuleNamespaces(pkg)
+    hydra.lib.maybes.cases[hydra.error.packaging.InvalidPackageError, Option[hydra.error.packaging.InvalidPackageError]](r2)(hydra.lib.lists.foldl[Option[hydra.error.packaging.InvalidPackageError],
+       hydra.module.Module]((acc: Option[hydra.error.packaging.InvalidPackageError]) =>
+      (mod: hydra.module.Module) =>
+      hydra.lib.maybes.cases[hydra.error.packaging.InvalidPackageError, Option[hydra.error.packaging.InvalidPackageError]](acc)(hydra.lib.maybes.map[hydra.error.packaging.InvalidModuleError,
+         hydra.error.packaging.InvalidPackageError]((err: hydra.error.packaging.InvalidModuleError) => hydra.error.packaging.InvalidPackageError.invalidModule(err))(hydra.validate.packaging.module(mod)))((_x: hydra.error.packaging.InvalidPackageError) => acc))(None)(pkg.modules))((_x: hydra.error.packaging.InvalidPackageError) => r2)
+  })((_x: hydra.error.packaging.InvalidPackageError) => r1)
 }

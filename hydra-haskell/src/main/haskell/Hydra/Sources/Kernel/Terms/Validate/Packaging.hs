@@ -34,6 +34,7 @@ module_ = Module ns elements
     Just "Validation functions for modules and packages"
   where
     elements = [
+      toTermDefinition checkConflictingModuleNamespaces,
       toTermDefinition checkConflictingVariantNames,
       toTermDefinition checkDefinitionNamespaces,
       toTermDefinition checkDuplicateDefinitionNames,
@@ -53,6 +54,37 @@ definitionName = define "definitionName" $
   cases _Definition (var "def") Nothing [
     _Definition_term>>: "td" ~> Module.termDefinitionName (var "td"),
     _Definition_type>>: "td" ~> Module.typeDefinitionName (var "td")]
+
+-- | Check for module namespaces that would conflict when mapped to a target language's
+-- directory structure. Two namespaces conflict if they are identical when lowercased,
+-- e.g. hydra.fooBar and hydra.foobar, or hydra.Foo.Bar and hydra.foo.bar.
+-- Fails on the first conflict found.
+checkConflictingModuleNamespaces :: TBinding (Package -> Maybe InvalidPackageError)
+checkConflictingModuleNamespaces = define "checkConflictingModuleNamespaces" $
+  doc "Check for module namespaces that conflict when mapped to target language paths" $
+  "pkg" ~>
+  -- Build a map from lowercased namespace strings to original namespaces.
+  -- If a lowercased version is already in the map, that's a conflict.
+  "result" <~ Lists.foldl
+    ("acc" ~> "mod" ~>
+      "seen" <~ Pairs.first (var "acc") $
+      "err" <~ Pairs.second (var "acc") $
+      Maybes.cases (var "err")
+        ("ns" <~ Module.moduleNamespace (var "mod") $
+          "key" <~ Strings.toLower (Module.unNamespace $ var "ns") $
+          "existing" <~ Maps.lookup (var "key") (var "seen") $
+          Maybes.cases (var "existing")
+            -- No conflict: add to map
+            (pair (Maps.insert (var "key") (var "ns") (var "seen")) nothing)
+            -- Conflict found
+            ("first" ~>
+              pair (var "seen") (just $
+                ErrorPackaging.invalidPackageErrorConflictingModuleNamespace $
+                  ErrorPackaging.conflictingModuleNamespaceError (var "first") (var "ns"))))
+        (constant $ var "acc"))
+    (pair Maps.empty nothing)
+    (Packaging.packageModules $ var "pkg") $
+  Pairs.second (var "result")
 
 -- | Check for union variant names that conflict with type definition names.
 -- For each union type, the capitalized type local name concatenated with
@@ -203,15 +235,19 @@ package = define "package" $
   "pkg" ~>
   "r1" <~ (checkDuplicateModuleNamespaces @@ var "pkg") $
   Maybes.cases (var "r1")
-    -- No package-level errors: validate each module
-    (Lists.foldl
+    ("r2" <~ (checkConflictingModuleNamespaces @@ var "pkg") $
+      Maybes.cases (var "r2")
+        -- No package-level errors: validate each module
+        (Lists.foldl
       ("acc" ~> "mod" ~>
         Maybes.cases (var "acc")
           (Maybes.map
             ("err" ~> ErrorPackaging.invalidPackageErrorInvalidModule (var "err"))
             (module' @@ var "mod"))
           (constant $ var "acc"))
-      nothing
-      (Packaging.packageModules $ var "pkg"))
-    -- Package-level error found: stop
+          nothing
+          (Packaging.packageModules $ var "pkg"))
+        -- Conflicting namespace error found: stop
+        (constant $ var "r2"))
+    -- Duplicate namespace error found: stop
     (constant $ var "r1")
