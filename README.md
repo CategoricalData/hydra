@@ -1,5 +1,7 @@
 # Hydra
 
+[![gitcgr](https://gitcgr.com/badge/CategoricalData/hydra.svg)](https://gitcgr.com/CategoricalData/hydra)
+
 Welcome to the Hydra project!
 Hydra is a unique functional programming language based on the [LambdaGraph](https://bit.ly/lg-kgc2024) data model.
 It explores an isomorphism between labeled [hypergraphs](https://en.wikipedia.org/wiki/Hypergraph)
