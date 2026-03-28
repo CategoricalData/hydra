@@ -32,3 +32,21 @@ bimap cx g firstFun secondFun pairTerm =
       _ -> Left (Context.InContext {
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "pair value") " but found ") (Core_.term pairTerm)))),
         Context.inContextContext = cx})
+
+-- | Interpreter-friendly first for Pair terms.
+first :: Context.Context -> t0 -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
+first cx g pairTerm =
+    case pairTerm of
+      Core.TermPair v0 -> Right (Pairs.first v0)
+      _ -> Left (Context.InContext {
+        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "pair value") " but found ") (Core_.term pairTerm)))),
+        Context.inContextContext = cx})
+
+-- | Interpreter-friendly second for Pair terms.
+second :: Context.Context -> t0 -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
+second cx g pairTerm =
+    case pairTerm of
+      Core.TermPair v0 -> Right (Pairs.second v0)
+      _ -> Left (Context.InContext {
+        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "pair value") " but found ") (Core_.term pairTerm)))),
+        Context.inContextContext = cx})

@@ -12,6 +12,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Show.Core as Core__
@@ -79,6 +80,49 @@ foldl cx g funTerm initTerm listTerm =
               Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
             Core.applicationArgument = el}))})))})),
       Core.applicationArgument = acc})) (Core.TermEither (Right initTerm)) elements))
+
+-- | Interpreter-friendly fromLeft for Either terms.
+fromLeft :: Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
+fromLeft cx g defaultTerm eitherTerm =
+    case eitherTerm of
+      Core.TermEither v0 -> Right (Eithers.either (\val -> val) (\_ -> defaultTerm) v0)
+      _ -> Left (Context.InContext {
+        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "either value") " but found ") (Core__.term eitherTerm)))),
+        Context.inContextContext = cx})
+
+-- | Interpreter-friendly fromRight for Either terms.
+fromRight :: Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
+fromRight cx g defaultTerm eitherTerm =
+    case eitherTerm of
+      Core.TermEither v0 -> Right (Eithers.either (\_ -> defaultTerm) (\val -> val) v0)
+      _ -> Left (Context.InContext {
+        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "either value") " but found ") (Core__.term eitherTerm)))),
+        Context.inContextContext = cx})
+
+-- | Interpreter-friendly isLeft for Either terms.
+isLeft :: Context.Context -> t0 -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
+isLeft cx g eitherTerm =
+    case eitherTerm of
+      Core.TermEither v0 -> Right (Eithers.either (\_ -> Core.TermLiteral (Core.LiteralBoolean True)) (\_ -> Core.TermLiteral (Core.LiteralBoolean False)) v0)
+      _ -> Left (Context.InContext {
+        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "either value") " but found ") (Core__.term eitherTerm)))),
+        Context.inContextContext = cx})
+
+-- | Interpreter-friendly isRight for Either terms.
+isRight :: Context.Context -> t0 -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
+isRight cx g eitherTerm =
+    case eitherTerm of
+      Core.TermEither v0 -> Right (Eithers.either (\_ -> Core.TermLiteral (Core.LiteralBoolean False)) (\_ -> Core.TermLiteral (Core.LiteralBoolean True)) v0)
+      _ -> Left (Context.InContext {
+        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "either value") " but found ") (Core__.term eitherTerm)))),
+        Context.inContextContext = cx})
+
+-- | Interpreter-friendly lefts for list of Either terms.
+lefts :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
+lefts cx g listTerm =
+    Eithers.bind (Core_.list cx g listTerm) (\elements -> Right (Core.TermList (Lists.foldl (\acc -> \el -> case el of
+      Core.TermEither v0 -> Eithers.either (\val -> Lists.concat2 acc (Lists.pure val)) (\_ -> acc) v0
+      _ -> acc) [] elements)))
 
 -- | Interpreter-friendly map for Either terms.
 map :: Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
@@ -183,3 +227,20 @@ mapSet cx g funTerm setTerm =
       Core.applicationArgument = (Core.TermApplication (Core.Application {
         Core.applicationFunction = funTerm,
         Core.applicationArgument = el}))})) (Core.TermEither (Right (Core.TermSet (Sets.fromList [])))) (Sets.toList elements)))
+
+-- | Interpreter-friendly partitionEithers for list of Either terms.
+partitionEithers :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) ([Core.Term], [Core.Term])
+partitionEithers cx g listTerm =
+    Eithers.bind (Core_.list cx g listTerm) (\elements -> Right (Lists.foldl (\acc -> \el ->
+      let ls = Pairs.first acc
+          rs = Pairs.second acc
+      in case el of
+        Core.TermEither v0 -> Eithers.either (\val -> (Lists.concat2 ls (Lists.pure val), rs)) (\val -> (ls, (Lists.concat2 rs (Lists.pure val)))) v0
+        _ -> acc) ([], []) elements))
+
+-- | Interpreter-friendly rights for list of Either terms.
+rights :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
+rights cx g listTerm =
+    Eithers.bind (Core_.list cx g listTerm) (\elements -> Right (Core.TermList (Lists.foldl (\acc -> \el -> case el of
+      Core.TermEither v0 -> Eithers.either (\_ -> acc) (\val -> Lists.concat2 acc (Lists.pure val)) v0
+      _ -> acc) [] elements)))
