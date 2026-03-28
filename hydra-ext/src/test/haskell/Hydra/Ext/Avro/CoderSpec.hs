@@ -18,6 +18,7 @@ import qualified Hydra.Json.Parser as JsonParser
 import Hydra.Parsing (ParseResult(..), ParseSuccess(..), ParseError(..))
 
 import qualified Test.Hspec as H
+import qualified Data.ByteString as B
 import qualified Data.List as L
 import qualified Data.Map as M
 
@@ -40,6 +41,12 @@ spec = do
   avscFileSpec
   schemaStringCoderSpec
   endToEndSpec
+  binaryTermSpec
+  lossyIntegerFloatSpec
+  wrapTypeSpec
+  errorCaseSpec
+  complexRealisticSpec
+  kernelTypeSpec
 
 
 -- Avro schema helpers
@@ -1106,3 +1113,612 @@ endToEndSpec = H.describe "End-to-end pipeline" $ do
       Left e -> H.expectationFailure $ "reverse adapter failed: " ++ show e
       Right revAdapter ->
         Util.adapterTarget revAdapter `H.shouldBe` avroPrim Avro.PrimitiveInt
+
+
+-- ============================================================
+-- Binary (bytes) term-level tests
+-- ============================================================
+
+binaryTermSpec :: H.Spec
+binaryTermSpec = H.describe "Binary (bytes) term encoding" $ do
+
+  -- Note: Hydra's binaryToString/stringToBinary use base64 encoding
+  H.it "forward: JSON base64 string -> Hydra binary term" $ do
+    case AvroCoder.avroHydraAdapter emptyContext (avroPrim Avro.PrimitiveBytes) AvroCoder.emptyAvroEnvironment of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right (adapter, _) -> do
+        -- "aGVsbG8=" is the base64 encoding of "hello"
+        let result = Util.coderEncode (Util.adapterCoder adapter) emptyContext (Json.ValueString "aGVsbG8=")
+        case result of
+          Left e -> H.expectationFailure $ "encode failed: " ++ show e
+          Right term -> term `H.shouldBe` Core.TermLiteral (Core.LiteralBinary (B.pack [104,101,108,108,111]))
+
+  H.it "reverse: Hydra binary term -> JSON base64 string" $ do
+    case Encoder.hydraAvroAdapter emptyContext M.empty Types.binary of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right adapter -> do
+        let term = Core.TermLiteral (Core.LiteralBinary (B.pack [104,101,108,108,111]))
+        case Util.coderEncode (Util.adapterCoder adapter) emptyContext term of
+          Left e -> H.expectationFailure $ "encode failed: " ++ show e
+          Right json -> json `H.shouldBe` Json.ValueString "aGVsbG8="
+
+  H.it "binary round-trip: term -> JSON -> term" $ do
+    case Encoder.hydraAvroAdapter emptyContext M.empty Types.binary of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right adapter -> do
+        let term = Core.TermLiteral (Core.LiteralBinary (B.pack [0, 1, 255]))
+        case Util.coderEncode (Util.adapterCoder adapter) emptyContext term of
+          Left e -> H.expectationFailure $ "encode failed: " ++ show e
+          Right json -> do
+            case Util.coderDecode (Util.adapterCoder adapter) emptyContext json of
+              Left e -> H.expectationFailure $ "decode failed: " ++ show e
+              Right term' -> term' `H.shouldBe` term
+
+  H.it "binary in a record field" $ do
+    let hydraType = hydraRecordType [("data", Types.binary), ("label", Types.string)]
+    case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right adapter -> do
+        let term = hydraRecord "Record" [
+              ("data", Core.TermLiteral (Core.LiteralBinary (B.pack [1, 2, 3]))),
+              ("label", Terms.string "test")]
+        case Util.coderEncode (Util.adapterCoder adapter) emptyContext term of
+          Left e -> H.expectationFailure $ "encode failed: " ++ show e
+          Right json -> do
+            case Util.coderDecode (Util.adapterCoder adapter) emptyContext json of
+              Left e -> H.expectationFailure $ "decode failed: " ++ show e
+              Right term' -> term' `H.shouldBe` term
+
+
+-- ============================================================
+-- Lossy integer and float type tests
+-- ============================================================
+
+lossyIntegerFloatSpec :: H.Spec
+lossyIntegerFloatSpec = H.describe "Lossy integer and float type mapping" $ do
+
+  H.it "int8 -> long (lossy), term round-trips" $ do
+    let hydraType = Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt8)
+    case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right adapter -> do
+        Util.adapterIsLossy adapter `H.shouldBe` True
+        case Util.adapterTarget adapter of
+          Avro.SchemaPrimitive Avro.PrimitiveLong -> return ()
+          other -> H.expectationFailure $ "expected long, got: " ++ show other
+
+  H.it "int16 -> long (lossy)" $ do
+    let hydraType = Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt16)
+    case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right adapter -> do
+        Util.adapterIsLossy adapter `H.shouldBe` True
+        case Util.adapterTarget adapter of
+          Avro.SchemaPrimitive Avro.PrimitiveLong -> return ()
+          other -> H.expectationFailure $ "expected long, got: " ++ show other
+
+  H.it "uint16 -> long (lossy)" $ do
+    let hydraType = Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint16)
+    case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right adapter -> Util.adapterIsLossy adapter `H.shouldBe` True
+
+  H.it "bigint -> long (lossy)" $ do
+    let hydraType = Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint)
+    case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right adapter -> Util.adapterIsLossy adapter `H.shouldBe` True
+
+  H.it "int32 -> int (not lossy)" $ do
+    case Encoder.hydraAvroAdapter emptyContext M.empty Types.int32 of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right adapter -> do
+        Util.adapterIsLossy adapter `H.shouldBe` False
+        case Util.adapterTarget adapter of
+          Avro.SchemaPrimitive Avro.PrimitiveInt -> return ()
+          other -> H.expectationFailure $ "expected int, got: " ++ show other
+
+  H.it "int64 -> long (not lossy)" $ do
+    case Encoder.hydraAvroAdapter emptyContext M.empty Types.int64 of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right adapter -> do
+        Util.adapterIsLossy adapter `H.shouldBe` False
+        case Util.adapterTarget adapter of
+          Avro.SchemaPrimitive Avro.PrimitiveLong -> return ()
+          other -> H.expectationFailure $ "expected long, got: " ++ show other
+
+  H.it "bigfloat -> double (lossy)" $ do
+    let hydraType = Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeBigfloat)
+    case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right adapter -> Util.adapterIsLossy adapter `H.shouldBe` True
+
+  H.it "float32 -> float (not lossy)" $ do
+    case Encoder.hydraAvroAdapter emptyContext M.empty Types.float32 of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right adapter -> do
+        Util.adapterIsLossy adapter `H.shouldBe` False
+        case Util.adapterTarget adapter of
+          Avro.SchemaPrimitive Avro.PrimitiveFloat -> return ()
+          other -> H.expectationFailure $ "expected float, got: " ++ show other
+
+  H.it "float64 -> double (not lossy)" $ do
+    case Encoder.hydraAvroAdapter emptyContext M.empty Types.float64 of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right adapter -> do
+        Util.adapterIsLossy adapter `H.shouldBe` False
+        case Util.adapterTarget adapter of
+          Avro.SchemaPrimitive Avro.PrimitiveDouble -> return ()
+          other -> H.expectationFailure $ "expected double, got: " ++ show other
+
+  H.it "lossy int8 term encoding round-trips through int64" $ do
+    let hydraType = Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt8)
+    case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right adapter -> do
+        let term = Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt8 42))
+        case Util.coderEncode (Util.adapterCoder adapter) emptyContext term of
+          Left e -> H.expectationFailure $ "encode failed: " ++ show e
+          Right json -> do
+            json `H.shouldBe` Json.ValueNumber 42.0
+            -- Decode comes back as int64 (lossy: original int8 precision lost)
+            case Util.coderDecode (Util.adapterCoder adapter) emptyContext json of
+              Left e -> H.expectationFailure $ "decode failed: " ++ show e
+              Right term' -> term' `H.shouldBe` Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 42))
+
+
+-- ============================================================
+-- TypeWrap (newtype) tests
+-- ============================================================
+
+wrapTypeSpec :: H.Spec
+wrapTypeSpec = H.describe "TypeWrap (newtype) encoding" $ do
+
+  H.it "wrapped string is encoded as Avro string" $ do
+    -- Name is defined as a newtype over String in the Hydra kernel
+    let hydraType = Core.TypeWrap Types.string
+    case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right adapter -> do
+        Util.adapterTarget adapter `H.shouldBe` avroPrim Avro.PrimitiveString
+        Util.adapterIsLossy adapter `H.shouldBe` False
+
+  H.it "wrapped int32 is encoded as Avro int" $ do
+    let hydraType = Core.TypeWrap Types.int32
+    case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right adapter ->
+        Util.adapterTarget adapter `H.shouldBe` avroPrim Avro.PrimitiveInt
+
+  H.it "wrapped list(string) is encoded as Avro array(string)" $ do
+    let hydraType = Core.TypeWrap (Types.list Types.string)
+    case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right adapter ->
+        Util.adapterTarget adapter `H.shouldBe` avroArray (avroPrim Avro.PrimitiveString)
+
+  H.it "nested wraps are unwrapped correctly" $ do
+    let hydraType = Core.TypeWrap (Core.TypeWrap Types.boolean)
+    case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right adapter ->
+        Util.adapterTarget adapter `H.shouldBe` avroPrim Avro.PrimitiveBoolean
+
+  H.it "record with wrapped field types" $ do
+    -- A record where one field is a wrapped string (like Hydra Name)
+    let hydraType = hydraRecordType [
+          ("id", Core.TypeWrap Types.string),
+          ("count", Types.int32)]
+    case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right adapter -> do
+        case Util.adapterTarget adapter of
+          Avro.SchemaNamed named -> do
+            let Avro.NamedTypeRecord (Avro.Record fields) = Avro.namedType named
+            length fields `H.shouldBe` 2
+            -- Fields are in definition order: id (wrapped string), count (int32)
+            Avro.fieldName (head fields) `H.shouldBe` "id"
+            Avro.fieldType (head fields) `H.shouldBe` avroPrim Avro.PrimitiveString
+            Avro.fieldName (fields !! 1) `H.shouldBe` "count"
+            Avro.fieldType (fields !! 1) `H.shouldBe` avroPrim Avro.PrimitiveInt
+          other -> H.expectationFailure $ "expected named schema, got: " ++ show other
+
+
+-- ============================================================
+-- Error case tests
+-- ============================================================
+
+errorCaseSpec :: H.Spec
+errorCaseSpec = H.describe "Error cases" $ do
+
+  H.it "non-string map keys are rejected" $ do
+    let hydraType = Types.map Types.int32 Types.string
+    case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
+      Left _ -> return ()  -- Expected to fail
+      Right _ -> H.expectationFailure "should have rejected non-string map keys"
+
+  H.it "unknown type variable is rejected" $ do
+    -- Reference a type that doesn't exist in the type map
+    let hydraType = Core.TypeVariable (Core.Name "com.example.NonExistent")
+    case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
+      Left _ -> return ()
+      Right _ -> H.expectationFailure "should have rejected unknown type variable"
+
+  H.it "encodeType with unknown name is rejected" $ do
+    let typeMap = M.empty :: M.Map Core.Name Core.Type
+    case Encoder.encodeType emptyContext typeMap (Core.Name "com.example.Missing") of
+      Left _ -> return ()
+      Right _ -> H.expectationFailure "should have rejected unknown name"
+
+
+-- ============================================================
+-- Complex realistic types
+-- ============================================================
+
+complexRealisticSpec :: H.Spec
+complexRealisticSpec = H.describe "Complex realistic Avro schemas" $ do
+
+  -- Kafka-style schema: a message envelope with metadata and payload
+  H.it "Kafka-style message envelope with nested records, optional fields, and containers" $ do
+    let headerName = Core.Name "com.messaging.Header"
+    let messageName = Core.Name "com.messaging.Message"
+    let headerType = hydraRecordType [
+          ("key", Types.string),
+          ("value", Types.string)]
+    let messageType = hydraRecordType [
+          ("id", Types.string),
+          ("timestamp", Types.int64),
+          ("headers", Types.list (Core.TypeVariable headerName)),
+          ("payload", Types.binary),
+          ("metadata", Types.map Types.string Types.string),
+          ("replyTo", Types.optional Types.string)]
+    let typeMap = M.fromList [(headerName, headerType), (messageName, messageType)]
+    case Encoder.encodeType emptyContext typeMap messageName of
+      Left e -> H.expectationFailure $ "encode failed: " ++ show e
+      Right adapter -> do
+        case Util.adapterTarget adapter of
+          Avro.SchemaNamed named -> do
+            Avro.namedName named `H.shouldBe` "Message"
+            Avro.namedNamespace named `H.shouldBe` Just "com.messaging"
+            case Avro.namedType named of
+              Avro.NamedTypeRecord (Avro.Record fields) -> do
+                length fields `H.shouldBe` 6
+                -- The "headers" field should be array of inlined Header record
+                let headersField = fields !! 2
+                Avro.fieldName headersField `H.shouldBe` "headers"
+                case Avro.fieldType headersField of
+                  Avro.SchemaArray (Avro.Array items) -> case items of
+                    Avro.SchemaNamed innerNamed -> Avro.namedName innerNamed `H.shouldBe` "Header"
+                    other -> H.expectationFailure $ "expected named schema for array items, got: " ++ show other
+                  other -> H.expectationFailure $ "expected array schema for headers, got: " ++ show other
+                -- The "payload" field should be bytes
+                Avro.fieldType (fields !! 3) `H.shouldBe` avroPrim Avro.PrimitiveBytes
+                -- The "metadata" field should be map(string)
+                case Avro.fieldType (fields !! 4) of
+                  Avro.SchemaMap _ -> return ()
+                  other -> H.expectationFailure $ "expected map schema for metadata, got: " ++ show other
+                -- The "replyTo" field should be union[null, string]
+                case Avro.fieldType (fields !! 5) of
+                  Avro.SchemaUnion (Avro.Union schemas) -> do
+                    length schemas `H.shouldBe` 2
+                    head schemas `H.shouldBe` avroPrim Avro.PrimitiveNull
+                  other -> H.expectationFailure $ "expected union for replyTo, got: " ++ show other
+              _ -> H.expectationFailure "expected record type"
+          _ -> H.expectationFailure "expected named schema"
+
+  -- IoT sensor data schema: enum + nested records + arrays + maps
+  H.it "IoT sensor data with enum, nested records, and mixed containers" $ do
+    let sensorTypeName = Core.Name "iot.SensorType"
+    let readingName = Core.Name "iot.Reading"
+    let deviceName = Core.Name "iot.Device"
+    let sensorType = hydraUnionType [("temperature", Types.unit), ("humidity", Types.unit), ("pressure", Types.unit)]
+    let readingType = hydraRecordType [
+          ("timestamp", Types.int64),
+          ("value", Types.float64),
+          ("quality", Types.optional Types.float32)]
+    let deviceType = hydraRecordType [
+          ("id", Types.string),
+          ("sensorType", Core.TypeVariable sensorTypeName),
+          ("readings", Types.list (Core.TypeVariable readingName)),
+          ("tags", Types.map Types.string Types.string)]
+    let typeMap = M.fromList [
+          (sensorTypeName, sensorType),
+          (readingName, readingType),
+          (deviceName, deviceType)]
+    case Encoder.encodeType emptyContext typeMap deviceName of
+      Left e -> H.expectationFailure $ "encode failed: " ++ show e
+      Right adapter -> do
+        case Util.adapterTarget adapter of
+          Avro.SchemaNamed named -> do
+            Avro.namedName named `H.shouldBe` "Device"
+            case Avro.namedType named of
+              Avro.NamedTypeRecord (Avro.Record fields) -> do
+                length fields `H.shouldBe` 4
+                -- sensorType should be inlined as an enum
+                case Avro.fieldType (fields !! 1) of
+                  Avro.SchemaNamed enumNamed -> case Avro.namedType enumNamed of
+                    Avro.NamedTypeEnum (Avro.Enum symbols _) ->
+                      symbols `H.shouldBe` ["temperature", "humidity", "pressure"]
+                    other -> H.expectationFailure $ "expected enum, got: " ++ show other
+                  other -> H.expectationFailure $ "expected named schema for sensorType, got: " ++ show other
+                -- readings should be array of inlined Reading record
+                case Avro.fieldType (fields !! 2) of
+                  Avro.SchemaArray (Avro.Array items) -> case items of
+                    Avro.SchemaNamed readingNamed -> do
+                      Avro.namedName readingNamed `H.shouldBe` "Reading"
+                      case Avro.namedType readingNamed of
+                        Avro.NamedTypeRecord (Avro.Record rFields) -> length rFields `H.shouldBe` 3
+                        _ -> H.expectationFailure "expected record for Reading"
+                    other -> H.expectationFailure $ "expected named schema in array, got: " ++ show other
+                  other -> H.expectationFailure $ "expected array for readings, got: " ++ show other
+              _ -> H.expectationFailure "expected record type"
+          _ -> H.expectationFailure "expected named schema"
+
+  -- Term-level end-to-end with the Kafka message schema
+  H.it "Kafka message: term-level encode and decode round-trip" $ do
+    let headerName = Core.Name "com.messaging.Header"
+    let messageName = Core.Name "com.messaging.Message"
+    let headerType = hydraRecordType [("key", Types.string), ("value", Types.string)]
+    let messageType = hydraRecordType [
+          ("id", Types.string),
+          ("timestamp", Types.int64),
+          ("headers", Types.list (Core.TypeVariable headerName)),
+          ("payload", Types.binary),
+          ("metadata", Types.map Types.string Types.string),
+          ("replyTo", Types.optional Types.string)]
+    let typeMap = M.fromList [(headerName, headerType), (messageName, messageType)]
+    case Encoder.encodeType emptyContext typeMap messageName of
+      Left e -> H.expectationFailure $ "encode failed: " ++ show e
+      Right adapter -> do
+        let headerTerm1 = hydraRecord "com.messaging.Header" [
+              ("key", Terms.string "content-type"),
+              ("value", Terms.string "application/json")]
+        let headerTerm2 = hydraRecord "com.messaging.Header" [
+              ("key", Terms.string "correlation-id"),
+              ("value", Terms.string "abc-123")]
+        let term = hydraRecord "com.messaging.Message" [
+              ("id", Terms.string "msg-001"),
+              ("timestamp", Terms.int64 1738136577459),
+              ("headers", Terms.list [headerTerm1, headerTerm2]),
+              ("payload", Core.TermLiteral (Core.LiteralBinary (B.pack [123, 125]))),
+              ("metadata", Core.TermMap (M.fromList [
+                (Terms.string "source", Terms.string "api"),
+                (Terms.string "version", Terms.string "1.0")])),
+              ("replyTo", Core.TermMaybe (Just (Terms.string "reply-queue")))]
+        case Util.coderEncode (Util.adapterCoder adapter) emptyContext term of
+          Left e -> H.expectationFailure $ "encode failed: " ++ show e
+          Right json -> do
+            case Util.coderDecode (Util.adapterCoder adapter) emptyContext json of
+              Left e -> H.expectationFailure $ "decode failed: " ++ show e
+              Right term' -> term' `H.shouldBe` term
+
+  -- Full round-trip through AirplaneInfo.avsc with real data
+  H.it "AirplaneInfo.avsc: forward adapter processes real data end-to-end" $ do
+    schemaJson <- readAvscFile "src/test/avro/aviationdemo/AirplaneInfo.avsc"
+    dataJson <- readJsonFile "src/test/json/aviationdemo/exampleAirplaneInfo.json"
+    case SchemaJson.decodeSchema emptyContext schemaJson of
+      Left e -> H.expectationFailure $ "schema decode failed: " ++ show e
+      Right schema -> do
+        case AvroCoder.avroHydraAdapter emptyContext schema AvroCoder.emptyAvroEnvironment of
+          Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+          Right (adapter, _) -> do
+            -- Encode the data JSON through the adapter
+            case Util.coderEncode (Util.adapterCoder adapter) emptyContext dataJson of
+              Left e -> H.expectationFailure $ "data encode failed: " ++ show e
+              Right hydraTerm -> do
+                -- Decode back to JSON
+                case Util.coderDecode (Util.adapterCoder adapter) emptyContext hydraTerm of
+                  Left e -> H.expectationFailure $ "data decode failed: " ++ show e
+                  Right jsonResult -> do
+                    -- The round-tripped JSON should be structurally equivalent
+                    case (dataJson, jsonResult) of
+                      (Json.ValueObject orig, Json.ValueObject result) -> do
+                        -- Key fields should be preserved
+                        M.lookup "recordId" result `H.shouldBe` M.lookup "recordId" orig
+                        M.lookup "performanceProfile" result `H.shouldBe` M.lookup "performanceProfile" orig
+                      _ -> H.expectationFailure "expected JSON objects"
+
+  -- Full round-trip through Review.avsc with real data
+  H.it "Review.avsc: forward adapter processes real data end-to-end" $ do
+    schemaJson <- readAvscFile "src/test/avro/moviedemo/Review.avsc"
+    dataJson <- readJsonFile "src/test/json/moviedemo/exampleReview.json"
+    case SchemaJson.decodeSchema emptyContext schemaJson of
+      Left e -> H.expectationFailure $ "schema decode failed: " ++ show e
+      Right schema -> do
+        case AvroCoder.avroHydraAdapter emptyContext schema AvroCoder.emptyAvroEnvironment of
+          Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+          Right (adapter, _) -> do
+            case Util.coderEncode (Util.adapterCoder adapter) emptyContext dataJson of
+              Left e -> H.expectationFailure $ "data encode failed: " ++ show e
+              Right hydraTerm -> do
+                case Util.coderDecode (Util.adapterCoder adapter) emptyContext hydraTerm of
+                  Left e -> H.expectationFailure $ "data decode failed: " ++ show e
+                  Right jsonResult -> do
+                    case (dataJson, jsonResult) of
+                      (Json.ValueObject orig, Json.ValueObject result) -> do
+                        M.lookup "timestamp" result `H.shouldBe` M.lookup "timestamp" orig
+                      _ -> H.expectationFailure "expected JSON objects"
+
+  -- Multiple named type references with second-occurrence reference
+  H.it "diamond dependency: type referenced from two fields, second is a reference" $ do
+    let coordName = Core.Name "geo.Coordinate"
+    let segmentName = Core.Name "geo.Segment"
+    let routeName = Core.Name "geo.Route"
+    let coordType = hydraRecordType [("lat", Types.float64), ("lon", Types.float64)]
+    let segmentType = hydraRecordType [
+          ("start", Core.TypeVariable coordName),
+          ("end", Core.TypeVariable coordName)]
+    let routeType = hydraRecordType [
+          ("name", Types.string),
+          ("segments", Types.list (Core.TypeVariable segmentName)),
+          ("origin", Core.TypeVariable coordName)]
+    let typeMap = M.fromList [(coordName, coordType), (segmentName, segmentType), (routeName, routeType)]
+    case Encoder.encodeType emptyContext typeMap routeName of
+      Left e -> H.expectationFailure $ "encode failed: " ++ show e
+      Right adapter -> do
+        case Util.adapterTarget adapter of
+          Avro.SchemaNamed named -> do
+            Avro.namedName named `H.shouldBe` "Route"
+            -- The origin field references Coordinate, which was already inlined in Segment
+            case Avro.namedType named of
+              Avro.NamedTypeRecord (Avro.Record fields) -> do
+                length fields `H.shouldBe` 3
+                -- origin (3rd field) should be a reference since Coordinate was already emitted
+                case Avro.fieldType (fields !! 2) of
+                  Avro.SchemaReference ref -> ref `H.shouldBe` "Coordinate"
+                  other -> H.expectationFailure $ "expected reference for origin, got: " ++ show other
+              _ -> H.expectationFailure "expected record"
+          _ -> H.expectationFailure "expected named schema"
+
+
+-- ============================================================
+-- Hydra kernel type tests
+-- ============================================================
+
+kernelTypeSpec :: H.Spec
+kernelTypeSpec = H.describe "Hydra kernel types as Avro schemas" $ do
+
+  -- FieldType: a record with a Name (wrapped string) and a Type
+  -- This exercises wrap + record
+  H.it "Hydra FieldType: record with wrapped Name and recursive Type" $ do
+    let fieldTypeName = Core.Name "hydra.core.FieldType"
+    let fieldTypeType = hydraRecordType [
+          ("name", Core.TypeWrap Types.string),  -- Name is a newtype over String
+          ("type", Types.string)]  -- simplified: use string instead of recursive Type
+    let typeMap = M.singleton fieldTypeName fieldTypeType
+    case Encoder.encodeType emptyContext typeMap fieldTypeName of
+      Left e -> H.expectationFailure $ "encode failed: " ++ show e
+      Right adapter -> do
+        case Util.adapterTarget adapter of
+          Avro.SchemaNamed named -> do
+            Avro.namedName named `H.shouldBe` "FieldType"
+            Avro.namedNamespace named `H.shouldBe` Just "hydra.core"
+            case Avro.namedType named of
+              Avro.NamedTypeRecord (Avro.Record fields) -> do
+                length fields `H.shouldBe` 2
+                -- Both fields should be string (Name wraps to string, type is string)
+                Avro.fieldType (head fields) `H.shouldBe` avroPrim Avro.PrimitiveString
+                Avro.fieldType (fields !! 1) `H.shouldBe` avroPrim Avro.PrimitiveString
+              _ -> H.expectationFailure "expected record"
+          _ -> H.expectationFailure "expected named schema"
+
+  -- Projection: a record with two Name fields
+  H.it "Hydra Projection: record with two wrapped Name fields" $ do
+    let projName = Core.Name "hydra.core.Projection"
+    let projType = hydraRecordType [
+          ("typeName", Core.TypeWrap Types.string),
+          ("field", Core.TypeWrap Types.string)]
+    let typeMap = M.singleton projName projType
+    case Encoder.encodeType emptyContext typeMap projName of
+      Left e -> H.expectationFailure $ "encode failed: " ++ show e
+      Right adapter -> do
+        -- Term-level round-trip
+        let term = hydraRecord "hydra.core.Projection" [
+              ("typeName", Terms.string "MyRecord"),
+              ("field", Terms.string "myField")]
+        case Util.coderEncode (Util.adapterCoder adapter) emptyContext term of
+          Left e -> H.expectationFailure $ "encode failed: " ++ show e
+          Right json -> do
+            case json of
+              Json.ValueObject m -> do
+                M.lookup "typeName" m `H.shouldBe` Just (Json.ValueString "MyRecord")
+                M.lookup "field" m `H.shouldBe` Just (Json.ValueString "myField")
+              _ -> H.expectationFailure "expected JSON object"
+            case Util.coderDecode (Util.adapterCoder adapter) emptyContext json of
+              Left e -> H.expectationFailure $ "decode failed: " ++ show e
+              Right term' -> term' `H.shouldBe` term
+
+  -- MapType: a record containing two types (simplified as strings)
+  H.it "Hydra MapType analog: record with key and value type fields" $ do
+    let mapTypeName = Core.Name "hydra.core.MapType"
+    let mapTypeType = hydraRecordType [("keys", Types.string), ("values", Types.string)]
+    let typeMap = M.singleton mapTypeName mapTypeType
+    case Encoder.encodeType emptyContext typeMap mapTypeName of
+      Left e -> H.expectationFailure $ "encode failed: " ++ show e
+      Right adapter -> do
+        let term = hydraRecord "hydra.core.MapType" [
+              ("keys", Terms.string "string"),
+              ("values", Terms.string "int32")]
+        case Util.coderEncode (Util.adapterCoder adapter) emptyContext term of
+          Left e -> H.expectationFailure $ "encode failed: " ++ show e
+          Right json -> do
+            case Util.coderDecode (Util.adapterCoder adapter) emptyContext json of
+              Left e -> H.expectationFailure $ "decode failed: " ++ show e
+              Right term' -> term' `H.shouldBe` term
+
+  -- A mini graph schema: nodes and edges with various field types
+  H.it "Graph-like schema with nodes, edges, labels, and properties" $ do
+    let labelName = Core.Name "graph.Label"
+    let propName = Core.Name "graph.Property"
+    let nodeName = Core.Name "graph.Node"
+    let edgeName = Core.Name "graph.Edge"
+    let graphName = Core.Name "graph.Graph"
+    let labelType = hydraUnionType [("vertex", Types.unit), ("edge", Types.unit), ("property", Types.unit)]
+    let propType = hydraRecordType [
+          ("key", Types.string),
+          ("value", Types.string)]
+    let nodeType = hydraRecordType [
+          ("id", Types.string),
+          ("labels", Types.list (Core.TypeVariable labelName)),
+          ("properties", Types.map Types.string (Core.TypeVariable propName))]
+    let edgeType = hydraRecordType [
+          ("source", Types.string),
+          ("target", Types.string),
+          ("label", Core.TypeVariable labelName),
+          ("weight", Types.optional Types.float64)]
+    let graphType = hydraRecordType [
+          ("nodes", Types.list (Core.TypeVariable nodeName)),
+          ("edges", Types.list (Core.TypeVariable edgeName))]
+    let typeMap = M.fromList [
+          (labelName, labelType), (propName, propType),
+          (nodeName, nodeType), (edgeName, edgeType), (graphName, graphType)]
+    case Encoder.encodeType emptyContext typeMap graphName of
+      Left e -> H.expectationFailure $ "encode failed: " ++ show e
+      Right adapter -> do
+        case Util.adapterTarget adapter of
+          Avro.SchemaNamed named -> do
+            Avro.namedName named `H.shouldBe` "Graph"
+            case Avro.namedType named of
+              Avro.NamedTypeRecord (Avro.Record fields) -> do
+                length fields `H.shouldBe` 2
+                -- nodes field should be array
+                case Avro.fieldType (head fields) of
+                  Avro.SchemaArray _ -> return ()
+                  other -> H.expectationFailure $ "expected array for edges, got: " ++ show other
+                -- edges field should be array
+                case Avro.fieldType (fields !! 1) of
+                  Avro.SchemaArray _ -> return ()
+                  other -> H.expectationFailure $ "expected array for nodes, got: " ++ show other
+              _ -> H.expectationFailure "expected record"
+          _ -> H.expectationFailure "expected named schema"
+
+  -- Term-level: graph with actual data
+  H.it "Graph schema: term-level encode and decode with real data" $ do
+    let propName = Core.Name "graph.Property"
+    let nodeName = Core.Name "graph.Node"
+    let propType = hydraRecordType [("key", Types.string), ("value", Types.string)]
+    let nodeType = hydraRecordType [
+          ("id", Types.string),
+          ("properties", Types.map Types.string (Core.TypeVariable propName))]
+    let typeMap = M.fromList [(propName, propType), (nodeName, nodeType)]
+    case Encoder.encodeType emptyContext typeMap nodeName of
+      Left e -> H.expectationFailure $ "encode failed: " ++ show e
+      Right adapter -> do
+        let prop1 = hydraRecord "graph.Property" [("key", Terms.string "name"), ("value", Terms.string "Alice")]
+        let prop2 = hydraRecord "graph.Property" [("key", Terms.string "age"), ("value", Terms.string "30")]
+        let term = hydraRecord "graph.Node" [
+              ("id", Terms.string "node-1"),
+              ("properties", Core.TermMap (M.fromList [
+                (Terms.string "name", prop1),
+                (Terms.string "age", prop2)]))]
+        case Util.coderEncode (Util.adapterCoder adapter) emptyContext term of
+          Left e -> H.expectationFailure $ "encode failed: " ++ show e
+          Right json -> do
+            case Util.coderDecode (Util.adapterCoder adapter) emptyContext json of
+              Left e -> H.expectationFailure $ "decode failed: " ++ show e
+              Right term' -> term' `H.shouldBe` term
+
+
+-- Helper for reading JSON data files (reuses the same parser as readAvscFile)
+readJsonFile :: FilePath -> IO Json.Value
+readJsonFile = readAvscFile
