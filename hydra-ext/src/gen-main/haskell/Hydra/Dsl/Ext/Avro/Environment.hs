@@ -304,3 +304,63 @@ avroQualifiedNameWithNamespace original newVal =
               Core.projectionTypeName = (Core.Name "hydra.ext.avro.environment.AvroQualifiedName"),
               Core.projectionField = (Core.Name "name")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+encodeEnvironment :: Phantoms.TTerm (M.Map Core.Name Core.Type) -> Phantoms.TTerm (M.Map Core.Name (Util.Adapter Core.Type Schema.Schema Core.Term Model.Value)) -> Phantoms.TTerm Environment.EncodeEnvironment
+encodeEnvironment typeMap emitted =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.avro.environment.EncodeEnvironment"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "typeMap"),
+          Core.fieldTerm = (Phantoms.unTTerm typeMap)},
+        Core.Field {
+          Core.fieldName = (Core.Name "emitted"),
+          Core.fieldTerm = (Phantoms.unTTerm emitted)}]}))
+
+encodeEnvironmentEmitted :: Phantoms.TTerm Environment.EncodeEnvironment -> Phantoms.TTerm (M.Map Core.Name (Util.Adapter Core.Type Schema.Schema Core.Term Model.Value))
+encodeEnvironmentEmitted x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.avro.environment.EncodeEnvironment"),
+        Core.projectionField = (Core.Name "emitted")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+encodeEnvironmentTypeMap :: Phantoms.TTerm Environment.EncodeEnvironment -> Phantoms.TTerm (M.Map Core.Name Core.Type)
+encodeEnvironmentTypeMap x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.avro.environment.EncodeEnvironment"),
+        Core.projectionField = (Core.Name "typeMap")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+encodeEnvironmentWithEmitted :: Phantoms.TTerm Environment.EncodeEnvironment -> Phantoms.TTerm (M.Map Core.Name (Util.Adapter Core.Type Schema.Schema Core.Term Model.Value)) -> Phantoms.TTerm Environment.EncodeEnvironment
+encodeEnvironmentWithEmitted original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.avro.environment.EncodeEnvironment"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "typeMap"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.avro.environment.EncodeEnvironment"),
+              Core.projectionField = (Core.Name "typeMap")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "emitted"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+encodeEnvironmentWithTypeMap :: Phantoms.TTerm Environment.EncodeEnvironment -> Phantoms.TTerm (M.Map Core.Name Core.Type) -> Phantoms.TTerm Environment.EncodeEnvironment
+encodeEnvironmentWithTypeMap original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.avro.environment.EncodeEnvironment"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "typeMap"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "emitted"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.ext.avro.environment.EncodeEnvironment"),
+              Core.projectionField = (Core.Name "emitted")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
