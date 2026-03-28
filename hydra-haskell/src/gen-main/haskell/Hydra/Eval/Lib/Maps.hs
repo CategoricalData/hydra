@@ -124,6 +124,19 @@ filterWithKey cx g pred mapTerm =
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map value") " but found ") (Core_.term mapTerm)))),
         Context.inContextContext = cx})
 
+-- | Interpreter-friendly findWithDefault for Map terms.
+findWithDefault :: t0 -> t1 -> Core.Term -> Core.Term -> Core.Term -> Either t2 Core.Term
+findWithDefault cx g defaultTerm keyTerm mapTerm =
+    Right (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maybes.fromMaybe"))),
+        Core.applicationArgument = defaultTerm})),
+      Core.applicationArgument = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maps.lookup"))),
+          Core.applicationArgument = keyTerm})),
+        Core.applicationArgument = mapTerm}))}))
+
 -- | Interpreter-friendly map for Map terms.
 map :: Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 map cx g valFun mapTerm =
