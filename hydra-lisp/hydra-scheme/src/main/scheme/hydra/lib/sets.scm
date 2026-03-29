@@ -17,7 +17,10 @@
           hydra_lib_sets_unions)
   (begin
 
-    ;; Sets are sorted lists (no duplicates)
+    ;; Sets use Guile's vhash for O(1) amortized membership test and insert.
+    ;; A set is a vhash mapping elements to #t.
+    ;; Sorted lists from generated code are transparently converted on first use.
+    (use-modules (ice-9 vlist))
 
     (define (obj->string x)
       (let ((p (open-output-string)))
@@ -26,7 +29,7 @@
 
     (define (generic-compare a b)
       (cond
-        ((equal? a b) 0)  ;; Fast path: if equal, no need for ordering
+        ((equal? a b) 0)
         ((and (number? a) (number? b))
          (cond ((< a b) -1) ((= a b) 0) (else 1)))
         ((and (string? a) (string? b))
@@ -44,123 +47,130 @@
         ((and (null? a) (null? b)) 0)
         ((null? a) -1)
         ((null? b) 1)
-        ;; Fallback: compare string representations for records and other types
         (else (let ((sa (obj->string a)) (sb (obj->string b)))
                 (cond ((string<? sa sb) -1) ((string=? sa sb) 0) (else 1))))))
 
-    (define (set-insert x s)
-      (cond
-        ((null? s) (list x))
-        ((= (generic-compare x (car s)) 0) s)
-        ((< (generic-compare x (car s)) 0) (cons x s))
-        (else (cons (car s) (set-insert x (cdr s))))))
+    ;; Convert a sorted list to a vhash set
+    (define (list->vhset lst)
+      (let loop ((rest lst) (vh vlist-null))
+        (if (null? rest) vh
+            (loop (cdr rest) (vhash-cons (car rest) #t vh)))))
 
-    (define (set-delete x s)
+    ;; Ensure s is a vhash set. Transparently convert sorted lists.
+    (define (ensure-vhset s)
       (cond
-        ((null? s) '())
-        ((equal? x (car s)) (cdr s))
-        (else (cons (car s) (set-delete x (cdr s))))))
-
-    (define (set-member? x s)
-      (cond
-        ((null? s) #f)
-        ((equal? x (car s)) #t)
-        ((< (generic-compare x (car s)) 0) #f)
-        (else (set-member? x (cdr s)))))
+        ((vlist? s) s)
+        ((null? s) vlist-null)
+        ((pair? s) (list->vhset s))
+        (else vlist-null)))
 
     ;; Delete an element from a set.
     (define hydra_lib_sets_delete
       (lambda (x)
         (lambda (s)
-          (set-delete x s))))
+          (vhash-fold (lambda (k v acc)
+                        (if (equal? k x) acc (vhash-cons k #t acc)))
+                      vlist-null (ensure-vhset s)))))
 
     ;; Compute the difference of two sets.
     (define hydra_lib_sets_difference
       (lambda (s1)
         (lambda (s2)
-          (let loop ((rest s1) (acc '()))
-            (if (null? rest)
-                (reverse acc)
-                (if (set-member? (car rest) s2)
-                    (loop (cdr rest) acc)
-                    (loop (cdr rest) (cons (car rest) acc))))))))
+          (let ((vh2 (ensure-vhset s2)))
+            (vhash-fold (lambda (k v acc)
+                          (if (vhash-assoc k vh2) acc (vhash-cons k #t acc)))
+                        vlist-null (ensure-vhset s1))))))
 
     ;; Create an empty set.
-    (define hydra_lib_sets_empty '())
+    (define hydra_lib_sets_empty vlist-null)
 
     ;; Create a set from a list.
     (define hydra_lib_sets_from_list
       (lambda (xs)
-        (let loop ((rest xs) (acc '()))
-          (if (null? rest)
-              acc
-              (loop (cdr rest) (set-insert (car rest) acc))))))
+        (let loop ((rest xs) (vh vlist-null))
+          (if (null? rest) vh
+              (loop (cdr rest) (vhash-cons (car rest) #t vh))))))
 
-    ;; Insert an element into a set.
+    ;; Insert an element into a set. O(1) via vhash-cons.
     (define hydra_lib_sets_insert
       (lambda (x)
         (lambda (s)
-          (set-insert x s))))
+          (vhash-cons x #t (ensure-vhset s)))))
 
     ;; Compute the intersection of two sets.
     (define hydra_lib_sets_intersection
       (lambda (s1)
         (lambda (s2)
-          (let loop ((rest s1) (acc '()))
-            (if (null? rest)
-                (reverse acc)
-                (if (set-member? (car rest) s2)
-                    (loop (cdr rest) (cons (car rest) acc))
-                    (loop (cdr rest) acc)))))))
+          (let ((vh2 (ensure-vhset s2)))
+            (vhash-fold (lambda (k v acc)
+                          (if (vhash-assoc k vh2) (vhash-cons k #t acc) acc))
+                        vlist-null (ensure-vhset s1))))))
 
     ;; Map a function over a set.
     (define hydra_lib_sets_map
       (lambda (f)
         (lambda (s)
-          (let loop ((rest s) (acc '()))
-            (if (null? rest)
-                acc
-                (loop (cdr rest) (set-insert (f (car rest)) acc)))))))
+          (vhash-fold (lambda (k v acc) (vhash-cons (f k) #t acc))
+                      vlist-null (ensure-vhset s)))))
 
-    ;; Check if an element is in a set.
+    ;; Check if an element is in a set. O(1) via vhash-assoc.
     (define hydra_lib_sets_member
       (lambda (x)
         (lambda (s)
-          (set-member? x s))))
+          (if (vhash-assoc x (ensure-vhset s)) #t #f))))
 
     ;; Check if a set is empty.
     (define hydra_lib_sets_null
       (lambda (s)
-        (null? s)))
+        (cond
+          ((vlist? s) (vlist-null? s))
+          ((null? s) #t)
+          ((pair? s) #f)
+          (else #t))))
 
     ;; Create a singleton set.
     (define hydra_lib_sets_singleton
       (lambda (x)
-        (list x)))
+        (vhash-cons x #t vlist-null)))
 
     ;; Get the size of a set.
+    ;; Note: vhash may have shadowed duplicates, but for sets created through
+    ;; our API, duplicates don't change membership semantics.
+    ;; We count unique keys for correctness.
     (define hydra_lib_sets_size
       (lambda (s)
-        (length s)))
+        (if (vlist? s)
+            (let ((seen (make-hash-table)))
+              (vhash-fold (lambda (k v acc)
+                            (if (hash-ref seen k #f) acc
+                                (begin (hash-set! seen k #t) (+ acc 1))))
+                          0 s))
+            (length s))))
 
-    ;; Convert a set to a list.
+    ;; Convert a set to a sorted list.
     (define hydra_lib_sets_to_list
       (lambda (s)
-        s))
+        (let ((seen (make-hash-table)))
+          (let ((unique (vhash-fold (lambda (k v acc)
+                                      (if (hash-ref seen k #f) acc
+                                          (begin (hash-set! seen k #t)
+                                                 (cons k acc))))
+                                    '() (ensure-vhset s))))
+            (sort unique (lambda (a b) (< (generic-compare a b) 0)))))))
 
     ;; Compute the union of two sets.
     (define hydra_lib_sets_union
       (lambda (s1)
         (lambda (s2)
-          (let loop ((rest s2) (acc s1))
-            (if (null? rest)
-                acc
-                (loop (cdr rest) (set-insert (car rest) acc)))))))
+          (let ((vh1 (ensure-vhset s1))
+                (vh2 (ensure-vhset s2)))
+            (vhash-fold (lambda (k v acc) (vhash-cons k #t acc))
+                        vh2 vh1)))))
 
     ;; Compute the union of multiple sets.
     (define hydra_lib_sets_unions
       (lambda (sets)
-        (let loop ((rest sets) (acc '()))
+        (let loop ((rest sets) (acc vlist-null))
           (if (null? rest)
               acc
               (loop (cdr rest)
