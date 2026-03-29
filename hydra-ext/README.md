@@ -463,30 +463,24 @@ The following scripts in `hydra-haskell/bin/` are used for the bootstrapping imp
   and mappings. Includes an LLM-assisted workflow for generating schemas.
   Can be run in either Haskell or Python.
   [Demo video](https://drive.google.com/file/d/10HCElcG7n0tprOTdtX4bSa5yWYs08nV-/view?usp=sharing).
-* **AvroToPropertyGraphs**: transforms a specific Avro schema and matching sample JSON
-  to a property graph representation
+* **AvroBicoder**: exercises the bidirectional Avro coder (forward, reverse, round-trip,
+  schema codec, and property graph output).
+  See the [Avro demo README](demos/avro/README.md).
 * **MeteredEvaluation**: demonstrates term reduction with logging, e.g. for tracking usage or estimating cost
 
-### AvroToPropertyGraphs
+### AvroBicoder
 
-To run the `AvroToPropertyGraphs` demo, first enter `stack ghci`, then:
+To run the Avro bidirectional coder demo:
+
+```bash
+demos/avro/bin/run.sh           # all demos
+demos/avro/bin/run.sh --demo 5  # just the property graph demo
+```
+
+Or interactively in `stack ghci`:
 
 ```haskell
-import Hydra.Tools.AvroWorkflows
-import Hydra.Demos.AvroToPropertyGraphs
-
--- Arguments
-jsonLastMile = propertyGraphJsonLastMile examplePgSchema () ()
-graphsonLastMile = propertyGraphGraphsonLastMile exampleGraphsonContext examplePgSchema () ()
-aviationSchema = "src/test/avro/aviationdemo/AirplaneInfo.avsc"
-aviationDataDir = "src/test/json/aviationdemo"
-movieSchema = "src/test/avro/moviedemo/Review.avsc"
-movieDataDir = "src/test/json/moviedemo"
-outDir = "/tmp/avro-pg-demo/output"
-
--- Try a few combinations
-transformAvroJsonToPg jsonLastMile aviationSchema aviationDataDir outDir
-transformAvroJsonToPg graphsonLastMile aviationSchema aviationDataDir outDir
-transformAvroJsonToPg jsonLastMile movieSchema movieDataDir outDir
-transformAvroJsonToPg graphsonLastMile movieSchema movieDataDir outDir
+import Hydra.Ext.Demos.AvroBicoder
+runAllDemos          -- all five demos
+runPropertyGraphDemo -- Avro -> GraphSON property graph
 ```
