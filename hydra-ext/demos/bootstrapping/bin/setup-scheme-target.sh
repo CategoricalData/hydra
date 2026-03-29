@@ -27,6 +27,11 @@ echo "Copying static resources for Scheme target..."
 echo "  Copying hand-written source files..."
 mkdir -p "$OUTPUT_DIR/src/main/scheme"
 cp -r "$HYDRA_SCHEME_DIR/src/main/scheme/hydra" "$OUTPUT_DIR/src/main/scheme/"
+# The src/main maps.scm and sets.scm use Guile-specific vhash which requires
+# (ice-9 vlist). For standalone targets, replace with the portable gen-main versions.
+echo "  Replacing vhash-based maps/sets with portable alist versions..."
+cp "$HYDRA_SCHEME_DIR/src/gen-main/scheme/hydra/lib/maps.scm" "$OUTPUT_DIR/src/main/scheme/hydra/lib/maps.scm"
+cp "$HYDRA_SCHEME_DIR/src/gen-main/scheme/hydra/lib/sets.scm" "$OUTPUT_DIR/src/main/scheme/hydra/lib/sets.scm"
 # Copy bundled SRFI implementations (e.g., SRFI-151 for bitwise ops)
 if [ -d "$HYDRA_SCHEME_DIR/src/main/scheme/srfi" ]; then
     cp -r "$HYDRA_SCHEME_DIR/src/main/scheme/srfi" "$OUTPUT_DIR/src/main/scheme/"
