@@ -98,6 +98,18 @@ echo ""
 # and let the user's --dialects flag control which tests to run
 stack exec generate-lisp -- $RTS_FLAGS
 
+# Restore Scheme gen-main native libs to their committed (portable alist) versions.
+# The generate-lisp tool overwrites these with the src/main vhash versions, but
+# gen-main must use portable alists since standalone targets lack (ice-9 vlist).
+SCHEME_GEN_LIB="$HYDRA_ROOT_DIR/hydra-lisp/hydra-scheme/src/gen-main/scheme/hydra/lib"
+if [ -d "$SCHEME_GEN_LIB" ]; then
+    echo "  Restoring portable gen-main lib files for Scheme..."
+    git -C "$HYDRA_ROOT_DIR" checkout -- \
+        hydra-lisp/hydra-scheme/src/gen-main/scheme/hydra/lib/maps.scm \
+        hydra-lisp/hydra-scheme/src/gen-main/scheme/hydra/lib/sets.scm \
+        2>/dev/null || true
+fi
+
 dialect_dir() {
     case "$1" in
         clojure)     echo "$HYDRA_ROOT_DIR/hydra-lisp/hydra-clojure" ;;
