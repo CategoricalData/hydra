@@ -199,6 +199,8 @@ The user may issue these shorthand commands inline (e.g. "now /sync-all").
 All commands run from the repo root.
 If a command fails, investigate and fix the issue, then re-run the failing step
 and all subsequent steps. Do not re-run steps that have already succeeded.
+For long-running commands (sync, bootstrap, or any task exceeding a few minutes),
+give the user a brief status update approximately every 10 minutes.
 
 | Command | Action |
 |---------|--------|
@@ -209,7 +211,7 @@ and all subsequent steps. Do not re-run steps that have already succeeded.
 | `/sync-python` | Run `hydra-ext/bin/sync-python.sh`. |
 | `/sync-scala` | Run `hydra-ext/bin/sync-scala.sh`. |
 | `/sync-lisp` | Run `hydra-ext/bin/sync-lisp.sh`. Pass `--dialects <list>` to limit dialects. |
-| `/bootstrap` or `/bootstrap()` | Run `bin/run-bootstrapping-demo.sh` with default hosts and targets. Capture full stdout+stderr to a temp file (do NOT pipe through grep/tail — the dashboard table will be lost). When done, show the script's dashboard output verbatim: the NxM results matrix, per-path timings, and total time. Do not reformat the table. |
+| `/bootstrap()` | Run `bin/run-bootstrapping-demo.sh` with default hosts and targets. Capture full stdout+stderr to a temp file (do NOT pipe through grep/tail — the dashboard table will be lost). When done, show the script's dashboard output verbatim: the NxM results matrix, per-path timings, and total time. Do not reformat the table. |
 | `/bootstrap(lang1,lang2[,...])` | Run `bin/run-bootstrapping-demo.sh --hosts lang1,lang2[,...] --targets lang1,lang2[,...] --tag lang1_lang2[_...]`. Same output handling as `/bootstrap()`. |
 
 ## Coding style (read the full guide!)
