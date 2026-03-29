@@ -1,5 +1,6 @@
 (define-library (hydra lib literals)
   (import (scheme base) (scheme inexact)
+          (scheme bytevector)
           (srfi 151))         ;; Bitwise operations (chibi-compatible)
   (export hydra_lib_literals_bigfloat_to_bigint
           hydra_lib_literals_bigfloat_to_float
