@@ -70,16 +70,17 @@ adaptDataGraph constraints doExpand els0 cx graph0 =
                         Core.bindingType = adaptedType})))
           in (Eithers.bind (Eithers.mapList processBinding els1Raw) (\els1 -> Eithers.bind (Eithers.mapList (\kv -> Eithers.bind (adaptPrimitive constraints litmap (Pairs.second kv)) (\prim1 -> Right (Pairs.first kv, prim1))) (Maps.toList prims0)) (\primPairs ->
             let prims1 = Maps.fromList primPairs
+                adaptedGraphRaw = Lexical.buildGraph els1 Maps.empty prims1
                 adaptedGraph =
                         Graph.Graph {
-                          Graph.graphBoundTerms = (Graph.graphBoundTerms (Lexical.buildGraph els1 Maps.empty prims1)),
-                          Graph.graphBoundTypes = (Graph.graphBoundTypes (Lexical.buildGraph els1 Maps.empty prims1)),
-                          Graph.graphClassConstraints = (Graph.graphClassConstraints (Lexical.buildGraph els1 Maps.empty prims1)),
-                          Graph.graphLambdaVariables = (Graph.graphLambdaVariables (Lexical.buildGraph els1 Maps.empty prims1)),
-                          Graph.graphMetadata = (Graph.graphMetadata (Lexical.buildGraph els1 Maps.empty prims1)),
-                          Graph.graphPrimitives = (Graph.graphPrimitives (Lexical.buildGraph els1 Maps.empty prims1)),
+                          Graph.graphBoundTerms = (Graph.graphBoundTerms adaptedGraphRaw),
+                          Graph.graphBoundTypes = (Graph.graphBoundTypes adaptedGraphRaw),
+                          Graph.graphClassConstraints = (Graph.graphClassConstraints adaptedGraphRaw),
+                          Graph.graphLambdaVariables = (Graph.graphLambdaVariables adaptedGraphRaw),
+                          Graph.graphMetadata = (Graph.graphMetadata adaptedGraphRaw),
+                          Graph.graphPrimitives = (Graph.graphPrimitives adaptedGraphRaw),
                           Graph.graphSchemaTypes = adaptedSchemaTypes,
-                          Graph.graphTypeVariables = (Graph.graphTypeVariables (Lexical.buildGraph els1 Maps.empty prims1))}
+                          Graph.graphTypeVariables = (Graph.graphTypeVariables adaptedGraphRaw)}
             in (Right (adaptedGraph, els1))))))))))
 
 -- | Attempt to adapt a floating-point type using the given language constraints

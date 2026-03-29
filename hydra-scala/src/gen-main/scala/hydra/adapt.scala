@@ -98,15 +98,14 @@ def adaptDataGraph(constraints: hydra.coders.LanguageConstraints)(doExpand: Bool
               {
               lazy val prims1: Map[hydra.core.Name, hydra.graph.Primitive] = hydra.lib.maps.fromList[hydra.core.Name, hydra.graph.Primitive](primPairs)
               {
-                lazy val adaptedGraph: hydra.graph.Graph = hydra.graph.Graph(hydra.lexical.buildGraph(els1)(hydra.lib.maps.empty[hydra.core.Name,
-                   Option[hydra.core.Term]])(prims1).boundTerms, (hydra.lexical.buildGraph(els1)(hydra.lib.maps.empty[hydra.core.Name,
-                   Option[hydra.core.Term]])(prims1).boundTypes), (hydra.lexical.buildGraph(els1)(hydra.lib.maps.empty[hydra.core.Name,
-                   Option[hydra.core.Term]])(prims1).classConstraints), (hydra.lexical.buildGraph(els1)(hydra.lib.maps.empty[hydra.core.Name,
-                   Option[hydra.core.Term]])(prims1).lambdaVariables), (hydra.lexical.buildGraph(els1)(hydra.lib.maps.empty[hydra.core.Name,
-                   Option[hydra.core.Term]])(prims1).metadata), (hydra.lexical.buildGraph(els1)(hydra.lib.maps.empty[hydra.core.Name,
-                   Option[hydra.core.Term]])(prims1).primitives), adaptedSchemaTypes, (hydra.lexical.buildGraph(els1)(hydra.lib.maps.empty[hydra.core.Name,
-                   Option[hydra.core.Term]])(prims1).typeVariables))
-                Right(Tuple2(adaptedGraph, els1))
+                lazy val adaptedGraphRaw: hydra.graph.Graph = hydra.lexical.buildGraph(els1)(hydra.lib.maps.empty[hydra.core.Name,
+                   Option[hydra.core.Term]])(prims1)
+                {
+                  lazy val adaptedGraph: hydra.graph.Graph = hydra.graph.Graph(adaptedGraphRaw.boundTerms,
+                     (adaptedGraphRaw.boundTypes), (adaptedGraphRaw.classConstraints), (adaptedGraphRaw.lambdaVariables),
+                     (adaptedGraphRaw.metadata), (adaptedGraphRaw.primitives), adaptedSchemaTypes, (adaptedGraphRaw.typeVariables))
+                  Right(Tuple2(adaptedGraph, els1))
+                }
               }
             }))
           }
