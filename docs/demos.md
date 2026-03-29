@@ -84,16 +84,33 @@ Python as well, so translingual support is feasible.
 
 See the [SHACL README](../hydra-ext/demos/shacl/README.md) for setup and usage.
 
-## Avro to property graphs
+## Avro bidirectional coder
 
-This demo transforms Avro-schema'd JSON data into either GraphSON property graphs or SHACL RDF.
-It uses a swappable `LastMile` abstraction that decouples the core pipeline (Avro JSON to Hydra terms)
-from the output format -- switching from GraphSON to RDF requires only changing a single argument.
+This demo exercises Hydra's bidirectional Avro coder, which converts between Avro schemas/data
+and Hydra types/terms in both directions.
+It runs five sub-demos:
+
+1. **Forward pipeline.** Parses a real `.avsc` schema (`Review.avsc`) and example JSON data,
+   converts them to Hydra types and terms via the forward adapter, and round-trips the terms
+   back to JSON.
+2. **Reverse pipeline.** Defines Hydra types programmatically (a `Person` record with a nested
+   `Address`, optional email, and a list of tags), encodes them as an Avro schema, and serializes
+   a sample term to Avro-conformant JSON.
+3. **Round-trip.** Loads the `AirplaneInfo.avsc` schema (a complex real-world schema with nested
+   records, enums, optional fields, and annotations), converts to Hydra types via the forward
+   adapter, then converts back to an Avro schema via the reverse encoder and compares structure.
+4. **Schema codec.** Constructs an Avro schema in memory, serializes it to a JSON string via
+   `avroSchemaStringCoder`, parses it back, and verifies the round-trip.
+5. **Avro to property graph.** Parses `Review.avsc` and example JSON data, converts through the
+   forward adapter, extracts property graph elements from Hydra-specific annotations
+   (`@vertexLabel`, `@edgeLabel`, `@vertexId`, `@outVertex`, `@inVertex`), and produces
+   [GraphSON](https://github.com/apache/tinkerpop/blob/master/docs/src/dev/io/graphson.asciidoc)
+   3.0 output with vertices, edges, and properties.
 
 The underlying workflow engine is `Hydra.Ext.Tools.AvroWorkflows`, which parses Avro schemas,
 decodes JSON data into typed Hydra terms, and applies the chosen last-mile transformation.
 
-Entry point: `hydra-ext/src/main/haskell/Hydra/Ext/Demos/AvroToPropertyGraphs.hs`.
+See the [Avro README](../hydra-ext/demos/avro/README.md) for setup and usage.
 
 ## GraphQL JSON (querying Hydra modules with GraphQL)
 
