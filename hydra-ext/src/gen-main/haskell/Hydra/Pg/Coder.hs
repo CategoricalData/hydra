@@ -39,7 +39,7 @@ check _cx b e = Logic.ifElse b (Right ()) e
 -- | Check that a record name matches the expected name
 checkRecordName :: Context.Context -> Core.Name -> Core.Name -> Either (Context.InContext Errors.Error) ()
 checkRecordName cx expected actual =
-    check cx (Equality.equal (Core.unName actual) (Core.unName expected)) (Left (Context.InContext {
+    check cx (Logic.or (Equality.equal (Core.unName expected) "placeholder") (Equality.equal (Core.unName actual) (Core.unName expected))) (Left (Context.InContext {
       Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "Expected record of type " (Core.unName expected)) ", found record of type ") (Core.unName actual)))),
       Context.inContextContext = cx}))
 
