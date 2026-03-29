@@ -165,30 +165,13 @@ public interface Inference {
     java.util.function.Function<hydra.core.Let, hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.core.Binding>>> fromLetTerm = (java.util.function.Function<hydra.core.Let, hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.core.Binding>>>) (l -> {
       hydra.util.ConsList<hydra.core.Binding> bindings = (l).bindings;
       hydra.util.PersistentMap<hydra.core.Name, hydra.graph.Primitive> prims = (g0).primitives;
+      hydra.util.Lazy<hydra.graph.Graph> rawG = new hydra.util.Lazy<>(() -> hydra.Lexical.buildGraph(
+        bindings,
+        (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
+        prims));
       hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme> schemaTypes = (g0).schemaTypes;
-      hydra.util.Lazy<hydra.graph.Graph> g = new hydra.util.Lazy<>(() -> new hydra.graph.Graph(hydra.Lexical.buildGraph(
-        bindings,
-        (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-        prims).boundTerms, hydra.Lexical.buildGraph(
-        bindings,
-        (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-        prims).boundTypes, hydra.Lexical.buildGraph(
-        bindings,
-        (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-        prims).classConstraints, hydra.Lexical.buildGraph(
-        bindings,
-        (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-        prims).lambdaVariables, hydra.Lexical.buildGraph(
-        bindings,
-        (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-        prims).metadata, hydra.Lexical.buildGraph(
-        bindings,
-        (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-        prims).primitives, schemaTypes, hydra.Lexical.buildGraph(
-        bindings,
-        (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-        prims).typeVariables));
-      return (hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.core.Binding>>) ((hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.core.Binding>>) (new hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.core.Binding>>(g.get(), bindings)));
+      hydra.graph.Graph g = new hydra.graph.Graph(rawG.get().boundTerms, rawG.get().boundTypes, rawG.get().classConstraints, rawG.get().lambdaVariables, rawG.get().metadata, rawG.get().primitives, schemaTypes, rawG.get().typeVariables);
+      return (hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.core.Binding>>) ((hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.core.Binding>>) (new hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.core.Binding>>(g, bindings)));
     });
     hydra.core.Let let0 = new hydra.core.Let(bindings0, new hydra.core.Term.Unit());
     return hydra.lib.eithers.Bind.apply(

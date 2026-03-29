@@ -102,29 +102,12 @@ public interface Adapt {
                     hydra.lib.maps.ToList.apply(prims0)),
                   (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.graph.Primitive>>, hydra.util.Either<String, hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.core.Binding>>>>) (primPairs -> {
                     hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.graph.Primitive>> prims1 = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(primPairs));
-                    hydra.util.Lazy<hydra.graph.Graph> adaptedGraph = new hydra.util.Lazy<>(() -> new hydra.graph.Graph(hydra.Lexical.buildGraph(
+                    hydra.util.Lazy<hydra.graph.Graph> adaptedGraphRaw = new hydra.util.Lazy<>(() -> hydra.Lexical.buildGraph(
                       els1,
                       (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-                      prims1.get()).boundTerms, hydra.Lexical.buildGraph(
-                      els1,
-                      (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-                      prims1.get()).boundTypes, hydra.Lexical.buildGraph(
-                      els1,
-                      (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-                      prims1.get()).classConstraints, hydra.Lexical.buildGraph(
-                      els1,
-                      (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-                      prims1.get()).lambdaVariables, hydra.Lexical.buildGraph(
-                      els1,
-                      (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-                      prims1.get()).metadata, hydra.Lexical.buildGraph(
-                      els1,
-                      (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-                      prims1.get()).primitives, adaptedSchemaTypes, hydra.Lexical.buildGraph(
-                      els1,
-                      (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-                      prims1.get()).typeVariables));
-                    return hydra.util.Either.<String, hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.core.Binding>>>right((hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.core.Binding>>) ((hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.core.Binding>>) (new hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.core.Binding>>(adaptedGraph.get(), els1))));
+                      prims1.get()));
+                    hydra.graph.Graph adaptedGraph = new hydra.graph.Graph(adaptedGraphRaw.get().boundTerms, adaptedGraphRaw.get().boundTypes, adaptedGraphRaw.get().classConstraints, adaptedGraphRaw.get().lambdaVariables, adaptedGraphRaw.get().metadata, adaptedGraphRaw.get().primitives, adaptedSchemaTypes, adaptedGraphRaw.get().typeVariables);
+                    return hydra.util.Either.<String, hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.core.Binding>>>right((hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.core.Binding>>) ((hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.core.Binding>>) (new hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.core.Binding>>(adaptedGraph, els1))));
                   }))));
             }))));
       }));
