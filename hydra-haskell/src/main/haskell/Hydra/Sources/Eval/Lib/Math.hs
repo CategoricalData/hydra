@@ -113,6 +113,12 @@ pred_ = define "pred" $
       (var "x"))
     (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ MetaLiterals.int32 1)
 
+-- TODO: range lo hi = ifElse (gt lo hi) [] (cons lo (range (add lo 1) hi))
+--   The recursive definition causes the interpreter to loop. The eval primitive returns a term
+--   containing ifElse(gt(lo,hi), [], cons(lo, range(add(lo,1), hi))), but reduction does not
+--   terminate. Needs investigation of the reducer's handling of recursive primitive references.
+-- range_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+
 -- | Interpreter-friendly successor.
 -- succ x = add x 1
 succ_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
