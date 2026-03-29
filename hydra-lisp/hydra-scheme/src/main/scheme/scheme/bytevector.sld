@@ -8,10 +8,14 @@
           snap-to-float32
           utf8->string string->utf8)
   (begin
-    ;; Portable float32 snap: round to 7 significant digits (24-bit mantissa)
+    ;; Ensure rnrs bytevectors is available (the bootstrap loader strips
+    ;; define-library and its import clause, so we need this explicitly).
+    (use-modules (rnrs bytevectors))
+
+    ;; Round-trip a double through IEEE 754 float32 using bytevector operations.
+    ;; This gives the exact float32 representation, not a decimal approximation.
     (define (snap-to-float32 x)
       (if (= x 0.0) 0.0
-          (let* ((e (exact (floor (/ (log (abs x)) (log 10)))))
-                 (scale (expt 10 (- 7 e 1)))
-                 (rounded (/ (round (* (inexact x) scale)) scale)))
-            (inexact rounded))))))
+          (let ((bv (make-bytevector 4)))
+            (bytevector-ieee-single-set! bv 0 x (endianness little))
+            (bytevector-ieee-single-ref bv 0 (endianness little)))))))
