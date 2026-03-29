@@ -1,5 +1,6 @@
 (import (scheme base) (scheme write) (scheme cxr) (scheme char)
         (scheme time) (scheme process-context) (scheme file)
+        (scheme bytevector)
         (hydra core) (hydra context) (hydra graph) (hydra prims)
         (hydra reduction) (hydra rewriting) (hydra show core) (hydra testing)
         (hydra formatting) (hydra sorting) (hydra serialization)
