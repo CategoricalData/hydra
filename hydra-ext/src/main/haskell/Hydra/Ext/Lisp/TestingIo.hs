@@ -34,7 +34,7 @@ import Data.Char (toLower, isAlphaNum, isUpper)
 termToLisp :: Syntax.Dialect -> Term -> Graph -> Either String String
 termToLisp dialect term _g = encodeForRuntime term
   where
-    encode t = case encodeTerm dialect () () t of
+    encode t = case encodeTerm dialect () emptyGraph S.empty t of
       Left _ -> Left "Lisp encoding failed"
       Right expr -> Right $ printExpr $ parenthesize $ expressionToExpr dialect expr
 
