@@ -156,13 +156,16 @@ check = define "check" $
   "_cx" ~> "b" ~> "e" ~>
     Logic.ifElse (var "b") (right unit) (var "e")
 
--- | Check that a record name matches the expected name
+-- | Check that a record name matches the expected name.
+--   Skips the check when the expected name is a placeholder (used when the type has no intrinsic name).
 checkRecordName :: TBinding (Context -> Name -> Name -> Either (InContext Error) ())
 checkRecordName = define "checkRecordName" $
   doc "Check that a record name matches the expected name" $
   "cx" ~> "expected" ~> "actual" ~>
     check @@ var "cx"
-      @@ (Equality.equal (Core.unName $ var "actual") (Core.unName $ var "expected"))
+      @@ (Logic.or
+        (Equality.equal (Core.unName $ var "expected") (string "placeholder"))
+        (Equality.equal (Core.unName $ var "actual") (Core.unName $ var "expected")))
       @@ (err (var "cx") (string "Expected record of type " ++ (Core.unName $ var "expected") ++ string ", found record of type " ++ (Core.unName $ var "actual")))
 
 -- | Construct an edge coder from components

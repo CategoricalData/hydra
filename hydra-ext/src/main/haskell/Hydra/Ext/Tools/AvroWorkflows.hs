@@ -9,6 +9,7 @@ module Hydra.Ext.Tools.AvroWorkflows (
   encodeStringValue,
   examplePgSchema,
   executeAvroTransformWorkflow,
+  propertyGraphGraphsonLastMile,
   rdfDescriptionsToNtriples,
   shaclRdfLastMile,
   typeApplicationTermToShaclRdf,
@@ -37,7 +38,8 @@ import Hydra.Ext.Rdf.Serde
 import Hydra.Sources.Kernel.Types.Core
 import Hydra.Pg.Graphson.Coder
 import Hydra.Pg.Graphson.Syntax as G
-import Hydra.Pg.Utils (defaultTinkerpopAnnotations, examplePgSchema)
+import Hydra.Pg.Utils (defaultTinkerpopAnnotations, examplePgSchema, typeApplicationTermToPropertyGraph)
+import qualified Hydra.Json.Writer as JsonWriter
 
 import qualified Control.Monad as CM
 import qualified Data.Either as E
@@ -100,6 +102,18 @@ listsToSets = rewriteTerm mapExpr
 rdfDescriptionsToNtriples :: [Rdf.Description] -> String
 rdfDescriptionsToNtriples = rdfGraphToNtriples . RdfUt.descriptionsToGraph
 
+-- | A LastMile which converts Hydra terms to GraphSON property graph JSON (JSONL format).
+--   Uses the default Tinkerpop annotation schema for vertex/edge labels and IDs.
+propertyGraphGraphsonLastMile :: LastMile Json.Value
+propertyGraphGraphsonLastMile = LastMile encoder serializer "jsonl"
+  where
+    encoder typ cx graf = do
+      encodeTerm <- typeApplicationTermToPropertyGraph examplePgSchema typ () () cx graf
+      return $ \term _graf cx' -> do
+        elements <- encodeTerm term cx'
+        pgElementsToGraphson encodeStringValue elements
+    serializer jsonValues = Right $ L.unlines $ L.map JsonWriter.printJson jsonValues
+
 shaclRdfLastMile :: LastMile Rdf.Description
 shaclRdfLastMile = LastMile typeApplicationTermToShaclRdf (Right . rdfDescriptionsToNtriples) "nt"
 
@@ -140,10 +154,9 @@ transformAvroJson format adapter lastMile inFile outFile = do
     jsonToTarget inFile' adapter' lmEncoder cx (index, payload) = case parseJsonEither payload of
         Left msg -> fail $ "Failed to read JSON payload #" ++ show index ++ " in file " ++ inFile' ++ ": " ++ msg
         Right json -> do
-          -- TODO; the core graph is neither the data nor the schema graph
-          let dataGraph = hydraCoreGraph
           term <- eitherToIo $ coderEncode (adapterCoder adapter') cx json
-          let graph = dataGraph  -- Note: elements from AvroEnvironment are no longer dynamically tracked
+          let bindings = extractElements (adapterTarget adapter') term
+          let graph = bindingsToGraph hydraCoreGraph bindings
           eitherToIo $ lmEncoder term graph cx
 
 -- | Given a payload format (one JSON object per file, or one per line),
@@ -180,3 +193,74 @@ transformAvroJsonDirectory lastMile schemaPath srcDir destDir = do
         else Nothing
       where
         ext = takeExtension fileName
+
+-- | Extract elements from a term based on @primaryKey annotations in the type.
+--   Walks the type and term together; for each record with a @primaryKey field,
+--   creates a Binding using the primary key value as the element name.
+extractElements :: Type -> Term -> [Binding]
+extractElements typ term = case (stripType typ, stripTerm term) of
+    (TypeRecord fieldTypes, TermRecord (Record _ fields)) ->
+      let fieldMap = M.fromList [(fieldName f, fieldTerm f) | f <- fields]
+          -- Check if this record has a @primaryKey annotation
+          selfElements = case findPrimaryKeyInType fieldTypes of
+            Nothing -> []
+            Just (pkFieldName, pkConstructor) ->
+              case M.lookup pkFieldName fieldMap of
+                Nothing -> []
+                Just pkTerm -> case extractStringFromTerm pkTerm of
+                  Nothing -> []
+                  Just pkValue ->
+                    let elementName = pkConstructor pkValue
+                    in [Binding elementName term Nothing]
+          -- Recurse into nested record fields
+          childElements = L.concatMap (\ft ->
+            case M.lookup (fieldTypeName ft) fieldMap of
+              Nothing -> []
+              Just fTerm -> extractElements (fieldTypeType ft) fTerm) fieldTypes
+      in selfElements ++ childElements
+    (TypeList innerType, TermList terms) ->
+      L.concatMap (extractElements innerType) terms
+    (TypeMaybe innerType, TermMaybe (Just t)) ->
+      extractElements innerType t
+    _ -> []
+  where
+    stripType t = case t of
+      TypeAnnotated (AnnotatedType inner _) -> stripType inner
+      TypeWrap inner -> stripType inner
+      _ -> t
+    stripTerm t = case t of
+      TermAnnotated (AnnotatedTerm inner _) -> stripTerm inner
+      _ -> t
+
+-- | Find a @primaryKey annotation among the record's field types.
+--   Returns the field name and constructor function if found.
+findPrimaryKeyInType :: [FieldType] -> Maybe (Name, String -> Name)
+findPrimaryKeyInType fieldTypes = Y.listToMaybe $ Y.mapMaybe checkField fieldTypes
+  where
+    checkField (FieldType fname ftyp) = case ftyp of
+      TypeAnnotated (AnnotatedType _ anns) ->
+        case M.lookup (Name "@primaryKey") anns of
+          Just (TermLiteral (LiteralString pattern_)) -> Just (fname, patternToName pattern_)
+          _ -> Nothing
+      _ -> Nothing
+    patternToName pattern_ value = Name $ L.intercalate value $ splitOn "${}" pattern_
+    splitOn :: String -> String -> [String]
+    splitOn sep s = case L.break (== head sep) s of
+      (before, []) -> [before]
+      (before, rest) ->
+        if L.take (length sep) rest == sep
+        then before : splitOn sep (L.drop (length sep) rest)
+        else [s]
+
+-- | Extract a string value from a term (handling wraps and literals)
+extractStringFromTerm :: Term -> Maybe String
+extractStringFromTerm term = case term of
+  TermLiteral (LiteralString s) -> Just s
+  TermAnnotated (AnnotatedTerm inner _) -> extractStringFromTerm inner
+  TermVariable (Name s) -> Just s  -- Foreign key references are stored as variables
+  _ -> Nothing
+
+-- | Build a Graph from a base graph and a list of bindings (elements)
+bindingsToGraph :: Graph -> [Binding] -> Graph
+bindingsToGraph base bindings = base {
+  graphBoundTerms = M.union (M.fromList [(bindingName b, bindingTerm b) | b <- bindings]) (graphBoundTerms base)}
