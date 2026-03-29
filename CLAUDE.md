@@ -195,17 +195,22 @@ Use this table to find the right doc for common tasks:
 
 ## Shorthand commands
 
-The user may issue these shorthand commands prefixed with `!`:
+The user may issue these shorthand commands inline (e.g. "now /sync-all").
+All commands run from the repo root.
+If a command fails, investigate and fix the issue, then re-run the failing step
+and all subsequent steps. Do not re-run steps that have already succeeded.
 
 | Command | Action |
 |---------|--------|
-| `!SYNC-ALL` | Run `bin/sync-all.sh --targets all` from the repo root, propagating changes into all generated artifacts. If it fails on any step, investigate and fix the issue, then re-run the failing step and all subsequent steps. Do not re-run steps that have already succeeded. |
-| `!SYNC-HASKELL` | Run `hydra-haskell/bin/sync-haskell.sh` from the repo root. Same failure handling as `!SYNC-ALL`. |
-| `!SYNC-EXT` | Run `hydra-ext/bin/sync-ext.sh` from the repo root. Same failure handling as `!SYNC-ALL`. |
-| `!SYNC-JAVA` | Run `hydra-ext/bin/sync-java.sh` from the repo root. Same failure handling as `!SYNC-ALL`. |
-| `!SYNC-PYTHON` | Run `hydra-ext/bin/sync-python.sh` from the repo root. Same failure handling as `!SYNC-ALL`. |
-| `!SYNC-SCALA` | Run `hydra-ext/bin/sync-scala.sh` from the repo root. Same failure handling as `!SYNC-ALL`. |
-| `!SYNC-LISP` | Run `hydra-ext/bin/sync-lisp.sh` from the repo root. Same failure handling as `!SYNC-ALL`. |
+| `/sync-all` | Run `bin/sync-all.sh --targets all`, propagating changes into all generated artifacts. |
+| `/sync-haskell` | Run `hydra-haskell/bin/sync-haskell.sh`. |
+| `/sync-ext` | Run `hydra-ext/bin/sync-ext.sh`. |
+| `/sync-java` | Run `hydra-ext/bin/sync-java.sh`. |
+| `/sync-python` | Run `hydra-ext/bin/sync-python.sh`. |
+| `/sync-scala` | Run `hydra-ext/bin/sync-scala.sh`. |
+| `/sync-lisp` | Run `hydra-ext/bin/sync-lisp.sh`. Pass `--dialects <list>` to limit dialects. |
+| `/bootstrap` or `/bootstrap()` | Run `bin/run-bootstrapping-demo.sh` with default hosts and targets. Capture full stdout+stderr to a temp file (do NOT pipe through grep/tail — the dashboard table will be lost). When done, show the script's dashboard output verbatim: the NxM results matrix, per-path timings, and total time. Do not reformat the table. |
+| `/bootstrap(lang1,lang2[,...])` | Run `bin/run-bootstrapping-demo.sh --hosts lang1,lang2[,...] --targets lang1,lang2[,...] --tag lang1_lang2[_...]`. Same output handling as `/bootstrap()`. |
 
 ## Coding style (read the full guide!)
 
