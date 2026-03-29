@@ -148,14 +148,9 @@ def inferGraphTypes(fcx0: hydra.context.Context)(bindings0: Seq[hydra.core.Bindi
     lazy val bindings: Seq[hydra.core.Binding] = (l.bindings)
     lazy val prims: Map[hydra.core.Name, hydra.graph.Primitive] = (g0.primitives)
     lazy val schemaTypes: Map[hydra.core.Name, hydra.core.TypeScheme] = (g0.schemaTypes)
-    lazy val g: hydra.graph.Graph = hydra.graph.Graph(hydra.lexical.buildGraph(bindings)(hydra.lib.maps.empty[hydra.core.Name,
-       Option[hydra.core.Term]])(prims).boundTerms, (hydra.lexical.buildGraph(bindings)(hydra.lib.maps.empty[hydra.core.Name,
-       Option[hydra.core.Term]])(prims).boundTypes), (hydra.lexical.buildGraph(bindings)(hydra.lib.maps.empty[hydra.core.Name,
-       Option[hydra.core.Term]])(prims).classConstraints), (hydra.lexical.buildGraph(bindings)(hydra.lib.maps.empty[hydra.core.Name,
-       Option[hydra.core.Term]])(prims).lambdaVariables), (hydra.lexical.buildGraph(bindings)(hydra.lib.maps.empty[hydra.core.Name,
-       Option[hydra.core.Term]])(prims).metadata), (hydra.lexical.buildGraph(bindings)(hydra.lib.maps.empty[hydra.core.Name,
-       Option[hydra.core.Term]])(prims).primitives), schemaTypes, (hydra.lexical.buildGraph(bindings)(hydra.lib.maps.empty[hydra.core.Name,
-       Option[hydra.core.Term]])(prims).typeVariables))
+    lazy val rawG: hydra.graph.Graph = hydra.lexical.buildGraph(bindings)(hydra.lib.maps.empty[hydra.core.Name, Option[hydra.core.Term]])(prims)
+    lazy val g: hydra.graph.Graph = hydra.graph.Graph(rawG.boundTerms, (rawG.boundTypes), (rawG.classConstraints),
+       (rawG.lambdaVariables), (rawG.metadata), (rawG.primitives), schemaTypes, (rawG.typeVariables))
     Tuple2(g, bindings)
   }
   hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.typing.InferenceResult, Tuple2[Tuple2[hydra.graph.Graph,

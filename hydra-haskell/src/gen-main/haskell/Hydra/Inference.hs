@@ -168,16 +168,17 @@ inferGraphTypes fcx0 bindings0 g0 =
                     let bindings = Core.letBindings l
                         prims = Graph.graphPrimitives g0
                         schemaTypes = Graph.graphSchemaTypes g0
+                        rawG = Lexical.buildGraph bindings Maps.empty prims
                         g =
                                 Graph.Graph {
-                                  Graph.graphBoundTerms = (Graph.graphBoundTerms (Lexical.buildGraph bindings Maps.empty prims)),
-                                  Graph.graphBoundTypes = (Graph.graphBoundTypes (Lexical.buildGraph bindings Maps.empty prims)),
-                                  Graph.graphClassConstraints = (Graph.graphClassConstraints (Lexical.buildGraph bindings Maps.empty prims)),
-                                  Graph.graphLambdaVariables = (Graph.graphLambdaVariables (Lexical.buildGraph bindings Maps.empty prims)),
-                                  Graph.graphMetadata = (Graph.graphMetadata (Lexical.buildGraph bindings Maps.empty prims)),
-                                  Graph.graphPrimitives = (Graph.graphPrimitives (Lexical.buildGraph bindings Maps.empty prims)),
+                                  Graph.graphBoundTerms = (Graph.graphBoundTerms rawG),
+                                  Graph.graphBoundTypes = (Graph.graphBoundTypes rawG),
+                                  Graph.graphClassConstraints = (Graph.graphClassConstraints rawG),
+                                  Graph.graphLambdaVariables = (Graph.graphLambdaVariables rawG),
+                                  Graph.graphMetadata = (Graph.graphMetadata rawG),
+                                  Graph.graphPrimitives = (Graph.graphPrimitives rawG),
                                   Graph.graphSchemaTypes = schemaTypes,
-                                  Graph.graphTypeVariables = (Graph.graphTypeVariables (Lexical.buildGraph bindings Maps.empty prims))}
+                                  Graph.graphTypeVariables = (Graph.graphTypeVariables rawG)}
                     in (g, bindings)
       in (Eithers.bind (inferTypeOfTerm fcx g0 (Core.TermLet let0) "graph term") (\result ->
         let fcx2 = Typing_.inferenceResultContext result

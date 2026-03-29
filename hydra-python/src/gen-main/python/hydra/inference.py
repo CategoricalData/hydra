@@ -584,9 +584,10 @@ def infer_graph_types(fcx0: hydra.context.Context, bindings0: frozenlist[hydra.c
         prims = g0.primitives
         schema_types = g0.schema_types
         @lru_cache(1)
-        def g() -> hydra.graph.Graph:
-            return hydra.graph.Graph(hydra.lexical.build_graph(bindings, hydra.lib.maps.empty(), prims).bound_terms, hydra.lexical.build_graph(bindings, hydra.lib.maps.empty(), prims).bound_types, hydra.lexical.build_graph(bindings, hydra.lib.maps.empty(), prims).class_constraints, hydra.lexical.build_graph(bindings, hydra.lib.maps.empty(), prims).lambda_variables, hydra.lexical.build_graph(bindings, hydra.lib.maps.empty(), prims).metadata, hydra.lexical.build_graph(bindings, hydra.lib.maps.empty(), prims).primitives, schema_types, hydra.lexical.build_graph(bindings, hydra.lib.maps.empty(), prims).type_variables)
-        return (g(), bindings)
+        def raw_g() -> hydra.graph.Graph:
+            return hydra.lexical.build_graph(bindings, hydra.lib.maps.empty(), prims)
+        g = hydra.graph.Graph(raw_g().bound_terms, raw_g().bound_types, raw_g().class_constraints, raw_g().lambda_variables, raw_g().metadata, raw_g().primitives, schema_types, raw_g().type_variables)
+        return (g, bindings)
     return hydra.lib.eithers.bind(infer_type_of_term(fcx(), g0, cast(hydra.core.Term, hydra.core.TermLet(let0())), "graph term"), (lambda result: (fcx2 := result.context, term := result.term, _hoist_term_body_1 := (lambda v1: (lambda l: Right((from_let_term(l), fcx2)))(v1.value) if isinstance(v1, hydra.core.TermLet) else (lambda _: Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("Expected inferred graph as let term"))), fcx2)))(v1.value) if isinstance(v1, hydra.core.TermVariable) else hydra.dsl.python.unsupported("no matching case in inline union elimination")), hydra.lib.eithers.bind(finalize_inferred_term(fcx2, g0, term), (lambda finalized: _hoist_term_body_1(finalized))))[3]))
 
 def infer_in_graph_context(fcx: hydra.context.Context, cx: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.typing.InferenceResult]:
