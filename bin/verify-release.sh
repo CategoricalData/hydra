@@ -3,15 +3,17 @@ set -e
 
 # Pre-release verification script for Hydra.
 #
-# Checks that all three implementations are consistent and passing:
+# Checks that all implementations are consistent and passing:
 #   1. Versions are synchronized across all implementation configs
 #   2. Haskell tests pass (hydra-haskell and hydra-ext)
 #   3. Java tests pass
 #   4. Python tests pass
-#   5. JSON kernel is up to date and round-trips correctly
+#   5. Scala tests pass
+#   6. Lisp tests pass (Clojure, Common Lisp, Emacs Lisp, Scheme)
+#   7. JSON kernel is up to date and round-trips correctly
 #
 # Prerequisites:
-#   - Stack, Java 17+, Python 3.12+, and uv are installed
+#   - Stack, Java 11+, Python 3.12+, uv, sbt, Clojure, SBCL, Emacs, and Guile are installed
 #   - Run from the repository root directory
 #
 # Usage:
@@ -34,7 +36,9 @@ for arg in "$@"; do
             echo "  3. Haskell tests (hydra-ext)"
             echo "  4. Java build and tests"
             echo "  5. Python tests and code quality"
-            echo "  6. JSON kernel verification"
+            echo "  6. Scala build and tests"
+            echo "  7. Lisp tests (Clojure, Common Lisp, Emacs Lisp, Scheme)"
+            echo "  8. JSON kernel verification"
             exit 0
             ;;
     esac
@@ -54,7 +58,7 @@ echo "=========================================="
 echo ""
 
 # --- Step 1: Version synchronization ---
-echo "Step 1/6: Checking version synchronization..."
+echo "Step 1/8: Checking version synchronization..."
 echo ""
 
 CANONICAL_VERSION=$(tr -d '[:space:]' < VERSION 2>/dev/null || echo "")
@@ -65,6 +69,7 @@ JAVA_VERSION=$(grep "version = " build.gradle | head -1 | sed "s/.*version = '\\
 BOOT_JAVA_VERSION=$(grep "version = " hydra-ext/demos/bootstrapping/resources/java/build.gradle | head -1 | sed "s/.*version = '\\(.*\\)'/\\1/")
 PYTHON_VERSION=$(grep '^version' hydra-python/pyproject.toml | sed 's/.*"\(.*\)"/\1/')
 BOOT_PYTHON_VERSION=$(grep '^version' hydra-ext/demos/bootstrapping/resources/python/pyproject.toml | sed 's/.*"\(.*\)"/\1/')
+SCALA_VERSION=$(grep 'version :=' hydra-scala/build.sbt | sed 's/.*"\(.*\)".*/\1/' 2>/dev/null || echo "")
 
 echo "  VERSION:                     $CANONICAL_VERSION"
 echo "  hydra-haskell/package.yaml:  $HASKELL_VERSION"
@@ -74,6 +79,7 @@ echo "  build.gradle:                $JAVA_VERSION"
 echo "  bootstrapping/java:          $BOOT_JAVA_VERSION"
 echo "  hydra-python/pyproject.toml: $PYTHON_VERSION"
 echo "  bootstrapping/python:        $BOOT_PYTHON_VERSION"
+echo "  hydra-scala/build.sbt:       $SCALA_VERSION"
 echo ""
 
 EXPECTED="$CANONICAL_VERSION"
@@ -90,7 +96,8 @@ for pair in \
     "build.gradle:$JAVA_VERSION" \
     "bootstrapping/java:$BOOT_JAVA_VERSION" \
     "hydra-python/pyproject.toml:$PYTHON_VERSION" \
-    "bootstrapping/python:$BOOT_PYTHON_VERSION"; do
+    "bootstrapping/python:$BOOT_PYTHON_VERSION" \
+    "hydra-scala/build.sbt:$SCALA_VERSION"; do
     file="${pair%%:*}"
     ver="${pair##*:}"
     if [ "$ver" != "$EXPECTED" ]; then
@@ -108,7 +115,7 @@ fi
 
 # --- Step 2: Haskell tests (hydra-haskell) ---
 echo ""
-echo "Step 2/6: Running Haskell tests (hydra-haskell)..."
+echo "Step 2/8: Running Haskell tests (hydra-haskell)..."
 echo ""
 
 cd "$HYDRA_ROOT/hydra-haskell"
@@ -123,7 +130,7 @@ fi
 
 # --- Step 3: Haskell tests (hydra-ext) ---
 echo ""
-echo "Step 3/6: Running Haskell tests (hydra-ext)..."
+echo "Step 3/8: Running Haskell tests (hydra-ext)..."
 echo ""
 
 cd "$HYDRA_ROOT/hydra-ext"
@@ -138,7 +145,7 @@ fi
 
 # --- Step 4: Java build and tests ---
 echo ""
-echo "Step 4/6: Running Java build and tests..."
+echo "Step 4/8: Running Java build and tests..."
 echo ""
 
 cd "$HYDRA_ROOT"
@@ -153,12 +160,10 @@ fi
 
 # --- Step 5: Python tests and code quality ---
 echo ""
-echo "Step 5/6: Running Python tests and code quality checks..."
+echo "Step 5/8: Running Python tests and code quality checks..."
 echo ""
 
 cd "$HYDRA_ROOT/hydra-python"
-
-PYTHON_OK=true
 
 if uv run pytest 2>&1 | tee "$HYDRA_ROOT/verify-python.log"; then
     echo ""
@@ -166,7 +171,6 @@ if uv run pytest 2>&1 | tee "$HYDRA_ROOT/verify-python.log"; then
 else
     echo ""
     echo "  FAIL: Python tests failed (see verify-python.log)"
-    PYTHON_OK=false
     ERRORS=$((ERRORS + 1))
 fi
 
@@ -184,9 +188,49 @@ else
     WARNINGS=$((WARNINGS + 1))
 fi
 
-# --- Step 6: JSON kernel verification ---
+# --- Step 6: Scala build and tests ---
 echo ""
-echo "Step 6/6: Verifying JSON kernel..."
+echo "Step 6/8: Running Scala build and tests..."
+echo ""
+
+cd "$HYDRA_ROOT/hydra-scala"
+if sbt test 2>&1 | tee "$HYDRA_ROOT/verify-scala.log"; then
+    echo ""
+    echo "  OK: Scala tests passed"
+else
+    echo ""
+    echo "  FAIL: Scala tests failed (see verify-scala.log)"
+    ERRORS=$((ERRORS + 1))
+fi
+
+# --- Step 7: Lisp tests ---
+echo ""
+echo "Step 7/8: Running Lisp tests..."
+echo ""
+
+LISP_DIR="$HYDRA_ROOT/hydra-lisp"
+
+for dialect_dir in hydra-clojure hydra-common-lisp hydra-emacs-lisp hydra-scheme; do
+    dialect_name="${dialect_dir#hydra-}"
+    DIR="$LISP_DIR/$dialect_dir"
+    if [ -f "$DIR/run-tests.sh" ]; then
+        echo "  Testing $dialect_name..."
+        if bash "$DIR/run-tests.sh" 2>&1 | tee "$HYDRA_ROOT/verify-${dialect_name}.log" | tail -3; then
+            echo "  OK: $dialect_name tests passed"
+        else
+            echo "  FAIL: $dialect_name tests failed (see verify-${dialect_name}.log)"
+            ERRORS=$((ERRORS + 1))
+        fi
+        echo ""
+    else
+        echo "  WARNING: No run-tests.sh found for $dialect_name"
+        WARNINGS=$((WARNINGS + 1))
+    fi
+done
+
+# --- Step 8: JSON kernel verification ---
+echo ""
+echo "Step 8/8: Verifying JSON kernel..."
 echo ""
 
 cd "$HYDRA_ROOT/hydra-haskell"
@@ -218,7 +262,7 @@ if [ $ERRORS -eq 0 ]; then
     echo "  2. Commit all changes"
     echo "  3. Tag: git tag $EXPECTED -m '$EXPECTED release' HEAD"
     echo "  4. Push: git push && git push --tags"
-    echo "  5. Publish to Hackage, Sonatype, and conda-forge"
+    echo "  5. Publish to Hackage, Maven Central, and conda-forge"
 else
     echo "FAIL: $ERRORS check(s) failed. Please fix before releasing."
     exit 1

@@ -2,9 +2,69 @@
 
 All notable changes to the Hydra project are documented in this file.
 
-This changelog tracks changes across all Hydra implementations (Haskell, Java, Python, Scala, Clojure) and supporting infrastructure.
+This changelog tracks changes across all Hydra implementations
+(Haskell, Java, Python, Scala, Clojure, Common Lisp, Emacs Lisp, Scheme)
+and supporting infrastructure.
 
 The format is inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and [Apache TinkerPop](https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc).
+
+---
+
+## [0.14.0] - 2026-03-29
+
+Major release adding four new complete Hydra implementations — Scala (#273),
+Clojure (#278), Common Lisp, and Scheme — bringing the total to seven bootstrapping hosts
+(plus Emacs Lisp, which passes the test suite but does not yet participate in bootstrapping).
+Also includes kernel simplifications, an Avro bidirectional coder (#301), eval primitives (#281),
+new demos, and significant performance work on the Scheme host.
+
+### Highlights
+
+- **Four new complete implementations**: Hydra-Scala, Hydra-Clojure, Hydra-Common Lisp,
+  and Hydra-Scheme pass the common test suite and can serve as bootstrapping hosts.
+  The four Lisp dialects share a single coder and serializer.
+- **Kernel simplifications**: Removed `RowType`/`WrappedType` (#82),
+  unified `Graph`/`TypeContext`/`InferenceContext` (#192),
+  replaced `Module.elements` with `Module.definitions` (#214),
+  consolidated error types (#268), and promoted all staging modules to DSL sources (#267).
+- **Avro bidirectional coder** (#301) with property graph pipeline demo.
+- **Scheme bootstrap performance**: 58 minutes → 5.7 minutes via O(1) vhash data structures
+  and IEEE 754 float precision fixes.
+
+### New Features
+
+- **Hydra-Scala** (#273): complete implementation, sbt/Scala 3, 3043 tests
+- **Hydra-Lisp**: Clojure (#278), Common Lisp, Emacs Lisp, Scheme — four dialects,
+  one coder. CI workflows for Clojure, Common Lisp, and Scheme.
+- **Avro bidirectional coder** (#301) with demo
+- **Eval primitives** (#281): Logic, Equality, Math, collections, and Groups
+- **Generated DSL modules** (#180): `hydra.dsls` generates DSL helpers from type modules
+- **New demos**: GraphQL+JSON (#279), PG validation (#284), SHACL (#294), Avro+PG
+- **Packaging module** (#290): `hydra.packaging` with `Package` type and validation
+- **New primitives**: `lists.foldr` (#280), `maybes.toList`, float rounding (#264, #285)
+
+### Improvements
+
+- Promoted all staging modules to DSL sources (#267)
+- Removed legacy adapters, JSON/YAML coders, grammar framework (#236, #295)
+- Consolidated `hydra.compute` into `hydra.util` (#269)
+- Merged `hydra.tarjan` into `hydra.sorting` (#220)
+- Merged `hydra.constraints` into `hydra.query` (#272)
+- Renamed `hydra.accessors` to `hydra.paths` (#271)
+- Moved `hydra.workflow` to hydra-ext (#270)
+- Replaced legacy Flow monad with Either (#276)
+- Java: `Pair` replaces `Tuple2` (#245), flattened term naming (#223)
+
+### Bug Fixes
+
+- Fixed `Maybe TypeScheme` handling in ext coders (#295)
+- Fixed `buildGraph` shared subexpression issue in Adapt.hs and Inference.hs
+
+### Documentation
+
+- Thorough cleanup of user documentation (#302, #303)
+- Coding style guide added to wiki
+- Updated 'new implementation' recipe with learnings from Clojure head (#278)
 
 ---
 
