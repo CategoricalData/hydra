@@ -8,7 +8,9 @@ import hydra.dsl.Literals;
 import hydra.json.model.Value;
 import hydra.pg.model.Graph;
 import hydra.pg.model.GraphSchema;
-import hydra.pg.Validation;
+import hydra.error.pg.InvalidGraphError;
+import hydra.error.pg.InvalidValueError;
+import hydra.validate.Pg;
 import hydra.util.Maybe;
 
 import java.io.IOException;
@@ -21,7 +23,7 @@ import java.util.function.Function;
  * Java driver for the PG validation translingual demo.
  *
  * <p>Reads a schema JSON file and one or more graph JSON files (produced by GenerateData using
- * hydra.encode.pg.model), validates each graph against the schema using hydra.pg.validation,
+ * hydra.encode.pg.model), validates each graph against the schema using hydra.validate.pg,
  * and prints the results.
  *
  * <p>Usage: java hydra.demos.validatepg.ValidateDemo &lt;data-directory&gt;
@@ -30,14 +32,14 @@ public class ValidateDemo {
 
     // Checks a literal value against a literal type.
     // Compares the type family (string vs string, integer.int32 vs integer.int32, etc.)
-    private static final Function<LiteralType, Function<Literal, Maybe<String>>>
+    private static final Function<LiteralType, Function<Literal, Maybe<InvalidValueError>>>
             CHECK_LITERAL = type -> value -> {
         String expected = LiteralTypes.showLiteralType(type);
         String actual = literalFamily(value);
         if (expected.equals(actual)) {
             return Maybe.nothing();
         }
-        return Maybe.just("expected " + expected + ", got " + actual);
+        return Maybe.just(new InvalidValueError(expected, Literals.showLiteral(value)));
     };
 
     private static String literalFamily(Literal lit) {
@@ -115,9 +117,8 @@ public class ValidateDemo {
             String name = names.get(i);
             Graph<Literal> graph = graphs.get(i);
 
-            Maybe<String> validationResult = Validation.validateGraph(
+            Maybe<InvalidGraphError<Literal>> validationResult = Pg.validateGraph(
                     CHECK_LITERAL,
-                    Literals::showLiteral,
                     schema,
                     graph);
 
