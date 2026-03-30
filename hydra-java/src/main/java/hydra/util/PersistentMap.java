@@ -266,7 +266,7 @@ public abstract class PersistentMap<K, V> implements Map<K, V>, Iterable<Map.Ent
 
     /**
      * Left-biased union: entries in this map take precedence over entries in other.
-     * O(m * log(n/m + 1)) where m <= n.
+     * O(m * log(n/m + 1)) where m &lt;= n.
      */
     public PersistentMap<K, V> union(PersistentMap<K, V> other) {
         if (this.isEmpty()) {

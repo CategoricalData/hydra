@@ -74,7 +74,7 @@ public class FilterWithKey extends PrimitiveFunction {
      * Filters entries based on a curried key-value predicate (used by generated code).
      * @param <K> the key type
      * @param <V> the value type
-     * @param pred the curried predicate: key -> value -> Boolean
+     * @param pred the curried predicate: {@code key -> value -> Boolean}
      * @return a function that takes a map and returns the filtered map
      */
     public static <K, V> Function<PersistentMap<K, V>, PersistentMap<K, V>> apply(Function<K, Function<V, Boolean>> pred) {
@@ -85,7 +85,7 @@ public class FilterWithKey extends PrimitiveFunction {
      * Filters entries based on a curried key-value predicate (used by generated code).
      * @param <K> the key type
      * @param <V> the value type
-     * @param pred the curried predicate: key -> value -> Boolean
+     * @param pred the curried predicate: {@code key -> value -> Boolean}
      * @param mp the map to filter
      * @return the filtered map
      */
