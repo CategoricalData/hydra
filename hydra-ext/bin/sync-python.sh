@@ -59,19 +59,24 @@ cd "$HYDRA_EXT_DIR"
 # RTS flags to avoid stack overflow during generation
 RTS_FLAGS="+RTS -K256M -A32M -RTS"
 
-echo "Step 1/4: Building executable..."
+echo "Step 1/5: Building executable..."
 echo ""
 stack build hydra-ext:exe:bootstrap-from-json
 
 echo ""
-echo "Step 2/4: Generating Python main modules and tests from JSON..."
+echo "Step 2/5: Generating Python main modules and tests from JSON..."
 echo ""
 stack exec bootstrap-from-json -- --target python --include-coders --include-dsls --include-tests --include-gentests $RTS_FLAGS
 
 echo ""
-echo "Step 3/4: Generating ext Python demo modules from JSON..."
+echo "Step 3/5: Generating ext Python modules into hydra-ext from JSON..."
 echo ""
 stack exec bootstrap-from-json -- --target python --output . --include-coders --ext-only $RTS_FLAGS
+
+echo ""
+echo "Step 4/5: Generating ext Python modules into hydra-python from JSON..."
+echo ""
+stack exec bootstrap-from-json -- --target python --output "$HYDRA_PYTHON_DIR" --include-coders --ext-only $RTS_FLAGS
 
 echo ""
 echo "=========================================="
@@ -80,7 +85,7 @@ echo "=========================================="
 
 if [ "$QUICK_MODE" = false ]; then
     echo ""
-    echo "Step 4/4: Running Python tests..."
+    echo "Step 5/5: Running Python tests..."
     echo ""
 
     cd "$HYDRA_PYTHON_DIR"
@@ -96,7 +101,7 @@ if [ "$QUICK_MODE" = false ]; then
     cd "$HYDRA_EXT_DIR"
 else
     echo ""
-    echo "Step 4/4: Skipped (--quick mode)"
+    echo "Step 5/5: Skipped (--quick mode)"
 fi
 
 echo ""
