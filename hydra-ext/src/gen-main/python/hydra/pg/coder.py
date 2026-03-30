@@ -54,7 +54,7 @@ def check(_cx: T0, b: bool, e: Either[T1, None]) -> Either[T1, None]:
 def check_record_name(cx: hydra.context.Context, expected: hydra.core.Name, actual: hydra.core.Name) -> Either[hydra.context.InContext[hydra.errors.Error], None]:
     r"""Check that a record name matches the expected name."""
 
-    return check(cx, hydra.lib.equality.equal(actual.value, expected.value), Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("Expected record of type ", expected.value), ", found record of type "), actual.value)))), cx)))
+    return check(cx, hydra.lib.logic.or_(hydra.lib.equality.equal(expected.value, "placeholder"), hydra.lib.equality.equal(actual.value, expected.value)), Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("Expected record of type ", expected.value), ", found record of type "), actual.value)))), cx)))
 
 def element_tree_edge(edge: hydra.pg.model.Edge[T0], deps: frozenlist[hydra.pg.model.ElementTree[T0]]) -> hydra.pg.model.ElementTree[T0]:
     r"""Create an element tree for an edge."""
