@@ -2,7 +2,7 @@
 --
 -- Reads a schema JSON file and graph JSON files (produced by GenerateData using
 -- hydra.encode.pg.model), validates each graph against the schema using
--- Hydra.Pg.Validation, and prints the results.
+-- Hydra.Validate.Pg, and prints the results.
 --
 -- Usage: runhaskell ValidateDemo.hs <data-directory>
 
@@ -10,7 +10,8 @@ module Hydra.Ext.Demos.ValidatePg.Demo where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Pg.Model as Pg
-import qualified Hydra.Pg.Validation as Validation
+import qualified Hydra.Validate.Pg as Validation
+import qualified Hydra.Error.Pg as Err
 import qualified Hydra.Json.Model as Json
 
 import qualified Data.Aeson as A
@@ -69,10 +70,10 @@ loadGraph dataDir name = do
 
 printResult :: Pg.GraphSchema Core.LiteralType -> String -> Pg.Graph Core.Literal -> IO ()
 printResult schema name graph = do
-  let result = Validation.validateGraph checkLiteral showLiteral schema graph
+  let result = Validation.validateGraph checkLiteral schema graph
   case result of
     Nothing  -> log $ "Graph \"" ++ name ++ "\": VALID"
-    Just msg -> log $ "Graph \"" ++ name ++ "\": INVALID - " ++ msg
+    Just err -> log $ "Graph \"" ++ name ++ "\": INVALID - " ++ show err
   where
     log msg = putStrLn msg >> hFlush stdout
 
@@ -92,10 +93,12 @@ graphNames =
   ]
 
 -- | Check that a literal value matches a literal type.
-checkLiteral :: Core.LiteralType -> Core.Literal -> Maybe String
+checkLiteral :: Core.LiteralType -> Core.Literal -> Maybe Err.InvalidValueError
 checkLiteral lt lv = if showLiteralType lt == literalFamily lv
   then Nothing
-  else Just $ "expected " ++ showLiteralType lt ++ ", got " ++ literalFamily lv
+  else Just $ Err.InvalidValueError {
+    Err.invalidValueErrorExpectedType = showLiteralType lt,
+    Err.invalidValueErrorValue = showLiteral lv }
 
 showLiteralType :: Core.LiteralType -> String
 showLiteralType lt = case lt of

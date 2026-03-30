@@ -2,7 +2,7 @@
 
 Reads a schema JSON file and graph JSON files (produced by GenerateData using
 hydra.encode.pg.model), validates each graph against the schema using
-hydra.pg.validation, and prints the results.
+hydra.validate.pg, and prints the results.
 
 Usage: python validate_demo.py <data-directory>
 """
@@ -20,7 +20,7 @@ _hydra_python_root = os.path.join(os.path.dirname(_hydra_ext_root), "hydra-pytho
 # Add paths for modules (order matters - earlier paths take precedence):
 # 1. hydra-ext hand-written modules (this demo)
 sys.path.insert(0, os.path.join(_hydra_ext_root, "src/main/python"))
-# 2. hydra-ext generated modules (hydra.pg.*, hydra.pg.validation, etc.)
+# 2. hydra-ext generated modules (hydra.pg.*, hydra.validate.pg, etc.)
 sys.path.insert(0, os.path.join(_hydra_ext_root, "src/gen-main/python"))
 # 3. hydra-python generated modules (hydra.core, etc.)
 sys.path.insert(0, os.path.join(_hydra_python_root, "src/gen-main/python"))
@@ -29,7 +29,7 @@ sys.path.insert(0, os.path.join(_hydra_python_root, "src/main/python"))
 
 import hydra.core
 import hydra.pg.model as pg_model
-import hydra.pg.validation as pg_validation
+import hydra.validate.pg as pg_validation
 from hydra.dsl.python import FrozenDict, Just, Nothing, frozenlist
 
 

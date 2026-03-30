@@ -90,7 +90,8 @@ import qualified Hydra.Ext.Sources.Pg.Printing                 as PgPrinting
 import qualified Hydra.Ext.Sources.Pg.Query                    as PgQuery
 import qualified Hydra.Ext.Sources.Pg.TermsToElements          as PgTermsToElements
 import qualified Hydra.Ext.Sources.Pg.Utils                    as PgUtils
-import qualified Hydra.Ext.Sources.Pg.Validation               as PgValidation
+import qualified Hydra.Ext.Sources.Error.Pg                    as ErrorPg
+import qualified Hydra.Ext.Sources.Validate.Pg                 as ValidatePg
 import qualified Hydra.Ext.Sources.Protobuf.Any                as ProtobufAny
 import qualified Hydra.Ext.Sources.Protobuf.Proto3             as Proto3
 import qualified Hydra.Ext.Sources.Protobuf.Coder              as ProtobufCoder
@@ -296,20 +297,21 @@ pgModules = [
   DecodePgModel.module_,
   EncodePgMapping.module_,
   EncodePgModel.module_,
+  ErrorPg.module_,
   Gremlin.module_,
   OpenCypher.module_,
   PgCoder.module_,
   PgMapping.module_,
-  PgRdfEnvironment.module_,
-  PgRdfMappings.module_,
   PgModel.module_,
   PgPrinting.module_,
   PgQuery.module_,
+  PgRdfEnvironment.module_,
+  PgRdfMappings.module_,
   PgTermsToElements.module_,
   PgUtils.module_,
-  PgValidation.module_,
   TinkerpopFeatures.module_,
-  TinkerpopLanguage.module_]
+  TinkerpopLanguage.module_,
+  ValidatePg.module_]
 
 protobufModules :: [Module]
 protobufModules = [
