@@ -86,6 +86,7 @@ mkdir -p "$OUTPUT_DIR/src/test/haskell/Hydra"
 cp "$HYDRA_HASKELL_DIR/src/test/haskell/Hydra/TestSuiteSpec.hs" "$OUTPUT_DIR/src/test/haskell/Hydra/"
 cp "$HYDRA_HASKELL_DIR/src/test/haskell/Hydra/TestUtils.hs" "$OUTPUT_DIR/src/test/haskell/Hydra/"
 cp "$HYDRA_HASKELL_DIR/src/test/haskell/Hydra/ArbitraryCore.hs" "$OUTPUT_DIR/src/test/haskell/Hydra/"
+cp "$HYDRA_HASKELL_DIR/src/test/haskell/Hydra/EvalPrimitives.hs" "$OUTPUT_DIR/src/test/haskell/Hydra/"
 
 # License (needed by cabal)
 touch "$OUTPUT_DIR/LICENSE"
