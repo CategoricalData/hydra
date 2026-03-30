@@ -28,15 +28,7 @@ chibi-scheme \
 
 ## Test results
 
-| Category | Pass | Fail | Skip |
-|----------|------|------|------|
-| Evaluation (all primitives + reduction) | 919 | 0 | 0 |
-| Inference | 347 | 0 | 3 |
-| Type checking | 333 | 1 | 0 |
-| Rewriting | 116 | 0 | 0 |
-| JSON coder/roundtrip/decode | 55 | 0 | 0 |
-| All other test types | 407 | 0 | 0 |
-| **Total** | **2177** | **1** | **3** |
+2194 passed, 0 failed, 24 skipped.
 
 ## Performance: Scheme implementation choice
 
@@ -79,6 +71,25 @@ it is a pure interpreter with no compilation step, making it 40x slower than
 Guile for Hydra's curried-call-heavy workload. For development and CI, 5+ minutes
 per test run is impractical. chibi-scheme remains a useful conformance check —
 if the code runs on chibi, it will run on any R7RS implementation.
+
+## Bootstrapping
+
+Hydra-Scheme can serve as a bootstrapping host, generating code for any target language
+from the JSON kernel modules.
+The bootstrap script is at `src/main/scheme/hydra/bootstrap.scm`.
+Generating the full Python kernel takes approximately 6 minutes.
+
+The bootstrap uses Guile-specific optimizations not available in portable R7RS:
+- **vhash persistent data structures** (`(ice-9 vlist)`) for O(1) map and set operations,
+  replacing the O(n) sorted alists used in the portable gen-main code
+- **IEEE 754 float32 bytevector round-trip** (`(rnrs bytevectors)`) for exact float32 precision
+- **Loader transformations** (`fix-letrec`, `fix-if-else`, `and`/`or` short-circuiting)
+  to adapt generated code for eager evaluation
+
+The `src/main/` libraries use vhash for performance.
+The `src/gen-main/` libraries use portable alists so that standalone generated targets
+work without Guile-specific modules.
+The `sync-lisp.sh` script restores the alist gen-main versions after generation.
 
 ### Compatibility shims
 
