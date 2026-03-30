@@ -85,7 +85,7 @@ stack exec bootstrap-from-json -- --target java --include-coders --include-dsls 
 echo ""
 echo "Step 3/5: Generating ext Java demo modules from JSON..."
 echo ""
-stack exec bootstrap-from-json -- --target java --output . --include-coders --ext-only $RTS_FLAGS
+stack exec bootstrap-from-json -- --target java --output "$HYDRA_JAVA_DIR" --include-coders --ext-only $RTS_FLAGS
 
 if [ "$QUICK_MODE" = false ]; then
     echo ""

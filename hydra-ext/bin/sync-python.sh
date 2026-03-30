@@ -71,7 +71,7 @@ stack exec bootstrap-from-json -- --target python --include-coders --include-dsl
 echo ""
 echo "Step 3/4: Generating ext Python demo modules from JSON..."
 echo ""
-stack exec bootstrap-from-json -- --target python --output . --include-coders --ext-only $RTS_FLAGS
+stack exec bootstrap-from-json -- --target python --output "$HYDRA_PYTHON_DIR" --include-coders --ext-only $RTS_FLAGS
 
 echo ""
 echo "=========================================="

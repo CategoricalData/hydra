@@ -307,22 +307,6 @@ public interface Model {
         raw));
   }
 
-  static <T0> hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.Element<T0>>>> element_variantMap(hydra.graph.Graph cx, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, T0>>> v) {
-    return hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
-      (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.Element<T0>>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.Element<T0>>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.Element<T0>>>>(new hydra.core.Name("vertex"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.Element<T0>>>) (input -> hydra.lib.eithers.Map.apply(
-        (java.util.function.Function<hydra.pg.model.Vertex<T0>, hydra.pg.model.Element<T0>>) (t -> (hydra.pg.model.Element<T0>) (new hydra.pg.model.Element.Vertex(t))),
-        hydra.decode.pg.Model.<T0>vertex(
-          v,
-          cx,
-          input)))))),
-      (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.Element<T0>>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.Element<T0>>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.Element<T0>>>>(new hydra.core.Name("edge"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.Element<T0>>>) (input -> hydra.lib.eithers.Map.apply(
-        (java.util.function.Function<hydra.pg.model.Edge<T0>, hydra.pg.model.Element<T0>>) (t -> (hydra.pg.model.Element<T0>) (new hydra.pg.model.Element.Edge(t))),
-        hydra.decode.pg.Model.<T0>edge(
-          v,
-          cx,
-          input))))))));
-  }
-
   static hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.ElementKind> elementKind(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.ElementKind>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.pg.model.ElementKind>left(new hydra.errors.DecodingError(err))),
@@ -437,22 +421,6 @@ public interface Model {
         raw));
   }
 
-  static <T0> hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.ElementType<T0>>>> elementType_variantMap(hydra.graph.Graph cx, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, T0>>> t) {
-    return hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
-      (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.ElementType<T0>>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.ElementType<T0>>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.ElementType<T0>>>>(new hydra.core.Name("vertex"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.ElementType<T0>>>) (input -> hydra.lib.eithers.Map.apply(
-        (java.util.function.Function<hydra.pg.model.VertexType<T0>, hydra.pg.model.ElementType<T0>>) (t2 -> (hydra.pg.model.ElementType<T0>) (new hydra.pg.model.ElementType.Vertex(t2))),
-        hydra.decode.pg.Model.<T0>vertexType(
-          t,
-          cx,
-          input)))))),
-      (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.ElementType<T0>>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.ElementType<T0>>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.ElementType<T0>>>>(new hydra.core.Name("edge"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.ElementType<T0>>>) (input -> hydra.lib.eithers.Map.apply(
-        (java.util.function.Function<hydra.pg.model.EdgeType<T0>, hydra.pg.model.ElementType<T0>>) (t2 -> (hydra.pg.model.ElementType<T0>) (new hydra.pg.model.ElementType.Edge(t2))),
-        hydra.decode.pg.Model.<T0>edgeType(
-          t,
-          cx,
-          input))))))));
-  }
-
   static <T0> hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.ElementTypeTree<T0>> elementTypeTree(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, T0>>> t, hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.ElementTypeTree<T0>>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.pg.model.ElementTypeTree<T0>>left(new hydra.errors.DecodingError(err))),
@@ -492,6 +460,38 @@ public interface Model {
       hydra.Lexical.stripAndDereferenceTermEither(
         cx,
         raw));
+  }
+
+  static <T0> hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.ElementType<T0>>>> elementType_variantMap(hydra.graph.Graph cx, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, T0>>> t) {
+    return hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
+      (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.ElementType<T0>>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.ElementType<T0>>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.ElementType<T0>>>>(new hydra.core.Name("vertex"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.ElementType<T0>>>) (input -> hydra.lib.eithers.Map.apply(
+        (java.util.function.Function<hydra.pg.model.VertexType<T0>, hydra.pg.model.ElementType<T0>>) (t2 -> (hydra.pg.model.ElementType<T0>) (new hydra.pg.model.ElementType.Vertex(t2))),
+        hydra.decode.pg.Model.<T0>vertexType(
+          t,
+          cx,
+          input)))))),
+      (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.ElementType<T0>>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.ElementType<T0>>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.ElementType<T0>>>>(new hydra.core.Name("edge"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.ElementType<T0>>>) (input -> hydra.lib.eithers.Map.apply(
+        (java.util.function.Function<hydra.pg.model.EdgeType<T0>, hydra.pg.model.ElementType<T0>>) (t2 -> (hydra.pg.model.ElementType<T0>) (new hydra.pg.model.ElementType.Edge(t2))),
+        hydra.decode.pg.Model.<T0>edgeType(
+          t,
+          cx,
+          input))))))));
+  }
+
+  static <T0> hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.Element<T0>>>> element_variantMap(hydra.graph.Graph cx, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, T0>>> v) {
+    return hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
+      (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.Element<T0>>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.Element<T0>>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.Element<T0>>>>(new hydra.core.Name("vertex"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.Element<T0>>>) (input -> hydra.lib.eithers.Map.apply(
+        (java.util.function.Function<hydra.pg.model.Vertex<T0>, hydra.pg.model.Element<T0>>) (t -> (hydra.pg.model.Element<T0>) (new hydra.pg.model.Element.Vertex(t))),
+        hydra.decode.pg.Model.<T0>vertex(
+          v,
+          cx,
+          input)))))),
+      (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.Element<T0>>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.Element<T0>>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.Element<T0>>>>(new hydra.core.Name("edge"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.Element<T0>>>) (input -> hydra.lib.eithers.Map.apply(
+        (java.util.function.Function<hydra.pg.model.Edge<T0>, hydra.pg.model.Element<T0>>) (t -> (hydra.pg.model.Element<T0>) (new hydra.pg.model.Element.Edge(t))),
+        hydra.decode.pg.Model.<T0>edge(
+          v,
+          cx,
+          input))))))));
   }
 
   static <T0> hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.Graph<T0>> graph(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, T0>>> v, hydra.graph.Graph cx, hydra.core.Term raw) {

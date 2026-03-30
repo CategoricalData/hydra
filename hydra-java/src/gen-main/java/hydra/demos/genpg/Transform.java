@@ -208,19 +208,6 @@ public interface Transform {
           edgePairs))))));
   }
 
-  static <T0, T1, T2> hydra.util.PersistentMap<T0, hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> elementSpecsByTable_addVertex(hydra.util.PersistentMap<T0, hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> m, hydra.util.Pair<T0, T1> p) {
-    hydra.util.Lazy<T0> table = new hydra.util.Lazy<>(() -> hydra.demos.genpg.Transform.<T0, T1>elementSpecsByTable_table2(p));
-    hydra.util.Lazy<hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> current = new hydra.util.Lazy<>(() -> hydra.demos.genpg.Transform.<T1, T2>elementSpecsByTable_current2(hydra.demos.genpg.Transform.<T0, T1, T2>elementSpecsByTable_existing2(
-      m,
-      table.get())));
-    return hydra.lib.maps.Insert.apply(
-      table.get(),
-      (hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>) ((hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>) (new hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>(hydra.lib.lists.Cons.apply(
-        hydra.demos.genpg.Transform.<T0, T1>elementSpecsByTable_v(p),
-        hydra.lib.pairs.First.apply(current.get())), hydra.lib.pairs.Second.apply(current.get())))),
-      m);
-  }
-
   static <T0, T1, T2> hydra.util.PersistentMap<T0, hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> elementSpecsByTable_addEdge(hydra.util.PersistentMap<T0, hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> m, hydra.util.Pair<T0, T2> p) {
     hydra.util.Lazy<T0> table = new hydra.util.Lazy<>(() -> hydra.demos.genpg.Transform.<T0, T2>elementSpecsByTable_table(p));
     hydra.util.Lazy<hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> current = new hydra.util.Lazy<>(() -> hydra.demos.genpg.Transform.<T1, T2>elementSpecsByTable_current(hydra.demos.genpg.Transform.<T0, T1, T2>elementSpecsByTable_existing(
@@ -234,17 +221,29 @@ public interface Transform {
       m);
   }
 
-  static <T0> hydra.util.PersistentMap<String, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<T0>>> elementSpecsByTable_vertexMap(hydra.util.ConsList<hydra.util.Pair<String, hydra.pg.model.Vertex<hydra.core.Term>>> vertexPairs) {
-    return hydra.lib.lists.Foldl.apply(
-      p0 -> p1 -> hydra.demos.genpg.Transform.<String, hydra.pg.model.Vertex<hydra.core.Term>, T0>elementSpecsByTable_addVertex(
-        p0,
-        p1),
-      (hydra.util.PersistentMap<String, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<T0>>>) ((hydra.util.PersistentMap<String, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<T0>>>) (hydra.lib.maps.Empty.<String, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<T0>>>apply())),
-      vertexPairs);
+  static <T0, T1, T2> hydra.util.PersistentMap<T0, hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> elementSpecsByTable_addVertex(hydra.util.PersistentMap<T0, hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> m, hydra.util.Pair<T0, T1> p) {
+    hydra.util.Lazy<T0> table = new hydra.util.Lazy<>(() -> hydra.demos.genpg.Transform.<T0, T1>elementSpecsByTable_table2(p));
+    hydra.util.Lazy<hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> current = new hydra.util.Lazy<>(() -> hydra.demos.genpg.Transform.<T1, T2>elementSpecsByTable_current2(hydra.demos.genpg.Transform.<T0, T1, T2>elementSpecsByTable_existing2(
+      m,
+      table.get())));
+    return hydra.lib.maps.Insert.apply(
+      table.get(),
+      (hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>) ((hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>) (new hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>(hydra.lib.lists.Cons.apply(
+        hydra.demos.genpg.Transform.<T0, T1>elementSpecsByTable_v(p),
+        hydra.lib.pairs.First.apply(current.get())), hydra.lib.pairs.Second.apply(current.get())))),
+      m);
   }
 
-  static <T0, T2> T0 elementSpecsByTable_table(hydra.util.Pair<T0, T2> p) {
-    return hydra.lib.pairs.First.apply(p);
+  static <T1, T2> hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>> elementSpecsByTable_current(hydra.util.Maybe<hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> existing) {
+    return hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> (hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>) ((hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>) (new hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>empty()), (hydra.util.ConsList<T2>) (hydra.util.ConsList.<T2>empty())))),
+      existing);
+  }
+
+  static <T1, T2> hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>> elementSpecsByTable_current2(hydra.util.Maybe<hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> existing) {
+    return hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> (hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>) ((hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>) (new hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>empty()), (hydra.util.ConsList<T2>) (hydra.util.ConsList.<T2>empty())))),
+      existing);
   }
 
   static <T0, T2> T2 elementSpecsByTable_e(hydra.util.Pair<T0, T2> p) {
@@ -257,10 +256,14 @@ public interface Transform {
       m);
   }
 
-  static <T1, T2> hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>> elementSpecsByTable_current(hydra.util.Maybe<hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> existing) {
-    return hydra.lib.maybes.FromMaybe.applyLazy(
-      () -> (hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>) ((hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>) (new hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>empty()), (hydra.util.ConsList<T2>) (hydra.util.ConsList.<T2>empty())))),
-      existing);
+  static <T0, T1, T2> hydra.util.Maybe<hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> elementSpecsByTable_existing2(hydra.util.PersistentMap<T0, hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> m, T0 table) {
+    return hydra.lib.maps.Lookup.apply(
+      table,
+      m);
+  }
+
+  static <T0, T2> T0 elementSpecsByTable_table(hydra.util.Pair<T0, T2> p) {
+    return hydra.lib.pairs.First.apply(p);
   }
 
   static <T0, T1> T0 elementSpecsByTable_table2(hydra.util.Pair<T0, T1> p) {
@@ -271,16 +274,13 @@ public interface Transform {
     return hydra.lib.pairs.Second.apply(p);
   }
 
-  static <T0, T1, T2> hydra.util.Maybe<hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> elementSpecsByTable_existing2(hydra.util.PersistentMap<T0, hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> m, T0 table) {
-    return hydra.lib.maps.Lookup.apply(
-      table,
-      m);
-  }
-
-  static <T1, T2> hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>> elementSpecsByTable_current2(hydra.util.Maybe<hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> existing) {
-    return hydra.lib.maybes.FromMaybe.applyLazy(
-      () -> (hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>) ((hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>) (new hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>empty()), (hydra.util.ConsList<T2>) (hydra.util.ConsList.<T2>empty())))),
-      existing);
+  static <T0> hydra.util.PersistentMap<String, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<T0>>> elementSpecsByTable_vertexMap(hydra.util.ConsList<hydra.util.Pair<String, hydra.pg.model.Vertex<hydra.core.Term>>> vertexPairs) {
+    return hydra.lib.lists.Foldl.apply(
+      p0 -> p1 -> hydra.demos.genpg.Transform.<String, hydra.pg.model.Vertex<hydra.core.Term>, T0>elementSpecsByTable_addVertex(
+        p0,
+        p1),
+      (hydra.util.PersistentMap<String, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<T0>>>) ((hydra.util.PersistentMap<String, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<T0>>>) (hydra.lib.maps.Empty.<String, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<T0>>>apply())),
+      vertexPairs);
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.pg.model.Edge<hydra.core.Term>>> evaluateEdge(hydra.context.Context cx, hydra.graph.Graph g, hydra.pg.model.Edge<hydra.core.Term> edgeSpec, hydra.core.Term record) {
