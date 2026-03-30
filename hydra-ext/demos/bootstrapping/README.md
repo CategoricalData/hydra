@@ -1,11 +1,15 @@
-# Bootstrapping demo — everything-to-everything code generation
+# Bootstrapping — cross-implementation code generation and verification
 
-This demo demonstrates Hydra's self-hosting capability by regenerating all
-generated code from a language-independent JSON representation. Each of Hydra's
-five complete implementations (Haskell, Java, Python, Scala, and Lisp) can independently load
-Hydra modules from JSON and generate code for any target language, producing a
-matrix of bootstrapping paths — all of which produce functionally equivalent
-output that passes the common test suite.
+Hydra's bootstrapping system validates that all implementations can independently
+regenerate each other from a language-independent JSON representation.
+Each of Hydra's seven bootstrapping hosts (Haskell, Java, Python, Scala,
+Clojure, Common Lisp, and Scheme) can load Hydra modules from JSON and generate code
+for any target language, producing a matrix of generation paths — all of which produce
+functionally equivalent output that passes the common test suite.
+
+This is a core part of Hydra's build and verification system, not just a demo.
+It ensures that changes to one implementation do not silently break cross-language
+compatibility.
 
 ## Overview
 
@@ -18,8 +22,9 @@ Each bootstrapping path proceeds as follows:
 3. Copy minimal static resources (primitive libraries, build files, test runners)
 4. Build and test the generated project
 
-By default, the demo runs the 3x3 matrix of Haskell, Java, and Python as both hosts
-and targets. Scala and Lisp can be included with `--hosts` and `--targets` flags.
+By default, the bootstrapping system runs the 3×3 matrix of Haskell, Java, and Python
+as both hosts and targets. Additional hosts and targets (Scala, Clojure, Common Lisp,
+Emacs Lisp, Scheme) can be included with `--hosts` and `--targets` flags.
 All output goes to `/tmp/hydra-bootstrapping-demo/` (override with `--output`):
 
 ```
@@ -67,9 +72,10 @@ hydra-python/
 
 ## Prerequisites
 
-This demo requires all three language environments to be set up. Unlike a
-typical Hydra application (which uses only one language, or sometimes two in bridging scenarios), the bootstrapping
-demo exercises all three implementations.
+Running the full bootstrapping matrix requires all language environments to be set up.
+The default 3×3 matrix needs Haskell, Java, and Python.
+Additional hosts require their respective toolchains
+(sbt for Scala, Clojure CLI, SBCL for Common Lisp, Emacs for Emacs Lisp, Guile for Scheme).
 
 ### Haskell
 
@@ -136,7 +142,7 @@ for more details.
   exports should be up to date.
 
 - If you have made local changes to Sources or other DSL code, run the
-  top-level sync script before running the demo:
+  top-level sync script before running the bootstrapping verification:
   ```bash
   ./bin/sync-all.sh    # from repo root; or --quick to skip tests
   ```
@@ -276,7 +282,7 @@ functionally equivalent to the canonical baseline.
 
 ## Module coverage
 
-The bootstrapping demo generates the following module sets for each target:
+The bootstrapping system generates the following module sets for each target:
 
 - **Main modules** (129): kernel types, kernel terms, JSON, Haskell, eval lib
 - **Extension modules** (74): Java, Python, Rust, Go, C++, GraphQL,

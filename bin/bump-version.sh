@@ -65,6 +65,10 @@ patch "$REPO_ROOT/build.gradle" \
 patch "$REPO_ROOT/hydra-ext/demos/bootstrapping/resources/java/build.gradle" \
     "s/version = '.*'/version = '$VERSION'/"
 
+# Scala (build.sbt): version := "X.Y.Z"
+patch "$REPO_ROOT/hydra-scala/build.sbt" \
+    "s/version := \".*\"/version := \"$VERSION\"/"
+
 # Python (pyproject.toml): version = "X.Y.Z"
 patch "$REPO_ROOT/hydra-python/pyproject.toml" \
     "s/^version = \".*\"/version = \"$VERSION\"/"
