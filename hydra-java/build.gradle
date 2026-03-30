@@ -11,6 +11,10 @@ dependencies {
     api group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: junitVersion
 }
 
+tasks.named('sourcesJar') {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
 // Temporarily exclude generated files with stale visitor patterns pending full regeneration
 compileJava {
     exclude '**/hydra/ext/lisp/Coder.java'
