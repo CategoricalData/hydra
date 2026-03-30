@@ -74,20 +74,45 @@
     (define (float32-approx x) (snap-to-float32 x))
 
     ;; Haskell-compatible float formatting helper
+    ;; Format a float matching Haskell's Show instance: scientific notation for
+    ;; |x| < 0.1 or |x| >= 1e7, decimal notation otherwise. Full precision.
     (define (haskell-show-float x)
       (cond
         ((= x 0.0) "0.0")
-        ((and (not (= x 0.0))
-              (or (< (abs x) 0.1) (>= (abs x) 1.0e7)))
-         ;; Scientific notation: Haskell uses e.g. "5.0e-2"
-         (let* ((e (exact (floor (/ (log (abs x)) (log 10)))))
-                (m (/ x (expt 10.0 e)))
-                ;; Round mantissa to eliminate floating point noise
-                (m-rounded (* 1.0 (/ (round (* (abs m) 1e14)) 1e14)))
-                (adj-e (if (>= m-rounded 10.0) (+ e 1) e))
-                (adj-m (if (>= m-rounded 10.0) (/ m-rounded 10.0) m-rounded))
-                (sign (if (< x 0) "-" "")))
-           (string-append sign (number->string adj-m) "e" (number->string adj-e))))
+        ((or (< (abs x) 0.1) (>= (abs x) 1.0e7))
+         ;; Scientific notation needed. Use number->string and convert if needed.
+         (let* ((s (number->string x))
+                (has-e (let loop ((i 0))
+                         (cond ((>= i (string-length s)) #f)
+                               ((char=? (string-ref s i) #\e) #t)
+                               (else (loop (+ i 1)))))))
+           (if has-e
+               s  ;; Already scientific notation with full precision
+               ;; Decimal like "0.05" — convert to scientific via string manipulation.
+               ;; Find the first significant digit and shift the decimal point.
+               (let* ((neg (char=? (string-ref s 0) #\-))
+                      (digits (if neg (substring s 1 (string-length s))
+                                  s))
+                      ;; Strip "0." prefix and count leading zeros
+                      (after-dot (substring digits 2 (string-length digits)))
+                      (leading-zeros (let loop ((i 0))
+                                       (if (and (< i (string-length after-dot))
+                                                (char=? (string-ref after-dot i) #\0))
+                                           (loop (+ i 1)) i)))
+                      (sig-digits (substring after-dot leading-zeros (string-length after-dot)))
+                      ;; Strip trailing zeros from significant digits
+                      (sig-trimmed (let loop ((i (- (string-length sig-digits) 1)))
+                                     (if (and (> i 0) (char=? (string-ref sig-digits i) #\0))
+                                         (loop (- i 1))
+                                         (substring sig-digits 0 (+ i 1)))))
+                      (mantissa (string-append (substring sig-trimmed 0 1)
+                                               "."
+                                               (if (> (string-length sig-trimmed) 1)
+                                                   (substring sig-trimmed 1 (string-length sig-trimmed))
+                                                   "0")))
+                      (exp (- 0 leading-zeros 1))
+                      (sign (if neg "-" "")))
+                 (string-append sign mantissa "e" (number->string exp))))))
         (else (number->string x))))
 
     ;; Format a float32 value with minimum digits for unique representation

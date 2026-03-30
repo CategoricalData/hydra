@@ -95,8 +95,33 @@ def qualified_snake_name(name: hydra.core.Name) -> str:
         return hydra.lib.strings.intercalate("_", snake_parts())
     return hydra.formatting.sanitize_with_underscores(hydra.ext.lisp.language.lisp_reserved_words(), joined())
 
+def lisp_should_thunk_binding(g: T0, b: hydra.core.Binding) -> bool:
+    term = b.term
+    @lru_cache(1)
+    def is_lambda():
+        def _hoist_is_lambda_1(v1):
+            match v1:
+                case hydra.core.FunctionLambda():
+                    return True
+
+                case _:
+                    return False
+        match hydra.rewriting.deannotate_term(term):
+            case hydra.core.TermFunction(value=f):
+                return _hoist_is_lambda_1(f)
+
+            case _:
+                return False
+    return False
+
+def lisp_binding_metadata(g: hydra.graph.Graph, b: hydra.core.Binding) -> Maybe[hydra.core.Term]:
+    return hydra.lib.logic.if_else(lisp_should_thunk_binding(g, b), (lambda : hydra.coder_utils.binding_metadata(g, b)), (lambda : Nothing()))
+
 def lisp_named_lambda_expr(name: str, params: frozenlist[str], body: hydra.ext.lisp.syntax.Expression) -> hydra.ext.lisp.syntax.Expression:
     return cast(hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.ExpressionLambda(hydra.ext.lisp.syntax.Lambda(Just(hydra.ext.lisp.syntax.Symbol(name)), hydra.lib.lists.map((lambda p: hydra.ext.lisp.syntax.Symbol(p)), params), Nothing(), (body,))))
+
+def wrap_in_delay(expr: hydra.ext.lisp.syntax.Expression) -> hydra.ext.lisp.syntax.Expression:
+    return lisp_app(lisp_var("delay"), (expr,))
 
 def encode_literal(lit: hydra.core.Literal):
     def _hoist_hydra_ext_lisp_coder_encode_literal_1(v1):
@@ -207,15 +232,15 @@ def is_primitive_ref(prim_name: str, term: hydra.core.Term):
 def wrap_in_thunk(expr: hydra.ext.lisp.syntax.Expression) -> hydra.ext.lisp.syntax.Expression:
     return cast(hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.ExpressionLambda(hydra.ext.lisp.syntax.Lambda(Nothing(), (), Nothing(), (expr,))))
 
-def encode_application(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, raw_fun: hydra.core.Term, raw_arg: hydra.core.Term):
+def encode_application(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: hydra.graph.Graph, thunked_vars: frozenset[hydra.core.Name], raw_fun: hydra.core.Term, raw_arg: hydra.core.Term):
     @lru_cache(1)
     def d_fun() -> hydra.core.Term:
         return hydra.rewriting.deannotate_term(raw_fun)
     @lru_cache(1)
     def normal() -> Either[hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression]:
-        return hydra.lib.eithers.bind(encode_term(dialect, cx, g, raw_fun), (lambda fun: hydra.lib.eithers.bind(encode_term(dialect, cx, g, raw_arg), (lambda arg: Right(lisp_app(fun, (arg,)))))))
-    def enc(t: hydra.core.Term) -> Either[T2, hydra.ext.lisp.syntax.Expression]:
-        return encode_term(dialect, cx, g, t)
+        return hydra.lib.eithers.bind(encode_term(dialect, cx, g, thunked_vars, raw_fun), (lambda fun: hydra.lib.eithers.bind(encode_term(dialect, cx, g, thunked_vars, raw_arg), (lambda arg: Right(lisp_app(fun, (arg,)))))))
+    def enc(t: hydra.core.Term) -> Either[T1, hydra.ext.lisp.syntax.Expression]:
+        return encode_term(dialect, cx, g, thunked_vars, t)
     match d_fun():
         case hydra.core.TermApplication(value=app2):
             mid_fun = app2.function
@@ -243,7 +268,7 @@ def encode_application(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, ra
         case _:
             return normal()
 
-def encode_elimination(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, elim: hydra.core.Elimination, marg: Maybe[hydra.core.Term]) -> Either[T2, hydra.ext.lisp.syntax.Expression]:
+def encode_elimination(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: hydra.graph.Graph, thunked_vars: frozenset[hydra.core.Name], elim: hydra.core.Elimination, marg: Maybe[hydra.core.Term]) -> Either[T1, hydra.ext.lisp.syntax.Expression]:
     match elim:
         case hydra.core.EliminationRecord(value=proj):
             @lru_cache(1)
@@ -252,7 +277,7 @@ def encode_elimination(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, el
             @lru_cache(1)
             def tname() -> str:
                 return qualified_snake_name(proj.type_name)
-            return hydra.lib.maybes.cases(marg, (lambda : Right(lisp_lambda_expr(("v",), cast(hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.ExpressionFieldAccess(hydra.ext.lisp.syntax.FieldAccess(hydra.ext.lisp.syntax.Symbol(tname()), hydra.ext.lisp.syntax.Symbol(fname()), lisp_var("v"))))))), (lambda arg: hydra.lib.eithers.bind(encode_term(dialect, cx, g, arg), (lambda sarg: Right(cast(hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.ExpressionFieldAccess(hydra.ext.lisp.syntax.FieldAccess(hydra.ext.lisp.syntax.Symbol(tname()), hydra.ext.lisp.syntax.Symbol(fname()), sarg))))))))
+            return hydra.lib.maybes.cases(marg, (lambda : Right(lisp_lambda_expr(("v",), cast(hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.ExpressionFieldAccess(hydra.ext.lisp.syntax.FieldAccess(hydra.ext.lisp.syntax.Symbol(tname()), hydra.ext.lisp.syntax.Symbol(fname()), lisp_var("v"))))))), (lambda arg: hydra.lib.eithers.bind(encode_term(dialect, cx, g, thunked_vars, arg), (lambda sarg: Right(cast(hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.ExpressionFieldAccess(hydra.ext.lisp.syntax.FieldAccess(hydra.ext.lisp.syntax.Symbol(tname()), hydra.ext.lisp.syntax.Symbol(fname()), sarg))))))))
 
         case hydra.core.EliminationUnion(value=cs):
             @lru_cache(1)
@@ -260,32 +285,32 @@ def encode_elimination(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, el
                 return hydra.names.local_name_of(cs.type_name)
             case_fields = cs.cases
             def_case = cs.default
-            return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda cf: (cfname := hydra.formatting.convert_case_camel_to_lower_snake(cf.name.value), cfterm := cf.term, cond_expr := lisp_app(lisp_var(dialect_equal(dialect)), (lisp_app(lisp_var(dialect_car(dialect)), (lisp_var("match_target"),)), lisp_keyword(cfname))), hydra.lib.eithers.bind(encode_term(dialect, cx, g, cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cfterm, cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("match_value"))))))), (lambda body_expr: Right(hydra.ext.lisp.syntax.CondClause(cond_expr, body_expr)))))[3]), case_fields), (lambda clauses: hydra.lib.eithers.bind(hydra.lib.maybes.cases(def_case, (lambda : Right(Nothing())), (lambda dt: hydra.lib.eithers.bind(encode_term(dialect, cx, g, dt), (lambda def_body: Right(Just(def_body)))))), (lambda def_expr: (cond_expr := cast(hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.ExpressionCond(hydra.ext.lisp.syntax.CondExpression(clauses, def_expr))), inner_expr := lisp_app(lisp_lambda_expr(("match_value",), cond_expr), (lisp_app(lisp_var(dialect_cadr(dialect)), (lisp_var("match_target"),)),)), hydra.lib.maybes.cases(marg, (lambda : Right(lisp_lambda_expr(("match_target",), inner_expr))), (lambda arg: hydra.lib.eithers.bind(encode_term(dialect, cx, g, arg), (lambda sarg: Right(lisp_app(lisp_lambda_expr(("match_target",), inner_expr), (sarg,))))))))[2]))))
+            return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda cf: (cfname := hydra.formatting.convert_case_camel_to_lower_snake(cf.name.value), cfterm := cf.term, cond_expr := lisp_app(lisp_var(dialect_equal(dialect)), (lisp_app(lisp_var(dialect_car(dialect)), (lisp_var("match_target"),)), lisp_keyword(cfname))), hydra.lib.eithers.bind(encode_term(dialect, cx, g, thunked_vars, cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cfterm, cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("match_value"))))))), (lambda body_expr: Right(hydra.ext.lisp.syntax.CondClause(cond_expr, body_expr)))))[3]), case_fields), (lambda clauses: hydra.lib.eithers.bind(hydra.lib.maybes.cases(def_case, (lambda : Right(Nothing())), (lambda dt: hydra.lib.eithers.bind(encode_term(dialect, cx, g, thunked_vars, dt), (lambda def_body: Right(Just(def_body)))))), (lambda def_expr: (cond_expr := cast(hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.ExpressionCond(hydra.ext.lisp.syntax.CondExpression(clauses, def_expr))), inner_expr := lisp_app(lisp_lambda_expr(("match_value",), cond_expr), (lisp_app(lisp_var(dialect_cadr(dialect)), (lisp_var("match_target"),)),)), hydra.lib.maybes.cases(marg, (lambda : Right(lisp_lambda_expr(("match_target",), inner_expr))), (lambda arg: hydra.lib.eithers.bind(encode_term(dialect, cx, g, thunked_vars, arg), (lambda sarg: Right(lisp_app(lisp_lambda_expr(("match_target",), inner_expr), (sarg,))))))))[2]))))
 
         case hydra.core.EliminationWrap():
-            return hydra.lib.maybes.cases(marg, (lambda : Right(lisp_lambda_expr(("v",), lisp_var("v")))), (lambda arg: encode_term(dialect, cx, g, arg)))
+            return hydra.lib.maybes.cases(marg, (lambda : Right(lisp_lambda_expr(("v",), lisp_var("v")))), (lambda arg: encode_term(dialect, cx, g, thunked_vars, arg)))
 
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def encode_function(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, fun: hydra.core.Function) -> Either[hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression]:
+def encode_function(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: hydra.graph.Graph, thunked_vars: frozenset[hydra.core.Name], fun: hydra.core.Function) -> Either[hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression]:
     match fun:
         case hydra.core.FunctionLambda(value=lam):
             @lru_cache(1)
             def param() -> str:
                 return hydra.formatting.convert_case_camel_or_underscore_to_lower_snake(hydra.formatting.sanitize_with_underscores(hydra.ext.lisp.language.lisp_reserved_words(), lam.parameter.value))
-            return hydra.lib.eithers.bind(encode_term(dialect, cx, g, lam.body), (lambda body: Right(lisp_lambda_expr((param(),), body))))
+            return hydra.lib.eithers.bind(encode_term(dialect, cx, g, thunked_vars, lam.body), (lambda body: Right(lisp_lambda_expr((param(),), body))))
 
         case hydra.core.FunctionPrimitive(value=name):
             return Right(lisp_var(hydra.formatting.convert_case_camel_or_underscore_to_lower_snake(hydra.formatting.sanitize_with_underscores(hydra.ext.lisp.language.lisp_reserved_words(), name.value))))
 
         case hydra.core.FunctionElimination(value=elim):
-            return encode_elimination(dialect, cx, g, elim, Nothing())
+            return encode_elimination(dialect, cx, g, thunked_vars, elim, Nothing())
 
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def encode_let_as_native(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, bindings: frozenlist[hydra.core.Binding], body: hydra.core.Term) -> Either[hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression]:
+def encode_let_as_native(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: hydra.graph.Graph, thunked_vars: frozenset[hydra.core.Name], bindings: frozenlist[hydra.core.Binding], body: hydra.core.Term) -> Either[hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression]:
     @lru_cache(1)
     def is_clojure_top() -> bool:
         match dialect:
@@ -294,51 +319,60 @@ def encode_let_as_native(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, 
 
             case _:
                 return False
-    return hydra.lib.eithers.bind(encode_term(dialect, cx, g, body), (lambda body_expr: (sorted_bindings := hydra.lib.logic.if_else(True, (lambda : (all_names := hydra.lib.sets.from_list(hydra.lib.lists.map((lambda b: b.name), bindings)), adj_list := hydra.lib.lists.map((lambda b: (b.name, hydra.lib.sets.to_list(hydra.lib.sets.intersection(all_names, hydra.rewriting.free_variables_in_term(b.term))))), bindings), sort_result := hydra.sorting.topological_sort(adj_list), name_to_binding := hydra.lib.maps.from_list(hydra.lib.lists.map((lambda b: (b.name, b)), bindings)), hydra.lib.eithers.either((lambda _: bindings), (lambda sorted: hydra.lib.lists.map((lambda name: hydra.lib.maybes.from_maybe((lambda : hydra.lib.lists.head(bindings)), hydra.lib.maps.lookup(name, name_to_binding))), sorted)), sort_result))[4]), (lambda : bindings)), hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda b: (bname := hydra.formatting.convert_case_camel_or_underscore_to_lower_snake(hydra.formatting.sanitize_with_underscores(hydra.ext.lisp.language.lisp_reserved_words(), b.name.value)), is_self_ref := hydra.lib.sets.member(b.name, hydra.rewriting.free_variables_in_term(b.term)), is_lambda := (_hoist_is_lambda_1 := (lambda v1: (lambda _: True)(v1.value) if isinstance(v1, hydra.core.FunctionLambda) else False), _hoist_is_lambda_2 := (lambda v1: (lambda f: _hoist_is_lambda_1(f))(v1.value) if isinstance(v1, hydra.core.TermFunction) else False), _hoist_is_lambda_2(hydra.rewriting.deannotate_term(b.term)))[2], hydra.lib.eithers.bind(encode_term(dialect, cx, g, b.term), (lambda bval: (is_clojure := (_hoist_is_clojure_1 := (lambda v1: (lambda _: True)(v1) if v1 else False), _hoist_is_clojure_1(dialect))[1], wrapped_val := (_hoist_wrapped_val_1 := (lambda v1: (lambda lam: cast(hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.ExpressionLambda(hydra.ext.lisp.syntax.Lambda(Just(hydra.ext.lisp.syntax.Symbol(bname)), lam.params, lam.rest_param, lam.body))))(v1.value) if isinstance(v1, hydra.ext.lisp.syntax.ExpressionLambda) else bval), hydra.lib.logic.if_else(is_clojure, (lambda : hydra.lib.logic.if_else(is_self_ref, (lambda : hydra.lib.logic.if_else(is_lambda, (lambda : _hoist_wrapped_val_1(bval)), (lambda : lisp_named_lambda_expr(bname, ("_arg",), lisp_app(bval, (lisp_var("_arg"),)))))), (lambda : bval))), (lambda : hydra.lib.logic.if_else(hydra.lib.logic.and_(is_self_ref, hydra.lib.logic.not_(is_lambda)), (lambda : lisp_lambda_expr(("_arg",), lisp_app(bval, (lisp_var("_arg"),)))), (lambda : bval)))))[1], Right((bname, wrapped_val)))[2])))[3]), sorted_bindings), (lambda encoded_bindings: (all_binding_names := hydra.lib.sets.from_list(hydra.lib.lists.map((lambda b: b.name), bindings)), has_cross_refs := hydra.lib.lists.foldl((lambda acc, b: hydra.lib.logic.or_(acc, hydra.lib.logic.not_(hydra.lib.sets.null(hydra.lib.sets.intersection(all_binding_names, hydra.rewriting.free_variables_in_term(b.term)))))), False, bindings), has_self_ref := hydra.lib.lists.foldl((lambda acc, b: hydra.lib.logic.or_(acc, hydra.lib.sets.member(b.name, hydra.rewriting.free_variables_in_term(b.term)))), False, bindings), is_recursive := has_self_ref, let_kind := hydra.lib.logic.if_else(is_recursive, (lambda : hydra.ext.lisp.syntax.LetKind.RECURSIVE), (lambda : hydra.lib.logic.if_else(hydra.lib.lists.null(hydra.lib.lists.tail(bindings)), (lambda : hydra.ext.lisp.syntax.LetKind.PARALLEL), (lambda : hydra.ext.lisp.syntax.LetKind.SEQUENTIAL)))), lisp_bindings := hydra.lib.lists.map((lambda eb: cast(hydra.ext.lisp.syntax.LetBinding, hydra.ext.lisp.syntax.LetBindingSimple(hydra.ext.lisp.syntax.SimpleBinding(hydra.ext.lisp.syntax.Symbol(hydra.lib.pairs.first(eb)), hydra.lib.pairs.second(eb))))), encoded_bindings), Right(cast(hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.ExpressionLet(hydra.ext.lisp.syntax.LetExpression(let_kind, lisp_bindings, (body_expr,))))))[6])))[1]))
+    @lru_cache(1)
+    def g_extended() -> hydra.graph.Graph:
+        return hydra.rewriting.extend_graph_for_let((lambda x1, x2: lisp_binding_metadata(x1, x2)), g, hydra.core.Let(bindings, body))
+    @lru_cache(1)
+    def new_thunked_names() -> frozenset[hydra.core.Name]:
+        return hydra.lib.sets.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda b: hydra.lib.logic.if_else(lisp_should_thunk_binding(g, b), (lambda : Just(b.name)), (lambda : Nothing()))), bindings)))
+    @lru_cache(1)
+    def thunked_vars_extended() -> frozenset[hydra.core.Name]:
+        return hydra.lib.sets.union(thunked_vars, new_thunked_names())
+    return hydra.lib.eithers.bind(encode_term(dialect, cx, g_extended(), thunked_vars_extended(), body), (lambda body_expr: (sorted_bindings := hydra.lib.logic.if_else(True, (lambda : (all_names := hydra.lib.sets.from_list(hydra.lib.lists.map((lambda b: b.name), bindings)), adj_list := hydra.lib.lists.map((lambda b: (b.name, hydra.lib.sets.to_list(hydra.lib.sets.intersection(all_names, hydra.rewriting.free_variables_in_term(b.term))))), bindings), sort_result := hydra.sorting.topological_sort(adj_list), name_to_binding := hydra.lib.maps.from_list(hydra.lib.lists.map((lambda b: (b.name, b)), bindings)), hydra.lib.eithers.either((lambda _: bindings), (lambda sorted: hydra.lib.lists.map((lambda name: hydra.lib.maybes.from_maybe((lambda : hydra.lib.lists.head(bindings)), hydra.lib.maps.lookup(name, name_to_binding))), sorted)), sort_result))[4]), (lambda : bindings)), hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda b: (bname := hydra.formatting.convert_case_camel_or_underscore_to_lower_snake(hydra.formatting.sanitize_with_underscores(hydra.ext.lisp.language.lisp_reserved_words(), b.name.value)), is_self_ref := hydra.lib.sets.member(b.name, hydra.rewriting.free_variables_in_term(b.term)), is_lambda := (_hoist_is_lambda_1 := (lambda v1: (lambda _: True)(v1.value) if isinstance(v1, hydra.core.FunctionLambda) else False), _hoist_is_lambda_2 := (lambda v1: (lambda f: _hoist_is_lambda_1(f))(v1.value) if isinstance(v1, hydra.core.TermFunction) else False), _hoist_is_lambda_2(hydra.rewriting.deannotate_term(b.term)))[2], needs_thunk := lisp_should_thunk_binding(g, b), hydra.lib.eithers.bind(encode_term(dialect, cx, g_extended(), thunked_vars_extended(), b.term), (lambda bval: (is_clojure := (_hoist_is_clojure_1 := (lambda v1: (lambda _: True)(v1) if v1 else False), _hoist_is_clojure_1(dialect))[1], wrapped_val := (_hoist_wrapped_val_1 := (lambda v1: (lambda lam: cast(hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.ExpressionLambda(hydra.ext.lisp.syntax.Lambda(Just(hydra.ext.lisp.syntax.Symbol(bname)), lam.params, lam.rest_param, lam.body))))(v1.value) if isinstance(v1, hydra.ext.lisp.syntax.ExpressionLambda) else bval), hydra.lib.logic.if_else(is_clojure, (lambda : hydra.lib.logic.if_else(is_self_ref, (lambda : hydra.lib.logic.if_else(is_lambda, (lambda : _hoist_wrapped_val_1(bval)), (lambda : lisp_named_lambda_expr(bname, ("_arg",), lisp_app(bval, (lisp_var("_arg"),)))))), (lambda : bval))), (lambda : hydra.lib.logic.if_else(hydra.lib.logic.and_(is_self_ref, hydra.lib.logic.not_(is_lambda)), (lambda : lisp_lambda_expr(("_arg",), lisp_app(bval, (lisp_var("_arg"),)))), (lambda : bval)))))[1], thunked_val := hydra.lib.logic.if_else(hydra.lib.logic.and_(needs_thunk, hydra.lib.logic.not_(is_self_ref)), (lambda : wrap_in_delay(wrapped_val)), (lambda : wrapped_val)), Right((bname, thunked_val)))[3])))[4]), sorted_bindings), (lambda encoded_bindings: (all_binding_names := hydra.lib.sets.from_list(hydra.lib.lists.map((lambda b: b.name), bindings)), has_cross_refs := hydra.lib.lists.foldl((lambda acc, b: hydra.lib.logic.or_(acc, hydra.lib.logic.not_(hydra.lib.sets.null(hydra.lib.sets.intersection(all_binding_names, hydra.rewriting.free_variables_in_term(b.term)))))), False, bindings), has_self_ref := hydra.lib.lists.foldl((lambda acc, b: hydra.lib.logic.or_(acc, hydra.lib.sets.member(b.name, hydra.rewriting.free_variables_in_term(b.term)))), False, bindings), is_recursive := has_self_ref, let_kind := hydra.lib.logic.if_else(is_recursive, (lambda : hydra.ext.lisp.syntax.LetKind.RECURSIVE), (lambda : hydra.lib.logic.if_else(hydra.lib.lists.null(hydra.lib.lists.tail(bindings)), (lambda : hydra.ext.lisp.syntax.LetKind.PARALLEL), (lambda : hydra.ext.lisp.syntax.LetKind.SEQUENTIAL)))), lisp_bindings := hydra.lib.lists.map((lambda eb: cast(hydra.ext.lisp.syntax.LetBinding, hydra.ext.lisp.syntax.LetBindingSimple(hydra.ext.lisp.syntax.SimpleBinding(hydra.ext.lisp.syntax.Symbol(hydra.lib.pairs.first(eb)), hydra.lib.pairs.second(eb))))), encoded_bindings), Right(cast(hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.ExpressionLet(hydra.ext.lisp.syntax.LetExpression(let_kind, lisp_bindings, (body_expr,))))))[6])))[1]))
 
-def encode_term(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, term: hydra.core.Term) -> Either[T2, hydra.ext.lisp.syntax.Expression]:
+def encode_term(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: hydra.graph.Graph, thunked_vars: frozenset[hydra.core.Name], term: hydra.core.Term) -> Either[T1, hydra.ext.lisp.syntax.Expression]:
     match term:
         case hydra.core.TermAnnotated(value=at):
-            return encode_term(dialect, cx, g, at.body)
+            return encode_term(dialect, cx, g, thunked_vars, at.body)
 
         case hydra.core.TermApplication(value=app):
             raw_fun = app.function
             raw_arg = app.argument
-            return encode_application(dialect, cx, g, raw_fun, raw_arg)
+            return encode_application(dialect, cx, g, thunked_vars, raw_fun, raw_arg)
 
         case hydra.core.TermEither(value=e):
-            return hydra.lib.eithers.either((lambda l: hydra.lib.eithers.bind(encode_term(dialect, cx, g, l), (lambda sl: Right(lisp_app(lisp_var("list"), (lisp_keyword("left"), sl)))))), (lambda r: hydra.lib.eithers.bind(encode_term(dialect, cx, g, r), (lambda sr: Right(lisp_app(lisp_var("list"), (lisp_keyword("right"), sr)))))), e)
+            return hydra.lib.eithers.either((lambda l: hydra.lib.eithers.bind(encode_term(dialect, cx, g, thunked_vars, l), (lambda sl: Right(lisp_app(lisp_var("list"), (lisp_keyword("left"), sl)))))), (lambda r: hydra.lib.eithers.bind(encode_term(dialect, cx, g, thunked_vars, r), (lambda sr: Right(lisp_app(lisp_var("list"), (lisp_keyword("right"), sr)))))), e)
 
         case hydra.core.TermFunction(value=fun):
-            return encode_function(dialect, cx, g, fun)
+            return encode_function(dialect, cx, g, thunked_vars, fun)
 
         case hydra.core.TermLet(value=lt):
             bindings = lt.bindings
             body = lt.body
-            return encode_let_as_native(dialect, cx, g, bindings, body)
+            return encode_let_as_native(dialect, cx, g, thunked_vars, bindings, body)
 
         case hydra.core.TermList(value=els):
-            return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v1: encode_term(dialect, cx, g, v1)), els), (lambda sels: Right(lisp_list_expr(sels))))
+            return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v1: encode_term(dialect, cx, g, thunked_vars, v1)), els), (lambda sels: Right(lisp_list_expr(sels))))
 
         case hydra.core.TermLiteral(value=lit):
             return Right(encode_literal(lit))
 
         case hydra.core.TermMap(value=m):
-            return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda entry: hydra.lib.eithers.bind(encode_term(dialect, cx, g, hydra.lib.pairs.first(entry)), (lambda k: hydra.lib.eithers.bind(encode_term(dialect, cx, g, hydra.lib.pairs.second(entry)), (lambda v: Right(hydra.ext.lisp.syntax.MapEntry(k, v))))))), hydra.lib.maps.to_list(m)), (lambda pairs: Right(cast(hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.ExpressionMap(hydra.ext.lisp.syntax.MapLiteral(pairs))))))
+            return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda entry: hydra.lib.eithers.bind(encode_term(dialect, cx, g, thunked_vars, hydra.lib.pairs.first(entry)), (lambda k: hydra.lib.eithers.bind(encode_term(dialect, cx, g, thunked_vars, hydra.lib.pairs.second(entry)), (lambda v: Right(hydra.ext.lisp.syntax.MapEntry(k, v))))))), hydra.lib.maps.to_list(m)), (lambda pairs: Right(cast(hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.ExpressionMap(hydra.ext.lisp.syntax.MapLiteral(pairs))))))
 
         case hydra.core.TermMaybe(value=mt):
-            return hydra.lib.maybes.cases(mt, (lambda : Right(lisp_app(lisp_var("list"), (lisp_keyword("nothing"),)))), (lambda val: hydra.lib.eithers.bind(encode_term(dialect, cx, g, val), (lambda sval: Right(lisp_app(lisp_var("list"), (lisp_keyword("just"), sval)))))))
+            return hydra.lib.maybes.cases(mt, (lambda : Right(lisp_app(lisp_var("list"), (lisp_keyword("nothing"),)))), (lambda val: hydra.lib.eithers.bind(encode_term(dialect, cx, g, thunked_vars, val), (lambda sval: Right(lisp_app(lisp_var("list"), (lisp_keyword("just"), sval)))))))
 
         case hydra.core.TermPair(value=p):
-            return hydra.lib.eithers.bind(encode_term(dialect, cx, g, hydra.lib.pairs.first(p)), (lambda f: hydra.lib.eithers.bind(encode_term(dialect, cx, g, hydra.lib.pairs.second(p)), (lambda s: Right(lisp_list_expr((f, s)))))))
+            return hydra.lib.eithers.bind(encode_term(dialect, cx, g, thunked_vars, hydra.lib.pairs.first(p)), (lambda f: hydra.lib.eithers.bind(encode_term(dialect, cx, g, thunked_vars, hydra.lib.pairs.second(p)), (lambda s: Right(lisp_list_expr((f, s)))))))
 
         case hydra.core.TermRecord(value=rec):
             rname = rec.type_name
             fields = rec.fields
-            return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda f: encode_term(dialect, cx, g, f.term)), fields), (lambda sfields: (constructor_name := hydra.lib.strings.cat2(dialect_constructor_prefix(dialect), qualified_snake_name(rname)), Right(lisp_app(lisp_var(constructor_name), sfields)))[1]))
+            return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda f: encode_term(dialect, cx, g, thunked_vars, f.term)), fields), (lambda sfields: (constructor_name := hydra.lib.strings.cat2(dialect_constructor_prefix(dialect), qualified_snake_name(rname)), Right(lisp_app(lisp_var(constructor_name), sfields)))[1]))
 
         case hydra.core.TermSet(value=s):
-            return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v1: encode_term(dialect, cx, g, v1)), hydra.lib.sets.to_list(s)), (lambda sels: Right(cast(hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.ExpressionSet(hydra.ext.lisp.syntax.SetLiteral(sels))))))
+            return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v1: encode_term(dialect, cx, g, thunked_vars, v1)), hydra.lib.sets.to_list(s)), (lambda sels: Right(cast(hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.ExpressionSet(hydra.ext.lisp.syntax.SetLiteral(sels))))))
 
         case hydra.core.TermUnion(value=inj):
             @lru_cache(1)
@@ -363,22 +397,31 @@ def encode_term(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, term: hyd
                         case _:
                             return False
                 return _hoist_is_unit_1(dterm())
-            return hydra.lib.logic.if_else(is_unit(), (lambda : Right(lisp_app(lisp_var("list"), (lisp_keyword(hydra.formatting.convert_case_camel_to_lower_snake(fname)), lisp_nil_expr)))), (lambda : hydra.lib.eithers.bind(encode_term(dialect, cx, g, fterm), (lambda sval: Right(lisp_app(lisp_var("list"), (lisp_keyword(hydra.formatting.convert_case_camel_to_lower_snake(fname)), sval)))))))
+            return hydra.lib.logic.if_else(is_unit(), (lambda : Right(lisp_app(lisp_var("list"), (lisp_keyword(hydra.formatting.convert_case_camel_to_lower_snake(fname)), lisp_nil_expr)))), (lambda : hydra.lib.eithers.bind(encode_term(dialect, cx, g, thunked_vars, fterm), (lambda sval: Right(lisp_app(lisp_var("list"), (lisp_keyword(hydra.formatting.convert_case_camel_to_lower_snake(fname)), sval)))))))
 
         case hydra.core.TermUnit():
             return Right(lisp_nil_expr)
 
         case hydra.core.TermVariable(value=name):
-            return Right(lisp_var(hydra.formatting.convert_case_camel_or_underscore_to_lower_snake(hydra.formatting.sanitize_with_underscores(hydra.ext.lisp.language.lisp_reserved_words(), name.value))))
+            @lru_cache(1)
+            def sname() -> str:
+                return hydra.formatting.convert_case_camel_or_underscore_to_lower_snake(hydra.formatting.sanitize_with_underscores(hydra.ext.lisp.language.lisp_reserved_words(), name.value))
+            @lru_cache(1)
+            def var_expr() -> hydra.ext.lisp.syntax.Expression:
+                return lisp_var(sname())
+            @lru_cache(1)
+            def is_thunked() -> bool:
+                return hydra.lib.sets.member(name, thunked_vars)
+            return hydra.lib.logic.if_else(is_thunked(), (lambda : Right(lisp_app(lisp_var("force"), (var_expr(),)))), (lambda : Right(var_expr())))
 
         case hydra.core.TermTypeApplication(value=ta):
-            return encode_term(dialect, cx, g, ta.body)
+            return encode_term(dialect, cx, g, thunked_vars, ta.body)
 
         case hydra.core.TermTypeLambda(value=tl):
-            return encode_term(dialect, cx, g, tl.body)
+            return encode_term(dialect, cx, g, thunked_vars, tl.body)
 
         case hydra.core.TermWrap(value=wt):
-            return encode_term(dialect, cx, g, wt.body)
+            return encode_term(dialect, cx, g, thunked_vars, wt.body)
 
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -387,13 +430,13 @@ def encode_field_def(ft: hydra.core.FieldType) -> hydra.ext.lisp.syntax.FieldDef
     fname = ft.name.value
     return hydra.ext.lisp.syntax.FieldDefinition(hydra.ext.lisp.syntax.Symbol(hydra.formatting.convert_case_camel_to_lower_snake(fname)), Nothing())
 
-def encode_let_as_lambda_app(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, bindings: frozenlist[hydra.core.Binding], body: hydra.core.Term) -> Either[hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression]:
-    return hydra.lib.eithers.bind(encode_term(dialect, cx, g, body), (lambda body_expr: hydra.lib.eithers.foldl((lambda acc, b: (bname := hydra.formatting.convert_case_camel_or_underscore_to_lower_snake(hydra.formatting.sanitize_with_underscores(hydra.ext.lisp.language.lisp_reserved_words(), b.name.value)), hydra.lib.eithers.bind(encode_term(dialect, cx, g, b.term), (lambda bval: Right(lisp_app(lisp_lambda_expr((bname,), acc), (bval,))))))[1]), body_expr, hydra.lib.lists.reverse(bindings))))
+def encode_let_as_lambda_app(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: hydra.graph.Graph, thunked_vars: frozenset[hydra.core.Name], bindings: frozenlist[hydra.core.Binding], body: hydra.core.Term) -> Either[hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression]:
+    return hydra.lib.eithers.bind(encode_term(dialect, cx, g, thunked_vars, body), (lambda body_expr: hydra.lib.eithers.foldl((lambda acc, b: (bname := hydra.formatting.convert_case_camel_or_underscore_to_lower_snake(hydra.formatting.sanitize_with_underscores(hydra.ext.lisp.language.lisp_reserved_words(), b.name.value)), hydra.lib.eithers.bind(encode_term(dialect, cx, g, thunked_vars, b.term), (lambda bval: Right(lisp_app(lisp_lambda_expr((bname,), acc), (bval,))))))[1]), body_expr, hydra.lib.lists.reverse(bindings))))
 
 def lisp_top_form(form: hydra.ext.lisp.syntax.TopLevelForm) -> hydra.ext.lisp.syntax.TopLevelFormWithComments:
     return hydra.ext.lisp.syntax.TopLevelFormWithComments(Nothing(), Nothing(), form)
 
-def encode_term_definition(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, tdef: hydra.module.TermDefinition):
+def encode_term_definition(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: hydra.graph.Graph, tdef: hydra.module.TermDefinition):
     name = tdef.name
     term = tdef.term
     @lru_cache(1)
@@ -405,16 +448,16 @@ def encode_term_definition(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1
     def _hoist_dterm_body_1(v1):
         match v1:
             case hydra.core.FunctionLambda():
-                return hydra.lib.eithers.bind(encode_term(dialect, cx, g, term), (lambda sterm: Right(lisp_top_form(cast(hydra.ext.lisp.syntax.TopLevelForm, hydra.ext.lisp.syntax.TopLevelFormVariable(hydra.ext.lisp.syntax.VariableDefinition(hydra.ext.lisp.syntax.Symbol(lname()), sterm, Nothing())))))))
+                return hydra.lib.eithers.bind(encode_term(dialect, cx, g, hydra.lib.sets.empty(), term), (lambda sterm: Right(lisp_top_form(cast(hydra.ext.lisp.syntax.TopLevelForm, hydra.ext.lisp.syntax.TopLevelFormVariable(hydra.ext.lisp.syntax.VariableDefinition(hydra.ext.lisp.syntax.Symbol(lname()), sterm, Nothing())))))))
 
             case _:
-                return hydra.lib.eithers.bind(encode_term(dialect, cx, g, term), (lambda sterm: Right(lisp_top_form(cast(hydra.ext.lisp.syntax.TopLevelForm, hydra.ext.lisp.syntax.TopLevelFormVariable(hydra.ext.lisp.syntax.VariableDefinition(hydra.ext.lisp.syntax.Symbol(lname()), sterm, Nothing())))))))
+                return hydra.lib.eithers.bind(encode_term(dialect, cx, g, hydra.lib.sets.empty(), term), (lambda sterm: Right(lisp_top_form(cast(hydra.ext.lisp.syntax.TopLevelForm, hydra.ext.lisp.syntax.TopLevelFormVariable(hydra.ext.lisp.syntax.VariableDefinition(hydra.ext.lisp.syntax.Symbol(lname()), sterm, Nothing())))))))
     match dterm():
         case hydra.core.TermFunction(value=fun):
             return _hoist_dterm_body_1(fun)
 
         case _:
-            return hydra.lib.eithers.bind(encode_term(dialect, cx, g, term), (lambda sterm: Right(lisp_top_form(cast(hydra.ext.lisp.syntax.TopLevelForm, hydra.ext.lisp.syntax.TopLevelFormVariable(hydra.ext.lisp.syntax.VariableDefinition(hydra.ext.lisp.syntax.Symbol(lname()), sterm, Nothing())))))))
+            return hydra.lib.eithers.bind(encode_term(dialect, cx, g, hydra.lib.sets.empty(), term), (lambda sterm: Right(lisp_top_form(cast(hydra.ext.lisp.syntax.TopLevelForm, hydra.ext.lisp.syntax.TopLevelFormVariable(hydra.ext.lisp.syntax.VariableDefinition(hydra.ext.lisp.syntax.Symbol(lname()), sterm, Nothing())))))))
 
 def encode_type(cx: T0, g: T1, t: hydra.core.Type):
     @lru_cache(1)
@@ -553,7 +596,7 @@ def module_imports(focus_ns: hydra.module.Namespace, defs: frozenlist[hydra.modu
         return hydra.lib.sets.to_list(hydra.lib.sets.delete(focus_ns, hydra.schemas.definition_dependency_namespaces(defs)))
     return hydra.lib.lists.map((lambda ns: hydra.ext.lisp.syntax.ImportDeclaration(hydra.ext.lisp.syntax.NamespaceName(ns.value), cast(hydra.ext.lisp.syntax.ImportSpec, hydra.ext.lisp.syntax.ImportSpecAll()))), dep_nss())
 
-def module_to_lisp(dialect: hydra.ext.lisp.syntax.Dialect, mod: hydra.module.Module, defs0: frozenlist[hydra.module.Definition], cx: T0, g: T1) -> Either[hydra.ext.lisp.syntax.Program, hydra.ext.lisp.syntax.Program]:
+def module_to_lisp(dialect: hydra.ext.lisp.syntax.Dialect, mod: hydra.module.Module, defs0: frozenlist[hydra.module.Definition], cx: T0, g: hydra.graph.Graph) -> Either[frozenlist[hydra.ext.lisp.syntax.TopLevelFormWithComments], hydra.ext.lisp.syntax.Program]:
     @lru_cache(1)
     def defs() -> frozenlist[hydra.module.Definition]:
         return hydra.coder_utils.reorder_defs(defs0)

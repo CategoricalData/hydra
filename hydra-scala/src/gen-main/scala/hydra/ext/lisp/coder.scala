@@ -48,14 +48,14 @@ def dialectEqual(d: hydra.ext.lisp.syntax.Dialect): scala.Predef.String =
   case hydra.ext.lisp.syntax.Dialect.emacsLisp => "equal"
   case _ => "equal?"
 
-def encodeApplication[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0)(g: T1)(rawFun: hydra.core.Term)(rawArg: hydra.core.Term): Either[T2,
+def encodeApplication[T0, T1](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0)(g: hydra.graph.Graph)(thunkedVars: scala.collection.immutable.Set[hydra.core.Name])(rawFun: hydra.core.Term)(rawArg: hydra.core.Term): Either[T1,
    hydra.ext.lisp.syntax.Expression] =
   {
   lazy val dFun: hydra.core.Term = hydra.rewriting.deannotateTerm(rawFun)
-  lazy val normal: Either[T2, hydra.ext.lisp.syntax.Expression] = hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression,
-     hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(rawFun))((fun: hydra.ext.lisp.syntax.Expression) =>
-    hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(rawArg))((arg: hydra.ext.lisp.syntax.Expression) => Right(hydra.ext.lisp.coder.lispApp(fun)(Seq(arg)))))
-  def enc(t: hydra.core.Term): Either[T2, hydra.ext.lisp.syntax.Expression] = hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(t)
+  lazy val normal: Either[T1, hydra.ext.lisp.syntax.Expression] = hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression,
+     hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(thunkedVars)(rawFun))((fun: hydra.ext.lisp.syntax.Expression) =>
+    hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(thunkedVars)(rawArg))((arg: hydra.ext.lisp.syntax.Expression) => Right(hydra.ext.lisp.coder.lispApp(fun)(Seq(arg)))))
+  def enc(t: hydra.core.Term): Either[T1, hydra.ext.lisp.syntax.Expression] = hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(thunkedVars)(t)
   dFun match
     case hydra.core.Term.application(v_Term_application_app2) => {
       lazy val midFun: hydra.core.Term = (v_Term_application_app2.function)
@@ -65,10 +65,10 @@ def encodeApplication[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0
           lazy val dMidFun: hydra.core.Term = hydra.rewriting.deannotateTerm(midFun)
           {
             lazy val isLazy2: Boolean = hydra.lib.logic.or(hydra.ext.lisp.coder.isPrimitiveRef("hydra.lib.eithers.fromLeft")(dMidFun))(hydra.lib.logic.or(hydra.ext.lisp.coder.isPrimitiveRef("hydra.lib.eithers.fromRight")(dMidFun))(hydra.ext.lisp.coder.isPrimitiveRef("hydra.lib.maybes.fromMaybe")(dMidFun)))
-            hydra.lib.logic.ifElse[Either[T2, hydra.ext.lisp.syntax.Expression]](isLazy2)(hydra.lib.eithers.bind[T2,
+            hydra.lib.logic.ifElse[Either[T1, hydra.ext.lisp.syntax.Expression]](isLazy2)(hydra.lib.eithers.bind[T1,
                hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](enc(midFun))((ePrim: hydra.ext.lisp.syntax.Expression) =>
-              hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](enc(midArg))((eDef: hydra.ext.lisp.syntax.Expression) =>
-              hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](enc(rawArg))((eArg: hydra.ext.lisp.syntax.Expression) =>
+              hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](enc(midArg))((eDef: hydra.ext.lisp.syntax.Expression) =>
+              hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](enc(rawArg))((eArg: hydra.ext.lisp.syntax.Expression) =>
               Right(hydra.ext.lisp.coder.lispApp(hydra.ext.lisp.coder.lispApp(ePrim)(Seq(hydra.ext.lisp.coder.wrapInThunk(eDef))))(Seq(eArg)))))))(dMidFun match
               case hydra.core.Term.application(v_Term_application_app3) => {
                 lazy val innerFun: hydra.core.Term = (v_Term_application_app3.function)
@@ -76,22 +76,22 @@ def encodeApplication[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0
                   lazy val innerArg: hydra.core.Term = (v_Term_application_app3.argument)
                   {
                     lazy val dInnerFun: hydra.core.Term = hydra.rewriting.deannotateTerm(innerFun)
-                    hydra.lib.logic.ifElse[Either[T2, hydra.ext.lisp.syntax.Expression]](hydra.ext.lisp.coder.isPrimitiveRef("hydra.lib.logic.ifElse")(dInnerFun))(hydra.lib.eithers.bind[T2,
+                    hydra.lib.logic.ifElse[Either[T1, hydra.ext.lisp.syntax.Expression]](hydra.ext.lisp.coder.isPrimitiveRef("hydra.lib.logic.ifElse")(dInnerFun))(hydra.lib.eithers.bind[T1,
                        hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](enc(innerArg))((eC: hydra.ext.lisp.syntax.Expression) =>
-                      hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](enc(midArg))((eT: hydra.ext.lisp.syntax.Expression) =>
-                      hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](enc(rawArg))((eE: hydra.ext.lisp.syntax.Expression) =>
+                      hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](enc(midArg))((eT: hydra.ext.lisp.syntax.Expression) =>
+                      hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](enc(rawArg))((eE: hydra.ext.lisp.syntax.Expression) =>
                       Right(hydra.ext.lisp.syntax.Expression.`if`(hydra.ext.lisp.syntax.IfExpression(eC,
-                         eT, Some(eE))))))))(hydra.lib.logic.ifElse[Either[T2, hydra.ext.lisp.syntax.Expression]](hydra.ext.lisp.coder.isPrimitiveRef("hydra.lib.maybes.maybe")(dInnerFun))(hydra.lib.eithers.bind[T2,
+                         eT, Some(eE))))))))(hydra.lib.logic.ifElse[Either[T1, hydra.ext.lisp.syntax.Expression]](hydra.ext.lisp.coder.isPrimitiveRef("hydra.lib.maybes.maybe")(dInnerFun))(hydra.lib.eithers.bind[T1,
                          hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](enc(innerFun))((eP: hydra.ext.lisp.syntax.Expression) =>
-                      hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](enc(innerArg))((eDef: hydra.ext.lisp.syntax.Expression) =>
-                      hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](enc(midArg))((eF: hydra.ext.lisp.syntax.Expression) =>
-                      hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](enc(rawArg))((eM: hydra.ext.lisp.syntax.Expression) =>
-                      Right(hydra.ext.lisp.coder.lispApp(hydra.ext.lisp.coder.lispApp(hydra.ext.lisp.coder.lispApp(eP)(Seq(hydra.ext.lisp.coder.wrapInThunk(eDef))))(Seq(eF)))(Seq(eM))))))))(hydra.lib.logic.ifElse[Either[T2,
-                         hydra.ext.lisp.syntax.Expression]](hydra.ext.lisp.coder.isPrimitiveRef("hydra.lib.maybes.cases")(dInnerFun))(hydra.lib.eithers.bind[T2,
+                      hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](enc(innerArg))((eDef: hydra.ext.lisp.syntax.Expression) =>
+                      hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](enc(midArg))((eF: hydra.ext.lisp.syntax.Expression) =>
+                      hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](enc(rawArg))((eM: hydra.ext.lisp.syntax.Expression) =>
+                      Right(hydra.ext.lisp.coder.lispApp(hydra.ext.lisp.coder.lispApp(hydra.ext.lisp.coder.lispApp(eP)(Seq(hydra.ext.lisp.coder.wrapInThunk(eDef))))(Seq(eF)))(Seq(eM))))))))(hydra.lib.logic.ifElse[Either[T1,
+                         hydra.ext.lisp.syntax.Expression]](hydra.ext.lisp.coder.isPrimitiveRef("hydra.lib.maybes.cases")(dInnerFun))(hydra.lib.eithers.bind[T1,
                          hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](enc(innerFun))((eP: hydra.ext.lisp.syntax.Expression) =>
-                      hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](enc(innerArg))((eM: hydra.ext.lisp.syntax.Expression) =>
-                      hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](enc(midArg))((eN: hydra.ext.lisp.syntax.Expression) =>
-                      hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](enc(rawArg))((eJ: hydra.ext.lisp.syntax.Expression) =>
+                      hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](enc(innerArg))((eM: hydra.ext.lisp.syntax.Expression) =>
+                      hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](enc(midArg))((eN: hydra.ext.lisp.syntax.Expression) =>
+                      hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](enc(rawArg))((eJ: hydra.ext.lisp.syntax.Expression) =>
                       Right(hydra.ext.lisp.coder.lispApp(hydra.ext.lisp.coder.lispApp(hydra.ext.lisp.coder.lispApp(eP)(Seq(eM)))(Seq(hydra.ext.lisp.coder.wrapInThunk(eN))))(Seq(eJ))))))))(normal)))
                   }
                 }
@@ -104,16 +104,16 @@ def encodeApplication[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0
     case _ => normal
 }
 
-def encodeElimination[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0)(g: T1)(elim: hydra.core.Elimination)(marg: Option[hydra.core.Term]): Either[T2,
+def encodeElimination[T0, T1](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0)(g: hydra.graph.Graph)(thunkedVars: scala.collection.immutable.Set[hydra.core.Name])(elim: hydra.core.Elimination)(marg: Option[hydra.core.Term]): Either[T1,
    hydra.ext.lisp.syntax.Expression] =
   elim match
   case hydra.core.Elimination.record(v_Elimination_record_proj) => {
     lazy val fname: scala.Predef.String = hydra.formatting.convertCaseCamelToLowerSnake(v_Elimination_record_proj.field)
     {
       lazy val tname: scala.Predef.String = hydra.ext.lisp.coder.qualifiedSnakeName(v_Elimination_record_proj.typeName)
-      hydra.lib.maybes.cases[hydra.core.Term, Either[T2, hydra.ext.lisp.syntax.Expression]](marg)(Right(hydra.ext.lisp.coder.lispLambdaExpr(Seq("v"))(hydra.ext.lisp.syntax.Expression.fieldAccess(hydra.ext.lisp.syntax.FieldAccess(tname,
+      hydra.lib.maybes.cases[hydra.core.Term, Either[T1, hydra.ext.lisp.syntax.Expression]](marg)(Right(hydra.ext.lisp.coder.lispLambdaExpr(Seq("v"))(hydra.ext.lisp.syntax.Expression.fieldAccess(hydra.ext.lisp.syntax.FieldAccess(tname,
          fname, hydra.ext.lisp.coder.lispVar("v"))))))((arg: hydra.core.Term) =>
-        hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(arg))((sarg: hydra.ext.lisp.syntax.Expression) =>
+        hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(thunkedVars)(arg))((sarg: hydra.ext.lisp.syntax.Expression) =>
         Right(hydra.ext.lisp.syntax.Expression.fieldAccess(hydra.ext.lisp.syntax.FieldAccess(tname, fname, sarg)))))
     }
   }
@@ -123,8 +123,8 @@ def encodeElimination[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0
       lazy val caseFields: Seq[hydra.core.Field] = (v_Elimination_union_cs.cases)
       {
         lazy val defCase: Option[hydra.core.Term] = (v_Elimination_union_cs.default)
-        hydra.lib.eithers.bind[T2, Seq[hydra.ext.lisp.syntax.CondClause], hydra.ext.lisp.syntax.Expression](hydra.lib.eithers.mapList[hydra.core.Field,
-           hydra.ext.lisp.syntax.CondClause, T2]((cf: hydra.core.Field) =>
+        hydra.lib.eithers.bind[T1, Seq[hydra.ext.lisp.syntax.CondClause], hydra.ext.lisp.syntax.Expression](hydra.lib.eithers.mapList[hydra.core.Field,
+           hydra.ext.lisp.syntax.CondClause, T1]((cf: hydra.core.Field) =>
           {
           lazy val cfname: scala.Predef.String = hydra.formatting.convertCaseCamelToLowerSnake(cf.name)
           {
@@ -132,21 +132,21 @@ def encodeElimination[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0
             {
               lazy val condExpr: hydra.ext.lisp.syntax.Expression = hydra.ext.lisp.coder.lispApp(hydra.ext.lisp.coder.lispVar(hydra.ext.lisp.coder.dialectEqual(dialect)))(Seq(hydra.ext.lisp.coder.lispApp(hydra.ext.lisp.coder.lispVar(hydra.ext.lisp.coder.dialectCar(dialect)))(Seq(hydra.ext.lisp.coder.lispVar("match_target"))),
                  hydra.ext.lisp.coder.lispKeyword(cfname)))
-              hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.CondClause](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(hydra.core.Term.application(hydra.core.Application(cfterm,
+              hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.CondClause](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(thunkedVars)(hydra.core.Term.application(hydra.core.Application(cfterm,
                  hydra.core.Term.variable("match_value")))))((bodyExpr: hydra.ext.lisp.syntax.Expression) => Right(hydra.ext.lisp.syntax.CondClause(condExpr,
                  bodyExpr)))
             }
           }
         })(caseFields))((clauses: Seq[hydra.ext.lisp.syntax.CondClause]) =>
-          hydra.lib.eithers.bind[T2, Option[hydra.ext.lisp.syntax.Expression], hydra.ext.lisp.syntax.Expression](hydra.lib.maybes.cases[hydra.core.Term,
-             Either[T2, Option[hydra.ext.lisp.syntax.Expression]]](defCase)(Right(None))((dt: hydra.core.Term) =>
-          hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, Option[hydra.ext.lisp.syntax.Expression]](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(dt))((defBody: hydra.ext.lisp.syntax.Expression) => Right(Some(defBody)))))((defExpr: Option[hydra.ext.lisp.syntax.Expression]) =>
+          hydra.lib.eithers.bind[T1, Option[hydra.ext.lisp.syntax.Expression], hydra.ext.lisp.syntax.Expression](hydra.lib.maybes.cases[hydra.core.Term,
+             Either[T1, Option[hydra.ext.lisp.syntax.Expression]]](defCase)(Right(None))((dt: hydra.core.Term) =>
+          hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, Option[hydra.ext.lisp.syntax.Expression]](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(thunkedVars)(dt))((defBody: hydra.ext.lisp.syntax.Expression) => Right(Some(defBody)))))((defExpr: Option[hydra.ext.lisp.syntax.Expression]) =>
           {
           lazy val condExpr: hydra.ext.lisp.syntax.Expression = hydra.ext.lisp.syntax.Expression.cond(hydra.ext.lisp.syntax.CondExpression(clauses, defExpr))
           {
             lazy val innerExpr: hydra.ext.lisp.syntax.Expression = hydra.ext.lisp.coder.lispApp(hydra.ext.lisp.coder.lispLambdaExpr(Seq("match_value"))(condExpr))(Seq(hydra.ext.lisp.coder.lispApp(hydra.ext.lisp.coder.lispVar(hydra.ext.lisp.coder.dialectCadr(dialect)))(Seq(hydra.ext.lisp.coder.lispVar("match_target")))))
-            hydra.lib.maybes.cases[hydra.core.Term, Either[T2, hydra.ext.lisp.syntax.Expression]](marg)(Right(hydra.ext.lisp.coder.lispLambdaExpr(Seq("match_target"))(innerExpr)))((arg: hydra.core.Term) =>
-              hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(arg))((sarg: hydra.ext.lisp.syntax.Expression) =>
+            hydra.lib.maybes.cases[hydra.core.Term, Either[T1, hydra.ext.lisp.syntax.Expression]](marg)(Right(hydra.ext.lisp.coder.lispLambdaExpr(Seq("match_target"))(innerExpr)))((arg: hydra.core.Term) =>
+              hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(thunkedVars)(arg))((sarg: hydra.ext.lisp.syntax.Expression) =>
               Right(hydra.ext.lisp.coder.lispApp(hydra.ext.lisp.coder.lispLambdaExpr(Seq("match_target"))(innerExpr))(Seq(sarg)))))
           }
         }))
@@ -154,7 +154,8 @@ def encodeElimination[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0
     }
   }
   case hydra.core.Elimination.wrap(v_Elimination_wrap_name) => hydra.lib.maybes.cases[hydra.core.Term,
-     Either[T2, hydra.ext.lisp.syntax.Expression]](marg)(Right(hydra.ext.lisp.coder.lispLambdaExpr(Seq("v"))(hydra.ext.lisp.coder.lispVar("v"))))((arg: hydra.core.Term) => hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(arg))
+     Either[T1, hydra.ext.lisp.syntax.Expression]](marg)(Right(hydra.ext.lisp.coder.lispLambdaExpr(Seq("v"))(hydra.ext.lisp.coder.lispVar("v"))))((arg: hydra.core.Term) =>
+    hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(thunkedVars)(arg))
 
 def encodeFieldDef(ft: hydra.core.FieldType): hydra.ext.lisp.syntax.FieldDefinition =
   {
@@ -162,33 +163,39 @@ def encodeFieldDef(ft: hydra.core.FieldType): hydra.ext.lisp.syntax.FieldDefinit
   hydra.ext.lisp.syntax.FieldDefinition(hydra.formatting.convertCaseCamelToLowerSnake(fname), None)
 }
 
-def encodeFunction[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0)(g: T1)(fun: hydra.core.Function): Either[T2, hydra.ext.lisp.syntax.Expression] =
+def encodeFunction[T0, T1](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0)(g: hydra.graph.Graph)(thunkedVars: scala.collection.immutable.Set[hydra.core.Name])(fun: hydra.core.Function): Either[T1,
+   hydra.ext.lisp.syntax.Expression] =
   fun match
   case hydra.core.Function.lambda(v_Function_lambda_lam) => {
     lazy val param: scala.Predef.String = hydra.formatting.convertCaseCamelOrUnderscoreToLowerSnake(hydra.formatting.sanitizeWithUnderscores(hydra.ext.lisp.language.lispReservedWords)(v_Function_lambda_lam.parameter))
-    hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(v_Function_lambda_lam.body))((body: hydra.ext.lisp.syntax.Expression) => Right(hydra.ext.lisp.coder.lispLambdaExpr(Seq(param))(body)))
+    hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(thunkedVars)(v_Function_lambda_lam.body))((body: hydra.ext.lisp.syntax.Expression) => Right(hydra.ext.lisp.coder.lispLambdaExpr(Seq(param))(body)))
   }
   case hydra.core.Function.primitive(v_Function_primitive_name) => Right(hydra.ext.lisp.coder.lispVar(hydra.formatting.convertCaseCamelOrUnderscoreToLowerSnake(hydra.formatting.sanitizeWithUnderscores(hydra.ext.lisp.language.lispReservedWords)(v_Function_primitive_name))))
-  case hydra.core.Function.elimination(v_Function_elimination_elim) => hydra.ext.lisp.coder.encodeElimination(dialect)(cx)(g)(v_Function_elimination_elim)(None)
+  case hydra.core.Function.elimination(v_Function_elimination_elim) => hydra.ext.lisp.coder.encodeElimination(dialect)(cx)(g)(thunkedVars)(v_Function_elimination_elim)(None)
 
-def encodeLetAsLambdaApp[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0)(g: T1)(bindings: Seq[hydra.core.Binding])(body: hydra.core.Term): Either[T2,
+def encodeLetAsLambdaApp[T0, T1](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0)(g: hydra.graph.Graph)(thunkedVars: scala.collection.immutable.Set[hydra.core.Name])(bindings: Seq[hydra.core.Binding])(body: hydra.core.Term): Either[T1,
    hydra.ext.lisp.syntax.Expression] =
-  hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(body))((bodyExpr: hydra.ext.lisp.syntax.Expression) =>
-  hydra.lib.eithers.foldl[hydra.ext.lisp.syntax.Expression, hydra.core.Binding, T2]((acc: hydra.ext.lisp.syntax.Expression) =>
+  hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(thunkedVars)(body))((bodyExpr: hydra.ext.lisp.syntax.Expression) =>
+  hydra.lib.eithers.foldl[hydra.ext.lisp.syntax.Expression, hydra.core.Binding, T1]((acc: hydra.ext.lisp.syntax.Expression) =>
   (b: hydra.core.Binding) =>
   {
   lazy val bname: scala.Predef.String = hydra.formatting.convertCaseCamelOrUnderscoreToLowerSnake(hydra.formatting.sanitizeWithUnderscores(hydra.ext.lisp.language.lispReservedWords)(b.name))
-  hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(b.term))((bval: hydra.ext.lisp.syntax.Expression) =>
+  hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(thunkedVars)(b.term))((bval: hydra.ext.lisp.syntax.Expression) =>
     Right(hydra.ext.lisp.coder.lispApp(hydra.ext.lisp.coder.lispLambdaExpr(Seq(bname))(acc))(Seq(bval))))
 })(bodyExpr)(hydra.lib.lists.reverse[hydra.core.Binding](bindings)))
 
-def encodeLetAsNative[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0)(g: T1)(bindings: Seq[hydra.core.Binding])(body: hydra.core.Term): Either[T2,
+def encodeLetAsNative[T0, T1](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0)(g: hydra.graph.Graph)(thunkedVars: scala.collection.immutable.Set[hydra.core.Name])(bindings: Seq[hydra.core.Binding])(body: hydra.core.Term): Either[T1,
    hydra.ext.lisp.syntax.Expression] =
   {
   lazy val isClojureTop: Boolean = dialect match
     case hydra.ext.lisp.syntax.Dialect.clojure => true
     case _ => false
-  hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(body))((bodyExpr: hydra.ext.lisp.syntax.Expression) =>
+  lazy val gExtended: hydra.graph.Graph = hydra.rewriting.extendGraphForLet(hydra.ext.lisp.coder.lispBindingMetadata)(g)(hydra.core.Let(bindings, body))
+  lazy val newThunkedNames: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.maybes.cat[hydra.core.Name](hydra.lib.lists.map[hydra.core.Binding,
+     Option[hydra.core.Name]]((b: hydra.core.Binding) =>
+    hydra.lib.logic.ifElse[Option[hydra.core.Name]](hydra.ext.lisp.coder.lispShouldThunkBinding(g)(b))(Some(b.name))(None))(bindings)))
+  lazy val thunkedVarsExtended: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.union[hydra.core.Name](thunkedVars)(newThunkedNames)
+  hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(gExtended)(thunkedVarsExtended)(body))((bodyExpr: hydra.ext.lisp.syntax.Expression) =>
     {
     lazy val sortedBindings: Seq[hydra.core.Binding] = hydra.lib.logic.ifElse[Seq[hydra.core.Binding]](true)({
       lazy val allNames: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.lists.map[hydra.core.Binding,
@@ -205,8 +212,8 @@ def encodeLetAsNative[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0
         hydra.lib.maybes.fromMaybe[hydra.core.Binding](hydra.lib.lists.head[hydra.core.Binding](bindings))(hydra.lib.maps.lookup[hydra.core.Name,
            hydra.core.Binding](name)(nameToBinding)))(sorted))(sortResult)
     })(bindings)
-    hydra.lib.eithers.bind[T2, Seq[Tuple2[scala.Predef.String, hydra.ext.lisp.syntax.Expression]], hydra.ext.lisp.syntax.Expression](hydra.lib.eithers.mapList[hydra.core.Binding,
-       Tuple2[scala.Predef.String, hydra.ext.lisp.syntax.Expression], T2]((b: hydra.core.Binding) =>
+    hydra.lib.eithers.bind[T1, Seq[Tuple2[scala.Predef.String, hydra.ext.lisp.syntax.Expression]], hydra.ext.lisp.syntax.Expression](hydra.lib.eithers.mapList[hydra.core.Binding,
+       Tuple2[scala.Predef.String, hydra.ext.lisp.syntax.Expression], T1]((b: hydra.core.Binding) =>
       {
       lazy val bname: scala.Predef.String = hydra.formatting.convertCaseCamelOrUnderscoreToLowerSnake(hydra.formatting.sanitizeWithUnderscores(hydra.ext.lisp.language.lispReservedWords)(b.name))
       {
@@ -217,19 +224,25 @@ def encodeLetAsNative[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0
               case hydra.core.Function.lambda(v_Function_lambda__) => true
               case _ => false
             case _ => false
-          hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, Tuple2[scala.Predef.String, hydra.ext.lisp.syntax.Expression]](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(b.term))((bval: hydra.ext.lisp.syntax.Expression) =>
-            {
-            lazy val isClojure: Boolean = dialect match
-              case hydra.ext.lisp.syntax.Dialect.clojure => true
-              case _ => false
-            {
-              lazy val wrappedVal: hydra.ext.lisp.syntax.Expression = hydra.lib.logic.ifElse[hydra.ext.lisp.syntax.Expression](isClojure)(hydra.lib.logic.ifElse[hydra.ext.lisp.syntax.Expression](isSelfRef)(hydra.lib.logic.ifElse[hydra.ext.lisp.syntax.Expression](isLambda)(bval match
-                case hydra.ext.lisp.syntax.Expression.lambda(v_Expression_lambda_lam) => hydra.ext.lisp.syntax.Expression.lambda(hydra.ext.lisp.syntax.Lambda(Some(bname),
-                   (v_Expression_lambda_lam.params), (v_Expression_lambda_lam.restParam), (v_Expression_lambda_lam.body)))
-                case _ => bval)(hydra.ext.lisp.coder.lispNamedLambdaExpr(bname)(Seq("_arg"))(hydra.ext.lisp.coder.lispApp(bval)(Seq(hydra.ext.lisp.coder.lispVar("_arg"))))))(bval))(hydra.lib.logic.ifElse[hydra.ext.lisp.syntax.Expression](hydra.lib.logic.and(isSelfRef)(hydra.lib.logic.not(isLambda)))(hydra.ext.lisp.coder.lispLambdaExpr(Seq("_arg"))(hydra.ext.lisp.coder.lispApp(bval)(Seq(hydra.ext.lisp.coder.lispVar("_arg")))))(bval))
-              Right(Tuple2(bname, wrappedVal))
-            }
-          })
+          {
+            lazy val needsThunk: Boolean = hydra.ext.lisp.coder.lispShouldThunkBinding(g)(b)
+            hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, Tuple2[scala.Predef.String, hydra.ext.lisp.syntax.Expression]](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(gExtended)(thunkedVarsExtended)(b.term))((bval: hydra.ext.lisp.syntax.Expression) =>
+              {
+              lazy val isClojure: Boolean = dialect match
+                case hydra.ext.lisp.syntax.Dialect.clojure => true
+                case _ => false
+              {
+                lazy val wrappedVal: hydra.ext.lisp.syntax.Expression = hydra.lib.logic.ifElse[hydra.ext.lisp.syntax.Expression](isClojure)(hydra.lib.logic.ifElse[hydra.ext.lisp.syntax.Expression](isSelfRef)(hydra.lib.logic.ifElse[hydra.ext.lisp.syntax.Expression](isLambda)(bval match
+                  case hydra.ext.lisp.syntax.Expression.lambda(v_Expression_lambda_lam) => hydra.ext.lisp.syntax.Expression.lambda(hydra.ext.lisp.syntax.Lambda(Some(bname),
+                     (v_Expression_lambda_lam.params), (v_Expression_lambda_lam.restParam), (v_Expression_lambda_lam.body)))
+                  case _ => bval)(hydra.ext.lisp.coder.lispNamedLambdaExpr(bname)(Seq("_arg"))(hydra.ext.lisp.coder.lispApp(bval)(Seq(hydra.ext.lisp.coder.lispVar("_arg"))))))(bval))(hydra.lib.logic.ifElse[hydra.ext.lisp.syntax.Expression](hydra.lib.logic.and(isSelfRef)(hydra.lib.logic.not(isLambda)))(hydra.ext.lisp.coder.lispLambdaExpr(Seq("_arg"))(hydra.ext.lisp.coder.lispApp(bval)(Seq(hydra.ext.lisp.coder.lispVar("_arg")))))(bval))
+                {
+                  lazy val thunkedVal: hydra.ext.lisp.syntax.Expression = hydra.lib.logic.ifElse[hydra.ext.lisp.syntax.Expression](hydra.lib.logic.and(needsThunk)(hydra.lib.logic.not(isSelfRef)))(hydra.ext.lisp.coder.wrapInDelay(wrappedVal))(wrappedVal)
+                  Right(Tuple2(bname, thunkedVal))
+                }
+              }
+            })
+          }
         }
       }
     })(sortedBindings))((encodedBindings: Seq[Tuple2[scala.Predef.String, hydra.ext.lisp.syntax.Expression]]) =>
@@ -302,67 +315,71 @@ def encodeLiteral(lit: hydra.core.Literal): hydra.ext.lisp.syntax.Expression =
          false))))(byteValues)))
   }
 
-def encodeTerm[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0)(g: T1)(term: hydra.core.Term): Either[T2, hydra.ext.lisp.syntax.Expression] =
+def encodeTerm[T0, T1](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0)(g: hydra.graph.Graph)(thunkedVars: scala.collection.immutable.Set[hydra.core.Name])(term: hydra.core.Term): Either[T1,
+   hydra.ext.lisp.syntax.Expression] =
   term match
-  case hydra.core.Term.annotated(v_Term_annotated_at) => hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(v_Term_annotated_at.body)
+  case hydra.core.Term.annotated(v_Term_annotated_at) => hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(thunkedVars)(v_Term_annotated_at.body)
   case hydra.core.Term.application(v_Term_application_app) => {
     lazy val rawFun: hydra.core.Term = (v_Term_application_app.function)
     {
       lazy val rawArg: hydra.core.Term = (v_Term_application_app.argument)
-      hydra.ext.lisp.coder.encodeApplication(dialect)(cx)(g)(rawFun)(rawArg)
+      hydra.ext.lisp.coder.encodeApplication(dialect)(cx)(g)(thunkedVars)(rawFun)(rawArg)
     }
   }
   case hydra.core.Term.either(v_Term_either_e) => hydra.lib.eithers.either[hydra.core.Term, hydra.core.Term,
-     Either[T2, hydra.ext.lisp.syntax.Expression]]((l: hydra.core.Term) =>
-    hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(l))((sl: hydra.ext.lisp.syntax.Expression) =>
+     Either[T1, hydra.ext.lisp.syntax.Expression]]((l: hydra.core.Term) =>
+    hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(thunkedVars)(l))((sl: hydra.ext.lisp.syntax.Expression) =>
     Right(hydra.ext.lisp.coder.lispApp(hydra.ext.lisp.coder.lispVar("list"))(Seq(hydra.ext.lisp.coder.lispKeyword("left"), sl)))))((r: hydra.core.Term) =>
-    hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(r))((sr: hydra.ext.lisp.syntax.Expression) =>
+    hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(thunkedVars)(r))((sr: hydra.ext.lisp.syntax.Expression) =>
     Right(hydra.ext.lisp.coder.lispApp(hydra.ext.lisp.coder.lispVar("list"))(Seq(hydra.ext.lisp.coder.lispKeyword("right"), sr)))))(v_Term_either_e)
-  case hydra.core.Term.function(v_Term_function_fun) => hydra.ext.lisp.coder.encodeFunction(dialect)(cx)(g)(v_Term_function_fun)
+  case hydra.core.Term.function(v_Term_function_fun) => hydra.ext.lisp.coder.encodeFunction(dialect)(cx)(g)(thunkedVars)(v_Term_function_fun)
   case hydra.core.Term.let(v_Term_let_lt) => {
     lazy val bindings: Seq[hydra.core.Binding] = (v_Term_let_lt.bindings)
     {
       lazy val body: hydra.core.Term = (v_Term_let_lt.body)
-      hydra.ext.lisp.coder.encodeLetAsNative(dialect)(cx)(g)(bindings)(body)
+      hydra.ext.lisp.coder.encodeLetAsNative(dialect)(cx)(g)(thunkedVars)(bindings)(body)
     }
   }
-  case hydra.core.Term.list(v_Term_list_els) => hydra.lib.eithers.bind[T2, Seq[hydra.ext.lisp.syntax.Expression],
+  case hydra.core.Term.list(v_Term_list_els) => hydra.lib.eithers.bind[T1, Seq[hydra.ext.lisp.syntax.Expression],
      hydra.ext.lisp.syntax.Expression](hydra.lib.eithers.mapList[hydra.core.Term, hydra.ext.lisp.syntax.Expression,
-     T2]((v1: hydra.core.Term) => hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(v1))(v_Term_list_els))((sels: Seq[hydra.ext.lisp.syntax.Expression]) => Right(hydra.ext.lisp.coder.lispListExpr(sels)))
+     T1]((v1: hydra.core.Term) =>
+    hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(thunkedVars)(v1))(v_Term_list_els))((sels: Seq[hydra.ext.lisp.syntax.Expression]) => Right(hydra.ext.lisp.coder.lispListExpr(sels)))
   case hydra.core.Term.literal(v_Term_literal_lit) => Right(hydra.ext.lisp.coder.encodeLiteral(v_Term_literal_lit))
-  case hydra.core.Term.map(v_Term_map_m) => hydra.lib.eithers.bind[T2, Seq[hydra.ext.lisp.syntax.MapEntry],
+  case hydra.core.Term.map(v_Term_map_m) => hydra.lib.eithers.bind[T1, Seq[hydra.ext.lisp.syntax.MapEntry],
      hydra.ext.lisp.syntax.Expression](hydra.lib.eithers.mapList[Tuple2[hydra.core.Term, hydra.core.Term],
-     hydra.ext.lisp.syntax.MapEntry, T2]((entry: Tuple2[hydra.core.Term, hydra.core.Term]) =>
-    hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.MapEntry](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(hydra.lib.pairs.first[hydra.core.Term,
+     hydra.ext.lisp.syntax.MapEntry, T1]((entry: Tuple2[hydra.core.Term, hydra.core.Term]) =>
+    hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.MapEntry](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(thunkedVars)(hydra.lib.pairs.first[hydra.core.Term,
        hydra.core.Term](entry)))((k: hydra.ext.lisp.syntax.Expression) =>
-    hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.MapEntry](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(hydra.lib.pairs.second[hydra.core.Term,
+    hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.MapEntry](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(thunkedVars)(hydra.lib.pairs.second[hydra.core.Term,
        hydra.core.Term](entry)))((v: hydra.ext.lisp.syntax.Expression) => Right(hydra.ext.lisp.syntax.MapEntry(k,
        v)))))(hydra.lib.maps.toList[hydra.core.Term, hydra.core.Term](v_Term_map_m)))((pairs: Seq[hydra.ext.lisp.syntax.MapEntry]) =>
     Right(hydra.ext.lisp.syntax.Expression.map(hydra.ext.lisp.syntax.MapLiteral(pairs))))
-  case hydra.core.Term.maybe(v_Term_maybe_mt) => hydra.lib.maybes.cases[hydra.core.Term, Either[T2, hydra.ext.lisp.syntax.Expression]](v_Term_maybe_mt)(Right(hydra.ext.lisp.coder.lispApp(hydra.ext.lisp.coder.lispVar("list"))(Seq(hydra.ext.lisp.coder.lispKeyword("nothing")))))((`val`: hydra.core.Term) =>
-    hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(`val`))((sval: hydra.ext.lisp.syntax.Expression) =>
+  case hydra.core.Term.maybe(v_Term_maybe_mt) => hydra.lib.maybes.cases[hydra.core.Term, Either[T1, hydra.ext.lisp.syntax.Expression]](v_Term_maybe_mt)(Right(hydra.ext.lisp.coder.lispApp(hydra.ext.lisp.coder.lispVar("list"))(Seq(hydra.ext.lisp.coder.lispKeyword("nothing")))))((`val`: hydra.core.Term) =>
+    hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(thunkedVars)(`val`))((sval: hydra.ext.lisp.syntax.Expression) =>
     Right(hydra.ext.lisp.coder.lispApp(hydra.ext.lisp.coder.lispVar("list"))(Seq(hydra.ext.lisp.coder.lispKeyword("just"), sval)))))
-  case hydra.core.Term.pair(v_Term_pair_p) => hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression,
-     hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(hydra.lib.pairs.first[hydra.core.Term,
+  case hydra.core.Term.pair(v_Term_pair_p) => hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression,
+     hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(thunkedVars)(hydra.lib.pairs.first[hydra.core.Term,
      hydra.core.Term](v_Term_pair_p)))((f: hydra.ext.lisp.syntax.Expression) =>
-    hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(hydra.lib.pairs.second[hydra.core.Term,
+    hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(thunkedVars)(hydra.lib.pairs.second[hydra.core.Term,
        hydra.core.Term](v_Term_pair_p)))((s: hydra.ext.lisp.syntax.Expression) => Right(hydra.ext.lisp.coder.lispListExpr(Seq(f,
        s)))))
   case hydra.core.Term.record(v_Term_record_rec) => {
     lazy val rname: hydra.core.Name = (v_Term_record_rec.typeName)
     {
       lazy val fields: Seq[hydra.core.Field] = (v_Term_record_rec.fields)
-      hydra.lib.eithers.bind[T2, Seq[hydra.ext.lisp.syntax.Expression], hydra.ext.lisp.syntax.Expression](hydra.lib.eithers.mapList[hydra.core.Field,
-         hydra.ext.lisp.syntax.Expression, T2]((f: hydra.core.Field) => hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(f.term))(fields))((sfields: Seq[hydra.ext.lisp.syntax.Expression]) =>
+      hydra.lib.eithers.bind[T1, Seq[hydra.ext.lisp.syntax.Expression], hydra.ext.lisp.syntax.Expression](hydra.lib.eithers.mapList[hydra.core.Field,
+         hydra.ext.lisp.syntax.Expression, T1]((f: hydra.core.Field) =>
+        hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(thunkedVars)(f.term))(fields))((sfields: Seq[hydra.ext.lisp.syntax.Expression]) =>
         {
         lazy val constructorName: scala.Predef.String = hydra.lib.strings.cat2(hydra.ext.lisp.coder.dialectConstructorPrefix(dialect))(hydra.ext.lisp.coder.qualifiedSnakeName(rname))
         Right(hydra.ext.lisp.coder.lispApp(hydra.ext.lisp.coder.lispVar(constructorName))(sfields))
       })
     }
   }
-  case hydra.core.Term.set(v_Term_set_s) => hydra.lib.eithers.bind[T2, Seq[hydra.ext.lisp.syntax.Expression],
+  case hydra.core.Term.set(v_Term_set_s) => hydra.lib.eithers.bind[T1, Seq[hydra.ext.lisp.syntax.Expression],
      hydra.ext.lisp.syntax.Expression](hydra.lib.eithers.mapList[hydra.core.Term, hydra.ext.lisp.syntax.Expression,
-     T2]((v1: hydra.core.Term) => hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(v1))(hydra.lib.sets.toList[hydra.core.Term](v_Term_set_s)))((sels: Seq[hydra.ext.lisp.syntax.Expression]) =>
+     T1]((v1: hydra.core.Term) =>
+    hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(thunkedVars)(v1))(hydra.lib.sets.toList[hydra.core.Term](v_Term_set_s)))((sels: Seq[hydra.ext.lisp.syntax.Expression]) =>
     Right(hydra.ext.lisp.syntax.Expression.set(hydra.ext.lisp.syntax.SetLiteral(sels))))
   case hydra.core.Term.union(v_Term_union_inj) => {
     lazy val tname: scala.Predef.String = hydra.names.localNameOf(v_Term_union_inj.typeName)
@@ -379,9 +396,9 @@ def encodeTerm[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0)(g: T1
                 case hydra.core.Term.unit => true
                 case hydra.core.Term.record(v_Term_record_rt) => hydra.lib.lists.`null`[hydra.core.Field](v_Term_record_rt.fields)
                 case _ => false
-              hydra.lib.logic.ifElse[Either[T2, hydra.ext.lisp.syntax.Expression]](isUnit)(Right(hydra.ext.lisp.coder.lispApp(hydra.ext.lisp.coder.lispVar("list"))(Seq(hydra.ext.lisp.coder.lispKeyword(hydra.formatting.convertCaseCamelToLowerSnake(fname)),
-                 hydra.ext.lisp.coder.lispNilExpr))))(hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression,
-                 hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(fterm))((sval: hydra.ext.lisp.syntax.Expression) =>
+              hydra.lib.logic.ifElse[Either[T1, hydra.ext.lisp.syntax.Expression]](isUnit)(Right(hydra.ext.lisp.coder.lispApp(hydra.ext.lisp.coder.lispVar("list"))(Seq(hydra.ext.lisp.coder.lispKeyword(hydra.formatting.convertCaseCamelToLowerSnake(fname)),
+                 hydra.ext.lisp.coder.lispNilExpr))))(hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression,
+                 hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(thunkedVars)(fterm))((sval: hydra.ext.lisp.syntax.Expression) =>
                 Right(hydra.ext.lisp.coder.lispApp(hydra.ext.lisp.coder.lispVar("list"))(Seq(hydra.ext.lisp.coder.lispKeyword(hydra.formatting.convertCaseCamelToLowerSnake(fname)),
                    sval)))))
             }
@@ -391,12 +408,21 @@ def encodeTerm[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0)(g: T1
     }
   }
   case hydra.core.Term.unit => Right(hydra.ext.lisp.coder.lispNilExpr)
-  case hydra.core.Term.variable(v_Term_variable_name) => Right(hydra.ext.lisp.coder.lispVar(hydra.formatting.convertCaseCamelOrUnderscoreToLowerSnake(hydra.formatting.sanitizeWithUnderscores(hydra.ext.lisp.language.lispReservedWords)(v_Term_variable_name))))
-  case hydra.core.Term.typeApplication(v_Term_typeApplication_ta) => hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(v_Term_typeApplication_ta.body)
-  case hydra.core.Term.typeLambda(v_Term_typeLambda_tl) => hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(v_Term_typeLambda_tl.body)
-  case hydra.core.Term.wrap(v_Term_wrap_wt) => hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(v_Term_wrap_wt.body)
+  case hydra.core.Term.variable(v_Term_variable_name) => {
+    lazy val sname: scala.Predef.String = hydra.formatting.convertCaseCamelOrUnderscoreToLowerSnake(hydra.formatting.sanitizeWithUnderscores(hydra.ext.lisp.language.lispReservedWords)(v_Term_variable_name))
+    {
+      lazy val varExpr: hydra.ext.lisp.syntax.Expression = hydra.ext.lisp.coder.lispVar(sname)
+      {
+        lazy val isThunked: Boolean = hydra.lib.sets.member[hydra.core.Name](v_Term_variable_name)(thunkedVars)
+        hydra.lib.logic.ifElse[Either[T1, hydra.ext.lisp.syntax.Expression]](isThunked)(Right(hydra.ext.lisp.coder.lispApp(hydra.ext.lisp.coder.lispVar("force"))(Seq(varExpr))))(Right(varExpr))
+      }
+    }
+  }
+  case hydra.core.Term.typeApplication(v_Term_typeApplication_ta) => hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(thunkedVars)(v_Term_typeApplication_ta.body)
+  case hydra.core.Term.typeLambda(v_Term_typeLambda_tl) => hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(thunkedVars)(v_Term_typeLambda_tl.body)
+  case hydra.core.Term.wrap(v_Term_wrap_wt) => hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(thunkedVars)(v_Term_wrap_wt.body)
 
-def encodeTermDefinition[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0)(g: T1)(tdef: hydra.module.TermDefinition): Either[T2,
+def encodeTermDefinition[T0, T1](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0)(g: hydra.graph.Graph)(tdef: hydra.module.TermDefinition): Either[T1,
    hydra.ext.lisp.syntax.TopLevelFormWithComments] =
   {
   lazy val name: hydra.core.Name = (tdef.name)
@@ -405,12 +431,12 @@ def encodeTermDefinition[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx:
   lazy val dterm: hydra.core.Term = hydra.rewriting.deannotateTerm(term)
   dterm match
     case hydra.core.Term.function(v_Term_function_fun) => v_Term_function_fun match
-      case hydra.core.Function.lambda(v_Function_lambda_lam) => hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression,
-         hydra.ext.lisp.syntax.TopLevelFormWithComments](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(term))((sterm: hydra.ext.lisp.syntax.Expression) =>
+      case hydra.core.Function.lambda(v_Function_lambda_lam) => hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression,
+         hydra.ext.lisp.syntax.TopLevelFormWithComments](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(hydra.lib.sets.empty[hydra.core.Name])(term))((sterm: hydra.ext.lisp.syntax.Expression) =>
         Right(hydra.ext.lisp.coder.lispTopForm(hydra.ext.lisp.syntax.TopLevelForm.variable(hydra.ext.lisp.syntax.VariableDefinition(lname, sterm, None)))))
-      case _ => hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.TopLevelFormWithComments](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(term))((sterm: hydra.ext.lisp.syntax.Expression) =>
+      case _ => hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.TopLevelFormWithComments](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(hydra.lib.sets.empty[hydra.core.Name])(term))((sterm: hydra.ext.lisp.syntax.Expression) =>
         Right(hydra.ext.lisp.coder.lispTopForm(hydra.ext.lisp.syntax.TopLevelForm.variable(hydra.ext.lisp.syntax.VariableDefinition(lname, sterm, None)))))
-    case _ => hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.TopLevelFormWithComments](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(term))((sterm: hydra.ext.lisp.syntax.Expression) =>
+    case _ => hydra.lib.eithers.bind[T1, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.TopLevelFormWithComments](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(hydra.lib.sets.empty[hydra.core.Name])(term))((sterm: hydra.ext.lisp.syntax.Expression) =>
       Right(hydra.ext.lisp.coder.lispTopForm(hydra.ext.lisp.syntax.TopLevelForm.variable(hydra.ext.lisp.syntax.VariableDefinition(lname, sterm, None)))))
 }
 
@@ -497,6 +523,9 @@ def isPrimitiveRef(primName: scala.Predef.String)(term: hydra.core.Term): Boolea
 def lispApp(fun: hydra.ext.lisp.syntax.Expression)(args: Seq[hydra.ext.lisp.syntax.Expression]): hydra.ext.lisp.syntax.Expression =
   hydra.ext.lisp.syntax.Expression.application(hydra.ext.lisp.syntax.Application(fun, args))
 
+def lispBindingMetadata(g: hydra.graph.Graph)(b: hydra.core.Binding): Option[hydra.core.Term] =
+  hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.ext.lisp.coder.lispShouldThunkBinding(g)(b))(hydra.coderUtils.bindingMetadata(g)(b))(None)
+
 def lispKeyword(name: scala.Predef.String): hydra.ext.lisp.syntax.Expression =
   hydra.ext.lisp.syntax.Expression.literal(hydra.ext.lisp.syntax.Literal.keyword(hydra.ext.lisp.syntax.Keyword(name, None)))
 
@@ -514,6 +543,17 @@ def lispNamedLambdaExpr(name: scala.Predef.String)(params: Seq[scala.Predef.Stri
      hydra.ext.lisp.syntax.Symbol]((p: scala.Predef.String) => p)(params), None, Seq(body)))
 
 lazy val lispNilExpr: hydra.ext.lisp.syntax.Expression = hydra.ext.lisp.syntax.Expression.literal(hydra.ext.lisp.syntax.Literal.nil)
+
+def lispShouldThunkBinding[T0](g: T0)(b: hydra.core.Binding): Boolean =
+  {
+  lazy val term: hydra.core.Term = (b.term)
+  lazy val isLambda: Boolean = hydra.rewriting.deannotateTerm(term) match
+    case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
+      case hydra.core.Function.lambda(v_Function_lambda__) => true
+      case _ => false
+    case _ => false
+  false
+}
 
 def lispSymbol(name: scala.Predef.String): hydra.ext.lisp.syntax.Symbol = name
 
@@ -563,7 +603,7 @@ def moduleImports(focusNs: hydra.module.Namespace)(defs: Seq[hydra.module.Defini
     hydra.ext.lisp.syntax.ImportDeclaration(ns, hydra.ext.lisp.syntax.ImportSpec.all))(depNss)
 }
 
-def moduleToLisp[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(mod: hydra.module.Module)(defs0: Seq[hydra.module.Definition])(cx: T0)(g: T1): Either[T2,
+def moduleToLisp[T0, T1](dialect: hydra.ext.lisp.syntax.Dialect)(mod: hydra.module.Module)(defs0: Seq[hydra.module.Definition])(cx: T0)(g: hydra.graph.Graph): Either[T1,
    hydra.ext.lisp.syntax.Program] =
   {
   lazy val defs: Seq[hydra.module.Definition] = hydra.coderUtils.reorderDefs(defs0)
@@ -572,10 +612,10 @@ def moduleToLisp[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(mod: hydra.
      Seq[hydra.module.TermDefinition]](partitioned)
   lazy val termDefs: Seq[hydra.module.TermDefinition] = hydra.lib.pairs.second[Seq[hydra.module.TypeDefinition], Seq[hydra.module.TermDefinition]](partitioned)
   lazy val typeDefs: Seq[hydra.module.TypeDefinition] = hydra.lib.lists.filter[hydra.module.TypeDefinition]((td: hydra.module.TypeDefinition) => hydra.schemas.isNominalType(td.`type`))(allTypeDefs)
-  hydra.lib.eithers.bind[T2, Seq[hydra.ext.lisp.syntax.TopLevelFormWithComments], hydra.ext.lisp.syntax.Program](hydra.lib.eithers.mapList[hydra.module.TypeDefinition,
-     hydra.ext.lisp.syntax.TopLevelFormWithComments, T2]((v1: hydra.module.TypeDefinition) => hydra.ext.lisp.coder.encodeTypeDefinition(cx)(g)(v1))(typeDefs))((typeItems: Seq[hydra.ext.lisp.syntax.TopLevelFormWithComments]) =>
-    hydra.lib.eithers.bind[T2, Seq[hydra.ext.lisp.syntax.TopLevelFormWithComments], hydra.ext.lisp.syntax.Program](hydra.lib.eithers.mapList[hydra.module.TermDefinition,
-       hydra.ext.lisp.syntax.TopLevelFormWithComments, T2]((v1: hydra.module.TermDefinition) =>
+  hydra.lib.eithers.bind[T1, Seq[hydra.ext.lisp.syntax.TopLevelFormWithComments], hydra.ext.lisp.syntax.Program](hydra.lib.eithers.mapList[hydra.module.TypeDefinition,
+     hydra.ext.lisp.syntax.TopLevelFormWithComments, T1]((v1: hydra.module.TypeDefinition) => hydra.ext.lisp.coder.encodeTypeDefinition(cx)(g)(v1))(typeDefs))((typeItems: Seq[hydra.ext.lisp.syntax.TopLevelFormWithComments]) =>
+    hydra.lib.eithers.bind[T1, Seq[hydra.ext.lisp.syntax.TopLevelFormWithComments], hydra.ext.lisp.syntax.Program](hydra.lib.eithers.mapList[hydra.module.TermDefinition,
+       hydra.ext.lisp.syntax.TopLevelFormWithComments, T1]((v1: hydra.module.TermDefinition) =>
     hydra.ext.lisp.coder.encodeTermDefinition(dialect)(cx)(g)(v1))(termDefs))((termItems: Seq[hydra.ext.lisp.syntax.TopLevelFormWithComments]) =>
     {
     lazy val allItems: Seq[hydra.ext.lisp.syntax.TopLevelFormWithComments] = hydra.lib.lists.concat2[hydra.ext.lisp.syntax.TopLevelFormWithComments](typeItems)(termItems)
@@ -605,6 +645,8 @@ def qualifiedSnakeName(name: hydra.core.Name): scala.Predef.String =
 }
 
 def qualifiedTypeName(name: hydra.core.Name): scala.Predef.String = hydra.formatting.capitalize(hydra.names.localNameOf(name))
+
+def wrapInDelay(expr: hydra.ext.lisp.syntax.Expression): hydra.ext.lisp.syntax.Expression = hydra.ext.lisp.coder.lispApp(hydra.ext.lisp.coder.lispVar("delay"))(Seq(expr))
 
 def wrapInThunk(expr: hydra.ext.lisp.syntax.Expression): hydra.ext.lisp.syntax.Expression =
   hydra.ext.lisp.syntax.Expression.lambda(hydra.ext.lisp.syntax.Lambda(None, Seq(), None, Seq(expr)))
