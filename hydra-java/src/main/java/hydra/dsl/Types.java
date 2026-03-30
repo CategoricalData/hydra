@@ -452,8 +452,8 @@ public interface Types {
 
     /**
      * Create a polymorphic type scheme with explicit type variables and constraints.
-     * Example: polyConstrained(Map.of("a", Set.of(name("hydra.core.Eq"))), function(var("a"), var("a"), boolean_()))
-     * This represents a type forall a. (Eq a) => a -> a -> Boolean
+     * Example: {@code polyConstrained(Map.of("a", Set.of(name("hydra.core.Eq"))), function(var("a"), var("a"), boolean_()))}
+     * This represents a type {@code forall a. (Eq a) => a -> a -> Boolean}
      * @param vsWithConstraints a map from type variable names to sets of typeclass constraint names
      * @param body the body type
      * @return the type scheme
