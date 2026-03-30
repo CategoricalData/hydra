@@ -16,9 +16,13 @@ public interface Coder {
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.lang.Void> checkRecordName(hydra.context.Context cx, hydra.core.Name expected, hydra.core.Name actual) {
     return hydra.pg.Coder.check(
       cx,
-      hydra.lib.equality.Equal.apply(
-        (actual).value,
-        (expected).value),
+      hydra.lib.logic.Or.apply(
+        hydra.lib.equality.Equal.apply(
+          (expected).value,
+          "placeholder"),
+        hydra.lib.equality.Equal.apply(
+          (actual).value,
+          (expected).value)),
       hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, java.lang.Void>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
         hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
