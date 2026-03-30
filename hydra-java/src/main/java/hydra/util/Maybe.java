@@ -98,7 +98,7 @@ public class Maybe<T> implements Serializable, Comparable<Maybe> {
     }
 
     /**
-     * Compares this Maybe to another. Nothing < Just, and Just values are compared by their content.
+     * Compares this Maybe to another. Nothing &lt; Just, and Just values are compared by their content.
      */
     @Override
     @SuppressWarnings("unchecked")

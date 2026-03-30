@@ -23,7 +23,7 @@ import hydra.util.Either;
 
 /**
  * Monadic left fold over a list using Either.
- * Type: (a -> b -> Either z a) -> a -> [b] -> Either z a
+ * Type: {@code (a -> b -> Either z a) -> a -> [b] -> Either z a}
  */
 public class Foldl extends PrimitiveFunction {
     public static final Name NAME = new Name("hydra.lib.eithers.foldl");
