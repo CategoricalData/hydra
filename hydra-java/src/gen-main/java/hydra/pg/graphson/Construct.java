@@ -6,6 +6,33 @@ package hydra.pg.graphson;
  * Functions for constructing GraphSON vertices from property graph vertices.
  */
 public interface Construct {
+  static <T0, T1> hydra.util.Either<T1, hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>> adjacentEdgeToGraphson(java.util.function.Function<T0, hydra.util.Either<T1, hydra.pg.graphson.syntax.Value>> encodeValue, hydra.pg.model.AdjacentEdge<T0> edge) {
+    hydra.util.Lazy<hydra.pg.model.EdgeLabel> label = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.pg.model.AdjacentEdge<T0>, hydra.pg.model.EdgeLabel>) (projected -> projected.label)).apply(edge));
+    return hydra.lib.eithers.Bind.apply(
+      (encodeValue).apply(hydra.pg.graphson.Construct.<T0>adjacentEdgeToGraphson_edgeId(edge)),
+      (java.util.function.Function<hydra.pg.graphson.syntax.Value, hydra.util.Either<T1, hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>>>) (gid -> hydra.lib.eithers.Bind.apply(
+        (encodeValue).apply(hydra.pg.graphson.Construct.<T0>adjacentEdgeToGraphson_vertexId(edge)),
+        (java.util.function.Function<hydra.pg.graphson.syntax.Value, hydra.util.Either<T1, hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>>>) (gv -> hydra.lib.eithers.Bind.apply(
+          hydra.lib.eithers.MapList.apply(
+            (java.util.function.Function<hydra.util.Pair<hydra.pg.model.PropertyKey, T0>, hydra.util.Either<T1, hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.Value>>>) (v1 -> hydra.pg.graphson.Construct.edgePropertyToGraphson(
+              encodeValue,
+              v1)),
+            hydra.lib.maps.ToList.apply(hydra.pg.graphson.Construct.<T0>adjacentEdgeToGraphson_props(edge))),
+          (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.Value>>, hydra.util.Either<T1, hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>>>) (propPairs -> hydra.util.Either.<T1, hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>>right((hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>) ((hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>) (new hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>(new hydra.pg.graphson.syntax.EdgeLabel(label.get().value), new hydra.pg.graphson.syntax.AdjacentEdge(gid, gv, hydra.lib.maps.FromList.apply(propPairs))))))))))));
+  }
+
+  static <T0> T0 adjacentEdgeToGraphson_edgeId(hydra.pg.model.AdjacentEdge<T0> edge) {
+    return ((java.util.function.Function<hydra.pg.model.AdjacentEdge<T0>, T0>) (projected -> projected.id)).apply(edge);
+  }
+
+  static <T0> hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T0> adjacentEdgeToGraphson_props(hydra.pg.model.AdjacentEdge<T0> edge) {
+    return ((java.util.function.Function<hydra.pg.model.AdjacentEdge<T0>, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T0>>) (projected -> projected.properties)).apply(edge);
+  }
+
+  static <T0> T0 adjacentEdgeToGraphson_vertexId(hydra.pg.model.AdjacentEdge<T0> edge) {
+    return ((java.util.function.Function<hydra.pg.model.AdjacentEdge<T0>, T0>) (projected -> projected.vertex)).apply(edge);
+  }
+
   static <T0, T1> hydra.util.PersistentMap<T0, hydra.util.ConsList<T1>> aggregateMap(hydra.util.ConsList<hydra.util.Pair<T0, T1>> pairs) {
     return hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<hydra.util.PersistentMap<T0, hydra.util.ConsList<T1>>, java.util.function.Function<hydra.util.Pair<T0, T1>, hydra.util.PersistentMap<T0, hydra.util.ConsList<T1>>>>) (m -> (java.util.function.Function<hydra.util.Pair<T0, T1>, hydra.util.PersistentMap<T0, hydra.util.ConsList<T1>>>) (p -> {
@@ -27,45 +54,18 @@ public interface Construct {
       pairs);
   }
 
-  static <T0, T1> T0 aggregateMap_k(hydra.util.Pair<T0, T1> p) {
-    return hydra.lib.pairs.First.apply(p);
-  }
-
-  static <T0, T1> T1 aggregateMap_v(hydra.util.Pair<T0, T1> p) {
-    return hydra.lib.pairs.Second.apply(p);
-  }
-
   static <T0, T1> hydra.util.Maybe<hydra.util.ConsList<T1>> aggregateMap_existing(T0 k, hydra.util.PersistentMap<T0, hydra.util.ConsList<T1>> m) {
     return hydra.lib.maps.Lookup.apply(
       k,
       m);
   }
 
-  static <T0, T1> hydra.util.Either<T1, hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>> adjacentEdgeToGraphson(java.util.function.Function<T0, hydra.util.Either<T1, hydra.pg.graphson.syntax.Value>> encodeValue, hydra.pg.model.AdjacentEdge<T0> edge) {
-    hydra.util.Lazy<hydra.pg.model.EdgeLabel> label = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.pg.model.AdjacentEdge<T0>, hydra.pg.model.EdgeLabel>) (projected -> projected.label)).apply(edge));
-    return hydra.lib.eithers.Bind.apply(
-      (encodeValue).apply(hydra.pg.graphson.Construct.<T0>adjacentEdgeToGraphson_edgeId(edge)),
-      (java.util.function.Function<hydra.pg.graphson.syntax.Value, hydra.util.Either<T1, hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>>>) (gid -> hydra.lib.eithers.Bind.apply(
-        (encodeValue).apply(hydra.pg.graphson.Construct.<T0>adjacentEdgeToGraphson_vertexId(edge)),
-        (java.util.function.Function<hydra.pg.graphson.syntax.Value, hydra.util.Either<T1, hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>>>) (gv -> hydra.lib.eithers.Bind.apply(
-          hydra.lib.eithers.MapList.apply(
-            (java.util.function.Function<hydra.util.Pair<hydra.pg.model.PropertyKey, T0>, hydra.util.Either<T1, hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.Value>>>) (v1 -> hydra.pg.graphson.Construct.edgePropertyToGraphson(
-              encodeValue,
-              v1)),
-            hydra.lib.maps.ToList.apply(hydra.pg.graphson.Construct.<T0>adjacentEdgeToGraphson_props(edge))),
-          (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.Value>>, hydra.util.Either<T1, hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>>>) (propPairs -> hydra.util.Either.<T1, hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>>right((hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>) ((hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>) (new hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>(new hydra.pg.graphson.syntax.EdgeLabel(label.get().value), new hydra.pg.graphson.syntax.AdjacentEdge(gid, gv, hydra.lib.maps.FromList.apply(propPairs))))))))))));
+  static <T0, T1> T0 aggregateMap_k(hydra.util.Pair<T0, T1> p) {
+    return hydra.lib.pairs.First.apply(p);
   }
 
-  static <T0> T0 adjacentEdgeToGraphson_edgeId(hydra.pg.model.AdjacentEdge<T0> edge) {
-    return ((java.util.function.Function<hydra.pg.model.AdjacentEdge<T0>, T0>) (projected -> projected.id)).apply(edge);
-  }
-
-  static <T0> T0 adjacentEdgeToGraphson_vertexId(hydra.pg.model.AdjacentEdge<T0> edge) {
-    return ((java.util.function.Function<hydra.pg.model.AdjacentEdge<T0>, T0>) (projected -> projected.vertex)).apply(edge);
-  }
-
-  static <T0> hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T0> adjacentEdgeToGraphson_props(hydra.pg.model.AdjacentEdge<T0> edge) {
-    return ((java.util.function.Function<hydra.pg.model.AdjacentEdge<T0>, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T0>>) (projected -> projected.properties)).apply(edge);
+  static <T0, T1> T1 aggregateMap_v(hydra.util.Pair<T0, T1> p) {
+    return hydra.lib.pairs.Second.apply(p);
   }
 
   static <T0, T1, T2> hydra.util.Either<T1, hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, T2>> edgePropertyToGraphson(java.util.function.Function<T0, hydra.util.Either<T1, T2>> encodeValue, hydra.util.Pair<hydra.pg.model.PropertyKey, T0> prop) {
@@ -104,10 +104,6 @@ public interface Construct {
             (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>>, hydra.util.Either<T1, hydra.pg.graphson.syntax.Vertex>>) (outPairs -> hydra.util.Either.<T1, hydra.pg.graphson.syntax.Vertex>right(new hydra.pg.graphson.syntax.Vertex(gid, hydra.util.Maybe.just(new hydra.pg.graphson.syntax.VertexLabel(label.get().value)), hydra.pg.graphson.Construct.aggregateMap(inPairs), hydra.pg.graphson.Construct.aggregateMap(outPairs), hydra.pg.graphson.Construct.aggregateMap(propPairs)))))))))));
   }
 
-  static <T0> hydra.pg.model.Vertex<T0> pgVertexWithAdjacentEdgesToGraphsonVertex_vertex(hydra.pg.model.VertexWithAdjacentEdges<T0> vae) {
-    return ((java.util.function.Function<hydra.pg.model.VertexWithAdjacentEdges<T0>, hydra.pg.model.Vertex<T0>>) (projected -> projected.vertex)).apply(vae);
-  }
-
   static <T0> hydra.util.ConsList<hydra.pg.model.AdjacentEdge<T0>> pgVertexWithAdjacentEdgesToGraphsonVertex_ins(hydra.pg.model.VertexWithAdjacentEdges<T0> vae) {
     return ((java.util.function.Function<hydra.pg.model.VertexWithAdjacentEdges<T0>, hydra.util.ConsList<hydra.pg.model.AdjacentEdge<T0>>>) (projected -> projected.ins)).apply(vae);
   }
@@ -116,12 +112,16 @@ public interface Construct {
     return ((java.util.function.Function<hydra.pg.model.VertexWithAdjacentEdges<T0>, hydra.util.ConsList<hydra.pg.model.AdjacentEdge<T0>>>) (projected -> projected.outs)).apply(vae);
   }
 
-  static <T0> T0 pgVertexWithAdjacentEdgesToGraphsonVertex_vertexId(hydra.pg.model.Vertex<T0> vertex) {
-    return ((java.util.function.Function<hydra.pg.model.Vertex<T0>, T0>) (projected -> projected.id)).apply(vertex);
-  }
-
   static <T0> hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T0> pgVertexWithAdjacentEdgesToGraphsonVertex_props(hydra.pg.model.Vertex<T0> vertex) {
     return ((java.util.function.Function<hydra.pg.model.Vertex<T0>, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T0>>) (projected -> projected.properties)).apply(vertex);
+  }
+
+  static <T0> hydra.pg.model.Vertex<T0> pgVertexWithAdjacentEdgesToGraphsonVertex_vertex(hydra.pg.model.VertexWithAdjacentEdges<T0> vae) {
+    return ((java.util.function.Function<hydra.pg.model.VertexWithAdjacentEdges<T0>, hydra.pg.model.Vertex<T0>>) (projected -> projected.vertex)).apply(vae);
+  }
+
+  static <T0> T0 pgVertexWithAdjacentEdgesToGraphsonVertex_vertexId(hydra.pg.model.Vertex<T0> vertex) {
+    return ((java.util.function.Function<hydra.pg.model.Vertex<T0>, T0>) (projected -> projected.id)).apply(vertex);
   }
 
   static <T0, T1> hydra.util.Either<T1, hydra.json.model.Value> pgVertexWithAdjacentEdgesToJson(java.util.function.Function<T0, hydra.util.Either<T1, hydra.pg.graphson.syntax.Value>> encodeValue, hydra.pg.model.VertexWithAdjacentEdges<T0> vertex) {
