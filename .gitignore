@@ -37,6 +37,7 @@ __pycache__/
 node_modules/
 
 # Other
+*.log
 *.swp
 .claude
 # Hydra branch plan files (see CLAUDE.md)
