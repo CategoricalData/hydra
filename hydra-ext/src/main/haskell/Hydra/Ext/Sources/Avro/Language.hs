@@ -80,17 +80,17 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
 module_ = Module (Namespace "hydra.ext.avro.language")
-  [toTermDefinition avroLanguage]
+  [toDefinition avroLanguage]
   [Lexical.ns, Rewriting.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints for Apache Avro"
 
-avroLanguage :: TBinding Language
+avroLanguage :: TTermDefinition Language
 avroLanguage = define "avroLanguage" $
   doc "Language constraints for Apache Avro" $ lets [
   "eliminationVariants">: Sets.empty,

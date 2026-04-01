@@ -71,7 +71,7 @@ import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 ns :: Namespace
 ns = Namespace "hydra.reduction"
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
@@ -83,23 +83,23 @@ module_ = Module ns elements
     Just "Functions for reducing terms and types, i.e. performing computations."
   where
    elements = [
-     toTermDefinition alphaConvert,
-     toTermDefinition betaReduceType,
-     toTermDefinition contractTerm,
-     toTermDefinition countPrimitiveInvocations,
-     toTermDefinition etaReduceTerm,
-     toTermDefinition etaExpandTerm,
-     toTermDefinition etaExpandTermNew,
-     toTermDefinition etaExpansionArity,
-     toTermDefinition etaExpandTypedTerm,
-     toTermDefinition reduceTerm,
-     toTermDefinition termIsClosed,
-     toTermDefinition termIsValue]
+     toDefinition alphaConvert,
+     toDefinition betaReduceType,
+     toDefinition contractTerm,
+     toDefinition countPrimitiveInvocations,
+     toDefinition etaReduceTerm,
+     toDefinition etaExpandTerm,
+     toDefinition etaExpandTermNew,
+     toDefinition etaExpansionArity,
+     toDefinition etaExpandTypedTerm,
+     toDefinition reduceTerm,
+     toDefinition termIsClosed,
+     toDefinition termIsValue]
 
 formatError :: TTerm (InContext Error -> String)
 formatError = "_fic" ~> ShowError.error_ @@ Ctx.inContextObject (var "_fic")
 
-alphaConvert :: TBinding (Name -> Name -> Term -> Term)
+alphaConvert :: TTermDefinition (Name -> Name -> Term -> Term)
 alphaConvert = define "alphaConvert" $
   doc "Alpha convert a variable in a term" $
   "vold" ~> "vnew" ~> "term" ~>
@@ -107,7 +107,7 @@ alphaConvert = define "alphaConvert" $
 
 -- Note: this is eager beta reduction, in that we always descend into subtypes,
 --       and always reduce the right-hand side of an application prior to substitution
-betaReduceType :: TBinding (Context -> Graph -> Type -> Prelude.Either (InContext Error) Type)
+betaReduceType :: TTermDefinition (Context -> Graph -> Type -> Prelude.Either (InContext Error) Type)
 betaReduceType = define "betaReduceType" $
   doc "Eagerly beta-reduce a type by substituting type arguments into type lambdas" $
   "cx" ~> "graph" ~> "typ" ~>
@@ -136,7 +136,7 @@ betaReduceType = define "betaReduceType" $
     var "findApp" @@ var "r") $
   Rewriting.rewriteTypeM @@ var "mapExpr" @@ var "typ"
 
-contractTerm :: TBinding (Term -> Term)
+contractTerm :: TTermDefinition (Term -> Term)
 contractTerm = define "contractTerm" $
   doc ("Apply the special rules:\n"
     <> "    ((\\x.e1) e2) == e1, where x does not appear free in e1\n"
@@ -164,11 +164,11 @@ contractTerm = define "contractTerm" $
   Rewriting.rewriteTerm @@ var "rewrite" @@ var "term"
 
 -- For demo purposes. This should be generalized to enable additional side effects of interest.
-countPrimitiveInvocations :: TBinding Bool
+countPrimitiveInvocations :: TTermDefinition Bool
 countPrimitiveInvocations = define "countPrimitiveInvocations" true
 
 -- TODO: see notes on etaExpansionArity
-etaExpandTerm :: TBinding (Graph -> Term -> Term)
+etaExpandTerm :: TTermDefinition (Graph -> Term -> Term)
 etaExpandTerm = define "etaExpandTerm" $
   doc ("Recursively transform arbitrary terms like 'add 42' into terms like '\\x.add 42 x', in which the implicit"
     <> " parameters of primitive functions and eliminations are made into explicit lambda parameters."
@@ -214,7 +214,7 @@ etaExpandTerm = define "etaExpandTerm" $
 -- 1. Pure because we look up types directly from the context
 -- 2. Manually tracks Graph when entering lambdas, lets, and type lambdas
 -- 3. Preserves existing type annotations where possible
-etaExpandTermNew :: TBinding (Graph -> Term -> Term)
+etaExpandTermNew :: TTermDefinition (Graph -> Term -> Term)
 etaExpandTermNew = define "etaExpandTermNew" $
   doc ("Recursively transform terms to eliminate partial application, e.g. 'add 42' becomes '\\x.add 42 x'."
     <> " Uses the Graph to look up types for arity calculation."
@@ -540,7 +540,7 @@ etaExpandTermNew = define "etaExpandTermNew" $
 --       etaExpansionArity won't give the correct answer unless it has access to the full lexical environment
 --       of each subterm in which it is applied, including lambda-bound variables as well as nested let-bound variables.
 --       The new function need not be monadic, because we don't need to call typeOf; it just needs accurate type lookups.
-etaExpansionArity :: TBinding (Graph -> Term -> Int)
+etaExpansionArity :: TTermDefinition (Graph -> Term -> Int)
 etaExpansionArity = define "etaExpansionArity" $
   doc ("Calculate the arity for eta expansion"
     <> " Note: this is a \"trusty\" function which assumes the graph is well-formed, i.e. no dangling references.") $
@@ -568,7 +568,7 @@ etaExpansionArity = define "etaExpansionArity" $
           ("b" ~> Core.bindingType $ var "b"))]
 
 -- TODO: add lambda domains as part of the rewriting process, so inference does not need to be performed again.
-etaExpandTypedTerm :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext Error) Term)
+etaExpandTypedTerm :: TTermDefinition (Context -> Graph -> Term -> Prelude.Either (InContext Error) Term)
 etaExpandTypedTerm = define "etaExpandTypedTerm" $
   doc ("Recursively transform arbitrary terms like 'add 42' into terms like '\\x.add 42 x',"
     <> " eliminating partial application. Variable references are not expanded."
@@ -712,7 +712,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
         var "recurse" @@ var "txt" @@ var "term"]) $
   Rewriting.rewriteTermWithContextM @@ (var "rewrite" @@ true @@ false @@ list ([] :: [TTerm Type])) @@ var "tx0" @@ var "term0"
 
-etaReduceTerm :: TBinding (Term -> Term)
+etaReduceTerm :: TTermDefinition (Term -> Term)
 etaReduceTerm = define "etaReduceTerm" $
   doc "Eta-reduce a term by removing redundant lambda abstractions" $
   "term" ~>
@@ -751,7 +751,7 @@ etaReduceTerm = define "etaReduceTerm" $
         (Just $ var "noChange") [
         _Function_lambda>>: "l" ~> var "reduceLambda" @@ var "l"]]
 
-reduceTerm :: TBinding (Context -> Graph -> Bool -> Term -> Prelude.Either (InContext Error) Term)
+reduceTerm :: TTermDefinition (Context -> Graph -> Bool -> Term -> Prelude.Either (InContext Error) Term)
 reduceTerm = define "reduceTerm" $
   doc "A term evaluation function which is alternatively lazy or eager" $
   "cx" ~> "graph" ~> "eager" ~> "term" ~>
@@ -908,12 +908,12 @@ reduceTerm = define "reduceTerm" $
     var "applyIfNullary" @@ var "eager" @@ var "inner" @@ (list ([] :: [TTerm Term]))) $
   Rewriting.rewriteTermM @@ var "mapping" @@ var "term"
 
-termIsClosed :: TBinding (Term -> Bool)
+termIsClosed :: TTermDefinition (Term -> Bool)
 termIsClosed = define "termIsClosed" $
   doc "Whether a term is closed, i.e. represents a complete program" $
   "term" ~> Sets.null $ Rewriting.freeVariablesInTerm @@ var "term"
 
-termIsValue :: TBinding (Term -> Bool)
+termIsValue :: TTermDefinition (Term -> Bool)
 termIsValue = define "termIsValue" $
   doc "Whether a term has been fully reduced to a value" $
   "term" ~>

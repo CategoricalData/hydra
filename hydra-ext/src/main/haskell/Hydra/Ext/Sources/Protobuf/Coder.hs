@@ -54,7 +54,7 @@ import qualified Hydra.Ext.Sources.Protobuf.Environment as ProtobufEnvironment
 import qualified Hydra.Ext.Sources.Protobuf.Serde as ProtobufSerdeSource
 
 
-def :: String -> TTerm a -> TBinding a
+def :: String -> TTerm a -> TTermDefinition a
 def = definitionInModule module_
 
 -- | Name for the StructuralTypeRef union type (either | pair)
@@ -82,45 +82,45 @@ module_ = Module ns elements
     Just "Protobuf code generator: converts Hydra modules to Protocol Buffers v3 definitions"
   where
     elements = [
-      toTermDefinition key_proto_field_index,
-      toTermDefinition err,
-      toTermDefinition unexpectedE,
-      toTermDefinition fromEitherString,
-      toTermDefinition structuralTypeName,
-      toTermDefinition generateStructuralTypeMessage,
-      toTermDefinition encodeSimpleTypeForHelper,
-      toTermDefinition collectStructuralTypes,
-      toTermDefinition collectStructuralTypes_collectFromType,
-      toTermDefinition moduleToProtobuf,
-      toTermDefinition javaMultipleFilesOptionName,
-      toTermDefinition javaPackageOptionName,
-      toTermDefinition constructModule,
-      toTermDefinition mapAccumResult,
-      toTermDefinition encodeDefinition,
-      toTermDefinition encodeEnumDefinition,
-      toTermDefinition encodeEnumValueName,
-      toTermDefinition encodeFieldName,
-      toTermDefinition encodeFieldType,
-      toTermDefinition encodeRecordType,
-      toTermDefinition encodeScalarType,
-      toTermDefinition encodeScalarTypeWrapped,
-      toTermDefinition encodeTypeName,
-      toTermDefinition encodeTypeReference,
-      toTermDefinition flattenType,
-      toTermDefinition findOptions,
-      toTermDefinition isEnumFields,
-      toTermDefinition isEnumDefinition,
-      toTermDefinition namespaceToFileReference,
-      toTermDefinition namespaceToPackageName,
-      toTermDefinition readBooleanAnnotation,
-      toTermDefinition simplifyType]
+      toDefinition key_proto_field_index,
+      toDefinition err,
+      toDefinition unexpectedE,
+      toDefinition fromEitherString,
+      toDefinition structuralTypeName,
+      toDefinition generateStructuralTypeMessage,
+      toDefinition encodeSimpleTypeForHelper,
+      toDefinition collectStructuralTypes,
+      toDefinition collectStructuralTypes_collectFromType,
+      toDefinition moduleToProtobuf,
+      toDefinition javaMultipleFilesOptionName,
+      toDefinition javaPackageOptionName,
+      toDefinition constructModule,
+      toDefinition mapAccumResult,
+      toDefinition encodeDefinition,
+      toDefinition encodeEnumDefinition,
+      toDefinition encodeEnumValueName,
+      toDefinition encodeFieldName,
+      toDefinition encodeFieldType,
+      toDefinition encodeRecordType,
+      toDefinition encodeScalarType,
+      toDefinition encodeScalarTypeWrapped,
+      toDefinition encodeTypeName,
+      toDefinition encodeTypeReference,
+      toDefinition flattenType,
+      toDefinition findOptions,
+      toDefinition isEnumFields,
+      toDefinition isEnumDefinition,
+      toDefinition namespaceToFileReference,
+      toDefinition namespaceToPackageName,
+      toDefinition readBooleanAnnotation,
+      toDefinition simplifyType]
 
 
 -- =============================================================================
 -- Constants
 -- =============================================================================
 
-key_proto_field_index :: TBinding Name
+key_proto_field_index :: TTermDefinition Name
 key_proto_field_index = def "key_proto_field_index" $
   Core.name (string "proto_field_index")
 
@@ -128,17 +128,17 @@ key_proto_field_index = def "key_proto_field_index" $
 -- Error helpers
 -- =============================================================================
 
-err :: TBinding (Context -> String -> Either (InContext Error) a)
+err :: TTermDefinition (Context -> String -> Either (InContext Error) a)
 err = def "err" $
   "cx" ~> "msg" ~>
   Ctx.failInContext (Error.errorOther $ Error.otherError (var "msg")) (var "cx")
 
-unexpectedE :: TBinding (Context -> String -> String -> Either (InContext Error) a)
+unexpectedE :: TTermDefinition (Context -> String -> String -> Either (InContext Error) a)
 unexpectedE = def "unexpectedE" $
   "cx" ~> "expected" ~> "found" ~>
   asTerm err @@ var "cx" @@ (Strings.cat (list [string "Expected ", var "expected", string ", found: ", var "found"]))
 
-fromEitherString :: TBinding (Context -> Either String a -> Either (InContext Error) a)
+fromEitherString :: TTermDefinition (Context -> Either String a -> Either (InContext Error) a)
 fromEitherString = def "fromEitherString" $
   "cx" ~> "e" ~>
   Eithers.bimap
@@ -153,7 +153,7 @@ fromEitherString = def "fromEitherString" $
 -- | Generate a message name for a structural type reference.
 -- The StructuralTypeRef is represented as a tagged union with "either" and "pair" variants,
 -- where each variant holds a pair of types (left/right or first/second).
-structuralTypeName :: TBinding (Namespace -> Term -> P3.TypeName)
+structuralTypeName :: TTermDefinition (Namespace -> Term -> P3.TypeName)
 structuralTypeName = def "structuralTypeName" $
   doc "Generate a message name for a structural type reference" $
   "localNs" ~> "ref" ~> lets [
@@ -199,7 +199,7 @@ structuralTypeName = def "structuralTypeName" $
 
 -- | Generate a helper message definition for a structural type.
 -- Returns the definition and the updated context (counter state).
-generateStructuralTypeMessage :: TBinding (Context -> Graph -> Namespace -> Term -> Either (InContext Error) (P3.Definition, Context))
+generateStructuralTypeMessage :: TTermDefinition (Context -> Graph -> Namespace -> Term -> Either (InContext Error) (P3.Definition, Context))
 generateStructuralTypeMessage = def "generateStructuralTypeMessage" $
   doc "Generate a helper message definition for a structural type" $
   "cx" ~> "g" ~> "localNs" ~> "ref" ~> lets [
@@ -253,7 +253,7 @@ generateStructuralTypeMessage = def "generateStructuralTypeMessage" $
           (var "cx4")] @@ var "ref"
 
 -- | Encode a simple type for helper message fields
-encodeSimpleTypeForHelper :: TBinding (Context -> Namespace -> Type -> Either (InContext Error) P3.SimpleType)
+encodeSimpleTypeForHelper :: TTermDefinition (Context -> Namespace -> Type -> Either (InContext Error) P3.SimpleType)
 encodeSimpleTypeForHelper = def "encodeSimpleTypeForHelper" $
   doc "Encode a simple type for helper message fields" $
   "cx" ~> "localNs" ~> "typ" ~> lets [
@@ -270,7 +270,7 @@ encodeSimpleTypeForHelper = def "encodeSimpleTypeForHelper" $
       _Type_variable>>: "name" ~> var "forNominal" @@ var "name"]
 
 -- | Collect all structural type references (Either, Pair) from a list of types
-collectStructuralTypes :: TBinding ([Type] -> S.Set Term)
+collectStructuralTypes :: TTermDefinition ([Type] -> S.Set Term)
 collectStructuralTypes = def "collectStructuralTypes" $
   doc "Collect all structural type references (Either, Pair) from a list of types" $
   "types" ~>
@@ -279,7 +279,7 @@ collectStructuralTypes = def "collectStructuralTypes" $
       Sets.empty
       (var "types")
 
-collectStructuralTypes_collectFromType :: TBinding (Type -> S.Set Term)
+collectStructuralTypes_collectFromType :: TTermDefinition (Type -> S.Set Term)
 collectStructuralTypes_collectFromType = def "collectStructuralTypes_collectFromType" $
   doc "Collect structural type references from a single type" $
   "typ" ~>
@@ -304,7 +304,7 @@ collectStructuralTypes_collectFromType = def "collectStructuralTypes_collectFrom
 -- =============================================================================
 
 -- | Note: follows the Protobuf Style Guide (https://protobuf.dev/programming-guides/style)
-moduleToProtobuf :: TBinding (Module -> [Definition] -> Context -> Graph -> Either (InContext Error) (M.Map FilePath String))
+moduleToProtobuf :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either (InContext Error) (M.Map FilePath String))
 moduleToProtobuf = def "moduleToProtobuf" $
   doc "Convert a Hydra module to Protocol Buffers v3 source files" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~> lets [
@@ -320,11 +320,11 @@ moduleToProtobuf = def "moduleToProtobuf" $
 -- Option name constants
 -- =============================================================================
 
-javaMultipleFilesOptionName :: TBinding String
+javaMultipleFilesOptionName :: TTermDefinition String
 javaMultipleFilesOptionName = def "javaMultipleFilesOptionName" $
   string "java_multiple_files"
 
-javaPackageOptionName :: TBinding String
+javaPackageOptionName :: TTermDefinition String
 javaPackageOptionName = def "javaPackageOptionName" $
   string "java_package"
 
@@ -332,7 +332,7 @@ javaPackageOptionName = def "javaPackageOptionName" $
 -- Module construction
 -- =============================================================================
 
-constructModule :: TBinding (Context -> Graph -> Module -> [TypeDefinition] -> Either (InContext Error) P3.ProtoFile)
+constructModule :: TTermDefinition (Context -> Graph -> Module -> [TypeDefinition] -> Either (InContext Error) P3.ProtoFile)
 constructModule = def "constructModule" $
   doc "Construct a Protobuf file from a Hydra module and its type definitions" $
   "cx" ~> "g" ~> "mod" ~> "typeDefs" ~> lets [
@@ -411,7 +411,7 @@ constructModule = def "constructModule" $
 -- =============================================================================
 
 -- | Helper to thread context through a list, accumulating results
-mapAccumResult :: TBinding ((Context -> a -> Either (InContext Error) (b, Context)) -> Context -> [a] -> Either (InContext Error) ([b], Context))
+mapAccumResult :: TTermDefinition ((Context -> a -> Either (InContext Error) (b, Context)) -> Context -> [a] -> Either (InContext Error) ([b], Context))
 mapAccumResult = def "mapAccumResult" $
   doc "Thread context through a list, accumulating results" $
   "f" ~> "cx0" ~> "xs" ~>
@@ -432,7 +432,7 @@ mapAccumResult = def "mapAccumResult" $
 -- Definition encoding
 -- =============================================================================
 
-encodeDefinition :: TBinding (Context -> Graph -> Namespace -> Name -> Type -> Either String P3.Definition)
+encodeDefinition :: TTermDefinition (Context -> Graph -> Namespace -> Name -> Type -> Either String P3.Definition)
 encodeDefinition = def "encodeDefinition" $
   doc "Encode a Hydra type as a Protobuf definition" $
   "cx" ~> "g" ~> "localNs" ~> "name" ~> "typ" ~> lets [
@@ -464,7 +464,7 @@ encodeDefinition = def "encodeDefinition" $
 -- Enum encoding
 -- =============================================================================
 
-encodeEnumDefinition :: TBinding (Context -> Graph -> [P3.Option] -> Name -> [FieldType] -> Either (InContext Error) P3.EnumDefinition)
+encodeEnumDefinition :: TTermDefinition (Context -> Graph -> [P3.Option] -> Name -> [FieldType] -> Either (InContext Error) P3.EnumDefinition)
 encodeEnumDefinition = def "encodeEnumDefinition" $
   doc "Encode a Hydra union type as a Protobuf enum definition" $
   "cx" ~> "g" ~> "options" ~> "tname" ~> "fts" ~> lets [
@@ -489,7 +489,7 @@ encodeEnumDefinition = def "encodeEnumDefinition" $
       P3._EnumDefinition_values>>: Lists.cons (var "unspecifiedField") (var "values"),
       P3._EnumDefinition_options>>: var "options"]
 
-encodeEnumValueName :: TBinding (Name -> Name -> P3.EnumValueName)
+encodeEnumValueName :: TTermDefinition (Name -> Name -> P3.EnumValueName)
 encodeEnumValueName = def "encodeEnumValueName" $
   doc "Encode an enum value name from type name and field name" $
   "tname" ~> "fname" ~> lets [
@@ -501,7 +501,7 @@ encodeEnumValueName = def "encodeEnumValueName" $
 -- Field encoding
 -- =============================================================================
 
-encodeFieldName :: TBinding (Bool -> Name -> P3.FieldName)
+encodeFieldName :: TTermDefinition (Bool -> Name -> P3.FieldName)
 encodeFieldName = def "encodeFieldName" $
   doc "Encode a field name, optionally preserving the original case" $
   "preserve" ~> "name" ~>
@@ -511,7 +511,7 @@ encodeFieldName = def "encodeFieldName" $
         (Formatting.convertCaseCamelToLowerSnake @@ (unwrap _Name @@ var "name"))
 
 -- | Returns the field and updated context (for counter threading)
-encodeFieldType :: TBinding (Context -> Graph -> Namespace -> FieldType -> Either (InContext Error) (P3.Field, Context))
+encodeFieldType :: TTermDefinition (Context -> Graph -> Namespace -> FieldType -> Either (InContext Error) (P3.Field, Context))
 encodeFieldType = def "encodeFieldType" $
   doc "Encode a Hydra field type as a Protobuf field" $
   "cx" ~> "g" ~> "localNs" ~> "ft" ~> lets [
@@ -599,7 +599,7 @@ encodeFieldType = def "encodeFieldType" $
 -- =============================================================================
 
 -- | Returns the message definition; counter is threaded via context
-encodeRecordType :: TBinding (Context -> Graph -> Namespace -> [P3.Option] -> Name -> [FieldType] -> Either (InContext Error) P3.MessageDefinition)
+encodeRecordType :: TTermDefinition (Context -> Graph -> Namespace -> [P3.Option] -> Name -> [FieldType] -> Either (InContext Error) P3.MessageDefinition)
 encodeRecordType = def "encodeRecordType" $
   doc "Encode a Hydra record type as a Protobuf message definition" $
   "cx" ~> "g" ~> "localNs" ~> "options" ~> "tname" ~> "fts" ~>
@@ -617,7 +617,7 @@ encodeRecordType = def "encodeRecordType" $
 -- Scalar type encoding
 -- =============================================================================
 
-encodeScalarType :: TBinding (Context -> LiteralType -> Either (InContext Error) P3.ScalarType)
+encodeScalarType :: TTermDefinition (Context -> LiteralType -> Either (InContext Error) P3.ScalarType)
 encodeScalarType = def "encodeScalarType" $
   doc "Encode a Hydra literal type as a Protobuf scalar type" $
   "cx" ~> "lt" ~>
@@ -639,7 +639,7 @@ encodeScalarType = def "encodeScalarType" $
           _IntegerType_uint64>>: constant $ right (inject P3._ScalarType P3._ScalarType_uint64 unit)],
       _LiteralType_string>>: constant $ right (inject P3._ScalarType P3._ScalarType_string unit)]
 
-encodeScalarTypeWrapped :: TBinding (Context -> LiteralType -> Either (InContext Error) P3.SimpleType)
+encodeScalarTypeWrapped :: TTermDefinition (Context -> LiteralType -> Either (InContext Error) P3.SimpleType)
 encodeScalarTypeWrapped = def "encodeScalarTypeWrapped" $
   doc "Encode a Hydra literal type as a wrapped Protobuf type (for optional scalars)" $
   "cx" ~> "lt" ~> lets [
@@ -667,12 +667,12 @@ encodeScalarTypeWrapped = def "encodeScalarTypeWrapped" $
 -- Type name encoding
 -- =============================================================================
 
-encodeTypeName :: TBinding (Name -> P3.TypeName)
+encodeTypeName :: TTermDefinition (Name -> P3.TypeName)
 encodeTypeName = def "encodeTypeName" $
   doc "Encode a Hydra type name as a Protobuf type name" $
   "name" ~> wrap P3._TypeName (Names.localNameOf @@ var "name")
 
-encodeTypeReference :: TBinding (Namespace -> Name -> P3.TypeName)
+encodeTypeReference :: TTermDefinition (Namespace -> Name -> P3.TypeName)
 encodeTypeReference = def "encodeTypeReference" $
   doc "Encode a Hydra name as a Protobuf type reference" $
   "localNs" ~> "name" ~> lets [
@@ -695,7 +695,7 @@ encodeTypeReference = def "encodeTypeReference" $
 -- =============================================================================
 
 -- | Eliminate type lambdas and type applications, simply replacing type variables with the string type
-flattenType :: TBinding (Type -> Type)
+flattenType :: TTermDefinition (Type -> Type)
 flattenType = def "flattenType" $
   doc "Eliminate type lambdas and type applications, replacing type variables with the string type" $
   "typ" ~>
@@ -711,7 +711,7 @@ flattenType = def "flattenType" $
 -- Options
 -- =============================================================================
 
-findOptions :: TBinding (Context -> Graph -> Type -> Either (InContext Error) [P3.Option])
+findOptions :: TTermDefinition (Context -> Graph -> Type -> Either (InContext Error) [P3.Option])
 findOptions = def "findOptions" $
   doc "Find Protobuf options for a type (description and deprecated)" $
   "cx" ~> "g" ~> "typ" ~>
@@ -733,7 +733,7 @@ findOptions = def "findOptions" $
 -- Enum detection
 -- =============================================================================
 
-isEnumFields :: TBinding ([FieldType] -> Bool)
+isEnumFields :: TTermDefinition ([FieldType] -> Bool)
 isEnumFields = def "isEnumFields" $
   doc "Check if all fields are unit types (i.e., this is an enum)" $
   "fts" ~>
@@ -742,7 +742,7 @@ isEnumFields = def "isEnumFields" $
       true
       (var "fts")
 
-isEnumDefinition :: TBinding (Type -> Bool)
+isEnumDefinition :: TTermDefinition (Type -> Bool)
 isEnumDefinition = def "isEnumDefinition" $
   doc "Check if a type is an enum definition" $
   "typ" ~>
@@ -754,7 +754,7 @@ isEnumDefinition = def "isEnumDefinition" $
 -- Namespace conversion
 -- =============================================================================
 
-namespaceToFileReference :: TBinding (Namespace -> P3.FileReference)
+namespaceToFileReference :: TTermDefinition (Namespace -> P3.FileReference)
 namespaceToFileReference = def "namespaceToFileReference" $
   doc "Convert a Hydra namespace to a Protobuf file reference" $
   "ns_" ~> lets [
@@ -762,7 +762,7 @@ namespaceToFileReference = def "namespaceToFileReference" $
       (Lists.map (lambda "s" $ Formatting.convertCaseCamelToLowerSnake @@ var "s") (Strings.splitOn (string ".") (unwrap _Namespace @@ var "ns_")))] $
     wrap P3._FileReference (Strings.cat2 (var "pns") (string ".proto"))
 
-namespaceToPackageName :: TBinding (Namespace -> P3.PackageName)
+namespaceToPackageName :: TTermDefinition (Namespace -> P3.PackageName)
 namespaceToPackageName = def "namespaceToPackageName" $
   doc "Convert a Hydra namespace to a Protobuf package name" $
   "ns_" ~>
@@ -776,7 +776,7 @@ namespaceToPackageName = def "namespaceToPackageName" $
 -- Boolean annotation reading
 -- =============================================================================
 
-readBooleanAnnotation :: TBinding (Context -> Graph -> Name -> Type -> Either (InContext Error) Bool)
+readBooleanAnnotation :: TTermDefinition (Context -> Graph -> Name -> Type -> Either (InContext Error) Bool)
 readBooleanAnnotation = def "readBooleanAnnotation" $
   doc "Read a boolean annotation from a type" $
   "cx" ~> "g" ~> "key" ~> "typ" ~>
@@ -790,7 +790,7 @@ readBooleanAnnotation = def "readBooleanAnnotation" $
 -- =============================================================================
 
 -- | Note: this should probably be done in the term adapters
-simplifyType :: TBinding (Type -> Type)
+simplifyType :: TTermDefinition (Type -> Type)
 simplifyType = def "simplifyType" $
   doc "Simplify a type by removing annotations and unwrapping newtypes" $
   "typ" ~>

@@ -67,13 +67,13 @@ module_ = Module ns elements
     Just "A utility which instantiates a nonrecursive type with default values"
   where
    elements = [
-     toTermDefinition graphToSchema,
-     toTermDefinition instantiateTemplate]
+     toDefinition graphToSchema,
+     toDefinition instantiateTemplate]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-graphToSchema :: TBinding (Context -> Graph -> [Binding] -> Either (InContext DecodingError) (M.Map Name Type))
+graphToSchema :: TTermDefinition (Context -> Graph -> [Binding] -> Either (InContext DecodingError) (M.Map Name Type))
 graphToSchema = define "graphToSchema" $
   doc "Decode a list of type-encoding bindings into a map of named types" $
   "cx" ~> "graph" ~> "els" ~>
@@ -84,7 +84,7 @@ graphToSchema = define "graphToSchema" $
   Eithers.bind (Eithers.mapList (var "toPair") (var "els")) (
     "pairs" ~> right (Maps.fromList (var "pairs")))
 
-instantiateTemplate :: TBinding (Context -> Bool -> M.Map Name Type -> Name -> Type -> Either (InContext Error) Term)
+instantiateTemplate :: TTermDefinition (Context -> Bool -> M.Map Name Type -> Name -> Type -> Either (InContext Error) Term)
 instantiateTemplate = define "instantiateTemplate" $
   doc ("Given a graph schema and a nonrecursive type, instantiate it with default values."
     <> " If the minimal flag is set, the smallest possible term is produced; otherwise, exactly one subterm"

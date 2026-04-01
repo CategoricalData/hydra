@@ -96,7 +96,7 @@ import qualified Hydra.Sources.Test.Utils as TestUtils
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as SerializationSource
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 
@@ -110,18 +110,18 @@ module_ = Module ns elements
     Just "Java test code generation codec for JUnit-based generation tests"
   where
     elements = [
-      toTermDefinition buildJavaTestModule,
-      toTermDefinition findJavaImports,
-      toTermDefinition formatJavaTestName,
-      toTermDefinition generateJavaTestCase,
-      toTermDefinition generateJavaTestFile,
-      toTermDefinition generateJavaTestGroupHierarchy,
-      toTermDefinition generateTestFileWithJavaCodec,
-      toTermDefinition namespaceToJavaClassName]
+      toDefinition buildJavaTestModule,
+      toDefinition findJavaImports,
+      toDefinition formatJavaTestName,
+      toDefinition generateJavaTestCase,
+      toDefinition generateJavaTestFile,
+      toDefinition generateJavaTestGroupHierarchy,
+      toDefinition generateTestFileWithJavaCodec,
+      toDefinition namespaceToJavaClassName]
 
 
 -- | Build complete Java test module
-buildJavaTestModule :: TBinding (Module -> TestGroup -> String -> String)
+buildJavaTestModule :: TTermDefinition (Module -> TestGroup -> String -> String)
 buildJavaTestModule = define "buildJavaTestModule" $
   doc "Build the complete Java test module content" $
   lambda "testModule" $ lambda "testGroup" $ lambda "testBody" $ lets [
@@ -148,7 +148,7 @@ buildJavaTestModule = define "buildJavaTestModule" $
 
 
 -- | Find necessary imports for Java test files
-findJavaImports :: TBinding [String]
+findJavaImports :: TTermDefinition [String]
 findJavaImports = define "findJavaImports" $
   doc "Standard imports for Java JUnit test files" $
   list [
@@ -158,7 +158,7 @@ findJavaImports = define "findJavaImports" $
 
 
 -- | Format a test name for Java (camelCase method name)
-formatJavaTestName :: TBinding (String -> String)
+formatJavaTestName :: TTermDefinition (String -> String)
 formatJavaTestName = define "formatJavaTestName" $
   doc "Format a test name for Java (PascalCase method name with 'test' prefix)" $
   lambda "name" $ lets [
@@ -176,7 +176,7 @@ formatJavaTestName = define "formatJavaTestName" $
 
 
 -- | Generate a single test case for Java/JUnit
-generateJavaTestCase :: TBinding ([String] -> TestCaseWithMetadata -> Either String [String])
+generateJavaTestCase :: TTermDefinition ([String] -> TestCaseWithMetadata -> Either String [String])
 generateJavaTestCase = define "generateJavaTestCase" $
   doc "Generate a single JUnit test case from a test case with metadata" $
   lambda "groupPath" $ lambda "tcm" $ lets [
@@ -200,7 +200,7 @@ generateJavaTestCase = define "generateJavaTestCase" $
 
 
 -- | Generate Java test file for a test group
-generateJavaTestFile :: TBinding (Module -> TestGroup -> Graph -> Either String (String, String))
+generateJavaTestFile :: TTermDefinition (Module -> TestGroup -> Graph -> Either String (String, String))
 generateJavaTestFile = define "generateJavaTestFile" $
   doc "Generate a Java test file for a test group" $
   lambda "testModule" $ lambda "testGroup" $ lambda "_g" $
@@ -208,7 +208,7 @@ generateJavaTestFile = define "generateJavaTestFile" $
 
 
 -- | Generate Java test group hierarchy
-generateJavaTestGroupHierarchy :: TBinding ([String] -> TestGroup -> Either String String)
+generateJavaTestGroupHierarchy :: TTermDefinition ([String] -> TestGroup -> Either String String)
 generateJavaTestGroupHierarchy = define "generateJavaTestGroupHierarchy" $
   doc "Generate test hierarchy for Java with nested subgroups" $
   lambda "groupPath" $ lambda "testGroup" $ lets [
@@ -245,7 +245,7 @@ generateJavaTestGroupHierarchy = define "generateJavaTestGroupHierarchy" $
 
 
 -- | Generate test file using Java codec
-generateTestFileWithJavaCodec :: TBinding (Module -> TestGroup -> Either String (String, String))
+generateTestFileWithJavaCodec :: TTermDefinition (Module -> TestGroup -> Either String (String, String))
 generateTestFileWithJavaCodec = define "generateTestFileWithJavaCodec" $
   doc "Generate a complete test file for Java" $
   lambda "testModule" $ lambda "testGroup" $
@@ -263,7 +263,7 @@ generateTestFileWithJavaCodec = define "generateTestFileWithJavaCodec" $
 
 
 -- | Convert namespace to Java class name
-namespaceToJavaClassName :: TBinding (Namespace -> String)
+namespaceToJavaClassName :: TTermDefinition (Namespace -> String)
 namespaceToJavaClassName = define "namespaceToJavaClassName" $
   doc "Convert namespace to Java class name" $
   lambda "ns_" $

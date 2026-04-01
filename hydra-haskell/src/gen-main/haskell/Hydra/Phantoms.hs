@@ -34,3 +34,18 @@ newtype TTerm a =
   deriving (Eq, Ord, Read, Show)
 
 _TTerm = Core.Name "hydra.phantoms.TTerm"
+
+-- | An association of a term definition with a phantom type
+data TTermDefinition a =
+  TTermDefinition {
+    -- | The name of the term
+    tTermDefinitionName :: Core.Name,
+    -- | The term with its phantom type
+    tTermDefinitionTerm :: (TTerm a)}
+  deriving (Eq, Ord, Read, Show)
+
+_TTermDefinition = Core.Name "hydra.phantoms.TTermDefinition"
+
+_TTermDefinition_name = Core.Name "name"
+
+_TTermDefinition_term = Core.Name "term"

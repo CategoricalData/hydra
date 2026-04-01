@@ -48,25 +48,25 @@ module_ = Module ns elements
     Just "Functions for generating domain-specific DSL modules from type modules"
   where
     elements = [
-      toTermDefinition dslBindingName,
-      toTermDefinition dslElementName,
-      toTermDefinition dslModule,
-      toTermDefinition dslNamespace,
-      toTermDefinition filterTypeBindings,
-      toTermDefinition generateBindingsForType,
-      toTermDefinition generateRecordAccessor,
-      toTermDefinition generateRecordConstructor,
-      toTermDefinition generateRecordWithUpdater,
-      toTermDefinition generateUnionInjector,
-      toTermDefinition generateWrappedTypeAccessors,
-      toTermDefinition deduplicateBindings,
-      toTermDefinition findUniqueName,
-      toTermDefinition isDslEligibleBinding,
-      toTermDefinition dslTypeScheme,
-      toTermDefinition collectForallVars,
-      toTermDefinition nominalResultType]
+      toDefinition dslBindingName,
+      toDefinition dslElementName,
+      toDefinition dslModule,
+      toDefinition dslNamespace,
+      toDefinition filterTypeBindings,
+      toDefinition generateBindingsForType,
+      toDefinition generateRecordAccessor,
+      toDefinition generateRecordConstructor,
+      toDefinition generateRecordWithUpdater,
+      toDefinition generateUnionInjector,
+      toDefinition generateWrappedTypeAccessors,
+      toDefinition deduplicateBindings,
+      toDefinition findUniqueName,
+      toDefinition isDslEligibleBinding,
+      toDefinition dslTypeScheme,
+      toDefinition collectForallVars,
+      toDefinition nominalResultType]
 
-define :: String -> TTerm x -> TBinding x
+define :: String -> TTerm x -> TTermDefinition x
 define = definitionInModule module_
 
 -- | Wrap a type in TTerm: TypeApplication (TypeVariable "hydra.phantoms.TTerm") innerType
@@ -75,7 +75,7 @@ wrapInTTerm t = Core.typeApplication $ Core.applicationType (Core.typeVariable (
 
 -- | Build a TypeScheme from a list of parameter types and a result type.
 -- All types are wrapped in TTerm. Forall variables are collected from the original type.
-dslTypeScheme :: TBinding (Type -> [Type] -> Type -> TypeScheme)
+dslTypeScheme :: TTermDefinition (Type -> [Type] -> Type -> TypeScheme)
 dslTypeScheme = define "dslTypeScheme" $
   doc "Build a TypeScheme with TTerm-wrapped parameter and result types" $
   "origType" ~> "paramTypes" ~> "resultType" ~>
@@ -88,7 +88,7 @@ dslTypeScheme = define "dslTypeScheme" $
   Core.typeScheme (var "typeVars") (var "funType") nothing
 
 -- | Collect forall type variables from a type (stripping annotations)
-collectForallVars :: TBinding (Type -> [Name])
+collectForallVars :: TTermDefinition (Type -> [Name])
 collectForallVars = define "collectForallVars" $
   doc "Collect forall type variable names from a type" $
   "typ" ~> cases _Type (var "typ") (Just $ list ([] :: [TTerm Name])) [
@@ -101,7 +101,7 @@ collectForallVars = define "collectForallVars" $
 -- | Build the nominal result type for a type definition.
 -- For non-polymorphic types: TypeVariable typeName
 -- For polymorphic types like (forall n. Namespaces n): TypeApplication (TypeVariable typeName) (TypeVariable n)
-nominalResultType :: TBinding (Name -> Type -> Type)
+nominalResultType :: TTermDefinition (Name -> Type -> Type)
 nominalResultType = define "nominalResultType" $
   doc "Build the nominal result type with type applications for forall variables" $
   "typeName" ~> "origType" ~>
@@ -215,7 +215,7 @@ wrapTermInTTerm t = Core.termWrap $ Core.wrappedTerm (Core.nameLift _TTerm) t
 
 -- | Generate a DSL module namespace from a source module namespace
 -- For example, "hydra.core" -> "hydra.dsl.core"
-dslNamespace :: TBinding (Namespace -> Namespace)
+dslNamespace :: TTermDefinition (Namespace -> Namespace)
 dslNamespace = define "dslNamespace" $
   doc "Generate a DSL module namespace from a source module namespace" $
   "ns" ~>
@@ -233,7 +233,7 @@ dslNamespace = define "dslNamespace" $
 -- | Generate a fully qualified binding name for a DSL function from a type name
 -- For example, "hydra.core.AnnotatedTerm" -> "hydra.dsl.core.annotatedTerm"
 -- For local types (no namespace), returns just the decapitalized local name
-dslBindingName :: TBinding (Name -> Name)
+dslBindingName :: TTermDefinition (Name -> Name)
 dslBindingName = define "dslBindingName" $
   doc "Generate a binding name for a DSL function from a type name" $
   "n" ~>
@@ -261,7 +261,7 @@ dslBindingName = define "dslBindingName" $
 -- For example, ("hydra.core.AnnotatedTerm", "annotatedTermBody") -> "hydra.dsl.core.annotatedTermBody"
 -- This extracts the namespace from the type name, transforms it to the DSL namespace,
 -- and appends the local element name.
-dslElementName :: TBinding (Name -> String -> Name)
+dslElementName :: TTermDefinition (Name -> String -> Name)
 dslElementName = define "dslElementName" $
   doc "Generate a qualified DSL element name from a type name and local element name" $
   "typeName" ~> "localName" ~>
@@ -281,7 +281,7 @@ dslElementName = define "dslElementName" $
 --   \body -> \annotation -> TermRecord (Record "hydra.core.AnnotatedTerm" [Field "body" body, ...])
 -- When code-generated into Haskell, this becomes:
 --   annotatedTerm body annotation = Core.TermRecord (Core.Record { ... })
-generateRecordConstructor :: TBinding (Type -> Name -> [FieldType] -> [Binding])
+generateRecordConstructor :: TTermDefinition (Type -> Name -> [FieldType] -> [Binding])
 generateRecordConstructor = define "generateRecordConstructor" $
   doc "Generate a record constructor function" $
   "origType" ~> "typeName" ~> "fieldTypes" ~>
@@ -318,7 +318,7 @@ generateRecordConstructor = define "generateRecordConstructor" $
 -- For a field "name" in record type "Binding", produces:
 --   bindingName :: Binding -> Name
 --   bindingName x = x.name
-generateRecordAccessor :: TBinding (Type -> Name -> FieldType -> Binding)
+generateRecordAccessor :: TTermDefinition (Type -> Name -> FieldType -> Binding)
 generateRecordAccessor = define "generateRecordAccessor" $
   doc "Generate a record field accessor function" $
   "origType" ~> "typeName" ~> "ft" ~>
@@ -347,7 +347,7 @@ generateRecordAccessor = define "generateRecordAccessor" $
 --   bindingWithName :: Binding -> Name -> Binding
 --   bindingWithName b newName = Binding newName (bindingTerm b) (bindingType b)
 -- This constructs a new record with the specified field replaced and all others projected.
-generateRecordWithUpdater :: TBinding (Type -> Name -> [FieldType] -> FieldType -> Binding)
+generateRecordWithUpdater :: TTermDefinition (Type -> Name -> [FieldType] -> FieldType -> Binding)
 generateRecordWithUpdater = define "generateRecordWithUpdater" $
   doc "Generate a withXxx record field updater function" $
   "origType" ~> "typeName" ~> "allFields" ~> "targetField" ~>
@@ -391,7 +391,7 @@ generateRecordWithUpdater = define "generateRecordWithUpdater" $
 -- For unit variants (field type is unit), produces:
 --   comparisonLessThan :: Comparison
 --   comparisonLessThan = Comparison.lessThan ()
-generateUnionInjector :: TBinding (Type -> Name -> FieldType -> Binding)
+generateUnionInjector :: TTermDefinition (Type -> Name -> FieldType -> Binding)
 generateUnionInjector = define "generateUnionInjector" $
   doc "Generate a union injection helper" $
   "origType" ~> "typeName" ~> "ft" ~>
@@ -436,7 +436,7 @@ isUnitType_ = "t" ~> cases _Type (Rewriting.deannotateType @@ var "t") (Just Pha
 -- For a wrapped type like "Name" wrapping String, produces:
 --   name :: String -> Name      (constructor/wrap)
 --   unName :: Name -> String    (unwrap)
-generateWrappedTypeAccessors :: TBinding (Type -> Name -> Type -> [Binding])
+generateWrappedTypeAccessors :: TTermDefinition (Type -> Name -> Type -> [Binding])
 generateWrappedTypeAccessors = define "generateWrappedTypeAccessors" $
   doc "Generate wrap/unwrap accessors for a wrapped type" $
   "origType" ~> "typeName" ~> "innerType" ~>
@@ -473,7 +473,7 @@ generateWrappedTypeAccessors = define "generateWrappedTypeAccessors" $
 -- - Records: constructor + accessors + withXxx updaters
 -- - Unions: injection helpers
 -- - Wrapped types: wrap + unwrap
-generateBindingsForType :: TBinding (Context -> Graph -> Binding -> Either (InContext DecodingError) [Binding])
+generateBindingsForType :: TTermDefinition (Context -> Graph -> Binding -> Either (InContext DecodingError) [Binding])
 generateBindingsForType = define "generateBindingsForType" $
   doc "Generate all DSL bindings for a type binding" $
   "cx" ~> "graph" ~> "b" ~>
@@ -496,7 +496,7 @@ generateBindingsForType = define "generateBindingsForType" $
 -- | Deduplicate bindings by appending "_" suffixes to duplicate names.
 -- Later bindings get suffixes; earlier ones keep their name.
 -- Multiple duplicates get increasing suffixes: name_, name__, name___, etc.
-deduplicateBindings :: TBinding ([Binding] -> [Binding])
+deduplicateBindings :: TTermDefinition ([Binding] -> [Binding])
 deduplicateBindings = define "deduplicateBindings" $
   doc "Deduplicate bindings by appending underscore suffixes to duplicate names" $
   "bindings" ~>
@@ -514,7 +514,7 @@ deduplicateBindings = define "deduplicateBindings" $
     (var "bindings")
 
 -- | Find a unique name by appending "_" suffixes until not in the used list
-findUniqueName :: TBinding (String -> [String] -> String)
+findUniqueName :: TTermDefinition (String -> [String] -> String)
 findUniqueName = define "findUniqueName" $
   doc "Find a unique name by appending underscores" $
   "candidate" ~> "usedNames" ~>
@@ -523,7 +523,7 @@ findUniqueName = define "findUniqueName" $
     (findUniqueName @@ (Strings.cat $ list [var "candidate", string "_"]) @@ var "usedNames")
 
 -- | Filter bindings to only DSL-eligible type definitions
-filterTypeBindings :: TBinding (Context -> Graph -> [Binding] -> Either (InContext Error) [Binding])
+filterTypeBindings :: TTermDefinition (Context -> Graph -> [Binding] -> Either (InContext Error) [Binding])
 filterTypeBindings = define "filterTypeBindings" $
   doc "Filter bindings to only DSL-eligible type definitions" $
   "cx" ~> "graph" ~> "bindings" ~>
@@ -533,7 +533,7 @@ filterTypeBindings = define "filterTypeBindings" $
 
 -- | Check if a binding is eligible for DSL generation.
 -- Excludes phantom types (TTerm, TBinding) since they are meta-infrastructure.
-isDslEligibleBinding :: TBinding (Context -> Graph -> Binding -> Either (InContext Error) (Maybe Binding))
+isDslEligibleBinding :: TTermDefinition (Context -> Graph -> Binding -> Either (InContext Error) (Maybe Binding))
 isDslEligibleBinding = define "isDslEligibleBinding" $
   doc "Check if a binding is eligible for DSL generation" $
   "cx" ~> "graph" ~> "b" ~>
@@ -544,7 +544,7 @@ isDslEligibleBinding = define "isDslEligibleBinding" $
 
 -- | Transform a type module into a DSL module.
 -- Returns Nothing if the module has no eligible type definitions.
-dslModule :: TBinding (Context -> Graph -> Module -> Either (InContext Error) (Maybe Module))
+dslModule :: TTermDefinition (Context -> Graph -> Module -> Either (InContext Error) (Maybe Module))
 dslModule = define "dslModule" $
   doc "Transform a type module into a DSL module" $
   "cx" ~> "graph" ~> "mod" ~>

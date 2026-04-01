@@ -30,13 +30,13 @@ module_ = Module ns elements
     (Just "Test cases for string formatting and case conversion")
   where
     elements = [
-      Phantoms.toTermDefinition allTests,
-      Phantoms.toTermDefinition caseConversionTests]
+      Phantoms.toDefinition allTests,
+      Phantoms.toDefinition caseConversionTests]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
     doc "Test cases for hydra.formatting" $
     Testing.testGroup (string "formatting") nothing (list subgroups) (list ([] :: [TTerm TestCaseWithMetadata]))
@@ -44,7 +44,7 @@ allTests = define "allTests" $
     subgroups = [
       caseConversionTests]
 
-caseConversionTests :: TBinding TestGroup
+caseConversionTests :: TTermDefinition TestGroup
 caseConversionTests = define "caseConversionTests" $
   doc "Test cases for case conversion" $
   Testing.testGroup (string "case conversion") nothing (list ([] :: [TTerm TestGroup])) (list cases)

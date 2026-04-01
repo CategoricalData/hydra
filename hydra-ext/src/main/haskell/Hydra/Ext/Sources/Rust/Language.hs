@@ -80,17 +80,17 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
 module_ = Module (Namespace "hydra.ext.rust.language")
-  [toTermDefinition rustLanguage, toTermDefinition rustReservedWords]
+  [toDefinition rustLanguage, toDefinition rustReservedWords]
   [Lexical.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints and reserved words for Rust"
 
-rustLanguage :: TBinding Language
+rustLanguage :: TTermDefinition Language
 rustLanguage = define "rustLanguage" $
     doc "Language constraints for Rust" $ lets [
     "eliminationVariants">: Sets.fromList $ list [
@@ -168,7 +168,7 @@ rustLanguage = define "rustLanguage" $
         (var "typeVariants")
         (var "typePredicate"))
 
-rustReservedWords :: TBinding (S.Set String)
+rustReservedWords :: TTermDefinition (S.Set String)
 rustReservedWords = define "rustReservedWords" $
   doc "A set of reserved words in Rust" $
   lets [

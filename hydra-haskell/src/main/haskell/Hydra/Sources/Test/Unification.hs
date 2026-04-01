@@ -40,9 +40,9 @@ module_ = Module ns elements
     kernelTypesNamespaces
     (Just "Test cases for type unification operations")
   where
-    elements = [Phantoms.toTermDefinition allTests]
+    elements = [Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 -- Helper to build names
@@ -500,7 +500,7 @@ joinTypesTests = subgroup "joinTypes" [
 -- All tests
 -- ============================================================
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Test cases for type unification operations" $
     supergroup "unification" [

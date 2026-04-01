@@ -72,17 +72,17 @@ module_ = Module ns elements namespaces kernelTypesNamespaces $
     Just ("Hydra's common test suite, which is designed to run identically in each Hydra implementation;"
       <> " the criterion for a true Hydra implementation is that all test cases pass.")
   where
-    elements = [Phantoms.toTermDefinition allTests]
+    elements = [Phantoms.toDefinition allTests]
     namespaces = fst <$> testPairs
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     doc "The group of all common tests" $
     Testing.testGroup (string "common") nothing (list subgroups) (list ([] :: [TTerm TestCaseWithMetadata]))
   where
     subgroups = snd <$> testPairs
 
-libPairs :: [(Namespace, TBinding TestGroup)]
+libPairs :: [(Namespace, TTermDefinition TestGroup)]
 libPairs = [
   (Chars.ns, Chars.allTests),
   (Eithers.ns, Eithers.allTests),
@@ -98,7 +98,7 @@ libPairs = [
   (Sets.ns, Sets.allTests),
   (Strings.ns, Strings.allTests)]
 
-otherPairs :: [(Namespace, TBinding TestGroup)]
+otherPairs :: [(Namespace, TTermDefinition TestGroup)]
 otherPairs = [
   (Annotations.ns, Annotations.allTests),
   (CheckingAll.ns, CheckingAll.allTests),
@@ -119,7 +119,7 @@ otherPairs = [
   (Unification.ns, Unification.allTests),
   (ValidateAll.ns, ValidateAll.allTests)]
 
-testPairs :: [(Namespace, TBinding TestGroup)]
+testPairs :: [(Namespace, TTermDefinition TestGroup)]
 testPairs = libPairs ++ otherPairs
 
 -- | All test suite modules (the actual Module values)

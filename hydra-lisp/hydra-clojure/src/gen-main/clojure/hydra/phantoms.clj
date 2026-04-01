@@ -7,3 +7,6 @@
 
 (defrecord hydra_phantoms_t_term [value])
 (defn make-hydra_phantoms_t_term [value] (->hydra_phantoms_t_term value))
+
+(defrecord hydra_phantoms_t_term_definition [name term])
+(defn make-hydra_phantoms_t_term_definition [name term] (->hydra_phantoms_t_term_definition name term))

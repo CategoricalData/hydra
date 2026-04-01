@@ -37,9 +37,9 @@ module_ = Module ns elements
     kernelTypesNamespaces $
     Just "Test cases for subterm hoisting and case statement hoisting"
   where
-    elements = [Phantoms.toTermDefinition allTests]
+    elements = [Phantoms.toDefinition allTests]
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for subterm hoisting and case statement hoisting" $
     supergroup "hoistCases" [

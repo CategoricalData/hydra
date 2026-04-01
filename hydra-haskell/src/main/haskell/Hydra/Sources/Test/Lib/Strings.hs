@@ -32,12 +32,12 @@ module_ = Module ns elements
     (Just "Test cases for hydra.lib.strings primitives")
   where
     elements = [
-        Phantoms.toTermDefinition allTests]
+        Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Test cases for hydra.lib.strings primitives" $
     supergroup "hydra.lib.strings primitives" [

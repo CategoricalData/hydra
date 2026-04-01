@@ -80,17 +80,17 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
 module_ = Module (Namespace "hydra.ext.pegasus.language")
-  [toTermDefinition pdlLanguage]
+  [toDefinition pdlLanguage]
   [Lexical.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints for LinkedIn Pegasus (PDL)"
 
-pdlLanguage :: TBinding Language
+pdlLanguage :: TTermDefinition Language
 pdlLanguage = define "pdlLanguage" $
   doc "Language constraints for LinkedIn Pegasus (PDL)" $ lets [
   "eliminationVariants">: Sets.empty,

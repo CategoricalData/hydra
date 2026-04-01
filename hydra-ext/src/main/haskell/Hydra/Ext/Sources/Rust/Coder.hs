@@ -44,7 +44,7 @@ import qualified Hydra.Ext.Sources.Rust.Serde as RustSerdeSource
 import qualified Hydra.Ext.Sources.Rust.Language as RustLanguageSource
 
 
-def :: String -> TTerm a -> TBinding a
+def :: String -> TTerm a -> TTermDefinition a
 def = definitionInModule module_
 
 ns :: Namespace
@@ -58,34 +58,34 @@ module_ = Module ns elements
     Just "Rust code generator: converts Hydra type and term modules to Rust source code"
   where
     elements = [
-      toTermDefinition standardDerives,
-      toTermDefinition rustPath,
-      toTermDefinition rustPathSegmented,
-      toTermDefinition rustApply1,
-      toTermDefinition rustApply2,
-      toTermDefinition rustUnit,
-      toTermDefinition rustExprPath,
-      toTermDefinition rustCall,
-      toTermDefinition rustBlock,
-      toTermDefinition rustLetStmt,
-      toTermDefinition rustClosure,
-      toTermDefinition encodeLiteralType,
-      toTermDefinition encodeLiteral,
-      toTermDefinition encodeType,
-      toTermDefinition encodeTerm,
-      toTermDefinition encodeFunction,
-      toTermDefinition encodeElimination,
-      toTermDefinition encodeStructField,
-      toTermDefinition encodeEnumVariant,
-      toTermDefinition encodeTypeDefinition,
-      toTermDefinition encodeTermDefinition,
-      toTermDefinition moduleToRust]
+      toDefinition standardDerives,
+      toDefinition rustPath,
+      toDefinition rustPathSegmented,
+      toDefinition rustApply1,
+      toDefinition rustApply2,
+      toDefinition rustUnit,
+      toDefinition rustExprPath,
+      toDefinition rustCall,
+      toDefinition rustBlock,
+      toDefinition rustLetStmt,
+      toDefinition rustClosure,
+      toDefinition encodeLiteralType,
+      toDefinition encodeLiteral,
+      toDefinition encodeType,
+      toDefinition encodeTerm,
+      toDefinition encodeFunction,
+      toDefinition encodeElimination,
+      toDefinition encodeStructField,
+      toDefinition encodeEnumVariant,
+      toDefinition encodeTypeDefinition,
+      toDefinition encodeTermDefinition,
+      toDefinition moduleToRust]
 
 -- =============================================================================
 -- Standard derives
 -- =============================================================================
 
-standardDerives :: TBinding [String]
+standardDerives :: TTermDefinition [String]
 standardDerives = def "standardDerives" $
   list $ string <$> ["Clone", "Debug", "PartialEq", "Eq", "PartialOrd", "Ord"]
 
@@ -94,7 +94,7 @@ standardDerives = def "standardDerives" $
 -- =============================================================================
 
 -- | Construct a simple Rust path type (e.g., "String" -> String)
-rustPath :: TBinding (String -> R.Type)
+rustPath :: TTermDefinition (String -> R.Type)
 rustPath = def "rustPath" $
   lambda "name" $
     inject R._Type R._Type_path $
@@ -106,7 +106,7 @@ rustPath = def "rustPath" $
             R._PathSegment_arguments>>: inject R._GenericArguments R._GenericArguments_none unit]]]
 
 -- | Construct a Rust path type with multiple segments (e.g., ["num", "BigInt"] -> num::BigInt)
-rustPathSegmented :: TBinding ([String] -> R.Type)
+rustPathSegmented :: TTermDefinition ([String] -> R.Type)
 rustPathSegmented = def "rustPathSegmented" $
   lambda "segs" $
     inject R._Type R._Type_path $
@@ -120,7 +120,7 @@ rustPathSegmented = def "rustPathSegmented" $
           (var "segs")]
 
 -- | Apply a type constructor to one type argument (e.g., Vec<T>)
-rustApply1 :: TBinding (String -> R.Type -> R.Type)
+rustApply1 :: TTermDefinition (String -> R.Type -> R.Type)
 rustApply1 = def "rustApply1" $
   lambda "name" $ lambda "arg" $
     inject R._Type R._Type_path $
@@ -136,7 +136,7 @@ rustApply1 = def "rustApply1" $
                     inject R._GenericArg R._GenericArg_type (var "arg")]]]]]
 
 -- | Apply a type constructor to two type arguments (e.g., BTreeMap<K, V>)
-rustApply2 :: TBinding (String -> R.Type -> R.Type -> R.Type)
+rustApply2 :: TTermDefinition (String -> R.Type -> R.Type -> R.Type)
 rustApply2 = def "rustApply2" $
   lambda "name" $ lambda "arg1" $ lambda "arg2" $
     inject R._Type R._Type_path $
@@ -153,7 +153,7 @@ rustApply2 = def "rustApply2" $
                     inject R._GenericArg R._GenericArg_type (var "arg2")]]]]]
 
 -- | The Rust unit type ()
-rustUnit :: TBinding R.Type
+rustUnit :: TTermDefinition R.Type
 rustUnit = def "rustUnit" $
   inject R._Type R._Type_unit unit
 
@@ -162,7 +162,7 @@ rustUnit = def "rustUnit" $
 -- =============================================================================
 
 -- | Variable reference as a path expression
-rustExprPath :: TBinding (String -> R.Expression)
+rustExprPath :: TTermDefinition (String -> R.Expression)
 rustExprPath = def "rustExprPath" $
   lambda "name" $
     inject R._Expression R._Expression_path $
@@ -174,7 +174,7 @@ rustExprPath = def "rustExprPath" $
             R._PathSegment_arguments>>: inject R._GenericArguments R._GenericArguments_none unit]]]
 
 -- | Function call expression
-rustCall :: TBinding (R.Expression -> [R.Expression] -> R.Expression)
+rustCall :: TTermDefinition (R.Expression -> [R.Expression] -> R.Expression)
 rustCall = def "rustCall" $
   lambda "fun" $ lambda "args" $
     inject R._Expression R._Expression_call $
@@ -183,7 +183,7 @@ rustCall = def "rustCall" $
         R._CallExpr_args>>: var "args"]
 
 -- | Block expression with statements and trailing expression
-rustBlock :: TBinding ([R.Statement] -> R.Expression -> R.Expression)
+rustBlock :: TTermDefinition ([R.Statement] -> R.Expression -> R.Expression)
 rustBlock = def "rustBlock" $
   lambda "stmts" $ lambda "expr" $
     inject R._Expression R._Expression_block $
@@ -192,7 +192,7 @@ rustBlock = def "rustBlock" $
         R._Block_expression>>: just (var "expr")]
 
 -- | Let statement: let name = expr;
-rustLetStmt :: TBinding (String -> R.Expression -> R.Statement)
+rustLetStmt :: TTermDefinition (String -> R.Expression -> R.Statement)
 rustLetStmt = def "rustLetStmt" $
   lambda "name" $ lambda "expr" $
     inject R._Statement R._Statement_let $
@@ -208,7 +208,7 @@ rustLetStmt = def "rustLetStmt" $
         R._LetStatement_init>>: just (var "expr")]
 
 -- | Closure expression: |params| body
-rustClosure :: TBinding ([String] -> R.Expression -> R.Expression)
+rustClosure :: TTermDefinition ([String] -> R.Expression -> R.Expression)
 rustClosure = def "rustClosure" $
   lambda "params" $ lambda "body" $
     inject R._Expression R._Expression_closure $
@@ -233,7 +233,7 @@ rustClosure = def "rustClosure" $
 -- =============================================================================
 
 -- | Encode a Hydra literal type as a Rust type
-encodeLiteralType :: TBinding (LiteralType -> R.Type)
+encodeLiteralType :: TTermDefinition (LiteralType -> R.Type)
 encodeLiteralType = def "encodeLiteralType" $
   lambda "lt" $ cases _LiteralType (var "lt") Nothing [
     _LiteralType_binary>>: constant $
@@ -264,7 +264,7 @@ encodeLiteralType = def "encodeLiteralType" $
 -- =============================================================================
 
 -- | Encode a Hydra literal value as a Rust expression
-encodeLiteral :: TBinding (Literal -> R.Expression)
+encodeLiteral :: TTermDefinition (Literal -> R.Expression)
 encodeLiteral = def "encodeLiteral" $
   lambda "lit" $ cases _Literal (var "lit") Nothing [
     _Literal_boolean>>: lambda "b" $
@@ -355,7 +355,7 @@ encodeLiteral = def "encodeLiteral" $
 -- =============================================================================
 
 -- | Encode a Hydra type as a Rust syntax type
-encodeType :: TBinding (Context -> Graph -> Type -> Either (InContext Error) R.Type)
+encodeType :: TTermDefinition (Context -> Graph -> Type -> Either (InContext Error) R.Type)
 encodeType = def "encodeType" $
   "cx" ~> "g" ~> lambda "t" $
     "typ" <~ (Rewriting.deannotateType @@ var "t") $
@@ -423,7 +423,7 @@ encodeType = def "encodeType" $
 -- =============================================================================
 
 -- | Encode a Hydra term as a Rust expression
-encodeTerm :: TBinding (Context -> Graph -> Term -> Either (InContext Error) R.Expression)
+encodeTerm :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) R.Expression)
 encodeTerm = def "encodeTerm" $
   "cx" ~> "g" ~> lambda "term" $
     cases _Term (var "term") (Just $
@@ -537,7 +537,7 @@ encodeTerm = def "encodeTerm" $
 -- =============================================================================
 
 -- | Encode a Hydra function as a Rust expression
-encodeFunction :: TBinding (Context -> Graph -> Function -> Either (InContext Error) R.Expression)
+encodeFunction :: TTermDefinition (Context -> Graph -> Function -> Either (InContext Error) R.Expression)
 encodeFunction = def "encodeFunction" $
   "cx" ~> "g" ~> lambda "fun" $
     cases _Function (var "fun") Nothing [
@@ -556,7 +556,7 @@ encodeFunction = def "encodeFunction" $
 
 -- | Encode a Hydra elimination as a Rust expression.
 -- Takes an optional argument for applied eliminations.
-encodeElimination :: TBinding (Context -> Graph -> Elimination -> Maybe Term -> Either (InContext Error) R.Expression)
+encodeElimination :: TTermDefinition (Context -> Graph -> Elimination -> Maybe Term -> Either (InContext Error) R.Expression)
 encodeElimination = def "encodeElimination" $
   "cx" ~> "g" ~> lambda "elim" $ lambda "marg" $
     cases _Elimination (var "elim") Nothing [
@@ -647,7 +647,7 @@ encodeElimination = def "encodeElimination" $
 -- =============================================================================
 
 -- | Encode a Hydra record field as a Rust struct field
-encodeStructField :: TBinding (Context -> Graph -> FieldType -> Either (InContext Error) R.StructField)
+encodeStructField :: TTermDefinition (Context -> Graph -> FieldType -> Either (InContext Error) R.StructField)
 encodeStructField = def "encodeStructField" $
   "cx" ~> "g" ~> lambda "ft" $
     "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
@@ -664,7 +664,7 @@ encodeStructField = def "encodeStructField" $
 -- =============================================================================
 
 -- | Encode a Hydra union field as a Rust enum variant
-encodeEnumVariant :: TBinding (Context -> Graph -> FieldType -> Either (InContext Error) R.EnumVariant)
+encodeEnumVariant :: TTermDefinition (Context -> Graph -> FieldType -> Either (InContext Error) R.EnumVariant)
 encodeEnumVariant = def "encodeEnumVariant" $
   "cx" ~> "g" ~> lambda "ft" $
     "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
@@ -700,7 +700,7 @@ encodeEnumVariant = def "encodeEnumVariant" $
 -- =============================================================================
 
 -- | Encode a Hydra type definition as a Rust item
-encodeTypeDefinition :: TBinding (Context -> Graph -> TypeDefinition -> Either (InContext Error) R.ItemWithComments)
+encodeTypeDefinition :: TTermDefinition (Context -> Graph -> TypeDefinition -> Either (InContext Error) R.ItemWithComments)
 encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Module.typeDefinitionName (var "tdef") $
@@ -772,7 +772,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
 -- =============================================================================
 
 -- | Encode a Hydra term definition as a Rust function item
-encodeTermDefinition :: TBinding (Context -> Graph -> TermDefinition -> Either (InContext Error) R.ItemWithComments)
+encodeTermDefinition :: TTermDefinition (Context -> Graph -> TermDefinition -> Either (InContext Error) R.ItemWithComments)
 encodeTermDefinition = def "encodeTermDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Module.termDefinitionName (var "tdef") $
@@ -808,7 +808,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
 -- =============================================================================
 
 -- | Convert a Hydra module to a map of file paths to Rust source code strings.
-moduleToRust :: TBinding (Module -> [Definition] -> Context -> Graph -> Either (InContext Error) (M.Map FilePath String))
+moduleToRust :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either (InContext Error) (M.Map FilePath String))
 moduleToRust = def "moduleToRust" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>
     "partitioned" <~ (Schemas.partitionDefinitions @@ var "defs") $

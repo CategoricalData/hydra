@@ -26,15 +26,15 @@ ns = Namespace "hydra.ext.org.yaml.language"
 
 module_ :: Module
 module_ = Module ns
-  [toTermDefinition yamlLanguage]
+  [toDefinition yamlLanguage]
   [Rewriting.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints for YAML"
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-yamlLanguage :: TBinding Language
+yamlLanguage :: TTermDefinition Language
 yamlLanguage = define "yamlLanguage" $
   doc "Language constraints for YAML" $ lets [
   "eliminationVariants">: Sets.empty,

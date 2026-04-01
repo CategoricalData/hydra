@@ -27,14 +27,14 @@ module_ = Module ns elements
     (Just "Type checking failure test cases")
   where
     elements = [
-      Phantoms.toTermDefinition allTests,
-      Phantoms.toTermDefinition failOnUntypedTests,
-      Phantoms.toTermDefinition untypedLambdasTests]
+      Phantoms.toDefinition allTests,
+      Phantoms.toDefinition failOnUntypedTests,
+      Phantoms.toDefinition untypedLambdasTests]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
   Phantoms.doc "Type checking failure test cases" $
   supergroup "Failures" [
@@ -44,11 +44,11 @@ allTests = define "allTests" $
 
 ------ Fail on untyped (pre-inference) terms ------
 
-failOnUntypedTests :: TBinding TestGroup
+failOnUntypedTests :: TTermDefinition TestGroup
 failOnUntypedTests = define "failOnUntypedTests" $
   supergroup "Fail on untyped (pre-inference) terms" [
     untypedLambdasTests]
 
-untypedLambdasTests :: TBinding TestGroup
+untypedLambdasTests :: TTermDefinition TestGroup
 untypedLambdasTests = define "untypedLambdasTests" $
   subgroup "Untyped lambdas" ([] :: [TTerm TestCaseWithMetadata])

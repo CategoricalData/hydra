@@ -43,7 +43,7 @@ liftStringError cx = Eithers.bimap ("_s" ~> Ctx.inContext (Error.errorOther $ Er
 ns :: Namespace
 ns = Namespace "hydra.ext.org.yaml.coder"
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
@@ -54,15 +54,15 @@ module_ = Module ns elements
     Just "YAML encoding and decoding for Hydra terms"
   where
     elements = [
-      toTermDefinition yamlCoder,
-      toTermDefinition literalYamlCoder,
-      toTermDefinition recordCoder,
-      toTermDefinition encodeRecord,
-      toTermDefinition decodeRecord,
-      toTermDefinition termCoder,
-      toTermDefinition unitCoder]
+      toDefinition yamlCoder,
+      toDefinition literalYamlCoder,
+      toDefinition recordCoder,
+      toDefinition encodeRecord,
+      toDefinition decodeRecord,
+      toDefinition termCoder,
+      toDefinition unitCoder]
 
-yamlCoder :: TBinding (Type -> Context -> Graph -> Either (InContext Error) (Coder Term YM.Node))
+yamlCoder :: TTermDefinition (Type -> Context -> Graph -> Either (InContext Error) (Coder Term YM.Node))
 yamlCoder = define "yamlCoder" $
   doc "Create a YAML coder for a given type" $
   "typ" ~> "cx" ~> "g" ~>
@@ -71,7 +71,7 @@ yamlCoder = define "yamlCoder" $
   "coder" <<~ var "mkTermCoder" @@ (Util.adapterTarget $ var "adapter") $
   right $ Adapt.composeCoders @@ (Util.adapterCoder $ var "adapter") @@ var "coder"
 
-literalYamlCoder :: TBinding (LiteralType -> Either (InContext Error) (Coder Literal YM.Scalar))
+literalYamlCoder :: TTermDefinition (LiteralType -> Either (InContext Error) (Coder Literal YM.Scalar))
 literalYamlCoder = define "literalYamlCoder" $
   doc "Create a YAML coder for literal types" $
   "lt" ~>
@@ -116,7 +116,7 @@ literalYamlCoder = define "literalYamlCoder" $
       (var "decodeString")]) $
   right $ var "encoded"
 
-recordCoder :: TBinding (Name -> [FieldType] -> Context -> Graph -> Either (InContext Error) (Coder Term YM.Node))
+recordCoder :: TTermDefinition (Name -> [FieldType] -> Context -> Graph -> Either (InContext Error) (Coder Term YM.Node))
 recordCoder = define "recordCoder" $
   doc "Create a YAML coder for record types" $
   "tname" ~> "rt" ~> "cx" ~> "g" ~>
@@ -128,7 +128,7 @@ recordCoder = define "recordCoder" $
     ("cx" ~> "term" ~> encodeRecord @@ var "coders" @@ var "cx" @@ var "g" @@ var "term")
     ("cx" ~> "val" ~> decodeRecord @@ var "tname" @@ var "coders" @@ var "cx" @@ var "val")
 
-encodeRecord :: TBinding ([(FieldType, Coder Term YM.Node)] -> Context -> Graph -> Term -> Either (InContext Error) YM.Node)
+encodeRecord :: TTermDefinition ([(FieldType, Coder Term YM.Node)] -> Context -> Graph -> Term -> Either (InContext Error) YM.Node)
 encodeRecord = define "encodeRecord" $
   doc "Encode a record term to YAML" $
   "coders" ~> "cx" ~> "graph" ~> "term" ~>
@@ -157,7 +157,7 @@ encodeRecord = define "encodeRecord" $
   "maybeFields" <<~ Eithers.mapList (var "encodeField") (Lists.zip (var "coders") (var "fields")) $
   right (Yaml.nodeMapping $ Maps.fromList $ Maybes.cat $ var "maybeFields")
 
-decodeRecord :: TBinding (Name -> [(FieldType, Coder Term YM.Node)] -> Context -> YM.Node -> Either (InContext Error) Term)
+decodeRecord :: TTermDefinition (Name -> [(FieldType, Coder Term YM.Node)] -> Context -> YM.Node -> Either (InContext Error) Term)
 decodeRecord = define "decodeRecord" $
   doc "Decode a YAML value to a record term" $
   "tname" ~> "coders" ~> "cx" ~> "n" ~>
@@ -176,7 +176,7 @@ decodeRecord = define "decodeRecord" $
     (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (string "expected mapping")) (var "cx")) [
     YM._Node_mapping>>: var "decodeObjectBody"]
 
-termCoder :: TBinding (Type -> Context -> Graph -> Either (InContext Error) (Coder Term YM.Node))
+termCoder :: TTermDefinition (Type -> Context -> Graph -> Either (InContext Error) (Coder Term YM.Node))
 termCoder = define "termCoder" $
   doc "Create a YAML coder for term types" $
   "typ" ~> "cx" ~> "g" ~>
@@ -277,7 +277,7 @@ termCoder = define "termCoder" $
     _Type_unit>>: constant $ right $ (var "hydra.ext.org.yaml.coder.unitCoder" :: TTerm (Coder Term YM.Node))]) $
   var "result"
 
-unitCoder :: TBinding (Coder Term YM.Node)
+unitCoder :: TTermDefinition (Coder Term YM.Node)
 unitCoder = define "unitCoder" $
   doc "YAML coder for unit values" $
   "encodeUnit" <~ ("cx" ~> "term" ~>

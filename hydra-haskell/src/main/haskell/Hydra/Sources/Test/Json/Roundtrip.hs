@@ -40,9 +40,9 @@ module_ = Module ns elements
     (Just "Round-trip test cases for JSON encoding and decoding")
   where
     elements = [
-        Phantoms.toTermDefinition allTests]
+        Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 -- Local alias for polymorphic application
@@ -50,7 +50,7 @@ define = definitionInModule module_
 (#) = (Phantoms.@@)
 infixl 1 #
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Round-trip test cases for JSON encoding and decoding" $
     supergroup "JSON round-trip" [

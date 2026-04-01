@@ -56,7 +56,7 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 
@@ -71,24 +71,24 @@ module_ = Module ns elements
     Just "Transform test cases for code generation, filtering to tests that can be compiled to target languages"
   where
     elements = [
-      toTermDefinition transformToCompiledTests,
-      toTermDefinition transformTestCase,
-      toTermDefinition buildConvertCaseCall,
-      toTermDefinition encodeCaseConvention,
-      toTermDefinition addGenerationPrefix,
-      toTermDefinition transformModule,
-      toTermDefinition collectTestCases,
-      toTermDefinition buildTopologicalSortCall,
-      toTermDefinition buildTopologicalSortSCCCall,
-      toTermDefinition encodeAdjacencyList,
-      toTermDefinition encodeInt,
-      toTermDefinition encodeEitherListList,
-      toTermDefinition encodeListList,
-      toTermDefinition encodeIntList]
+      toDefinition transformToCompiledTests,
+      toDefinition transformTestCase,
+      toDefinition buildConvertCaseCall,
+      toDefinition encodeCaseConvention,
+      toDefinition addGenerationPrefix,
+      toDefinition transformModule,
+      toDefinition collectTestCases,
+      toDefinition buildTopologicalSortCall,
+      toDefinition buildTopologicalSortSCCCall,
+      toDefinition encodeAdjacencyList,
+      toDefinition encodeInt,
+      toDefinition encodeEitherListList,
+      toDefinition encodeListList,
+      toDefinition encodeIntList]
 
 
 -- | Transform test group hierarchy to only include delegated evaluation tests
-transformToCompiledTests :: TBinding (TestGroup -> Maybe TestGroup)
+transformToCompiledTests :: TTermDefinition (TestGroup -> Maybe TestGroup)
 transformToCompiledTests = define "transformToCompiledTests" $
   doc "Transform test group hierarchy to only include delegated evaluation tests" $
   lambda "tg" $ lets [
@@ -105,14 +105,14 @@ transformToCompiledTests = define "transformToCompiledTests" $
 
 
 -- | Transform a test case (pass through unchanged — all test cases are now universal)
-transformTestCase :: TBinding (TestCaseWithMetadata -> Maybe TestCaseWithMetadata)
+transformTestCase :: TTermDefinition (TestCaseWithMetadata -> Maybe TestCaseWithMetadata)
 transformTestCase = define "transformTestCase" $
   doc "Pass through test cases unchanged" $
   lambda "tcm" $ just (var "tcm")
 
 
 -- | Build a Term representing a convertCase function call
-buildConvertCaseCall :: TBinding (CaseConvention -> CaseConvention -> String -> Term)
+buildConvertCaseCall :: TTermDefinition (CaseConvention -> CaseConvention -> String -> Term)
 buildConvertCaseCall = define "buildConvertCaseCall" $
   doc "Build a Term representing a convertCase function call" $
   lambdas ["fromConv", "toConv", "input_"] $
@@ -126,7 +126,7 @@ buildConvertCaseCall = define "buildConvertCaseCall" $
 
 
 -- | Encode CaseConvention as a Term (unit variant)
-encodeCaseConvention :: TBinding (CaseConvention -> Term)
+encodeCaseConvention :: TTermDefinition (CaseConvention -> Term)
 encodeCaseConvention = define "encodeCaseConvention" $
   doc "Encode CaseConvention as a Term (unit variant)" $
   lambda "conv" $
@@ -142,7 +142,7 @@ encodeCaseConvention = define "encodeCaseConvention" $
 
 
 -- | Add "generation" namespace prefix
-addGenerationPrefix :: TBinding (Namespace -> Namespace)
+addGenerationPrefix :: TTermDefinition (Namespace -> Namespace)
 addGenerationPrefix = define "addGenerationPrefix" $
   doc "Add generation namespace prefix" $
   lambda "ns_" $
@@ -150,7 +150,7 @@ addGenerationPrefix = define "addGenerationPrefix" $
 
 
 -- | Transform module with generation namespace
-transformModule :: TBinding (Module -> Module)
+transformModule :: TTermDefinition (Module -> Module)
 transformModule = define "transformModule" $
   doc "Transform module with generation namespace" $
   lambda "m" $
@@ -163,7 +163,7 @@ transformModule = define "transformModule" $
 
 
 -- | Collect all test cases from a test group (flattening hierarchy)
-collectTestCases :: TBinding (TestGroup -> [TestCaseWithMetadata])
+collectTestCases :: TTermDefinition (TestGroup -> [TestCaseWithMetadata])
 collectTestCases = define "collectTestCases" $
   doc "Collect all test cases from a test group (flattening hierarchy)" $
   lambda "tg" $
@@ -174,7 +174,7 @@ collectTestCases = define "collectTestCases" $
 
 
 -- | Build a Term representing a topologicalSort function call
-buildTopologicalSortCall :: TBinding ([(Int, [Int])] -> Term)
+buildTopologicalSortCall :: TTermDefinition ([(Int, [Int])] -> Term)
 buildTopologicalSortCall = define "buildTopologicalSortCall" $
   doc "Build a Term representing a topologicalSort function call" $
   lambda "adjList" $
@@ -184,7 +184,7 @@ buildTopologicalSortCall = define "buildTopologicalSortCall" $
 
 
 -- | Build a Term representing a topologicalSortComponents function call
-buildTopologicalSortSCCCall :: TBinding ([(Int, [Int])] -> Term)
+buildTopologicalSortSCCCall :: TTermDefinition ([(Int, [Int])] -> Term)
 buildTopologicalSortSCCCall = define "buildTopologicalSortSCCCall" $
   doc "Build a Term representing a topologicalSortComponents function call" $
   lambda "adjList" $
@@ -194,7 +194,7 @@ buildTopologicalSortSCCCall = define "buildTopologicalSortSCCCall" $
 
 
 -- | Encode an adjacency list as a Term
-encodeAdjacencyList :: TBinding ([(Int, [Int])] -> Term)
+encodeAdjacencyList :: TTermDefinition ([(Int, [Int])] -> Term)
 encodeAdjacencyList = define "encodeAdjacencyList" $
   doc "Encode an adjacency list as a Term" $
   lambda "pairs" $
@@ -207,7 +207,7 @@ encodeAdjacencyList = define "encodeAdjacencyList" $
 
 
 -- | Encode an Int as a Term
-encodeInt :: TBinding (Int -> Term)
+encodeInt :: TTermDefinition (Int -> Term)
 encodeInt = define "encodeInt" $
   doc "Encode an Int as a Term" $
   lambda "n" $
@@ -215,7 +215,7 @@ encodeInt = define "encodeInt" $
 
 
 -- | Encode Either [[Int]] [Int] as a Term
-encodeEitherListList :: TBinding (Either [[Int]] [Int] -> Term)
+encodeEitherListList :: TTermDefinition (Either [[Int]] [Int] -> Term)
 encodeEitherListList = define "encodeEitherListList" $
   doc "Encode Either [[Int]] [Int] as a Term" $
   lambda "e" $
@@ -226,7 +226,7 @@ encodeEitherListList = define "encodeEitherListList" $
 
 
 -- | Encode [[Int]] as a Term
-encodeListList :: TBinding ([[Int]] -> Term)
+encodeListList :: TTermDefinition ([[Int]] -> Term)
 encodeListList = define "encodeListList" $
   doc "Encode [[Int]] as a Term" $
   lambda "lists" $
@@ -234,7 +234,7 @@ encodeListList = define "encodeListList" $
 
 
 -- | Encode [Int] as a Term
-encodeIntList :: TBinding ([Int] -> Term)
+encodeIntList :: TTermDefinition ([Int] -> Term)
 encodeIntList = define "encodeIntList" $
   doc "Encode [Int] as a Term" $
   lambda "ints" $

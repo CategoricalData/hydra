@@ -25,19 +25,19 @@ module_ = Module ns elements
     (Just "Inference tests for examples from the Hydra kernel")
   where
     elements = [
-      Phantoms.toTermDefinition allTests,
-      Phantoms.toTermDefinition testGroupForNestedLet]
+      Phantoms.toDefinition allTests,
+      Phantoms.toDefinition testGroupForNestedLet]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
   Phantoms.doc "Examples from the Hydra kernel" $
   supergroup "Examples from the Hydra kernel" [
     testGroupForNestedLet]
 
-testGroupForNestedLet :: TBinding TestGroup
+testGroupForNestedLet :: TTermDefinition TestGroup
 testGroupForNestedLet = define "testGroupForNestedLet" $
   supergroup "Nested let" [
     subgroup "hydra.formatting.mapFirstLetter" [

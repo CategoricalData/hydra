@@ -104,12 +104,12 @@ module_ = Module ns elements
     Just "Utility functions for GraphSON encoding and property graph conversion."
   where
     elements = [
-      toTermDefinition elementsToVerticesWithAdjacentEdges,
-      toTermDefinition encodeStringValue,
-      toTermDefinition encodeTermValue,
-      toTermDefinition pgElementsToGraphson]
+      toDefinition elementsToVerticesWithAdjacentEdges,
+      toDefinition encodeStringValue,
+      toDefinition encodeTermValue,
+      toDefinition pgElementsToGraphson]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 -- Type references
@@ -123,14 +123,14 @@ jsonValue :: Type
 jsonValue = Bootstrap.typeref JsonModel.ns "Value"
 
 -- | Encode a String value to GraphSON
-encodeStringValue :: TBinding (String -> Either (InContext Error) G.Value)
+encodeStringValue :: TTermDefinition (String -> Either (InContext Error) G.Value)
 encodeStringValue = define "encodeStringValue" $
   doc "Encode a String value as a GraphSON Value" $
   "s" ~>
     right $ inject G._Value G._Value_string (var "s")
 
 -- | Encode a Term value to GraphSON
-encodeTermValue :: TBinding (Term -> Either (InContext Error) G.Value)
+encodeTermValue :: TTermDefinition (Term -> Either (InContext Error) G.Value)
 encodeTermValue = define "encodeTermValue" $
   doc "Encode a Hydra Term as a GraphSON Value. Supports literals and unit values." $
   "term" ~>
@@ -170,7 +170,7 @@ encodeTermValue = define "encodeTermValue" $
     @@ (Rewriting.deannotateTerm @@ var "term")
 
 -- | Convert a list of PG elements to vertices with adjacent edges
-elementsToVerticesWithAdjacentEdges :: TBinding ([PG.Element v] -> [PG.VertexWithAdjacentEdges v])
+elementsToVerticesWithAdjacentEdges :: TTermDefinition ([PG.Element v] -> [PG.VertexWithAdjacentEdges v])
 elementsToVerticesWithAdjacentEdges = define "elementsToVerticesWithAdjacentEdges" $
   doc "Convert a list of property graph elements to a list of vertices with their adjacent edges" $
   "els" ~>
@@ -249,7 +249,7 @@ elementsToVerticesWithAdjacentEdges = define "elementsToVerticesWithAdjacentEdge
     Maps.elems (var "vertexMap1")
 
 -- | Convert PG elements to GraphSON JSON values
-pgElementsToGraphson :: TBinding ((v -> Either (InContext Error) G.Value) -> [PG.Element v] -> Either (InContext Error) [JM.Value])
+pgElementsToGraphson :: TTermDefinition ((v -> Either (InContext Error) G.Value) -> [PG.Element v] -> Either (InContext Error) [JM.Value])
 pgElementsToGraphson = define "pgElementsToGraphson" $
   doc "Convert property graph elements to a list of GraphSON JSON values" $
   "encodeValue" ~> "els" ~>

@@ -124,7 +124,7 @@ import qualified Hydra.Sources.Kernel.Terms.Sorting as Sorting
 ns :: Namespace
 ns = Namespace "hydra.rewriting"
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
@@ -134,74 +134,74 @@ module_ = Module ns elements
     Just ("Utilities for type and term rewriting and analysis.")
   where
    elements = [
-     toTermDefinition applyInsideTypeLambdasAndAnnotations,
-     toTermDefinition extendGraphForLambda,
-     toTermDefinition extendGraphForLet,
-     toTermDefinition extendGraphForTypeLambda,
-     toTermDefinition extendGraphWithBindings,
-     toTermDefinition deannotateAndDetypeTerm,
-     toTermDefinition deannotateTerm,
-     toTermDefinition deannotateType,
-     toTermDefinition deannotateTypeParameters,
-     toTermDefinition deannotateTypeRecursive,
-     toTermDefinition deannotateTypeSchemeRecursive,
-     toTermDefinition detypeTerm,
-     toTermDefinition flattenLetTerms,
-     toTermDefinition foldOverTerm,
-     toTermDefinition foldOverType,
-     toTermDefinition foldTermWithGraphAndPath,
-     toTermDefinition fTypeToTypeScheme,
-     toTermDefinition freeTypeVariablesInTerm,
-     toTermDefinition freeVariablesInTerm,
-     toTermDefinition freeVariablesInType,
-     toTermDefinition freeVariablesInTypeOrdered,
-     toTermDefinition freeVariablesInTypeSchemeSimple,
-     toTermDefinition freeVariablesInTypeScheme,
-     toTermDefinition freeVariablesInTypeSimple,
-     toTermDefinition inlineType,
-     toTermDefinition isFreeVariableInTerm,
-     toTermDefinition isLambda,
-     toTermDefinition liftLambdaAboveLet,
-     toTermDefinition mapBeneathTypeAnnotations,
-     toTermDefinition normalizeTypeVariablesInTerm,
-     toTermDefinition pruneLet,
-     toTermDefinition removeTermAnnotations,
-     toTermDefinition removeTypeAnnotations,
-     toTermDefinition removeTypeAnnotationsFromTerm,
-     toTermDefinition removeTypesFromTerm,
-     toTermDefinition replaceFreeTermVariable,
-     toTermDefinition replaceFreeTypeVariable,
-     toTermDefinition replaceTypedefs,
-     toTermDefinition rewriteAndFoldTerm,
-     toTermDefinition rewriteAndFoldTermWithGraph,
-     toTermDefinition rewriteAndFoldTermWithGraphAndPath,
-     toTermDefinition rewriteAndFoldTermWithPath,
-     toTermDefinition rewriteTerm,
-     toTermDefinition rewriteTermM,
-     toTermDefinition rewriteTermWithContext,
-     toTermDefinition rewriteTermWithGraph,
-     toTermDefinition rewriteTermWithContextM,
-     toTermDefinition rewriteType,
-     toTermDefinition rewriteTypeM,
-     toTermDefinition simplifyTerm,
-     toTermDefinition substituteTypeVariables,
-     toTermDefinition substituteTypeVariablesInTerm,
-     toTermDefinition substituteVariable,
-     toTermDefinition substituteVariables,
-     toTermDefinition stripTypeLambdas,
-     toTermDefinition subterms,
-     toTermDefinition subtermsWithSteps,
-     toTermDefinition subtypes,
-     toTermDefinition termDependencyNames,
-     toTermDefinition toShortNames,
-     toTermDefinition topologicalSortBindingMap,
-     toTermDefinition topologicalSortBindings,
-     toTermDefinition typeDependencyNames,
-     toTermDefinition typeNamesInType,
-     toTermDefinition typeSchemeToFType,
-     toTermDefinition unshadowVariables]
+     toDefinition applyInsideTypeLambdasAndAnnotations,
+     toDefinition extendGraphForLambda,
+     toDefinition extendGraphForLet,
+     toDefinition extendGraphForTypeLambda,
+     toDefinition extendGraphWithBindings,
+     toDefinition deannotateAndDetypeTerm,
+     toDefinition deannotateTerm,
+     toDefinition deannotateType,
+     toDefinition deannotateTypeParameters,
+     toDefinition deannotateTypeRecursive,
+     toDefinition deannotateTypeSchemeRecursive,
+     toDefinition detypeTerm,
+     toDefinition flattenLetTerms,
+     toDefinition foldOverTerm,
+     toDefinition foldOverType,
+     toDefinition foldTermWithGraphAndPath,
+     toDefinition fTypeToTypeScheme,
+     toDefinition freeTypeVariablesInTerm,
+     toDefinition freeVariablesInTerm,
+     toDefinition freeVariablesInType,
+     toDefinition freeVariablesInTypeOrdered,
+     toDefinition freeVariablesInTypeSchemeSimple,
+     toDefinition freeVariablesInTypeScheme,
+     toDefinition freeVariablesInTypeSimple,
+     toDefinition inlineType,
+     toDefinition isFreeVariableInTerm,
+     toDefinition isLambda,
+     toDefinition liftLambdaAboveLet,
+     toDefinition mapBeneathTypeAnnotations,
+     toDefinition normalizeTypeVariablesInTerm,
+     toDefinition pruneLet,
+     toDefinition removeTermAnnotations,
+     toDefinition removeTypeAnnotations,
+     toDefinition removeTypeAnnotationsFromTerm,
+     toDefinition removeTypesFromTerm,
+     toDefinition replaceFreeTermVariable,
+     toDefinition replaceFreeTypeVariable,
+     toDefinition replaceTypedefs,
+     toDefinition rewriteAndFoldTerm,
+     toDefinition rewriteAndFoldTermWithGraph,
+     toDefinition rewriteAndFoldTermWithGraphAndPath,
+     toDefinition rewriteAndFoldTermWithPath,
+     toDefinition rewriteTerm,
+     toDefinition rewriteTermM,
+     toDefinition rewriteTermWithContext,
+     toDefinition rewriteTermWithGraph,
+     toDefinition rewriteTermWithContextM,
+     toDefinition rewriteType,
+     toDefinition rewriteTypeM,
+     toDefinition simplifyTerm,
+     toDefinition substituteTypeVariables,
+     toDefinition substituteTypeVariablesInTerm,
+     toDefinition substituteVariable,
+     toDefinition substituteVariables,
+     toDefinition stripTypeLambdas,
+     toDefinition subterms,
+     toDefinition subtermsWithSteps,
+     toDefinition subtypes,
+     toDefinition termDependencyNames,
+     toDefinition toShortNames,
+     toDefinition topologicalSortBindingMap,
+     toDefinition topologicalSortBindings,
+     toDefinition typeDependencyNames,
+     toDefinition typeNamesInType,
+     toDefinition typeSchemeToFType,
+     toDefinition unshadowVariables]
 
-applyInsideTypeLambdasAndAnnotations :: TBinding ((Term -> Term) -> Term -> Term)
+applyInsideTypeLambdasAndAnnotations :: TTermDefinition ((Term -> Term) -> Term -> Term)
 applyInsideTypeLambdasAndAnnotations = define "applyInsideTypeLambdasAndAnnotations" $
   doc "Apply a term-level function inside any leading type lambdas" $
   "f" ~> "term0" ~> cases _Term (var "term0")
@@ -211,7 +211,7 @@ applyInsideTypeLambdasAndAnnotations = define "applyInsideTypeLambdasAndAnnotati
     _Term_typeLambda>>: "tl" ~> Core.termTypeLambda $ Core.typeLambdaWithBody (var "tl")
       (applyInsideTypeLambdasAndAnnotations @@ var "f" @@ (Core.typeLambdaBody $ var "tl"))]
 
-deannotateAndDetypeTerm :: TBinding (Term -> Term)
+deannotateAndDetypeTerm :: TTermDefinition (Term -> Term)
 deannotateAndDetypeTerm = define "deannotateAndDetypeTerm" $
   doc "Strip type annotations from the top levels of a term" $
   "t" ~> cases _Term (var "t")
@@ -220,28 +220,28 @@ deannotateAndDetypeTerm = define "deannotateAndDetypeTerm" $
     _Term_typeApplication>>: "tt" ~> deannotateAndDetypeTerm @@ (Core.typeApplicationTermBody $ var "tt"),
     _Term_typeLambda>>: "ta" ~> deannotateAndDetypeTerm @@ (Core.typeLambdaBody $ var "ta")]
 
-deannotateTerm :: TBinding (Term -> Term)
+deannotateTerm :: TTermDefinition (Term -> Term)
 deannotateTerm = define "deannotateTerm" $
   doc "Strip all annotations (including System F type annotations) from the top levels of a term" $
   "t" ~> cases _Term (var "t")
     (Just $ var "t") [
     _Term_annotated>>: "at" ~> deannotateTerm @@ (Core.annotatedTermBody $ var "at")]
 
-deannotateType :: TBinding (Type -> Type)
+deannotateType :: TTermDefinition (Type -> Type)
 deannotateType = define "deannotateType" $
   doc "Strip all annotations from a term" $
   "t" ~> cases _Type (var "t")
     (Just $ var "t") [
     _Type_annotated>>: deannotateType <.> (project _AnnotatedType _AnnotatedType_body)]
 
-deannotateTypeParameters :: TBinding (Type -> Type)
+deannotateTypeParameters :: TTermDefinition (Type -> Type)
 deannotateTypeParameters = define "deannotateTypeParameters" $
   doc "Strip any top-level type lambdas from a type, extracting the (possibly nested) type body" $
   "t" ~> cases _Type (deannotateType @@ var "t")
     (Just $ var "t") [
     _Type_forall>>: "lt" ~> deannotateTypeParameters @@ (project _ForallType _ForallType_body @@ var "lt")]
 
-deannotateTypeRecursive :: TBinding (Type -> Type)
+deannotateTypeRecursive :: TTermDefinition (Type -> Type)
 deannotateTypeRecursive = define "deannotateTypeRecursive" $
   doc "Recursively strip all annotations from a type" $
   "typ" ~>
@@ -252,7 +252,7 @@ deannotateTypeRecursive = define "deannotateTypeRecursive" $
       _Type_annotated>>: "at" ~> Core.annotatedTypeBody $ var "at"]) $
   rewriteType @@ var "strip" @@ var "typ"
 
-deannotateTypeSchemeRecursive :: TBinding (TypeScheme -> TypeScheme)
+deannotateTypeSchemeRecursive :: TTermDefinition (TypeScheme -> TypeScheme)
 deannotateTypeSchemeRecursive = define "deannotateTypeSchemeRecursive" $
   doc "Recursively strip all annotations from a type scheme" $
   "ts" ~>
@@ -261,7 +261,7 @@ deannotateTypeSchemeRecursive = define "deannotateTypeSchemeRecursive" $
   "constraints" <~ Core.typeSchemeConstraints (var "ts") $
   Core.typeScheme (var "vars") (deannotateTypeRecursive @@ var "typ") (var "constraints")
 
-detypeTerm :: TBinding (Term -> Term)
+detypeTerm :: TTermDefinition (Term -> Term)
 detypeTerm = define "detypeTerm" $
   doc "Strip System F type annotations from the top levels of a term, but leave application-specific annotations intact" $
   "t" ~> cases _Term (var "t")
@@ -273,7 +273,7 @@ detypeTerm = define "detypeTerm" $
     _Term_typeApplication>>: "tt" ~> deannotateAndDetypeTerm @@ (Core.typeApplicationTermBody $ var "tt"),
     _Term_typeLambda>>: "ta" ~> deannotateAndDetypeTerm @@ (Core.typeLambdaBody $ var "ta")]
 
-stripTypeLambdas :: TBinding (Term -> Term)
+stripTypeLambdas :: TTermDefinition (Term -> Term)
 stripTypeLambdas = define "stripTypeLambdas" $
   doc "Strip outer type lambda wrappers from a term, preserving type application wrappers and annotations" $
   "t" ~> cases _Term (var "t")
@@ -284,7 +284,7 @@ stripTypeLambdas = define "stripTypeLambdas" $
        Core.termAnnotated $ Core.annotatedTerm (stripTypeLambdas @@ var "subj") (var "ann"),
     _Term_typeLambda>>: "ta" ~> stripTypeLambdas @@ (Core.typeLambdaBody $ var "ta")]
 
-flattenLetTerms :: TBinding (Term -> Term)
+flattenLetTerms :: TTermDefinition (Term -> Term)
 flattenLetTerms = define "flattenLetTerms" $
   doc "Flatten nested let expressions" $
   "term" ~>
@@ -348,7 +348,7 @@ flattenLetTerms = define "flattenLetTerms" $
         Core.termLet $ Core.let_ (var "newBindings") (var "newBody")]) $
   rewriteTerm @@ var "flatten" @@ var "term"
 
-foldOverTerm :: TBinding (TraversalOrder -> (x -> Term -> x) -> x -> Term -> x)
+foldOverTerm :: TTermDefinition (TraversalOrder -> (x -> Term -> x) -> x -> Term -> x)
 foldOverTerm = define "foldOverTerm" $
   doc "Fold over a term, traversing its subterms in the specified order" $
   "order" ~> "fld" ~> "b0" ~> "term" ~> cases _TraversalOrder (var "order") Nothing [
@@ -361,7 +361,7 @@ foldOverTerm = define "foldOverTerm" $
         @@ (subterms @@ var "term"))
       @@ var "term")]
 
-foldOverType :: TBinding (TraversalOrder -> (x -> Type -> x) -> x -> Type -> x)
+foldOverType :: TTermDefinition (TraversalOrder -> (x -> Type -> x) -> x -> Type -> x)
 foldOverType = define "foldOverType" $
   doc "Fold over a type, traversing its subtypes in the specified order" $
   "order" ~> "fld" ~> "b0" ~> "typ" ~> cases _TraversalOrder (var "order") Nothing [
@@ -374,7 +374,7 @@ foldOverType = define "foldOverType" $
         @@ (subtypes @@ var "typ"))
       @@ var "typ")]
 
---freeTypeVariablesInTerm :: TBinding (Term -> S.Set Name)
+--freeTypeVariablesInTerm :: TTermDefinition (Term -> S.Set Name)
 --freeTypeVariablesInTerm = define "freeTypeVariablesInTerm" $
 --  doc "Find free type variables introduced by type applications within a term." $
 --  "term" ~> cases _Term (var "term")
@@ -387,7 +387,7 @@ foldOverType = define "foldOverType" $
 --      "tmp" <~ freeTypeVariablesInTerm @@ (Core.typeLambdaBody $ var "tl") $
 --      Sets.delete (Core.typeLambdaParameter $ var "tl") (var "tmp")]
 
-freeTypeVariablesInTerm :: TBinding (Term -> S.Set Name)
+freeTypeVariablesInTerm :: TTermDefinition (Term -> S.Set Name)
 freeTypeVariablesInTerm = define "freeTypeVariablesInTerm" $
   doc ("Get the set of free type variables in a term (including schema names, where they appear in type annotations)."
     <> " In this context, only the type schemes of let bindings can bind type variables; type lambdas do not.") $
@@ -430,7 +430,7 @@ freeTypeVariablesInTerm = define "freeTypeVariablesInTerm" $
           (var "recurse" @@ (Core.typeLambdaBody $ var "tl"))]) $
   var "getAll" @@ Sets.empty @@ var "term0"
 
-freeVariablesInTerm :: TBinding (Term -> S.Set Name)
+freeVariablesInTerm :: TTermDefinition (Term -> S.Set Name)
 freeVariablesInTerm = define "freeVariablesInTerm" $
   doc "Find the free variables (i.e. variables not bound by a lambda or let) in a term" $
   "term" ~>
@@ -451,7 +451,7 @@ freeVariablesInTerm = define "freeVariablesInTerm" $
       (Sets.fromList (Lists.map (unaryFunction Core.bindingName) (Core.letBindings $ var "l"))),
     _Term_variable>>: "v" ~> Sets.singleton $ var "v"]
 
---freeVariablesInTermOpt :: TBinding (Term -> S.Set Name)
+--freeVariablesInTermOpt :: TTermDefinition (Term -> S.Set Name)
 --freeVariablesInTermOpt = define "freeVariablesInTermOpt" $
 --  doc ("A possibly more efficient function to find the free variables (i.e. variables not bound by a lambda or let) in a term") $
 --  "term0" ~>
@@ -482,7 +482,7 @@ freeVariablesInTerm = define "freeVariablesInTerm" $
 --        (Sets.insert (var "name") (var "s"))]) $
 --  "gather" @@ Sets.empty @@ Sets.empty @@ var "term0"
 
-freeVariablesInType :: TBinding (Type -> S.Set Name)
+freeVariablesInType :: TTermDefinition (Type -> S.Set Name)
 freeVariablesInType = define "freeVariablesInType" $
   doc "Find the free variables (i.e. variables not bound by a lambda or let) in a type" $
   "typ" ~>
@@ -499,7 +499,7 @@ freeVariablesInType = define "freeVariablesInType" $
   where
     recurse = freeVariablesInType
 
-freeVariablesInTypeOrdered :: TBinding (Type -> [Name])
+freeVariablesInTypeOrdered :: TTermDefinition (Type -> [Name])
 freeVariablesInTypeOrdered = define "freeVariablesInTypeOrdered" $
   doc "Find the free variables in a type in deterministic left-to-right order" $
   "typ" ~>
@@ -517,7 +517,7 @@ freeVariablesInTypeOrdered = define "freeVariablesInTypeOrdered" $
           (Core.forallTypeBody $ var "ft")]) $
   (Lists.nub :: TTerm [Name] -> TTerm [Name]) $ var "collectVars" @@ Sets.empty @@ var "typ"
 
-freeVariablesInTypeSimple :: TBinding (Type -> S.Set Name)
+freeVariablesInTypeSimple :: TTermDefinition (Type -> S.Set Name)
 freeVariablesInTypeSimple = define "freeVariablesInTypeSimple" $
   doc "Same as freeVariablesInType, but ignores the binding action of lambda types" $
   "typ" ~>
@@ -526,7 +526,7 @@ freeVariablesInTypeSimple = define "freeVariablesInTypeSimple" $
     _Type_variable>>: "v" ~> Sets.insert (var "v") (var "types")]) $
   foldOverType @@ Coders.traversalOrderPre @@ var "helper" @@ Sets.empty @@ var "typ"
 
-freeVariablesInTypeScheme :: TBinding (TypeScheme -> S.Set Name)
+freeVariablesInTypeScheme :: TTermDefinition (TypeScheme -> S.Set Name)
 freeVariablesInTypeScheme = define "freeVariablesInTypeScheme" $
   doc "Find free variables in a type scheme" $
   "ts" ~>
@@ -534,7 +534,7 @@ freeVariablesInTypeScheme = define "freeVariablesInTypeScheme" $
   "t" <~ Core.typeSchemeType (var "ts") $
   Sets.difference (freeVariablesInType @@ var "t") (Sets.fromList $ var "vars")
 
-freeVariablesInTypeSchemeSimple :: TBinding (TypeScheme -> S.Set Name)
+freeVariablesInTypeSchemeSimple :: TTermDefinition (TypeScheme -> S.Set Name)
 freeVariablesInTypeSchemeSimple = define "freeVariablesInTypeSchemeSimple" $
   doc "Find free variables in a type scheme (simple version)" $
   "ts" ~>
@@ -542,7 +542,7 @@ freeVariablesInTypeSchemeSimple = define "freeVariablesInTypeSchemeSimple" $
   "t" <~ Core.typeSchemeType (var "ts") $
   Sets.difference (freeVariablesInTypeSimple @@ var "t") (Sets.fromList $ var "vars")
 
-inlineType :: TBinding (M.Map Name Type -> Type -> Prelude.Either String Type)
+inlineType :: TTermDefinition (M.Map Name Type -> Type -> Prelude.Either String Type)
 inlineType = define "inlineType" $
   doc "Inline all type variables in a type using the provided schema (Either version). Note: this function is only appropriate for nonrecursive type definitions" $
   "schema" ~> "typ" ~>
@@ -558,13 +558,13 @@ inlineType = define "inlineType" $
     var "afterRecurse" @@ var "tr") $
   rewriteTypeM @@ var "f" @@ var "typ"
 
-isFreeVariableInTerm :: TBinding (Name -> Term -> Bool)
+isFreeVariableInTerm :: TTermDefinition (Name -> Term -> Bool)
 isFreeVariableInTerm = define "isFreeVariableInTerm" $
  doc "Check whether a variable is free (not bound) in a term" $
  "v" ~> "term" ~>
    Logic.not $ Sets.member (var "v") (freeVariablesInTerm @@ var "term")
 
-isLambda :: TBinding (Term -> Bool)
+isLambda :: TTermDefinition (Term -> Bool)
 isLambda = define "isLambda" $
   doc "Check whether a term is a lambda, possibly nested within let and/or annotation terms" $
   "term" ~> cases _Term (deannotateTerm @@ var "term")
@@ -575,7 +575,7 @@ isLambda = define "isLambda" $
     _Term_let>>: "lt" ~> isLambda @@ (project _Let _Let_body @@ var "lt")]
 
 -- TODO: account for shadowing among let- and lambda-bound variables
-liftLambdaAboveLet :: TBinding (Term -> Term)
+liftLambdaAboveLet :: TTermDefinition (Term -> Term)
 liftLambdaAboveLet = define "liftLambdaAboveLet" $
   doc ("Rewrite terms like `let foo = bar in λx.baz` to `λx.let foo = bar in baz`, lifting lambda-bound variables"
     <> " above let-bound variables, recursively. This is helpful for targets such as Python.") $
@@ -609,7 +609,7 @@ liftLambdaAboveLet = define "liftLambdaAboveLet" $
         @@ Core.letBody (var "l")]) $
   rewriteTerm @@ var "rewrite" @@ var "term0"
 
-mapBeneathTypeAnnotations :: TBinding ((Type -> Type) -> Type -> Type)
+mapBeneathTypeAnnotations :: TTermDefinition ((Type -> Type) -> Type -> Type)
 mapBeneathTypeAnnotations = define "mapBeneathTypeAnnotations" $
   doc "Apply a transformation to the first type beneath a chain of annotations" $
   "f" ~> "t" ~> cases _Type (var "t")
@@ -618,7 +618,7 @@ mapBeneathTypeAnnotations = define "mapBeneathTypeAnnotations" $
       (mapBeneathTypeAnnotations @@ var "f" @@ (Core.annotatedTypeBody $ var "at"))
       (Core.annotatedTypeAnnotation $ var "at")]
 
-normalizeTypeVariablesInTerm :: TBinding (Term -> Term)
+normalizeTypeVariablesInTerm :: TTermDefinition (Term -> Term)
 normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
   doc "Recursively replace the type variables of let bindings with the systematic type variables t0, t1, t2, ..." $
   "term" ~>
@@ -720,7 +720,7 @@ normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
   -- initial state: ((emptySubst, emptyBound), next=0)
   var "rewriteWithSubst" @@ (pair (pair Maps.empty Sets.empty) (int32 0)) @@ var "term"
 
-pruneLet :: TBinding (Let -> Let)
+pruneLet :: TTermDefinition (Let -> Let)
 pruneLet = define "pruneLet" $
   doc ("Given a let expression, remove any unused bindings. The resulting expression is still a let,"
     <> " even if has no remaining bindings") $
@@ -740,7 +740,7 @@ pruneLet = define "pruneLet" $
     (var "prunedBindings")
     (Core.letBody $ var "l")
 
-removeTermAnnotations :: TBinding (Term -> Term)
+removeTermAnnotations :: TTermDefinition (Term -> Term)
 removeTermAnnotations = define "removeTermAnnotations" $
   doc "Recursively remove term annotations, including within subterms" $
   "term" ~>
@@ -751,7 +751,7 @@ removeTermAnnotations = define "removeTermAnnotations" $
       _Term_annotated>>: "at" ~> Core.annotatedTermBody $ var "at"]) $
   rewriteTerm @@ var "remove" @@ var "term"
 
-removeTypeAnnotations :: TBinding (Type -> Type)
+removeTypeAnnotations :: TTermDefinition (Type -> Type)
 removeTypeAnnotations = define "removeTypeAnnotations" $
   doc "Recursively remove type annotations, including within subtypes" $
   "typ" ~>
@@ -762,7 +762,7 @@ removeTypeAnnotations = define "removeTypeAnnotations" $
       _Type_annotated>>: "at" ~> Core.annotatedTypeBody $ var "at"]) $
   rewriteType @@ var "remove" @@ var "typ"
 
-removeTypesFromTerm :: TBinding (Term -> Term)
+removeTypesFromTerm :: TTermDefinition (Term -> Term)
 removeTypesFromTerm = define "removeTypesFromTerm" $
   doc "Strip type annotations from terms while preserving other annotations" $
   "term" ~>
@@ -788,7 +788,7 @@ removeTypesFromTerm = define "removeTypesFromTerm" $
       _Term_typeLambda>>: "ta" ~> Core.typeLambdaBody $ var "ta"]) $
   rewriteTerm @@ var "strip" @@ var "term"
 
-removeTypeAnnotationsFromTerm :: TBinding (Term -> Term)
+removeTypeAnnotationsFromTerm :: TTermDefinition (Term -> Term)
 removeTypeAnnotationsFromTerm = define "removeTypeAnnotationsFromTerm" $
   doc "Strip type annotations (TypeLambda, TypeApplication, binding type schemes) from terms while preserving lambda domain types and other annotations" $
   "term" ~>
@@ -807,7 +807,7 @@ removeTypeAnnotationsFromTerm = define "removeTypeAnnotationsFromTerm" $
       _Term_typeLambda>>: "ta" ~> Core.typeLambdaBody $ var "ta"]) $
   rewriteTerm @@ var "strip" @@ var "term"
 
-replaceFreeTermVariable :: TBinding (Name -> Term -> Term -> Term)
+replaceFreeTermVariable :: TTermDefinition (Name -> Term -> Term -> Term)
 replaceFreeTermVariable = define "replaceFreeTermVariable" $
   doc "Replace a free variable in a term" $
   "vold" ~> "tnew" ~> "term" ~>
@@ -827,7 +827,7 @@ replaceFreeTermVariable = define "replaceFreeTermVariable" $
         (Core.termVariable $ var "v")]) $
   rewriteTerm @@ var "rewrite" @@ var "term"
 
-replaceFreeTypeVariable :: TBinding (Name -> Type -> Type -> Type)
+replaceFreeTypeVariable :: TTermDefinition (Name -> Type -> Type -> Type)
 replaceFreeTypeVariable = define "replaceFreeTypeVariable" $
   doc "Replace free occurrences of a name in a type" $
   "v" ~> "rep" ~> "typ" ~>
@@ -845,7 +845,7 @@ replaceFreeTypeVariable = define "replaceFreeTypeVariable" $
       (var "t")]) $
   rewriteType @@ var "mapExpr" @@ var "typ"
 
-replaceTypedefs :: TBinding (M.Map Name TypeScheme -> Type -> Type)
+replaceTypedefs :: TTermDefinition (M.Map Name TypeScheme -> Type -> Type)
 replaceTypedefs = define "replaceTypedefs" $
   doc "Replace all occurrences of simple typedefs (type aliases) with the aliased types, recursively" $
   "types" ~> "typ0" ~>
@@ -880,12 +880,12 @@ replaceTypedefs = define "replaceTypedefs" $
 
 -- TODO: this is a fixpoint combinator, but its type is sometimes incorrectly inferred based on how it is used.
 --       For now, we generally define local "rewrite"/"recurse" helper functions rather than using this global one.
---rewrite :: TBinding (((x -> y) -> x -> y) -> ((x -> y) -> x -> y) -> x -> y)
+--rewrite :: TTermDefinition (((x -> y) -> x -> y) -> ((x -> y) -> x -> y) -> x -> y)
 --rewrite = define "rewrite" $ "fsub" ~> "f" ~>
 --  "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
 --  var "recurse"
 
-rewriteAndFoldTerm :: TBinding (((a -> Term -> (a, Term)) -> a -> Term -> (a, Term)) -> a -> Term -> (a, Term))
+rewriteAndFoldTerm :: TTermDefinition (((a -> Term -> (a, Term)) -> a -> Term -> (a, Term)) -> a -> Term -> (a, Term))
 rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
   doc "Rewrite a term, and at the same time, fold a function over it, accumulating a value" $
   "f" ~> "term0" ~>
@@ -1035,7 +1035,7 @@ rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
 -- | Rewrite a term with path tracking, and fold a function over it.
 -- The path is the list of accessors from the root to the current term.
 -- The function f receives: (recurse path acc term -> (acc', term')) -> path -> acc -> term -> (acc', term')
-rewriteAndFoldTermWithPath :: TBinding ((([SubtermStep] -> a -> Term -> (a, Term)) -> [SubtermStep] -> a -> Term -> (a, Term)) -> a -> Term -> (a, Term))
+rewriteAndFoldTermWithPath :: TTermDefinition ((([SubtermStep] -> a -> Term -> (a, Term)) -> [SubtermStep] -> a -> Term -> (a, Term)) -> a -> Term -> (a, Term))
 rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
   doc "Rewrite a term with path tracking, and fold a function over it, accumulating a value. The path is a list of SubtermSteps from root to current position." $
   "f" ~> "term0" ~>
@@ -1312,7 +1312,7 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ list ([] :: [TTerm SubtermStep]) @@ var "term0"
 
-rewriteTerm :: TBinding (((Term -> Term) -> Term -> Term) -> Term -> Term)
+rewriteTerm :: TTermDefinition (((Term -> Term) -> Term -> Term) -> Term -> Term)
 rewriteTerm = define "rewriteTerm" $ "f" ~> "term0" ~>
   "fsub" <~ ("recurse" ~> "term" ~>
     "forField" <~ ("f" ~> Core.fieldWithTerm (var "f") (var "recurse" @@ (Core.fieldTerm $ var "f"))) $
@@ -1383,7 +1383,7 @@ rewriteTerm = define "rewriteTerm" $ "f" ~> "term0" ~>
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ var "term0"
 
-rewriteTermM :: TBinding (((Term -> Prelude.Either e Term) -> Term -> Prelude.Either e Term) -> Term -> Prelude.Either e Term)
+rewriteTermM :: TTermDefinition (((Term -> Prelude.Either e Term) -> Term -> Prelude.Either e Term) -> Term -> Prelude.Either e Term)
 rewriteTermM = define "rewriteTermM" $
   doc "Either-based term rewriting with custom transformation function" $
   "f" ~> "term0" ~>
@@ -1491,7 +1491,7 @@ rewriteTermM = define "rewriteTermM" $
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ var "term0"
 
-rewriteTermWithContext :: TBinding (((a -> Term -> Term) -> a -> Term -> Term) -> a -> Term -> Term)
+rewriteTermWithContext :: TTermDefinition (((a -> Term -> Term) -> a -> Term -> Term) -> a -> Term -> Term)
 rewriteTermWithContext = define "rewriteTermWithContext" $
   doc ("A variant of rewriteTerm which allows a context (e.g. a TypeContext)"
     <> " to be passed down to all subterms during rewriting") $
@@ -1565,7 +1565,7 @@ rewriteTermWithContext = define "rewriteTermWithContext" $
   "rewrite" <~ ("cx" ~> "term" ~> var "f" @@ (var "forSubterms" @@ var "rewrite") @@ var "cx" @@ var "term") $
   var "rewrite" @@ var "cx0" @@ var "term0"
 
-rewriteTermWithContextM :: TBinding (((a -> Term -> Prelude.Either e Term) -> a -> Term -> Prelude.Either e Term) -> a -> Term -> Prelude.Either e Term)
+rewriteTermWithContextM :: TTermDefinition (((a -> Term -> Prelude.Either e Term) -> a -> Term -> Prelude.Either e Term) -> a -> Term -> Prelude.Either e Term)
 rewriteTermWithContextM = define "rewriteTermWithContextM" $
   doc ("Either-based variant of rewriteTermWithContextM which allows a context (e.g. a TypeContext)"
     <> " to be passed down to all subterms during rewriting") $
@@ -1676,7 +1676,7 @@ rewriteTermWithContextM = define "rewriteTermWithContextM" $
   "rewrite" <~ ("cx" ~> "term" ~> var "f" @@ (var "forSubterms" @@ var "rewrite") @@ var "cx" @@ var "term") $
   var "rewrite" @@ var "cx0" @@ var "term0"
 
-rewriteType :: TBinding (((Type -> Type) -> Type -> Type) -> Type -> Type)
+rewriteType :: TTermDefinition (((Type -> Type) -> Type -> Type) -> Type -> Type)
 rewriteType = define "rewriteType" $ "f" ~> "typ0" ~>
   "fsub" <~ ("recurse" ~> "typ" ~>
     "forField" <~ ("field" ~> Core.fieldTypeWithType (var "field") (var "recurse" @@ (Core.fieldTypeType $ var "field"))) $
@@ -1719,7 +1719,7 @@ rewriteType = define "rewriteType" $ "f" ~> "typ0" ~>
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ var "typ0"
 
-rewriteTypeM :: TBinding (((Type -> Prelude.Either e Type) -> Type -> Prelude.Either e Type) -> Type -> Prelude.Either e Type)
+rewriteTypeM :: TTermDefinition (((Type -> Prelude.Either e Type) -> Type -> Prelude.Either e Type) -> Type -> Prelude.Either e Type)
 rewriteTypeM = define "rewriteTypeM" $
   doc "Either-based type rewriting" $
   "f" ~> "typ0" ~>
@@ -1781,7 +1781,7 @@ rewriteTypeM = define "rewriteTypeM" $
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ var "typ0"
 
-simplifyTerm :: TBinding (Term -> Term)
+simplifyTerm :: TTermDefinition (Term -> Term)
 simplifyTerm = define "simplifyTerm" $
   doc "Simplify terms by applying beta reduction where possible" $
   "term" ~>
@@ -1812,7 +1812,7 @@ simplifyTerm = define "simplifyTerm" $
     var "recurse" @@ (var "forTerm" @@ var "stripped")) $
   rewriteTerm @@ var "simplify" @@ var "term"
 
-substituteTypeVariables :: TBinding (M.Map Name Name -> Type -> Type)
+substituteTypeVariables :: TTermDefinition (M.Map Name Name -> Type -> Type)
 substituteTypeVariables = define "substituteTypeVariables" $
   doc "Substitute type variables in a type" $
   "subst" ~> "typ" ~>
@@ -1822,7 +1822,7 @@ substituteTypeVariables = define "substituteTypeVariables" $
       Core.typeVariable $ Maybes.fromMaybe (var "n") $ Maps.lookup (var "n") (var "subst")]) $
   rewriteType @@ var "replace" @@ var "typ"
 
-substituteTypeVariablesInTerm :: TBinding (M.Map Name Name -> Term -> Term)
+substituteTypeVariablesInTerm :: TTermDefinition (M.Map Name Name -> Term -> Term)
 substituteTypeVariablesInTerm = define "substituteTypeVariablesInTerm" $
   doc "Substitute type variables throughout a term, including in type annotations, type applications, lambda domains, and type schemes" $
   "subst" ~> "term" ~>
@@ -1858,7 +1858,7 @@ substituteTypeVariablesInTerm = define "substituteTypeVariablesInTerm" $
         (Core.annotatedTermAnnotation $ var "at")]) $
   rewriteTerm @@ var "replace" @@ var "term"
 
-substituteVariable :: TBinding (Name -> Name -> Term -> Term)
+substituteVariable :: TTermDefinition (Name -> Name -> Term -> Term)
 substituteVariable = define "substituteVariable" $
   doc "Substitute one variable for another in a term" $
   "from" ~> "to" ~> "term" ~>
@@ -1875,7 +1875,7 @@ substituteVariable = define "substituteVariable" $
           (var "recurse" @@ var "term")]]) $
   rewriteTerm @@ var "replace" @@ var "term"
 
-substituteVariables :: TBinding (M.Map Name Name -> Term -> Term)
+substituteVariables :: TTermDefinition (M.Map Name Name -> Term -> Term)
 substituteVariables = define "substituteVariables" $
   doc "Substitute multiple variables in a term" $
   "subst" ~> "term" ~>
@@ -1893,7 +1893,7 @@ substituteVariables = define "substituteVariables" $
             (Maps.lookup (Core.lambdaParameter $ var "l") (var "subst"))]]) $
   rewriteTerm @@ var "replace" @@ var "term"
 
-subterms :: TBinding (Term -> [Term])
+subterms :: TTermDefinition (Term -> [Term])
 subterms = define "subterms" $
   doc "Find the children of a given term" $
   match _Term Nothing [
@@ -1932,7 +1932,7 @@ subterms = define "subterms" $
     _Term_variable>>: constant $ list ([] :: [TTerm Term]),
     _Term_wrap>>: "n" ~> list [Core.wrappedTermBody $ var "n"]]
 
-subtermsWithSteps :: TBinding (Term -> [(SubtermStep, Term)])
+subtermsWithSteps :: TTermDefinition (Term -> [(SubtermStep, Term)])
 subtermsWithSteps = define "subtermsWithSteps" $
   doc "Find the children of a given term" $
   match _Term Nothing [
@@ -1998,7 +1998,7 @@ subtermsWithSteps = define "subtermsWithSteps" $
     single step term = list [result step term]
     result step term = pair step term
 
-subtypes :: TBinding (Type -> [Type])
+subtypes :: TTermDefinition (Type -> [Type])
 subtypes = define "subtypes" $
   doc "Find the children of a given type expression" $
   match _Type Nothing [
@@ -2030,7 +2030,7 @@ subtypes = define "subtypes" $
     _Type_void>>: constant $ list ([] :: [TTerm Type]),
     _Type_wrap>>: "nt" ~> list [var "nt"]]
 
-termDependencyNames :: TBinding (Bool -> Bool -> Bool -> Term -> S.Set Name)
+termDependencyNames :: TTermDefinition (Bool -> Bool -> Bool -> Term -> S.Set Name)
 termDependencyNames = define "termDependencyNames" $
   doc "Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that" $
   "binds" ~> "withPrims" ~> "withNoms" ~> "term0" ~>
@@ -2060,7 +2060,7 @@ termDependencyNames = define "termDependencyNames" $
       _Term_wrap>>: "wrappedTerm" ~> var "nominal" @@ (Core.wrappedTermTypeName $ var "wrappedTerm")]) $
   foldOverTerm @@ Coders.traversalOrderPre @@ var "addNames" @@ Sets.empty @@ var "term0"
 
-toShortNames :: TBinding ([Name] -> M.Map Name Name)
+toShortNames :: TTermDefinition ([Name] -> M.Map Name Name)
 toShortNames = define "toShortNames" $
   doc "Generate short names from a list of fully qualified names" $
   "original" ~>
@@ -2081,7 +2081,7 @@ toShortNames = define "toShortNames" $
     Lists.zipWith (var "rename") (Sets.toList $ var "names") (var "rangeFrom" @@ int32 1)) $
   Maps.fromList $ Lists.concat $ Lists.map (var "renameGroup") $ Maps.toList $ var "groups"
 
-topologicalSortBindingMap :: TBinding (M.Map Name Term -> [[(Name, Term)]])
+topologicalSortBindingMap :: TTermDefinition (M.Map Name Term -> [[(Name, Term)]])
 topologicalSortBindingMap = define "topologicalSortBindingMap" $
   doc "Topological sort of connected components, in terms of dependencies between variable/term binding pairs" $
   "bindingMap" ~>
@@ -2103,7 +2103,7 @@ topologicalSortBindingMap = define "topologicalSortBindingMap" $
     (Maps.lookup (var "name") (var "bindingMap"))) $
   Lists.map (unaryFunction $ Lists.map $ var "toPair") (Sorting.topologicalSortComponents @@ Lists.map (var "depsOf") (var "bindings"))
 
-topologicalSortBindings :: TBinding ([Binding] -> Either [[Name]] [Name])
+topologicalSortBindings :: TTermDefinition ([Binding] -> Either [[Name]] [Name])
 topologicalSortBindings = define "topologicalSortBindings" $
   doc "Topological sort of elements based on their dependencies" $
   "els" ~>
@@ -2112,7 +2112,7 @@ topologicalSortBindings = define "topologicalSortBindings" $
     (Sets.toList $ termDependencyNames @@ false @@ true @@ true @@ (Core.bindingTerm $ var "e"))) $
   Sorting.topologicalSort @@ Lists.map (var "adjlist") (var "els")
 
-typeDependencyNames :: TBinding (Bool -> Type -> S.Set Name)
+typeDependencyNames :: TTermDefinition (Bool -> Type -> S.Set Name)
 typeDependencyNames = define "typeDependencyNames" $
   "withSchema" ~> "typ" ~> Logic.ifElse (var "withSchema")
     (Sets.union
@@ -2120,13 +2120,13 @@ typeDependencyNames = define "typeDependencyNames" $
       (typeNamesInType @@ var "typ"))
     (freeVariablesInType @@ var "typ")
 
-typeNamesInType :: TBinding (Type -> S.Set Name)
+typeNamesInType :: TTermDefinition (Type -> S.Set Name)
 typeNamesInType = define "typeNamesInType" $
   "typ0" ~>
   "addNames" <~ ("names" ~> "typ" ~> var "names") $
   foldOverType @@ Coders.traversalOrderPre @@ var "addNames" @@ Sets.empty @@ var "typ0"
 
-unshadowVariables :: TBinding (Term -> Term)
+unshadowVariables :: TTermDefinition (Term -> Term)
 unshadowVariables = define "unshadowVariables" $
   doc ("Rename all shadowed variables (both lambda parameters and let-bound variables"
     <> " that shadow lambda parameters) in a term.") $
@@ -2168,7 +2168,7 @@ unshadowVariables = define "unshadowVariables" $
       ("renamed" ~> var "renamed")]) $
   rewriteTermWithContext @@ var "f" @@ Maps.empty @@ var "term0"
 
-fTypeToTypeScheme :: TBinding (Type -> TypeScheme)
+fTypeToTypeScheme :: TTermDefinition (Type -> TypeScheme)
 fTypeToTypeScheme = define "fTypeToTypeScheme" $
   doc "Convert a forall type to a type scheme" $
   "typ" ~>
@@ -2179,7 +2179,7 @@ fTypeToTypeScheme = define "fTypeToTypeScheme" $
        (Core.forallTypeBody $ var "ft")]) $
   var "gatherForall" @@ list ([] :: [TTerm Name]) @@ var "typ"
 
-typeSchemeToFType :: TBinding (TypeScheme -> Type)
+typeSchemeToFType :: TTermDefinition (TypeScheme -> Type)
 typeSchemeToFType = define "typeSchemeToFType" $
   doc "Convert a type scheme to a forall type" $
   "ts" ~>
@@ -2190,7 +2190,7 @@ typeSchemeToFType = define "typeSchemeToFType" $
     (var "body")
     (Lists.reverse $ var "vars")
 
-extendGraphForLambda :: TBinding (Graph -> Lambda -> Graph)
+extendGraphForLambda :: TTermDefinition (Graph -> Lambda -> Graph)
 extendGraphForLambda = define "extendGraphForLambda" $
   doc "Extend a graph by descending into a lambda body" $
   "g" ~> "lam" ~>
@@ -2207,7 +2207,7 @@ extendGraphForLambda = define "extendGraphForLambda" $
     (Graph.graphSchemaTypes $ var "g")
     (Graph.graphTypeVariables $ var "g")
 
-extendGraphForLet :: TBinding ((Graph -> Binding -> Maybe Term) -> Graph -> Let -> Graph)
+extendGraphForLet :: TTermDefinition ((Graph -> Binding -> Maybe Term) -> Graph -> Let -> Graph)
 extendGraphForLet = define "extendGraphForLet" $
   doc "Extend a graph by descending into a let body" $
   "forBinding" ~> "g" ~> "letrec" ~>
@@ -2253,7 +2253,7 @@ extendGraphForLet = define "extendGraphForLet" $
     (Graph.graphSchemaTypes $ var "g")
     (Graph.graphTypeVariables $ var "g")
 
-extendGraphForTypeLambda :: TBinding (Graph -> TypeLambda -> Graph)
+extendGraphForTypeLambda :: TTermDefinition (Graph -> TypeLambda -> Graph)
 extendGraphForTypeLambda = define "extendGraphForTypeLambda" $
   doc "Extend a graph by descending into a type lambda body" $
   "g" ~> "tlam" ~>
@@ -2268,7 +2268,7 @@ extendGraphForTypeLambda = define "extendGraphForTypeLambda" $
     (Graph.graphSchemaTypes $ var "g")
     (Sets.insert (var "name") $ Graph.graphTypeVariables $ var "g")
 
-extendGraphWithBindings :: TBinding ([Binding] -> Graph -> Graph)
+extendGraphWithBindings :: TTermDefinition ([Binding] -> Graph -> Graph)
 extendGraphWithBindings = define "extendGraphWithBindings" $
   doc "Add bindings to an existing graph" $
   "bindings" ~> "g" ~>
@@ -2288,7 +2288,7 @@ extendGraphWithBindings = define "extendGraphWithBindings" $
     (Graph.graphSchemaTypes (var "g"))
     (Graph.graphTypeVariables (var "g"))
 
-rewriteAndFoldTermWithGraph :: TBinding (((a -> Term -> (a, Term)) -> Graph -> a -> Term -> (a, Term)) -> Graph -> a -> Term -> (a, Term))
+rewriteAndFoldTermWithGraph :: TTermDefinition (((a -> Term -> (a, Term)) -> Graph -> a -> Term -> (a, Term)) -> Graph -> a -> Term -> (a, Term))
 rewriteAndFoldTermWithGraph = define "rewriteAndFoldTermWithGraph" $
   doc ("Rewrite a term while folding to produce a value, with Graph updated as we descend into subterms."
     <> " Combines the features of rewriteAndFoldTerm and rewriteTermWithGraph."
@@ -2312,7 +2312,7 @@ rewriteAndFoldTermWithGraph = define "rewriteAndFoldTermWithGraph" $
   "result" <~ rewriteAndFoldTerm @@ var "wrapper" @@ pair (var "val0") (var "cx0") @@ var "term0" $
   pair (Pairs.first $ Pairs.first $ var "result") (Pairs.second $ var "result")
 
-rewriteAndFoldTermWithGraphAndPath :: TBinding (
+rewriteAndFoldTermWithGraphAndPath :: TTermDefinition (
   ((a -> Term -> (a, Term)) -> [SubtermStep] -> Graph -> a -> Term -> (a, Term))
   -> Graph -> a -> Term -> (a, Term))
 rewriteAndFoldTermWithGraphAndPath = define "rewriteAndFoldTermWithGraphAndPath" $
@@ -2339,7 +2339,7 @@ rewriteAndFoldTermWithGraphAndPath = define "rewriteAndFoldTermWithGraphAndPath"
   "result" <~ rewriteAndFoldTermWithPath @@ var "wrapper" @@ pair (var "cx0") (var "val0") @@ var "term0" $
   pair (Pairs.second $ Pairs.first $ var "result") (Pairs.second $ var "result")
 
-rewriteTermWithGraph :: TBinding (((Term -> Term) -> Graph -> Term -> Term) -> Graph -> Term -> Term)
+rewriteTermWithGraph :: TTermDefinition (((Term -> Term) -> Graph -> Term -> Term) -> Graph -> Term -> Term)
 rewriteTermWithGraph = define "rewriteTermWithGraph" $
   doc "Rewrite a term with the help of a Graph which is updated as we descend into subterms" $
   "f" ~> "cx0" ~> "term0" ~>
@@ -2363,7 +2363,7 @@ rewriteTermWithGraph = define "rewriteTermWithGraph" $
   "rewrite" <~ ("cx" ~> "term" ~> var "f2" @@ (var "rewrite") @@ var "cx" @@ var "term") $
   var "rewrite" @@ var "cx0" @@ var "term0"
 
-foldTermWithGraphAndPath :: TBinding (
+foldTermWithGraphAndPath :: TTermDefinition (
   ((a -> Term -> a) -> [SubtermStep] -> Graph -> a -> Term -> a)
   -> Graph -> a -> Term -> a)
 foldTermWithGraphAndPath = define "foldTermWithGraphAndPath" $

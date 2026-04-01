@@ -85,7 +85,7 @@ import Hydra.Pg.Model as PG
 import qualified Hydra.Ext.Sources.Pg.Model as PgModel
 
 
-validationDefinition :: String -> TTerm a -> TBinding a
+validationDefinition :: String -> TTerm a -> TTermDefinition a
 validationDefinition = definitionInModule module_
 
 module_ :: Module
@@ -95,41 +95,41 @@ module_ = Module (Namespace "hydra.pg.validation") elements
     Just "Utilities for validating property graphs against property graph schemas"
   where
    elements = [
-     toTermDefinition checkAll,
-     toTermDefinition edgeError,
-     toTermDefinition edgeLabelMismatch,
-     toTermDefinition prepend,
-     toTermDefinition validateEdge,
-     toTermDefinition validateElement,
-     toTermDefinition validateGraph,
-     toTermDefinition validateProperties,
-     toTermDefinition validateVertex,
-     toTermDefinition verify,
-     toTermDefinition vertexError,
-     toTermDefinition vertexLabelMismatch]
+     toDefinition checkAll,
+     toDefinition edgeError,
+     toDefinition edgeLabelMismatch,
+     toDefinition prepend,
+     toDefinition validateEdge,
+     toDefinition validateElement,
+     toDefinition validateGraph,
+     toDefinition validateProperties,
+     toDefinition validateVertex,
+     toDefinition verify,
+     toDefinition vertexError,
+     toDefinition vertexLabelMismatch]
 
-checkAll :: TBinding ([Y.Maybe a] -> Y.Maybe a)
+checkAll :: TTermDefinition ([Y.Maybe a] -> Y.Maybe a)
 checkAll = validationDefinition "checkAll" $
   "checks" ~> lets [
     "errors">: Maybes.cat $ var "checks"]
     $ Lists.safeHead $ var "errors"
 
-edgeError :: TBinding ((v -> String) -> PG.Edge v -> String -> String)
+edgeError :: TTermDefinition ((v -> String) -> PG.Edge v -> String -> String)
 edgeError = validationDefinition "edgeError" $
   "showValue" ~> "e" ~>
     prepend @@ (string "Invalid edge with id " ++ (var "showValue" @@ (project _Edge _Edge_id @@ var "e")))
 
-edgeLabelMismatch :: TBinding (PG.EdgeLabel -> PG.EdgeLabel -> String)
+edgeLabelMismatch :: TTermDefinition (PG.EdgeLabel -> PG.EdgeLabel -> String)
 edgeLabelMismatch = validationDefinition "edgeLabelMismatch" $
   "expected" ~> "actual" ~>
     string "expected " ++ (unwrap _EdgeLabel @@ var "expected") ++ string ", found " ++ (unwrap _EdgeLabel @@ var "actual")
 
-prepend :: TBinding (String -> String -> String)
+prepend :: TTermDefinition (String -> String -> String)
 prepend = validationDefinition "prepend" $
   "prefix" ~> "msg" ~>
     (var "prefix") ++ string ": " ++ (var "msg")
 
-validateEdge :: TBinding (
+validateEdge :: TTermDefinition (
      (t -> v -> Maybe String)
   -> (v -> String)
   -> Y.Maybe (v -> Y.Maybe PG.VertexLabel)
@@ -181,7 +181,7 @@ validateEdge = validationDefinition "validateEdge" $
         (var "labelForVertexId")]
       $ checkAll @@ list [var "checkLabel", var "checkId", var "checkProperties", var "checkOut", var "checkIn"]
 
-validateElement :: TBinding (
+validateElement :: TTermDefinition (
      (t -> v -> Maybe String)
   -> (v -> String)
   -> Y.Maybe (v -> Y.Maybe PG.VertexLabel)
@@ -208,7 +208,7 @@ validateElement = validationDefinition "validateElement" $
               @@ var "et"
               @@ var "edge"]) @@ var "el"]) @@ var "typ"
 
-validateGraph :: TBinding (
+validateGraph :: TTermDefinition (
      (t -> v -> Maybe String)
   -> (v -> String)
   -> PG.GraphSchema t
@@ -249,7 +249,7 @@ validateGraph = validationDefinition "validateGraph" $
           @@ (Lists.map (var "checkEdge") $ Maps.elems $ project _Graph _Graph_edges @@ var "graph")]
     $ checkAll @@ list [var "checkVertices", var "checkEdges"]
 
-validateProperties :: TBinding (
+validateProperties :: TTermDefinition (
      (t -> v -> Maybe String)
   -> [PG.PropertyType t]
   -> M.Map PG.PropertyKey v
@@ -282,7 +282,7 @@ validateProperties = validationDefinition "validateProperties" $
       $ checkAll @@ (Lists.map (var "checkPair") (Maps.toList $ var "props"))]
     $ checkAll @@ list [var "checkTypes", var "checkValues"]
 
-validateVertex :: TBinding (
+validateVertex :: TTermDefinition (
      (t -> v -> Maybe String)
   -> (v -> String)
   -> PG.VertexType t
@@ -310,19 +310,19 @@ validateVertex = validationDefinition "validateVertex" $
         @@ (project _Vertex _Vertex_properties @@ var "el"))]
     $ checkAll @@ list [var "checkLabel", var "checkId", var "checkProperties"]
 
-verify :: TBinding (Bool -> String -> Maybe String)
+verify :: TTermDefinition (Bool -> String -> Maybe String)
 verify = validationDefinition "verify" $
   "b" ~> "err" ~>
     Logic.ifElse (var "b")
       nothing
       (just $ var "err")
 
-vertexError :: TBinding ((v -> String) -> PG.Vertex v -> String -> String)
+vertexError :: TTermDefinition ((v -> String) -> PG.Vertex v -> String -> String)
 vertexError = validationDefinition "vertexError" $
   "showValue" ~> "v" ~>
     prepend @@ (string "Invalid vertex with id " ++ (var "showValue" @@ (project _Vertex _Vertex_id @@ var "v")))
 
-vertexLabelMismatch :: TBinding (PG.VertexLabel -> PG.VertexLabel -> String)
+vertexLabelMismatch :: TTermDefinition (PG.VertexLabel -> PG.VertexLabel -> String)
 vertexLabelMismatch = validationDefinition "vertexLabelMismatch" $
   "expected" ~> "actual" ~> Strings.cat $ list [
     string "expected ", unwrap _VertexLabel @@ var "expected", string ", found ", unwrap _VertexLabel @@ var "actual"]

@@ -123,7 +123,7 @@ import qualified Hydra.Sources.Encode.Core  as EncodeCore
 ns :: Namespace
 ns = Namespace "hydra.schemas"
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 formatError :: TTerm (InContext Error -> String)
@@ -137,61 +137,61 @@ module_ = Module ns elements
     Just ("Various functions for dereferencing and decoding schema types.")
   where
     elements = [
-      toTermDefinition addNamesToNamespaces,
-      toTermDefinition definitionDependencyNamespaces,
-      toTermDefinition dependencyNamespaces,
-      toTermDefinition dereferenceType,
-      toTermDefinition elementAsTypeApplicationTerm,
-      toTermDefinition elementsWithDependencies,
-      toTermDefinition fieldMap,
-      toTermDefinition fieldTypeMap,
-      toTermDefinition fieldTypes,
-      toTermDefinition findFieldType,
-      toTermDefinition freshName,
-      toTermDefinition freshNames,
-      toTermDefinition fTypeIsPolymorphic,
-      toTermDefinition fullyStripAndNormalizeType,
-      toTermDefinition fullyStripType,
-      toTermDefinition graphAsLet,
-      toTermDefinition graphAsTerm,
-      toTermDefinition graphAsTypes,
-      toTermDefinition instantiateType,
-      toTermDefinition instantiateTypeScheme,
-      toTermDefinition isEncodedTerm,
-      toTermDefinition isEncodedType,
-      toTermDefinition isEnumRowType,
-      toTermDefinition isEnumType,
-      toTermDefinition isSerializable,
-      toTermDefinition isSerializableType,
-      toTermDefinition isSerializableByName,
-      toTermDefinition isNominalType,
-      toTermDefinition isType,
-      toTermDefinition isUnitTerm,
-      toTermDefinition isUnitType,
-      toTermDefinition moduleContainsBinaryLiterals,
-      toTermDefinition moduleDependencyNamespaces,
-      toTermDefinition namespacesForDefinitions,
-      toTermDefinition nominalApplication,
-      toTermDefinition normalTypeVariable,
-      toTermDefinition partitionDefinitions,
-      toTermDefinition requireRecordType,
-      toTermDefinition requireRowType,
-      toTermDefinition requireSchemaType,
-      toTermDefinition requireType,
-      toTermDefinition requireUnionField_,
-      toTermDefinition requireUnionType,
-      toTermDefinition resolveType,
-      toTermDefinition schemaGraphToTypingEnvironment,
-      toTermDefinition termAsBindings,
-      toTermDefinition topologicalSortTypeDefinitions,
-      toTermDefinition typeDependencies,
-      toTermDefinition typeToTypeScheme,
-      toTermDefinition typesToElements,
-      toTermDefinition withLambdaContext,
-      toTermDefinition withLetContext,
-      toTermDefinition withTypeLambdaContext]
+      toDefinition addNamesToNamespaces,
+      toDefinition definitionDependencyNamespaces,
+      toDefinition dependencyNamespaces,
+      toDefinition dereferenceType,
+      toDefinition elementAsTypeApplicationTerm,
+      toDefinition elementsWithDependencies,
+      toDefinition fieldMap,
+      toDefinition fieldTypeMap,
+      toDefinition fieldTypes,
+      toDefinition findFieldType,
+      toDefinition freshName,
+      toDefinition freshNames,
+      toDefinition fTypeIsPolymorphic,
+      toDefinition fullyStripAndNormalizeType,
+      toDefinition fullyStripType,
+      toDefinition graphAsLet,
+      toDefinition graphAsTerm,
+      toDefinition graphAsTypes,
+      toDefinition instantiateType,
+      toDefinition instantiateTypeScheme,
+      toDefinition isEncodedTerm,
+      toDefinition isEncodedType,
+      toDefinition isEnumRowType,
+      toDefinition isEnumType,
+      toDefinition isSerializable,
+      toDefinition isSerializableType,
+      toDefinition isSerializableByName,
+      toDefinition isNominalType,
+      toDefinition isType,
+      toDefinition isUnitTerm,
+      toDefinition isUnitType,
+      toDefinition moduleContainsBinaryLiterals,
+      toDefinition moduleDependencyNamespaces,
+      toDefinition namespacesForDefinitions,
+      toDefinition nominalApplication,
+      toDefinition normalTypeVariable,
+      toDefinition partitionDefinitions,
+      toDefinition requireRecordType,
+      toDefinition requireRowType,
+      toDefinition requireSchemaType,
+      toDefinition requireType,
+      toDefinition requireUnionField_,
+      toDefinition requireUnionType,
+      toDefinition resolveType,
+      toDefinition schemaGraphToTypingEnvironment,
+      toDefinition termAsBindings,
+      toDefinition topologicalSortTypeDefinitions,
+      toDefinition typeDependencies,
+      toDefinition typeToTypeScheme,
+      toDefinition typesToElements,
+      toDefinition withLambdaContext,
+      toDefinition withLetContext,
+      toDefinition withTypeLambdaContext]
 
-addNamesToNamespaces :: TBinding ((Namespace -> a) -> S.Set Name -> Namespaces a -> Namespaces a)
+addNamesToNamespaces :: TTermDefinition ((Namespace -> a) -> S.Set Name -> Namespaces a -> Namespaces a)
 addNamesToNamespaces = define "addNamesToNamespaces" $
   doc "Add names to existing namespaces mapping" $
   "encodeNamespace" ~> "names" ~> "ns0" ~>
@@ -202,7 +202,7 @@ addNamesToNamespaces = define "addNamesToNamespaces" $
     (Module.namespacesMapping $ var "ns0")
     (Maps.fromList $ Lists.map (var "toPair") $ Sets.toList $ var "nss")
 
-definitionDependencyNamespaces :: TBinding ([Definition] -> S.Set Namespace)
+definitionDependencyNamespaces :: TTermDefinition ([Definition] -> S.Set Namespace)
 definitionDependencyNamespaces = define "definitionDependencyNamespaces" $
   doc "Get dependency namespaces from definitions" $
   "defs" ~>
@@ -215,7 +215,7 @@ definitionDependencyNamespaces = define "definitionDependencyNamespaces" $
   "allNames" <~ Sets.unions (Lists.map (var "defNames") (var "defs")) $
   Sets.fromList (Maybes.cat (Lists.map (Names.namespaceOf) (Sets.toList (var "allNames"))))
 
-dependencyNamespaces :: TBinding (Context -> Graph -> Bool -> Bool -> Bool -> Bool -> [Binding] -> Either (InContext Error) (S.Set Namespace))
+dependencyNamespaces :: TTermDefinition (Context -> Graph -> Bool -> Bool -> Bool -> Bool -> [Binding] -> Either (InContext Error) (S.Set Namespace))
 dependencyNamespaces = define "dependencyNamespaces" $
   doc "Find dependency namespaces in all of a set of terms (Either version)" $
   "cx" ~> "graph" ~> "binds" ~> "withPrims" ~> "withNoms" ~> "withSchema" ~> "els" ~>
@@ -249,7 +249,7 @@ dependencyNamespaces = define "dependencyNamespaces" $
       Sets.toList (Sets.unions (var "namesList"))))))
     (Eithers.mapList (var "depNames") (var "els"))
 
-dereferenceType :: TBinding (Context -> Graph -> Name -> Either (InContext Error) (Maybe Type))
+dereferenceType :: TTermDefinition (Context -> Graph -> Name -> Either (InContext Error) (Maybe Type))
 dereferenceType = define "dereferenceType" $
   doc "Dereference a type name to get the actual type (Either version)" $
   "cx" ~> "graph" ~> "name" ~>
@@ -261,7 +261,7 @@ dereferenceType = define "dereferenceType" $
         (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")
           (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el")))))
 
-elementAsTypeApplicationTerm :: TBinding (Context -> Binding -> Either (InContext Error) TypeApplicationTerm)
+elementAsTypeApplicationTerm :: TTermDefinition (Context -> Binding -> Either (InContext Error) TypeApplicationTerm)
 elementAsTypeApplicationTerm = define "elementAsTypeApplicationTerm" $
   doc "Convert an element to a typed term" $
   "cx" ~> "el" ~>
@@ -269,7 +269,7 @@ elementAsTypeApplicationTerm = define "elementAsTypeApplicationTerm" $
     ("ts" ~> right (Core.typeApplicationTerm (Core.bindingTerm (var "el")) (Core.typeSchemeType (var "ts"))))
     (Core.bindingType (var "el"))
 
-elementsWithDependencies :: TBinding (Context -> Graph -> [Binding] -> Either (InContext Error) [Binding])
+elementsWithDependencies :: TTermDefinition (Context -> Graph -> [Binding] -> Either (InContext Error) [Binding])
 elementsWithDependencies = define "elementsWithDependencies" $
   doc "Get elements with their dependencies" $
   "cx" ~> "graph" ~> "original" ~>
@@ -279,19 +279,19 @@ elementsWithDependencies = define "elementsWithDependencies" $
     (Lists.concat (Lists.map (var "depNames") (var "original")))) $
   Eithers.mapList ("name" ~> Lexical.requireElement @@ var "cx" @@ var "graph" @@ var "name") (var "allDepNames")
 
-fieldMap :: TBinding ([Field] -> M.Map Name Term)
+fieldMap :: TTermDefinition ([Field] -> M.Map Name Term)
 fieldMap = define "fieldMap" $
   "fields" ~>
   "toPair" <~ ("f" ~> pair (Core.fieldName $ var "f") (Core.fieldTerm $ var "f")) $
   Maps.fromList $ Lists.map (var "toPair") (var "fields")
 
-fieldTypeMap :: TBinding ([FieldType] -> M.Map Name Type)
+fieldTypeMap :: TTermDefinition ([FieldType] -> M.Map Name Type)
 fieldTypeMap = define "fieldTypeMap" $
   "fields" ~>
   "toPair" <~ ("f" ~> pair (Core.fieldTypeName $ var "f") (Core.fieldTypeType $ var "f")) $
   Maps.fromList $ Lists.map (var "toPair") (var "fields")
 
-fieldTypes :: TBinding (Context -> Graph -> Type -> Either (InContext Error) (M.Map Name Type))
+fieldTypes :: TTermDefinition (Context -> Graph -> Type -> Either (InContext Error) (M.Map Name Type))
 fieldTypes = define "fieldTypes" $
   doc "Get field types from a record or union type (Either version)" $
   "cx" ~> "graph" ~> "t" ~>
@@ -316,7 +316,7 @@ fieldTypes = define "fieldTypes" $
         (Maps.lookup (var "name") (Graph.graphSchemaTypes $ var "graph"))]
   @@ (Rewriting.deannotateType @@ var "t")
 
-findFieldType :: TBinding (Context -> Name -> [FieldType] -> Either (InContext Error) Type)
+findFieldType :: TTermDefinition (Context -> Name -> [FieldType] -> Either (InContext Error) Type)
 findFieldType = define "findFieldType" $
   doc "Find a field type by name in a list of field types" $
   "cx" ~> "fname" ~> "fields" ~>
@@ -329,7 +329,7 @@ findFieldType = define "findFieldType" $
       (right (Core.fieldTypeType (Lists.head (var "matchingFields"))))
       (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat2 (string "Multiple fields named ") (Core.unName (var "fname")))) (var "cx")))
 
-fTypeIsPolymorphic :: TBinding (Type -> Bool)
+fTypeIsPolymorphic :: TTermDefinition (Type -> Bool)
 fTypeIsPolymorphic = define "fTypeIsPolymorphic" $
   doc "Test whether a given System F type is polymorphic (i.e., a forall type)" $
   "typ" ~> cases _Type (var "typ")
@@ -337,7 +337,7 @@ fTypeIsPolymorphic = define "fTypeIsPolymorphic" $
     _Type_annotated>>: "at" ~> fTypeIsPolymorphic @@ Core.annotatedTypeBody (var "at"),
     _Type_forall>>: "ft" ~> true]
 
-freshName :: TBinding (Context -> (Name, Context))
+freshName :: TTermDefinition (Context -> (Name, Context))
 freshName = define "freshName" $
   doc "Generate a fresh type variable name, threading Context" $
   "cx" ~>
@@ -346,7 +346,7 @@ freshName = define "freshName" $
     (normalTypeVariable @@ var "count")
     (Annotations.putCount @@ Constants.key_freshTypeVariableCount @@ Math.add (var "count") (int32 1) @@ var "cx")
 
-freshNames :: TBinding (Int -> Context -> ([Name], Context))
+freshNames :: TTermDefinition (Int -> Context -> ([Name], Context))
 freshNames = define "freshNames" $
   doc "Generate multiple fresh type variable names, threading Context" $
   "n" ~> "cx" ~>
@@ -360,7 +360,7 @@ freshNames = define "freshNames" $
     pair (Lists.concat2 (var "names") (Lists.pure (var "name"))) (var "cx1")) $
   Lists.foldl (var "go") (pair (list ([] :: [TTerm Name])) (var "cx")) (Lists.replicate (var "n") unit)
 
-fullyStripAndNormalizeType :: TBinding (Type -> Type)
+fullyStripAndNormalizeType :: TTermDefinition (Type -> Type)
 fullyStripAndNormalizeType = define "fullyStripAndNormalizeType" $
   doc "Fully strip a type of forall quantifiers, normalizing bound variable names for alpha-equivalence comparison" $
   "typ" ~>
@@ -380,7 +380,7 @@ fullyStripAndNormalizeType = define "fullyStripAndNormalizeType" $
   -- Apply the renaming substitution
   Rewriting.substituteTypeVariables @@ var "subst" @@ var "body"
 
-fullyStripType :: TBinding (Type -> Type)
+fullyStripType :: TTermDefinition (Type -> Type)
 fullyStripType = define "fullyStripType" $
   doc "Fully strip a type of forall quantifiers" $
   "typ" ~>
@@ -388,7 +388,7 @@ fullyStripType = define "fullyStripType" $
     _Type_forall>>: "ft" ~> fullyStripType @@ Core.forallTypeBody (var "ft")]
   @@ (Rewriting.deannotateType @@ var "typ")
 
-graphAsLet :: TBinding ([Binding] -> Term -> Let)
+graphAsLet :: TTermDefinition ([Binding] -> Term -> Let)
 graphAsLet = define "graphAsLet" $
   doc "Convert bindings and a body to a let expression" $
   "bindings" ~> "body" ~>
@@ -396,12 +396,12 @@ graphAsLet = define "graphAsLet" $
     (var "bindings")
     (var "body")
 
-graphAsTerm :: TBinding ([Binding] -> Term -> Term)
+graphAsTerm :: TTermDefinition ([Binding] -> Term -> Term)
 graphAsTerm = define "graphAsTerm" $
   doc "Convert bindings and a body to a term, using let-term duality" $
   "bindings" ~> "body" ~> Core.termLet (graphAsLet @@ var "bindings" @@ var "body")
 
-graphAsTypes :: TBinding (Context -> Graph -> [Binding] -> Either (InContext DecodingError) (M.Map Name Type))
+graphAsTypes :: TTermDefinition (Context -> Graph -> [Binding] -> Either (InContext DecodingError) (M.Map Name Type))
 graphAsTypes = define "graphAsTypes" $
   doc "Decode a list of type-encoding bindings into a map of named types" $
   "cx" ~> "graph" ~> "els" ~>
@@ -411,14 +411,14 @@ graphAsTypes = define "graphAsTypes" $
       (Ctx.withContext (var "cx") (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm $ var "el")))) $
   Eithers.map (unaryFunction Maps.fromList) (Eithers.mapList (var "toPair") (var "els"))
 
-instantiateType :: TBinding (Context -> Type -> (Type, Context))
+instantiateType :: TTermDefinition (Context -> Type -> (Type, Context))
 instantiateType = define "instantiateType" $
   doc "Instantiate a type by replacing all forall-bound type variables with fresh variables, threading Context" $
   "cx" ~> "typ" ~>
   "result" <~ instantiateTypeScheme @@ var "cx" @@ (typeToTypeScheme @@ var "typ") $
   pair (Rewriting.typeSchemeToFType @@ Pairs.first (var "result")) (Pairs.second (var "result"))
 
-instantiateTypeScheme :: TBinding (Context -> TypeScheme -> (TypeScheme, Context))
+instantiateTypeScheme :: TTermDefinition (Context -> TypeScheme -> (TypeScheme, Context))
 instantiateTypeScheme = define "instantiateTypeScheme" $
   doc "Instantiate a type scheme with fresh variables, threading Context" $
   "cx" ~> "scheme" ~>
@@ -443,14 +443,14 @@ instantiateTypeScheme = define "instantiateTypeScheme" $
       (var "renamedConstraints"))
     (var "cx2")
 
-isEnumRowType :: TBinding ([FieldType] -> Bool)
+isEnumRowType :: TTermDefinition ([FieldType] -> Bool)
 isEnumRowType = define "isEnumRowType" $
   doc "Check if a row type represents an enum (all fields are unit-typed)" $
   "rt" ~> Lists.foldl (binaryFunction Logic.and) true $
     Lists.map ("f" ~> isUnitType @@ (Rewriting.deannotateType @@ (Core.fieldTypeType (var "f")))) $
       var "rt"
 
-isEncodedType :: TBinding (Term -> Bool)
+isEncodedType :: TTermDefinition (Term -> Bool)
 isEncodedType = define "isEncodedType" $
   doc "Determines whether a given term is an encoded type" $
   "t" ~> cases _Term (Rewriting.deannotateTerm @@ var "t") (Just false) [
@@ -459,7 +459,7 @@ isEncodedType = define "isEncodedType" $
     _Term_union>>: "i" ~>
       Equality.equal (string (unName _Type)) (Core.unName (Core.injectionTypeName (var "i")))]
 
-isEncodedTerm :: TBinding (Term -> Bool)
+isEncodedTerm :: TTermDefinition (Term -> Bool)
 isEncodedTerm = define "isEncodedTerm" $
   doc "Determines whether a given term is an encoded term (meta-level term)" $
   "t" ~> cases _Term (Rewriting.deannotateTerm @@ var "t") (Just false) [
@@ -468,7 +468,7 @@ isEncodedTerm = define "isEncodedTerm" $
     _Term_union>>: "i" ~>
       Equality.equal (string (unName _Term)) (Core.unName (Core.injectionTypeName (var "i")))]
 
-isEnumType :: TBinding (Type -> Bool)
+isEnumType :: TTermDefinition (Type -> Bool)
 isEnumType = define "isEnumType" $
   doc "Check if a type is an enum type" $
   "typ" ~>
@@ -476,7 +476,7 @@ isEnumType = define "isEnumType" $
     _Type_union>>: "rt" ~> isEnumRowType @@ var "rt"]
   @@ (Rewriting.deannotateType @@ var "typ")
 
-isSerializable :: TBinding (Context -> Graph -> Binding -> Either (InContext Error) Bool)
+isSerializable :: TTermDefinition (Context -> Graph -> Binding -> Either (InContext Error) Bool)
 isSerializable = define "isSerializable" $
   doc "Check if an element is serializable (no function types in dependencies) (Either version)" $
   "cx" ~> "graph" ~> "el" ~>
@@ -489,7 +489,7 @@ isSerializable = define "isSerializable" $
       Logic.not (Sets.member Variants.typeVariantFunction (var "allVariants")))
     (typeDependencies @@ var "cx" @@ var "graph" @@ false @@ (unaryFunction Equality.identity) @@ Core.bindingName (var "el"))
 
-isSerializableType :: TBinding (Type -> Bool)
+isSerializableType :: TTermDefinition (Type -> Bool)
 isSerializableType = define "isSerializableType" $
   doc "Check if a type is serializable (no function types in the type itself)" $
   "typ" ~>
@@ -498,7 +498,7 @@ isSerializableType = define "isSerializableType" $
       ("m" ~> "t" ~> Lists.cons (var "t") (var "m")) @@ list ([] :: [TTerm Type]) @@ var "typ")) $
   Logic.not (Sets.member Variants.typeVariantFunction (var "allVariants"))
 
-isSerializableByName :: TBinding (Context -> Graph -> Name -> Either (InContext Error) Bool)
+isSerializableByName :: TTermDefinition (Context -> Graph -> Name -> Either (InContext Error) Bool)
 isSerializableByName = define "isSerializableByName" $
   doc "Check if a type (by name) is serializable, resolving all type dependencies (Either version)" $
   "cx" ~> "graph" ~> "name" ~>
@@ -511,7 +511,7 @@ isSerializableByName = define "isSerializableByName" $
       Logic.not (Sets.member Variants.typeVariantFunction (var "allVariants")))
     (typeDependencies @@ var "cx" @@ var "graph" @@ false @@ (unaryFunction Equality.identity) @@ var "name")
 
-isType :: TBinding (Type -> Bool)
+isType :: TTermDefinition (Type -> Bool)
 isType = define "isType" $
   doc "Check whether a type is a type (always true for non-encoded types)" $
   "t" ~> cases _Type (Rewriting.deannotateType @@ var "t") (Just false) [
@@ -524,7 +524,7 @@ isType = define "isType" $
 
 -- | Check whether a type is a nominal type definition (record, union, wrap, or forall wrapping one).
 --   Type aliases (applications, functions, literal types, etc.) return false.
-isNominalType :: TBinding (Type -> Bool)
+isNominalType :: TTermDefinition (Type -> Bool)
 isNominalType = define "isNominalType" $
   lambda "typ" $
     cases _Type (Rewriting.deannotateType @@ var "typ")
@@ -535,17 +535,17 @@ isNominalType = define "isNominalType" $
       _Type_forall>>: lambda "fa" $
         isNominalType @@ Core.forallTypeBody (var "fa")]
 
-isUnitTerm :: TBinding (Term -> Bool)
+isUnitTerm :: TTermDefinition (Term -> Bool)
 isUnitTerm = define "isUnitTerm" $
   doc "Check whether a term is the unit term" $
   match _Term (Just false) [_Term_unit>>: constant true]
 
-isUnitType :: TBinding (Type -> Bool)
+isUnitType :: TTermDefinition (Type -> Bool)
 isUnitType = define "isUnitType" $
   doc "Check whether a type is the unit type" $
   match _Type (Just false) [_Type_unit>>: constant true]
 
-moduleContainsBinaryLiterals :: TBinding (Module -> Bool)
+moduleContainsBinaryLiterals :: TTermDefinition (Module -> Bool)
 moduleContainsBinaryLiterals = define "moduleContainsBinaryLiterals" $
   doc "Check whether a module contains any binary literal values" $
   "mod" ~>
@@ -565,7 +565,7 @@ moduleContainsBinaryLiterals = define "moduleContainsBinaryLiterals" $
     false
     (var "defTerms")
 
-moduleDependencyNamespaces :: TBinding (Context -> Graph -> Bool -> Bool -> Bool -> Bool -> Module -> Either (InContext Error) (S.Set Namespace))
+moduleDependencyNamespaces :: TTermDefinition (Context -> Graph -> Bool -> Bool -> Bool -> Bool -> Module -> Either (InContext Error) (S.Set Namespace))
 moduleDependencyNamespaces = define "moduleDependencyNamespaces" $
   doc "Find dependency namespaces in all elements of a module, excluding the module's own namespace (Either version)" $
   "cx" ~> "graph" ~> "binds" ~> "withPrims" ~> "withNoms" ~> "withSchema" ~> "mod" ~>
@@ -582,7 +582,7 @@ moduleDependencyNamespaces = define "moduleDependencyNamespaces" $
     (dependencyNamespaces @@ var "cx" @@ var "graph" @@ var "binds" @@ var "withPrims" @@ var "withNoms" @@ var "withSchema" @@
       (var "allBindings"))
 
-namespacesForDefinitions :: TBinding ((Namespace -> a) -> Namespace -> [Definition] -> Namespaces a)
+namespacesForDefinitions :: TTermDefinition ((Namespace -> a) -> Namespace -> [Definition] -> Namespaces a)
 namespacesForDefinitions = define "namespacesForDefinitions" $
   doc "Create namespaces mapping for definitions" $
   "encodeNamespace" ~> "focusNs" ~> "defs" ~>
@@ -590,7 +590,7 @@ namespacesForDefinitions = define "namespacesForDefinitions" $
   "toPair" <~ ("ns" ~> pair (var "ns") (var "encodeNamespace" @@ var "ns")) $
   Module.namespaces (var "toPair" @@ var "focusNs") (Maps.fromList (Lists.map (var "toPair") (Sets.toList (var "nss"))))
 
-nominalApplication :: TBinding (Name -> [Type] -> Type)
+nominalApplication :: TTermDefinition (Name -> [Type] -> Type)
 nominalApplication = define "nominalApplication" $
   doc "Apply type arguments to a nominal type" $
   "tname" ~> "args" ~>
@@ -599,12 +599,12 @@ nominalApplication = define "nominalApplication" $
     (Core.typeVariable $ var "tname")
     (var "args")
 
-normalTypeVariable :: TBinding (Int -> Name)
+normalTypeVariable :: TTermDefinition (Int -> Name)
 normalTypeVariable = define "normalTypeVariable" $
   doc "Type variable naming convention follows Haskell: t0, t1, etc." $
   "i" ~> Core.name (Strings.cat2 (string "t") (Literals.showInt32 $ var "i"))
 
-partitionDefinitions :: TBinding ([Definition] -> ([TypeDefinition], [TermDefinition]))
+partitionDefinitions :: TTermDefinition ([Definition] -> ([TypeDefinition], [TermDefinition]))
 partitionDefinitions = define "partitionDefinitions" $
   doc "Partition a list of definitions into type definitions and term definitions" $
   "defs" ~>
@@ -618,7 +618,7 @@ partitionDefinitions = define "partitionDefinitions" $
     (Maybes.cat $ Lists.map (var "getType") (var "defs"))
     (Maybes.cat $ Lists.map (var "getTerm") (var "defs"))
 
-requireRecordType :: TBinding (Context -> Graph -> Name -> Either (InContext Error) [FieldType])
+requireRecordType :: TTermDefinition (Context -> Graph -> Name -> Either (InContext Error) [FieldType])
 requireRecordType = define "requireRecordType" $
   doc "Require a name to resolve to a record type" $
   "cx" ~> "graph" ~> "name" ~>
@@ -626,7 +626,7 @@ requireRecordType = define "requireRecordType" $
     _Type_record>>: "rt" ~> just (var "rt")]) $
   requireRowType @@ var "cx" @@ string "record type" @@ var "toRecord" @@ var "graph" @@ var "name"
 
-requireRowType :: TBinding (Context -> String -> (Type -> Maybe [FieldType]) -> Graph -> Name -> Either (InContext Error) [FieldType])
+requireRowType :: TTermDefinition (Context -> String -> (Type -> Maybe [FieldType]) -> Graph -> Name -> Either (InContext Error) [FieldType])
 requireRowType = define "requireRowType" $
   doc "Require a name to resolve to a row type" $
   "cx" ~> "label" ~> "getter" ~> "graph" ~> "name" ~>
@@ -645,7 +645,7 @@ requireRowType = define "requireRowType" $
       (unaryFunction right)
       (var "getter" @@ (var "rawType" @@ var "t")))
 
-requireSchemaType :: TBinding (Context -> M.Map Name TypeScheme -> Name -> Either (InContext Error) (TypeScheme, Context))
+requireSchemaType :: TTermDefinition (Context -> M.Map Name TypeScheme -> Name -> Either (InContext Error) (TypeScheme, Context))
 requireSchemaType = define "requireSchemaType" $
   doc "Look up a schema type and instantiate it, threading Context" $
   "cx" ~> "types" ~> "tname" ~>
@@ -660,7 +660,7 @@ requireSchemaType = define "requireSchemaType" $
     ("ts" ~> right $ instantiateTypeScheme @@ var "cx" @@ (Rewriting.deannotateTypeSchemeRecursive @@ var "ts"))
     (Maps.lookup (var "tname") (var "types"))
 
-requireType :: TBinding (Context -> Graph -> Name -> Either (InContext Error) Type)
+requireType :: TTermDefinition (Context -> Graph -> Name -> Either (InContext Error) Type)
 requireType = define "requireType" $
   doc "Require a type by name" $
   "cx" ~> "graph" ~> "name" ~>
@@ -673,7 +673,7 @@ requireType = define "requireType" $
     ("ts" ~> right (Rewriting.typeSchemeToFType @@ var "ts"))
     (Maps.lookup (var "name") (Graph.graphSchemaTypes (var "graph")))
 
-requireUnionField_ :: TBinding (Context -> Graph -> Name -> Name -> Either (InContext Error) Type)
+requireUnionField_ :: TTermDefinition (Context -> Graph -> Name -> Name -> Either (InContext Error) Type)
 requireUnionField_ = define "requireUnionField" $
   doc "Require a field type from a union type" $
   "cx" ~> "graph" ~> "tname" ~> "fname" ~>
@@ -690,7 +690,7 @@ requireUnionField_ = define "requireUnionField" $
       (right $ Core.fieldTypeType $ Lists.head $ var "matches")) $
   Eithers.bind (requireUnionType @@ var "cx" @@ var "graph" @@ var "tname") (var "withRowType")
 
-requireUnionType :: TBinding (Context -> Graph -> Name -> Either (InContext Error) [FieldType])
+requireUnionType :: TTermDefinition (Context -> Graph -> Name -> Either (InContext Error) [FieldType])
 requireUnionType = define "requireUnionType" $
   doc "Require a name to resolve to a union type" $
   "cx" ~> "graph" ~> "name" ~>
@@ -699,7 +699,7 @@ requireUnionType = define "requireUnionType" $
     _Type_union>>: "rt" ~> just (var "rt")]) $
   requireRowType @@ var "cx" @@ string "union" @@ var "toUnion" @@ var "graph" @@ var "name"
 
-resolveType :: TBinding (Graph -> Type -> Maybe Type)
+resolveType :: TTermDefinition (Graph -> Type -> Maybe Type)
 resolveType = define "resolveType" $
   doc "Resolve a type, dereferencing type variables" $
   "graph" ~> "typ" ~>
@@ -712,7 +712,7 @@ resolveType = define "resolveType" $
         (Maps.lookup (var "name") (Graph.graphSchemaTypes (var "graph")))]
   @@ (Rewriting.deannotateType @@ var "typ")
 
-schemaGraphToTypingEnvironment :: TBinding (Context -> Graph -> Either (InContext Error) (M.Map Name TypeScheme))
+schemaGraphToTypingEnvironment :: TTermDefinition (Context -> Graph -> Either (InContext Error) (M.Map Name TypeScheme))
 schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
   doc "Convert a schema graph to a typing environment (Either version)" $
   "cx" ~> "g" ~>
@@ -756,14 +756,14 @@ schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
     (Eithers.mapList (var "toPair") (Lexical.graphToBindings @@ var "g"))
 
 -- Note: this is lossy, as it throws away the term body
-termAsBindings :: TBinding (Term -> [Binding])
+termAsBindings :: TTermDefinition (Term -> [Binding])
 termAsBindings = define "termAsBindings" $
   doc "Extract the bindings from a let term, or return an empty list for other terms" $
   "term" ~> cases _Term (Rewriting.deannotateTerm @@ var "term")
     (Just (list ([] :: [TTerm Binding]))) [
     _Term_let>>: "lt" ~> Core.letBindings (var "lt")]
 
-topologicalSortTypeDefinitions :: TBinding ([TypeDefinition] -> [[TypeDefinition]])
+topologicalSortTypeDefinitions :: TTermDefinition ([TypeDefinition] -> [[TypeDefinition]])
 topologicalSortTypeDefinitions = define "topologicalSortTypeDefinitions" $
   doc "Topologically sort type definitions by dependencies" $
   "defs" ~>
@@ -777,7 +777,7 @@ topologicalSortTypeDefinitions = define "topologicalSortTypeDefinitions" $
   Lists.map ("names" ~> Maybes.cat (Lists.map ("n" ~> Maps.lookup (var "n") (var "nameToDef")) (var "names"))) (
     var "sorted")
 
-typeDependencies :: TBinding (Context -> Graph -> Bool -> (Type -> Type) -> Name -> Either (InContext Error) (M.Map Name Type))
+typeDependencies :: TTermDefinition (Context -> Graph -> Bool -> (Type -> Type) -> Name -> Either (InContext Error) (M.Map Name Type))
 typeDependencies = define "typeDependencies" $
   doc "Get all type dependencies for a given type name (Either version)" $
   "cx" ~> "graph" ~> "withSchema" ~> "transform" ~> "name" ~>
@@ -804,7 +804,7 @@ typeDependencies = define "typeDependencies" $
         var "deps" @@ var "newSeeds" @@ var "newNames"))) $
   var "deps" @@ Sets.singleton (var "name") @@ Maps.empty
 
-typeToTypeScheme :: TBinding (Type -> TypeScheme)
+typeToTypeScheme :: TTermDefinition (Type -> TypeScheme)
 typeToTypeScheme = define "typeToTypeScheme" $
   doc "Convert a (System F -style) type to a type scheme" $
   "t0" ~>
@@ -815,7 +815,7 @@ typeToTypeScheme = define "typeToTypeScheme" $
       @@ (Core.forallTypeBody $ var "ft")]) $
   var "helper" @@ list ([] :: [TTerm Name]) @@ var "t0"
 
-typesToElements :: TBinding (M.Map Name Type -> [Binding])
+typesToElements :: TTermDefinition (M.Map Name Type -> [Binding])
 typesToElements = define "typesToElements" $
   doc "Encode a map of named types to a list of elements" $
   "typeMap" ~>
@@ -827,21 +827,21 @@ typesToElements = define "typesToElements" $
       nothing) $
   Lists.map (var "toElement") $ Maps.toList $ var "typeMap"
 
-withLambdaContext :: TBinding ((e -> Graph) -> (Graph -> e -> f) -> e -> Lambda -> (f -> a) -> a)
+withLambdaContext :: TTermDefinition ((e -> Graph) -> (Graph -> e -> f) -> e -> Lambda -> (f -> a) -> a)
 withLambdaContext = define "withLambdaContext" $
   doc "Execute a computation in the context of a lambda body, extending the type context with the lambda parameter" $
   "getContext" ~> "setContext" ~> "env" ~> "lam" ~> "body" ~>
   "newContext" <~ Rewriting.extendGraphForLambda @@ (var "getContext" @@ var "env") @@ var "lam" $
   var "body" @@ (var "setContext" @@ var "newContext" @@ var "env")
 
-withLetContext :: TBinding ((e -> Graph) -> (Graph -> e -> f) -> (Graph -> Binding -> Maybe Term) -> e -> Let -> (f -> a) -> a)
+withLetContext :: TTermDefinition ((e -> Graph) -> (Graph -> e -> f) -> (Graph -> Binding -> Maybe Term) -> e -> Let -> (f -> a) -> a)
 withLetContext = define "withLetContext" $
   doc "Execute a computation in the context of a let body, extending the type context with the let bindings" $
   "getContext" ~> "setContext" ~> "forBinding" ~> "env" ~> "letrec" ~> "body" ~>
   "newContext" <~ Rewriting.extendGraphForLet @@ var "forBinding" @@ (var "getContext" @@ var "env") @@ var "letrec" $
   var "body" @@ (var "setContext" @@ var "newContext" @@ var "env")
 
-withTypeLambdaContext :: TBinding ((e -> Graph) -> (Graph -> e -> f) -> e -> TypeLambda -> (f -> a) -> a)
+withTypeLambdaContext :: TTermDefinition ((e -> Graph) -> (Graph -> e -> f) -> e -> TypeLambda -> (f -> a) -> a)
 withTypeLambdaContext = define "withTypeLambdaContext" $
   doc "Execute a computation in the context of a type lambda body, extending the type context with the type parameter" $
   "getContext" ~> "setContext" ~> "env" ~> "tlam" ~> "body" ~>

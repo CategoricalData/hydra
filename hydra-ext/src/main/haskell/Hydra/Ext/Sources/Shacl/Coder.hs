@@ -89,7 +89,7 @@ import qualified Hydra.Ext.Sources.Rdf.Syntax as RdfSyntax
 import qualified Hydra.Ext.Sources.Rdf.Utils as RdfUtils
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 ns :: Namespace
@@ -102,33 +102,33 @@ module_ = Module ns elements
     Just "SHACL coder: converts Hydra types and terms to SHACL shapes and RDF descriptions"
   where
     elements = [
-      toTermDefinition err,
-      toTermDefinition unexpectedE,
-      toTermDefinition shaclCoder,
-      toTermDefinition common,
-      toTermDefinition defaultCommonProperties,
-      toTermDefinition elementIri,
-      toTermDefinition encodeField,
-      toTermDefinition encodeFieldType,
-      toTermDefinition encodeLiteralType,
-      toTermDefinition encodeTerm,
-      toTermDefinition encodeList,
-      toTermDefinition foldAccumResult,
-      toTermDefinition encodeType,
-      toTermDefinition node,
-      toTermDefinition property,
-      toTermDefinition withType]
+      toDefinition err,
+      toDefinition unexpectedE,
+      toDefinition shaclCoder,
+      toDefinition common,
+      toDefinition defaultCommonProperties,
+      toDefinition elementIri,
+      toDefinition encodeField,
+      toDefinition encodeFieldType,
+      toDefinition encodeLiteralType,
+      toDefinition encodeTerm,
+      toDefinition encodeList,
+      toDefinition foldAccumResult,
+      toDefinition encodeType,
+      toDefinition node,
+      toDefinition property,
+      toDefinition withType]
 
 
 -- | Construct a Left (InContext Error) error
-err :: TBinding (Context -> String -> Either (InContext Error) a)
+err :: TTermDefinition (Context -> String -> Either (InContext Error) a)
 err = define "err" $
   doc "Construct an error result with a context and message" $
   lambda "cx" $ lambda "msg" $
     left (Ctx.inContext (Error.errorOther $ Error.otherError (var "msg")) (var "cx"))
 
 -- | Construct an 'expected X, found Y' error
-unexpectedE :: TBinding (Context -> String -> String -> Either (InContext Error) a)
+unexpectedE :: TTermDefinition (Context -> String -> String -> Either (InContext Error) a)
 unexpectedE = define "unexpectedE" $
   doc "Construct an error for unexpected input, given expected and found descriptions" $
   lambda "cx" $ lambda "expected" $ lambda "found" $
@@ -139,7 +139,7 @@ unexpectedE = define "unexpectedE" $
       var "found"])
 
 -- | Main SHACL coder: encode a module's type elements into a ShapesGraph
-shaclCoder :: TBinding (Module -> Context -> Graph -> Either (InContext Error) (Shacl.ShapesGraph, Context))
+shaclCoder :: TTermDefinition (Module -> Context -> Graph -> Either (InContext Error) (Shacl.ShapesGraph, Context))
 shaclCoder = define "shaclCoder" $
   doc "Encode a module's type elements as a SHACL ShapesGraph" $
   lambda "mod" $ lambda "cx" $ lambda "g" $ lets [
@@ -167,7 +167,7 @@ shaclCoder = define "shaclCoder" $
       (Eithers.mapList (var "toShape") (var "typeEls"))
 
 -- | Construct CommonProperties with the given constraints and defaults for everything else
-common :: TBinding ([Shacl.CommonConstraint] -> Shacl.CommonProperties)
+common :: TTermDefinition ([Shacl.CommonConstraint] -> Shacl.CommonProperties)
 common = define "common" $
   doc "Construct CommonProperties from a list of constraints, using defaults for other fields" $
   lambda "constraints" $
@@ -182,20 +182,20 @@ common = define "common" $
       Shacl._CommonProperties_targetSubjectsOf>>: Sets.empty]
 
 -- | Default (empty) CommonProperties
-defaultCommonProperties :: TBinding Shacl.CommonProperties
+defaultCommonProperties :: TTermDefinition Shacl.CommonProperties
 defaultCommonProperties = define "defaultCommonProperties" $
   doc "Default CommonProperties with empty constraints and default severity" $
   common @@ (list ([] :: [TTerm Shacl.CommonConstraint]))
 
 -- | Convert a Binding's name to an RDF IRI
-elementIri :: TBinding (Binding -> Rdf.Iri)
+elementIri :: TTermDefinition (Binding -> Rdf.Iri)
 elementIri = define "elementIri" $
   doc "Convert a binding's name to an RDF IRI" $
   lambda "el" $
     nameToIri @@ (Core.bindingName (var "el"))
 
 -- | Encode a record field as RDF triples
-encodeField :: TBinding (Name -> Rdf.Resource -> Field -> Context -> Graph -> Either (InContext Error) ([Rdf.Triple], Context))
+encodeField :: TTermDefinition (Name -> Rdf.Resource -> Field -> Context -> Graph -> Either (InContext Error) ([Rdf.Triple], Context))
 encodeField = define "encodeField" $
   doc "Encode a record field as RDF triples with a given subject" $
   lambda "rname" $ lambda "subject" $ lambda "field" $ lambda "cx" $ lambda "g" $ lets [
@@ -216,7 +216,7 @@ encodeField = define "encodeField" $
           (var "cx2")))
 
 -- | Encode a FieldType as a SHACL property shape definition
-encodeFieldType :: TBinding (Name -> Maybe Integer -> FieldType -> Context -> Either (InContext Error) (Shacl.Definition Shacl.PropertyShape))
+encodeFieldType :: TTermDefinition (Name -> Maybe Integer -> FieldType -> Context -> Either (InContext Error) (Shacl.Definition Shacl.PropertyShape))
 encodeFieldType = define "encodeFieldType" $
   doc "Encode a FieldType as a SHACL property shape Definition" $
   lambda "rname" $ lambda "order" $ lambda "ft" $ lambda "cx" $ lets [
@@ -254,7 +254,7 @@ encodeFieldType = define "encodeFieldType" $
     var "forType" @@ (just (bigint 1)) @@ (just (bigint 1)) @@ var "ftype"
 
 -- | Encode a Hydra LiteralType as SHACL CommonProperties with a datatype constraint
-encodeLiteralType :: TBinding (LiteralType -> Shacl.CommonProperties)
+encodeLiteralType :: TTermDefinition (LiteralType -> Shacl.CommonProperties)
 encodeLiteralType = define "encodeLiteralType" $
   doc "Encode a LiteralType as SHACL CommonProperties with an XSD datatype constraint" $
   lambda "lt" $ lets [
@@ -283,7 +283,7 @@ encodeLiteralType = define "encodeLiteralType" $
       _LiteralType_string>>: constant $ var "xsd" @@ string "string"]
 
 -- | Encode a Hydra Term as a list of RDF Descriptions
-encodeTerm :: TBinding (Rdf.Resource -> Term -> Context -> Graph -> Either (InContext Error) ([Rdf.Description], Context))
+encodeTerm :: TTermDefinition (Rdf.Resource -> Term -> Context -> Graph -> Either (InContext Error) ([Rdf.Description], Context))
 encodeTerm = define "encodeTerm" $
   doc "Encode a Hydra term as a list of RDF Descriptions" $
   lambda "subject" $ lambda "term" $ lambda "cx" $ lambda "g" $
@@ -376,7 +376,7 @@ encodeTerm = define "encodeTerm" $
           (encodeField @@ var "rname" @@ var "subject" @@ var "field" @@ var "cx" @@ var "g")]
 
 -- | Helper for encoding lists as RDF (recursive)
-encodeList :: TBinding (Rdf.Resource -> [Term] -> Context -> Graph -> Either (InContext Error) ([Rdf.Description], Context))
+encodeList :: TTermDefinition (Rdf.Resource -> [Term] -> Context -> Graph -> Either (InContext Error) ([Rdf.Description], Context))
 encodeList = define "encodeList" $
   doc "Encode a list of terms as RDF list structure" $
   lambda "subj" $ lambda "terms" $ lambda "cx0" $ lambda "g" $
@@ -416,7 +416,7 @@ encodeList = define "encodeList" $
               (encodeList @@ var "next" @@ (Lists.tail (var "terms")) @@ var "cx3" @@ var "g")))
 
 -- | Fold over a list, accumulating results and threading context
-foldAccumResult :: TBinding ((Context -> a -> Either (InContext Error) (b, Context)) -> Context -> [a] -> Either (InContext Error) ([b], Context))
+foldAccumResult :: TTermDefinition ((Context -> a -> Either (InContext Error) (b, Context)) -> Context -> [a] -> Either (InContext Error) ([b], Context))
 foldAccumResult = define "foldAccumResult" $
   doc "Fold over a list, accumulating results and threading context through each step" $
   lambda "f" $ lambda "cx" $ lambda "xs" $
@@ -431,7 +431,7 @@ foldAccumResult = define "foldAccumResult" $
           (foldAccumResult @@ var "f" @@ (Pairs.second (var "__r")) @@ (Lists.tail (var "xs")))))
 
 -- | Encode a Hydra Type as SHACL CommonProperties
-encodeType :: TBinding (Name -> Type -> Context -> Either (InContext Error) Shacl.CommonProperties)
+encodeType :: TTermDefinition (Name -> Type -> Context -> Either (InContext Error) Shacl.CommonProperties)
 encodeType = define "encodeType" $
   doc "Encode a Hydra type as SHACL CommonProperties" $
   lambda "tname" $ lambda "typ" $ lambda "cx" $ lets [
@@ -474,7 +474,7 @@ encodeType = define "encodeType" $
               inject Shacl._Reference Shacl._Reference_named (nameToIri @@ var "vname")]))])]
 
 -- | Construct a SHACL node shape from a list of common constraints
-node :: TBinding ([Shacl.CommonConstraint] -> Shacl.Shape)
+node :: TTermDefinition ([Shacl.CommonConstraint] -> Shacl.Shape)
 node = define "node" $
   doc "Construct a SHACL node shape from a list of common constraints" $
   lambda "constraints" $
@@ -482,7 +482,7 @@ node = define "node" $
       (record Shacl._NodeShape [Shacl._NodeShape_common>>: common @@ var "constraints"])
 
 -- | Construct a default SHACL property shape with a given IRI path
-property :: TBinding (Rdf.Iri -> Shacl.PropertyShape)
+property :: TTermDefinition (Rdf.Iri -> Shacl.PropertyShape)
 property = define "property" $
   doc "Construct a default property shape with the given IRI as its path" $
   lambda "iri" $
@@ -496,7 +496,7 @@ property = define "property" $
       Shacl._PropertyShape_path>>: var "iri"]
 
 -- | Add an rdf:type triple to an RDF Description
-withType :: TBinding (Name -> Rdf.Description -> Rdf.Description)
+withType :: TTermDefinition (Name -> Rdf.Description -> Rdf.Description)
 withType = define "withType" $
   doc "Add an rdf:type triple to an RDF Description" $
   lambda "name" $ lambda "desc" $ lets [

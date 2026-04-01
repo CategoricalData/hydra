@@ -85,7 +85,7 @@ import Hydra.Ast
 import qualified Hydra.Json.Model as J
 
 
-jsonSerdeDefinition :: String -> TTerm a -> TBinding a
+jsonSerdeDefinition :: String -> TTerm a -> TTermDefinition a
 jsonSerdeDefinition = definitionInModule module_
 
 module_ :: Module
@@ -96,13 +96,13 @@ module_ = Module ns elements
   where
     ns = Namespace "hydra.json.writer"
     elements = [
-      toTermDefinition colonOp,
-      toTermDefinition jsonString,
-      toTermDefinition keyValueToExpr,
-      toTermDefinition printJson,
-      toTermDefinition valueToExpr]
+      toDefinition colonOp,
+      toDefinition jsonString,
+      toDefinition keyValueToExpr,
+      toDefinition printJson,
+      toDefinition valueToExpr]
 
-colonOp :: TBinding Op
+colonOp :: TTermDefinition Op
 colonOp = jsonSerdeDefinition "colonOp" $
   doc "The colon operator used to separate keys and values in JSON objects" $
   Ast.op
@@ -124,7 +124,7 @@ tabCode = int32 9         -- '\t'
 hexDigits :: TTerm String
 hexDigits = string "0123456789abcdef"
 
-jsonString :: TBinding (String -> String)
+jsonString :: TTermDefinition (String -> String)
 jsonString = jsonSerdeDefinition "jsonString" $
   doc "Escape and quote a string for JSON output" $
   "s" ~>
@@ -157,7 +157,7 @@ jsonString = jsonSerdeDefinition "jsonString" $
   "escaped" <~ Strings.cat (Lists.map (var "escape") (Strings.toList $ var "s")) $
   string "\"" ++ var "escaped" ++ string "\""
 
-keyValueToExpr :: TBinding ((String, J.Value) -> Expr)
+keyValueToExpr :: TTermDefinition ((String, J.Value) -> Expr)
 keyValueToExpr = jsonSerdeDefinition "keyValueToExpr" $
   doc "Convert a key-value pair to an AST expression" $
   "pair" ~>
@@ -167,7 +167,7 @@ keyValueToExpr = jsonSerdeDefinition "keyValueToExpr" $
     @@ (Serialization.cst @@ (jsonString @@ var "key"))
     @@ (valueToExpr @@ var "value")
 
-valueToExpr :: TBinding (J.Value -> Expr)
+valueToExpr :: TTermDefinition (J.Value -> Expr)
 valueToExpr = jsonSerdeDefinition "valueToExpr" $
   doc "Convert a JSON value to an AST expression for serialization" $
   "value" ~>
@@ -190,7 +190,7 @@ valueToExpr = jsonSerdeDefinition "valueToExpr" $
     J._Value_string>>: "s" ~>
       Serialization.cst @@ (jsonString @@ var "s")]
 
-printJson :: TBinding (J.Value -> String)
+printJson :: TTermDefinition (J.Value -> String)
 printJson = jsonSerdeDefinition "printJson" $
   doc "Serialize a JSON value to a string" $
   "value" ~> Serialization.printExpr @@ (valueToExpr @@ var "value")

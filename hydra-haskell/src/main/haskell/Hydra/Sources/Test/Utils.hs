@@ -87,7 +87,7 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 
@@ -102,13 +102,13 @@ module_ = Module ns elements
     Just "Shared utility functions for test code generation codecs"
   where
     elements = [
-      toTermDefinition inferTestGroupTerms,
-      toTermDefinition inferTestCase,
-      toTermDefinition inferTerm]
+      toDefinition inferTestGroupTerms,
+      toDefinition inferTestCase,
+      toDefinition inferTerm]
 
 
 -- | Run type inference on all terms in a TestGroup
-inferTestGroupTerms :: TBinding (Graph -> TestGroup -> Either String TestGroup)
+inferTestGroupTerms :: TTermDefinition (Graph -> TestGroup -> Either String TestGroup)
 inferTestGroupTerms = define "inferTestGroupTerms" $
   doc "Run type inference on all terms in a TestGroup to ensure lambdas have domain types" $
   lambda "g" $ lambda "tg" $ lets [
@@ -126,7 +126,7 @@ inferTestGroupTerms = define "inferTestGroupTerms" $
 
 
 -- | Run type inference on the terms in a test case
-inferTestCase :: TBinding (Graph -> TestCaseWithMetadata -> Either String TestCaseWithMetadata)
+inferTestCase :: TTermDefinition (Graph -> TestCaseWithMetadata -> Either String TestCaseWithMetadata)
 inferTestCase = define "inferTestCase" $
   doc "Run type inference on the terms in a test case" $
   lambda "g" $ lambda "tcm" $ lets [
@@ -141,7 +141,7 @@ inferTestCase = define "inferTestCase" $
 
 
 -- | Run type inference on a single term
-inferTerm :: TBinding (Graph -> Term -> Either String Term)
+inferTerm :: TTermDefinition (Graph -> Term -> Either String Term)
 inferTerm = define "inferTerm" $
   doc "Run type inference on a single term" $
   lambda "g" $ lambda "term" $

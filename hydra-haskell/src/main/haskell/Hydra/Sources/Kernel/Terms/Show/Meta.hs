@@ -62,13 +62,13 @@ module_ = Module ns elements
     Just "String representations of hydra.meta types"
   where
    elements = [
-     toTermDefinition termVariant,
-     toTermDefinition typeVariant]
+     toDefinition termVariant,
+     toDefinition typeVariant]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-termVariant :: TBinding (TermVariant -> String)
+termVariant :: TTermDefinition (TermVariant -> String)
 termVariant = define "termVariant" $
   doc "Show a term variant as a string" $
   match _TermVariant Nothing [
@@ -91,7 +91,7 @@ termVariant = define "termVariant" $
     _TermVariant_variable>>: constant $ string "variable",
     _TermVariant_wrap>>: constant $ string "wrap"]
 
-typeVariant :: TBinding (TypeVariant -> String)
+typeVariant :: TTermDefinition (TypeVariant -> String)
 typeVariant = define "typeVariant" $
   doc "Show a type variant as a string" $
   match _TypeVariant Nothing [

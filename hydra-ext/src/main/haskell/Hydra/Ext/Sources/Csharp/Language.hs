@@ -80,17 +80,17 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
 module_ = Module (Namespace "hydra.ext.csharp.language")
-  [toTermDefinition csharpLanguage, toTermDefinition csharpReservedWords]
+  [toDefinition csharpLanguage, toDefinition csharpReservedWords]
   [Lexical.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints and reserved words for C Sharp (C#)"
 
-csharpLanguage :: TBinding Language
+csharpLanguage :: TTermDefinition Language
 csharpLanguage = define "csharpLanguage" $
   doc "Language constraints for C Sharp (C#)" $ lets [
   "eliminationVariants">: Sets.fromList $ list [ -- TODO: verify whether all are supported
@@ -163,7 +163,7 @@ csharpLanguage = define "csharpLanguage" $
       (var "typeVariants")
       (var "typePredicate"))
 
-csharpReservedWords :: TBinding (S.Set String)
+csharpReservedWords :: TTermDefinition (S.Set String)
 csharpReservedWords = define "csharpReservedWords" $
   doc ("A set of reserved words in C#. Both the \"keywords\" and \"contextual keywords\" are drawn from"
     <> " section 6.4.4 of the C# documentation:\n"

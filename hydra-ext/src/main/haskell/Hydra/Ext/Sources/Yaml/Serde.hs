@@ -27,7 +27,7 @@ import qualified Hydra.Ext.Org.Yaml.Model as YM
 ns :: Namespace
 ns = Namespace "hydra.ext.org.yaml.serde"
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
@@ -37,31 +37,31 @@ module_ = Module ns elements
     Just "Native YAML serialization: YAML Node to String"
   where
     elements = [
-      toTermDefinition hydraYamlToString,
-      toTermDefinition writeNode,
-      toTermDefinition writeScalar,
-      toTermDefinition writeString,
-      toTermDefinition writeSequenceItem,
-      toTermDefinition writeMappingEntry,
-      toTermDefinition writeMappingEntryInline,
-      toTermDefinition writeNodeInline,
-      toTermDefinition indentString,
-      toTermDefinition needsQuoting,
-      toTermDefinition looksLikeNumber,
-      toTermDefinition isDecimalString,
-      toTermDefinition hasLeadingTrailingSpace,
-      toTermDefinition escapeSingleQuotes,
-      toTermDefinition yamlReservedWords,
-      toTermDefinition yamlSpecialChars]
+      toDefinition hydraYamlToString,
+      toDefinition writeNode,
+      toDefinition writeScalar,
+      toDefinition writeString,
+      toDefinition writeSequenceItem,
+      toDefinition writeMappingEntry,
+      toDefinition writeMappingEntryInline,
+      toDefinition writeNodeInline,
+      toDefinition indentString,
+      toDefinition needsQuoting,
+      toDefinition looksLikeNumber,
+      toDefinition isDecimalString,
+      toDefinition hasLeadingTrailingSpace,
+      toDefinition escapeSingleQuotes,
+      toDefinition yamlReservedWords,
+      toDefinition yamlSpecialChars]
 
 -- | Serialize a YAML node to a string
-hydraYamlToString :: TBinding (YM.Node -> String)
+hydraYamlToString :: TTermDefinition (YM.Node -> String)
 hydraYamlToString = define "hydraYamlToString" $
   doc "Serialize a YAML node to a string" $
   lambda "node" $ writeNode @@ var "node"
 
 -- | Write a YAML node as a top-level value (block style)
-writeNode :: TBinding (YM.Node -> String)
+writeNode :: TTermDefinition (YM.Node -> String)
 writeNode = define "writeNode" $
   doc "Write a YAML node as a top-level value in block style" $
   "node" ~> cases YM._Node (var "node") Nothing [
@@ -76,7 +76,7 @@ writeNode = define "writeNode" $
         (Strings.cat $ Lists.map (lambda "e" $ writeMappingEntry @@ var "e") (Maps.toList $ var "m"))]
 
 -- | Write a scalar value
-writeScalar :: TBinding (YM.Scalar -> String)
+writeScalar :: TTermDefinition (YM.Scalar -> String)
 writeScalar = define "writeScalar" $
   doc "Write a scalar value" $
   "s" ~> cases YM._Scalar (var "s") Nothing [
@@ -87,7 +87,7 @@ writeScalar = define "writeScalar" $
     YM._Scalar_str>>: "str" ~> writeString @@ var "str"]
 
 -- | Write a string value, quoting if necessary
-writeString :: TBinding (String -> String)
+writeString :: TTermDefinition (String -> String)
 writeString = define "writeString" $
   doc "Write a string value, quoting if necessary" $
   "s" ~>
@@ -96,7 +96,7 @@ writeString = define "writeString" $
     (var "s")
 
 -- | Check if a string needs quoting in YAML
-needsQuoting :: TBinding (String -> Bool)
+needsQuoting :: TTermDefinition (String -> Bool)
 needsQuoting = define "needsQuoting" $
   doc "Check if a string needs quoting in YAML" $
   "s" ~>
@@ -117,7 +117,7 @@ needsQuoting = define "needsQuoting" $
   hasLeadingTrailingSpace @@ var "s"
 
 -- | YAML reserved words that need quoting
-yamlReservedWords :: TBinding [String]
+yamlReservedWords :: TTermDefinition [String]
 yamlReservedWords = define "yamlReservedWords" $
   doc "YAML reserved words that need quoting" $
   list [
@@ -129,13 +129,13 @@ yamlReservedWords = define "yamlReservedWords" $
     string "YES", string "NO", string "ON", string "OFF"]
 
 -- | YAML special characters that trigger quoting
-yamlSpecialChars :: TBinding String
+yamlSpecialChars :: TTermDefinition String
 yamlSpecialChars = define "yamlSpecialChars" $
   doc "YAML special characters that trigger quoting" $
   string ": {}[]#,&*!|>'\"%@`"
 
 -- | Check if a string looks like a number
-looksLikeNumber :: TBinding (String -> Bool)
+looksLikeNumber :: TTermDefinition (String -> Bool)
 looksLikeNumber = define "looksLikeNumber" $
   doc "Check if a string looks like a number" $
   "s" ~>
@@ -158,7 +158,7 @@ looksLikeNumber = define "looksLikeNumber" $
   isDecimalString @@ var "rest"
 
 -- | Check if a list of character codes represents a decimal number (digits.digits)
-isDecimalString :: TBinding ([Int] -> Bool)
+isDecimalString :: TTermDefinition ([Int] -> Bool)
 isDecimalString = define "isDecimalString" $
   doc "Check if character codes represent a decimal number" $
   "chars" ~>
@@ -183,7 +183,7 @@ isDecimalString = define "isDecimalString" $
     (Lists.null (Lists.filter ("c" ~> Logic.not (var "isDigitFn" @@ var "c")) (var "after")))
 
 -- | Check if a string has leading or trailing whitespace
-hasLeadingTrailingSpace :: TBinding (String -> Bool)
+hasLeadingTrailingSpace :: TTermDefinition (String -> Bool)
 hasLeadingTrailingSpace = define "hasLeadingTrailingSpace" $
   doc "Check if a string has leading or trailing whitespace" $
   "s" ~>
@@ -194,7 +194,7 @@ hasLeadingTrailingSpace = define "hasLeadingTrailingSpace" $
     (Chars.isSpace $ Lists.last $ var "chars")
 
 -- | Escape single quotes by doubling them
-escapeSingleQuotes :: TBinding (String -> String)
+escapeSingleQuotes :: TTermDefinition (String -> String)
 escapeSingleQuotes = define "escapeSingleQuotes" $
   doc "Escape single quotes by doubling them" $
   "s" ~>
@@ -205,7 +205,7 @@ escapeSingleQuotes = define "escapeSingleQuotes" $
       (list [var "c"]))
 
 -- | Write a sequence item in block style
-writeSequenceItem :: TBinding (YM.Node -> String)
+writeSequenceItem :: TTermDefinition (YM.Node -> String)
 writeSequenceItem = define "writeSequenceItem" $
   doc "Write a sequence item in block style" $
   "node" ~> cases YM._Node (var "node") Nothing [
@@ -225,7 +225,7 @@ writeSequenceItem = define "writeSequenceItem" $
          Strings.cat $ list [string "- ", var "firstStr", indentString @@ var "restStr"])]
 
 -- | Write a mapping entry in block style (key: value\n)
-writeMappingEntry :: TBinding ((YM.Node, YM.Node) -> String)
+writeMappingEntry :: TTermDefinition ((YM.Node, YM.Node) -> String)
 writeMappingEntry = define "writeMappingEntry" $
   doc "Write a mapping entry in block style" $
   "entry" ~>
@@ -243,7 +243,7 @@ writeMappingEntry = define "writeMappingEntry" $
         (Strings.cat $ list [writeNodeInline @@ var "key", string ":\n", indentString @@ (writeNode @@ var "value")])]
 
 -- | Write a mapping entry for the first item of a sequence element
-writeMappingEntryInline :: TBinding ((YM.Node, YM.Node) -> String)
+writeMappingEntryInline :: TTermDefinition ((YM.Node, YM.Node) -> String)
 writeMappingEntryInline = define "writeMappingEntryInline" $
   doc "Write a mapping entry for the first item of a sequence element" $
   "entry" ~>
@@ -261,7 +261,7 @@ writeMappingEntryInline = define "writeMappingEntryInline" $
         (Strings.cat $ list [writeNodeInline @@ var "key", string ":\n", indentString @@ (writeNode @@ var "value")])]
 
 -- | Write a node inline (for use as a mapping key)
-writeNodeInline :: TBinding (YM.Node -> String)
+writeNodeInline :: TTermDefinition (YM.Node -> String)
 writeNodeInline = define "writeNodeInline" $
   doc "Write a node inline (for use as a mapping key)" $
   "node" ~> cases YM._Node (var "node") Nothing [
@@ -283,7 +283,7 @@ writeNodeInline = define "writeNodeInline" $
         string "}"]]
 
 -- | Indent all lines of a string by 2 spaces
-indentString :: TBinding (String -> String)
+indentString :: TTermDefinition (String -> String)
 indentString = define "indentString" $
   doc "Indent all lines of a string by 2 spaces" $
   "s" ~>

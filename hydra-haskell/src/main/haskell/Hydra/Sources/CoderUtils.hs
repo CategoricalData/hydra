@@ -80,7 +80,7 @@ import qualified Hydra.Sources.Kernel.Terms.Sorting as Sorting
 ns :: Namespace
 ns = Namespace "hydra.coderUtils"
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
@@ -91,33 +91,33 @@ module_ = Module ns elements
   where
    elements = [
      -- Simple pure functions first
-     toTermDefinition normalizeComment,
-     toTermDefinition gatherApplications,
-     toTermDefinition gatherArgs,
-     toTermDefinition gatherArgsWithTypeApps,
+     toDefinition normalizeComment,
+     toDefinition gatherApplications,
+     toDefinition gatherArgs,
+     toDefinition gatherArgsWithTypeApps,
      -- Predicates
-     toTermDefinition isSimpleAssignment,
-     toTermDefinition isComplexTerm,
-     toTermDefinition isComplexVariable,
-     toTermDefinition isComplexBinding,
-     toTermDefinition isTrivialTerm,
+     toDefinition isSimpleAssignment,
+     toDefinition isComplexTerm,
+     toDefinition isComplexVariable,
+     toDefinition isComplexBinding,
+     toDefinition isTrivialTerm,
      -- Tail-call optimization detection
-     toTermDefinition isSelfTailRecursive,
-     toTermDefinition isTailRecursiveInTailPosition,
+     toDefinition isSelfTailRecursive,
+     toDefinition isTailRecursiveInTailPosition,
      -- Type transformation utilities
-     toTermDefinition nameToFilePath,
+     toDefinition nameToFilePath,
      -- Definition ordering
-     toTermDefinition reorderDefs,
+     toDefinition reorderDefs,
      -- Context/graph utilities
-     toTermDefinition commentsFromBinding,
-     toTermDefinition commentsFromFieldType,
-     toTermDefinition typeOfTerm,
+     toDefinition commentsFromBinding,
+     toDefinition commentsFromFieldType,
+     toDefinition typeOfTerm,
      -- Function analysis helpers
-     toTermDefinition bindingMetadata,
-     toTermDefinition analyzeFunctionTerm,
-     toTermDefinition analyzeFunctionTermWith,
-     toTermDefinition analyzeFunctionTermWith_finish,
-     toTermDefinition analyzeFunctionTermWith_gather]
+     toDefinition bindingMetadata,
+     toDefinition analyzeFunctionTerm,
+     toDefinition analyzeFunctionTermWith,
+     toDefinition analyzeFunctionTermWith_finish,
+     toDefinition analyzeFunctionTermWith_gather]
 
 --------------------------------------------------------------------------------
 -- Simple pure functions
@@ -126,7 +126,7 @@ module_ = Module ns elements
 -- | Normalize a comment string for consistent output across coders.
 -- Strips leading/trailing whitespace and ensures the comment ends with a period.
 -- Returns empty string for whitespace-only input.
-normalizeComment :: TBinding (String -> String)
+normalizeComment :: TTermDefinition (String -> String)
 normalizeComment = define "normalizeComment" $
   doc "Normalize a comment string for consistent output across coders" $
   "s" ~>
@@ -148,7 +148,7 @@ normalizeComment = define "normalizeComment" $
 -- collected in the order they appear (leftmost first).
 --
 -- For example, given a term representing @f a b c@, this returns @([a, b, c], f)@.
-gatherApplications :: TBinding (Term -> ([Term], Term))
+gatherApplications :: TTermDefinition (Term -> ([Term], Term))
 gatherApplications = define "gatherApplications" $
   doc "Gather applications from a term, returning (args, baseTerm)" $
   "term" ~>
@@ -165,7 +165,7 @@ gatherApplications = define "gatherApplications" $
 -- | Recursively gather applications, type lambdas, and type applications from a term.
 -- Returns a pair of (base term, argument list) where the base term has all applications,
 -- type lambdas, and type applications removed.
-gatherArgs :: TBinding (Term -> [Term] -> (Term, [Term]))
+gatherArgs :: TTermDefinition (Term -> [Term] -> (Term, [Term]))
 gatherArgs = define "gatherArgs" $
   doc "Gather term arguments, stripping type-level constructs" $
   "term" ~> "args" ~>
@@ -184,7 +184,7 @@ gatherArgs = define "gatherArgs" $
 
 -- | Like gatherArgs but also collects type arguments from TermTypeApplication nodes.
 -- Returns (fun, args, typeArgs) where typeArgs are in application order.
-gatherArgsWithTypeApps :: TBinding (Term -> [Term] -> [Type] -> (Term, [Term], [Type]))
+gatherArgsWithTypeApps :: TTermDefinition (Term -> [Term] -> [Type] -> (Term, [Term], [Type]))
 gatherArgsWithTypeApps = define "gatherArgsWithTypeApps" $
   doc "Gather term and type arguments from a term" $
   "term" ~> "args" ~> "tyArgs" ~>
@@ -212,7 +212,7 @@ gatherArgsWithTypeApps = define "gatherArgsWithTypeApps" $
 -- - It's not a lambda, let, or type lambda
 -- - It's not a type application (which introduces polymorphism requiring type signatures)
 -- - When peeled of applications, it's not a case statement
-isSimpleAssignment :: TBinding (Term -> Bool)
+isSimpleAssignment :: TTermDefinition (Term -> Bool)
 isSimpleAssignment = define "isSimpleAssignment" $
   doc "Check if a term can be encoded as a simple assignment" $
   "term" ~>
@@ -243,7 +243,7 @@ isSimpleAssignment = define "isSimpleAssignment" $
 -- | Determine whether a given term needs to be treated as a (possibly nullary) function,
 -- rather than a simple value. The term might be an actual function, or it may have type parameters
 -- or internal let bindings, or it may reference complex variables.
-isComplexTerm :: TBinding (Graph -> Term -> Bool)
+isComplexTerm :: TTermDefinition (Graph -> Term -> Bool)
 isComplexTerm = define "isComplexTerm" $
   doc "Check if a term needs to be treated as a function rather than a simple value" $
   "tc" ~> "t" ~>
@@ -260,7 +260,7 @@ isComplexTerm = define "isComplexTerm" $
     _Term_variable>>: "name" ~> isComplexVariable @@ var "tc" @@ var "name"]
 
 -- | Look up a variable to see if it is bound to a complex term
-isComplexVariable :: TBinding (Graph -> Name -> Bool)
+isComplexVariable :: TTermDefinition (Graph -> Name -> Bool)
 isComplexVariable = define "isComplexVariable" $
   doc "Check if a variable is bound to a complex term" $
   "tc" ~> "name" ~>
@@ -287,7 +287,7 @@ isComplexVariable = define "isComplexVariable" $
          (var "typeLookup")))
 
 -- | Check if a binding is complex and needs to be treated as a function
-isComplexBinding :: TBinding (Graph -> Binding -> Bool)
+isComplexBinding :: TTermDefinition (Graph -> Binding -> Bool)
 isComplexBinding = define "isComplexBinding" $
   doc "Check if a binding needs to be treated as a function" $
   "tc" ~> "b" ~>
@@ -312,7 +312,7 @@ isComplexBinding = define "isComplexBinding" $
 -- Field projections cause minor regressions in inference/hoisting (~200ms) but yield
 -- large gains in checking/annotations/strings (~1500ms), for a net 4.2% improvement.
 -- This is a conservative predicate: anything not explicitly recognized is non-trivial.
-isTrivialTerm :: TBinding (Term -> Bool)
+isTrivialTerm :: TTermDefinition (Term -> Bool)
 isTrivialTerm = define "isTrivialTerm" $
   doc "Check if a term is trivially cheap (no thunking needed)" $
   "t" ~>
@@ -358,7 +358,7 @@ isTrivialTerm = define "isTrivialTerm" $
 -- | Check if a term body is self-tail-recursive with respect to a function name.
 --   Returns True if the function references itself AND all self-references are in tail position.
 --   Note: isFreeVariableInTerm returns True when the variable is NOT present (confusing API).
-isSelfTailRecursive :: TBinding (Name -> Term -> Bool)
+isSelfTailRecursive :: TTermDefinition (Name -> Term -> Bool)
 isSelfTailRecursive = define "isSelfTailRecursive" $
   doc "Check if a term body is self-tail-recursive with respect to a function name" $
   "funcName" ~> "body" ~>
@@ -372,7 +372,7 @@ isSelfTailRecursive = define "isSelfTailRecursive" $
 -- | Check that all occurrences of funcName in a term are in tail position.
 --   Called after confirming funcName IS present in the term.
 --   Returns True if the term is safe for TCO transformation.
-isTailRecursiveInTailPosition :: TBinding (Name -> Term -> Bool)
+isTailRecursiveInTailPosition :: TTermDefinition (Name -> Term -> Bool)
 isTailRecursiveInTailPosition = define "isTailRecursiveInTailPosition" $
   doc "Check that all self-references are in tail position" $
   "funcName" ~> "term" ~>
@@ -472,7 +472,7 @@ isTailRecursiveInTailPosition = define "isTailRecursiveInTailPosition" $
 -- Type transformation utilities
 --------------------------------------------------------------------------------
 
-nameToFilePath :: TBinding (CaseConvention -> CaseConvention -> FileExtension -> Name -> FilePath)
+nameToFilePath :: TTermDefinition (CaseConvention -> CaseConvention -> FileExtension -> Name -> FilePath)
 nameToFilePath = define "nameToFilePath" $
   doc "Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator" $
   "nsConv" ~> "localConv" ~> "ext" ~> "name" ~>
@@ -497,7 +497,7 @@ nameToFilePath = define "nameToFilePath" $
 -- | Reorder definitions: types first, then topologically sorted terms.
 -- This is a common pattern across language coders to ensure definitions
 -- appear in dependency order in the generated output.
-reorderDefs :: TBinding ([Definition] -> [Definition])
+reorderDefs :: TTermDefinition ([Definition] -> [Definition])
 reorderDefs = define "reorderDefs" $
   doc "Reorder definitions: types first (with hydra.core.Name first among types), then topologically sorted terms" $
   "defs" ~>
@@ -537,7 +537,7 @@ reorderDefs = define "reorderDefs" $
 
 -- | Extract comments/description from a Binding.
 -- This is a common pattern for coders that need to preserve documentation.
-commentsFromBinding :: TBinding (Context -> Graph -> Binding -> Either (InContext Error) (Maybe String))
+commentsFromBinding :: TTermDefinition (Context -> Graph -> Binding -> Either (InContext Error) (Maybe String))
 commentsFromBinding = define "commentsFromBinding" $
   doc "Extract comments/description from a Binding" $
   "cx" ~> "g" ~> "b" ~>
@@ -545,7 +545,7 @@ commentsFromBinding = define "commentsFromBinding" $
 
 -- | Extract comments/description from a FieldType.
 -- This is a common pattern for coders that need to preserve field documentation.
-commentsFromFieldType :: TBinding (Context -> Graph -> FieldType -> Either (InContext Error) (Maybe String))
+commentsFromFieldType :: TTermDefinition (Context -> Graph -> FieldType -> Either (InContext Error) (Maybe String))
 commentsFromFieldType = define "commentsFromFieldType" $
   doc "Extract comments/description from a FieldType" $
   "cx" ~> "g" ~> "ft" ~>
@@ -553,7 +553,7 @@ commentsFromFieldType = define "commentsFromFieldType" $
 
 -- | Check/reconstruct the type of a term, discarding the updated Context.
 -- Wraps Checking.typeOf and returns just the Type.
-typeOfTerm :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Type)
+typeOfTerm :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Type)
 typeOfTerm = define "typeOfTerm" $
   doc "Check the type of a term" $
   "cx" ~> "g" ~> "term" ~>
@@ -566,7 +566,7 @@ typeOfTerm = define "typeOfTerm" $
 --------------------------------------------------------------------------------
 
 -- | Produces a simple 'true' value if the binding is complex (needs to be treated as a function)
-bindingMetadata :: TBinding (Graph -> Binding -> Maybe Term)
+bindingMetadata :: TTermDefinition (Graph -> Binding -> Maybe Term)
 bindingMetadata = define "bindingMetadata" $
   doc "Produces metadata for a binding if it is complex" $
   "tc" ~> "b" ~>
@@ -578,7 +578,7 @@ bindingMetadata = define "bindingMetadata" $
 -- | Analyze a function term by recursively peeling off lambdas, type lambdas, lets, and type applications.
 -- This is a common pattern across all language coders: we need to understand the structure of a function
 -- to properly encode it in the target language.
-analyzeFunctionTerm :: TBinding (
+analyzeFunctionTerm :: TTermDefinition (
   Context ->
   (env -> Graph) ->
   (Graph -> env -> env) ->
@@ -590,7 +590,7 @@ analyzeFunctionTerm = define "analyzeFunctionTerm" $
   "cx" ~> "getTC" ~> "setTC" ~> "env" ~> "term" ~>
   analyzeFunctionTermWith @@ var "cx" @@ bindingMetadata @@ var "getTC" @@ var "setTC" @@ var "env" @@ var "term"
 
-analyzeFunctionTermWith :: TBinding (
+analyzeFunctionTermWith :: TTermDefinition (
   Context ->
   (Graph -> Binding -> Maybe Term) ->
   (env -> Graph) ->
@@ -618,7 +618,7 @@ analyzeFunctionTermWith = define "analyzeFunctionTermWith" $
 -- gather/finish pattern with an argMode flag to track whether we're still
 -- collecting lambda parameters (vs. having seen a let which stops parameter collection).
 -- | Finish helper for analyzeFunctionTermWith: reapply type applications and infer return type
-analyzeFunctionTermWith_finish :: TBinding (
+analyzeFunctionTermWith_finish :: TTermDefinition (
   Context ->
   (env -> Graph) ->
   env -> [Name] -> [Name] -> [Binding] -> [Type] -> [Type] -> Term ->
@@ -642,7 +642,7 @@ analyzeFunctionTermWith_finish = define "analyzeFunctionTermWith_finish" $
     _FunctionStructure_environment>>: var "fEnv"]
 
 -- | Gather helper for analyzeFunctionTermWith: recursively collect function components
-analyzeFunctionTermWith_gather :: TBinding (
+analyzeFunctionTermWith_gather :: TTermDefinition (
   Context ->
   (Graph -> Binding -> Maybe Term) ->
   (env -> Graph) ->

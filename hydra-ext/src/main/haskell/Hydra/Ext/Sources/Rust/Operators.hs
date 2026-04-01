@@ -87,7 +87,7 @@ import qualified Data.Maybe                                as Y
 import Hydra.Ast
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 ns :: Namespace
@@ -101,115 +101,115 @@ module_ = Module ns elements
   where
     elements = [
       -- Assignment operators (lowest precedence)
-      toTermDefinition assignOp,
-      toTermDefinition addAssignOp,
-      toTermDefinition subAssignOp,
-      toTermDefinition mulAssignOp,
-      toTermDefinition divAssignOp,
-      toTermDefinition remAssignOp,
-      toTermDefinition bitAndAssignOp,
-      toTermDefinition bitOrAssignOp,
-      toTermDefinition bitXorAssignOp,
-      toTermDefinition shlAssignOp,
-      toTermDefinition shrAssignOp,
+      toDefinition assignOp,
+      toDefinition addAssignOp,
+      toDefinition subAssignOp,
+      toDefinition mulAssignOp,
+      toDefinition divAssignOp,
+      toDefinition remAssignOp,
+      toDefinition bitAndAssignOp,
+      toDefinition bitOrAssignOp,
+      toDefinition bitXorAssignOp,
+      toDefinition shlAssignOp,
+      toDefinition shrAssignOp,
       -- Range operators
-      toTermDefinition rangeOp,
-      toTermDefinition rangeInclusiveOp,
+      toDefinition rangeOp,
+      toDefinition rangeInclusiveOp,
       -- Logical operators
-      toTermDefinition orOp,
-      toTermDefinition andOp,
+      toDefinition orOp,
+      toDefinition andOp,
       -- Comparison operators
-      toTermDefinition eqOp,
-      toTermDefinition neOp,
-      toTermDefinition ltOp,
-      toTermDefinition leOp,
-      toTermDefinition gtOp,
-      toTermDefinition geOp,
+      toDefinition eqOp,
+      toDefinition neOp,
+      toDefinition ltOp,
+      toDefinition leOp,
+      toDefinition gtOp,
+      toDefinition geOp,
       -- Bitwise operators
-      toTermDefinition bitOrOp,
-      toTermDefinition bitXorOp,
-      toTermDefinition bitAndOp,
+      toDefinition bitOrOp,
+      toDefinition bitXorOp,
+      toDefinition bitAndOp,
       -- Shift operators
-      toTermDefinition shlOp,
-      toTermDefinition shrOp,
+      toDefinition shlOp,
+      toDefinition shrOp,
       -- Arithmetic operators
-      toTermDefinition addOp,
-      toTermDefinition subOp,
-      toTermDefinition mulOp,
-      toTermDefinition divOp,
-      toTermDefinition remOp,
+      toDefinition addOp,
+      toDefinition subOp,
+      toDefinition mulOp,
+      toDefinition divOp,
+      toDefinition remOp,
       -- Cast and type ascription
-      toTermDefinition asOp,
-      toTermDefinition colonOp,
+      toDefinition asOp,
+      toDefinition colonOp,
       -- Unary operators (highest precedence)
-      toTermDefinition negOp,
-      toTermDefinition notOp,
-      toTermDefinition derefOp,
-      toTermDefinition refOp,
+      toDefinition negOp,
+      toDefinition notOp,
+      toDefinition derefOp,
+      toDefinition refOp,
       -- Other operators
-      toTermDefinition appOp,
-      toTermDefinition fieldOp,
-      toTermDefinition methodOp,
-      toTermDefinition arrowOp,
-      toTermDefinition fatArrowOp,
-      toTermDefinition doubleColonOp,
-      toTermDefinition colonColonOp]
+      toDefinition appOp,
+      toDefinition fieldOp,
+      toDefinition methodOp,
+      toDefinition arrowOp,
+      toDefinition fatArrowOp,
+      toDefinition doubleColonOp,
+      toDefinition colonColonOp]
 
 -- =============================================================================
 -- Assignment operators (precedence 1, right associative)
 -- =============================================================================
 
-assignOp :: TBinding Op
+assignOp :: TTermDefinition Op
 assignOp = define "assignOp" $
   doc "Assignment operator (=)" $
   Serialization.op @@ string "=" @@ int32 1 @@ Ast.associativityRight
 
-addAssignOp :: TBinding Op
+addAssignOp :: TTermDefinition Op
 addAssignOp = define "addAssignOp" $
   doc "Add-assign operator (+=)" $
   Serialization.op @@ string "+=" @@ int32 1 @@ Ast.associativityRight
 
-subAssignOp :: TBinding Op
+subAssignOp :: TTermDefinition Op
 subAssignOp = define "subAssignOp" $
   doc "Sub-assign operator (-=)" $
   Serialization.op @@ string "-=" @@ int32 1 @@ Ast.associativityRight
 
-mulAssignOp :: TBinding Op
+mulAssignOp :: TTermDefinition Op
 mulAssignOp = define "mulAssignOp" $
   doc "Mul-assign operator (*=)" $
   Serialization.op @@ string "*=" @@ int32 1 @@ Ast.associativityRight
 
-divAssignOp :: TBinding Op
+divAssignOp :: TTermDefinition Op
 divAssignOp = define "divAssignOp" $
   doc "Div-assign operator (/=)" $
   Serialization.op @@ string "/=" @@ int32 1 @@ Ast.associativityRight
 
-remAssignOp :: TBinding Op
+remAssignOp :: TTermDefinition Op
 remAssignOp = define "remAssignOp" $
   doc "Rem-assign operator (%=)" $
   Serialization.op @@ string "%=" @@ int32 1 @@ Ast.associativityRight
 
-bitAndAssignOp :: TBinding Op
+bitAndAssignOp :: TTermDefinition Op
 bitAndAssignOp = define "bitAndAssignOp" $
   doc "Bitwise and-assign operator (&=)" $
   Serialization.op @@ string "&=" @@ int32 1 @@ Ast.associativityRight
 
-bitOrAssignOp :: TBinding Op
+bitOrAssignOp :: TTermDefinition Op
 bitOrAssignOp = define "bitOrAssignOp" $
   doc "Bitwise or-assign operator (|=)" $
   Serialization.op @@ string "|=" @@ int32 1 @@ Ast.associativityRight
 
-bitXorAssignOp :: TBinding Op
+bitXorAssignOp :: TTermDefinition Op
 bitXorAssignOp = define "bitXorAssignOp" $
   doc "Bitwise xor-assign operator (^=)" $
   Serialization.op @@ string "^=" @@ int32 1 @@ Ast.associativityRight
 
-shlAssignOp :: TBinding Op
+shlAssignOp :: TTermDefinition Op
 shlAssignOp = define "shlAssignOp" $
   doc "Shift-left assign operator (<<=)" $
   Serialization.op @@ string "<<=" @@ int32 1 @@ Ast.associativityRight
 
-shrAssignOp :: TBinding Op
+shrAssignOp :: TTermDefinition Op
 shrAssignOp = define "shrAssignOp" $
   doc "Shift-right assign operator (>>=)" $
   Serialization.op @@ string ">>=" @@ int32 1 @@ Ast.associativityRight
@@ -218,12 +218,12 @@ shrAssignOp = define "shrAssignOp" $
 -- Range operators (precedence 2, neither associative)
 -- =============================================================================
 
-rangeOp :: TBinding Op
+rangeOp :: TTermDefinition Op
 rangeOp = define "rangeOp" $
   doc "Range operator (..)" $
   Serialization.op @@ string ".." @@ int32 2 @@ Ast.associativityNone
 
-rangeInclusiveOp :: TBinding Op
+rangeInclusiveOp :: TTermDefinition Op
 rangeInclusiveOp = define "rangeInclusiveOp" $
   doc "Inclusive range operator (..=)" $
   Serialization.op @@ string "..=" @@ int32 2 @@ Ast.associativityNone
@@ -232,12 +232,12 @@ rangeInclusiveOp = define "rangeInclusiveOp" $
 -- Logical operators
 -- =============================================================================
 
-orOp :: TBinding Op
+orOp :: TTermDefinition Op
 orOp = define "orOp" $
   doc "Logical OR operator (||)" $
   Serialization.op @@ string "||" @@ int32 3 @@ Ast.associativityLeft
 
-andOp :: TBinding Op
+andOp :: TTermDefinition Op
 andOp = define "andOp" $
   doc "Logical AND operator (&&)" $
   Serialization.op @@ string "&&" @@ int32 4 @@ Ast.associativityLeft
@@ -246,32 +246,32 @@ andOp = define "andOp" $
 -- Comparison operators (precedence 5, require parentheses for chaining)
 -- =============================================================================
 
-eqOp :: TBinding Op
+eqOp :: TTermDefinition Op
 eqOp = define "eqOp" $
   doc "Equality operator (==)" $
   Serialization.op @@ string "==" @@ int32 5 @@ Ast.associativityNone
 
-neOp :: TBinding Op
+neOp :: TTermDefinition Op
 neOp = define "neOp" $
   doc "Not-equal operator (!=)" $
   Serialization.op @@ string "!=" @@ int32 5 @@ Ast.associativityNone
 
-ltOp :: TBinding Op
+ltOp :: TTermDefinition Op
 ltOp = define "ltOp" $
   doc "Less-than operator (<)" $
   Serialization.op @@ string "<" @@ int32 5 @@ Ast.associativityNone
 
-leOp :: TBinding Op
+leOp :: TTermDefinition Op
 leOp = define "leOp" $
   doc "Less-than-or-equal operator (<=)" $
   Serialization.op @@ string "<=" @@ int32 5 @@ Ast.associativityNone
 
-gtOp :: TBinding Op
+gtOp :: TTermDefinition Op
 gtOp = define "gtOp" $
   doc "Greater-than operator (>)" $
   Serialization.op @@ string ">" @@ int32 5 @@ Ast.associativityNone
 
-geOp :: TBinding Op
+geOp :: TTermDefinition Op
 geOp = define "geOp" $
   doc "Greater-than-or-equal operator (>=)" $
   Serialization.op @@ string ">=" @@ int32 5 @@ Ast.associativityNone
@@ -280,17 +280,17 @@ geOp = define "geOp" $
 -- Bitwise operators
 -- =============================================================================
 
-bitOrOp :: TBinding Op
+bitOrOp :: TTermDefinition Op
 bitOrOp = define "bitOrOp" $
   doc "Bitwise OR operator (|)" $
   Serialization.op @@ string "|" @@ int32 6 @@ Ast.associativityLeft
 
-bitXorOp :: TBinding Op
+bitXorOp :: TTermDefinition Op
 bitXorOp = define "bitXorOp" $
   doc "Bitwise XOR operator (^)" $
   Serialization.op @@ string "^" @@ int32 7 @@ Ast.associativityLeft
 
-bitAndOp :: TBinding Op
+bitAndOp :: TTermDefinition Op
 bitAndOp = define "bitAndOp" $
   doc "Bitwise AND operator (&)" $
   Serialization.op @@ string "&" @@ int32 8 @@ Ast.associativityLeft
@@ -299,12 +299,12 @@ bitAndOp = define "bitAndOp" $
 -- Shift operators (precedence 9)
 -- =============================================================================
 
-shlOp :: TBinding Op
+shlOp :: TTermDefinition Op
 shlOp = define "shlOp" $
   doc "Shift-left operator (<<)" $
   Serialization.op @@ string "<<" @@ int32 9 @@ Ast.associativityLeft
 
-shrOp :: TBinding Op
+shrOp :: TTermDefinition Op
 shrOp = define "shrOp" $
   doc "Shift-right operator (>>)" $
   Serialization.op @@ string ">>" @@ int32 9 @@ Ast.associativityLeft
@@ -313,27 +313,27 @@ shrOp = define "shrOp" $
 -- Arithmetic operators
 -- =============================================================================
 
-addOp :: TBinding Op
+addOp :: TTermDefinition Op
 addOp = define "addOp" $
   doc "Addition operator (+)" $
   Serialization.op @@ string "+" @@ int32 10 @@ Ast.associativityLeft
 
-subOp :: TBinding Op
+subOp :: TTermDefinition Op
 subOp = define "subOp" $
   doc "Subtraction operator (-)" $
   Serialization.op @@ string "-" @@ int32 10 @@ Ast.associativityLeft
 
-mulOp :: TBinding Op
+mulOp :: TTermDefinition Op
 mulOp = define "mulOp" $
   doc "Multiplication operator (*)" $
   Serialization.op @@ string "*" @@ int32 11 @@ Ast.associativityLeft
 
-divOp :: TBinding Op
+divOp :: TTermDefinition Op
 divOp = define "divOp" $
   doc "Division operator (/)" $
   Serialization.op @@ string "/" @@ int32 11 @@ Ast.associativityLeft
 
-remOp :: TBinding Op
+remOp :: TTermDefinition Op
 remOp = define "remOp" $
   doc "Remainder operator (%)" $
   Serialization.op @@ string "%" @@ int32 11 @@ Ast.associativityLeft
@@ -342,12 +342,12 @@ remOp = define "remOp" $
 -- Type cast and ascription operators (precedence 12)
 -- =============================================================================
 
-asOp :: TBinding Op
+asOp :: TTermDefinition Op
 asOp = define "asOp" $
   doc "Type cast operator (as)" $
   Serialization.op @@ string "as" @@ int32 12 @@ Ast.associativityLeft
 
-colonOp :: TBinding Op
+colonOp :: TTermDefinition Op
 colonOp = define "colonOp" $
   doc "Type ascription operator (:)" $
   Serialization.op @@ string ":" @@ int32 12 @@ Ast.associativityLeft
@@ -356,7 +356,7 @@ colonOp = define "colonOp" $
 -- Unary operators (highest precedence 13)
 -- =============================================================================
 
-negOp :: TBinding Op
+negOp :: TTermDefinition Op
 negOp = define "negOp" $
   doc "Unary negation operator (-)" $
   Ast.op
@@ -365,7 +365,7 @@ negOp = define "negOp" $
     (Ast.precedence $ int32 13)
     Ast.associativityNone
 
-notOp :: TBinding Op
+notOp :: TTermDefinition Op
 notOp = define "notOp" $
   doc "Unary logical not operator (!)" $
   Ast.op
@@ -374,7 +374,7 @@ notOp = define "notOp" $
     (Ast.precedence $ int32 13)
     Ast.associativityNone
 
-derefOp :: TBinding Op
+derefOp :: TTermDefinition Op
 derefOp = define "derefOp" $
   doc "Dereference operator (*)" $
   Ast.op
@@ -383,7 +383,7 @@ derefOp = define "derefOp" $
     (Ast.precedence $ int32 13)
     Ast.associativityNone
 
-refOp :: TBinding Op
+refOp :: TTermDefinition Op
 refOp = define "refOp" $
   doc "Reference operator (&)" $
   Ast.op
@@ -396,7 +396,7 @@ refOp = define "refOp" $
 -- Other operators
 -- =============================================================================
 
-appOp :: TBinding Op
+appOp :: TTermDefinition Op
 appOp = define "appOp" $
   doc "Function application operator (whitespace)" $
   Ast.op
@@ -405,7 +405,7 @@ appOp = define "appOp" $
     (Ast.precedence $ int32 0)
     Ast.associativityLeft
 
-fieldOp :: TBinding Op
+fieldOp :: TTermDefinition Op
 fieldOp = define "fieldOp" $
   doc "Field access operator (.)" $
   Ast.op
@@ -414,7 +414,7 @@ fieldOp = define "fieldOp" $
     (Ast.precedence $ int32 14)
     Ast.associativityLeft
 
-methodOp :: TBinding Op
+methodOp :: TTermDefinition Op
 methodOp = define "methodOp" $
   doc "Method call operator (.)" $
   Ast.op
@@ -423,17 +423,17 @@ methodOp = define "methodOp" $
     (Ast.precedence $ int32 14)
     Ast.associativityLeft
 
-arrowOp :: TBinding Op
+arrowOp :: TTermDefinition Op
 arrowOp = define "arrowOp" $
   doc "Return type arrow (->)" $
   Serialization.op @@ string "->" @@ int32 0 @@ Ast.associativityRight
 
-fatArrowOp :: TBinding Op
+fatArrowOp :: TTermDefinition Op
 fatArrowOp = define "fatArrowOp" $
   doc "Match arm arrow (=>)" $
   Serialization.op @@ string "=>" @@ int32 0 @@ Ast.associativityNone
 
-doubleColonOp :: TBinding Op
+doubleColonOp :: TTermDefinition Op
 doubleColonOp = define "doubleColonOp" $
   doc "Path separator (::)" $
   Ast.op
@@ -442,7 +442,7 @@ doubleColonOp = define "doubleColonOp" $
     (Ast.precedence $ int32 15)
     Ast.associativityLeft
 
-colonColonOp :: TBinding Op
+colonColonOp :: TTermDefinition Op
 colonColonOp = define "colonColonOp" $
   doc "Type annotation (::) for let statements" $
   Serialization.op @@ string ":" @@ int32 0 @@ Ast.associativityNone

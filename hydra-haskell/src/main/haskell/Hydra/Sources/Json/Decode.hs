@@ -87,7 +87,7 @@ import Hydra.Json.Model
 ns :: Namespace
 ns = Namespace "hydra.json.decode"
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
@@ -97,18 +97,18 @@ module_ = Module ns elements
     Just "JSON decoding for Hydra terms. Converts JSON Values to Terms using Either for error handling."
   where
     elements = [
-      toTermDefinition fromJson,
-      toTermDefinition decodeLiteral,
-      toTermDefinition decodeFloat,
-      toTermDefinition decodeInteger,
-      toTermDefinition expectString,
-      toTermDefinition expectArray,
-      toTermDefinition expectObject,
-      toTermDefinition expectNumber]
+      toDefinition fromJson,
+      toDefinition decodeLiteral,
+      toDefinition decodeFloat,
+      toDefinition decodeInteger,
+      toDefinition expectString,
+      toDefinition expectArray,
+      toDefinition expectObject,
+      toDefinition expectNumber]
 
 -- | Decode a JSON Value to a Term given a Type and type lookup table.
 -- Returns Left with an error message for type mismatches or invalid JSON.
-fromJson :: TBinding (M.Map Name Type -> Name -> Type -> Value -> Either String Term)
+fromJson :: TTermDefinition (M.Map Name Type -> Name -> Type -> Value -> Either String Term)
 fromJson = define "fromJson" $
   doc "Decode a JSON value to a Hydra term given a type and type name. Returns Left for type mismatches." $
   "types" ~> "tname" ~> "typ" ~> "value" ~>
@@ -329,7 +329,7 @@ fromJson = define "fromJson" $
         (var "lookedUp")]
 
 -- | Decode a JSON value to a literal term given a literal type
-decodeLiteral :: TBinding (LiteralType -> Value -> Either String Term)
+decodeLiteral :: TTermDefinition (LiteralType -> Value -> Either String Term)
 decodeLiteral = define "decodeLiteral" $
   doc "Decode a JSON value to a literal term" $
   "lt" ~> "value" ~>
@@ -353,7 +353,7 @@ decodeLiteral = define "decodeLiteral" $
 
 -- | Decode a JSON value to a float term
 -- Float64 and Bigfloat are decoded from JSON numbers; Float32 from string
-decodeFloat :: TBinding (FloatType -> Value -> Either String Term)
+decodeFloat :: TTermDefinition (FloatType -> Value -> Either String Term)
 decodeFloat = define "decodeFloat" $
   doc "Decode a JSON value to a float term. Float64/Bigfloat from numbers; Float32 from string." $
   "ft" ~> "value" ~>
@@ -386,7 +386,7 @@ decodeFloat = define "decodeFloat" $
 -- | Decode a JSON value to an integer term
 -- Small integers (int8, int16, int32, uint8, uint16) are decoded from JSON numbers
 -- Large integers (int64, uint32, uint64, bigint) are decoded from JSON strings
-decodeInteger :: TBinding (IntegerType -> Value -> Either String Term)
+decodeInteger :: TTermDefinition (IntegerType -> Value -> Either String Term)
 decodeInteger = define "decodeInteger" $
   doc "Decode a JSON value to an integer term. Small ints from numbers; large ints from strings." $
   "it" ~> "value" ~>
@@ -469,7 +469,7 @@ decodeInteger = define "decodeInteger" $
         (var "numResult")]
 
 -- | Extract a string from a JSON value
-expectString :: TBinding (Value -> Either String String)
+expectString :: TTermDefinition (Value -> Either String String)
 expectString = define "expectString" $
   doc "Extract a string from a JSON value" $
   "value" ~> cases _Value (var "value")
@@ -477,7 +477,7 @@ expectString = define "expectString" $
     _Value_string>>: "s" ~> right $ var "s"]
 
 -- | Extract an array from a JSON value
-expectArray :: TBinding (Value -> Either String [Value])
+expectArray :: TTermDefinition (Value -> Either String [Value])
 expectArray = define "expectArray" $
   doc "Extract an array from a JSON value" $
   "value" ~> cases _Value (var "value")
@@ -485,7 +485,7 @@ expectArray = define "expectArray" $
     _Value_array>>: "arr" ~> right $ var "arr"]
 
 -- | Extract an object from a JSON value
-expectObject :: TBinding (Value -> Either String (M.Map String Value))
+expectObject :: TTermDefinition (Value -> Either String (M.Map String Value))
 expectObject = define "expectObject" $
   doc "Extract an object from a JSON value" $
   "value" ~> cases _Value (var "value")
@@ -493,7 +493,7 @@ expectObject = define "expectObject" $
     _Value_object>>: "obj" ~> right $ var "obj"]
 
 -- | Extract a number from a JSON value
-expectNumber :: TBinding (Value -> Either String Double)
+expectNumber :: TTermDefinition (Value -> Either String Double)
 expectNumber = define "expectNumber" $
   doc "Extract a number from a JSON value" $
   "value" ~> cases _Value (var "value")

@@ -27,7 +27,7 @@ module_ :: Module
 module_ = Module ns elements [Namespace "hydra.reduction", Namespace "hydra.show.core"] [] $
     Just "Test cases for hydra.lib.math primitives"
   where
-    elements = [Phantoms.toTermDefinition allTests]
+    elements = [Phantoms.toDefinition allTests]
 
 -- Test groups for hydra.lib.math primitives
 
@@ -453,7 +453,7 @@ mathTruncate = subgroup "truncate" [
   where
     test name x result = primCase name _math_truncate [float64 x] (bigint result)
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.math primitives" $
     supergroup "hydra.lib.math primitives" [

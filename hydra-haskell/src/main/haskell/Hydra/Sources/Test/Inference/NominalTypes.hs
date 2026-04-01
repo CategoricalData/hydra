@@ -27,17 +27,17 @@ module_ = Module ns elements
     (Just "Inference tests for nominal types")
   where
     elements = [
-      Phantoms.toTermDefinition allTests,
-      Phantoms.toTermDefinition testGroupForCaseStatements,
-      Phantoms.toTermDefinition testGroupForProjections,
-      Phantoms.toTermDefinition testGroupForRecords,
-      Phantoms.toTermDefinition testGroupForVariants,
-      Phantoms.toTermDefinition testGroupForWrappers]
+      Phantoms.toDefinition allTests,
+      Phantoms.toDefinition testGroupForCaseStatements,
+      Phantoms.toDefinition testGroupForProjections,
+      Phantoms.toDefinition testGroupForRecords,
+      Phantoms.toDefinition testGroupForVariants,
+      Phantoms.toDefinition testGroupForWrappers]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
   Phantoms.doc "Nominal type tests" $
   supergroup "Nominal terms" [
@@ -47,7 +47,7 @@ allTests = define "allTests" $
     testGroupForVariants,
     testGroupForWrappers]
 
-testGroupForCaseStatements :: TBinding TestGroup
+testGroupForCaseStatements :: TTermDefinition TestGroup
 testGroupForCaseStatements = define "testGroupForCaseStatements" $
   subgroup "Case statements" [
     expectMono 1 [tag_disabledForMinimalInference]
@@ -62,7 +62,7 @@ testGroupForCaseStatements = define "testGroupForCaseStatements" $
         "unit">: constant false])
       (T.function (Core.typeVariable $ TestTypes.testTypeUnionMonomorphicName) T.boolean)]
 
-testGroupForProjections :: TBinding TestGroup
+testGroupForProjections :: TTermDefinition TestGroup
 testGroupForProjections = define "testGroupForProjections" $
   supergroup "Projections" [
     subgroup "Record eliminations" [
@@ -78,7 +78,7 @@ testGroupForProjections = define "testGroupForProjections" $
         (primitive _pairs_second @@ pair (int32 42) (string "foo"))
         T.string]]
 
-testGroupForRecords :: TBinding TestGroup
+testGroupForRecords :: TTermDefinition TestGroup
 testGroupForRecords = define "testGroupForRecords" $
   supergroup "Records" [
 
@@ -160,7 +160,7 @@ testGroupForRecords = define "testGroupForRecords" $
             "tail">: optional nothing]])
         ["t0"] (T.function (T.var "t0") (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListAName) (T.var "t0")))]]
 
-testGroupForVariants :: TBinding TestGroup
+testGroupForVariants :: TTermDefinition TestGroup
 testGroupForVariants = define "testGroupForVariants" $
   supergroup "Variant terms" [
 
@@ -189,7 +189,7 @@ testGroupForVariants = define "testGroupForVariants" $
           $ inject (TestTypes.testTypeUnionPolymorphicRecursiveName) "other" $ var "other")
         (T.apply (Core.typeVariable (TestTypes.testTypeUnionPolymorphicRecursiveName)) T.int32)]]
 
-testGroupForWrappers :: TBinding TestGroup
+testGroupForWrappers :: TTermDefinition TestGroup
 testGroupForWrappers = define "testGroupForWrappers" $
   supergroup "Wrapper introductions and eliminations" [
 

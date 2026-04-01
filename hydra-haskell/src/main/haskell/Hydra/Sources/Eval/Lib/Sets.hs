@@ -56,7 +56,7 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 ns :: Namespace
 ns = Namespace "hydra.eval.lib.sets"
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
@@ -66,15 +66,15 @@ module_ = Module ns elements
     Just ("Evaluation-level implementations of Set functions for the Hydra interpreter.")
   where
     elements = [
-      toTermDefinition difference_,
-      toTermDefinition intersection_,
-      toTermDefinition map_,
-      toTermDefinition union_,
-      toTermDefinition unions_]
+      toDefinition difference_,
+      toDefinition intersection_,
+      toDefinition map_,
+      toDefinition union_,
+      toDefinition unions_]
 
 -- | Interpreter-friendly set difference.
 -- difference s1 s2: elements in s1 that are not in s2.
-difference_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+difference_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 difference_ = define "difference" $
   doc "Interpreter-friendly set difference." $
   "cx" ~> "g" ~>
@@ -103,7 +103,7 @@ difference_ = define "difference" $
 
 -- | Interpreter-friendly set intersection.
 -- intersection s1 s2: elements in both s1 and s2.
-intersection_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+intersection_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 intersection_ = define "intersection" $
   doc "Interpreter-friendly set intersection." $
   "cx" ~> "g" ~>
@@ -132,7 +132,7 @@ intersection_ = define "intersection" $
 
 -- | Interpreter-friendly map for Set terms.
 -- Applies fun to each element.
-map_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+map_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 map_ = define "map" $
   doc "Interpreter-friendly map for Set terms." $
   "cx" ~> "g" ~>
@@ -147,7 +147,7 @@ map_ = define "map" $
 
 -- | Interpreter-friendly set union.
 -- union s1 s2: elements in either s1 or s2.
-union_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+union_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 union_ = define "union" $
   doc "Interpreter-friendly set union." $
   "cx" ~> "g" ~>
@@ -166,7 +166,7 @@ union_ = define "union" $
 
 -- | Interpreter-friendly unions for list of Set terms.
 -- unions [s1, s2, ...]: union of all sets.
-unions_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+unions_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
 unions_ = define "unions" $
   doc "Interpreter-friendly unions for list of Set terms." $
   "cx" ~> "g" ~>

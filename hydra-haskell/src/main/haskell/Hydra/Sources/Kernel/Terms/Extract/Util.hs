@@ -67,15 +67,15 @@ module_ = Module ns elements
     Just ("Extraction and validation for hydra.util types")
   where
    elements = [
-     toTermDefinition comparison]
+     toDefinition comparison]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 formatError :: TTerm (InContext Error -> String)
 formatError = "ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic")
 
-comparison :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext Error) Comparison)
+comparison :: TTermDefinition (Context -> Graph -> Term -> Prelude.Either (InContext Error) Comparison)
 comparison = define "comparison" $
   doc "Extract a comparison from a term" $
   "cx" ~> "graph" ~> "term" ~>

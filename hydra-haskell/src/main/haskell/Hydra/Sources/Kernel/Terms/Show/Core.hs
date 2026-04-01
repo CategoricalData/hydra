@@ -64,41 +64,41 @@ module_ = Module ns elements
     Just "String representations of hydra.core types"
   where
    elements = [
-     toTermDefinition readTerm, -- TODO: move this to hydra.read.core
-     toTermDefinition binding,
-     toTermDefinition elimination,
-     toTermDefinition field,
-     toTermDefinition fieldType,
-     toTermDefinition fields,
-     toTermDefinition floatValue,
-     toTermDefinition floatType,
-     toTermDefinition function,
-     toTermDefinition injection,
-     toTermDefinition integerValue,
-     toTermDefinition integerType,
-     toTermDefinition lambda,
-     toTermDefinition let_,
-     toTermDefinition list_,
-     toTermDefinition maybe_,
-     toTermDefinition pair_,
-     toTermDefinition either_,
-     toTermDefinition map_,
-     toTermDefinition set_,
-     toTermDefinition literal,
-     toTermDefinition literalType,
-     toTermDefinition term,
-     toTermDefinition type_,
-     toTermDefinition typeScheme]
+     toDefinition readTerm, -- TODO: move this to hydra.read.core
+     toDefinition binding,
+     toDefinition elimination,
+     toDefinition field,
+     toDefinition fieldType,
+     toDefinition fields,
+     toDefinition floatValue,
+     toDefinition floatType,
+     toDefinition function,
+     toDefinition injection,
+     toDefinition integerValue,
+     toDefinition integerType,
+     toDefinition lambda,
+     toDefinition let_,
+     toDefinition list_,
+     toDefinition maybe_,
+     toDefinition pair_,
+     toDefinition either_,
+     toDefinition map_,
+     toDefinition set_,
+     toDefinition literal,
+     toDefinition literalType,
+     toDefinition term,
+     toDefinition type_,
+     toDefinition typeScheme]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-readTerm :: TBinding (String -> Maybe Term)
+readTerm :: TTermDefinition (String -> Maybe Term)
 readTerm = define "readTerm" $
   doc "A placeholder for reading terms from their serialized form. Not implemented." $
   "s" ~> just $ Core.termLiteral $ Core.literalString $ var "s"
 
-binding :: TBinding (Binding -> String)
+binding :: TTermDefinition (Binding -> String)
 binding = define "binding" $
   doc "Show a binding as a string" $
   "el" ~>
@@ -114,7 +114,7 @@ binding = define "binding" $
     string " = ",
     term @@ var "t"]
       
-elimination :: TBinding (Elimination -> String)
+elimination :: TTermDefinition (Elimination -> String)
 elimination = define "elimination" $
   doc "Show an elimination as a string" $
   "elm" ~>
@@ -147,14 +147,14 @@ elimination = define "elimination" $
       unwrap _Name @@ var "tname",
       string ")"]]
 
-field :: TBinding (Field -> String)
+field :: TTermDefinition (Field -> String)
 field = define "field" $
   "field" ~>
   "fname" <~ unwrap _Name @@ (Core.fieldName $ var "field") $
   "fterm" <~ Core.fieldTerm (var "field") $
   Strings.cat $ list [var "fname", string "=", term @@ var "fterm"]
 
-fieldType :: TBinding (FieldType -> String)
+fieldType :: TTermDefinition (FieldType -> String)
 fieldType = define "fieldType" $
   "ft" ~>
   "fname" <~ unwrap _Name @@ (Core.fieldTypeName $ var "ft") $
@@ -164,7 +164,7 @@ fieldType = define "fieldType" $
     string ":",
     type_ @@ var "ftyp"]
 
-fields :: TBinding ([Field] -> String)
+fields :: TTermDefinition ([Field] -> String)
 fields = define "fields" $
   doc "Show a list of fields as a string" $
   "flds" ~>
@@ -174,7 +174,7 @@ fields = define "fields" $
     Strings.intercalate (string ", ") (var "fieldStrs"),
     string "}"]
 
-floatValue :: TBinding (FloatValue -> String)
+floatValue :: TTermDefinition (FloatValue -> String)
 floatValue = define "float" $
   doc "Show a float value as a string" $
   "fv" ~> cases _FloatValue (var "fv") Nothing [
@@ -182,7 +182,7 @@ floatValue = define "float" $
     _FloatValue_float32>>: "v" ~> Literals.showFloat32 (var "v") ++ (string ":float32"),
     _FloatValue_float64>>: "v" ~> Literals.showFloat64 (var "v") ++ (string ":float64")]
 
-floatType :: TBinding (FloatType -> String)
+floatType :: TTermDefinition (FloatType -> String)
 floatType = define "floatType" $
   doc "Show a float type as a string" $
   "ft" ~> cases _FloatType (var "ft") Nothing [
@@ -190,7 +190,7 @@ floatType = define "floatType" $
     _FloatType_float32>>: constant $ string "float32",
     _FloatType_float64>>: constant $ string "float64"]
 
-function :: TBinding (Function -> String)
+function :: TTermDefinition (Function -> String)
 function = define "function" $
   doc "Show a function as a string" $
   "f" ~> cases _Function (var "f") Nothing [
@@ -198,7 +198,7 @@ function = define "function" $
     _Function_lambda>>: lambda,
     _Function_primitive>>: "name" ~> Strings.cat2 (unwrap _Name @@ var "name") (string "!")]
 
-injection :: TBinding (Injection -> String)
+injection :: TTermDefinition (Injection -> String)
 injection = define "injection" $
   doc "Show an injection as a string" $
   "inj" ~>
@@ -210,7 +210,7 @@ injection = define "injection" $
     string ")",
     fields @@ (list [var "f"])]
 
-integerValue :: TBinding (IntegerValue -> String)
+integerValue :: TTermDefinition (IntegerValue -> String)
 integerValue = define "integer" $
   doc "Show an integer value as a string" $
   "iv" ~> cases _IntegerValue (var "iv") Nothing [
@@ -224,7 +224,7 @@ integerValue = define "integer" $
     _IntegerValue_uint32>>: "v" ~> Literals.showUint32 (var "v") ++ (string ":uint32"),
     _IntegerValue_uint64>>: "v" ~> Literals.showUint64 (var "v") ++ (string ":uint64")]
 
-integerType :: TBinding (IntegerType -> String)
+integerType :: TTermDefinition (IntegerType -> String)
 integerType = define "integerType" $
   doc "Show an integer type as a string" $
   "it" ~> cases _IntegerType (var "it") Nothing [
@@ -238,7 +238,7 @@ integerType = define "integerType" $
     _IntegerType_uint32>>: constant $ string "uint32",
     _IntegerType_uint64>>: constant $ string "uint64"]
 
-lambda :: TBinding (Lambda -> String)
+lambda :: TTermDefinition (Lambda -> String)
 lambda = define "lambda" $
   doc "Show a lambda as a string" $
   "l" ~>
@@ -256,7 +256,7 @@ lambda = define "lambda" $
     string ".",
     term @@ var "body"]
 
-let_ :: TBinding (Let -> String)
+let_ :: TTermDefinition (Let -> String)
 let_ = define "let" $
   doc "Show a let expression as a string" $
   "l" ~>
@@ -269,7 +269,7 @@ let_ = define "let" $
     string " in ",
     term @@ var "env"]
 
-list_ :: TBinding ((a -> String) -> [a] -> String)
+list_ :: TTermDefinition ((a -> String) -> [a] -> String)
 list_ = define "list" $
   doc "Show a list using a given function to show each element" $
   "f" ~> "xs" ~>
@@ -279,7 +279,7 @@ list_ = define "list" $
     Strings.intercalate (string ", ") (var "elementStrs"),
     string "]"]
 
-pair_ :: TBinding ((a -> String) -> (b -> String) -> (a, b) -> String)
+pair_ :: TTermDefinition ((a -> String) -> (b -> String) -> (a, b) -> String)
 pair_ = define "pair" $
   doc "Show a pair using given functions to show each element" $
   "showA" ~> "showB" ~> "p" ~>
@@ -290,7 +290,7 @@ pair_ = define "pair" $
     var "showB" @@ (Pairs.second $ var "p"),
     string ")"]
 
-either_ :: TBinding ((a -> String) -> (b -> String) -> Prelude.Either a b -> String)
+either_ :: TTermDefinition ((a -> String) -> (b -> String) -> Prelude.Either a b -> String)
 either_ = define "either" $
   doc "Show an Either value using given functions for left and right" $
   "showA" ~> "showB" ~> "e" ~>
@@ -299,13 +299,13 @@ either_ = define "either" $
     ("b" ~> Strings.cat2 (string "right(") (Strings.cat2 (var "showB" @@ var "b") (string ")")))
     (var "e")
 
-maybe_ :: TBinding ((a -> String) -> Maybe a -> String)
+maybe_ :: TTermDefinition ((a -> String) -> Maybe a -> String)
 maybe_ = define "maybe" $
   doc "Show a Maybe value using a given function to show the element" $
   "f" ~> "mx" ~>
   Maybes.maybe (string "nothing") ("x" ~> Strings.cat2 (string "just(") (Strings.cat2 (var "f" @@ var "x") (string ")"))) (var "mx")
 
-map_ :: TBinding ((k -> String) -> (v -> String) -> M.Map k v -> String)
+map_ :: TTermDefinition ((k -> String) -> (v -> String) -> M.Map k v -> String)
 map_ = define "map" $
   doc "Show a map using given functions to show keys and values" $
   "showK" ~> "showV" ~> "m" ~>
@@ -318,7 +318,7 @@ map_ = define "map" $
     Strings.intercalate (string ", ") (var "pairStrs"),
     string "}"]
 
-set_ :: TBinding ((a -> String) -> S.Set a -> String)
+set_ :: TTermDefinition ((a -> String) -> S.Set a -> String)
 set_ = define "set" $
   doc "Show a set using a given function to show each element" $
   "f" ~> "xs" ~>
@@ -328,7 +328,7 @@ set_ = define "set" $
     Strings.intercalate (string ", ") (var "elementStrs"),
     string "}"]
 
-literal :: TBinding (Literal -> String)
+literal :: TTermDefinition (Literal -> String)
 literal = define "literal" $
   doc "Show a literal as a string" $
   "l" ~> cases _Literal (var "l") Nothing [
@@ -338,7 +338,7 @@ literal = define "literal" $
     _Literal_integer>>: "iv" ~> integerValue @@ var "iv",
     _Literal_string>>: "s" ~> Literals.showString $ var "s"]
 
-literalType :: TBinding (LiteralType -> String)
+literalType :: TTermDefinition (LiteralType -> String)
 literalType = define "literalType" $
   doc "Show a literal type as a string" $
   "lt" ~> cases _LiteralType (var "lt") Nothing [
@@ -348,7 +348,7 @@ literalType = define "literalType" $
     _LiteralType_integer>>: "it" ~> integerType @@ var "it",
     _LiteralType_string>>: constant $ string "string"]
 
-term :: TBinding (Term -> String)
+term :: TTermDefinition (Term -> String)
 term = define "term" $
   doc "Show a term as a string" $
   "t" ~>
@@ -450,7 +450,7 @@ term = define "term" $
         term @@ var "term1",
         string "}"]]
 
-type_ :: TBinding (Type -> String)
+type_ :: TTermDefinition (Type -> String)
 type_ = define "type" $
   doc "Show a type as a string" $
   "typ" ~>
@@ -546,7 +546,7 @@ type_ = define "type" $
     _Type_wrap>>: "wt" ~>
       Strings.cat $ list [string "wrap(", type_ @@ var "wt", string ")"]]
 
-typeScheme :: TBinding (TypeScheme -> String)
+typeScheme :: TTermDefinition (TypeScheme -> String)
 typeScheme = define "typeScheme" $
   doc "Show a type scheme as a string" $
   "ts" ~>

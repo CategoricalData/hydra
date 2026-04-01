@@ -42,7 +42,7 @@ module_ :: Module
 module_ = Module ns elements [Annotations.ns, Lexical.ns, Namespace "hydra.reduction", Namespace "hydra.show.core"] [] $
     Just "Test cases for hydra.annotations functions"
   where
-    elements = [Phantoms.toTermDefinition allTests]
+    elements = [Phantoms.toDefinition allTests]
 
 
 -- | Annotation eval case: like annEvalCase but tagged as disabled because these tests
@@ -251,7 +251,7 @@ layeredAnnotationTests = subgroup "layered annotations" [
            $ Terms.map $ Maps.singleton (nameTerm "one") (int32Term 99)))
     (optional $ just $ int32Term 99)]
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = Phantoms.definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.annotations functions" $
     supergroup "annotations" [
