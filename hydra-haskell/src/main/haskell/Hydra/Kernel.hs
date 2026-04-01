@@ -10,7 +10,6 @@ Note: the following modules are part of the kernel, but they are not default imp
 - Hydra.Json.Parser
 - Hydra.Json.Writer
 - Hydra.Parsers
-- Hydra.Packaging
 - Hydra.Show.Core
 - Hydra.Topology
 -}
@@ -28,7 +27,6 @@ module Hydra.Kernel (
   module Hydra.Core,
   module Hydra.Error.Checking,
   module Hydra.Error.Core,
-  module Hydra.Error.Packaging,
   module Hydra.Errors,
   module Hydra.Languages,
   module Hydra.Formatting,
@@ -72,7 +70,6 @@ import Hydra.Context
 import Hydra.Core
 import Hydra.Error.Checking
 import Hydra.Error.Core
-import Hydra.Error.Packaging
 import Hydra.Errors
 import Hydra.Languages
 import Hydra.Formatting

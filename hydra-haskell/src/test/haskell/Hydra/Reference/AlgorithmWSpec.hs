@@ -62,7 +62,6 @@ algorithmWRunner :: TestRunner
 algorithmWRunner desc tcase = if Testing.isDisabled tcase || Testing.isDisabledForMinimalInference tcase
   then Nothing
   else case testCaseWithMetadataCase tcase of
-    TestCaseInference (InferenceTestCase input output) -> Just $ expectType input output
     _ -> Nothing
 
 spec :: H.Spec

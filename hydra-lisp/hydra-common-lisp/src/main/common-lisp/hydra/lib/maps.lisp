@@ -12,7 +12,6 @@
   pairs)
 
 ;; alter :: (Maybe v -> Maybe v) -> k -> Map k v -> Map k v
-;; Alter a value at a key using a function.
 (defun alter-is-nothing-p (m)
   (or (null m)
       (and (consp m) (eq (first m) :nothing))
@@ -42,7 +41,6 @@
               (cons (cons k (alter-get-value new-maybe)) new-m)))))))
 
 ;; bimap :: (k1 -> k2) -> (v1 -> v2) -> Map k1 v1 -> Map k2 v2
-;; Map a function over the keys and values of a map.
 (defvar hydra_lib_maps_bimap
   (lambda (fk)
     (lambda (fv)
@@ -50,38 +48,32 @@
         (mapcar (lambda (pair) (cons (funcall fk (car pair)) (funcall fv (cdr pair)))) m)))))
 
 ;; delete :: k -> Map k v -> Map k v
-;; Remove a key from a map.
 (defvar hydra_lib_maps_delete
   (lambda (k)
     (lambda (m)
       (remove k m :key #'car :test #'equal))))
 
 ;; elems :: Map k v -> [v]
-;; Get the values of a map.
 (defvar hydra_lib_maps_elems
   (lambda (m)
     (mapcar #'cdr m)))
 
 ;; empty :: Map k v
-;; Create an empty map.
 (defvar hydra_lib_maps_empty nil)
 
 ;; filter :: (v -> Bool) -> Map k v -> Map k v
-;; Filter a map based on values.
 (defvar hydra_lib_maps_filter
   (lambda (pred)
     (lambda (m)
       (remove-if-not (lambda (pair) (funcall pred (cdr pair))) m))))
 
 ;; filter_with_key :: (k -> v -> Bool) -> Map k v -> Map k v
-;; Filter a map based on key-value pairs.
 (defvar hydra_lib_maps_filter_with_key
   (lambda (pred)
     (lambda (m)
       (remove-if-not (lambda (pair) (funcall (funcall pred (car pair)) (cdr pair))) m))))
 
 ;; find_with_default :: v -> k -> Map k v -> v
-;; Lookup a value with a default.
 (defvar hydra_lib_maps_find_with_default
   (lambda (def)
     (lambda (k)
@@ -90,9 +82,8 @@
           (if entry (cdr entry) def))))))
 
 ;; from_list :: [Pair k v] -> Map k v
-;; Create a map from a list of key-value pairs.
-;; Pairs are (key val) two-element lists; convert to alist (key . val).
-;; Later entries override earlier ones for duplicate keys (last wins).
+;; Pairs are (key val) two-element lists; convert to alist (key . val)
+;; Later entries override earlier ones for duplicate keys (last wins)
 (defvar hydra_lib_maps_from_list
   (lambda (pairs)
     (let ((result nil))
@@ -101,7 +92,6 @@
           (push (cons (first p) (second p)) result))))))
 
 ;; insert :: k -> v -> Map k v -> Map k v
-;; Insert a key-value pair into a map.
 (defvar hydra_lib_maps_insert
   (lambda (k)
     (lambda (v)
@@ -109,12 +99,10 @@
         (cons (cons k v) (remove k m :key #'car :test #'equal))))))
 
 ;; keys :: Map k v -> [k]
-;; Get the keys of a map.
 (defvar hydra_lib_maps_keys
   (lambda (m) (mapcar #'car m)))
 
 ;; lookup :: k -> Map k v -> Maybe v
-;; Lookup a value in a map.
 (defvar hydra_lib_maps_lookup
   (lambda (k)
     (lambda (m)
@@ -124,53 +112,45 @@
             (list :nothing))))))
 
 ;; map :: (v1 -> v2) -> Map k v1 -> Map k v2
-;; Map a function over a map.
 (defvar hydra_lib_maps_map
   (lambda (f)
     (lambda (m)
       (mapcar (lambda (pair) (cons (car pair) (funcall f (cdr pair)))) m))))
 
 ;; map_keys :: (k1 -> k2) -> Map k1 v -> Map k2 v
-;; Map a function over the keys of a map.
 (defvar hydra_lib_maps_map_keys
   (lambda (f)
     (lambda (m)
       (mapcar (lambda (pair) (cons (funcall f (car pair)) (cdr pair))) m))))
 
 ;; member :: k -> Map k v -> Bool
-;; Check if a key is present in a map.
 (defvar hydra_lib_maps_member
   (lambda (k)
     (lambda (m)
       (if (assoc k m :test #'equal) t nil))))
 
 ;; null :: Map k v -> Bool
-;; Check if a map is empty.
 (defvar hydra_lib_maps_null
   (lambda (m) (null m)))
 
 ;; singleton :: k -> v -> Map k v
-;; Create a map with a single key-value pair.
 (defvar hydra_lib_maps_singleton
   (lambda (k)
     (lambda (v)
       (list (cons k v)))))
 
 ;; size :: Map k v -> Int
-;; Get the size of a map.
 (defvar hydra_lib_maps_size
   (lambda (m) (length m)))
 
 ;; to_list :: Map k v -> [Pair k v]
-;; Convert a map to a list of key-value pairs.
-;; Sort by key for deterministic output.
+;; Sort by key for deterministic output
 (defvar hydra_lib_maps_to_list
   (lambda (m)
     (let ((pairs (mapcar (lambda (pair) (list (car pair) (cdr pair))) m)))
       (sort pairs (lambda (a b) (< (generic-compare (first a) (first b)) 0))))))
 
-;; union :: Map k v -> Map k v -> Map k v
-;; Union two maps, with the first taking precedence.
+;; union :: Map k v -> Map k v -> Map k v (left-biased)
 ;; Uses copy-alist (not copy-list) so that m2's cons cells are not mutated
 ;; when an existing key is overwritten via setf.
 (defvar hydra_lib_maps_union

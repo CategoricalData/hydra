@@ -40,9 +40,11 @@ import Hydra.Dsl.Testing hiding (
   topologicalSortTestCase, typeReductionTestCase,
   typeRewriterReplaceStringWithInt32, unifyTypesTestCase,
   unshadowVariablesTestCase, variableOccursInTypeTestCase, writerTestCase, unTag,
-  testCaseTypeChecking, testCaseValidateCoreTerm, typeCheckingTestCase,
-  validateCoreTermCase, validateCoreTermTestCase)
+  testCaseTypeChecking, testCaseUniversal, testCaseValidateCoreTerm,
+  typeCheckingTestCase,
+  universalTestCase, validateCoreTermCase, validateCoreTermTestCase)
 import Hydra.Kernel
+import Hydra.Error.Core (InvalidTermError)
 import Hydra.Ast (Expr)
 import Hydra.Json.Model (Value)
 import Hydra.Parsing (ParseResult)
@@ -50,6 +52,10 @@ import Hydra.Testing as Testing
 import Hydra.Dsl.Meta.Phantoms as Phantoms hiding ((++))
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Dsl.Meta.Core as Core
+import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
+import qualified Hydra.Dsl.Meta.Lib.Maybes as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Pairs as Pairs
+import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Meta.Terms as MetaTerms
 import qualified Hydra.Dsl.Meta.Types as T
@@ -86,27 +92,144 @@ primCase :: String -> Name -> [TTerm Term] -> TTerm Term -> TTerm TestCaseWithMe
 primCase cname primName args output = primCaseWithTags cname [] primName args output
 
 primCaseWithTags :: String -> [Tag] -> Name -> [TTerm Term] -> TTerm Term -> TTerm TestCaseWithMetadata
-primCaseWithTags cname tags primName args output = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseEvaluation $ evaluationTestCase evaluationStyleEager input output)
-  nothing (Phantoms.list $ tag . unTag <$> tags)
+primCaseWithTags cname tags primName args output = evalCaseWithTags cname tags input output
   where
     input = L.foldl (MetaTerms.@@) (MetaTerms.primitive primName) args
 
 evalCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
 evalCase cname input output = evalCaseWithTags cname [] input output
 
+-- | Create a universal test case that evaluates a Term via reduceTerm and compares the result.
 evalCaseWithTags :: String -> [Tag] -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
 evalCaseWithTags cname tags input output = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseEvaluation $ evaluationTestCase evaluationStyleEager input output)
+  (testCaseUniversal $ universalTestCase
+    (retype $ Eithers.either_
+      (Phantoms.lambda "e" (Phantoms.string "<<eval error>>"))
+      (Phantoms.lambda "t" (showTermRef @@ Phantoms.var "t"))
+      (reduceTermRef @@ testContextRef @@ testGraphRef @@ true @@ input))
+    (retype $ showTermRef @@ output))
   nothing (Phantoms.list $ tag . unTag <$> tags)
+  where
+    retype :: TTerm x -> TTerm String
+    retype (TTerm t) = TTerm t
 
+-- | References to kernel functions (avoids circular imports)
+testGraphRef :: TTerm Graph
+testGraphRef = TTerm $ TermVariable $ Name "hydra.test.testGraph.testGraph"
+
+testContextRef :: TTerm Context
+testContextRef = TTerm $ TermVariable $ Name "hydra.test.testGraph.testContext"
+
+showTermRef :: TTerm (Term -> String)
+showTermRef = TTerm $ TermVariable $ Name "hydra.show.core.term"
+
+showTypeRef :: TTerm (Type -> String)
+showTypeRef = TTerm $ TermVariable $ Name "hydra.show.core.type"
+
+inferTypeOfRef :: TTerm (Context -> Graph -> Term -> Either (InContext Error) ((Term, TypeScheme), Context))
+inferTypeOfRef = TTerm $ TermVariable $ Name "hydra.inference.inferTypeOf"
+
+alphaConvertRef :: TTerm (Name -> Name -> Term -> Term)
+alphaConvertRef = TTerm $ TermVariable $ Name "hydra.reduction.alphaConvert"
+
+betaReduceTypeRef :: TTerm (Context -> Graph -> Type -> Either (InContext Error) Type)
+betaReduceTypeRef = TTerm $ TermVariable $ Name "hydra.reduction.betaReduceType"
+
+validateCoreTermRef :: TTerm (Bool -> Graph -> Term -> Maybe InvalidTermError)
+validateCoreTermRef = TTerm $ TermVariable $ Name "hydra.validate.core.term"
+
+showInvalidTermErrorRef :: TTerm (InvalidTermError -> String)
+showInvalidTermErrorRef = TTerm $ TermVariable $ Name "hydra.show.error.core.invalidTermError"
+
+showTypeSchemeRef :: TTerm (TypeScheme -> String)
+showTypeSchemeRef = TTerm $ TermVariable $ Name "hydra.show.core.typeScheme"
+
+reduceTermRef :: TTerm (Context -> Graph -> Bool -> Term -> Either (InContext Error) Term)
+reduceTermRef = TTerm $ TermVariable $ Name "hydra.reduction.reduceTerm"
+
+removeTypesFromTermRef :: TTerm (Term -> Term)
+removeTypesFromTermRef = TTerm $ TermVariable $ Name "hydra.rewriting.removeTypesFromTerm"
+
+typeSchemeToFTypeRef :: TTerm (TypeScheme -> Type)
+typeSchemeToFTypeRef = TTerm $ TermVariable $ Name "hydra.rewriting.typeSchemeToFType"
+
+-- | Create a universal test case for an expression with a show function
+evalPair :: String -> TTerm (t -> String) -> TTerm t -> TTerm t -> TTerm TestCaseWithMetadata
+evalPair cname showFn logicalActual logicalExpected = universalCase cname
+  (retype $ showFn @@ logicalActual) (retype $ showFn @@ logicalExpected)
+  where
+    retype :: TTerm x -> TTerm String
+    retype (TTerm t) = TTerm t
+
+-- | evalPair for String-typed expressions (identity show)
+stringEvalPair :: String -> TTerm String -> TTerm String -> TTerm TestCaseWithMetadata
+stringEvalPair cname = evalPair cname (Phantoms.lambda "s" (Phantoms.var "s"))
+
+-- | evalPair with tags
+evalPairWithTags :: String -> [Tag] -> TTerm (t -> String) -> TTerm t -> TTerm t -> TTerm TestCaseWithMetadata
+evalPairWithTags cname tags showFn logicalActual logicalExpected = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseUniversal $ universalTestCase (retype $ showFn @@ logicalActual) (retype $ showFn @@ logicalExpected))
+  nothing (Phantoms.list $ tag . unTag <$> tags)
+  where
+    retype :: TTerm x -> TTerm String
+    retype (TTerm t) = TTerm t
+
+-- | Type checking test: infers the type and compares with expected.
+checkTest :: String -> [Tag] -> TTerm Term -> TTerm Term -> TTerm Type -> TTerm TestCaseWithMetadata
+checkTest name tags input _outputTerm outputType = testCaseWithMetadata (Phantoms.string name)
+  (testCaseUniversal $ universalTestCase
+    (retype $ Eithers.either_
+      (Phantoms.lambda "e" (Phantoms.string "<<inference error>>"))
+      (Phantoms.lambda "result"
+        (showTypeRef @@ (typeSchemeToFTypeRef @@ Pairs.second (Pairs.first (Phantoms.var "result")))))
+      (inferTypeOfRef @@ testContextRef @@ testGraphRef @@ input))
+    (retype $ showTypeRef @@ outputType))
+  nothing (Phantoms.list $ tag . unTag <$> tags)
+  where
+    retype :: TTerm x -> TTerm String
+    retype (TTerm t) = TTerm t
+
+-- | Type checking test where term doesn't change (just check the inferred type)
+noChange :: String -> TTerm Term -> TTerm Type -> TTerm TestCaseWithMetadata
+noChange name term typ = checkTest name [] term term typ
+
+universalCase :: String -> TTerm a -> TTerm b -> TTerm TestCaseWithMetadata
+universalCase cname actual expected = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseUniversal $ universalTestCase (retype actual) (retype expected))
+  nothing noTags
+  where
+    retype :: TTerm x -> TTerm String
+    retype (TTerm t) = TTerm t
+
+-- | Inference failure test: expects inference to fail.
 infFailureTest :: String -> [Tag] -> TTerm Term -> TTerm TestCaseWithMetadata
 infFailureTest name tags term = testCaseWithMetadata (Phantoms.string name)
-  (testCaseInferenceFailure $ inferenceFailureTestCase term) nothing (Phantoms.list $ tag . unTag <$> tags)
+  (testCaseUniversal $ universalTestCase
+    (retype $ Eithers.either_
+      (Phantoms.lambda "e" (Phantoms.string "FAIL"))
+      (Phantoms.lambda "result" (Strings.cat2 (Phantoms.string "unexpected: ")
+        (showTypeSchemeRef @@ Pairs.second (Pairs.first (Phantoms.var "result")))))
+      (inferTypeOfRef @@ testContextRef @@ testGraphRef @@ term))
+    (Phantoms.string "FAIL"))
+  nothing (Phantoms.list $ tag . unTag <$> tags)
+  where
+    retype :: TTerm x -> TTerm String
+    retype (TTerm t) = TTerm t
 
+-- | Inference test: infer type and compare with expected type scheme.
 infTest :: String -> [Tag] -> TTerm Term -> TTerm TypeScheme -> TTerm TestCaseWithMetadata
 infTest name tags term ts = testCaseWithMetadata (Phantoms.string name)
-  (testCaseInference $ inferenceTestCase term ts) nothing (Phantoms.list $ tag . unTag <$> tags)
+  (testCaseUniversal $ universalTestCase
+    (retype $ Eithers.either_
+      (Phantoms.lambda "e" (Strings.cat2 (Phantoms.string "INFERENCE ERROR: ") (Phantoms.string "failed")))
+      (Phantoms.lambda "result"
+        (showTypeSchemeRef @@ Pairs.second (Pairs.first (Phantoms.var "result"))))
+      (inferTypeOfRef @@ testContextRef @@ testGraphRef @@ term))
+    (retype $ showTypeSchemeRef @@ ts))
+  nothing (Phantoms.list $ tag . unTag <$> tags)
+  where
+    retype :: TTerm x -> TTerm String
+    retype (TTerm t) = TTerm t
 
 isDisabled tcase = tag_disabled `L.elem` Testing.testCaseWithMetadataTags tcase
 isDisabledForMinimalInference tcase = tag_disabledForMinimalInference `L.elem` Testing.testCaseWithMetadataTags tcase
@@ -212,16 +335,24 @@ evaluationTestCase style input output = Phantoms.record _EvaluationTestCase [
   _EvaluationTestCase_input>>: input,
   _EvaluationTestCase_output>>: output]
 
+testCaseCaseConversion :: TTerm CaseConversionTestCase -> TTerm TestCase
+testCaseCaseConversion = inject _TestCase _TestCase_caseConversion
+
 delegatedEvaluationTestCase :: TTerm Term -> TTerm Term -> TTerm DelegatedEvaluationTestCase
 delegatedEvaluationTestCase input output = Phantoms.record _DelegatedEvaluationTestCase [
   _DelegatedEvaluationTestCase_input>>: input,
   _DelegatedEvaluationTestCase_output>>: output]
 
-testCaseCaseConversion :: TTerm CaseConversionTestCase -> TTerm TestCase
-testCaseCaseConversion = inject _TestCase _TestCase_caseConversion
-
 testCaseDelegatedEvaluation :: TTerm DelegatedEvaluationTestCase -> TTerm TestCase
 testCaseDelegatedEvaluation = inject _TestCase _TestCase_delegatedEvaluation
+
+testCaseUniversal :: TTerm UniversalTestCase -> TTerm TestCase
+testCaseUniversal = inject _TestCase _TestCase_universal
+
+universalTestCase :: TTerm String -> TTerm String -> TTerm UniversalTestCase
+universalTestCase actual expected = Phantoms.record _UniversalTestCase [
+  _UniversalTestCase_actual Phantoms.>>: actual,
+  _UniversalTestCase_expected Phantoms.>>: expected]
 
 testCaseEtaExpansion :: TTerm EtaExpansionTestCase -> TTerm TestCase
 testCaseEtaExpansion = inject _TestCase _TestCase_etaExpansion
@@ -270,15 +401,24 @@ typeReductionTestCase input output = Phantoms.record _TypeReductionTestCase [
 
 -- | Convenience function for creating alpha conversion test cases
 alphaCase :: String -> TTerm Term -> TTerm Name -> TTerm Name -> TTerm Term -> TTerm TestCaseWithMetadata
-alphaCase cname term oldVar newVar result = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseAlphaConversion $ alphaConversionTestCase term oldVar newVar result)
-  nothing noTags
+alphaCase cname term oldVar newVar result = universalCase cname
+  (retype $ showTermRef @@ (alphaConvertRef @@ oldVar @@ newVar @@ term))
+  (retype $ showTermRef @@ result)
+  where
+    retype :: TTerm x -> TTerm String
+    retype (TTerm t) = TTerm t
 
 -- | Convenience function for creating type reduction test cases
 typeRedCase :: String -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
-typeRedCase cname input output = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseTypeReduction $ typeReductionTestCase input output)
-  nothing noTags
+typeRedCase cname input output = universalCase cname
+  (retype $ Eithers.either_
+    (Phantoms.lambda "e" (Phantoms.string "<<type reduction error>>"))
+    (Phantoms.lambda "t" (showTypeRef @@ Phantoms.var "t"))
+    (betaReduceTypeRef @@ testContextRef @@ testGraphRef @@ input))
+  (retype $ showTypeRef @@ output)
+  where
+    retype :: TTerm x -> TTerm String
+    retype (TTerm t) = TTerm t
 
 writerTestCase :: TTerm a -> TTerm String -> TTerm (WriterTestCase a)
 writerTestCase input output = Phantoms.record _WriterTestCase [
@@ -350,16 +490,8 @@ topologicalSortSCCTestCase adj expected = Phantoms.record _TopologicalSortSCCTes
   _TopologicalSortSCCTestCase_expected>>: expected]
 
 -- | Convenience function for creating topological sort test cases
-sortCase :: String -> TTerm [(Int, [Int])] -> TTerm (Either [[Int]] [Int]) -> TTerm TestCaseWithMetadata
-sortCase cname adj expected = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseTopologicalSort $ topologicalSortTestCase adj expected)
-  nothing noTags
 
 -- | Convenience function for creating topological sort SCC test cases
-sortSCCCase :: String -> TTerm [(Int, [Int])] -> TTerm [[Int]] -> TTerm TestCaseWithMetadata
-sortSCCCase cname adj expected = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseTopologicalSortSCC $ topologicalSortSCCTestCase adj expected)
-  nothing noTags
 
 testCaseWithMetadata :: TTerm String -> TTerm TestCase -> TTerm (Maybe String) -> TTerm [Tag] -> TTerm TestCaseWithMetadata
 testCaseWithMetadata name tcase description tags = Phantoms.record _TestCaseWithMetadata [
@@ -399,10 +531,6 @@ serializationTestCase input output = Phantoms.record _SerializationTestCase [
   _SerializationTestCase_output>>: output]
 
 -- | Convenience function for creating serialization test cases
-serCase :: String -> TTerm Expr -> TTerm String -> TTerm TestCaseWithMetadata
-serCase cname input output = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseSerialization $ serializationTestCase input output)
-  nothing noTags
 
 ----------------------------------------
 -- Rewriting test case helpers
@@ -440,28 +568,12 @@ simplifyTermTestCase input output = Phantoms.record _SimplifyTermTestCase [
   _SimplifyTermTestCase_output>>: output]
 
 -- | Convenience function for creating flatten let terms test cases
-flattenCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-flattenCase cname input output = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseFlattenLetTerms $ flattenLetTermsTestCase input output)
-  nothing noTags
 
 -- | Convenience function for creating free variables test cases
-freeVarsCase :: String -> TTerm Term -> TTerm (S.Set Name) -> TTerm TestCaseWithMetadata
-freeVarsCase cname input output = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseFreeVariables $ freeVariablesTestCase input output)
-  nothing noTags
 
 -- | Convenience function for creating lift lambda above let test cases
-liftLambdaCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-liftLambdaCase cname input output = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseLiftLambdaAboveLet $ liftLambdaAboveLetTestCase input output)
-  nothing noTags
 
 -- | Convenience function for creating simplify term test cases
-simplifyCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-simplifyCase cname input output = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseSimplifyTerm $ simplifyTermTestCase input output)
-  nothing noTags
 
 ----------------------------------------
 -- Deannotate test case helpers
@@ -483,16 +595,8 @@ deannotateTypeTestCase input output = Phantoms.record _DeannotateTypeTestCase [
   _DeannotateTypeTestCase_output>>: output]
 
 -- | Convenience function for creating deannotate term test cases
-deannotateTermCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-deannotateTermCase cname input output = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseDeannotateTerm $ deannotateTermTestCase input output)
-  nothing noTags
 
 -- | Convenience function for creating deannotate type test cases
-deannotateTypeCase :: String -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
-deannotateTypeCase cname input output = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseDeannotateType $ deannotateTypeTestCase input output)
-  nothing noTags
 
 ----------------------------------------
 -- Topological sort bindings test case helpers
@@ -506,10 +610,6 @@ topologicalSortBindingsTestCase bindings expected = Phantoms.record _Topological
   _TopologicalSortBindingsTestCase_expected>>: expected]
 
 -- | Convenience function for creating topological sort bindings test cases
-sortBindingsCase :: String -> TTerm [(Name, Term)] -> TTerm [[(Name, Term)]] -> TTerm TestCaseWithMetadata
-sortBindingsCase cname bindings expected = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseTopologicalSortBindings $ topologicalSortBindingsTestCase bindings expected)
-  nothing noTags
 
 ----------------------------------------
 -- Normalize type variables test case helpers
@@ -523,10 +623,6 @@ normalizeTypeVariablesTestCase input output = Phantoms.record _NormalizeTypeVari
   _NormalizeTypeVariablesTestCase_output>>: output]
 
 -- | Convenience function for creating normalize type variables test cases
-normalizeTypeVarsCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-normalizeTypeVarsCase cname input output = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseNormalizeTypeVariables $ normalizeTypeVariablesTestCase input output)
-  nothing noTags
 
 ----------------------------------------
 -- Fold over term test case helpers
@@ -542,20 +638,10 @@ foldOverTermTestCase input order op output = Phantoms.record _FoldOverTermTestCa
   _FoldOverTermTestCase_output>>: output]
 
 -- Fold operation constructors
-foldOpSumInt32Literals :: TTerm FoldOperation
-foldOpSumInt32Literals = inject _FoldOperation _FoldOperation_sumInt32Literals $ Phantoms.unit
 
-foldOpCollectListLengths :: TTerm FoldOperation
-foldOpCollectListLengths = inject _FoldOperation _FoldOperation_collectListLengths $ Phantoms.unit
 
-foldOpCollectLabels :: TTerm FoldOperation
-foldOpCollectLabels = inject _FoldOperation _FoldOperation_collectLabels $ Phantoms.unit
 
 -- | Convenience function for creating fold over term test cases
-foldOverTermCase :: String -> TTerm Term -> TTerm TraversalOrder -> TTerm FoldOperation -> TTerm Term -> TTerm TestCaseWithMetadata
-foldOverTermCase cname input order op output = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseFoldOverTerm $ foldOverTermTestCase input order op output)
-  nothing noTags
 
 ----------------------------------------
 -- Rewrite term test case helpers
@@ -577,10 +663,6 @@ termRewriterReplaceInt32WithInt64 :: TTerm TermRewriter
 termRewriterReplaceInt32WithInt64 = inject _TermRewriter _TermRewriter_replaceInt32WithInt64 $ Phantoms.unit
 
 -- | Convenience function for creating rewrite term test cases (replaceFooWithBar)
-rewriteTermCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-rewriteTermCase cname input output = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseRewriteTerm $ rewriteTermTestCase input termRewriterReplaceFooWithBar output)
-  nothing noTags
 
 ----------------------------------------
 -- Rewrite type test case helpers
@@ -599,16 +681,8 @@ typeRewriterReplaceStringWithInt32 :: TTerm TypeRewriter
 typeRewriterReplaceStringWithInt32 = inject _TypeRewriter _TypeRewriter_replaceStringWithInt32 $ Phantoms.unit
 
 -- | Convenience function for creating rewrite type test cases (replaceStringWithInt32)
-rewriteTypeCase :: String -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
-rewriteTypeCase cname input output = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseRewriteType $ rewriteTypeTestCase input typeRewriterReplaceStringWithInt32 output)
-  nothing noTags
 
 -- | Convenience function for creating eta expansion test cases
-etaCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-etaCase cname input output = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseEtaExpansion $ etaExpansionTestCase input output)
-  nothing noTags
 
 ----------------------------------------
 -- Hoist subterms test case helpers
@@ -641,10 +715,6 @@ hoistPredicateNothing :: TTerm HoistPredicate
 hoistPredicateNothing = inject _HoistPredicate _HoistPredicate_nothing $ Phantoms.unit
 
 -- | Convenience function for creating hoist subterms test cases
-hoistCase :: String -> TTerm HoistPredicate -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-hoistCase cname predicate input output = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseHoistSubterms $ hoistSubtermsTestCase predicate input output)
-  nothing noTags
 
 ----------------------------------------
 -- Hoist case statements test case helpers
@@ -658,10 +728,6 @@ hoistCaseStatementsTestCase input output = Phantoms.record _HoistCaseStatementsT
   _HoistCaseStatementsTestCase_output>>: output]
 
 -- | Convenience function for creating hoist case statements test cases
-hoistCaseStatementsCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-hoistCaseStatementsCase cname input output = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseHoistCaseStatements $ hoistCaseStatementsTestCase input output)
-  nothing noTags
 
 -----------------------------------------
 -- Hoist let bindings test case helpers (hoistAll=True, for Java)
@@ -675,10 +741,6 @@ hoistLetBindingsTestCase input output = Phantoms.record _HoistLetBindingsTestCas
   _HoistLetBindingsTestCase_output>>: output]
 
 -- | Convenience function for creating hoist let bindings test cases
-hoistLetBindingsCase :: String -> TTerm Let -> TTerm Let -> TTerm TestCaseWithMetadata
-hoistLetBindingsCase cname input output = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseHoistLetBindings $ hoistLetBindingsTestCase input output)
-  nothing noTags
 
 -----------------------------------------
 -- Hoist polymorphic let bindings test case helpers
@@ -692,10 +754,6 @@ hoistPolymorphicLetBindingsTestCase input output = Phantoms.record _HoistPolymor
   _HoistPolymorphicLetBindingsTestCase_output>>: output]
 
 -- | Convenience function for creating hoist polymorphic let bindings test cases
-hoistPolymorphicLetBindingsCase :: String -> TTerm Let -> TTerm Let -> TTerm TestCaseWithMetadata
-hoistPolymorphicLetBindingsCase cname input output = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseHoistPolymorphicLetBindings $ hoistPolymorphicLetBindingsTestCase input output)
-  nothing noTags
 
 ----------------------------------------
 -- Type substitution test case helpers
@@ -710,10 +768,6 @@ substInTypeTestCase subst input output = Phantoms.record _SubstInTypeTestCase [
   _SubstInTypeTestCase_output>>: output]
 
 -- | Convenience function for creating type substitution test cases
-substInTypeCase :: String -> TTerm [(Name, Type)] -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
-substInTypeCase cname subst input output = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseSubstInType $ substInTypeTestCase subst input output)
-  nothing noTags
 
 ----------------------------------------
 -- Variable occurs in type test case helpers
@@ -728,10 +782,6 @@ variableOccursInTypeTestCase variable typ expected = Phantoms.record _VariableOc
   _VariableOccursInTypeTestCase_expected>>: expected]
 
 -- | Convenience function for creating variable occurs in type test cases
-variableOccursCase :: String -> TTerm Name -> TTerm Type -> TTerm Bool -> TTerm TestCaseWithMetadata
-variableOccursCase cname variable typ expected = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseVariableOccursInType $ variableOccursInTypeTestCase variable typ expected)
-  nothing noTags
 
 ----------------------------------------
 -- Unify types test case helpers
@@ -748,16 +798,8 @@ unifyTypesTestCase schemaTypes left right expected = Phantoms.record _UnifyTypes
 
 -- | Convenience function for creating unify types test cases (expecting success)
 -- The substitution is provided as a list of (name, type) pairs
-unifyTypesCase :: String -> TTerm [Name] -> TTerm Type -> TTerm Type -> [(TTerm Name, TTerm Type)] -> TTerm TestCaseWithMetadata
-unifyTypesCase cname schemaTypes left right substPairs = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseUnifyTypes $ unifyTypesTestCase schemaTypes left right (Phantoms.right (Phantoms.wrap _TypeSubst (Phantoms.map (M.fromList substPairs)))))
-  nothing noTags
 
 -- | Convenience function for creating unify types test cases (expecting failure)
-unifyTypesFailCase :: String -> TTerm [Name] -> TTerm Type -> TTerm Type -> String -> TTerm TestCaseWithMetadata
-unifyTypesFailCase cname schemaTypes left right errSubstring = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseUnifyTypes $ unifyTypesTestCase schemaTypes left right (Phantoms.left (Phantoms.string errSubstring)))
-  nothing noTags
 
 ----------------------------------------
 -- Join types test case helpers
@@ -772,16 +814,8 @@ joinTypesTestCase left right expected = Phantoms.record _JoinTypesTestCase [
   _JoinTypesTestCase_expected>>: expected]
 
 -- | Convenience function for creating join types test cases (expecting success)
-joinTypesCase :: String -> TTerm Type -> TTerm Type -> TTerm [TypeConstraint] -> TTerm TestCaseWithMetadata
-joinTypesCase cname left right constraints = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseJoinTypes $ joinTypesTestCase left right (Phantoms.right constraints))
-  nothing noTags
 
 -- | Convenience function for creating join types test cases (expecting failure)
-joinTypesFailCase :: String -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
-joinTypesFailCase cname left right = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseJoinTypes $ joinTypesTestCase left right (Phantoms.left Phantoms.unit))
-  nothing noTags
 
 ----------------------------------------
 -- Unshadow variables test case helpers
@@ -795,10 +829,6 @@ unshadowVariablesTestCase input output = Phantoms.record _UnshadowVariablesTestC
   _UnshadowVariablesTestCase_output>>: output]
 
 -- | Convenience function for creating unshadow variables test cases
-unshadowCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-unshadowCase cname input output = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseUnshadowVariables $ unshadowVariablesTestCase input output)
-  nothing noTags
 
 -- | Inject a ValidateCoreTermTestCase into TestCase
 testCaseValidateCoreTerm :: TTerm ValidateCoreTermTestCase -> TTerm TestCase
@@ -813,6 +843,15 @@ validateCoreTermTestCase typed input output = Phantoms.record _ValidateCoreTermT
 
 -- | Convenience function for creating validation test cases
 validateCoreTermCase :: String -> TTerm Bool -> TTerm Term -> TTerm (Maybe InvalidTermError) -> TTerm TestCaseWithMetadata
-validateCoreTermCase cname typed input expected = testCaseWithMetadata (Phantoms.string cname)
-  (testCaseValidateCoreTerm $ validateCoreTermTestCase typed input expected)
-  nothing noTags
+validateCoreTermCase cname typed input expected = universalCase cname
+  (retype $ Maybes.maybe
+    (Phantoms.string "valid")
+    (Phantoms.lambda "e" (showInvalidTermErrorRef @@ Phantoms.var "e"))
+    (validateCoreTermRef @@ typed @@ testGraphRef @@ input))
+  (retype $ Maybes.maybe
+    (Phantoms.string "valid")
+    (Phantoms.lambda "e" (showInvalidTermErrorRef @@ Phantoms.var "e"))
+    expected)
+  where
+    retype :: TTerm x -> TTerm String
+    retype (TTerm t) = TTerm t

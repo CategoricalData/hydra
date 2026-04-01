@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 module Hydra.Sources.Test.Lib.Sets where
 
 -- Standard imports for shallow DSL tests
@@ -13,32 +15,46 @@ import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
+import qualified Data.Set                     as S
 
 -- Additional imports specific to this file
 import Hydra.Testing
 import Hydra.Sources.Libraries
-
+import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
+import qualified Hydra.Dsl.Meta.Lib.Math as Math
+import qualified Hydra.Dsl.Meta.Lib.Sets as Sets
+import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
 ns :: Namespace
 ns = Namespace "hydra.test.lib.sets"
 
 module_ :: Module
-module_ = Module ns elements [] [] $
+module_ = Module ns elements
+    [Namespace "hydra.reduction", ShowCore.ns]
+    kernelTypesNamespaces $
     Just "Test cases for hydra.lib.sets primitives"
   where
     elements = [Phantoms.toTermDefinition allTests]
 
-emptyStringSet = intSet []
-intSetOrEmpty = intSet
+(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
+(#) = (Phantoms.@@)
+infixl 1 #
 
--- Helper to create set terms
-intSet :: [Int] -> TTerm Term
-intSet xs = Core.termSet $ Phantoms.set $ Prelude.map int32 xs
+showInt32 :: TTerm (Int -> String)
+showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")
 
---intSetOrEmpty :: [Int] -> TTerm Term
---intSetOrEmpty xs = if L.null xs
---  then emptyStringSet
---  else intSet xs
+showBool :: TTerm (Bool -> String)
+showBool = Phantoms.lambda "b" $ Literals.showBoolean (Phantoms.var "b")
+
+showIntSet :: TTerm (S.Set Int -> String)
+showIntSet = Phantoms.lambda "s" $ ShowCore.set_ # showInt32 # Phantoms.var "s"
+
+showIntList :: TTerm ([Int] -> String)
+showIntList = Phantoms.lambda "xs" $ ShowCore.list_ # showInt32 # Phantoms.var "xs"
+
+-- Phantom-typed helper for int sets
+pIntSet :: [Int] -> TTerm (S.Set Int)
+pIntSet xs = Phantoms.set (Phantoms.int32 <$> xs)
 
 -- Test groups for hydra.lib.sets primitives
 
@@ -46,13 +62,17 @@ setsEmpty :: TTerm TestGroup
 setsEmpty = subgroup "empty" [
   test "empty set" []]
   where
-    test name expected = primCase name _sets_empty [] emptyStringSet
+    test name expected = evalPair name showIntSet
+      (Sets.empty :: TTerm (S.Set Int))
+      (pIntSet expected)
 
 setsSingleton :: TTerm TestGroup
 setsSingleton = subgroup "singleton" [
   test "single element" 42 [42]]
   where
-    test name x result = primCase name _sets_singleton [int32 x] (intSet result)
+    test name x result = evalPair name showIntSet
+      (Sets.singleton (Phantoms.int32 x))
+      (pIntSet result)
 
 setsFromList :: TTerm TestGroup
 setsFromList = subgroup "fromList" [
@@ -60,7 +80,9 @@ setsFromList = subgroup "fromList" [
   test "duplicates removed" [1, 2, 1, 3] [1, 2, 3],
   test "empty list" [] []]
   where
-    test name input expected = primCase name _sets_fromList [list $ Prelude.map int32 input] (intSetOrEmpty expected)
+    test name input expected = evalPair name showIntSet
+      (Sets.fromList (Phantoms.list $ Phantoms.int32 <$> input))
+      (pIntSet expected)
 
 setsToList :: TTerm TestGroup
 setsToList = subgroup "toList" [
@@ -68,7 +90,9 @@ setsToList = subgroup "toList" [
   test "unsorted input" [3, 1, 2] [1, 2, 3],
   test "empty set" [] []]
   where
-    test name input expected = primCase name _sets_toList [intSetOrEmpty input] (list $ Prelude.map int32 expected)
+    test name input expected = evalPair name showIntList
+      (Sets.toList (pIntSet input))
+      (Phantoms.list $ Phantoms.int32 <$> expected)
 
 setsInsert :: TTerm TestGroup
 setsInsert = subgroup "insert" [
@@ -76,7 +100,9 @@ setsInsert = subgroup "insert" [
   test "insert existing element" 2 [1, 2, 3] [1, 2, 3],
   test "insert into empty" 1 [] [1]]
   where
-    test name x s result = primCase name _sets_insert [int32 x, intSet s] (intSet result)
+    test name x s result = evalPair name showIntSet
+      (Sets.insert (Phantoms.int32 x) (pIntSet s))
+      (pIntSet result)
 
 setsDelete :: TTerm TestGroup
 setsDelete = subgroup "delete" [
@@ -84,15 +110,19 @@ setsDelete = subgroup "delete" [
   test "delete non-existing" 4 [1, 2, 3] [1, 2, 3],
   test "delete from empty" 1 [] []]
   where
-    test name x s result = primCase name _sets_delete [int32 x, intSet s] (intSet result)
+    test name x s result = evalPair name showIntSet
+      (Sets.delete (Phantoms.int32 x) (pIntSet s))
+      (pIntSet result)
 
 setsMember :: TTerm TestGroup
 setsMember = subgroup "member" [
-  test "element exists" 2 [1, 2, 3] true,
-  test "element missing" 4 [1, 2, 3] false,
-  test "empty set" 1 [] false]
+  test "element exists" 2 [1, 2, 3] True,
+  test "element missing" 4 [1, 2, 3] False,
+  test "empty set" 1 [] False]
   where
-    test name x s result = primCase name _sets_member [int32 x, intSet s] result
+    test name x s result = evalPair name showBool
+      (Sets.member (Phantoms.int32 x) (pIntSet s))
+      (Phantoms.boolean result)
 
 setsSize :: TTerm TestGroup
 setsSize = subgroup "size" [
@@ -100,14 +130,18 @@ setsSize = subgroup "size" [
   test "single element" [42] 1,
   test "empty set" [] 0]
   where
-    test name s result = primCase name _sets_size [intSetOrEmpty s] (int32 result)
+    test name s result = evalPair name showInt32
+      (Sets.size (pIntSet s))
+      (Phantoms.int32 result)
 
 setsNull :: TTerm TestGroup
 setsNull = subgroup "null" [
-  test "empty set" [] true,
-  test "non-empty set" [1, 2] false]
+  test "empty set" [] True,
+  test "non-empty set" [1, 2] False]
   where
-    test name s result = primCase name _sets_null [intSetOrEmpty s] result
+    test name s result = evalPair name showBool
+      (Sets.null (pIntSet s))
+      (Phantoms.boolean result)
 
 setsUnion :: TTerm TestGroup
 setsUnion = subgroup "union" [
@@ -115,7 +149,9 @@ setsUnion = subgroup "union" [
   test "union with empty" [1, 2] [] [1, 2],
   test "empty with non-empty" [] [1, 2] [1, 2]]
   where
-    test name s1 s2 result = primCase name _sets_union [intSet s1, intSet s2] (intSet result)
+    test name s1 s2 result = evalPair name showIntSet
+      (Sets.union (pIntSet s1) (pIntSet s2))
+      (pIntSet result)
 
 setsIntersection :: TTerm TestGroup
 setsIntersection = subgroup "intersection" [
@@ -123,7 +159,9 @@ setsIntersection = subgroup "intersection" [
   test "no common elements" [1, 2] [3, 4] [],
   test "intersection with empty" [1, 2] [] []]
   where
-    test name s1 s2 result = primCase name _sets_intersection [intSet s1, intSet s2] (intSet result)
+    test name s1 s2 result = evalPair name showIntSet
+      (Sets.intersection (pIntSet s1) (pIntSet s2))
+      (pIntSet result)
 
 setsDifference :: TTerm TestGroup
 setsDifference = subgroup "difference" [
@@ -131,7 +169,9 @@ setsDifference = subgroup "difference" [
   test "no overlap" [1, 2] [3, 4] [1, 2],
   test "difference with empty" [1, 2] [] [1, 2]]
   where
-    test name s1 s2 result = primCase name _sets_difference [intSet s1, intSet s2] (intSet result)
+    test name s1 s2 result = evalPair name showIntSet
+      (Sets.difference (pIntSet s1) (pIntSet s2))
+      (pIntSet result)
 
 setsUnions :: TTerm TestGroup
 setsUnions = subgroup "unions" [
@@ -140,16 +180,18 @@ setsUnions = subgroup "unions" [
   test "empty list of sets" [] [],
   test "single set" [[1, 2, 3]] [1, 2, 3]]
   where
-    test name sets result = primCase name _sets_unions [list $ Prelude.map intSet sets] (intSet result)
+    test name sets result = evalPair name showIntSet
+      (Sets.unions (Phantoms.list $ pIntSet <$> sets))
+      (pIntSet result)
 
 setsMap :: TTerm TestGroup
 setsMap = subgroup "map" [
   test "map function" [1, 2, 3] [2, 4, 6],
   test "map on empty" [] []]
   where
-    test name s result = primCase name _sets_map [
-      lambda "x" (primitive _math_mul @@ var "x" @@ int32 2),
-      intSet s] (intSet result)
+    test name s result = evalPair name showIntSet
+      (Sets.map (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2)) (pIntSet s))
+      (pIntSet result)
 
 allTests :: TBinding TestGroup
 allTests = definitionInModule module_ "allTests" $

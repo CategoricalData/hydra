@@ -12,7 +12,6 @@ import org.scalatest.funsuite.AnyFunSuite
  * This runs the kernel tests (evaluation, inference, type checking, etc.)
  * using the Scala implementations of the kernel functions.
  *
- * Generation tests (delegated evaluation) are separate ScalaTest suites
  * in src/gen-test/scala/generation/ and are auto-discovered by ScalaTest.
  */
 class TestSuiteRunner extends AnyFunSuite {
@@ -173,6 +172,9 @@ class TestSuiteRunner extends AnyFunSuite {
 
       case TestCase.rewriteType(rt) =>
         test(name) { assert(rt.output == runTypeRewriter(rt.rewriter, rt.input)) }
+
+      case TestCase.universal(uc) =>
+        test(name) { assert(uc.expected == uc.actual) }
 
       case _ =>
         test(name) { cancel("Unhandled test case type") }

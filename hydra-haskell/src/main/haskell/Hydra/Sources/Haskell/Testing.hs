@@ -298,11 +298,7 @@ extractTestTerms :: TBinding (TestCaseWithMetadata -> [Term])
 extractTestTerms = define "extractTestTerms" $
   doc "Extract input and output terms from a test case" $
   lambda "tcm" $
-    cases _TestCase (project _TestCaseWithMetadata _TestCaseWithMetadata_case @@ var "tcm") (Just (list ([] :: [TTerm Term]))) [
-      _TestCase_delegatedEvaluation>>: lambda "delCase" $
-        list [
-          project _DelegatedEvaluationTestCase _DelegatedEvaluationTestCase_input @@ var "delCase",
-          project _DelegatedEvaluationTestCase _DelegatedEvaluationTestCase_output @@ var "delCase"]]
+    list ([] :: [TTerm Term])
 
 
 -- | Find necessary imports for Haskell based on referenced names
@@ -344,30 +340,7 @@ generateTestCaseWithCodec = define "generateTestCaseWithCodec" $
   lambda "g" $ lambda "namespaces" $ lambda "codec" $ lambda "depth" $ lambda "tcm" $ lets [
     "name_">: project _TestCaseWithMetadata _TestCaseWithMetadata_name @@ var "tcm",
     "tcase">: project _TestCaseWithMetadata _TestCaseWithMetadata_case @@ var "tcm"] $
-    cases _TestCase (var "tcase") (Just (right (list ([] :: [TTerm String])))) [
-      _TestCase_delegatedEvaluation>>: lambda "delCase" $ lets [
-        "input_">: project _DelegatedEvaluationTestCase _DelegatedEvaluationTestCase_input @@ var "delCase",
-        "output_">: project _DelegatedEvaluationTestCase _DelegatedEvaluationTestCase_output @@ var "delCase",
-        "formattedName">: project _TestCodec _TestCodec_formatTestName @@ var "codec" @@ var "name_",
-        "continuationIndent">: Math.add (Math.mul (var "depth") (int32 2)) (int32 4)] $
-        Eithers.bind
-          (project _TestCodec _TestCodec_encodeTerm @@ var "codec" @@ var "input_" @@ var "g")
-          (lambda "inputCode" $
-            Eithers.bind
-              (project _TestCodec _TestCodec_encodeTerm @@ var "codec" @@ var "output_" @@ var "g")
-              (lambda "outputCode" $
-                Eithers.bind
-                  (generateTypeAnnotationFor @@ var "g" @@ var "namespaces" @@ var "input_" @@ var "output_")
-                  (lambda "typeAnnotation" $ lets [
-                    "indentedInputCode">: indentContinuationLines @@ var "continuationIndent" @@ var "inputCode",
-                    "indentedOutputCode">: indentContinuationLines @@ var "continuationIndent" @@ var "outputCode",
-                    "finalOutputCode">: Maybes.maybe (var "indentedOutputCode")
-                      (lambda "anno" $ Strings.cat2 (var "indentedOutputCode") (var "anno"))
-                      (var "typeAnnotation")] $
-                    right (list [
-                      Strings.cat (list [string "H.it ", Literals.showString (var "formattedName"), string " $ H.shouldBe"]),
-                      Strings.cat (list [string "  (", var "indentedInputCode", string ")"]),
-                      Strings.cat (list [string "  (", var "finalOutputCode", string ")"])]))))]
+    right (list ([] :: [TTerm String]))
 
 
 -- | Generate a test file using a TestCodec

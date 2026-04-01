@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 -- | Round-trip test cases for the JSON encoder and decoder
 --
 -- These tests verify that:
@@ -12,6 +14,8 @@ import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import qualified Hydra.Dsl.Meta.Lib.Eithers   as Eithers
+import qualified Hydra.Dsl.Meta.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
@@ -21,6 +25,9 @@ import qualified Data.Map                     as M
 
 -- Additional imports specific to this module
 import Hydra.Testing
+import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Json.Encode as EncodeModule
+import qualified Hydra.Sources.Json.Decode as DecodeModule
 
 
 ns :: Namespace
@@ -28,7 +35,7 @@ ns = Namespace "hydra.test.json.roundtrip"
 
 module_ :: Module
 module_ = Module ns elements
-    []
+    [ShowCore.ns, Namespace "hydra.json.encode", Namespace "hydra.json.decode"]
     kernelTypesNamespaces
     (Just "Round-trip test cases for JSON encoding and decoding")
   where
@@ -38,6 +45,11 @@ module_ = Module ns elements
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
+-- Local alias for polymorphic application
+(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
+(#) = (Phantoms.@@)
+infixl 1 #
+
 allTests :: TBinding TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Round-trip test cases for JSON encoding and decoding" $
@@ -46,9 +58,19 @@ allTests = define "allTests" $
       collectionRoundtripGroup,
       optionalRoundtripGroup]
 
--- Helper for creating JSON round-trip test cases
+-- Helper for creating JSON round-trip test cases (universal)
+-- Encodes term to JSON, decodes back, shows both and compares.
 roundtripTest :: String -> TTerm Type -> TTerm Term -> TTerm TestCaseWithMetadata
-roundtripTest testName typ term = jsonRoundtripCase testName typ term
+roundtripTest testName typ term = universalCase testName
+  (Eithers.either_
+    (Phantoms.lambda "e" $ Phantoms.var "e")
+    (Phantoms.lambda "json" $
+      Eithers.either_
+        (Phantoms.lambda "e" $ Phantoms.var "e")
+        (Phantoms.lambda "decoded" $ ShowCore.term # Phantoms.var "decoded")
+        (DecodeModule.fromJson # Maps.empty # Core.name (Phantoms.string "test") # typ # Phantoms.var "json"))
+    (EncodeModule.toJson # term))
+  (ShowCore.term # term)
 
 ----------------------------------------
 -- Literal types

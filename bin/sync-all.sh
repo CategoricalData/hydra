@@ -232,6 +232,14 @@ if $TARGET_HYDRA; then
     echo ""
     stack build hydra:exe:update-kernel-tests
     stack exec update-kernel-tests -- $RTS_FLAGS
+
+    # Patch TestGraph.hs to use TestEnv (real graph with primitives) instead of emptyGraph
+    echo "Patching TestGraph.hs..."
+    TESTGRAPH="src/gen-test/haskell/Hydra/Test/TestGraph.hs"
+    sed -i '' 's/import qualified Hydra.Lexical as Lexical$/import qualified Hydra.Lexical as Lexical\nimport qualified Hydra.Test.TestEnv as TestEnv/' "$TESTGRAPH"
+    sed -i '' 's/testGraph = Lexical.emptyGraph/testGraph = TestEnv.testGraph testTypes/' "$TESTGRAPH"
+    sed -i '' 's/testContext = Lexical.emptyContext/testContext = TestEnv.testContext/' "$TESTGRAPH"
+
     echo ""
     echo "Rebuilding..."
     stack build
@@ -262,14 +270,7 @@ if $TARGET_HYDRA; then
     echo "Rebuilding..."
     stack build
 
-    echo ""
-    echo "Step 1f: Generating generation tests..."
-    echo ""
-    stack build hydra:exe:update-generation-tests
-    stack exec update-generation-tests -- $RTS_FLAGS
-    echo ""
-    echo "Rebuilding..."
-    stack build
+    # Note: generation tests removed in favor of universal test cases
 
     if [ "$QUICK_MODE" = false ]; then
         echo ""

@@ -1,10 +1,13 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 -- | Test cases for subterm hoisting and case statement hoisting transformations
 
 module Hydra.Sources.Test.Hoisting.Cases where
 
 -- Standard imports for shallow DSL tests
 import Hydra.Kernel
-import Hydra.Dsl.Meta.Testing                 as Testing
+import Hydra.Dsl.Meta.Testing                 as Testing hiding (
+  hoistPredicateNothing, hoistPredicateLists, hoistPredicateApplications, hoistPredicateCaseStatements)
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
@@ -18,13 +21,20 @@ import qualified Data.Map                     as M
 
 import Hydra.Testing
 import Hydra.Sources.Libraries
+import qualified Hydra.Dsl.Meta.Lib.Pairs as Pairs
+
+import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Hoisting as HoistingModule
+import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 
 
 ns :: Namespace
 ns = Namespace "hydra.test.hoisting.cases"
 
 module_ :: Module
-module_ = Module ns elements [] kernelTypesNamespaces $
+module_ = Module ns elements
+    [ShowCore.ns, HoistingModule.ns, Lexical.ns]
+    kernelTypesNamespaces $
     Just "Test cases for subterm hoisting and case statement hoisting"
   where
     elements = [Phantoms.toTermDefinition allTests]
@@ -43,6 +53,56 @@ nm s = Core.name $ Phantoms.string s
 -- Helper to build an empty annotation map
 emptyAnnMap :: TTerm (M.Map Name Term)
 emptyAnnMap = Phantoms.map M.empty
+
+-- Local alias for polymorphic application (Phantoms.@@ applies TBindings; Terms.@@ only works on TTerm Term)
+(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
+(#) = (Phantoms.@@)
+infixl 1 #
+
+-- | Show a term as a string using ShowCore.term
+showTerm :: TTerm Term -> TTerm String
+showTerm t = ShowCore.term # t
+
+-- Field constructor for cases/match (Phantoms.>>: creates Field; unqualified >>: from Testing creates tuples)
+(~>:) :: AsTerm t a => Name -> t -> Field
+(~>:) = (Phantoms.>>:)
+infixr 0 ~>:
+
+-- | Predicate: never hoist anything
+hoistPredicateNothing :: TTerm (([SubtermStep], Term) -> Bool)
+hoistPredicateNothing = Phantoms.lambda "_" Phantoms.false
+
+-- | Predicate: hoist list terms
+hoistPredicateLists :: TTerm (([SubtermStep], Term) -> Bool)
+hoistPredicateLists = Phantoms.lambda "pt" $
+  Phantoms.cases _Term (Pairs.second (Phantoms.var "pt")) (Just Phantoms.false) [
+    _Term_list ~>: Phantoms.lambda "_" Phantoms.true]
+
+-- | Predicate: hoist function applications
+hoistPredicateApplications :: TTerm (([SubtermStep], Term) -> Bool)
+hoistPredicateApplications = Phantoms.lambda "pt" $
+  Phantoms.cases _Term (Pairs.second (Phantoms.var "pt")) (Just Phantoms.false) [
+    _Term_application ~>: Phantoms.lambda "_" Phantoms.true]
+
+-- | Predicate: hoist case statements (elimination unions)
+hoistPredicateCaseStatements :: TTerm (([SubtermStep], Term) -> Bool)
+hoistPredicateCaseStatements = Phantoms.lambda "pt" $
+  Phantoms.cases _Term (Pairs.second (Phantoms.var "pt")) (Just Phantoms.false) [
+    _Term_function ~>: Phantoms.lambda "fn" $
+      Phantoms.cases _Function (Phantoms.var "fn") (Just Phantoms.false) [
+        _Function_elimination ~>: Phantoms.lambda "_" Phantoms.true]]
+
+-- | Universal hoistSubterms test case
+hoistCase :: String -> TTerm (([SubtermStep], Term) -> Bool) -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+hoistCase cname predicate input output = universalCase cname
+  (showTerm (HoistingModule.hoistSubterms # predicate # Lexical.emptyGraph # input))
+  (showTerm output)
+
+-- | Local universal version of hoistCaseStatementsCase
+hoistCaseStatementsCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+hoistCaseStatementsCase cname input output = universalCase cname
+  (showTerm (HoistingModule.hoistCaseStatements # Lexical.emptyGraph # input))
+  (showTerm output)
 
 -- Helper for single-binding let
 letExpr :: String -> TTerm Term -> TTerm Term -> TTerm Term

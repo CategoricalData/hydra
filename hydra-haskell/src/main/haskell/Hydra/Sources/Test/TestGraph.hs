@@ -8,6 +8,7 @@ import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Meta.Types         as T
+import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Hydra.Dsl.Meta.Graph         as Graph
@@ -37,7 +38,7 @@ ns = Namespace "hydra.test.testGraph"
 
 module_ :: Module
 module_ = Module ns elements
-    [TestTerms.ns, TestTypes.ns]
+    [TestTerms.ns, TestTypes.ns, Lexical.ns]
     kernelTypesNamespaces $
     Just ("A module defining the graph used in the test suite.")
   where
@@ -45,7 +46,9 @@ module_ = Module ns elements
      Phantoms.toTermDefinition testTerms,
      Phantoms.toTermDefinition testTypes,
      Phantoms.toTermDefinition testNamespace,
-     Phantoms.toTermDefinition testSchemaNamespace]
+     Phantoms.toTermDefinition testSchemaNamespace,
+     Phantoms.toTermDefinition testGraph,
+     Phantoms.toTermDefinition testContext]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
@@ -57,6 +60,12 @@ testTerms = define "testTerms" $
 
 testNamespace :: TBinding Namespace
 testNamespace = define "testNamespace" $ DModule.namespace $ Phantoms.string "testGraph"
+
+testGraph :: TBinding Graph
+testGraph = define "testGraph" $ asTerm Lexical.emptyGraph
+
+testContext :: TBinding Context
+testContext = define "testContext" $ asTerm Lexical.emptyContext
 
 testTypes :: TBinding (M.Map Name Type)
 testTypes = define "testTypes" $

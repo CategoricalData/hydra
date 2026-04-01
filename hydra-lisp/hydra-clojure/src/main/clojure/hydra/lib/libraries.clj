@@ -593,9 +593,13 @@
     (= (first m) :just) m
     (= (first m) :maybe)
     (let [inner (second m)]
-      (if (or (nil? inner)
-              (and (sequential? inner) (= (first inner) :nothing)))
+      (cond
+        (or (nil? inner)
+            (and (sequential? inner) (= (first inner) :nothing)))
         (list :nothing)
+        (and (sequential? inner) (= (first inner) :just))
+        inner  ;; (:just val) — already in native format
+        :else
         (list :just inner)))
     :else (list :just m)))
 

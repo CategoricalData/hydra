@@ -81,6 +81,21 @@ stack exec update-scala-tests -- $RTS_FLAGS
 if [ -d "$HYDRA_SCALA_DIR/src/gen-test/scala" ]; then
     find "$HYDRA_SCALA_DIR/src/gen-test/scala" -name "*.scala" -exec \
         sed -i '' -e 's/case macro(/case `macro`(/g' -e 's/\.macro(/.`macro`(/g' {} +
+    # Replace unresolved inference type variables (T0-T99) with Any.
+    # These appear in type parameter positions like [T0], [Int, T1], [T2, String].
+    echo "  Post-processing: replacing inference type variables with Any..."
+    find "$HYDRA_SCALA_DIR/src/gen-test/scala" -name "*.scala" -exec \
+        perl -pi -e 's/\bT(\d+)\b/Any/g' {} +
+fi
+
+# Patch testGraph.scala to use the enhanced test graph with primitives.
+# Universal test cases eagerly evaluate their 'actual' expressions when the lazy val
+# is first accessed, so testGraph must have primitives for kernel tests to succeed.
+echo "Patching testGraph.scala..."
+TESTGRAPH="$HYDRA_SCALA_DIR/src/gen-test/scala/hydra/test/testGraph.scala"
+if [ -f "$TESTGRAPH" ]; then
+    sed -i '' 's/lazy val testGraph: hydra.graph.Graph = hydra.lexical.emptyGraph/lazy val testGraph: hydra.graph.Graph = hydra.TestSuiteRunner.buildTestGraph()/' "$TESTGRAPH"
+    sed -i '' 's/lazy val testContext: hydra.context.Context = hydra.lexical.emptyContext/lazy val testContext: hydra.context.Context = hydra.context.Context(Seq.empty, Seq.empty, Map.empty)/' "$TESTGRAPH"
 fi
 
 if [ "$QUICK_MODE" = false ]; then

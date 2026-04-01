@@ -23,7 +23,7 @@ ns :: Namespace
 ns = Namespace "hydra.test.lib.logic"
 
 module_ :: Module
-module_ = Module ns elements [] [] $
+module_ = Module ns elements [Namespace "hydra.reduction", Namespace "hydra.show.core"] [] $
     Just "Test cases for hydra.lib.logic primitives"
   where
     elements = [Phantoms.toTermDefinition allTests]

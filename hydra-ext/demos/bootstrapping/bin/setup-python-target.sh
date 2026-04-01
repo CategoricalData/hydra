@@ -86,6 +86,15 @@ if [ ! -e "$OUTPUT_DIR/../hydra-haskell" ]; then
     echo "    Symlinked ../hydra-haskell -> $HYDRA_ROOT/hydra-haskell"
 fi
 
+# Copy test_env.py (provides real test graph with primitives)
+echo "  Copying test_env.py..."
+PY_TEST_ENV="$HYDRA_PYTHON_DIR/src/gen-test/python/hydra/test/test_env.py"
+PY_TEST_DST="$OUTPUT_DIR/src/gen-test/python/hydra/test"
+if [ -f "$PY_TEST_ENV" ]; then
+    mkdir -p "$PY_TEST_DST"
+    cp "$PY_TEST_ENV" "$PY_TEST_DST/"
+fi
+
 # Summary
 STATIC_COUNT=$(find "$OUTPUT_DIR/src/main" -name "*.py" ! -name "__init__.py" 2>/dev/null | wc -l | tr -d ' ')
 echo "  Static resources: $STATIC_COUNT files"

@@ -25,7 +25,7 @@ ns = Namespace "hydra.test.validate.core"
 
 module_ :: Module
 module_ = Module ns elements
-    []
+    [Namespace "hydra.validate.core", Namespace "hydra.show.error.core"]
     kernelTypesNamespaces
     (Just "Test cases for core term and type validation")
   where

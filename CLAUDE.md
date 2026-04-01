@@ -231,32 +231,41 @@ Key rules:
 
 These are hard-won lessons. Read the linked docs for full context.
 
-1. **Never edit generated files** (`src/gen-main/`, `src/gen-test/`) except for bootstrap
+1. **Never proceed with failures**: If tests fail, investigate and fix the failures before
+   moving on. Do not skip them, do not ask the user whether to investigate, do not propose
+   workarounds. The answer is always: fix the errors first. This applies to every step —
+   build errors, test failures, sync failures, demo failures.
+
+2. **Never edit generated files** (`src/gen-main/`, `src/gen-test/`) except for bootstrap
    patches that will be overwritten by regeneration.
 
-2. **The bootstrap problem**: Extending core types creates a circular dependency.
+3. **The bootstrap problem**: Extending core types creates a circular dependency.
    You must manually patch generated files, rebuild, then regenerate to overwrite patches.
    See [extending-hydra-core.md](docs/recipes/extending-hydra-core.md).
 
-3. **Three DSL levels**: Term-level, meta-level (phantom-typed), and generated DSL.
+4. **Reason by analogy**: Hydra is characterized by a core set of problems which are
+   solved in different ways depending on the host or target language. Very often, the best
+   way to approach a problem is to examine how it has already been solved in other conexts.
+
+5. **Three DSL levels**: Term-level, meta-level (phantom-typed), and generated DSL.
    Mixing levels is a common source of errors. See [docs/dsl-guide.md](docs/dsl-guide.md).
 
-4. **Haskell must pass first**: Always ensure `stack test` passes in `hydra-haskell`
+6. **Haskell must pass first**: Always ensure `stack test` passes in `hydra-haskell`
    before syncing downstream implementations.
 
-5. **Primitive registration**: A primitive class can exist but be invisible at runtime
+7. **Primitive registration**: A primitive class can exist but be invisible at runtime
    if it isn't registered in `Libraries.java` / `Libraries.hs` / `libraries.py` /
    `Libraries.scala` / `libraries.clj`. Always check registration when debugging
    "unknown primitive" errors.
 
-6. **Primitive `implementation()` must not throw** (Java): Even higher-order (`prim2Eval`)
+8. **Primitive `implementation()` must not throw** (Java): Even higher-order (`prim2Eval`)
    primitives need a working `implementation()` that constructs term-level results.
    See [adding-primitives.md](docs/recipes/adding-primitives.md).
 
-7. **Floating-point test portability**: Use `roundedPrimCase1` / `roundedPrimCase2` for
+9. **Floating-point test portability**: Use `roundedPrimCase1` / `roundedPrimCase2` for
    transcendental math tests. See [extending-tests.md](docs/recipes/extending-tests.md).
 
-8. **Memory for generation**: Use `stack ghci --ghci-options='+RTS -K256M -A32M -RTS'`
+10. **Memory for generation**: Use `stack ghci --ghci-options='+RTS -K256M -A32M -RTS'`
    or let the sync scripts handle it.
 
 ---

@@ -88,6 +88,11 @@ cp "$HYDRA_HASKELL_DIR/src/test/haskell/Hydra/TestUtils.hs" "$OUTPUT_DIR/src/tes
 cp "$HYDRA_HASKELL_DIR/src/test/haskell/Hydra/ArbitraryCore.hs" "$OUTPUT_DIR/src/test/haskell/Hydra/"
 cp "$HYDRA_HASKELL_DIR/src/test/haskell/Hydra/EvalPrimitives.hs" "$OUTPUT_DIR/src/test/haskell/Hydra/"
 
+# TestEnv: provides the real test graph with primitives and kernel term bindings.
+# Must be copied to gen-test (where the generated TestGraph.hs imports it).
+mkdir -p "$OUTPUT_DIR/src/gen-test/haskell/Hydra/Test"
+cp "$HYDRA_HASKELL_DIR/src/gen-test/haskell/Hydra/Test/TestEnv.hs" "$OUTPUT_DIR/src/gen-test/haskell/Hydra/Test/"
+
 # License (needed by cabal)
 touch "$OUTPUT_DIR/LICENSE"
 

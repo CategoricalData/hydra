@@ -739,7 +739,8 @@ mapLiteralToExpr = define "mapLiteralToExpr" $
             expressionToExpr @@ var "d" @@ (project L._MapEntry L._MapEntry_key @@ var "e"),
             expressionToExpr @@ var "d" @@ (project L._MapEntry L._MapEntry_value @@ var "e")])
             (var "entries")))),
-      -- alist: '((key1 . val1) (key2 . val2)) in others
+      -- alist: '((key1 . val1) (key2 . val2)) in CL/EL — quoted because CL defstruct
+      -- constructors take keyword args, and the bootstrap data uses positional calls
       L._Dialect_emacsLisp>>: constant $ mapAsAlist (var "d") (var "entries"),
       L._Dialect_commonLisp>>: constant $ mapAsAlist (var "d") (var "entries"),
       -- (list (cons key1 val1) (cons key2 val2) ...) in Scheme — evaluated, not quoted

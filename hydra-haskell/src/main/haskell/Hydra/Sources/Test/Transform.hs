@@ -104,58 +104,11 @@ transformToCompiledTests = define "transformToCompiledTests" $
       (just $ Testing.testGroup (var "name_") (var "desc") (var "transformedSubgroups") (var "transformedCases"))
 
 
--- | Transform a test case to DelegatedEvaluationTestCase if applicable
+-- | Transform a test case (pass through unchanged — all test cases are now universal)
 transformTestCase :: TBinding (TestCaseWithMetadata -> Maybe TestCaseWithMetadata)
 transformTestCase = define "transformTestCase" $
-  doc "Transform a test case to DelegatedEvaluationTestCase if applicable" $
-  lambda "tcm" $ lets [
-    "name_">: project _TestCaseWithMetadata _TestCaseWithMetadata_name @@ var "tcm",
-    "tc">: project _TestCaseWithMetadata _TestCaseWithMetadata_case @@ var "tcm",
-    "desc">: project _TestCaseWithMetadata _TestCaseWithMetadata_description @@ var "tcm",
-    "tags_">: project _TestCaseWithMetadata _TestCaseWithMetadata_tags @@ var "tcm"] $
-    cases _TestCase (var "tc") (Just nothing) [
-      _TestCase_caseConversion>>: lambda "ccase" $ lets [
-        "fromConv">: project _CaseConversionTestCase _CaseConversionTestCase_fromConvention @@ var "ccase",
-        "toConv">: project _CaseConversionTestCase _CaseConversionTestCase_toConvention @@ var "ccase",
-        "fromStr">: project _CaseConversionTestCase _CaseConversionTestCase_fromString @@ var "ccase",
-        "toStr">: project _CaseConversionTestCase _CaseConversionTestCase_toString @@ var "ccase"] $
-        just $ Testing.testCaseWithMetadata (var "name_")
-          (Testing.testCaseDelegatedEvaluation $ Testing.delegatedEvaluationTestCase
-            (buildConvertCaseCall @@ var "fromConv" @@ var "toConv" @@ var "fromStr")
-            (Core.termLiteral $ Core.literalString (var "toStr")))
-          (var "desc") (var "tags_"),
-
-      _TestCase_evaluation>>: lambda "ecase" $ lets [
-        "input_">: project _EvaluationTestCase _EvaluationTestCase_input @@ var "ecase",
-        "output_">: project _EvaluationTestCase _EvaluationTestCase_output @@ var "ecase"] $
-        just $ Testing.testCaseWithMetadata (var "name_")
-          (Testing.testCaseDelegatedEvaluation $ Testing.delegatedEvaluationTestCase
-            (var "input_") (var "output_"))
-          (var "desc") (var "tags_"),
-
-      _TestCase_delegatedEvaluation>>: lambda "_" $
-        just (var "tcm"),
-
-      _TestCase_topologicalSort>>: lambda "tscase" $ lets [
-        "adjList">: project _TopologicalSortTestCase _TopologicalSortTestCase_adjacencyList @@ var "tscase",
-        "expected">: project _TopologicalSortTestCase _TopologicalSortTestCase_expected @@ var "tscase"] $
-        just $ Testing.testCaseWithMetadata (var "name_")
-          (Testing.testCaseDelegatedEvaluation $ Testing.delegatedEvaluationTestCase
-            (buildTopologicalSortCall @@ var "adjList")
-            (encodeEitherListList @@ var "expected"))
-          (var "desc") (var "tags_"),
-
-      _TestCase_topologicalSortSCC>>: lambda "scccase" $ lets [
-        "adjList">: project _TopologicalSortSCCTestCase _TopologicalSortSCCTestCase_adjacencyList @@ var "scccase",
-        "expected">: project _TopologicalSortSCCTestCase _TopologicalSortSCCTestCase_expected @@ var "scccase"] $
-        just $ Testing.testCaseWithMetadata (var "name_")
-          (Testing.testCaseDelegatedEvaluation $ Testing.delegatedEvaluationTestCase
-            (buildTopologicalSortSCCCall @@ var "adjList")
-            (encodeListList @@ var "expected"))
-          (var "desc") (var "tags_"),
-
-      _TestCase_validateCoreTerm>>: lambda "_" $
-        just (var "tcm")]
+  doc "Pass through test cases unchanged" $
+  lambda "tcm" $ just (var "tcm")
 
 
 -- | Build a Term representing a convertCase function call

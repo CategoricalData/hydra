@@ -24,7 +24,7 @@ ns = Namespace "hydra.test.lib.lists"
 
 module_ :: Module
 module_ = Module ns elements
-    [TestGraph.ns]
+    [TestGraph.ns, Namespace "hydra.reduction", Namespace "hydra.show.core"]
     kernelTypesNamespaces
     (Just "Test cases for hydra.lib.lists primitives")
   where

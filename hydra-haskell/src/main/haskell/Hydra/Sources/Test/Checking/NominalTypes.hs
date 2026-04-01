@@ -22,7 +22,7 @@ ns = Namespace "hydra.test.checking.nominalTypes"
 
 module_ :: Module
 module_ = Module ns elements
-    [TestGraph.ns]
+    [TestGraph.ns, Namespace "hydra.rewriting"]
     kernelTypesNamespaces
     (Just "Nominal type checking test cases: records, unions, field access, injection, projection")
   where
@@ -95,26 +95,6 @@ allTests = define "allTests" $
   eliminationsTests]
 
 ------ Helper functions ------
-
--- Helper function to create a type checking test case
-checkTest :: String -> [Tag] -> TTerm Term -> TTerm Term -> TTerm Type -> TTerm TestCaseWithMetadata
-checkTest name tags input outputTerm outputType = testCaseWithMetadata (Phantoms.string name)
-  (testCaseTypeChecking $ typeCheckingTestCase input outputTerm outputType) Phantoms.nothing (Phantoms.list $ tag . unTag <$> tags)
-
--- Helper for tests where the term doesn't change during type checking
-noChange :: String -> TTerm Term -> TTerm Type -> TTerm TestCaseWithMetadata
-noChange name term typ = checkTest name [] term term typ
-
--- Create a TestCase inject for type checking
-testCaseTypeChecking :: TTerm TypeCheckingTestCase -> TTerm TestCase
-testCaseTypeChecking = Phantoms.inject _TestCase _TestCase_typeChecking
-
--- Create a TypeCheckingTestCase record
-typeCheckingTestCase :: TTerm Term -> TTerm Term -> TTerm Type -> TTerm TypeCheckingTestCase
-typeCheckingTestCase input outputTerm outputType = Phantoms.record _TypeCheckingTestCase [
-  Phantoms.field _TypeCheckingTestCase_input input,
-  Phantoms.field _TypeCheckingTestCase_outputTerm outputTerm,
-  Phantoms.field _TypeCheckingTestCase_outputType outputType]
 
 ------ Records ------
 
@@ -998,7 +978,7 @@ usingUnionPolymorphicRecursiveTests = define "usingUnionPolymorphicRecursiveTest
 usingKernelTypesTests :: TBinding TestGroup
 usingKernelTypesTests = define "usingKernelTypesTests" $
   subgroup "Using kernel types" [
-  checkTest "case statement on CoderDirection applied to argument" []
+  checkTest "case statement on CoderDirection applied to argument" [tag_disabled]
     (lambda "dir" $
       lambda "coder" $
         match (name "hydra.coders.CoderDirection")

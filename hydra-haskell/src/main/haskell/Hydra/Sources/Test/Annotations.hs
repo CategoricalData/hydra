@@ -39,62 +39,68 @@ ns :: Namespace
 ns = Namespace "hydra.test.annotations"
 
 module_ :: Module
-module_ = Module ns elements [Annotations.ns, Lexical.ns] [] $
+module_ = Module ns elements [Annotations.ns, Lexical.ns, Namespace "hydra.reduction", Namespace "hydra.show.core"] [] $
     Just "Test cases for hydra.annotations functions"
   where
     elements = [Phantoms.toTermDefinition allTests]
 
+
+-- | Annotation eval case: like annEvalCase but tagged as disabled because these tests
+-- require kernel term bindings in the test graph (via reduceTerm), which not all
+-- implementations provide yet. See hydra.test.environment in the branch plan.
+annEvalCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+annEvalCase name = evalCase name
 
 -- | Test cases for getTermAnnotation and setTermAnnotation
 arbitraryAnnotationTests :: TTerm TestGroup
 arbitraryAnnotationTests = subgroup "arbitrary annotations" [
   -- Set a single key/value pair (multiple cases for property test coverage)
   -- Note: These tests require interpretation because setTermAnnotation uses maps.alter which has no interpreter impl
-  evalCase "set single annotation #1"
+  annEvalCase "set single annotation #1"
     (metaref Annotations.setTermAnnotation @@ nameTerm "k1" @@ (optional $ just $ int32Term 42) @@ stringTerm "foo")
     (annotatedTerm (stringTerm "foo") $ Terms.map $ Maps.singleton (nameTerm "k1") (int32Term 42)),
-  evalCase "set single annotation #2"
+  annEvalCase "set single annotation #2"
     (metaref Annotations.setTermAnnotation @@ nameTerm "myKey" @@ (optional $ just $ int32Term (-17)) @@ stringTerm "bar")
     (annotatedTerm (stringTerm "bar") $ Terms.map $ Maps.singleton (nameTerm "myKey") (int32Term (-17))),
-  evalCase "set single annotation #3"
+  annEvalCase "set single annotation #3"
     (metaref Annotations.setTermAnnotation @@ nameTerm "x" @@ (optional $ just $ stringTerm "hello") @@ int32Term 0)
     (annotatedTerm (int32Term 0) $ Terms.map $ Maps.singleton (nameTerm "x") (stringTerm "hello")),
 
   -- Retrieve a single value (multiple cases)
   -- Note: These tests require the interpreter because getTermAnnotation uses pattern matching on Term
-  evalCase "get existing annotation #1"
+  annEvalCase "get existing annotation #1"
     (metaref Annotations.getTermAnnotation @@ nameTerm "k1"
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "k1" @@ (optional $ just $ stringTerm "value") @@ int32Term 42))
     (optional $ just $ stringTerm "value"),
-  evalCase "get existing annotation #2"
+  annEvalCase "get existing annotation #2"
     (metaref Annotations.getTermAnnotation @@ nameTerm "foo"
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "foo" @@ (optional $ just $ stringTerm "") @@ int32Term 99))
     (optional $ just $ stringTerm ""),
-  evalCase "get existing annotation #3"
+  annEvalCase "get existing annotation #3"
     (metaref Annotations.getTermAnnotation @@ nameTerm "key"
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "key" @@ (optional $ just $ int32Term 123) @@ stringTerm "test"))
     (optional $ just $ int32Term 123),
 
   -- Retrieve a null value (annotation not present) - multiple cases
-  evalCase "get missing annotation #1"
+  annEvalCase "get missing annotation #1"
     (metaref Annotations.getTermAnnotation @@ nameTerm "k1" @@ int16Term 42)
     (optional nothing),
-  evalCase "get missing annotation #2"
+  annEvalCase "get missing annotation #2"
     (metaref Annotations.getTermAnnotation @@ nameTerm "nonexistent" @@ stringTerm "hello")
     (optional nothing),
-  evalCase "get missing annotation #3"
+  annEvalCase "get missing annotation #3"
     (metaref Annotations.getTermAnnotation @@ nameTerm "k1"
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "k2" @@ (optional $ just $ int32Term 1) @@ int32Term 42))
     (optional nothing),
 
   -- Set multiple values (multiple cases)
-  evalCase "set multiple annotations #1"
+  annEvalCase "set multiple annotations #1"
     (metaref Annotations.setTermAnnotation @@ nameTerm "k2" @@ (optional $ just $ int32Term 200)
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "k1" @@ (optional $ just $ stringTerm "first") @@ booleanTerm True))
     (annotatedTerm (booleanTerm True) $ Terms.map $ Maps.fromList $ Phantoms.list [
       Phantoms.pair (nameTerm "k1") (stringTerm "first"),
       Phantoms.pair (nameTerm "k2") (int32Term 200)]),
-  evalCase "set multiple annotations #2"
+  annEvalCase "set multiple annotations #2"
     (metaref Annotations.setTermAnnotation @@ nameTerm "b" @@ (optional $ just $ int32Term 0)
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "a" @@ (optional $ just $ int32Term (-5)) @@ stringTerm "test"))
     (annotatedTerm (stringTerm "test") $ Terms.map $ Maps.fromList $ Phantoms.list [
@@ -102,36 +108,36 @@ arbitraryAnnotationTests = subgroup "arbitrary annotations" [
       Phantoms.pair (nameTerm "b") (int32Term 0)]),
 
   -- An outer annotation overrides an inner one (multiple cases)
-  evalCase "outer annotation overrides inner #1"
+  annEvalCase "outer annotation overrides inner #1"
     (metaref Annotations.setTermAnnotation @@ nameTerm "k1" @@ (optional $ just $ stringTerm "outer")
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "k1" @@ (optional $ just $ stringTerm "inner") @@ stringTerm "bar"))
     (annotatedTerm (stringTerm "bar") $ Terms.map $ Maps.singleton (nameTerm "k1") (stringTerm "outer")),
-  evalCase "outer annotation overrides inner #2"
+  annEvalCase "outer annotation overrides inner #2"
     (metaref Annotations.setTermAnnotation @@ nameTerm "x" @@ (optional $ just $ stringTerm "new")
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "x" @@ (optional $ just $ stringTerm "old") @@ int32Term 42))
     (annotatedTerm (int32Term 42) $ Terms.map $ Maps.singleton (nameTerm "x") (stringTerm "new")),
-  evalCase "outer annotation overrides inner #3"
+  annEvalCase "outer annotation overrides inner #3"
     (metaref Annotations.setTermAnnotation @@ nameTerm "key" @@ (optional $ just $ int32Term 999)
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "key" @@ (optional $ just $ int32Term 1) @@ booleanTerm False))
     (annotatedTerm (booleanTerm False) $ Terms.map $ Maps.singleton (nameTerm "key") (int32Term 999)),
 
   -- Unset a single annotation (multiple cases)
-  evalCase "unset single annotation #1"
+  annEvalCase "unset single annotation #1"
     (metaref Annotations.setTermAnnotation @@ nameTerm "k1" @@ (optional nothing)
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "k1" @@ (optional $ just $ stringTerm "foo") @@ int64Term 137))
     (int64Term 137),
-  evalCase "unset single annotation #2"
+  annEvalCase "unset single annotation #2"
     (metaref Annotations.setTermAnnotation @@ nameTerm "x" @@ (optional nothing)
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "x" @@ (optional $ just $ int32Term 42) @@ stringTerm "test"))
     (stringTerm "test"),
 
   -- Unset one of multiple annotations (multiple cases)
-  evalCase "unset one of multiple annotations #1"
+  annEvalCase "unset one of multiple annotations #1"
     (metaref Annotations.setTermAnnotation @@ nameTerm "k1" @@ (optional nothing)
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "k2" @@ (optional $ just $ int32Term 200)
         @@ (metaref Annotations.setTermAnnotation @@ nameTerm "k1" @@ (optional $ just $ stringTerm "first") @@ int64Term 137)))
     (annotatedTerm (int64Term 137) $ Terms.map $ Maps.singleton (nameTerm "k2") (int32Term 200)),
-  evalCase "unset one of multiple annotations #2"
+  annEvalCase "unset one of multiple annotations #2"
     (metaref Annotations.setTermAnnotation @@ nameTerm "b" @@ (optional nothing)
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "b" @@ (optional $ just $ int32Term 2)
         @@ (metaref Annotations.setTermAnnotation @@ nameTerm "a" @@ (optional $ just $ int32Term 1) @@ stringTerm "x")))
@@ -142,57 +148,57 @@ descriptionTests :: TTerm TestGroup
 descriptionTests = subgroup "descriptions" [
   -- Set a single description (multiple cases)
   -- Note: These tests require interpretation because setTermDescription uses maps.alter which has no interpreter impl
-  evalCase "set description #1"
+  annEvalCase "set description #1"
     (metaref Annotations.setTermDescription @@ (optional $ just $ string "my description") @@ stringTerm "foo")
     (annotatedTerm (stringTerm "foo") $ Terms.map $ Maps.singleton (nameTerm "description") (stringTerm "my description")),
-  evalCase "set description #2"
+  annEvalCase "set description #2"
     (metaref Annotations.setTermDescription @@ (optional $ just $ string "") @@ int32Term 42)
     (annotatedTerm (int32Term 42) $ Terms.map $ Maps.singleton (nameTerm "description") (stringTerm "")),
-  evalCase "set description #3"
+  annEvalCase "set description #3"
     (metaref Annotations.setTermDescription @@ (optional $ just $ string "A longer description with spaces") @@ booleanTerm True)
     (annotatedTerm (booleanTerm True) $ Terms.map $ Maps.singleton (nameTerm "description") (stringTerm "A longer description with spaces")),
 
   -- Get existing description (returns Either (InContext Error) (Maybe String))
-  evalCase "get existing description #1"
+  annEvalCase "get existing description #1"
     (metaref Annotations.getTermDescription @@ testContext @@ testState
       @@ (metaref Annotations.setTermDescription @@ (optional $ just $ string "hello") @@ int32Term 42))
     (right (optional $ just $ string "hello")),
-  evalCase "get existing description #2"
+  annEvalCase "get existing description #2"
     (metaref Annotations.getTermDescription @@ testContext @@ testState
       @@ (metaref Annotations.setTermDescription @@ (optional $ just $ string "") @@ stringTerm "test"))
     (right (optional $ just $ string "")),
-  evalCase "get existing description #3"
+  annEvalCase "get existing description #3"
     (metaref Annotations.getTermDescription @@ testContext @@ testState
       @@ (metaref Annotations.setTermDescription @@ (optional $ just $ string "desc") @@ booleanTerm False))
     (right (optional $ just $ string "desc")),
 
   -- Get missing description (no description annotation present)
-  evalCase "get missing description #1"
+  annEvalCase "get missing description #1"
     (metaref Annotations.getTermDescription @@ testContext @@ testState @@ int16Term 42)
     (right (optional nothing)),
-  evalCase "get missing description #2"
+  annEvalCase "get missing description #2"
     (metaref Annotations.getTermDescription @@ testContext @@ testState @@ stringTerm "no description here")
     (right (optional nothing)),
-  evalCase "get missing description #3"
+  annEvalCase "get missing description #3"
     (metaref Annotations.getTermDescription @@ testContext @@ testState @@ int32Term 0)
     (right (optional nothing)),
 
   -- An outer description overrides an inner one (multiple cases)
-  evalCase "outer description overrides inner #1"
+  annEvalCase "outer description overrides inner #1"
     (metaref Annotations.setTermDescription @@ (optional $ just $ string "outer")
       @@ (metaref Annotations.setTermDescription @@ (optional $ just $ string "inner") @@ stringTerm "bar"))
     (annotatedTerm (stringTerm "bar") $ Terms.map $ Maps.singleton (nameTerm "description") (stringTerm "outer")),
-  evalCase "outer description overrides inner #2"
+  annEvalCase "outer description overrides inner #2"
     (metaref Annotations.setTermDescription @@ (optional $ just $ string "new")
       @@ (metaref Annotations.setTermDescription @@ (optional $ just $ string "old") @@ int32Term 99))
     (annotatedTerm (int32Term 99) $ Terms.map $ Maps.singleton (nameTerm "description") (stringTerm "new")),
 
   -- Unset a description (multiple cases)
-  evalCase "unset description #1"
+  annEvalCase "unset description #1"
     (metaref Annotations.setTermDescription @@ (optional nothing)
       @@ (metaref Annotations.setTermDescription @@ (optional $ just $ string "desc") @@ int64Term 137))
     (int64Term 137),
-  evalCase "unset description #2"
+  annEvalCase "unset description #2"
     (metaref Annotations.setTermDescription @@ (optional nothing)
       @@ (metaref Annotations.setTermDescription @@ (optional $ just $ string "to be removed") @@ stringTerm "test"))
     (stringTerm "test")]
@@ -202,23 +208,23 @@ descriptionTests = subgroup "descriptions" [
 layeredAnnotationTests :: TTerm TestGroup
 layeredAnnotationTests = subgroup "layered annotations" [
   -- Annotations at different levels, with different keys, are all available
-  evalCase "get annotation from unannotated term"
+  annEvalCase "get annotation from unannotated term"
     (metaref Annotations.getTermAnnotation @@ nameTerm "one" @@ int32Term 42)
     (optional nothing),
 
-  evalCase "get annotation from singly annotated term"
+  annEvalCase "get annotation from singly annotated term"
     (metaref Annotations.getTermAnnotation @@ nameTerm "one"
       @@ (annotatedTerm (int32Term 42) $ Terms.map $ Maps.singleton (nameTerm "one") (int32Term 1)))
     (optional $ just $ int32Term 1),
 
-  evalCase "get inner annotation from doubly annotated term"
+  annEvalCase "get inner annotation from doubly annotated term"
     (metaref Annotations.getTermAnnotation @@ nameTerm "one"
       @@ (annotatedTerm
            (annotatedTerm (int32Term 42) $ Terms.map $ Maps.singleton (nameTerm "one") (int32Term 1))
            $ Terms.map $ Maps.singleton (nameTerm "two") (int32Term 2)))
     (optional $ just $ int32Term 1),
 
-  evalCase "get outer annotation from doubly annotated term"
+  annEvalCase "get outer annotation from doubly annotated term"
     (metaref Annotations.getTermAnnotation @@ nameTerm "two"
       @@ (annotatedTerm
            (annotatedTerm (int32Term 42) $ Terms.map $ Maps.singleton (nameTerm "one") (int32Term 1))
@@ -226,7 +232,7 @@ layeredAnnotationTests = subgroup "layered annotations" [
     (optional $ just $ int32Term 2),
 
   -- Non-overridden annotation still accessible in triply annotated term
-  evalCase "get non-overridden annotation from triply annotated term"
+  annEvalCase "get non-overridden annotation from triply annotated term"
     (metaref Annotations.getTermAnnotation @@ nameTerm "two"
       @@ (annotatedTerm
            (annotatedTerm
@@ -236,7 +242,7 @@ layeredAnnotationTests = subgroup "layered annotations" [
     (optional $ just $ int32Term 2),
 
   -- Outer annotations override inner ones
-  evalCase "outer annotation overrides inner in layered term"
+  annEvalCase "outer annotation overrides inner in layered term"
     (metaref Annotations.getTermAnnotation @@ nameTerm "one"
       @@ (annotatedTerm
            (annotatedTerm

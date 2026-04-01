@@ -11,6 +11,7 @@ import qualified Hydra.Sources.Kernel.Types.Context     as Context
 import qualified Hydra.Sources.Kernel.Types.Core        as Core
 import qualified Hydra.Sources.Kernel.Types.Error.Checking as ErrorChecking
 import qualified Hydra.Sources.Kernel.Types.Error.Core     as ErrorCore
+import qualified Hydra.Sources.Kernel.Types.Error.Module   as ErrorModule
 import qualified Hydra.Sources.Kernel.Types.Error.Packaging as ErrorPackaging
 import qualified Hydra.Sources.Kernel.Types.Errors      as Errors
 import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
@@ -39,6 +40,7 @@ kernelTypesModules = [
   Core.module_,
   ErrorChecking.module_,
   ErrorCore.module_,
+  ErrorModule.module_,
   ErrorPackaging.module_,
   Errors.module_,
   Graph.module_,

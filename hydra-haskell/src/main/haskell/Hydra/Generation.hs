@@ -11,8 +11,7 @@ import Hydra.Dsl.Bootstrap
 import Hydra.Ext.Haskell.Coder
 import Hydra.Ext.Haskell.Language
 import Hydra.Module (_Module)
-import Hydra.Testing (TestGenerator(..), TestCodec(..), TestGroup(..), TestCaseWithMetadata(..), TestCase(..),
-                       DelegatedEvaluationTestCase(..))
+import Hydra.Testing (TestGenerator(..), TestCodec(..), TestGroup(..), TestCaseWithMetadata(..), TestCase(..))
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Writer as JsonWriter
 import Hydra.Sources.Libraries
@@ -26,7 +25,7 @@ import qualified Hydra.Sources.All as Sources
 import qualified Hydra.Sources.Eval.Lib.All as EvalLib
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
 import qualified Hydra.CodeGeneration as CodeGeneration
-import Hydra.Test.Transform (addGenerationPrefix, collectTestCases, transformToCompiledTests)
+import Hydra.Test.Transform (collectTestCases, transformToCompiledTests)
 import Hydra.Sources.Test.All (testModules)
 import qualified Hydra.Inference as Inference
 
@@ -382,9 +381,7 @@ buildNamespacesForTestGroup testGen testModule testGroup g = do
         tempModule = testModule { moduleDefinitions = map bindingToDefinition testBindings }
     testGeneratorNamespacesForModule testGen tempModule g
   where
-    extractTestTerms (TestCaseWithMetadata _ tcase _ _) = case tcase of
-      TestCaseDelegatedEvaluation (DelegatedEvaluationTestCase input output) -> [input, output]
-      _ -> []
+    extractTestTerms (TestCaseWithMetadata _ _tcase _ _) = []
 
 -- | Build a mapping from module namespaces to test groups by matching on derived keys.
 buildTestGroupMap :: [Namespace] -> TestGroup -> M.Map Namespace TestGroup
@@ -482,7 +479,7 @@ generateAllFiles testGen g baseDir modulePairs writeFile' = go 1 modulePairs
         Nothing -> return $ Right (length modulePairs)
     go idx ((sourceModule, testGroup):rest) = do
       let ns = moduleNamespace sourceModule
-          generationModule = sourceModule {moduleNamespace = addGenerationPrefix ns}
+          generationModule = sourceModule {moduleNamespace = Namespace ("generation." ++ unNamespace ns)}
       trace ("  Generating module " ++ show idx ++ ": " ++ show ns) $ return ()
       case testGeneratorGenerateTestFile testGen generationModule testGroup g of
         Left err -> return $ Left err

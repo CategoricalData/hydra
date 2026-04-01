@@ -14,7 +14,7 @@ set -e
 #   3. Generate eval lib modules (mainModules -> evalLibModules)
 #   4. Generate encoder/decoder source modules (kernelTypesModules)
 #   5. Regenerate kernel modules (to pick up new encoder/decoder sources)
-#   6. Generate generation tests
+
 #   7. Export and verify JSON kernel
 #   8. Run tests
 #
@@ -50,7 +50,7 @@ for arg in "$@"; do
             echo "  3. Generate eval lib modules"
             echo "  4. Generate encoder/decoder source modules"
             echo "  5. Regenerate kernel modules (picks up new encoder/decoder sources)"
-            echo "  6. Generate generation tests"
+            
             echo "  7. Export and verify JSON kernel"
             echo "  8. Run tests (unless --quick)"
             exit 0
@@ -103,6 +103,13 @@ if [ $? -ne 0 ]; then
     echo "ERROR: Kernel test generation failed"
     exit 1
 fi
+
+# Patch TestGraph.hs to use TestEnv (real graph with primitives) instead of emptyGraph
+echo "Patching TestGraph.hs..."
+TESTGRAPH="src/gen-test/haskell/Hydra/Test/TestGraph.hs"
+sed -i '' 's/import qualified Hydra.Lexical as Lexical$/import qualified Hydra.Lexical as Lexical\nimport qualified Hydra.Test.TestEnv as TestEnv/' "$TESTGRAPH"
+sed -i '' 's/testGraph = Lexical.emptyGraph/testGraph = TestEnv.testGraph testTypes/' "$TESTGRAPH"
+sed -i '' 's/testContext = Lexical.emptyContext/testContext = TestEnv.testContext/' "$TESTGRAPH"
 
 # Rebuild to pick up newly generated test files
 echo ""
@@ -159,21 +166,7 @@ echo ""
 echo "Rebuilding..."
 stack build
 
-# Phase 6: Generate generation tests
-echo ""
-echo "Step 6/$TOTAL_STEPS: Generating generation tests..."
-echo ""
-stack build hydra:exe:update-generation-tests
-stack exec update-generation-tests -- $RTS_FLAGS
-
-if [ $? -ne 0 ]; then
-    echo "WARNING: Some generation tests failed to generate"
-fi
-
-# Rebuild to pick up generated test files
-echo ""
-echo "Rebuilding..."
-stack build
+# Note: generation tests removed in favor of universal test cases
 
 # Phase 7: Export and verify JSON
 # All main modules (kernel + eval lib + ext) are exported to JSON.

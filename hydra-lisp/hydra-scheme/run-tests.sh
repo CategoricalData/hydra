@@ -15,7 +15,7 @@ cd "$SCRIPT_DIR"
 
 # Detect Scheme implementation
 if command -v guile > /dev/null 2>&1; then
-    SCHEME_CMD="guile -L src/gen-main/scheme -L src/gen-test/scheme -L src/main/scheme -s run-tests.scm"
+    SCHEME_CMD="guile --no-auto-compile -L src/gen-main/scheme -L src/gen-test/scheme -L src/main/scheme -s run-tests.scm"
 elif command -v chibi-scheme > /dev/null 2>&1; then
     SCHEME_CMD="chibi-scheme -I src/gen-main/scheme -I src/gen-test/scheme -I src/main/scheme run-tests.scm"
 else

@@ -40,13 +40,7 @@ import Hydra.Ext.Python.Coder (moduleToPython)
 import Hydra.Ext.Python.Language (pythonLanguage)
 import Hydra.Ext.Lisp.Language (lispLanguage)
 import qualified Hydra.Ext.Lisp.Syntax as LispSyntax
-import Hydra.Generation (TestGenerator, generateGenerationTestSuite, createTestGroupLookup)
-import Hydra.Ext.Haskell.TestingIo (haskellTestGenerator)
-import Hydra.Ext.Java.TestingIo (javaTestGenerator)
-import Hydra.Ext.Python.TestingIo (pythonTestGenerator)
-import Hydra.Ext.Scala.TestingIo (scalaTestGenerator)
 import qualified Hydra.Sources.Test.TestSuite as TestSuite
-import qualified Hydra.Test.TestSuite as GenTests
 
 import Control.Exception (catch, IOException)
 import Control.Monad (when)
@@ -378,28 +372,8 @@ main = do
   -- Optionally generate generation tests
   genTestSuccess <- if optIncludeGenTests opts
     then do
-      let (genTestDir, genTestExt) = case target of
-            "haskell" -> (outBase FP.</> "src/gen-test/haskell", ".hs")
-            "java"    -> (outBase FP.</> "src/gen-test/java/generation", ".java")
-            "python"  -> (outBase FP.</> "src/gen-test/python", ".py")
-            "scala"   -> (outBase FP.</> "src/gen-test/scala/generation", ".scala")
-            _         -> (outBase FP.</> "src/gen-test/" ++ target, "")
-      putStrLn $ "Generating " ++ targetCap ++ " generation tests..."
-      genTestStart <- getCurrentTime
-      success <- case target of
-        "haskell" -> runGenTests haskellTestGenerator genTestDir
-        "java"    -> runGenTests javaTestGenerator genTestDir
-        "python"  -> runGenTests pythonTestGenerator genTestDir
-        "scala"   -> runGenTests scalaTestGenerator genTestDir
-        _ -> do
-          putStrLn $ "  WARNING: No generation test codec for target: " ++ target
-          return True
-      genTestEnd <- getCurrentTime
-      genTestCount <- countFiles genTestDir genTestExt
-      putStrLn $ "  Generated " ++ show genTestCount ++ " generation test files."
-      putStrLn $ "  Time: " ++ formatTime (elapsed genTestEnd genTestStart)
-      putStrLn ""
-      return success
+      -- Note: generation tests removed in favor of universal test cases
+      return True
     else return True
 
   putStrLn "=========================================="
@@ -416,9 +390,3 @@ main = do
 elapsed :: UTCTime -> UTCTime -> Double
 elapsed end start = realToFrac (diffUTCTime end start)
 
-runGenTests :: TestGenerator a -> FilePath -> IO Bool
-runGenTests testGen outputDir = do
-  let testNamespaces = moduleTermDependencies TestSuite.module_
-  let lookupFn = createTestGroupLookup testNamespaces GenTests.allTests
-  let testModules = TestSuite.testSuiteModules
-  generateGenerationTestSuite testGen outputDir testModules lookupFn

@@ -137,20 +137,7 @@ inferTestCase = define "inferTestCase" $
     Eithers.map
       (lambda "inferredCase" $
         Testing.testCaseWithMetadata (var "name_") (var "inferredCase") (var "desc") (var "tags_"))
-      (cases _TestCase (var "tcase") (Just (Phantoms.right (var "tcase"))) [
-        _TestCase_delegatedEvaluation>>: lambda "delCase" $ lets [
-          "input_">: project _DelegatedEvaluationTestCase _DelegatedEvaluationTestCase_input @@ var "delCase",
-          "output_">: project _DelegatedEvaluationTestCase _DelegatedEvaluationTestCase_output @@ var "delCase"] $
-          Eithers.bind
-            (inferTerm @@ var "g" @@ var "input_")
-            (lambda "inferredInput" $
-              Eithers.map
-                (lambda "inferredOutput" $
-                  inject _TestCase _TestCase_delegatedEvaluation
-                    (record _DelegatedEvaluationTestCase [
-                      _DelegatedEvaluationTestCase_input>>: var "inferredInput",
-                      _DelegatedEvaluationTestCase_output>>: var "inferredOutput"]))
-                (inferTerm @@ var "g" @@ var "output_"))])
+      (Phantoms.right (var "tcase"))
 
 
 -- | Run type inference on a single term

@@ -251,7 +251,7 @@
 ;; Graph construction
 ;; ==========================================================================
 
-(defn- build-test-graph []
+(defn build-test-graph []
   (let [std-prims (libraries/standard-library)
 
         ;; Create annotation primitives
@@ -297,9 +297,9 @@
      :schema_types schema-types
      :type_variables #{}}))
 
-(def ^:private test-graph (atom nil))
+(def test-graph (atom nil))
 
-(defn- ensure-test-graph! []
+(defn ensure-test-graph! []
   "Build and enhance the test graph with schema types (called after all namespaces loaded)."
   (when (nil? @test-graph)
     (let [base (build-test-graph)]
@@ -547,6 +547,17 @@
       (println (str "FAIL: " path))
       (println (str "  EXCEPTION: " (.getMessage e)))
       [0 1 0])))
+
+(defn- run-universal-test [path tc]
+  "Run a universal test case: compare actual and expected strings."
+  (let [actual (:actual tc)
+        expected (:expected tc)]
+    (if (= actual expected)
+      [1 0 0]
+      (do (println (str "FAIL: " path))
+          (println (str "  Expected: " (pr-str expected)))
+          (println (str "  Actual:   " (pr-str actual)))
+          [0 1 0]))))
 
 (defn- run-simple-test [path expected actual-fn]
   "Run a test that compares expected to the result of actual-fn."
@@ -1303,6 +1314,7 @@
               :validate_core_term      (run-validate-core-term-test full case-data)
               ;; Skip remaining unimplemented test types
               :delegated_evaluation    [0 0 1]
+              :universal               (run-universal-test full case-data)
               [0 0 1]))))
     (catch Throwable e
       (let [tname (:name tcase) full (str path " > " tname)]

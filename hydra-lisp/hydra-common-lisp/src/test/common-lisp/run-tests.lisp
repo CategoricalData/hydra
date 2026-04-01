@@ -101,6 +101,7 @@
 ;; Base test types/terms (dependencies first)
 (load-test-file "test_types.lisp")
 (load-test-file "test_terms.lisp")
+(load "src/test/common-lisp/hydra/annotation_bindings.lisp")
 (load-test-file "test_graph.lisp")
 
 ;; Library tests

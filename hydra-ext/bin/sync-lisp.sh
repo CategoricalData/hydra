@@ -119,6 +119,137 @@ dialect_dir() {
     esac
 }
 
+# Patch Scheme test_graph.scm to build a full graph with primitives and schema types.
+# The graph must be defined AFTER test_terms and test_types (forward reference issue).
+# Copy annotation bindings alongside the generated test graph (for include)
+cp "$HYDRA_ROOT_DIR/hydra-lisp/hydra-scheme/src/test/scheme/hydra/annotation_bindings.scm" \
+   "$HYDRA_ROOT_DIR/hydra-lisp/hydra-scheme/src/gen-test/scheme/hydra/test/annotation_bindings.scm" 2>/dev/null
+
+echo "Patching Scheme test_graph.scm..."
+SCHEME_TESTGRAPH="$HYDRA_ROOT_DIR/hydra-lisp/hydra-scheme/src/gen-test/scheme/hydra/test/test_graph.scm"
+if [ -f "$SCHEME_TESTGRAPH" ]; then
+    # Add required imports for building graph with primitives
+    sed -i '' 's|(import (scheme base) (hydra core) (hydra lexical) (hydra lib maps) (hydra module) (hydra test test_terms) (hydra test test_types))|(import (scheme base) (hydra core) (hydra context) (hydra graph) (hydra lexical) (hydra lib libraries) (hydra lib maps) (hydra module) (hydra rewriting) (hydra json bootstrap) (hydra test test_terms) (hydra test test_types))|' "$SCHEME_TESTGRAPH"
+    # Delete the empty context and graph defs
+    sed -i '' '/^(define hydra_test_test_graph_test_context hydra_lexical_empty_context)/d' "$SCHEME_TESTGRAPH"
+    sed -i '' '/^(define hydra_test_test_graph_test_graph hydra_lexical_empty_graph)/d' "$SCHEME_TESTGRAPH"
+    # Remove the final )) that closes begin and define-library, then append defs + closing
+    sed -i '' '$ s/))$//' "$SCHEME_TESTGRAPH"
+    cat >> "$SCHEME_TESTGRAPH" << 'SCMEOF'
+;; Include annotation term-level bindings (shared with test runner).
+SCMEOF
+    # Insert include with absolute path (Guile's include in define-library doesn't search load path)
+    ANN_BINDINGS_PATH="$HYDRA_ROOT_DIR/hydra-lisp/hydra-scheme/src/test/scheme/hydra/annotation_bindings.scm"
+    echo "(include \"$ANN_BINDINGS_PATH\")" >> "$SCHEME_TESTGRAPH"
+    cat >> "$SCHEME_TESTGRAPH" << 'SCMEOF'
+
+(define hydra_test_test_graph_test_context (make-hydra_context_context (list) (list) hydra_lib_maps_empty))
+(define hydra_test_test_graph_test_graph
+  (let* ((all-prims (standard-library))
+         (type-to-ts hydra_rewriting_f_type_to_type_scheme)
+         (kernel-schemas (map (lambda (entry) (list (car entry) (type-to-ts (cdr entry)))) hydra_json_bootstrap_types_by_name))
+         (test-schemas (map (lambda (entry) (list (car entry) (type-to-ts (cadr entry)))) (hydra_lib_maps_to_list hydra_test_test_graph_test_types)))
+         (schema-types (hydra_lib_maps_from_list (append kernel-schemas test-schemas)))
+         (test-terms (map (lambda (entry) (list (car entry) (cdr entry))) (hydra_lib_maps_to_list hydra_test_test_graph_test_terms)))
+         (bound-terms (append
+           (map (lambda (pair) (list (car pair) (list (quote function) (list (quote primitive) (car pair))))) all-prims)
+           (annotation-bindings)
+           (list (list "hydra.monads.emptyContext" (list (quote unit) (list)))
+                 (list "hydra.lexical.emptyGraph" (list (quote unit) (list))))
+           test-terms)))
+    (make-hydra_graph_graph
+      (hydra_lib_maps_from_list bound-terms)
+      hydra_lib_maps_empty (list) (list) hydra_lib_maps_empty
+      (hydra_lib_maps_from_list (map (lambda (p) (list (car p) (cdr p))) all-prims))
+      schema-types (list))))
+))
+SCMEOF
+fi
+
+# Patch Clojure testGraph.clj to build a full graph with primitives and schema types.
+# The graph must be defined AFTER test_terms and test_types (forward reference issue).
+echo "Patching Clojure testGraph.clj..."
+CLJ_TESTGRAPH="$HYDRA_ROOT_DIR/hydra-lisp/hydra-clojure/src/gen-test/clojure/hydra/test/testGraph.clj"
+if [ -f "$CLJ_TESTGRAPH" ]; then
+    # Add required imports
+    sed -i '' 's|\[hydra.lexical :refer :all\]|[hydra.lexical :refer :all] [hydra.lib.libraries :refer :all] [hydra.rewriting :refer :all] [hydra.json.bootstrap :refer :all] [hydra.graph :refer :all] [hydra.context :refer :all] [hydra.annotation-bindings :refer [annotation-bindings]]|' "$CLJ_TESTGRAPH"
+    # Delete the empty context and empty graph defs (they'll be re-added at the end)
+    sed -i '' '/^(def hydra_test_test_graph_test_context hydra_lexical_empty_context)/d' "$CLJ_TESTGRAPH"
+    sed -i '' '/^(def hydra_test_test_graph_test_graph hydra_lexical_empty_graph)/d' "$CLJ_TESTGRAPH"
+    # Append full graph and context defs at end of file (after test_types is defined)
+    cat >> "$CLJ_TESTGRAPH" << 'CLJEOF'
+
+(def hydra_test_test_graph_test_context {:functions () :annotations () :variable_types {}})
+
+(def hydra_test_test_graph_test_graph
+  (let [std-prims (standard-library)
+        type-to-ts hydra_rewriting_f_type_to_type_scheme
+        boot-types-raw hydra_json_bootstrap_types_by_name
+        kernel-schemas (into {} (map (fn [[k v]] [k (type-to-ts v)]) boot-types-raw))
+        test-types-list (seq hydra_test_test_graph_test_types)
+        test-schemas (into {} (map (fn [[k v]] [k (type-to-ts v)]) test-types-list))
+        schema-types (merge kernel-schemas test-schemas)
+        bound-terms (merge
+          (into {} (map (fn [[k _]] [k (list :function (list :primitive k))]) std-prims))
+          (into {} (annotation-bindings))
+          (into {} (seq hydra_test_test_graph_test_terms)))]
+    {:bound_terms bound-terms
+     :bound_types {}
+     :class_constraints {}
+     :lambda_variables #{}
+     :metadata {}
+     :primitives std-prims
+     :schema_types schema-types
+     :type_variables #{}}))
+CLJEOF
+fi
+
+# Patch Common Lisp test_graph.lisp — same approach as Clojure (append at end)
+echo "Patching Common Lisp test_graph.lisp..."
+CL_TESTGRAPH="$HYDRA_ROOT_DIR/hydra-lisp/hydra-common-lisp/src/gen-test/common-lisp/hydra/test/test_graph.lisp"
+if [ -f "$CL_TESTGRAPH" ]; then
+    sed -i '' '/^(cl:defvar hydra_test_test_graph_test_context hydra_lexical_empty_context)/d' "$CL_TESTGRAPH"
+    sed -i '' '/^(cl:defvar hydra_test_test_graph_test_graph hydra_lexical_empty_graph)/d' "$CL_TESTGRAPH"
+    cat >> "$CL_TESTGRAPH" << 'CLEOF'
+
+(cl:defvar hydra_test_test_graph_test_context (cl:list (cl:cons :functions cl:nil) (cl:cons :annotations cl:nil) (cl:cons :variable_types cl:nil)))
+
+(cl:defvar hydra_test_test_graph_test_graph
+  (cl:let* ((std-prims (standard-library))
+            (type-to-ts hydra_rewriting_f_type_to_type_scheme)
+            (boot-types-raw hydra_json_bootstrap_types_by_name)
+            (kernel-schemas (cl:mapcar (cl:lambda (entry) (cl:list (cl:car entry) (cl:funcall type-to-ts (cl:cdr entry)))) (hydra_lib_maps_to_list boot-types-raw)))
+            (test-schemas (cl:mapcar (cl:lambda (entry) (cl:list (cl:car entry) (cl:funcall type-to-ts (cl:cadr entry)))) (hydra_lib_maps_to_list hydra_test_test_graph_test_types)))
+            (schema-types (hydra_lib_maps_from_list (cl:append kernel-schemas test-schemas)))
+            (prim-map (hydra_lib_maps_from_list (cl:mapcar (cl:lambda (p) (cl:list (cl:car p) (cl:cdr p))) std-prims)))
+            (bound-terms (hydra_lib_maps_from_list (cl:append (cl:mapcar (cl:lambda (p) (cl:list (cl:car p) (cl:list :function (cl:list :primitive (cl:car p))))) std-prims) (annotation-bindings) (hydra_lib_maps_to_list hydra_test_test_graph_test_terms)))))
+    (cl:list (cl:cons :bound_terms bound-terms) (cl:cons :bound_types cl:nil) (cl:cons :class_constraints cl:nil) (cl:cons :lambda_variables cl:nil) (cl:cons :metadata cl:nil) (cl:cons :primitives prim-map) (cl:cons :schema_types schema-types) (cl:cons :type_variables cl:nil))))
+CLEOF
+fi
+
+# Patch Emacs Lisp test_graph.el — same approach (append at end)
+echo "Patching Emacs Lisp test_graph.el..."
+EL_TESTGRAPH="$HYDRA_ROOT_DIR/hydra-lisp/hydra-emacs-lisp/src/gen-test/emacs-lisp/hydra/test/test_graph.el"
+if [ -f "$EL_TESTGRAPH" ]; then
+    sed -i '' '/^(setq hydra_test_test_graph_test_context hydra_lexical_empty_context)/d' "$EL_TESTGRAPH"
+    sed -i '' '/^(setq hydra_test_test_graph_test_graph hydra_lexical_empty_graph)/d' "$EL_TESTGRAPH"
+    cat >> "$EL_TESTGRAPH" << 'ELEOF'
+
+(setq hydra_test_test_graph_test_context (list (cons :functions nil) (cons :annotations nil) (cons :variable_types nil)))
+
+(setq hydra_test_test_graph_test_graph
+  (let* ((std-prims (standard-library))
+         (type-to-ts (lambda (t) (funcall hydra_rewriting_f_type_to_type_scheme t)))
+         (boot-types-raw hydra_json_bootstrap_types_by_name)
+         (kernel-schemas (mapcar (lambda (entry) (list (car entry) (funcall type-to-ts (cdr entry)))) (hydra_lib_maps_to_list boot-types-raw)))
+         (test-schemas (mapcar (lambda (entry) (list (car entry) (funcall type-to-ts (cadr entry)))) (hydra_lib_maps_to_list hydra_test_test_graph_test_types)))
+         (schema-types (hydra_lib_maps_from_list (append kernel-schemas test-schemas)))
+         (prim-map (hydra_lib_maps_from_list (mapcar (lambda (p) (list (car p) (cdr p))) std-prims)))
+         (bound-terms (hydra_lib_maps_from_list (append (mapcar (lambda (p) (list (car p) (list :function (list :primitive (car p))))) std-prims) (hydra-annotation-bindings) (hydra_lib_maps_to_list hydra_test_test_graph_test_terms)))))
+    (list (cons :bound_terms bound-terms) (cons :bound_types nil) (cons :class_constraints nil) (cons :lambda_variables nil) (cons :metadata nil) (cons :primitives prim-map) (cons :schema_types schema-types) (cons :type_variables nil))))
+ELEOF
+fi
+
 if [ "$QUICK_MODE" = false ]; then
     echo ""
     echo "Step 3: Running tests..."

@@ -62,7 +62,7 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase
         (convertCase fromConvention toConvention fromString)
         toString
     TestCaseDelegatedEvaluation _ ->
-      H.it "delegated evaluation (skipped - runs in target language)" $ H.shouldBe True True
+      H.it "delegated evaluation" $ H.shouldBe True True
     TestCaseEtaExpansion (EtaExpansionTestCase input output) -> expectEtaExpansionResult desc input output
     TestCaseEvaluation (EvaluationTestCase _ input output) ->
       H.it "evaluation" $ shouldSucceedWith
@@ -185,6 +185,9 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase
       H.it "validate core term" $ H.shouldBe
         (ValidateCore.term typed emptyGraph input)
         output
+    TestCaseUniversal (UniversalTestCase actual expected) ->
+      H.it "universal" $ H.shouldBe actual expected
+    _ -> H.it "unhandled test case type" $ H.shouldBe True True
 
 runTestCase :: String -> TestRunner -> TestCaseWithMetadata -> H.SpecWith ()
 runTestCase pdesc runner tcase@(TestCaseWithMetadata name _ mdesc _) =

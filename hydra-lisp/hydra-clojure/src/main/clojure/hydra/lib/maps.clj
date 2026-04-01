@@ -21,7 +21,6 @@
 
 ;; alter :: (Maybe v -> Maybe v) -> k -> Map k v -> Map k v
 (def hydra_lib_maps_alter
-  "Alter a value at a key using a function."
   (fn [f] (fn [k] (fn [m]
     (let [hm (to-hash-map m)
           old-maybe (if (contains? hm k)
@@ -38,7 +37,6 @@
 
 ;; bimap :: (k1 -> k2) -> (v1 -> v2) -> Map k1 v1 -> Map k2 v2
 (def hydra_lib_maps_bimap
-  "Map a function over the keys and values of a map."
   (fn [fk] (fn [fv] (fn [m]
     (reduce-kv (fn [acc k v]
                  (assoc acc (fk k) (fv v)))
@@ -47,22 +45,17 @@
 
 ;; delete :: k -> Map k v -> Map k v
 (def hydra_lib_maps_delete
-  "Remove a key from a map."
   (fn [k] (fn [m] (dissoc (to-hash-map m) k))))
 
 ;; elems :: Map k v -> [v]
 (def hydra_lib_maps_elems
-  "Get the values of a map."
   (fn [m] (vals (to-hash-map m))))
 
 ;; empty :: Map k v
-(def hydra_lib_maps_empty
-  "Create an empty map."
-  {})
+(def hydra_lib_maps_empty {})
 
 ;; filter :: (v -> Bool) -> Map k v -> Map k v
 (def hydra_lib_maps_filter
-  "Filter a map based on values."
   (fn [pred_] (fn [m]
     (reduce-kv (fn [acc k v]
                  (if (pred_ v) (assoc acc k v) acc))
@@ -71,7 +64,6 @@
 
 ;; filter_with_key :: (k -> v -> Bool) -> Map k v -> Map k v
 (def hydra_lib_maps_filter_with_key
-  "Filter a map based on key-value pairs."
   (fn [pred_] (fn [m]
     (reduce-kv (fn [acc k v]
                  (if ((pred_ k) v) (assoc acc k v) acc))
@@ -80,13 +72,11 @@
 
 ;; find_with_default :: v -> k -> Map k v -> v
 (def hydra_lib_maps_find_with_default
-  "Lookup a value with a default."
   (fn [def_] (fn [k] (fn [m]
     (get (to-hash-map m) k def_)))))
 
 ;; from_list :: [Pair k v] -> Map k v
 (def hydra_lib_maps_from_list
-  "Create a map from a list of key-value pairs."
   (fn [pairs]
     (reduce (fn [acc entry]
               (assoc acc (first entry) (second entry)))
@@ -95,17 +85,15 @@
 
 ;; insert :: k -> v -> Map k v -> Map k v
 (def hydra_lib_maps_insert
-  "Insert a key-value pair into a map."
   (fn [k] (fn [v] (fn [m] (assoc (to-hash-map m) k v)))))
 
 ;; keys :: Map k v -> [k]
+;; Returns keys in sorted order (via generic-compare) for determinism across platforms.
 (def hydra_lib_maps_keys
-  "Get the keys of a map."
-  (fn [m] (clojure.core/keys (to-hash-map m))))
+  (fn [m] (sort generic-compare (clojure.core/keys (to-hash-map m)))))
 
 ;; lookup :: k -> Map k v -> Maybe v
 (def hydra_lib_maps_lookup
-  "Lookup a value in a map."
   (fn [k] (fn [m]
     (let [hm (to-hash-map m)]
       (if (contains? hm k)
@@ -114,7 +102,6 @@
 
 ;; map :: (v1 -> v2) -> Map k v1 -> Map k v2
 (def hydra_lib_maps_map
-  "Map a function over a map."
   (fn [f] (fn [m]
     (reduce-kv (fn [acc k v]
                  (assoc acc k (f v)))
@@ -123,7 +110,6 @@
 
 ;; map_keys :: (k1 -> k2) -> Map k1 v -> Map k2 v
 (def hydra_lib_maps_map_keys
-  "Map a function over the keys of a map."
   (fn [f] (fn [m]
     (reduce-kv (fn [acc k v]
                  (assoc acc (f k) v))
@@ -132,28 +118,23 @@
 
 ;; member :: k -> Map k v -> Bool
 (def hydra_lib_maps_member
-  "Check if a key is present in a map."
   (fn [k] (fn [m] (contains? (to-hash-map m) k))))
 
 ;; null :: Map k v -> Bool
 (def hydra_lib_maps_null
-  "Check if a map is empty."
   (fn [m] (or (nil? m) (empty? m))))
 
 ;; singleton :: k -> v -> Map k v
 (def hydra_lib_maps_singleton
-  "Create a map with a single key-value pair."
   (fn [k] (fn [v] {k v})))
 
 ;; size :: Map k v -> Int
 (def hydra_lib_maps_size
-  "Get the size of a map."
   (fn [m] (count m)))
 
 ;; to_list :: Map k v -> [Pair k v]
 ;; Sort by key for deterministic output
 (def hydra_lib_maps_to_list
-  "Convert a map to a list of key-value pairs."
   (fn [m]
     (let [hm (to-hash-map m)]
       (map (fn [entry]
@@ -166,7 +147,6 @@
 
 ;; union :: Map k v -> Map k v -> Map k v (left-biased)
 (def hydra_lib_maps_union
-  "Union two maps, with the first taking precedence."
   (fn [m1] (fn [m2]
     ;; merge m2 into m1; m1 takes precedence (left-biased)
     (merge (to-hash-map m2) (to-hash-map m1)))))

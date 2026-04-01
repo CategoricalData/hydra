@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 module Hydra.Sources.Test.Json.Writer where
 
 -- Standard imports for shallow DSL tests
@@ -19,6 +21,7 @@ import Hydra.Json.Model (Value)
 import Hydra.Testing
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Json.Model as Json
+import qualified Hydra.Sources.Json.Writer as WriterModule
 
 
 ns :: Namespace
@@ -26,7 +29,7 @@ ns = Namespace "hydra.test.json.writer"
 
 module_ :: Module
 module_ = Module ns elements
-    []
+    [Namespace "hydra.json.writer"]
     kernelTypesNamespaces
     (Just "Test cases for JSON serialization")
   where
@@ -46,11 +49,16 @@ allTests = define "allTests" $
       objectsGroup,
       nestedGroup]
 
--- Helper for creating JSON writer test cases
+-- Local alias for polymorphic application
+(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
+(#) = (Phantoms.@@)
+infixl 1 #
+
+-- Helper for creating JSON writer test cases (universal)
 writerCase :: String -> TTerm Value -> String -> TTerm TestCaseWithMetadata
-writerCase name jsonValue expectedStr = testCaseWithMetadata (Phantoms.string name)
-  (testCaseJsonWriter $ jsonWriterTestCase jsonValue (Phantoms.string expectedStr))
-  Phantoms.nothing (Phantoms.list ([] :: [TTerm Tag]))
+writerCase name jsonValue expectedStr = universalCase name
+  (WriterModule.printJson # jsonValue)
+  (Phantoms.string expectedStr)
 
 primitivesGroup :: TTerm TestGroup
 primitivesGroup = subgroup "primitives" [

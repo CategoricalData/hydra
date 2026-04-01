@@ -823,6 +823,17 @@
             (list 0 1 0))))
     (error (e) (format t "FAIL: ~A~%  EXCEPTION: ~A~%" path e) (list 0 1 0))))
 
+(defun run-universal-test (path tc)
+  (let ((actual (a :actual tc))
+        (expected (a :expected tc)))
+    (if (equal actual expected)
+      (list 1 0 0)
+      (progn
+        (format t "FAIL: ~a~%" path)
+        (format t "  Expected: ~a~%" expected)
+        (format t "  Actual:   ~a~%" actual)
+        (list 0 1 0)))))
+
 (defun run-simple-test (path expected actual-fn)
   (handler-case
     (let ((actual (funcall actual-fn)))
@@ -1308,6 +1319,7 @@
                 ((eq case-type :json_encode)             (list 0 0 1)) ;; no test data (Java also skips)
                 ((eq case-type :validate_core_term)      (run-validate-core-term-test full case-data))
                 ((eq case-type :delegated_evaluation)    (list 0 0 1))
+                ((eq case-type :universal)               (run-universal-test full case-data))
                 (t (list 0 0 1))))))
     (error (e)
       (let* ((tname (cdr (assoc :name tcase)))

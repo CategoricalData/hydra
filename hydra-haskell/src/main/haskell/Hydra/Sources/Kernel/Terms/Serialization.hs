@@ -81,10 +81,10 @@ module_ = Module ns elements
      toTermDefinition bracketListAdaptive,
      toTermDefinition brackets,
      toTermDefinition commaSep,
-     toTermDefinition cst,
      toTermDefinition curlyBlock,
      toTermDefinition curlyBraces,
      toTermDefinition curlyBracesList,
+     toTermDefinition cst,
      toTermDefinition customIndent,
      toTermDefinition customIndentBlock,
      toTermDefinition dotSep,
@@ -116,9 +116,9 @@ module_ = Module ns elements
      toTermDefinition semicolonSep,
      toTermDefinition sep,
      toTermDefinition spaceSep,
-     toTermDefinition squareBrackets,
      toTermDefinition structuralSep,
      toTermDefinition structuralSpaceSep,
+     toTermDefinition squareBrackets,
      toTermDefinition suffix,
      toTermDefinition sym,
      toTermDefinition symbolSep,
@@ -153,13 +153,6 @@ bracesListAdaptive = define "bracesListAdaptive" $
     (curlyBracesList @@ nothing @@ halfBlockStyle @@ var "els")
     (var "inlineList")
 
-bracketList :: TBinding (BlockStyle -> [Expr] -> Expr)
-bracketList = define "bracketList" $
-  "style" ~> "els" ~>
-    Logic.ifElse (Lists.null $ var "els")
-      (cst @@ string "[]")
-      (brackets @@ squareBrackets @@ var "style" @@ (commaSep @@ var "style" @@ var "els"))
-
 bracketListAdaptive :: TBinding ([Expr] -> Expr)
 bracketListAdaptive = define "bracketListAdaptive" $
   doc "Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression." $
@@ -168,6 +161,13 @@ bracketListAdaptive = define "bracketListAdaptive" $
   Logic.ifElse (Equality.gt (expressionLength @@ var "inlineList") (int32 70))
     (bracketList @@ halfBlockStyle @@ var "els")
     (var "inlineList")
+
+bracketList :: TBinding (BlockStyle -> [Expr] -> Expr)
+bracketList = define "bracketList" $
+  "style" ~> "els" ~>
+    Logic.ifElse (Lists.null $ var "els")
+      (cst @@ string "[]")
+      (brackets @@ squareBrackets @@ var "style" @@ (commaSep @@ var "style" @@ var "els"))
 
 brackets :: TBinding (Brackets -> BlockStyle -> Expr -> Expr)
 brackets = define "brackets" $
@@ -199,11 +199,6 @@ curlyBracesList = define "curlyBracesList" $
       (brackets @@ curlyBraces @@ var "style" @@
         (symbolSep @@ (Maybes.fromMaybe (string ",") (var "msymb")) @@ var "style" @@ var "els"))
 
-customIndent :: TBinding (String -> String -> String)
-customIndent = define "customIndent" $
-  "idt" ~> "s" ~> Strings.cat $
-    Lists.intersperse (string "\n") $ Lists.map ("line" ~> var "idt" ++ var "line") $ Strings.lines $ var "s"
-
 customIndentBlock :: TBinding (String -> [Expr] -> Expr)
 customIndentBlock = define "customIndentBlock" $
   "idt" ~> "els" ~>
@@ -217,6 +212,11 @@ customIndentBlock = define "customIndentBlock" $
         (var "head")
         (ifx @@ var "idtOp" @@ var "head" @@ (newlineSep @@ Lists.drop (int32 1) (var "els"))))
       (Lists.safeHead $ var "els")
+
+customIndent :: TBinding (String -> String -> String)
+customIndent = define "customIndent" $
+  "idt" ~> "s" ~> Strings.cat $
+    Lists.intersperse (string "\n") $ Lists.map ("line" ~> var "idt" ++ var "line") $ Strings.lines $ var "s"
 
 dotSep :: TBinding ([Expr] -> Expr)
 dotSep = define "dotSep" $
@@ -307,13 +307,13 @@ ifx = define "ifx" $
   "op" ~> "lhs" ~> "rhs" ~>
     Ast.exprOp $ Ast.opExpr (var "op") (var "lhs") (var "rhs")
 
-indent :: TBinding (String -> String)
-indent = define "indent" $
-  customIndent @@ doubleSpace
-
 indentBlock :: TBinding ([Expr] -> Expr)
 indentBlock = define "indentBlock" $
   customIndentBlock @@ doubleSpace
+
+indent :: TBinding (String -> String)
+indent = define "indent" $
+  customIndent @@ doubleSpace
 
 indentSubsequentLines :: TBinding (String -> Expr -> Expr)
 indentSubsequentLines = define "indentSubsequentLines" $
@@ -556,10 +556,6 @@ spaceSep = define "spaceSep" $
     (Ast.precedence $ int32 0)
     Ast.associativityNone)
 
-squareBrackets :: TBinding Brackets
-squareBrackets = define "squareBrackets" $
-  Ast.brackets (Ast.symbol (string "[")) (Ast.symbol (string "]"))
-
 structuralSep :: TBinding (Op -> [Expr] -> Expr)
 structuralSep = define "structuralSep" $
   doc "Like sep, but produces a SeqExpr instead of an OpExpr chain. SeqExpr is treated as structural layout and is not subject to parenthesization." $
@@ -578,6 +574,10 @@ structuralSpaceSep = define "structuralSpaceSep" $
     (Ast.padding Ast.wsSpace Ast.wsNone)
     (Ast.precedence $ int32 0)
     Ast.associativityNone)
+
+squareBrackets :: TBinding Brackets
+squareBrackets = define "squareBrackets" $
+  Ast.brackets (Ast.symbol (string "[")) (Ast.symbol (string "]"))
 
 suffix :: TBinding (String -> Expr -> Expr)
 suffix = define "suffix" $

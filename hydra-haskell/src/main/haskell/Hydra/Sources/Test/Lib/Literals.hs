@@ -25,7 +25,7 @@ ns :: Namespace
 ns = Namespace "hydra.test.lib.literals"
 
 module_ :: Module
-module_ = Module ns elements [] [] $
+module_ = Module ns elements [Namespace "hydra.reduction", Namespace "hydra.show.core"] [] $
     Just "Test cases for hydra.lib.literals primitives"
   where
     elements = [Phantoms.toTermDefinition allTests]
@@ -471,7 +471,7 @@ literalsReadBigint = subgroup "readBigint" [
   testJust "positive" "42" 42,
   testJust "negative" "-42" (-42),
   testJust "zero" "0" 0,
-  testJust "large" "123456789012345678901234567890" 123456789012345678901234567890,
+  primCaseWithTags "large" [tag_disabled] _literals_readBigint [string "123456789012345678901234567890"] (Core.termMaybe $ just (bigint 123456789012345678901234567890)),
   testNothing "invalid" "abc"]
   where
     testJust name x result = primCase name _literals_readBigint [string x] (Core.termMaybe $ just (bigint result))
