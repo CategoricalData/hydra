@@ -77,16 +77,18 @@
   (when (file-directory-p ext-dir)
     (bootstrap-pre-declare-exports ext-dir)))
 
-;; Selective byte compilation: skip deeply nested functions that overflow
-;; Emacs's C bytecode stack. The skip list covers code gen, adaptation,
-;; type checking, and all language coders.
+;; Override byte-compile-all: skip deeply nested functions that overflow
+;; Emacs's C stack during byte-compilation or at runtime.
+;; The skip list covers code generation, adaptation, type checking, inference,
+;; and rewriting modules which have deeply recursive generated code.
+;; Ext coder modules (hydra_ext_*) ARE compiled — they need it for performance
+;; and compile+run successfully.
 (fset 'hydra-byte-compile-all
   (lambda ()
     (let ((skip-prefixes '("hydra_code_generation_" "hydra_reduction_"
                            "hydra_adapt_" "hydra_checking_" "hydra_inference_"
                            "hydra_hoisting_" "hydra_encoding_" "hydra_decoding_"
-                           "hydra_rewriting_" "hydra_schemas_"
-                           "hydra_ext_")))
+                           "hydra_rewriting_" "hydra_schemas_")))
       (let ((compiled 0) (skipped 0))
         (mapatoms
           (lambda (sym)
@@ -267,17 +269,18 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
             target)))
    (t (error "Unsupported target: %s" target))))
 
+
 ;; ============================================================================
 ;; Code generation
 ;; ============================================================================
 
 (defun bootstrap-generate-sources (coder language flags out-dir universe-mods mods-to-generate)
-  "Generate source files using CODER for LANGUAGE with FLAGS.
+  "Generate source files using the full generate_source_files pipeline.
 Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the subset to generate."
   (let* ((bs-graph (bootstrap-graph))
          (cx (funcall 'make-hydra_context_in_context nil nil))
-         (do-infer (car flags))
-         (do-expand (cadr flags))
+         (do-infer (nth 0 flags))
+         (do-expand (nth 1 flags))
          (do-hoist-case (nth 2 flags))
          (do-hoist-poly (nth 3 flags))
          (t0 (float-time))

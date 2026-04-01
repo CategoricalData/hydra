@@ -468,8 +468,8 @@ public interface Coder {
     });
   }
 
-  static <T0> hydra.util.Either<T0, hydra.ext.org.w3.shacl.model.CommonProperties> encodeType_any(java.util.function.Function<hydra.util.ConsList<hydra.ext.org.w3.shacl.model.CommonConstraint>, hydra.ext.org.w3.shacl.model.CommonProperties> hydra_ext_shacl_coder_common2) {
-    return hydra.util.Either.<T0, hydra.ext.org.w3.shacl.model.CommonProperties>right((hydra_ext_shacl_coder_common2).apply((hydra.util.ConsList<hydra.ext.org.w3.shacl.model.CommonConstraint>) (hydra.util.ConsList.<hydra.ext.org.w3.shacl.model.CommonConstraint>empty())));
+  static <T0> hydra.util.Either<T0, hydra.ext.org.w3.shacl.model.CommonProperties> encodeType_any(java.util.function.Function<hydra.util.ConsList<hydra.ext.org.w3.shacl.model.CommonConstraint>, hydra.ext.org.w3.shacl.model.CommonProperties> hydra_ext_shacl_coder_common) {
+    return hydra.util.Either.<T0, hydra.ext.org.w3.shacl.model.CommonProperties>right((hydra_ext_shacl_coder_common).apply((hydra.util.ConsList<hydra.ext.org.w3.shacl.model.CommonConstraint>) (hydra.util.ConsList.<hydra.ext.org.w3.shacl.model.CommonConstraint>empty())));
   }
 
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T0> err(hydra.context.Context cx, String msg) {

@@ -22,49 +22,49 @@ annotationSchema x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "vertexLabel"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaVertexLabel x))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Mapping.annotationSchemaVertexLabel x))},
         Core.Field {
           Core.fieldName = (Core.Name "edgeLabel"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaEdgeLabel x))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Mapping.annotationSchemaEdgeLabel x))},
         Core.Field {
           Core.fieldName = (Core.Name "vertexId"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaVertexId x))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Mapping.annotationSchemaVertexId x))},
         Core.Field {
           Core.fieldName = (Core.Name "edgeId"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaEdgeId x))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Mapping.annotationSchemaEdgeId x))},
         Core.Field {
           Core.fieldName = (Core.Name "propertyKey"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaPropertyKey x))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Mapping.annotationSchemaPropertyKey x))},
         Core.Field {
           Core.fieldName = (Core.Name "propertyValue"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaPropertyValue x))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Mapping.annotationSchemaPropertyValue x))},
         Core.Field {
           Core.fieldName = (Core.Name "outVertex"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaOutVertex x))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Mapping.annotationSchemaOutVertex x))},
         Core.Field {
           Core.fieldName = (Core.Name "outVertexLabel"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaOutVertexLabel x))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Mapping.annotationSchemaOutVertexLabel x))},
         Core.Field {
           Core.fieldName = (Core.Name "inVertex"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaInVertex x))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Mapping.annotationSchemaInVertex x))},
         Core.Field {
           Core.fieldName = (Core.Name "inVertexLabel"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaInVertexLabel x))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Mapping.annotationSchemaInVertexLabel x))},
         Core.Field {
           Core.fieldName = (Core.Name "outEdge"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaOutEdge x))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Mapping.annotationSchemaOutEdge x))},
         Core.Field {
           Core.fieldName = (Core.Name "outEdgeLabel"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaOutEdgeLabel x))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Mapping.annotationSchemaOutEdgeLabel x))},
         Core.Field {
           Core.fieldName = (Core.Name "inEdge"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaInEdge x))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Mapping.annotationSchemaInEdge x))},
         Core.Field {
           Core.fieldName = (Core.Name "inEdgeLabel"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaInEdgeLabel x))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Mapping.annotationSchemaInEdgeLabel x))},
         Core.Field {
           Core.fieldName = (Core.Name "ignore"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaIgnore x))}]})
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Mapping.annotationSchemaIgnore x))}]})
 
 edgeSpec :: Mapping.EdgeSpec -> Core.Term
 edgeSpec x =

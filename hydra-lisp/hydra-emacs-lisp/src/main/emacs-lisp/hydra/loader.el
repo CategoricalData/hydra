@@ -328,8 +328,10 @@
              (error (setq skipped (1+ skipped))))))))
     (message "Byte-compiled %d hydra functions (%d skipped)" compiled skipped)))
 
-(defun hydra-load-file (path)
-  "Load a generated Emacs Lisp file with transformations."
+(defun hydra-load-file (path &optional pre-transformed)
+  "Load a generated Emacs Lisp file with transformations.
+If PRE-TRANSFORMED is non-nil, skip the Lisp-1→Lisp-2 transformation
+\(forms are already transformed, e.g. from a cache file)."
   (with-temp-buffer
     (set-buffer-multibyte t)
     (let ((coding-system-for-read 'utf-8-unix))
@@ -341,10 +343,11 @@
           (while t
             (let ((form (read (current-buffer))))
               (unless (hydra-skip-form-p form)
-                (condition-case _err
-                    (eval (hydra-transform-form form) t)
-                  (error
-                   (push form failed-forms))))))
+                (let ((evform (if pre-transformed form (hydra-transform-form form))))
+                  (condition-case _err
+                      (eval evform t)
+                    (error
+                     (push evform failed-forms)))))))
         (end-of-file nil))
       ;; Retry failed forms
       (setq failed-forms (nreverse failed-forms))
@@ -353,7 +356,7 @@
           (let ((still-failed nil))
             (dolist (form failed-forms)
               (condition-case err
-                  (eval (hydra-transform-form form) t)
+                  (eval form t)
                 (error
                  (when (= pass 9)
                    (message "LOAD ERROR after 10 retries: %s" (error-message-string err)))
@@ -384,37 +387,56 @@
                                                          subdir-name)))))))
     result))
 
+(defvar hydra-gen-main-file-order
+  '("core.el" "error/core.el" "error/checking.el" "error/module.el"
+    "context.el" "graph.el"
+    "module.el" "ast.el" "coders.el" "phantoms.el"
+    "parsing.el" "query.el" "relational.el" "tabular.el" "testing.el"
+    "topology.el" "typing.el" "util.el" "variants.el"
+    "json/model.el" "classes.el" "constants.el" "paths.el"
+    "formatting.el" "tarjan.el" "rewriting.el" "sorting.el"
+    "names.el" "schemas.el" "arity.el" "lexical.el"
+    "literals.el" "reflect.el" "languages.el" "parsers.el"
+    "templates.el" "encoding.el" "decoding.el" "code_generation.el"
+    "hoisting.el" "show/core.el" "show/error/core.el" "show/errors.el"
+    "validate/core.el"
+    "encode/core.el" "encode/error/core.el" "encode/error/checking.el" "encode/errors.el"
+    "decode/core.el" "decode/error/core.el" "decode/error/checking.el" "decode/errors.el"
+    "extract/core.el" "extract/helpers.el" "extract/util.el" "extract/json.el"
+    "substitution.el" "annotations.el" "unification.el"
+    "inference.el" "checking.el" "serialization.el" "reduction.el"
+    "json/parser.el" "json/writer.el"
+    "json/encode.el" "json/decode.el" "json/bootstrap.el"
+    ;; Ext modules: load utils/syntax/language/serde before coders
+    "ext/haskell/syntax.el" "ext/haskell/language.el"
+    "ext/haskell/operators.el" "ext/haskell/utils.el"
+    "ext/haskell/serde.el" "ext/haskell/coder.el"
+    "ext/java/syntax.el" "ext/java/language.el" "ext/java/names.el"
+    "ext/java/environment.el" "ext/java/utils.el"
+    "ext/java/serde.el" "ext/java/coder.el"
+    "ext/lisp/syntax.el" "ext/lisp/language.el"
+    "ext/lisp/serde.el" "ext/lisp/coder.el"
+    "ext/python/syntax.el" "ext/python/language.el" "ext/python/names.el"
+    "ext/python/environment.el" "ext/python/utils.el"
+    "ext/python/serde.el" "ext/python/coder.el"
+    "ext/scala/syntax.el" "ext/scala/language.el"
+    "ext/scala/utils.el" "ext/scala/serde.el" "ext/scala/coder.el")
+  "Priority ordering for gen-main module loading.")
+
 (defun hydra-load-gen-main ()
   "Load all generated main modules, then byte-compile for performance."
   (let* ((base hydra-gen-main-dir)
-         (priority '("core.el" "error/core.el" "error/checking.el" "error/module.el"
-                     "context.el" "graph.el"
-                     "module.el" "ast.el" "coders.el" "phantoms.el"
-                     "parsing.el" "query.el" "relational.el" "tabular.el" "testing.el"
-                     "topology.el" "typing.el" "util.el" "variants.el"
-                     "json/model.el" "classes.el" "constants.el" "paths.el"
-                     "formatting.el" "tarjan.el" "rewriting.el" "sorting.el"
-                     "names.el" "schemas.el" "arity.el" "lexical.el"
-                     "literals.el" "reflect.el" "languages.el" "parsers.el"
-                     "templates.el" "encoding.el" "decoding.el" "code_generation.el"
-                     "hoisting.el" "show/core.el" "show/error/core.el" "show/errors.el"
-                     "validate/core.el"
-                     "encode/core.el" "encode/error/core.el" "encode/error/checking.el" "encode/errors.el"
-                     "decode/core.el" "decode/error/core.el" "decode/error/checking.el" "decode/errors.el"
-                     "extract/core.el" "extract/helpers.el" "extract/util.el" "extract/json.el"
-                     "substitution.el" "annotations.el" "unification.el"
-                     "inference.el" "checking.el" "serialization.el" "reduction.el"
-                     "json/parser.el" "json/writer.el"
-                     "json/encode.el" "json/decode.el" "json/bootstrap.el"))
          (all-files (hydra-collect-el-files base))
-         (remaining (cl-remove-if (lambda (f) (member f priority)) all-files))
-         (ordered (append priority (sort (copy-sequence remaining) #'string<))))
+         (remaining (cl-remove-if (lambda (f) (or (member f hydra-gen-main-file-order)
+                                                   (string-prefix-p "eval/lib/" f)))
+                                  all-files))
+         (ordered (append hydra-gen-main-file-order (sort (copy-sequence remaining) #'string<))))
     (dolist (f ordered)
       (let ((path (expand-file-name f base)))
         (when (file-exists-p path)
           (message "Loading %s..." f)
           (hydra-load-file path))))
-    ;; Byte-compile all loaded functions for ~13x speedup on curried calls
+    (hydra-set-function-bindings)
     (hydra-byte-compile-all)))
 
 (defun hydra-load-gen-test ()

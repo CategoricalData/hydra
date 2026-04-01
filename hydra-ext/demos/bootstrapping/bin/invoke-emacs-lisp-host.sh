@@ -68,7 +68,16 @@ fi
 # Run the EL bootstrap
 # Use --eval+load instead of -l to avoid byte-compiling the bootstrap file,
 # which can overflow the bytecode compiler's C stack on deeply nested forms.
+# Prefer Emacs 30+ with native compilation when available (5-10x faster).
+EMACS_CMD="emacs"
+if [ -x "/opt/homebrew/opt/emacs-plus@30/bin/emacs-30.2" ]; then
+    EMACS_CMD="/opt/homebrew/opt/emacs-plus@30/bin/emacs-30.2"
+elif command -v emacs > /dev/null 2>&1; then
+    EMACS_CMD="emacs"
+fi
+echo "  Emacs: $EMACS_CMD ($($EMACS_CMD --version 2>&1 | head -1))"
+
 cd "$HYDRA_EL_DIR"
-emacs --batch --no-init-file \
+$EMACS_CMD --batch --no-init-file \
      --eval "(load (expand-file-name \"src/main/emacs-lisp/hydra/bootstrap.el\") nil t)" \
      -- $EXTRA_ARGS
