@@ -1035,7 +1035,13 @@
                                           "function": {
                                             "application": {
                                               "argument": {"variable": "g"},
-                                              "function": {"variable": "hydra.test.utils.inferTestGroupTerms"}}}}},
+                                              "function": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "typeApplication": {
+                                                      "body": {"variable": "hydra.test.utils.inferTestGroupTerms"},
+                                                      "type": {"variable": "hydra.graph.Graph"}}},
+                                                  "type": {"literal": {"string": {}}}}}}}}},
                                       "function": {
                                         "typeApplication": {
                                           "body": {
@@ -2394,6 +2400,7 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
+    "hydra.error.module",
     "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",

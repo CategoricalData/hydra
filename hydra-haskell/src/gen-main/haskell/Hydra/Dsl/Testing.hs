@@ -2717,6 +2717,14 @@ testCaseUnifyTypes x =
         Core.fieldName = (Core.Name "unifyTypes"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
+testCaseUniversal :: Phantoms.TTerm Testing.UniversalTestCase -> Phantoms.TTerm Testing.TestCase
+testCaseUniversal x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "universal"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
 testCaseUnshadowVariables :: Phantoms.TTerm Testing.UnshadowVariablesTestCase -> Phantoms.TTerm Testing.TestCase
 testCaseUnshadowVariables x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
@@ -4804,6 +4812,66 @@ unifyTypesTestCaseWithSchemaTypes original newVal =
               Core.projectionTypeName = (Core.Name "hydra.testing.UnifyTypesTestCase"),
               Core.projectionField = (Core.Name "expected")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+universalTestCase :: Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm Testing.UniversalTestCase
+universalTestCase actual expected =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.UniversalTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "actual"),
+          Core.fieldTerm = (Phantoms.unTTerm actual)},
+        Core.Field {
+          Core.fieldName = (Core.Name "expected"),
+          Core.fieldTerm = (Phantoms.unTTerm expected)}]}))
+
+universalTestCaseActual :: Phantoms.TTerm Testing.UniversalTestCase -> Phantoms.TTerm String
+universalTestCaseActual x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.testing.UniversalTestCase"),
+        Core.projectionField = (Core.Name "actual")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+universalTestCaseExpected :: Phantoms.TTerm Testing.UniversalTestCase -> Phantoms.TTerm String
+universalTestCaseExpected x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.testing.UniversalTestCase"),
+        Core.projectionField = (Core.Name "expected")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+universalTestCaseWithActual :: Phantoms.TTerm Testing.UniversalTestCase -> Phantoms.TTerm String -> Phantoms.TTerm Testing.UniversalTestCase
+universalTestCaseWithActual original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.UniversalTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "actual"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "expected"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.testing.UniversalTestCase"),
+              Core.projectionField = (Core.Name "expected")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+universalTestCaseWithExpected :: Phantoms.TTerm Testing.UniversalTestCase -> Phantoms.TTerm String -> Phantoms.TTerm Testing.UniversalTestCase
+universalTestCaseWithExpected original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.UniversalTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "actual"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.testing.UniversalTestCase"),
+              Core.projectionField = (Core.Name "actual")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "expected"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
 unshadowVariablesTestCase :: Phantoms.TTerm Core.Term -> Phantoms.TTerm Core.Term -> Phantoms.TTerm Testing.UnshadowVariablesTestCase
 unshadowVariablesTestCase input output =

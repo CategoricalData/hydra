@@ -26,3 +26,19 @@ def case_convention(c: hydra.util.CaseConvention) -> str:
 
         case _:
             raise AssertionError("Unreachable: all variants handled")
+
+def comparison(c: hydra.util.Comparison) -> str:
+    r"""Show a comparison result as a string."""
+
+    match c:
+        case hydra.util.Comparison.LESS_THAN:
+            return "lessThan"
+
+        case hydra.util.Comparison.EQUAL_TO:
+            return "equalTo"
+
+        case hydra.util.Comparison.GREATER_THAN:
+            return "greaterThan"
+
+        case _:
+            raise AssertionError("Unreachable: all variants handled")

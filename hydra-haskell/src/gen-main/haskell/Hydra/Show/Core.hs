@@ -38,6 +38,11 @@ binding el =
         " = ",
         (term t)])
 
+-- | Show an Either value using given functions for left and right
+either :: (t0 -> String) -> (t1 -> String) -> Either t0 t1 -> String
+either showA showB e =
+    Eithers.either (\a -> Strings.cat2 "left(" (Strings.cat2 (showA a) ")")) (\b -> Strings.cat2 "right(" (Strings.cat2 (showB b) ")")) e
+
 -- | Show an elimination as a string
 elimination :: Core.Elimination -> String
 elimination elm =
@@ -227,9 +232,47 @@ literalType lt =
       Core.LiteralTypeInteger v0 -> integerType v0
       Core.LiteralTypeString -> "string"
 
+-- | Show a map using given functions to show keys and values
+map :: Ord t0 => ((t0 -> String) -> (t1 -> String) -> M.Map t0 t1 -> String)
+map showK showV m =
+
+      let pairStrs =
+              Lists.map (\p -> Strings.cat [
+                showK (Pairs.first p),
+                ": ",
+                (showV (Pairs.second p))]) (Maps.toList m)
+      in (Strings.cat [
+        "{",
+        (Strings.intercalate ", " pairStrs),
+        "}"])
+
+-- | Show a Maybe value using a given function to show the element
+maybe :: (t0 -> String) -> Maybe t0 -> String
+maybe f mx = Maybes.maybe "nothing" (\x -> Strings.cat2 "just(" (Strings.cat2 (f x) ")")) mx
+
+-- | Show a pair using given functions to show each element
+pair :: (t0 -> String) -> (t1 -> String) -> (t0, t1) -> String
+pair showA showB p =
+    Strings.cat [
+      "(",
+      (showA (Pairs.first p)),
+      ", ",
+      (showB (Pairs.second p)),
+      ")"]
+
 -- | A placeholder for reading terms from their serialized form. Not implemented.
 readTerm :: String -> Maybe Core.Term
 readTerm s = Just (Core.TermLiteral (Core.LiteralString s))
+
+-- | Show a set using a given function to show each element
+set :: Ord t0 => ((t0 -> String) -> S.Set t0 -> String)
+set f xs =
+
+      let elementStrs = Lists.map f (Sets.toList xs)
+      in (Strings.cat [
+        "{",
+        (Strings.intercalate ", " elementStrs),
+        "}"])
 
 -- | Show a term as a string
 term :: Core.Term -> String

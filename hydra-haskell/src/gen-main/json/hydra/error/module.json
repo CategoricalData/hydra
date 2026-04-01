@@ -1,0 +1,6 @@
+{
+  "definitions": [],
+  "description": ["Error types for module validation"],
+  "namespace": "hydra.error.module",
+  "termDependencies": [],
+  "typeDependencies": []}

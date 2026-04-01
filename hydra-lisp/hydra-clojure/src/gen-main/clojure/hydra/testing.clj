@@ -92,7 +92,7 @@
 (defrecord hydra_testing_test_generator [namespaces_for_module create_codec generate_test_file aggregator_file])
 (defn make-hydra_testing_test_generator [namespaces_for_module create_codec generate_test_file aggregator_file] (->hydra_testing_test_generator namespaces_for_module create_codec generate_test_file aggregator_file))
 
-(def hydra_testing_test_case-variants (list :alpha_conversion :case_conversion :deannotate_term :deannotate_type :delegated_evaluation :eta_expansion :flatten_let_terms :free_variables :evaluation :inference :inference_failure :json_decode :json_encode :json_parser :json_roundtrip :json_writer :lift_lambda_above_let :serialization :simplify_term :topological_sort :topological_sort_bindings :topological_sort_s_c_c :type_checking :type_checking_failure :type_reduction :normalize_type_variables :fold_over_term :rewrite_term :rewrite_type :hoist_subterms :hoist_case_statements :hoist_let_bindings :hoist_polymorphic_let_bindings :subst_in_type :variable_occurs_in_type :unify_types :join_types :unshadow_variables :validate_core_term))
+(def hydra_testing_test_case-variants (list :alpha_conversion :case_conversion :deannotate_term :deannotate_type :delegated_evaluation :eta_expansion :flatten_let_terms :free_variables :evaluation :inference :inference_failure :json_decode :json_encode :json_parser :json_roundtrip :json_writer :lift_lambda_above_let :serialization :simplify_term :topological_sort :topological_sort_bindings :topological_sort_s_c_c :type_checking :type_checking_failure :type_reduction :normalize_type_variables :fold_over_term :rewrite_term :rewrite_type :hoist_subterms :hoist_case_statements :hoist_let_bindings :hoist_polymorphic_let_bindings :subst_in_type :variable_occurs_in_type :unify_types :join_types :unshadow_variables :validate_core_term :universal))
 
 (defrecord hydra_testing_test_case_with_metadata [name case description tags])
 (defn make-hydra_testing_test_case_with_metadata [name case description tags] (->hydra_testing_test_case_with_metadata name case description tags))
@@ -147,3 +147,6 @@
 
 (defrecord hydra_testing_validate_core_term_test_case [typed input output])
 (defn make-hydra_testing_validate_core_term_test_case [typed input output] (->hydra_testing_validate_core_term_test_case typed input output))
+
+(defrecord hydra_testing_universal_test_case [actual expected])
+(defn make-hydra_testing_universal_test_case [actual expected] (->hydra_testing_universal_test_case actual expected))

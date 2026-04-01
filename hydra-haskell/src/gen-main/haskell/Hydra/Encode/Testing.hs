@@ -680,6 +680,11 @@ testCase x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "validateCoreTerm"),
           Core.fieldTerm = (validateCoreTermTestCase v0)}})
+      Testing.TestCaseUniversal v0 -> Core.TermUnion (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "universal"),
+          Core.fieldTerm = (universalTestCase v0)}})
 
 testCaseWithMetadata :: Testing.TestCaseWithMetadata -> Core.Term
 testCaseWithMetadata x =
@@ -815,6 +820,18 @@ unifyTypesTestCase x =
         Core.Field {
           Core.fieldName = (Core.Name "expected"),
           Core.fieldTerm = ((\e -> Core.TermEither (Eithers.bimap (\x -> Core.TermLiteral (Core.LiteralString x)) Typing.typeSubst e)) (Testing.unifyTypesTestCaseExpected x))}]})
+
+universalTestCase :: Testing.UniversalTestCase -> Core.Term
+universalTestCase x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.UniversalTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "actual"),
+          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Testing.universalTestCaseActual x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "expected"),
+          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Testing.universalTestCaseExpected x))}]})
 
 unshadowVariablesTestCase :: Testing.UnshadowVariablesTestCase -> Core.Term
 unshadowVariablesTestCase x =

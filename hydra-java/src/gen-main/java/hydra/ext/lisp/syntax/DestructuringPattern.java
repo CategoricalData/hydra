@@ -135,7 +135,7 @@ public abstract class DestructuringPattern implements Serializable, Comparable<D
   }
 
   /**
-   * Destructuring with a rest element: {@code [a b & rest]} (leading symbols + rest symbol)
+   * Destructuring with a rest element: [a b & rest] (leading symbols + rest symbol)
    */
   public static final class Rest extends hydra.ext.lisp.syntax.DestructuringPattern implements Serializable {
     public final hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol> value;

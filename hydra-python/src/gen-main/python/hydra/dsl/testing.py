@@ -637,6 +637,9 @@ def test_case_type_reduction(x: hydra.phantoms.TTerm[hydra.testing.TypeReduction
 def test_case_unify_types(x: hydra.phantoms.TTerm[hydra.testing.UnifyTypesTestCase]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("unifyTypes"), x.value)))))
 
+def test_case_universal(x: hydra.phantoms.TTerm[hydra.testing.UniversalTestCase]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("universal"), x.value)))))
+
 def test_case_unshadow_variables(x: hydra.phantoms.TTerm[hydra.testing.UnshadowVariablesTestCase]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("unshadowVariables"), x.value)))))
 
@@ -917,6 +920,21 @@ def unify_types_test_case_with_right(original: hydra.phantoms.TTerm[hydra.testin
 
 def unify_types_test_case_with_schema_types(original: hydra.phantoms.TTerm[hydra.testing.UnifyTypesTestCase], new_val: hydra.phantoms.TTerm[frozenlist[hydra.core.Name]]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.UnifyTypesTestCase"), (hydra.core.Field(hydra.core.Name("schemaTypes"), new_val.value), hydra.core.Field(hydra.core.Name("left"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.testing.UnifyTypesTestCase"), hydra.core.Name("left")))))))), original.value)))), hydra.core.Field(hydra.core.Name("right"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.testing.UnifyTypesTestCase"), hydra.core.Name("right")))))))), original.value)))), hydra.core.Field(hydra.core.Name("expected"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.testing.UnifyTypesTestCase"), hydra.core.Name("expected")))))))), original.value)))))))))
+
+def universal_test_case(actual: hydra.phantoms.TTerm[str], expected: hydra.phantoms.TTerm[str]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.UniversalTestCase"), (hydra.core.Field(hydra.core.Name("actual"), actual.value), hydra.core.Field(hydra.core.Name("expected"), expected.value))))))
+
+def universal_test_case_actual(x: hydra.phantoms.TTerm[hydra.testing.UniversalTestCase]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.testing.UniversalTestCase"), hydra.core.Name("actual")))))))), x.value))))
+
+def universal_test_case_expected(x: hydra.phantoms.TTerm[hydra.testing.UniversalTestCase]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.testing.UniversalTestCase"), hydra.core.Name("expected")))))))), x.value))))
+
+def universal_test_case_with_actual(original: hydra.phantoms.TTerm[hydra.testing.UniversalTestCase], new_val: hydra.phantoms.TTerm[str]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.UniversalTestCase"), (hydra.core.Field(hydra.core.Name("actual"), new_val.value), hydra.core.Field(hydra.core.Name("expected"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.testing.UniversalTestCase"), hydra.core.Name("expected")))))))), original.value)))))))))
+
+def universal_test_case_with_expected(original: hydra.phantoms.TTerm[hydra.testing.UniversalTestCase], new_val: hydra.phantoms.TTerm[str]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.UniversalTestCase"), (hydra.core.Field(hydra.core.Name("actual"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.testing.UniversalTestCase"), hydra.core.Name("actual")))))))), original.value)))), hydra.core.Field(hydra.core.Name("expected"), new_val.value))))))
 
 def unshadow_variables_test_case(input: hydra.phantoms.TTerm[hydra.core.Term], output: hydra.phantoms.TTerm[hydra.core.Term]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.UnshadowVariablesTestCase"), (hydra.core.Field(hydra.core.Name("input"), input.value), hydra.core.Field(hydra.core.Name("output"), output.value))))))

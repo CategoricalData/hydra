@@ -23,6 +23,21 @@ public interface Core {
       hydra.show.Core.term(t)));
   }
 
+  static <T0, T1> String either(java.util.function.Function<T0, String> showA, java.util.function.Function<T1, String> showB, hydra.util.Either<T0, T1> e) {
+    return hydra.lib.eithers.Either.apply(
+      (java.util.function.Function<T0, String>) (a -> hydra.lib.strings.Cat2.apply(
+        "left(",
+        hydra.lib.strings.Cat2.apply(
+          (showA).apply(a),
+          ")"))),
+      (java.util.function.Function<T1, String>) (b -> hydra.lib.strings.Cat2.apply(
+        "right(",
+        hydra.lib.strings.Cat2.apply(
+          (showB).apply(b),
+          ")"))),
+      e);
+  }
+
   static String elimination(hydra.core.Elimination elm) {
     return (elm).accept(new hydra.core.Elimination.PartialVisitor<>() {
       @Override
@@ -393,8 +408,55 @@ public interface Core {
     });
   }
 
+  static <T0, T1> String map(java.util.function.Function<T0, String> showK, java.util.function.Function<T1, String> showV, hydra.util.PersistentMap<T0, T1> m) {
+    hydra.util.Lazy<hydra.util.ConsList<String>> pairStrs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.util.Pair<T0, T1>, String>) (p -> hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+        (showK).apply(hydra.lib.pairs.First.apply(p)),
+        ": ",
+        (showV).apply(hydra.lib.pairs.Second.apply(p))))),
+      hydra.lib.maps.ToList.apply(m)));
+    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+      "{",
+      hydra.lib.strings.Intercalate.apply(
+        ", ",
+        pairStrs.get()),
+      "}"));
+  }
+
+  static <T0> String maybe(java.util.function.Function<T0, String> f, hydra.util.Maybe<T0> mx) {
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> "nothing",
+      (java.util.function.Function<T0, String>) (x -> hydra.lib.strings.Cat2.apply(
+        "just(",
+        hydra.lib.strings.Cat2.apply(
+          (f).apply(x),
+          ")"))),
+      mx);
+  }
+
+  static <T0, T1> String pair(java.util.function.Function<T0, String> showA, java.util.function.Function<T1, String> showB, hydra.util.Pair<T0, T1> p) {
+    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+      "(",
+      (showA).apply(hydra.lib.pairs.First.apply(p)),
+      ", ",
+      (showB).apply(hydra.lib.pairs.Second.apply(p)),
+      ")"));
+  }
+
   static hydra.util.Maybe<hydra.core.Term> readTerm(String s) {
     return hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.String_(s)));
+  }
+
+  static <T0> String set(java.util.function.Function<T0, String> f, hydra.util.PersistentSet<T0> xs) {
+    hydra.util.Lazy<hydra.util.ConsList<String>> elementStrs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+      f,
+      hydra.lib.sets.ToList.apply(xs)));
+    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+      "{",
+      hydra.lib.strings.Intercalate.apply(
+        ", ",
+        elementStrs.get()),
+      "}"));
   }
 
   static String term(hydra.core.Term t) {

@@ -6,43 +6,25 @@ object equality:
     case (a: Long, b: BigInt) => BigInt(a).compare(b)
     case (a: Comparable[?], _) => a.asInstanceOf[Comparable[Any]].compareTo(y)
     case _ => x.toString.compareTo(y.toString)
-
-  /** Compare two values and return a Comparison. */
   def compare[A](x: A)(y: A): hydra.util.Comparison =
     val c = cmp(x, y)
     if c < 0 then hydra.util.Comparison.lessThan
     else if c > 0 then hydra.util.Comparison.greaterThan
     else hydra.util.Comparison.equalTo
+  def equal[A](x: A)(y: A): Boolean = x == y
+  def gt[A](x: A)(y: A): Boolean = cmp(x, y) > 0
+  def gte[A](x: A)(y: A): Boolean = cmp(x, y) >= 0
+  def identity[A](x: A): A = x
+  def lt[A](x: A)(y: A): Boolean = cmp(x, y) < 0
+  def lte[A](x: A)(y: A): Boolean = cmp(x, y) <= 0
+  def max[A](x: A)(y: A): A = if cmp(x, y) >= 0 then x else y
+  def min[A](x: A)(y: A): A = if cmp(x, y) <= 0 then x else y
 
   /** Compare two Terms structurally, extracting literal values for proper numeric comparison. */
   def compareTerms(t1: hydra.core.Term, t2: hydra.core.Term): Int =
     (t1, t2) match
       case (hydra.core.Term.literal(l1), hydra.core.Term.literal(l2)) => compareLiterals(l1, l2)
       case _ => hydra.show.core.term(t1).compareTo(hydra.show.core.term(t2))
-
-  /** Check if two values are equal. */
-  def equal[A](x: A)(y: A): Boolean = x == y
-
-  /** Check if first value is greater than second. */
-  def gt[A](x: A)(y: A): Boolean = cmp(x, y) > 0
-
-  /** Check if first value is greater than or equal to second. */
-  def gte[A](x: A)(y: A): Boolean = cmp(x, y) >= 0
-
-  /** Return a value unchanged. */
-  def identity[A](x: A): A = x
-
-  /** Check if first value is less than second. */
-  def lt[A](x: A)(y: A): Boolean = cmp(x, y) < 0
-
-  /** Check if first value is less than or equal to second. */
-  def lte[A](x: A)(y: A): Boolean = cmp(x, y) <= 0
-
-  /** Return the maximum of two values. */
-  def max[A](x: A)(y: A): A = if cmp(x, y) >= 0 then x else y
-
-  /** Return the minimum of two values. */
-  def min[A](x: A)(y: A): A = if cmp(x, y) <= 0 then x else y
 
   private def compareLiterals(l1: hydra.core.Literal, l2: hydra.core.Literal): Int =
     (l1, l2) match

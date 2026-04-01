@@ -480,7 +480,8 @@ testCase cx raw =
                       (Core.Name "unifyTypes", (\input -> Eithers.map (\t -> Testing.TestCaseUnifyTypes t) (unifyTypesTestCase cx input))),
                       (Core.Name "joinTypes", (\input -> Eithers.map (\t -> Testing.TestCaseJoinTypes t) (joinTypesTestCase cx input))),
                       (Core.Name "unshadowVariables", (\input -> Eithers.map (\t -> Testing.TestCaseUnshadowVariables t) (unshadowVariablesTestCase cx input))),
-                      (Core.Name "validateCoreTerm", (\input -> Eithers.map (\t -> Testing.TestCaseValidateCoreTerm t) (validateCoreTermTestCase cx input)))]
+                      (Core.Name "validateCoreTerm", (\input -> Eithers.map (\t -> Testing.TestCaseValidateCoreTerm t) (validateCoreTermTestCase cx input))),
+                      (Core.Name "universal", (\input -> Eithers.map (\t -> Testing.TestCaseUniversal t) (universalTestCase cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
@@ -659,6 +660,24 @@ unifyTypesTestCase cx raw =
           Testing.unifyTypesTestCaseLeft = field_left,
           Testing.unifyTypesTestCaseRight = field_right,
           Testing.unifyTypesTestCaseExpected = field_expected}))))))
+      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+
+universalTestCase :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Testing.UniversalTestCase
+universalTestCase cx raw =
+    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+      Core.TermRecord v0 ->
+        let fieldMap = Helpers.toFieldMap v0
+        in (Eithers.bind (Helpers.requireField "actual" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+          Core.TermLiteral v1 -> case v1 of
+            Core.LiteralString v2 -> Right v2
+            _ -> Left (Errors.DecodingError "expected string literal")
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_actual -> Eithers.bind (Helpers.requireField "expected" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+          Core.TermLiteral v1 -> case v1 of
+            Core.LiteralString v2 -> Right v2
+            _ -> Left (Errors.DecodingError "expected string literal")
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_expected -> Right (Testing.UniversalTestCase {
+          Testing.universalTestCaseActual = field_actual,
+          Testing.universalTestCaseExpected = field_expected}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
 
 unshadowVariablesTestCase :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Testing.UnshadowVariablesTestCase

@@ -20,3 +20,11 @@ caseConvention c =
       Util.CaseConventionUpperSnake -> "UPPER_SNAKE_CASE"
       Util.CaseConventionCamel -> "camelCase"
       Util.CaseConventionPascal -> "PascalCase"
+
+-- | Show a comparison result as a string
+comparison :: Util.Comparison -> String
+comparison c =
+    case c of
+      Util.ComparisonLessThan -> "lessThan"
+      Util.ComparisonEqualTo -> "equalTo"
+      Util.ComparisonGreaterThan -> "greaterThan"

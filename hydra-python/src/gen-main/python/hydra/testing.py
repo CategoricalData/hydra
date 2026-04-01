@@ -63,10 +63,10 @@ class CaseConversionTestCase:
 
 @dataclass(frozen=True)
 class DelegatedEvaluationTestCase:
-    r"""A test case in which we delegate evaluation of an input term and an expected output term to a target programming language like Haskell, Java, or Python, checking whether the term evaluates as expected when translated into that language."""
+    r"""DEPRECATED: Delegated evaluation test case (to be removed)."""
 
-    input: Annotated[hydra.core.Term, "The first of two terms which should evaluate to the same expression"]
-    output: Annotated[hydra.core.Term, "The second of two terms which should evaluate to the same expression"]
+    input: hydra.core.Term
+    output: hydra.core.Term
 
     TYPE_ = hydra.core.Name("hydra.testing.DelegatedEvaluationTestCase")
     INPUT = hydra.core.Name("input")
@@ -422,7 +422,7 @@ class TestCaseDeannotateType(Node["DeannotateTypeTestCase"]):
     r"""A deannotate type test"""
 
 class TestCaseDelegatedEvaluation(Node["DelegatedEvaluationTestCase"]):
-    r"""A delegated evaluation test"""
+    r"""DEPRECATED: Delegated evaluation test (to be removed)"""
 
 class TestCaseEtaExpansion(Node["EtaExpansionTestCase"]):
     r"""An eta expansion test"""
@@ -526,13 +526,16 @@ class TestCaseUnshadowVariables(Node["UnshadowVariablesTestCase"]):
 class TestCaseValidateCoreTerm(Node["ValidateCoreTermTestCase"]):
     r"""A core term validation test"""
 
+class TestCaseUniversal(Node["UniversalTestCase"]):
+    r"""A universal test case (string comparison)"""
+
 class _TestCaseMeta(type):
     def __getitem__(cls, item):
         return object
 
 # A simple test case with an input and an expected output.
 class TestCase(metaclass=_TestCaseMeta):
-    r"""TestCaseAlphaConversion | TestCaseCaseConversion | TestCaseDeannotateTerm | TestCaseDeannotateType | TestCaseDelegatedEvaluation | TestCaseEtaExpansion | TestCaseFlattenLetTerms | TestCaseFreeVariables | TestCaseEvaluation | TestCaseInference | TestCaseInferenceFailure | TestCaseJsonDecode | TestCaseJsonEncode | TestCaseJsonParser | TestCaseJsonRoundtrip | TestCaseJsonWriter | TestCaseLiftLambdaAboveLet | TestCaseSerialization | TestCaseSimplifyTerm | TestCaseTopologicalSort | TestCaseTopologicalSortBindings | TestCaseTopologicalSortSCC | TestCaseTypeChecking | TestCaseTypeCheckingFailure | TestCaseTypeReduction | TestCaseNormalizeTypeVariables | TestCaseFoldOverTerm | TestCaseRewriteTerm | TestCaseRewriteType | TestCaseHoistSubterms | TestCaseHoistCaseStatements | TestCaseHoistLetBindings | TestCaseHoistPolymorphicLetBindings | TestCaseSubstInType | TestCaseVariableOccursInType | TestCaseUnifyTypes | TestCaseJoinTypes | TestCaseUnshadowVariables | TestCaseValidateCoreTerm"""
+    r"""TestCaseAlphaConversion | TestCaseCaseConversion | TestCaseDeannotateTerm | TestCaseDeannotateType | TestCaseDelegatedEvaluation | TestCaseEtaExpansion | TestCaseFlattenLetTerms | TestCaseFreeVariables | TestCaseEvaluation | TestCaseInference | TestCaseInferenceFailure | TestCaseJsonDecode | TestCaseJsonEncode | TestCaseJsonParser | TestCaseJsonRoundtrip | TestCaseJsonWriter | TestCaseLiftLambdaAboveLet | TestCaseSerialization | TestCaseSimplifyTerm | TestCaseTopologicalSort | TestCaseTopologicalSortBindings | TestCaseTopologicalSortSCC | TestCaseTypeChecking | TestCaseTypeCheckingFailure | TestCaseTypeReduction | TestCaseNormalizeTypeVariables | TestCaseFoldOverTerm | TestCaseRewriteTerm | TestCaseRewriteType | TestCaseHoistSubterms | TestCaseHoistCaseStatements | TestCaseHoistLetBindings | TestCaseHoistPolymorphicLetBindings | TestCaseSubstInType | TestCaseVariableOccursInType | TestCaseUnifyTypes | TestCaseJoinTypes | TestCaseUnshadowVariables | TestCaseValidateCoreTerm | TestCaseUniversal"""
 
     TYPE_ = hydra.core.Name("hydra.testing.TestCase")
     ALPHA_CONVERSION = hydra.core.Name("alphaConversion")
@@ -574,6 +577,7 @@ class TestCase(metaclass=_TestCaseMeta):
     JOIN_TYPES = hydra.core.Name("joinTypes")
     UNSHADOW_VARIABLES = hydra.core.Name("unshadowVariables")
     VALIDATE_CORE_TERM = hydra.core.Name("validateCoreTerm")
+    UNIVERSAL = hydra.core.Name("universal")
 
 @dataclass(frozen=True)
 class TestCaseWithMetadata:
@@ -792,3 +796,14 @@ class ValidateCoreTermTestCase:
     TYPED = hydra.core.Name("typed")
     INPUT = hydra.core.Name("input")
     OUTPUT = hydra.core.Name("output")
+
+@dataclass(frozen=True)
+class UniversalTestCase:
+    r"""A universal test case: the actual and expected values are both strings."""
+
+    actual: Annotated[str, "The actual result (a string-valued expression)"]
+    expected: Annotated[str, "The expected result (a string literal)"]
+
+    TYPE_ = hydra.core.Name("hydra.testing.UniversalTestCase")
+    ACTUAL = hydra.core.Name("actual")
+    EXPECTED = hydra.core.Name("expected")

@@ -257,34 +257,46 @@
                                     {
                                       "name": "testTerms",
                                       "term": {
-                                        "application": {
-                                          "argument": {
+                                        "typeLambda": {
+                                          "body": {
                                             "application": {
-                                              "argument": {"variable": "testCases_"},
-                                              "function": {
+                                              "argument": {
                                                 "application": {
-                                                  "argument": {"variable": "hydra.ext.haskell.testing.extractTestTerms"},
+                                                  "argument": {"variable": "testCases_"},
                                                   "function": {
-                                                    "typeApplication": {
-                                                      "body": {
+                                                    "application": {
+                                                      "argument": {
                                                         "typeApplication": {
-                                                          "body": {"function": {"primitive": "hydra.lib.lists.map"}},
-                                                          "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
-                                                      "type": {"list": {"variable": "hydra.core.Term"}}}}}}}},
-                                          "function": {
-                                            "typeApplication": {
-                                              "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
-                                              "type": {"variable": "hydra.core.Term"}}}}},
+                                                          "body": {
+                                                            "typeApplication": {
+                                                              "body": {"variable": "hydra.ext.haskell.testing.extractTestTerms"},
+                                                              "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
+                                                          "type": {"variable": "t0"}}},
+                                                      "function": {
+                                                        "typeApplication": {
+                                                          "body": {
+                                                            "typeApplication": {
+                                                              "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                              "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
+                                                          "type": {"list": {"variable": "t0"}}}}}}}},
+                                              "function": {
+                                                "typeApplication": {
+                                                  "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                                  "type": {"variable": "t0"}}}}},
+                                          "parameter": "t0"}},
                                       "type": [
                                         {
                                           "constraints": null,
-                                          "type": {"list": {"variable": "hydra.core.Term"}},
-                                          "variables": []}]},
+                                          "type": {"list": {"variable": "t0"}},
+                                          "variables": ["t0"]}]},
                                     {
                                       "name": "testBindings",
                                       "term": {
                                         "application": {
-                                          "argument": {"variable": "testTerms"},
+                                          "argument": {
+                                            "typeApplication": {
+                                              "body": {"variable": "testTerms"},
+                                              "type": {"variable": "hydra.core.Term"}}},
                                           "function": {
                                             "application": {
                                               "argument": {
@@ -433,7 +445,10 @@
                                                       "application": {
                                                         "argument": {
                                                           "application": {
-                                                            "argument": {"variable": "testTerms"},
+                                                            "argument": {
+                                                              "typeApplication": {
+                                                                "body": {"variable": "testTerms"},
+                                                                "type": {"variable": "hydra.core.Term"}}},
                                                             "function": {
                                                               "application": {
                                                                 "argument": {
@@ -1583,70 +1598,33 @@
       "term": {
         "name": "hydra.ext.haskell.testing.extractTestTerms",
         "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "Extract input and output terms from a test case"}}}],
+          "typeLambda": {
             "body": {
-              "function": {
-                "lambda": {
-                  "body": {
-                    "application": {
-                      "argument": {
-                        "application": {
-                          "argument": {"variable": "tcm"},
-                          "function": {
-                            "function": {
-                              "elimination": {
-                                "record": {"field": "case", "typeName": "hydra.testing.TestCaseWithMetadata"}}}}}},
+              "typeLambda": {
+                "body": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {
+                          "literal": {"string": "Extract input and output terms from a test case"}}}],
+                    "body": {
                       "function": {
-                        "function": {
-                          "elimination": {
-                            "union": {
-                              "cases": [
-                                {
-                                  "name": "delegatedEvaluation",
-                                  "term": {
-                                    "function": {
-                                      "lambda": {
-                                        "body": {
-                                          "list": [
-                                            {
-                                              "application": {
-                                                "argument": {"variable": "delCase"},
-                                                "function": {
-                                                  "function": {
-                                                    "elimination": {
-                                                      "record": {
-                                                        "field": "input",
-                                                        "typeName": "hydra.testing.DelegatedEvaluationTestCase"}}}}}},
-                                            {
-                                              "application": {
-                                                "argument": {"variable": "delCase"},
-                                                "function": {
-                                                  "function": {
-                                                    "elimination": {
-                                                      "record": {
-                                                        "field": "output",
-                                                        "typeName": "hydra.testing.DelegatedEvaluationTestCase"}}}}}}]},
-                                        "domain": [{"variable": "hydra.testing.DelegatedEvaluationTestCase"}],
-                                        "parameter": "delCase"}}}}],
-                              "default": [
-                                {
-                                  "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Term"}}}],
-                              "typeName": "hydra.testing.TestCase"}}}}}},
-                  "domain": [{"variable": "hydra.testing.TestCaseWithMetadata"}],
-                  "parameter": "tcm"}}}}},
+                        "lambda": {
+                          "body": {
+                            "typeApplication": {"body": {"list": []}, "type": {"variable": "t1"}}},
+                          "domain": [{"variable": "t0"}],
+                          "parameter": "tcm"}}}}},
+                "parameter": "t1"}},
+            "parameter": "t0"}},
         "type": [
           {
             "constraints": null,
             "type": {
               "function": {
-                "codomain": {"list": {"variable": "hydra.core.Term"}},
-                "domain": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
-            "variables": []}]}},
+                "codomain": {"list": {"variable": "t1"}},
+                "domain": {"variable": "t0"}}},
+            "variables": ["t0", "t1"]}]}},
     {
       "term": {
         "name": "hydra.ext.haskell.testing.findHaskellImports",
@@ -1906,7 +1884,19 @@
                                                               "application": {
                                                                 "argument": {"variable": "namespaces"},
                                                                 "function": {"variable": "hydra.ext.haskell.testing.haskellTestCodec"}}},
-                                                            "function": {"variable": "hydra.ext.haskell.testing.generateTestFileWithCodec"}}}}}}}}}}},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"variable": "hydra.ext.haskell.testing.generateTestFileWithCodec"},
+                                                                        "type": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
+                                                                            "function": {"variable": "hydra.module.Namespaces"}}}}},
+                                                                    "type": {"variable": "hydra.graph.Graph"}}},
+                                                                "type": {"literal": {"string": {}}}}}}}}}}}}}}},
                                         "domain": [
                                           {
                                             "application": {
@@ -1971,18 +1961,133 @@
       "term": {
         "name": "hydra.ext.haskell.testing.generateTestCaseWithCodec",
         "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "Generate a single test case using a TestCodec"}}}],
+          "typeLambda": {
             "body": {
+              "typeLambda": {
+                "body": {
+                  "typeLambda": {
+                    "body": {
+                      "typeLambda": {
+                        "body": {
+                          "typeLambda": {
+                            "body": {
+                              "typeLambda": {
+                                "body": {
+                                  "annotated": {
+                                    "annotation": [
+                                      {
+                                        "@key": "description",
+                                        "@value": {
+                                          "literal": {"string": "Generate a single test case using a TestCodec"}}}],
+                                    "body": {
+                                      "function": {
+                                        "lambda": {
+                                          "body": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "function": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "function": {
+                                                                "lambda": {
+                                                                  "body": {
+                                                                    "let": {
+                                                                      "bindings": [
+                                                                        {
+                                                                          "name": "name_",
+                                                                          "term": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "tcm"},
+                                                                              "function": {
+                                                                                "function": {
+                                                                                  "elimination": {
+                                                                                    "record": {"field": "name", "typeName": "hydra.testing.TestCaseWithMetadata"}}}}}},
+                                                                          "type": [
+                                                                            {
+                                                                              "constraints": null,
+                                                                              "type": {"literal": {"string": {}}},
+                                                                              "variables": []}]},
+                                                                        {
+                                                                          "name": "tcase",
+                                                                          "term": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "tcm"},
+                                                                              "function": {
+                                                                                "function": {
+                                                                                  "elimination": {
+                                                                                    "record": {"field": "case", "typeName": "hydra.testing.TestCaseWithMetadata"}}}}}},
+                                                                          "type": [
+                                                                            {
+                                                                              "constraints": null,
+                                                                              "type": {"variable": "hydra.testing.TestCase"},
+                                                                              "variables": []}]}],
+                                                                      "body": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "either": {
+                                                                                  "@right": {
+                                                                                    "typeApplication": {"body": {"list": []}, "type": {"variable": "t5"}}}}},
+                                                                              "type": {"variable": "t4"}}},
+                                                                          "type": {"list": {"variable": "t5"}}}}}},
+                                                                  "domain": [{"variable": "hydra.testing.TestCaseWithMetadata"}],
+                                                                  "parameter": "tcm"}}},
+                                                            "domain": [{"variable": "t3"}],
+                                                            "parameter": "depth"}}},
+                                                      "domain": [{"variable": "t2"}],
+                                                      "parameter": "codec"}}},
+                                                "domain": [{"variable": "t1"}],
+                                                "parameter": "namespaces"}}},
+                                          "domain": [{"variable": "t0"}],
+                                          "parameter": "g"}}}}},
+                                "parameter": "t5"}},
+                            "parameter": "t4"}},
+                        "parameter": "t3"}},
+                    "parameter": "t2"}},
+                "parameter": "t1"}},
+            "parameter": "t0"}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
               "function": {
-                "lambda": {
-                  "body": {
-                    "function": {
-                      "lambda": {
+                "codomain": {
+                  "function": {
+                    "codomain": {
+                      "function": {
+                        "codomain": {
+                          "function": {
+                            "codomain": {
+                              "function": {
+                                "codomain": {
+                                  "either": {"left": {"variable": "t4"}, "right": {"list": {"variable": "t5"}}}},
+                                "domain": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
+                            "domain": {"variable": "t3"}}},
+                        "domain": {"variable": "t2"}}},
+                    "domain": {"variable": "t1"}}},
+                "domain": {"variable": "t0"}}},
+            "variables": ["t0", "t1", "t2", "t3", "t4", "t5"]}]}},
+    {
+      "term": {
+        "name": "hydra.ext.haskell.testing.generateTestFileWithCodec",
+        "term": {
+          "typeLambda": {
+            "body": {
+              "typeLambda": {
+                "body": {
+                  "typeLambda": {
+                    "body": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "Generate a complete test file using a TestCodec"}}}],
                         "body": {
                           "function": {
                             "lambda": {
@@ -1993,995 +2098,186 @@
                                       "function": {
                                         "lambda": {
                                           "body": {
-                                            "let": {
-                                              "bindings": [
-                                                {
-                                                  "name": "name_",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "tcm"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {
-                                                            "record": {"field": "name", "typeName": "hydra.testing.TestCaseWithMetadata"}}}}}},
-                                                  "type": [
-                                                    {
-                                                      "constraints": null,
-                                                      "type": {"literal": {"string": {}}},
-                                                      "variables": []}]},
-                                                {
-                                                  "name": "tcase",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "tcm"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {
-                                                            "record": {"field": "case", "typeName": "hydra.testing.TestCaseWithMetadata"}}}}}},
-                                                  "type": [
-                                                    {
-                                                      "constraints": null,
-                                                      "type": {"variable": "hydra.testing.TestCase"},
-                                                      "variables": []}]}],
-                                              "body": {
-                                                "application": {
-                                                  "argument": {"variable": "tcase"},
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
                                                   "function": {
-                                                    "function": {
-                                                      "elimination": {
-                                                        "union": {
-                                                          "cases": [
-                                                            {
-                                                              "name": "delegatedEvaluation",
-                                                              "term": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "application": {
+                                                              "argument": {"variable": "testGroup"},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {"literal": {"integer": {"int32": 1}}},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "codec"},
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "namespaces"},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "g"},
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {"variable": "hydra.ext.haskell.testing.generateTestGroupHierarchy"},
+                                                                                              "type": {"variable": "t1"}}},
+                                                                                          "type": {"variable": "t0"}}},
+                                                                                      "type": {"variable": "hydra.testing.TestCodec"}}},
+                                                                                  "type": {"variable": "t2"}}}}}}}}}}}}},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "function": {
                                                                   "lambda": {
                                                                     "body": {
                                                                       "let": {
                                                                         "bindings": [
                                                                           {
-                                                                            "name": "input_",
+                                                                            "name": "testModuleContent",
                                                                             "term": {
                                                                               "application": {
-                                                                                "argument": {"variable": "delCase"},
-                                                                                "function": {
-                                                                                  "function": {
-                                                                                    "elimination": {
-                                                                                      "record": {
-                                                                                        "field": "input",
-                                                                                        "typeName": "hydra.testing.DelegatedEvaluationTestCase"}}}}}},
-                                                                            "type": [
-                                                                              {
-                                                                                "constraints": null,
-                                                                                "type": {"variable": "hydra.core.Term"},
-                                                                                "variables": []}]},
-                                                                          {
-                                                                            "name": "output_",
-                                                                            "term": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "delCase"},
-                                                                                "function": {
-                                                                                  "function": {
-                                                                                    "elimination": {
-                                                                                      "record": {
-                                                                                        "field": "output",
-                                                                                        "typeName": "hydra.testing.DelegatedEvaluationTestCase"}}}}}},
-                                                                            "type": [
-                                                                              {
-                                                                                "constraints": null,
-                                                                                "type": {"variable": "hydra.core.Term"},
-                                                                                "variables": []}]},
-                                                                          {
-                                                                            "name": "formattedName",
-                                                                            "term": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "name_"},
+                                                                                "argument": {"variable": "namespaces"},
                                                                                 "function": {
                                                                                   "application": {
-                                                                                    "argument": {"variable": "codec"},
+                                                                                    "argument": {"variable": "testBody"},
                                                                                     "function": {
-                                                                                      "function": {
-                                                                                        "elimination": {
-                                                                                          "record": {"field": "formatTestName", "typeName": "hydra.testing.TestCodec"}}}}}}}},
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "testGroup"},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "testModule"},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "codec"},
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"variable": "hydra.ext.haskell.testing.buildTestModuleWithCodec"},
+                                                                                                    "type": {"variable": "t0"}}}}}}}}}}}}},
                                                                             "type": [
                                                                               {
                                                                                 "constraints": null,
                                                                                 "type": {"literal": {"string": {}}},
                                                                                 "variables": []}]},
                                                                           {
-                                                                            "name": "continuationIndent",
+                                                                            "name": "ext",
                                                                             "term": {
-                                                                              "application": {
-                                                                                "argument": {"literal": {"integer": {"int32": 4}}},
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "argument": {
-                                                                                      "application": {
-                                                                                        "argument": {"literal": {"integer": {"int32": 2}}},
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "depth"},
-                                                                                            "function": {"function": {"primitive": "hydra.lib.math.mul"}}}}}},
-                                                                                    "function": {"function": {"primitive": "hydra.lib.math.add"}}}}}},
-                                                                            "type": [
-                                                                              {
-                                                                                "constraints": null,
-                                                                                "type": {"literal": {"integer": {"int32": {}}}},
-                                                                                "variables": []}]}],
-                                                                        "body": {
-                                                                          "application": {
-                                                                            "argument": {
-                                                                              "function": {
-                                                                                "lambda": {
-                                                                                  "body": {
-                                                                                    "application": {
-                                                                                      "argument": {
-                                                                                        "function": {
-                                                                                          "lambda": {
-                                                                                            "body": {
-                                                                                              "application": {
-                                                                                                "argument": {
-                                                                                                  "function": {
-                                                                                                    "lambda": {
-                                                                                                      "body": {
-                                                                                                        "let": {
-                                                                                                          "bindings": [
-                                                                                                            {
-                                                                                                              "name": "indentedInputCode",
-                                                                                                              "term": {
-                                                                                                                "application": {
-                                                                                                                  "argument": {"variable": "inputCode"},
-                                                                                                                  "function": {
-                                                                                                                    "application": {
-                                                                                                                      "argument": {"variable": "continuationIndent"},
-                                                                                                                      "function": {"variable": "hydra.ext.haskell.testing.indentContinuationLines"}}}}},
-                                                                                                              "type": [
-                                                                                                                {
-                                                                                                                  "constraints": null,
-                                                                                                                  "type": {"literal": {"string": {}}},
-                                                                                                                  "variables": []}]},
-                                                                                                            {
-                                                                                                              "name": "indentedOutputCode",
-                                                                                                              "term": {
-                                                                                                                "application": {
-                                                                                                                  "argument": {"variable": "outputCode"},
-                                                                                                                  "function": {
-                                                                                                                    "application": {
-                                                                                                                      "argument": {"variable": "continuationIndent"},
-                                                                                                                      "function": {"variable": "hydra.ext.haskell.testing.indentContinuationLines"}}}}},
-                                                                                                              "type": [
-                                                                                                                {
-                                                                                                                  "constraints": null,
-                                                                                                                  "type": {"literal": {"string": {}}},
-                                                                                                                  "variables": []}]},
-                                                                                                            {
-                                                                                                              "name": "finalOutputCode",
-                                                                                                              "term": {
-                                                                                                                "application": {
-                                                                                                                  "argument": {"variable": "typeAnnotation"},
-                                                                                                                  "function": {
-                                                                                                                    "application": {
-                                                                                                                      "argument": {
-                                                                                                                        "function": {
-                                                                                                                          "lambda": {
-                                                                                                                            "body": {
-                                                                                                                              "application": {
-                                                                                                                                "argument": {"variable": "anno"},
-                                                                                                                                "function": {
-                                                                                                                                  "application": {
-                                                                                                                                    "argument": {"variable": "indentedOutputCode"},
-                                                                                                                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                                                                                            "domain": [{"literal": {"string": {}}}],
-                                                                                                                            "parameter": "anno"}}},
-                                                                                                                      "function": {
-                                                                                                                        "application": {
-                                                                                                                          "argument": {"variable": "indentedOutputCode"},
-                                                                                                                          "function": {
-                                                                                                                            "typeApplication": {
-                                                                                                                              "body": {
-                                                                                                                                "typeApplication": {
-                                                                                                                                  "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
-                                                                                                                                  "type": {"literal": {"string": {}}}}},
-                                                                                                                              "type": {"literal": {"string": {}}}}}}}}}}},
-                                                                                                              "type": [
-                                                                                                                {
-                                                                                                                  "constraints": null,
-                                                                                                                  "type": {"literal": {"string": {}}},
-                                                                                                                  "variables": []}]}],
-                                                                                                          "body": {
-                                                                                                            "typeApplication": {
-                                                                                                              "body": {
-                                                                                                                "typeApplication": {
-                                                                                                                  "body": {
-                                                                                                                    "either": {
-                                                                                                                      "@right": {
-                                                                                                                        "list": [
-                                                                                                                          {
-                                                                                                                            "application": {
-                                                                                                                              "argument": {
-                                                                                                                                "list": [
-                                                                                                                                  {"literal": {"string": "H.it "}},
-                                                                                                                                  {
-                                                                                                                                    "application": {
-                                                                                                                                      "argument": {"variable": "formattedName"},
-                                                                                                                                      "function": {"function": {"primitive": "hydra.lib.literals.showString"}}}},
-                                                                                                                                  {"literal": {"string": " $ H.shouldBe"}}]},
-                                                                                                                              "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
-                                                                                                                          {
-                                                                                                                            "application": {
-                                                                                                                              "argument": {
-                                                                                                                                "list": [
-                                                                                                                                  {"literal": {"string": "  ("}},
-                                                                                                                                  {"variable": "indentedInputCode"},
-                                                                                                                                  {"literal": {"string": ")"}}]},
-                                                                                                                              "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
-                                                                                                                          {
-                                                                                                                            "application": {
-                                                                                                                              "argument": {
-                                                                                                                                "list": [
-                                                                                                                                  {"literal": {"string": "  ("}},
-                                                                                                                                  {"variable": "finalOutputCode"},
-                                                                                                                                  {"literal": {"string": ")"}}]},
-                                                                                                                              "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}}]}}},
-                                                                                                                  "type": {"literal": {"string": {}}}}},
-                                                                                                              "type": {"list": {"literal": {"string": {}}}}}}}},
-                                                                                                      "domain": [{"maybe": {"literal": {"string": {}}}}],
-                                                                                                      "parameter": "typeAnnotation"}}},
-                                                                                                "function": {
-                                                                                                  "application": {
-                                                                                                    "argument": {
-                                                                                                      "application": {
-                                                                                                        "argument": {"variable": "output_"},
-                                                                                                        "function": {
-                                                                                                          "application": {
-                                                                                                            "argument": {"variable": "input_"},
-                                                                                                            "function": {
-                                                                                                              "application": {
-                                                                                                                "argument": {"variable": "namespaces"},
-                                                                                                                "function": {
-                                                                                                                  "application": {
-                                                                                                                    "argument": {"variable": "g"},
-                                                                                                                    "function": {"variable": "hydra.ext.haskell.testing.generateTypeAnnotationFor"}}}}}}}}},
-                                                                                                    "function": {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {
-                                                                                                          "typeApplication": {
-                                                                                                            "body": {
-                                                                                                              "typeApplication": {
-                                                                                                                "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
-                                                                                                                "type": {"literal": {"string": {}}}}},
-                                                                                                            "type": {"maybe": {"literal": {"string": {}}}}}},
-                                                                                                        "type": {"list": {"literal": {"string": {}}}}}}}}}},
-                                                                                            "domain": [{"literal": {"string": {}}}],
-                                                                                            "parameter": "outputCode"}}},
-                                                                                      "function": {
-                                                                                        "application": {
-                                                                                          "argument": {
-                                                                                            "application": {
-                                                                                              "argument": {"variable": "g"},
-                                                                                              "function": {
-                                                                                                "application": {
-                                                                                                  "argument": {"variable": "output_"},
-                                                                                                  "function": {
-                                                                                                    "application": {
-                                                                                                      "argument": {"variable": "codec"},
-                                                                                                      "function": {
-                                                                                                        "function": {
-                                                                                                          "elimination": {
-                                                                                                            "record": {"field": "encodeTerm", "typeName": "hydra.testing.TestCodec"}}}}}}}}}},
-                                                                                          "function": {
-                                                                                            "typeApplication": {
-                                                                                              "body": {
-                                                                                                "typeApplication": {
-                                                                                                  "body": {
-                                                                                                    "typeApplication": {
-                                                                                                      "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
-                                                                                                      "type": {"literal": {"string": {}}}}},
-                                                                                                  "type": {"literal": {"string": {}}}}},
-                                                                                              "type": {"list": {"literal": {"string": {}}}}}}}}}},
-                                                                                  "domain": [{"literal": {"string": {}}}],
-                                                                                  "parameter": "inputCode"}}},
-                                                                            "function": {
                                                                               "application": {
                                                                                 "argument": {
                                                                                   "application": {
-                                                                                    "argument": {"variable": "g"},
+                                                                                    "argument": {"variable": "codec"},
                                                                                     "function": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "input_"},
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "codec"},
-                                                                                            "function": {
-                                                                                              "function": {
-                                                                                                "elimination": {
-                                                                                                  "record": {"field": "encodeTerm", "typeName": "hydra.testing.TestCodec"}}}}}}}}}},
-                                                                                "function": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
-                                                                                            "type": {"literal": {"string": {}}}}},
-                                                                                        "type": {"literal": {"string": {}}}}},
-                                                                                    "type": {"list": {"literal": {"string": {}}}}}}}}}}}},
-                                                                    "domain": [{"variable": "hydra.testing.DelegatedEvaluationTestCase"}],
-                                                                    "parameter": "delCase"}}}}],
-                                                          "default": [
-                                                            {
-                                                              "typeApplication": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {
-                                                                      "either": {
-                                                                        "@right": {
-                                                                          "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}}},
-                                                                    "type": {"literal": {"string": {}}}}},
-                                                                "type": {"list": {"literal": {"string": {}}}}}}],
-                                                          "typeName": "hydra.testing.TestCase"}}}}}}}},
-                                          "domain": [{"variable": "hydra.testing.TestCaseWithMetadata"}],
-                                          "parameter": "tcm"}}},
-                                    "domain": [{"literal": {"integer": {"int32": {}}}}],
-                                    "parameter": "depth"}}},
-                              "domain": [{"variable": "hydra.testing.TestCodec"}],
-                              "parameter": "codec"}}},
-                        "domain": [
-                          {
-                            "application": {
-                              "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                              "function": {"variable": "hydra.module.Namespaces"}}}],
-                        "parameter": "namespaces"}}},
-                  "domain": [{"variable": "hydra.graph.Graph"}],
-                  "parameter": "g"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "function": {
-                        "codomain": {
-                          "function": {
-                            "codomain": {
-                              "function": {
-                                "codomain": {
-                                  "either": {
-                                    "left": {"literal": {"string": {}}},
-                                    "right": {"list": {"literal": {"string": {}}}}}},
-                                "domain": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
-                            "domain": {"literal": {"integer": {"int32": {}}}}}},
-                        "domain": {"variable": "hydra.testing.TestCodec"}}},
-                    "domain": {
-                      "application": {
-                        "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                        "function": {"variable": "hydra.module.Namespaces"}}}}},
-                "domain": {"variable": "hydra.graph.Graph"}}},
-            "variables": []}]}},
-    {
-      "term": {
-        "name": "hydra.ext.haskell.testing.generateTestFileWithCodec",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "Generate a complete test file using a TestCodec"}}}],
-            "body": {
-              "function": {
-                "lambda": {
-                  "body": {
-                    "function": {
-                      "lambda": {
-                        "body": {
-                          "function": {
-                            "lambda": {
-                              "body": {
-                                "function": {
-                                  "lambda": {
-                                    "body": {
-                                      "function": {
-                                        "lambda": {
-                                          "body": {
-                                            "application": {
-                                              "argument": {
-                                                "application": {
-                                                  "argument": {"variable": "testGroup"},
-                                                  "function": {
-                                                    "application": {
-                                                      "argument": {"literal": {"integer": {"int32": 1}}},
-                                                      "function": {
-                                                        "application": {
-                                                          "argument": {"variable": "codec"},
-                                                          "function": {
-                                                            "application": {
-                                                              "argument": {"variable": "namespaces"},
-                                                              "function": {
-                                                                "application": {
-                                                                  "argument": {"variable": "g"},
-                                                                  "function": {"variable": "hydra.ext.haskell.testing.generateTestGroupHierarchy"}}}}}}}}}}},
-                                              "function": {
-                                                "application": {
-                                                  "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "let": {
-                                                            "bindings": [
-                                                              {
-                                                                "name": "testModuleContent",
-                                                                "term": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "namespaces"},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "testBody"},
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "testGroup"},
-                                                                            "function": {
+                                                                                      "function": {
+                                                                                        "elimination": {
+                                                                                          "record": {"field": "fileExtension", "typeName": "hydra.testing.TestCodec"}}}}}},
+                                                                                "function": {"function": {"elimination": {"wrap": "hydra.module.FileExtension"}}}}},
+                                                                            "type": [
+                                                                              {
+                                                                                "constraints": null,
+                                                                                "type": {"literal": {"string": {}}},
+                                                                                "variables": []}]},
+                                                                          {
+                                                                            "name": "ns_",
+                                                                            "term": {
                                                                               "application": {
                                                                                 "argument": {"variable": "testModule"},
                                                                                 "function": {
+                                                                                  "function": {
+                                                                                    "elimination": {"record": {"field": "namespace", "typeName": "hydra.module.Module"}}}}}},
+                                                                            "type": [
+                                                                              {
+                                                                                "constraints": null,
+                                                                                "type": {"variable": "hydra.module.Namespace"},
+                                                                                "variables": []}]},
+                                                                          {
+                                                                            "name": "specNs",
+                                                                            "term": {
+                                                                              "wrap": {
+                                                                                "body": {
                                                                                   "application": {
-                                                                                    "argument": {"variable": "codec"},
+                                                                                    "argument": {"literal": {"string": "Spec"}},
                                                                                     "function": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"variable": "hydra.ext.haskell.testing.buildTestModuleWithCodec"},
-                                                                                        "type": {
+                                                                                      "application": {
+                                                                                        "argument": {
                                                                                           "application": {
-                                                                                            "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                                                                                            "function": {"variable": "hydra.module.Namespaces"}}}}}}}}}}}}}}},
-                                                                "type": [
-                                                                  {
-                                                                    "constraints": null,
-                                                                    "type": {"literal": {"string": {}}},
-                                                                    "variables": []}]},
-                                                              {
-                                                                "name": "ext",
-                                                                "term": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "codec"},
-                                                                        "function": {
-                                                                          "function": {
-                                                                            "elimination": {
-                                                                              "record": {"field": "fileExtension", "typeName": "hydra.testing.TestCodec"}}}}}},
-                                                                    "function": {"function": {"elimination": {"wrap": "hydra.module.FileExtension"}}}}},
-                                                                "type": [
-                                                                  {
-                                                                    "constraints": null,
-                                                                    "type": {"literal": {"string": {}}},
-                                                                    "variables": []}]},
-                                                              {
-                                                                "name": "ns_",
-                                                                "term": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "testModule"},
-                                                                    "function": {
-                                                                      "function": {
-                                                                        "elimination": {"record": {"field": "namespace", "typeName": "hydra.module.Module"}}}}}},
-                                                                "type": [
-                                                                  {
-                                                                    "constraints": null,
-                                                                    "type": {"variable": "hydra.module.Namespace"},
-                                                                    "variables": []}]},
-                                                              {
-                                                                "name": "specNs",
-                                                                "term": {
-                                                                  "wrap": {
-                                                                    "body": {
-                                                                      "application": {
-                                                                        "argument": {"literal": {"string": "Spec"}},
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "argument": {
+                                                                                            "argument": {"variable": "ns_"},
+                                                                                            "function": {"function": {"elimination": {"wrap": "hydra.module.Namespace"}}}}},
+                                                                                        "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                                                                "typeName": "hydra.module.Namespace"}},
+                                                                            "type": [
+                                                                              {
+                                                                                "constraints": null,
+                                                                                "type": {"variable": "hydra.module.Namespace"},
+                                                                                "variables": []}]},
+                                                                          {
+                                                                            "name": "filePath",
+                                                                            "term": {
                                                                               "application": {
-                                                                                "argument": {"variable": "ns_"},
-                                                                                "function": {"function": {"elimination": {"wrap": "hydra.module.Namespace"}}}}},
-                                                                            "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                                    "typeName": "hydra.module.Namespace"}},
-                                                                "type": [
-                                                                  {
-                                                                    "constraints": null,
-                                                                    "type": {"variable": "hydra.module.Namespace"},
-                                                                    "variables": []}]},
-                                                              {
-                                                                "name": "filePath",
-                                                                "term": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "specNs"},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {
-                                                                          "wrap": {
-                                                                            "body": {"variable": "ext"},
-                                                                            "typeName": "hydra.module.FileExtension"}},
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "argument": {
-                                                                              "union": {
-                                                                                "field": {"name": "pascal", "term": {"unit": {}}},
-                                                                                "typeName": "hydra.util.CaseConvention"}},
-                                                                            "function": {"variable": "hydra.names.namespaceToFilePath"}}}}}}},
-                                                                "type": [
-                                                                  {
-                                                                    "constraints": null,
-                                                                    "type": {"literal": {"string": {}}},
-                                                                    "variables": []}]}],
-                                                            "body": {
-                                                              "typeApplication": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {
-                                                                      "pair": {
-                                                                        "@first": {"variable": "filePath"},
-                                                                        "@second": {"variable": "testModuleContent"}}},
-                                                                    "type": {"literal": {"string": {}}}}},
-                                                                "type": {"literal": {"string": {}}}}}}},
-                                                        "domain": [{"literal": {"string": {}}}],
-                                                        "parameter": "testBody"}}},
-                                                  "function": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "typeApplication": {
-                                                          "body": {
-                                                            "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
-                                                              "type": {"literal": {"string": {}}}}},
-                                                          "type": {
-                                                            "pair": {
-                                                              "first": {"literal": {"string": {}}},
-                                                              "second": {"literal": {"string": {}}}}}}},
-                                                      "type": {"literal": {"string": {}}}}}}}}},
-                                          "domain": [{"variable": "hydra.graph.Graph"}],
-                                          "parameter": "g"}}},
-                                    "domain": [
-                                      {
-                                        "application": {
-                                          "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                                          "function": {"variable": "hydra.module.Namespaces"}}}],
-                                    "parameter": "namespaces"}}},
-                              "domain": [{"variable": "hydra.testing.TestGroup"}],
-                              "parameter": "testGroup"}}},
-                        "domain": [{"variable": "hydra.module.Module"}],
-                        "parameter": "testModule"}}},
-                  "domain": [{"variable": "hydra.testing.TestCodec"}],
-                  "parameter": "codec"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "function": {
-                        "codomain": {
-                          "function": {
-                            "codomain": {
-                              "function": {
-                                "codomain": {
-                                  "either": {
-                                    "left": {"literal": {"string": {}}},
-                                    "right": {
-                                      "pair": {
-                                        "first": {"literal": {"string": {}}},
-                                        "second": {"literal": {"string": {}}}}}}},
-                                "domain": {"variable": "hydra.graph.Graph"}}},
-                            "domain": {
-                              "application": {
-                                "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                                "function": {"variable": "hydra.module.Namespaces"}}}}},
-                        "domain": {"variable": "hydra.testing.TestGroup"}}},
-                    "domain": {"variable": "hydra.module.Module"}}},
-                "domain": {"variable": "hydra.testing.TestCodec"}}},
-            "variables": []}]}},
-    {
-      "term": {
-        "name": "hydra.ext.haskell.testing.generateTestGroupHierarchy",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "Generate test hierarchy preserving the structure with H.describe blocks for subgroups"}}}],
-            "body": {
-              "function": {
-                "lambda": {
-                  "body": {
-                    "function": {
-                      "lambda": {
-                        "body": {
-                          "function": {
-                            "lambda": {
-                              "body": {
-                                "function": {
-                                  "lambda": {
-                                    "body": {
-                                      "function": {
-                                        "lambda": {
-                                          "body": {
-                                            "let": {
-                                              "bindings": [
-                                                {
-                                                  "name": "cases_",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "testGroup"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "cases", "typeName": "hydra.testing.TestGroup"}}}}}},
-                                                  "type": [
-                                                    {
-                                                      "constraints": null,
-                                                      "type": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}},
-                                                      "variables": []}]},
-                                                {
-                                                  "name": "subgroups",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "testGroup"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {
-                                                            "record": {"field": "subgroups", "typeName": "hydra.testing.TestGroup"}}}}}},
-                                                  "type": [
-                                                    {
-                                                      "constraints": null,
-                                                      "type": {"list": {"variable": "hydra.testing.TestGroup"}},
-                                                      "variables": []}]},
-                                                {
-                                                  "name": "indent",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {
-                                                        "application": {
-                                                          "argument": {"literal": {"integer": {"int32": 32}}},
-                                                          "function": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "application": {
-                                                                  "argument": {"literal": {"integer": {"int32": 2}}},
-                                                                  "function": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "depth"},
-                                                                      "function": {"function": {"primitive": "hydra.lib.math.mul"}}}}}},
-                                                              "function": {
-                                                                "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.lists.replicate"}},
-                                                                  "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                      "function": {"function": {"primitive": "hydra.lib.strings.fromList"}}}},
-                                                  "type": [
-                                                    {
-                                                      "constraints": null,
-                                                      "type": {"literal": {"string": {}}},
-                                                      "variables": []}]}],
-                                              "body": {
-                                                "application": {
-                                                  "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "let": {
-                                                            "bindings": [
-                                                              {
-                                                                "name": "testCaseLines",
-                                                                "term": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "testCaseLinesRaw"},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {
-                                                                          "function": {
-                                                                            "lambda": {
-                                                                              "body": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "lines_"},
-                                                                                  "function": {
-                                                                                    "application": {
-                                                                                      "argument": {
-                                                                                        "function": {
-                                                                                          "lambda": {
-                                                                                            "body": {
-                                                                                              "application": {
-                                                                                                "argument": {"variable": "line"},
-                                                                                                "function": {
-                                                                                                  "application": {
-                                                                                                    "argument": {"variable": "indent"},
-                                                                                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                                                            "domain": [{"literal": {"string": {}}}],
-                                                                                            "parameter": "line"}}},
-                                                                                      "function": {
-                                                                                        "typeApplication": {
-                                                                                          "body": {
-                                                                                            "typeApplication": {
-                                                                                              "body": {"function": {"primitive": "hydra.lib.lists.map"}},
-                                                                                              "type": {"literal": {"string": {}}}}},
-                                                                                          "type": {"literal": {"string": {}}}}}}}}},
-                                                                              "domain": [{"list": {"literal": {"string": {}}}}],
-                                                                              "parameter": "lines_"}}},
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {
-                                                                              "typeApplication": {
-                                                                                "body": {"function": {"primitive": "hydra.lib.lists.map"}},
-                                                                                "type": {"list": {"literal": {"string": {}}}}}},
-                                                                            "type": {"list": {"literal": {"string": {}}}}}}}}}},
-                                                                "type": [
-                                                                  {
-                                                                    "constraints": null,
-                                                                    "type": {"list": {"list": {"literal": {"string": {}}}}},
-                                                                    "variables": []}]},
-                                                              {
-                                                                "name": "testCasesStr",
-                                                                "term": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "testCaseLines"},
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
-                                                                            "type": {"literal": {"string": {}}}}}}},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {"literal": {"string": "\n"}},
-                                                                        "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}},
-                                                                "type": [
-                                                                  {
-                                                                    "constraints": null,
-                                                                    "type": {"literal": {"string": {}}},
-                                                                    "variables": []}]}],
-                                                            "body": {
-                                                              "application": {
-                                                                "argument": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "subgroups"},
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "argument": {
-                                                                              "function": {
-                                                                                "lambda": {
-                                                                                  "body": {
-                                                                                    "let": {
-                                                                                      "bindings": [
-                                                                                        {
-                                                                                          "name": "groupName_",
-                                                                                          "term": {
-                                                                                            "application": {
-                                                                                              "argument": {"variable": "subgroup"},
-                                                                                              "function": {
-                                                                                                "function": {
-                                                                                                  "elimination": {"record": {"field": "name", "typeName": "hydra.testing.TestGroup"}}}}}},
-                                                                                          "type": [
-                                                                                            {
-                                                                                              "constraints": null,
-                                                                                              "type": {"literal": {"string": {}}},
-                                                                                              "variables": []}]}],
-                                                                                      "body": {
-                                                                                        "application": {
-                                                                                          "argument": {
-                                                                                            "application": {
-                                                                                              "argument": {"variable": "subgroup"},
-                                                                                              "function": {
-                                                                                                "application": {
-                                                                                                  "argument": {
-                                                                                                    "application": {
-                                                                                                      "argument": {"literal": {"integer": {"int32": 1}}},
-                                                                                                      "function": {
-                                                                                                        "application": {
-                                                                                                          "argument": {"variable": "depth"},
-                                                                                                          "function": {"function": {"primitive": "hydra.lib.math.add"}}}}}},
-                                                                                                  "function": {
-                                                                                                    "application": {
-                                                                                                      "argument": {"variable": "codec"},
-                                                                                                      "function": {
-                                                                                                        "application": {
-                                                                                                          "argument": {"variable": "namespaces"},
-                                                                                                          "function": {
-                                                                                                            "application": {
-                                                                                                              "argument": {"variable": "g"},
-                                                                                                              "function": {"variable": "hydra.ext.haskell.testing.generateTestGroupHierarchy"}}}}}}}}}}},
-                                                                                          "function": {
-                                                                                            "application": {
-                                                                                              "argument": {
-                                                                                                "function": {
-                                                                                                  "lambda": {
-                                                                                                    "body": {
-                                                                                                      "application": {
-                                                                                                        "argument": {
-                                                                                                          "list": [
-                                                                                                            {"variable": "indent"},
-                                                                                                            {"literal": {"string": "H.describe "}},
-                                                                                                            {
-                                                                                                              "application": {
-                                                                                                                "argument": {"variable": "groupName_"},
-                                                                                                                "function": {"function": {"primitive": "hydra.lib.literals.showString"}}}},
-                                                                                                            {"literal": {"string": " $ do\n"}},
-                                                                                                            {"variable": "content"}]},
-                                                                                                        "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
-                                                                                                    "domain": [{"literal": {"string": {}}}],
-                                                                                                    "parameter": "content"}}},
-                                                                                              "function": {
-                                                                                                "typeApplication": {
-                                                                                                  "body": {
-                                                                                                    "typeApplication": {
-                                                                                                      "body": {
-                                                                                                        "typeApplication": {
-                                                                                                          "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
-                                                                                                          "type": {"literal": {"string": {}}}}},
-                                                                                                      "type": {"literal": {"string": {}}}}},
-                                                                                                  "type": {"literal": {"string": {}}}}}}}}}}},
-                                                                                  "domain": [{"variable": "hydra.testing.TestGroup"}],
-                                                                                  "parameter": "subgroup"}}},
-                                                                            "function": {
-                                                                              "typeApplication": {
-                                                                                "body": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
-                                                                                        "type": {"variable": "hydra.testing.TestGroup"}}},
-                                                                                    "type": {"literal": {"string": {}}}}},
-                                                                                "type": {"literal": {"string": {}}}}}}}}},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {
-                                                                          "function": {
-                                                                            "lambda": {
-                                                                              "body": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "blocks"},
-                                                                                  "function": {
-                                                                                    "application": {
-                                                                                      "argument": {"literal": {"string": "\n"}},
-                                                                                      "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}},
-                                                                              "domain": [{"list": {"literal": {"string": {}}}}],
-                                                                              "parameter": "blocks"}}},
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {
-                                                                              "typeApplication": {
-                                                                                "body": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
-                                                                                    "type": {"list": {"literal": {"string": {}}}}}},
-                                                                                "type": {"literal": {"string": {}}}}},
-                                                                            "type": {"literal": {"string": {}}}}}}}}},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "function": {
-                                                                        "lambda": {
-                                                                          "body": {
-                                                                            "application": {
-                                                                              "argument": {
-                                                                                "list": [
-                                                                                  {"variable": "testCasesStr"},
-                                                                                  {
-                                                                                    "application": {
-                                                                                      "argument": {"literal": {"string": "\n"}},
-                                                                                      "function": {
-                                                                                        "application": {
-                                                                                          "argument": {"literal": {"string": ""}},
-                                                                                          "function": {
-                                                                                            "application": {
-                                                                                              "argument": {
-                                                                                                "application": {
-                                                                                                  "argument": {
-                                                                                                    "application": {
-                                                                                                      "argument": {"literal": {"string": ""}},
-                                                                                                      "function": {
-                                                                                                        "application": {
-                                                                                                          "argument": {"variable": "subgroupsStr"},
-                                                                                                          "function": {
-                                                                                                            "typeApplication": {
-                                                                                                              "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
-                                                                                                              "type": {"literal": {"string": {}}}}}}}}},
-                                                                                                  "function": {
-                                                                                                    "application": {
-                                                                                                      "argument": {
-                                                                                                        "application": {
-                                                                                                          "argument": {"literal": {"string": ""}},
-                                                                                                          "function": {
-                                                                                                            "application": {
-                                                                                                              "argument": {"variable": "testCasesStr"},
-                                                                                                              "function": {
-                                                                                                                "typeApplication": {
-                                                                                                                  "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
-                                                                                                                  "type": {"literal": {"string": {}}}}}}}}},
-                                                                                                      "function": {"function": {"primitive": "hydra.lib.logic.or"}}}}}},
-                                                                                              "function": {
-                                                                                                "typeApplication": {
-                                                                                                  "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
-                                                                                                  "type": {"literal": {"string": {}}}}}}}}}}},
-                                                                                  {"variable": "subgroupsStr"}]},
-                                                                              "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
-                                                                          "domain": [{"literal": {"string": {}}}],
-                                                                          "parameter": "subgroupsStr"}}},
-                                                                    "function": {
-                                                                      "typeApplication": {
+                                                                                "argument": {"variable": "specNs"},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "wrap": {
+                                                                                        "body": {"variable": "ext"},
+                                                                                        "typeName": "hydra.module.FileExtension"}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "union": {
+                                                                                            "field": {"name": "pascal", "term": {"unit": {}}},
+                                                                                            "typeName": "hydra.util.CaseConvention"}},
+                                                                                        "function": {"variable": "hydra.names.namespaceToFilePath"}}}}}}},
+                                                                            "type": [
+                                                                              {
+                                                                                "constraints": null,
+                                                                                "type": {"literal": {"string": {}}},
+                                                                                "variables": []}]}],
                                                                         "body": {
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
+                                                                                "body": {
+                                                                                  "pair": {
+                                                                                    "@first": {"variable": "filePath"},
+                                                                                    "@second": {"variable": "testModuleContent"}}},
                                                                                 "type": {"literal": {"string": {}}}}},
-                                                                            "type": {"literal": {"string": {}}}}},
-                                                                        "type": {"literal": {"string": {}}}}}}}}}}},
-                                                        "domain": [{"list": {"list": {"literal": {"string": {}}}}}],
-                                                        "parameter": "testCaseLinesRaw"}}},
-                                                  "function": {
-                                                    "application": {
-                                                      "argument": {
-                                                        "application": {
-                                                          "argument": {"variable": "cases_"},
-                                                          "function": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "function": {
-                                                                  "lambda": {
-                                                                    "body": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "tc"},
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "depth"},
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "codec"},
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "namespaces"},
-                                                                                    "function": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "g"},
-                                                                                        "function": {"variable": "hydra.ext.haskell.testing.generateTestCaseWithCodec"}}}}}}}}}}},
-                                                                    "domain": [{"variable": "hydra.testing.TestCaseWithMetadata"}],
-                                                                    "parameter": "tc"}}},
+                                                                            "type": {"literal": {"string": {}}}}}}},
+                                                                    "domain": [{"literal": {"string": {}}}],
+                                                                    "parameter": "testBody"}}},
                                                               "function": {
                                                                 "typeApplication": {
                                                                   "body": {
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "typeApplication": {
-                                                                          "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
-                                                                          "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
-                                                                      "type": {"list": {"literal": {"string": {}}}}}},
-                                                                  "type": {"literal": {"string": {}}}}}}}}},
-                                                      "function": {
-                                                        "typeApplication": {
-                                                          "body": {
-                                                            "typeApplication": {
-                                                              "body": {
-                                                                "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
-                                                                  "type": {"literal": {"string": {}}}}},
-                                                              "type": {"list": {"list": {"literal": {"string": {}}}}}}},
-                                                          "type": {"literal": {"string": {}}}}}}}}}}},
+                                                                          "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
+                                                                          "type": {"literal": {"string": {}}}}},
+                                                                      "type": {
+                                                                        "pair": {
+                                                                          "first": {"literal": {"string": {}}},
+                                                                          "second": {"literal": {"string": {}}}}}}},
+                                                                  "type": {"variable": "t2"}}}}}}},
+                                                      "domain": [{"variable": "t1"}],
+                                                      "parameter": "g"}}},
+                                                "domain": [{"variable": "t0"}],
+                                                "parameter": "namespaces"}}},
                                           "domain": [{"variable": "hydra.testing.TestGroup"}],
                                           "parameter": "testGroup"}}},
-                                    "domain": [{"literal": {"integer": {"int32": {}}}}],
-                                    "parameter": "depth"}}},
+                                    "domain": [{"variable": "hydra.module.Module"}],
+                                    "parameter": "testModule"}}},
                               "domain": [{"variable": "hydra.testing.TestCodec"}],
-                              "parameter": "codec"}}},
-                        "domain": [
-                          {
-                            "application": {
-                              "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                              "function": {"variable": "hydra.module.Namespaces"}}}],
-                        "parameter": "namespaces"}}},
-                  "domain": [{"variable": "hydra.graph.Graph"}],
-                  "parameter": "g"}}}}},
+                              "parameter": "codec"}}}}},
+                    "parameter": "t2"}},
+                "parameter": "t1"}},
+            "parameter": "t0"}},
         "type": [
           {
             "constraints": null,
@@ -2997,17 +2293,477 @@
                               "function": {
                                 "codomain": {
                                   "either": {
-                                    "left": {"literal": {"string": {}}},
-                                    "right": {"literal": {"string": {}}}}},
+                                    "left": {"variable": "t2"},
+                                    "right": {
+                                      "pair": {
+                                        "first": {"literal": {"string": {}}},
+                                        "second": {"literal": {"string": {}}}}}}},
+                                "domain": {"variable": "t1"}}},
+                            "domain": {"variable": "t0"}}},
+                        "domain": {"variable": "hydra.testing.TestGroup"}}},
+                    "domain": {"variable": "hydra.module.Module"}}},
+                "domain": {"variable": "hydra.testing.TestCodec"}}},
+            "variables": ["t0", "t1", "t2"]}]}},
+    {
+      "term": {
+        "name": "hydra.ext.haskell.testing.generateTestGroupHierarchy",
+        "term": {
+          "typeLambda": {
+            "body": {
+              "typeLambda": {
+                "body": {
+                  "typeLambda": {
+                    "body": {
+                      "typeLambda": {
+                        "body": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "@key": "description",
+                                "@value": {
+                                  "literal": {
+                                    "string": "Generate test hierarchy preserving the structure with H.describe blocks for subgroups"}}}],
+                            "body": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "function": {
+                                      "lambda": {
+                                        "body": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "function": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "function": {
+                                                        "lambda": {
+                                                          "body": {
+                                                            "let": {
+                                                              "bindings": [
+                                                                {
+                                                                  "name": "cases_",
+                                                                  "term": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "testGroup"},
+                                                                      "function": {
+                                                                        "function": {
+                                                                          "elimination": {"record": {"field": "cases", "typeName": "hydra.testing.TestGroup"}}}}}},
+                                                                  "type": [
+                                                                    {
+                                                                      "constraints": null,
+                                                                      "type": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}},
+                                                                      "variables": []}]},
+                                                                {
+                                                                  "name": "subgroups",
+                                                                  "term": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "testGroup"},
+                                                                      "function": {
+                                                                        "function": {
+                                                                          "elimination": {
+                                                                            "record": {"field": "subgroups", "typeName": "hydra.testing.TestGroup"}}}}}},
+                                                                  "type": [
+                                                                    {
+                                                                      "constraints": null,
+                                                                      "type": {"list": {"variable": "hydra.testing.TestGroup"}},
+                                                                      "variables": []}]},
+                                                                {
+                                                                  "name": "indent",
+                                                                  "term": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "application": {
+                                                                          "argument": {"literal": {"integer": {"int32": 32}}},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {"literal": {"integer": {"int32": 2}}},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "depth"},
+                                                                                      "function": {"function": {"primitive": "hydra.lib.math.mul"}}}}}},
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.replicate"}},
+                                                                                  "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                      "function": {"function": {"primitive": "hydra.lib.strings.fromList"}}}},
+                                                                  "type": [
+                                                                    {
+                                                                      "constraints": null,
+                                                                      "type": {"literal": {"string": {}}},
+                                                                      "variables": []}]}],
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "function": {
+                                                                      "lambda": {
+                                                                        "body": {
+                                                                          "let": {
+                                                                            "bindings": [
+                                                                              {
+                                                                                "name": "testCaseLines",
+                                                                                "term": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "testCaseLinesRaw"},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "function": {
+                                                                                            "lambda": {
+                                                                                              "body": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "lines_"},
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "argument": {
+                                                                                                        "function": {
+                                                                                                          "lambda": {
+                                                                                                            "body": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"variable": "line"},
+                                                                                                                "function": {
+                                                                                                                  "application": {
+                                                                                                                    "argument": {"variable": "indent"},
+                                                                                                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                                                                                            "domain": [{"literal": {"string": {}}}],
+                                                                                                            "parameter": "line"}}},
+                                                                                                      "function": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {
+                                                                                                            "typeApplication": {
+                                                                                                              "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                                              "type": {"literal": {"string": {}}}}},
+                                                                                                          "type": {"literal": {"string": {}}}}}}}}},
+                                                                                              "domain": [{"list": {"literal": {"string": {}}}}],
+                                                                                              "parameter": "lines_"}}},
+                                                                                        "function": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                                "type": {"list": {"literal": {"string": {}}}}}},
+                                                                                            "type": {"list": {"literal": {"string": {}}}}}}}}}},
+                                                                                "type": [
+                                                                                  {
+                                                                                    "constraints": null,
+                                                                                    "type": {"list": {"list": {"literal": {"string": {}}}}},
+                                                                                    "variables": []}]},
+                                                                              {
+                                                                                "name": "testCasesStr",
+                                                                                "term": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "testCaseLines"},
+                                                                                        "function": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                                                                            "type": {"literal": {"string": {}}}}}}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {"literal": {"string": "\n"}},
+                                                                                        "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}},
+                                                                                "type": [
+                                                                                  {
+                                                                                    "constraints": null,
+                                                                                    "type": {"literal": {"string": {}}},
+                                                                                    "variables": []}]}],
+                                                                            "body": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "subgroups"},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "function": {
+                                                                                                "lambda": {
+                                                                                                  "body": {
+                                                                                                    "let": {
+                                                                                                      "bindings": [
+                                                                                                        {
+                                                                                                          "name": "groupName_",
+                                                                                                          "term": {
+                                                                                                            "application": {
+                                                                                                              "argument": {"variable": "subgroup"},
+                                                                                                              "function": {
+                                                                                                                "function": {
+                                                                                                                  "elimination": {"record": {"field": "name", "typeName": "hydra.testing.TestGroup"}}}}}},
+                                                                                                          "type": [
+                                                                                                            {
+                                                                                                              "constraints": null,
+                                                                                                              "type": {"literal": {"string": {}}},
+                                                                                                              "variables": []}]}],
+                                                                                                      "body": {
+                                                                                                        "application": {
+                                                                                                          "argument": {
+                                                                                                            "application": {
+                                                                                                              "argument": {"variable": "subgroup"},
+                                                                                                              "function": {
+                                                                                                                "application": {
+                                                                                                                  "argument": {
+                                                                                                                    "application": {
+                                                                                                                      "argument": {"literal": {"integer": {"int32": 1}}},
+                                                                                                                      "function": {
+                                                                                                                        "application": {
+                                                                                                                          "argument": {"variable": "depth"},
+                                                                                                                          "function": {"function": {"primitive": "hydra.lib.math.add"}}}}}},
+                                                                                                                  "function": {
+                                                                                                                    "application": {
+                                                                                                                      "argument": {"variable": "codec"},
+                                                                                                                      "function": {
+                                                                                                                        "application": {
+                                                                                                                          "argument": {"variable": "namespaces"},
+                                                                                                                          "function": {
+                                                                                                                            "application": {
+                                                                                                                              "argument": {"variable": "g"},
+                                                                                                                              "function": {
+                                                                                                                                "typeApplication": {
+                                                                                                                                  "body": {
+                                                                                                                                    "typeApplication": {
+                                                                                                                                      "body": {
+                                                                                                                                        "typeApplication": {
+                                                                                                                                          "body": {
+                                                                                                                                            "typeApplication": {
+                                                                                                                                              "body": {"variable": "hydra.ext.haskell.testing.generateTestGroupHierarchy"},
+                                                                                                                                              "type": {"variable": "t0"}}},
+                                                                                                                                          "type": {"variable": "t1"}}},
+                                                                                                                                      "type": {"variable": "t2"}}},
+                                                                                                                                  "type": {"variable": "t3"}}}}}}}}}}}}},
+                                                                                                          "function": {
+                                                                                                            "application": {
+                                                                                                              "argument": {
+                                                                                                                "function": {
+                                                                                                                  "lambda": {
+                                                                                                                    "body": {
+                                                                                                                      "application": {
+                                                                                                                        "argument": {
+                                                                                                                          "list": [
+                                                                                                                            {"variable": "indent"},
+                                                                                                                            {"literal": {"string": "H.describe "}},
+                                                                                                                            {
+                                                                                                                              "application": {
+                                                                                                                                "argument": {"variable": "groupName_"},
+                                                                                                                                "function": {"function": {"primitive": "hydra.lib.literals.showString"}}}},
+                                                                                                                            {"literal": {"string": " $ do\n"}},
+                                                                                                                            {"variable": "content"}]},
+                                                                                                                        "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                                                                                                                    "domain": [{"literal": {"string": {}}}],
+                                                                                                                    "parameter": "content"}}},
+                                                                                                              "function": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {
+                                                                                                                    "typeApplication": {
+                                                                                                                      "body": {
+                                                                                                                        "typeApplication": {
+                                                                                                                          "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
+                                                                                                                          "type": {"literal": {"string": {}}}}},
+                                                                                                                      "type": {"literal": {"string": {}}}}},
+                                                                                                                  "type": {"variable": "t3"}}}}}}}}},
+                                                                                                  "domain": [{"variable": "hydra.testing.TestGroup"}],
+                                                                                                  "parameter": "subgroup"}}},
+                                                                                            "function": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
+                                                                                                        "type": {"variable": "hydra.testing.TestGroup"}}},
+                                                                                                    "type": {"literal": {"string": {}}}}},
+                                                                                                "type": {"variable": "t3"}}}}}}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "function": {
+                                                                                            "lambda": {
+                                                                                              "body": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "blocks"},
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "argument": {"literal": {"string": "\n"}},
+                                                                                                      "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}},
+                                                                                              "domain": [{"list": {"literal": {"string": {}}}}],
+                                                                                              "parameter": "blocks"}}},
+                                                                                        "function": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
+                                                                                                    "type": {"list": {"literal": {"string": {}}}}}},
+                                                                                                "type": {"literal": {"string": {}}}}},
+                                                                                            "type": {"variable": "t3"}}}}}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "function": {
+                                                                                        "lambda": {
+                                                                                          "body": {
+                                                                                            "application": {
+                                                                                              "argument": {
+                                                                                                "list": [
+                                                                                                  {"variable": "testCasesStr"},
+                                                                                                  {
+                                                                                                    "application": {
+                                                                                                      "argument": {"literal": {"string": "\n"}},
+                                                                                                      "function": {
+                                                                                                        "application": {
+                                                                                                          "argument": {"literal": {"string": ""}},
+                                                                                                          "function": {
+                                                                                                            "application": {
+                                                                                                              "argument": {
+                                                                                                                "application": {
+                                                                                                                  "argument": {
+                                                                                                                    "application": {
+                                                                                                                      "argument": {"literal": {"string": ""}},
+                                                                                                                      "function": {
+                                                                                                                        "application": {
+                                                                                                                          "argument": {"variable": "subgroupsStr"},
+                                                                                                                          "function": {
+                                                                                                                            "typeApplication": {
+                                                                                                                              "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                                                                                              "type": {"literal": {"string": {}}}}}}}}},
+                                                                                                                  "function": {
+                                                                                                                    "application": {
+                                                                                                                      "argument": {
+                                                                                                                        "application": {
+                                                                                                                          "argument": {"literal": {"string": ""}},
+                                                                                                                          "function": {
+                                                                                                                            "application": {
+                                                                                                                              "argument": {"variable": "testCasesStr"},
+                                                                                                                              "function": {
+                                                                                                                                "typeApplication": {
+                                                                                                                                  "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                                                                                                  "type": {"literal": {"string": {}}}}}}}}},
+                                                                                                                      "function": {"function": {"primitive": "hydra.lib.logic.or"}}}}}},
+                                                                                                              "function": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                                                                  "type": {"literal": {"string": {}}}}}}}}}}},
+                                                                                                  {"variable": "subgroupsStr"}]},
+                                                                                              "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                                                                                          "domain": [{"literal": {"string": {}}}],
+                                                                                          "parameter": "subgroupsStr"}}},
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
+                                                                                                "type": {"literal": {"string": {}}}}},
+                                                                                            "type": {"literal": {"string": {}}}}},
+                                                                                        "type": {"variable": "t3"}}}}}}}}},
+                                                                        "domain": [{"list": {"list": {"literal": {"string": {}}}}}],
+                                                                        "parameter": "testCaseLinesRaw"}}},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "cases_"},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "function": {
+                                                                                  "lambda": {
+                                                                                    "body": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "tc"},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "depth"},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "codec"},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "namespaces"},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "g"},
+                                                                                                        "function": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {
+                                                                                                                          "typeApplication": {
+                                                                                                                            "body": {
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {"variable": "hydra.ext.haskell.testing.generateTestCaseWithCodec"},
+                                                                                                                                "type": {"variable": "t0"}}},
+                                                                                                                            "type": {"variable": "t1"}}},
+                                                                                                                        "type": {"variable": "t2"}}},
+                                                                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                                                "type": {"variable": "t3"}}},
+                                                                                                            "type": {"literal": {"string": {}}}}}}}}}}}}}}},
+                                                                                    "domain": [{"variable": "hydra.testing.TestCaseWithMetadata"}],
+                                                                                    "parameter": "tc"}}},
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
+                                                                                          "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
+                                                                                      "type": {"list": {"literal": {"string": {}}}}}},
+                                                                                  "type": {"variable": "t3"}}}}}}},
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                  "type": {"variable": "t3"}}},
+                                                                              "type": {"list": {"list": {"literal": {"string": {}}}}}}},
+                                                                          "type": {"literal": {"string": {}}}}}}}}}}},
+                                                          "domain": [{"variable": "hydra.testing.TestGroup"}],
+                                                          "parameter": "testGroup"}}},
+                                                    "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                    "parameter": "depth"}}},
+                                              "domain": [{"variable": "t2"}],
+                                              "parameter": "codec"}}},
+                                        "domain": [{"variable": "t1"}],
+                                        "parameter": "namespaces"}}},
+                                  "domain": [{"variable": "t0"}],
+                                  "parameter": "g"}}}}},
+                        "parameter": "t3"}},
+                    "parameter": "t2"}},
+                "parameter": "t1"}},
+            "parameter": "t0"}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {
+                  "function": {
+                    "codomain": {
+                      "function": {
+                        "codomain": {
+                          "function": {
+                            "codomain": {
+                              "function": {
+                                "codomain": {
+                                  "either": {"left": {"variable": "t3"}, "right": {"literal": {"string": {}}}}},
                                 "domain": {"variable": "hydra.testing.TestGroup"}}},
                             "domain": {"literal": {"integer": {"int32": {}}}}}},
-                        "domain": {"variable": "hydra.testing.TestCodec"}}},
-                    "domain": {
-                      "application": {
-                        "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                        "function": {"variable": "hydra.module.Namespaces"}}}}},
-                "domain": {"variable": "hydra.graph.Graph"}}},
-            "variables": []}]}},
+                        "domain": {"variable": "t2"}}},
+                    "domain": {"variable": "t1"}}},
+                "domain": {"variable": "t0"}}},
+            "variables": ["t0", "t1", "t2", "t3"]}]}},
     {
       "term": {
         "name": "hydra.ext.haskell.testing.generateTypeAnnotationFor",
@@ -4135,6 +3891,7 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
+    "hydra.error.module",
     "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",

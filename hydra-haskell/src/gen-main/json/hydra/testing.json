@@ -123,31 +123,11 @@
                 "@key": "description",
                 "@value": {
                   "literal": {
-                    "string": "A test case in which we delegate evaluation of an input term and an expected output term to a target programming language like Haskell, Java, or Python, checking whether the term evaluates as expected when translated into that language"}}}],
+                    "string": "DEPRECATED: Delegated evaluation test case (to be removed)"}}}],
             "body": {
               "record": [
-                {
-                  "name": "input",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "The first of two terms which should evaluate to the same expression"}}}],
-                      "body": {"variable": "hydra.core.Term"}}}},
-                {
-                  "name": "output",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "The second of two terms which should evaluate to the same expression"}}}],
-                      "body": {"variable": "hydra.core.Term"}}}}]}}}}},
+                {"name": "input", "type": {"variable": "hydra.core.Term"}},
+                {"name": "output", "type": {"variable": "hydra.core.Term"}}]}}}}},
     {
       "type": {
         "name": "hydra.testing.EtaExpansionTestCase",
@@ -1352,7 +1332,8 @@
                       "annotation": [
                         {
                           "@key": "description",
-                          "@value": {"literal": {"string": "A delegated evaluation test"}}}],
+                          "@value": {
+                            "literal": {"string": "DEPRECATED: Delegated evaluation test (to be removed)"}}}],
                       "body": {"variable": "hydra.testing.DelegatedEvaluationTestCase"}}}},
                 {
                   "name": "etaExpansion",
@@ -1666,7 +1647,16 @@
                         {
                           "@key": "description",
                           "@value": {"literal": {"string": "A core term validation test"}}}],
-                      "body": {"variable": "hydra.testing.ValidateCoreTermTestCase"}}}}]}}}}},
+                      "body": {"variable": "hydra.testing.ValidateCoreTermTestCase"}}}},
+                {
+                  "name": "universal",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "A universal test case (string comparison)"}}}],
+                      "body": {"variable": "hydra.testing.UniversalTestCase"}}}}]}}}}},
     {
       "type": {
         "name": "hydra.testing.TestCaseWithMetadata",
@@ -2373,7 +2363,39 @@
                           "@value": {
                             "literal": {
                               "string": "The expected validation result (Nothing if valid, Just error if invalid)"}}}],
-                      "body": {"maybe": {"variable": "hydra.error.core.InvalidTermError"}}}}}]}}}}}],
+                      "body": {"maybe": {"variable": "hydra.error.core.InvalidTermError"}}}}}]}}}}},
+    {
+      "type": {
+        "name": "hydra.testing.UniversalTestCase",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "A universal test case: the actual and expected values are both strings"}}}],
+            "body": {
+              "record": [
+                {
+                  "name": "actual",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "The actual result (a string-valued expression)"}}}],
+                      "body": {"literal": {"string": {}}}}}},
+                {
+                  "name": "expected",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The expected result (a string literal)"}}}],
+                      "body": {"literal": {"string": {}}}}}}]}}}}}],
   "description": ["A model for unit testing"],
   "namespace": "hydra.testing",
   "termDependencies": [

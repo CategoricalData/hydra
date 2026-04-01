@@ -6,6 +6,10 @@ import hydra.module.*
 
 import hydra.lib.maps
 
+lazy val testContext: hydra.context.Context = hydra.context.Context(Seq.empty, Seq.empty, Map.empty)
+
+lazy val testGraph: hydra.graph.Graph = hydra.TestSuiteRunner.buildTestGraph()
+
 lazy val testNamespace: hydra.module.Namespace = "testGraph"
 
 lazy val testSchemaNamespace: hydra.module.Namespace = "testSchemaGraph"

@@ -162,13 +162,8 @@ extractEncodedTermVariableNames graf term =
     Rewriting.foldOverTerm Coders.TraversalOrderPre (collectNames graf) Sets.empty term
 
 -- | Extract input and output terms from a test case
-extractTestTerms :: Testing.TestCaseWithMetadata -> [Core.Term]
-extractTestTerms tcm =
-    case (Testing.testCaseWithMetadataCase tcm) of
-      Testing.TestCaseDelegatedEvaluation v0 -> [
-        Testing.delegatedEvaluationTestCaseInput v0,
-        (Testing.delegatedEvaluationTestCaseOutput v0)]
-      _ -> []
+extractTestTerms :: t0 -> [t1]
+extractTestTerms tcm = []
 
 -- | Find necessary imports for Haskell based on referenced names
 findHaskellImports :: Module.Namespaces Syntax.ModuleName -> t0 -> [String]
@@ -189,38 +184,15 @@ generateHaskellTestFile testModule testGroup g =
     Eithers.bind (buildNamespacesForTestGroup testModule testGroup g) (\namespaces -> generateTestFileWithCodec (haskellTestCodec namespaces) testModule testGroup namespaces g)
 
 -- | Generate a single test case using a TestCodec
-generateTestCaseWithCodec :: Graph.Graph -> Module.Namespaces Syntax.ModuleName -> Testing.TestCodec -> Int -> Testing.TestCaseWithMetadata -> Either String [String]
+generateTestCaseWithCodec :: t0 -> t1 -> t2 -> t3 -> Testing.TestCaseWithMetadata -> Either t4 [t5]
 generateTestCaseWithCodec g namespaces codec depth tcm =
 
       let name_ = Testing.testCaseWithMetadataName tcm
           tcase = Testing.testCaseWithMetadataCase tcm
-      in case tcase of
-        Testing.TestCaseDelegatedEvaluation v0 ->
-          let input_ = Testing.delegatedEvaluationTestCaseInput v0
-              output_ = Testing.delegatedEvaluationTestCaseOutput v0
-              formattedName = Testing.testCodecFormatTestName codec name_
-              continuationIndent = Math.add (Math.mul depth 2) 4
-          in (Eithers.bind (Testing.testCodecEncodeTerm codec input_ g) (\inputCode -> Eithers.bind (Testing.testCodecEncodeTerm codec output_ g) (\outputCode -> Eithers.bind (generateTypeAnnotationFor g namespaces input_ output_) (\typeAnnotation ->
-            let indentedInputCode = indentContinuationLines continuationIndent inputCode
-                indentedOutputCode = indentContinuationLines continuationIndent outputCode
-                finalOutputCode = Maybes.maybe indentedOutputCode (\anno -> Strings.cat2 indentedOutputCode anno) typeAnnotation
-            in (Right [
-              Strings.cat [
-                "H.it ",
-                (Literals.showString formattedName),
-                " $ H.shouldBe"],
-              (Strings.cat [
-                "  (",
-                indentedInputCode,
-                ")"]),
-              (Strings.cat [
-                "  (",
-                finalOutputCode,
-                ")"])])))))
-        _ -> Right []
+      in (Right [])
 
 -- | Generate a complete test file using a TestCodec
-generateTestFileWithCodec :: Testing.TestCodec -> Module.Module -> Testing.TestGroup -> Module.Namespaces Syntax.ModuleName -> Graph.Graph -> Either String (String, String)
+generateTestFileWithCodec :: Testing.TestCodec -> Module.Module -> Testing.TestGroup -> t0 -> t1 -> Either t2 (String, String)
 generateTestFileWithCodec codec testModule testGroup namespaces g =
     Eithers.map (\testBody ->
       let testModuleContent = buildTestModuleWithCodec codec testModule testGroup testBody namespaces
@@ -231,7 +203,7 @@ generateTestFileWithCodec codec testModule testGroup namespaces g =
       in (filePath, testModuleContent)) (generateTestGroupHierarchy g namespaces codec 1 testGroup)
 
 -- | Generate test hierarchy preserving the structure with H.describe blocks for subgroups
-generateTestGroupHierarchy :: Graph.Graph -> Module.Namespaces Syntax.ModuleName -> Testing.TestCodec -> Int -> Testing.TestGroup -> Either String String
+generateTestGroupHierarchy :: t0 -> t1 -> t2 -> Int -> Testing.TestGroup -> Either t3 String
 generateTestGroupHierarchy g namespaces codec depth testGroup =
 
       let cases_ = Testing.testGroupCases testGroup

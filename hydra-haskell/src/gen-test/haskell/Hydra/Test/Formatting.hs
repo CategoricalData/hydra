@@ -4,6 +4,7 @@
 
 module Hydra.Test.Formatting where
 
+import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -33,145 +34,113 @@ caseConversionTests =
       Testing.testGroupCases = [
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#1 (lower_snake_case -> UPPER_SNAKE_CASE)",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-            Testing.caseConversionTestCaseFromConvention = Util.CaseConventionLowerSnake,
-            Testing.caseConversionTestCaseToConvention = Util.CaseConventionUpperSnake,
-            Testing.caseConversionTestCaseFromString = "a_hello_world_42_a42_42a_b",
-            Testing.caseConversionTestCaseToString = "A_HELLO_WORLD_42_A42_42A_B"})),
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Formatting.convertCase Util.CaseConventionLowerSnake Util.CaseConventionUpperSnake "a_hello_world_42_a42_42a_b"),
+            Testing.universalTestCaseExpected = "A_HELLO_WORLD_42_A42_42A_B"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#2 (lower_snake_case -> camelCase)",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-            Testing.caseConversionTestCaseFromConvention = Util.CaseConventionLowerSnake,
-            Testing.caseConversionTestCaseToConvention = Util.CaseConventionCamel,
-            Testing.caseConversionTestCaseFromString = "a_hello_world_42_a42_42a_b",
-            Testing.caseConversionTestCaseToString = "aHelloWorld42A4242aB"})),
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Formatting.convertCase Util.CaseConventionLowerSnake Util.CaseConventionCamel "a_hello_world_42_a42_42a_b"),
+            Testing.universalTestCaseExpected = "aHelloWorld42A4242aB"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#3 (lower_snake_case -> PascalCase)",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-            Testing.caseConversionTestCaseFromConvention = Util.CaseConventionLowerSnake,
-            Testing.caseConversionTestCaseToConvention = Util.CaseConventionPascal,
-            Testing.caseConversionTestCaseFromString = "a_hello_world_42_a42_42a_b",
-            Testing.caseConversionTestCaseToString = "AHelloWorld42A4242aB"})),
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Formatting.convertCase Util.CaseConventionLowerSnake Util.CaseConventionPascal "a_hello_world_42_a42_42a_b"),
+            Testing.universalTestCaseExpected = "AHelloWorld42A4242aB"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#4 (lower_snake_case -> lower_snake_case)",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-            Testing.caseConversionTestCaseFromConvention = Util.CaseConventionLowerSnake,
-            Testing.caseConversionTestCaseToConvention = Util.CaseConventionLowerSnake,
-            Testing.caseConversionTestCaseFromString = "a_hello_world_42_a42_42a_b",
-            Testing.caseConversionTestCaseToString = "a_hello_world_42_a42_42a_b"})),
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Formatting.convertCase Util.CaseConventionLowerSnake Util.CaseConventionLowerSnake "a_hello_world_42_a42_42a_b"),
+            Testing.universalTestCaseExpected = "a_hello_world_42_a42_42a_b"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#5 (UPPER_SNAKE_CASE -> lower_snake_case)",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-            Testing.caseConversionTestCaseFromConvention = Util.CaseConventionUpperSnake,
-            Testing.caseConversionTestCaseToConvention = Util.CaseConventionLowerSnake,
-            Testing.caseConversionTestCaseFromString = "A_HELLO_WORLD_42_A42_42A_B",
-            Testing.caseConversionTestCaseToString = "a_hello_world_42_a42_42a_b"})),
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Formatting.convertCase Util.CaseConventionUpperSnake Util.CaseConventionLowerSnake "A_HELLO_WORLD_42_A42_42A_B"),
+            Testing.universalTestCaseExpected = "a_hello_world_42_a42_42a_b"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#6 (UPPER_SNAKE_CASE -> camelCase)",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-            Testing.caseConversionTestCaseFromConvention = Util.CaseConventionUpperSnake,
-            Testing.caseConversionTestCaseToConvention = Util.CaseConventionCamel,
-            Testing.caseConversionTestCaseFromString = "A_HELLO_WORLD_42_A42_42A_B",
-            Testing.caseConversionTestCaseToString = "aHelloWorld42A4242aB"})),
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Formatting.convertCase Util.CaseConventionUpperSnake Util.CaseConventionCamel "A_HELLO_WORLD_42_A42_42A_B"),
+            Testing.universalTestCaseExpected = "aHelloWorld42A4242aB"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#7 (UPPER_SNAKE_CASE -> PascalCase)",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-            Testing.caseConversionTestCaseFromConvention = Util.CaseConventionUpperSnake,
-            Testing.caseConversionTestCaseToConvention = Util.CaseConventionPascal,
-            Testing.caseConversionTestCaseFromString = "A_HELLO_WORLD_42_A42_42A_B",
-            Testing.caseConversionTestCaseToString = "AHelloWorld42A4242aB"})),
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Formatting.convertCase Util.CaseConventionUpperSnake Util.CaseConventionPascal "A_HELLO_WORLD_42_A42_42A_B"),
+            Testing.universalTestCaseExpected = "AHelloWorld42A4242aB"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#8 (UPPER_SNAKE_CASE -> UPPER_SNAKE_CASE)",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-            Testing.caseConversionTestCaseFromConvention = Util.CaseConventionUpperSnake,
-            Testing.caseConversionTestCaseToConvention = Util.CaseConventionUpperSnake,
-            Testing.caseConversionTestCaseFromString = "A_HELLO_WORLD_42_A42_42A_B",
-            Testing.caseConversionTestCaseToString = "A_HELLO_WORLD_42_A42_42A_B"})),
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Formatting.convertCase Util.CaseConventionUpperSnake Util.CaseConventionUpperSnake "A_HELLO_WORLD_42_A42_42A_B"),
+            Testing.universalTestCaseExpected = "A_HELLO_WORLD_42_A42_42A_B"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#9 (camelCase -> lower_snake_case)",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-            Testing.caseConversionTestCaseFromConvention = Util.CaseConventionCamel,
-            Testing.caseConversionTestCaseToConvention = Util.CaseConventionLowerSnake,
-            Testing.caseConversionTestCaseFromString = "aHelloWorld42A4242aB",
-            Testing.caseConversionTestCaseToString = "a_hello_world42_a4242a_b"})),
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake "aHelloWorld42A4242aB"),
+            Testing.universalTestCaseExpected = "a_hello_world42_a4242a_b"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#10 (camelCase -> UPPER_SNAKE_CASE)",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-            Testing.caseConversionTestCaseFromConvention = Util.CaseConventionCamel,
-            Testing.caseConversionTestCaseToConvention = Util.CaseConventionUpperSnake,
-            Testing.caseConversionTestCaseFromString = "aHelloWorld42A4242aB",
-            Testing.caseConversionTestCaseToString = "A_HELLO_WORLD42_A4242A_B"})),
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionUpperSnake "aHelloWorld42A4242aB"),
+            Testing.universalTestCaseExpected = "A_HELLO_WORLD42_A4242A_B"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#11 (camelCase -> PascalCase)",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-            Testing.caseConversionTestCaseFromConvention = Util.CaseConventionCamel,
-            Testing.caseConversionTestCaseToConvention = Util.CaseConventionPascal,
-            Testing.caseConversionTestCaseFromString = "aHelloWorld42A4242aB",
-            Testing.caseConversionTestCaseToString = "AHelloWorld42A4242aB"})),
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionPascal "aHelloWorld42A4242aB"),
+            Testing.universalTestCaseExpected = "AHelloWorld42A4242aB"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#12 (camelCase -> camelCase)",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-            Testing.caseConversionTestCaseFromConvention = Util.CaseConventionCamel,
-            Testing.caseConversionTestCaseToConvention = Util.CaseConventionCamel,
-            Testing.caseConversionTestCaseFromString = "aHelloWorld42A4242aB",
-            Testing.caseConversionTestCaseToString = "aHelloWorld42A4242aB"})),
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionCamel "aHelloWorld42A4242aB"),
+            Testing.universalTestCaseExpected = "aHelloWorld42A4242aB"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#13 (PascalCase -> lower_snake_case)",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-            Testing.caseConversionTestCaseFromConvention = Util.CaseConventionPascal,
-            Testing.caseConversionTestCaseToConvention = Util.CaseConventionLowerSnake,
-            Testing.caseConversionTestCaseFromString = "AHelloWorld42A4242aB",
-            Testing.caseConversionTestCaseToString = "a_hello_world42_a4242a_b"})),
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Formatting.convertCase Util.CaseConventionPascal Util.CaseConventionLowerSnake "AHelloWorld42A4242aB"),
+            Testing.universalTestCaseExpected = "a_hello_world42_a4242a_b"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#14 (PascalCase -> UPPER_SNAKE_CASE)",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-            Testing.caseConversionTestCaseFromConvention = Util.CaseConventionPascal,
-            Testing.caseConversionTestCaseToConvention = Util.CaseConventionUpperSnake,
-            Testing.caseConversionTestCaseFromString = "AHelloWorld42A4242aB",
-            Testing.caseConversionTestCaseToString = "A_HELLO_WORLD42_A4242A_B"})),
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Formatting.convertCase Util.CaseConventionPascal Util.CaseConventionUpperSnake "AHelloWorld42A4242aB"),
+            Testing.universalTestCaseExpected = "A_HELLO_WORLD42_A4242A_B"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#15 (PascalCase -> camelCase)",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-            Testing.caseConversionTestCaseFromConvention = Util.CaseConventionPascal,
-            Testing.caseConversionTestCaseToConvention = Util.CaseConventionCamel,
-            Testing.caseConversionTestCaseFromString = "AHelloWorld42A4242aB",
-            Testing.caseConversionTestCaseToString = "aHelloWorld42A4242aB"})),
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Formatting.convertCase Util.CaseConventionPascal Util.CaseConventionCamel "AHelloWorld42A4242aB"),
+            Testing.universalTestCaseExpected = "aHelloWorld42A4242aB"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#16 (PascalCase -> PascalCase)",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-            Testing.caseConversionTestCaseFromConvention = Util.CaseConventionPascal,
-            Testing.caseConversionTestCaseToConvention = Util.CaseConventionPascal,
-            Testing.caseConversionTestCaseFromString = "AHelloWorld42A4242aB",
-            Testing.caseConversionTestCaseToString = "AHelloWorld42A4242aB"})),
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Formatting.convertCase Util.CaseConventionPascal Util.CaseConventionPascal "AHelloWorld42A4242aB"),
+            Testing.universalTestCaseExpected = "AHelloWorld42A4242aB"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}

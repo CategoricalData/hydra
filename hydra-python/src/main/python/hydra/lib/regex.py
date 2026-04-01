@@ -7,6 +7,11 @@ import re
 from hydra.dsl.python import Just, Maybe, NOTHING, frozenlist
 
 
+def matches(pattern: str, input: str) -> bool:
+    """Check whether an entire string matches a regex pattern."""
+    return re.fullmatch(pattern, input) is not None
+
+
 def find(pattern: str, input: str) -> Maybe[str]:
     """Find the first substring matching a regex pattern."""
     m = re.search(pattern, input)
@@ -18,11 +23,6 @@ def find(pattern: str, input: str) -> Maybe[str]:
 def find_all(pattern: str, input: str) -> frozenlist[str]:
     """Find all non-overlapping substrings matching a regex pattern."""
     return tuple(re.findall(pattern, input))
-
-
-def matches(pattern: str, input: str) -> bool:
-    """Check whether an entire string matches a regex pattern."""
-    return re.fullmatch(pattern, input) is not None
 
 
 def replace(pattern: str, replacement: str, input: str) -> str:
