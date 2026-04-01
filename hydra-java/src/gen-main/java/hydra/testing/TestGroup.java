@@ -19,22 +19,22 @@ public class TestGroup implements Serializable, Comparable<TestGroup> {
   public static final hydra.core.Name CASES = new hydra.core.Name("cases");
 
   /**
-   * The name of the test group
+   * A short name for the test group
    */
   public final String name;
 
   /**
-   * An optional description of the group
+   * An optional longer description of the test group
    */
   public final hydra.util.Maybe<String> description;
 
   /**
-   * Nested test groups
+   * Zero or more subgroups
    */
   public final hydra.util.ConsList<hydra.testing.TestGroup> subgroups;
 
   /**
-   * The test cases in this group
+   * Zero or more test cases
    */
   public final hydra.util.ConsList<hydra.testing.TestCaseWithMetadata> cases;
 
