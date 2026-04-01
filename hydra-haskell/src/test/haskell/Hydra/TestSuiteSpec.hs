@@ -97,13 +97,34 @@ writeBenchmarkJson outputPath timingsRef tg = do
     writeFile outputPath json
 
 renderBenchmarkJson :: M.Map String Double -> TestGroup -> String
-renderBenchmarkJson timings tg = "{\n" ++ renderGroup "  " (testGroupName tg) tg ++ "\n}"
+renderBenchmarkJson timings tg =
+    "{\n" ++
+    "  \"metadata\": {\n" ++
+    "    \"language\": \"haskell\"\n" ++
+    "  },\n" ++
+    "  \"groups\": [\n" ++
+    renderGroup "    " (testGroupName tg) tg ++ "\n" ++
+    "  ],\n" ++
+    "  \"summary\": {\n" ++
+    "    \"totalPassed\": " ++ show totalPassed ++ ",\n" ++
+    "    \"totalFailed\": 0,\n" ++
+    "    \"totalSkipped\": " ++ show totalSkipped ++ ",\n" ++
+    "    \"totalTimeMs\": " ++ show totalTime ++ "\n" ++
+    "  }\n" ++
+    "}"
   where
+    totalTime = Y.fromMaybe 0 $ M.lookup (testGroupName tg) timings
+    totalPassed = countCases False tg
+    totalSkipped = countCases True tg
+    countCases wantSkipped g =
+      length [() | c <- testGroupCases g, Testing.isDisabled c == wantSkipped] +
+      sum [countCases wantSkipped sub | sub <- testGroupSubgroups g]
     renderGroup indent path g =
-      indent ++ show (testGroupName g) ++ ": {\n" ++
+      indent ++ "{\n" ++
+      indent ++ "  \"name\": " ++ show (testGroupName g) ++ ",\n" ++
       indent ++ "  \"time_ms\": " ++ show (Y.fromMaybe 0 $ M.lookup path timings) ++ ",\n" ++
-      indent ++ "  \"subgroups\": {" ++
-      (if null (testGroupSubgroups g) then "}" else
+      indent ++ "  \"subgroups\": [" ++
+      (if null (testGroupSubgroups g) then "]" else
         "\n" ++ L.intercalate ",\n" [renderGroup (indent ++ "    ") (path ++ "/" ++ testGroupName sub) sub | sub <- testGroupSubgroups g] ++
-        "\n" ++ indent ++ "  }") ++
+        "\n" ++ indent ++ "  ]") ++
       "\n" ++ indent ++ "}"

@@ -16,7 +16,9 @@ fi
 echo "Patching TestGraph.hs..."
 TESTGRAPH="$OUTPUT_DIR/src/gen-test/haskell/Hydra/Test/TestGraph.hs"
 if [ -f "$TESTGRAPH" ]; then
-    sed -i '' 's/import qualified Hydra.Lexical as Lexical$/import qualified Hydra.Lexical as Lexical\nimport qualified Hydra.Test.TestEnv as TestEnv/' "$TESTGRAPH"
+    # BSD sed (macOS) requires a literal backslash-newline for multi-line replacements
+    sed -i '' 's/import qualified Hydra.Lexical as Lexical$/import qualified Hydra.Lexical as Lexical\
+import qualified Hydra.Test.TestEnv as TestEnv/' "$TESTGRAPH"
     sed -i '' 's/testGraph = Lexical.emptyGraph/testGraph = TestEnv.testGraph testTypes/' "$TESTGRAPH"
     sed -i '' 's/testContext = Lexical.emptyContext/testContext = TestEnv.testContext/' "$TESTGRAPH"
 fi
