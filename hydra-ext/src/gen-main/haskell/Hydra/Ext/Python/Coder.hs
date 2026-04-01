@@ -1128,7 +1128,7 @@ encodeTermMultiline cx env term =
                 in (Eithers.bind (Schemas.requireUnionType cx (pythonEnvironmentGetGraph env) tname) (\rt ->
                   let isEnum = Schemas.isEnumRowType rt
                       isFull = isCasesFull rt cases_
-                  in (Eithers.bind (encodeTermInline cx env False arg) (\pyArg -> Eithers.bind (Eithers.mapList (encodeCaseBlock cx env tname rt isEnum (\e -> \t -> encodeTermMultiline cx e t)) (deduplicateCaseVariables cases_)) (\pyCases -> Eithers.bind (encodeDefaultCaseBlock (\t -> encodeTermInline cx env False t) isFull dflt tname) (\pyDflt ->
+                  in (Eithers.bind (encodeTermInline cx env False arg) (\pyArg -> Eithers.bind (Eithers.mapList (encodeCaseBlock cx env tname rt isEnum (\e2 -> \t -> encodeTermMultiline cx e2 t)) (deduplicateCaseVariables cases_)) (\pyCases -> Eithers.bind (encodeDefaultCaseBlock (\t -> encodeTermInline cx env False t) isFull dflt tname) (\pyDflt ->
                     let subj = Syntax.SubjectExpressionSimple (Syntax.NamedExpressionSimple pyArg)
                         matchStmt =
                                 Syntax.StatementCompound (Syntax.CompoundStatementMatch (Syntax.MatchStatement {

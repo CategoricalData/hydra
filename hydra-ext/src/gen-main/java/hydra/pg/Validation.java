@@ -185,12 +185,12 @@ public interface Validation {
       checkEdges.get()));
   }
 
-  static <T0, T1> hydra.util.Maybe<String> validateGraph_checkEdge(java.util.function.Function<T0, java.util.function.Function<T1, hydra.util.Maybe<String>>> checkValue, hydra.pg.model.Graph<T1> graph, java.util.function.Function<String, java.util.function.Function<String, String>> hydra_pg_validation_prepend2, hydra.pg.model.GraphSchema<T0> schema, java.util.function.Function<T1, String> showValue, hydra.pg.model.Edge<T1> el) {
+  static <T0, T1> hydra.util.Maybe<String> validateGraph_checkEdge(java.util.function.Function<T0, java.util.function.Function<T1, hydra.util.Maybe<String>>> checkValue, hydra.pg.model.Graph<T1> graph, java.util.function.Function<String, java.util.function.Function<String, String>> hydra_pg_validation_prepend, hydra.pg.model.GraphSchema<T0> schema, java.util.function.Function<T1, String> showValue, hydra.pg.model.Edge<T1> el) {
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> hydra.util.Maybe.just(hydra.pg.Validation.<T1>edgeError(
         showValue,
         el,
-        (hydra_pg_validation_prepend2).apply("Unexpected label").apply(((java.util.function.Function<hydra.pg.model.Edge<T1>, hydra.pg.model.EdgeLabel>) (projected -> projected.label)).apply(el).value))),
+        (hydra_pg_validation_prepend).apply("Unexpected label").apply(((java.util.function.Function<hydra.pg.model.Edge<T1>, hydra.pg.model.EdgeLabel>) (projected -> projected.label)).apply(el).value))),
       (java.util.function.Function<hydra.pg.model.EdgeType<T0>, hydra.util.Maybe<String>>) (t -> hydra.pg.Validation.<T0, T1>validateEdge(
         checkValue,
         showValue,
@@ -202,12 +202,12 @@ public interface Validation {
         ((java.util.function.Function<hydra.pg.model.GraphSchema<T0>, hydra.util.PersistentMap<hydra.pg.model.EdgeLabel, hydra.pg.model.EdgeType<T0>>>) (projected -> projected.edges)).apply(schema)));
   }
 
-  static <T0, T1> hydra.util.Maybe<String> validateGraph_checkVertex(java.util.function.Function<T0, java.util.function.Function<T1, hydra.util.Maybe<String>>> checkValue, java.util.function.Function<String, java.util.function.Function<String, String>> hydra_pg_validation_prepend2, hydra.pg.model.GraphSchema<T0> schema, java.util.function.Function<T1, String> showValue, hydra.pg.model.Vertex<T1> el) {
+  static <T0, T1> hydra.util.Maybe<String> validateGraph_checkVertex(java.util.function.Function<T0, java.util.function.Function<T1, hydra.util.Maybe<String>>> checkValue, java.util.function.Function<String, java.util.function.Function<String, String>> hydra_pg_validation_prepend, hydra.pg.model.GraphSchema<T0> schema, java.util.function.Function<T1, String> showValue, hydra.pg.model.Vertex<T1> el) {
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> hydra.util.Maybe.just(hydra.pg.Validation.<T1>vertexError(
         showValue,
         el,
-        (hydra_pg_validation_prepend2).apply("Unexpected label").apply(((java.util.function.Function<hydra.pg.model.Vertex<T1>, hydra.pg.model.VertexLabel>) (projected -> projected.label)).apply(el).value))),
+        (hydra_pg_validation_prepend).apply("Unexpected label").apply(((java.util.function.Function<hydra.pg.model.Vertex<T1>, hydra.pg.model.VertexLabel>) (projected -> projected.label)).apply(el).value))),
       (java.util.function.Function<hydra.pg.model.VertexType<T0>, hydra.util.Maybe<String>>) (t -> hydra.pg.Validation.<T0, T1>validateVertex(
         checkValue,
         showValue,
@@ -249,23 +249,23 @@ public interface Validation {
       checkValues.get()));
   }
 
-  static <T0, T1> hydra.util.Maybe<String> validateProperties_checkPair(java.util.function.Function<T0, java.util.function.Function<T1, hydra.util.Maybe<String>>> checkValue, java.util.function.Function<String, java.util.function.Function<String, String>> hydra_pg_validation_prepend2, hydra.util.ConsList<hydra.pg.model.PropertyType<T0>> types, hydra.util.Pair<hydra.pg.model.PropertyKey, T1> pair) {
+  static <T0, T1> hydra.util.Maybe<String> validateProperties_checkPair(java.util.function.Function<T0, java.util.function.Function<T1, hydra.util.Maybe<String>>> checkValue, java.util.function.Function<String, java.util.function.Function<String, String>> hydra_pg_validation_prepend, hydra.util.ConsList<hydra.pg.model.PropertyType<T0>> types, hydra.util.Pair<hydra.pg.model.PropertyKey, T1> pair) {
     hydra.util.Lazy<hydra.pg.model.PropertyKey> key = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pair));
     return hydra.lib.maybes.Maybe.applyLazy(
-      () -> hydra.util.Maybe.just((hydra_pg_validation_prepend2).apply("Unexpected key").apply(key.get().value)),
+      () -> hydra.util.Maybe.just((hydra_pg_validation_prepend).apply("Unexpected key").apply(key.get().value)),
       (java.util.function.Function<T0, hydra.util.Maybe<String>>) (typ -> hydra.lib.maybes.Map.apply(
-        (java.util.function.Function<String, String>) (v1 -> (hydra_pg_validation_prepend2).apply("Invalid value").apply(v1)),
+        (java.util.function.Function<String, String>) (v1 -> (hydra_pg_validation_prepend).apply("Invalid value").apply(v1)),
         (checkValue).apply(typ).apply(hydra.pg.Validation.<T1>validateProperties_val(pair)))),
       hydra.lib.maps.Lookup.apply(
         key.get(),
         hydra.pg.Validation.<T0>validateProperties_m(types)));
   }
 
-  static <T1, T2> hydra.util.Maybe<String> validateProperties_checkType(java.util.function.Function<String, java.util.function.Function<String, String>> hydra_pg_validation_prepend2, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T1> props, hydra.pg.model.PropertyType<T2> t) {
+  static <T1, T2> hydra.util.Maybe<String> validateProperties_checkType(java.util.function.Function<String, java.util.function.Function<String, String>> hydra_pg_validation_prepend, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T1> props, hydra.pg.model.PropertyType<T2> t) {
     return hydra.lib.logic.IfElse.lazy(
       ((java.util.function.Function<hydra.pg.model.PropertyType<T2>, Boolean>) (projected -> projected.required)).apply(t),
       () -> hydra.lib.maybes.Maybe.applyLazy(
-        () -> hydra.util.Maybe.just((hydra_pg_validation_prepend2).apply("Missing value for ").apply(((java.util.function.Function<hydra.pg.model.PropertyType<T2>, hydra.pg.model.PropertyKey>) (projected -> projected.key)).apply(t).value)),
+        () -> hydra.util.Maybe.just((hydra_pg_validation_prepend).apply("Missing value for ").apply(((java.util.function.Function<hydra.pg.model.PropertyType<T2>, hydra.pg.model.PropertyKey>) (projected -> projected.key)).apply(t).value)),
         (java.util.function.Function<T1, hydra.util.Maybe<String>>) (ignored -> (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing())),
         hydra.lib.maps.Lookup.apply(
           ((java.util.function.Function<hydra.pg.model.PropertyType<T2>, hydra.pg.model.PropertyKey>) (projected -> projected.key)).apply(t),

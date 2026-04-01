@@ -155,17 +155,21 @@ adaptDataGraph = define "adaptDataGraph" $
     <> " The els0 parameter provides the original ordered bindings."
     <> " Returns both the adapted graph and the ordered adapted bindings.") $
   "constraints" ~> "doExpand" ~> "els0" ~> "cx" ~> "graph0" ~>
-  "transform" <~ ("g" ~> "gterm" ~>
+  -- Transform a single term: push type apps, eta expand, lift lambdas.
+  -- Applied per-binding to avoid O(n²) behavior when processing all bindings as one let.
+  "transformTerm" <~ ("g" ~> "term" ~>
     "tx" <~ var "g" $
-    -- Order of operations:
-    -- 1. Unshadow variables first (prevents capture issues in eta expansion)
-    -- 2. Eta expand (needs type annotations; creates fully-applied functions)
-    -- 3. Lift lambdas above lets (structural cleanup)
-    "gterm1" <~ Rewriting.unshadowVariables @@ (pushTypeAppsInward @@ var "gterm") $
-    "gterm2" <~ Rewriting.unshadowVariables @@ (Logic.ifElse (var "doExpand")
-      (pushTypeAppsInward @@ (Reduction.etaExpandTermNew @@ var "tx" @@ var "gterm1"))
-      (var "gterm1")) $
-    Rewriting.liftLambdaAboveLet @@ var "gterm2") $
+    "t1" <~ Rewriting.unshadowVariables @@ (pushTypeAppsInward @@ var "term") $
+    "t2" <~ Rewriting.unshadowVariables @@ (Logic.ifElse (var "doExpand")
+      (pushTypeAppsInward @@ (Reduction.etaExpandTermNew @@ var "tx" @@ var "t1"))
+      (var "t1")) $
+    Rewriting.liftLambdaAboveLet @@ var "t2") $
+  -- Transform each binding's term individually, preserving name and type
+  "transformBinding" <~ ("g" ~> "el" ~>
+    Core.binding
+      (Core.bindingName $ var "el")
+      (var "transformTerm" @@ var "g" @@ (Core.bindingTerm $ var "el"))
+      (Core.bindingType $ var "el")) $
   "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
   "prims0" <~ Graph.graphPrimitives (var "graph0") $
   "schemaTypes0" <~ Graph.graphSchemaTypes (var "graph0") $
@@ -177,16 +181,16 @@ adaptDataGraph = define "adaptDataGraph" $
       "tmap1" <<~ adaptGraphSchema @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
       right $ Maps.map ("t" ~> Schemas.typeToTypeScheme @@ var "t") (var "tmap1")) $
   "adaptedSchemaTypes" <~ var "schemaResult" $
-  "gterm0" <~ Core.termLet (Core.let_ (var "els0") Core.termUnit) $
-  "gterm1" <~ Logic.ifElse (var "doExpand")
-    (var "transform" @@ var "graph0" @@ var "gterm0")
-    (var "gterm0") $
-  "gterm2" <<~ adaptTerm @@ var "constraints" @@ var "litmap" @@ var "cx" @@ var "graph0" @@ var "gterm1" $
-  -- Adapt lambda domains in the adapted term.
-  -- Lambda domains carry pre-adaptation types (e.g. bigfloat) that must be adapted to match
-  -- the post-adaptation terms (e.g. float64). This preserves type annotations.
-  "gterm3" <<~ Rewriting.rewriteTermM @@ (adaptLambdaDomains @@ var "constraints" @@ var "litmap") @@ var "gterm2" $
-  "els1Raw" <~ Schemas.termAsBindings @@ var "gterm3" $
+  -- Process each binding individually: transform, wrap in single-binding let,
+  -- adapt, rewrite lambda domains, then extract. This avoids building one giant
+  -- let with all bindings, which causes bytecode stack overflow in EL.
+  "adaptBinding" <~ ("el" ~>
+    "transformed" <~ var "transformBinding" @@ var "graph0" @@ var "el" $
+    "wrapped" <~ Core.termLet (Core.let_ (Lists.pure (var "transformed")) Core.termUnit) $
+    "adapted" <<~ adaptTerm @@ var "constraints" @@ var "litmap" @@ var "cx" @@ var "graph0" @@ var "wrapped" $
+    Rewriting.rewriteTermM @@ (adaptLambdaDomains @@ var "constraints" @@ var "litmap") @@ var "adapted") $
+  "adaptedTerms" <<~ Eithers.mapList (var "adaptBinding") (var "els0") $
+  "els1Raw" <~ Lists.concat (Lists.map Schemas.termAsBindings (var "adaptedTerms")) $
 
   -- Adapt nested let binding TypeSchemes within each top-level binding's term.
   -- These TypeSchemes may carry stale types from JSON modules (e.g. bigfloat→float64).
