@@ -88,6 +88,8 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
 
   public static final hydra.core.Name VALIDATE_CORE_TERM = new hydra.core.Name("validateCoreTerm");
 
+  public static final hydra.core.Name UNIVERSAL = new hydra.core.Name("universal");
+
   private TestCase () {
 
   }
@@ -172,6 +174,8 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     R visit(UnshadowVariables instance) ;
 
     R visit(ValidateCoreTerm instance) ;
+
+    R visit(Universal instance) ;
   }
 
   public interface PartialVisitor<R> extends Visitor<R> {
@@ -332,6 +336,10 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     }
 
     default R visit(ValidateCoreTerm instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Universal instance) {
       return otherwise(instance);
     }
   }
@@ -509,7 +517,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
   }
 
   /**
-   * A delegated evaluation test
+   * DEPRECATED: Delegated evaluation test (to be removed)
    */
   public static final class DelegatedEvaluation extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.DelegatedEvaluationTestCase value;
@@ -2004,6 +2012,49 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         return tagCmp;
       }
       ValidateCoreTerm o = (ValidateCoreTerm) other;
+      return ((Comparable) value).compareTo(o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  /**
+   * A universal test case (string comparison)
+   */
+  public static final class Universal extends hydra.testing.TestCase implements Serializable {
+    public final hydra.testing.UniversalTestCase value;
+
+    public Universal (hydra.testing.UniversalTestCase value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Universal)) {
+        return false;
+      }
+      Universal o = (Universal) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TestCase other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Universal o = (Universal) other;
       return ((Comparable) value).compareTo(o.value);
     }
 

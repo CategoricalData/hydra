@@ -259,6 +259,44 @@ object Libraries:
         impl1(a => mkInt32(chars.toUpper(exInt32(a))))),
     )
 
+  // ===== Equality primitives =====
+
+  private def equalityPrimitives(): Map[String, Primitive] =
+    val ns = "hydra.lib.equality"
+    val x = tVar("x")
+    val xOrd = Seq(("x", Seq("ordering")))
+    val xEq = Seq(("x", Seq("equality")))
+    val xPlain = Seq(("x", Seq.empty))
+    Map(
+      // Polymorphic: compare, equal, gt, gte, lt, lte, max, min, identity
+      // These work on Term values directly since they are polymorphic.
+      // Use compareTerms for proper structural comparison of literal values.
+      s"$ns.compare" -> mkPrimImpl(s"$ns.compare", tSchemeConstrained(xOrd, tFun(x, tFun(x, tComparison))),
+        impl2 { (a, b) =>
+          val c = equality.compareTerms(a, b)
+          val comp = if c < 0 then hydra.util.Comparison.lessThan
+                     else if c > 0 then hydra.util.Comparison.greaterThan
+                     else hydra.util.Comparison.equalTo
+          mkComparison(comp)
+        }),
+      s"$ns.equal" -> mkPrimImpl(s"$ns.equal", tSchemeConstrained(xEq, tFun(x, tFun(x, tBool))),
+        impl2((a, b) => mkBool(a == b))),
+      s"$ns.identity" -> mkPrimImpl(s"$ns.identity", tSchemeConstrained(xPlain, tFun(x, x)),
+        impl1(a => a)),
+      s"$ns.gt" -> mkPrimImpl(s"$ns.gt", tSchemeConstrained(xOrd, tFun(x, tFun(x, tBool))),
+        impl2((a, b) => mkBool(equality.compareTerms(a, b) > 0))),
+      s"$ns.gte" -> mkPrimImpl(s"$ns.gte", tSchemeConstrained(xOrd, tFun(x, tFun(x, tBool))),
+        impl2((a, b) => mkBool(equality.compareTerms(a, b) >= 0))),
+      s"$ns.lt" -> mkPrimImpl(s"$ns.lt", tSchemeConstrained(xOrd, tFun(x, tFun(x, tBool))),
+        impl2((a, b) => mkBool(equality.compareTerms(a, b) < 0))),
+      s"$ns.lte" -> mkPrimImpl(s"$ns.lte", tSchemeConstrained(xOrd, tFun(x, tFun(x, tBool))),
+        impl2((a, b) => mkBool(equality.compareTerms(a, b) <= 0))),
+      s"$ns.max" -> mkPrimImpl(s"$ns.max", tSchemeConstrained(xOrd, tFun(x, tFun(x, x))),
+        impl2((a, b) => if equality.compareTerms(a, b) >= 0 then a else b)),
+      s"$ns.min" -> mkPrimImpl(s"$ns.min", tSchemeConstrained(xOrd, tFun(x, tFun(x, x))),
+        impl2((a, b) => if equality.compareTerms(a, b) <= 0 then a else b)),
+    )
+
   // ===== Eithers primitives =====
 
   private def eithersPrimitives(): Map[String, Primitive] =
@@ -383,44 +421,6 @@ object Libraries:
       s"$ns.rights" -> mkPrimImpl(s"$ns.rights", tScheme(Seq("x", "y"),
         tFun(tList(tEither(x, y)), tList(y))),
         impl1(es => mkList(exList(es).collect { case t if exEither(t).isRight => exEither(t).toOption.get }))),
-    )
-
-  // ===== Equality primitives =====
-
-  private def equalityPrimitives(): Map[String, Primitive] =
-    val ns = "hydra.lib.equality"
-    val x = tVar("x")
-    val xOrd = Seq(("x", Seq("ordering")))
-    val xEq = Seq(("x", Seq("equality")))
-    val xPlain = Seq(("x", Seq.empty))
-    Map(
-      // Polymorphic: compare, equal, gt, gte, lt, lte, max, min, identity
-      // These work on Term values directly since they are polymorphic.
-      // Use compareTerms for proper structural comparison of literal values.
-      s"$ns.compare" -> mkPrimImpl(s"$ns.compare", tSchemeConstrained(xOrd, tFun(x, tFun(x, tComparison))),
-        impl2 { (a, b) =>
-          val c = equality.compareTerms(a, b)
-          val comp = if c < 0 then hydra.util.Comparison.lessThan
-                     else if c > 0 then hydra.util.Comparison.greaterThan
-                     else hydra.util.Comparison.equalTo
-          mkComparison(comp)
-        }),
-      s"$ns.equal" -> mkPrimImpl(s"$ns.equal", tSchemeConstrained(xEq, tFun(x, tFun(x, tBool))),
-        impl2((a, b) => mkBool(a == b))),
-      s"$ns.identity" -> mkPrimImpl(s"$ns.identity", tSchemeConstrained(xPlain, tFun(x, x)),
-        impl1(a => a)),
-      s"$ns.gt" -> mkPrimImpl(s"$ns.gt", tSchemeConstrained(xOrd, tFun(x, tFun(x, tBool))),
-        impl2((a, b) => mkBool(equality.compareTerms(a, b) > 0))),
-      s"$ns.gte" -> mkPrimImpl(s"$ns.gte", tSchemeConstrained(xOrd, tFun(x, tFun(x, tBool))),
-        impl2((a, b) => mkBool(equality.compareTerms(a, b) >= 0))),
-      s"$ns.lt" -> mkPrimImpl(s"$ns.lt", tSchemeConstrained(xOrd, tFun(x, tFun(x, tBool))),
-        impl2((a, b) => mkBool(equality.compareTerms(a, b) < 0))),
-      s"$ns.lte" -> mkPrimImpl(s"$ns.lte", tSchemeConstrained(xOrd, tFun(x, tFun(x, tBool))),
-        impl2((a, b) => mkBool(equality.compareTerms(a, b) <= 0))),
-      s"$ns.max" -> mkPrimImpl(s"$ns.max", tSchemeConstrained(xOrd, tFun(x, tFun(x, x))),
-        impl2((a, b) => if equality.compareTerms(a, b) >= 0 then a else b)),
-      s"$ns.min" -> mkPrimImpl(s"$ns.min", tSchemeConstrained(xOrd, tFun(x, tFun(x, x))),
-        impl2((a, b) => if equality.compareTerms(a, b) <= 0 then a else b)),
     )
 
   // ===== Lists primitives =====
@@ -635,122 +635,6 @@ object Libraries:
       s"$ns.zip" -> mkPrimImpl(s"$ns.zip", tScheme(Seq("a", "b"),
         tFun(tList(a), tFun(tList(b), tList(tPair(a, b))))),
         impl2((xs, ys) => mkList(exList(xs).zip(exList(ys)).map((a, b) => mkPairTerm(a, b))))),
-    )
-
-  // ===== Literals primitives =====
-
-  private def literalsPrimitives(): Map[String, Primitive] =
-    val ns = "hydra.lib.literals"
-    Map(
-      // Conversion primitives
-      s"$ns.bigfloatToBigint" -> mkPrimImpl(s"$ns.bigfloatToBigint", tMono(tFun(tBigfloat, tBigint)),
-        impl1(a => mkBigint(literals.bigfloatToBigint(exBigfloat(a))))),
-      s"$ns.bigfloatToFloat32" -> mkPrimImpl(s"$ns.bigfloatToFloat32", tMono(tFun(tBigfloat, tFloat32)),
-        impl1(a => mkFloat32(literals.bigfloatToFloat32(exBigfloat(a))))),
-      s"$ns.bigfloatToFloat64" -> mkPrimImpl(s"$ns.bigfloatToFloat64", tMono(tFun(tBigfloat, tFloat64)),
-        impl1(a => mkFloat64(literals.bigfloatToFloat64(exBigfloat(a))))),
-      s"$ns.bigintToBigfloat" -> mkPrimImpl(s"$ns.bigintToBigfloat", tMono(tFun(tBigint, tBigfloat)),
-        impl1(a => mkBigfloat(literals.bigintToBigfloat(exBigint(a))))),
-      s"$ns.bigintToInt8" -> mkPrimImpl(s"$ns.bigintToInt8", tMono(tFun(tBigint, tInt8)),
-        impl1(a => mkInt8(literals.bigintToInt8(exBigint(a))))),
-      s"$ns.bigintToInt16" -> mkPrimImpl(s"$ns.bigintToInt16", tMono(tFun(tBigint, tInt16)),
-        impl1(a => mkInt16(literals.bigintToInt16(exBigint(a))))),
-      s"$ns.bigintToInt32" -> mkPrimImpl(s"$ns.bigintToInt32", tMono(tFun(tBigint, tInt32)),
-        impl1(a => mkInt32(literals.bigintToInt32(exBigint(a))))),
-      s"$ns.bigintToInt64" -> mkPrimImpl(s"$ns.bigintToInt64", tMono(tFun(tBigint, tInt64)),
-        impl1(a => mkInt64(literals.bigintToInt64(exBigint(a))))),
-      s"$ns.bigintToUint8" -> mkPrimImpl(s"$ns.bigintToUint8", tMono(tFun(tBigint, tUint8)),
-        impl1(a => mkUint8(literals.bigintToUint8(exBigint(a))))),
-      s"$ns.bigintToUint16" -> mkPrimImpl(s"$ns.bigintToUint16", tMono(tFun(tBigint, tUint16)),
-        impl1(a => mkUint16(literals.bigintToUint16(exBigint(a))))),
-      s"$ns.bigintToUint32" -> mkPrimImpl(s"$ns.bigintToUint32", tMono(tFun(tBigint, tUint32)),
-        impl1(a => mkUint32(literals.bigintToUint32(exBigint(a))))),
-      s"$ns.bigintToUint64" -> mkPrimImpl(s"$ns.bigintToUint64", tMono(tFun(tBigint, tUint64)),
-        impl1(a => mkUint64(literals.bigintToUint64(exBigint(a))))),
-      s"$ns.binaryToBytes" -> mkPrimImpl(s"$ns.binaryToBytes", tMono(tFun(tBinary, tList(tInt32))),
-        impl1(a => mkList(literals.binaryToBytes(exBinary(a)).map(mkInt32)))),
-      s"$ns.binaryToString" -> mkPrimImpl(s"$ns.binaryToString", tMono(tFun(tBinary, tString)),
-        impl1(a => mkString(literals.binaryToString(exBinary(a))))),
-      s"$ns.float32ToBigfloat" -> mkPrimImpl(s"$ns.float32ToBigfloat", tMono(tFun(tFloat32, tBigfloat)),
-        impl1(a => mkBigfloat(literals.float32ToBigfloat(exFloat32(a))))),
-      s"$ns.float64ToBigfloat" -> mkPrimImpl(s"$ns.float64ToBigfloat", tMono(tFun(tFloat64, tBigfloat)),
-        impl1(a => mkBigfloat(literals.float64ToBigfloat(exFloat64(a))))),
-      s"$ns.int8ToBigint" -> mkPrimImpl(s"$ns.int8ToBigint", tMono(tFun(tInt8, tBigint)),
-        impl1(a => mkBigint(literals.int8ToBigint(exInt8(a))))),
-      s"$ns.int16ToBigint" -> mkPrimImpl(s"$ns.int16ToBigint", tMono(tFun(tInt16, tBigint)),
-        impl1(a => mkBigint(literals.int16ToBigint(exInt16(a))))),
-      s"$ns.int32ToBigint" -> mkPrimImpl(s"$ns.int32ToBigint", tMono(tFun(tInt32, tBigint)),
-        impl1(a => mkBigint(literals.int32ToBigint(exInt32(a))))),
-      s"$ns.int64ToBigint" -> mkPrimImpl(s"$ns.int64ToBigint", tMono(tFun(tInt64, tBigint)),
-        impl1(a => mkBigint(literals.int64ToBigint(exInt64(a))))),
-      // Read primitives
-      s"$ns.readBigfloat" -> mkPrimImpl(s"$ns.readBigfloat", tMono(tFun(tString, tOpt(tBigfloat))),
-        impl1(s => mkMaybe(literals.readBigfloat(exString(s)).map(mkBigfloat)))),
-      s"$ns.readBigint" -> mkPrimImpl(s"$ns.readBigint", tMono(tFun(tString, tOpt(tBigint))),
-        impl1(s => mkMaybe(literals.readBigint(exString(s)).map(mkBigint)))),
-      s"$ns.readBoolean" -> mkPrimImpl(s"$ns.readBoolean", tMono(tFun(tString, tOpt(tBool))),
-        impl1(s => mkMaybe(literals.readBoolean(exString(s)).map(mkBool)))),
-      s"$ns.readFloat32" -> mkPrimImpl(s"$ns.readFloat32", tMono(tFun(tString, tOpt(tFloat32))),
-        impl1(s => mkMaybe(literals.readFloat32(exString(s)).map(mkFloat32)))),
-      s"$ns.readFloat64" -> mkPrimImpl(s"$ns.readFloat64", tMono(tFun(tString, tOpt(tFloat64))),
-        impl1(s => mkMaybe(literals.readFloat64(exString(s)).map(mkFloat64)))),
-      s"$ns.readInt8" -> mkPrimImpl(s"$ns.readInt8", tMono(tFun(tString, tOpt(tInt8))),
-        impl1(s => mkMaybe(literals.readInt8(exString(s)).map(mkInt8)))),
-      s"$ns.readInt16" -> mkPrimImpl(s"$ns.readInt16", tMono(tFun(tString, tOpt(tInt16))),
-        impl1(s => mkMaybe(literals.readInt16(exString(s)).map(mkInt16)))),
-      s"$ns.readInt32" -> mkPrimImpl(s"$ns.readInt32", tMono(tFun(tString, tOpt(tInt32))),
-        impl1(s => mkMaybe(literals.readInt32(exString(s)).map(mkInt32)))),
-      s"$ns.readInt64" -> mkPrimImpl(s"$ns.readInt64", tMono(tFun(tString, tOpt(tInt64))),
-        impl1(s => mkMaybe(literals.readInt64(exString(s)).map(mkInt64)))),
-      s"$ns.readString" -> mkPrimImpl(s"$ns.readString", tMono(tFun(tString, tOpt(tString))),
-        impl1(s => mkMaybe(literals.readString(exString(s)).map(mkString)))),
-      s"$ns.readUint8" -> mkPrimImpl(s"$ns.readUint8", tMono(tFun(tString, tOpt(tUint8))),
-        impl1(s => mkMaybe(literals.readUint8(exString(s)).map(mkUint8)))),
-      s"$ns.readUint16" -> mkPrimImpl(s"$ns.readUint16", tMono(tFun(tString, tOpt(tUint16))),
-        impl1(s => mkMaybe(literals.readUint16(exString(s)).map(mkUint16)))),
-      s"$ns.readUint32" -> mkPrimImpl(s"$ns.readUint32", tMono(tFun(tString, tOpt(tUint32))),
-        impl1(s => mkMaybe(literals.readUint32(exString(s)).map(mkUint32)))),
-      s"$ns.readUint64" -> mkPrimImpl(s"$ns.readUint64", tMono(tFun(tString, tOpt(tUint64))),
-        impl1(s => mkMaybe(literals.readUint64(exString(s)).map(mkUint64)))),
-      // Show primitives
-      s"$ns.showBigfloat" -> mkPrimImpl(s"$ns.showBigfloat", tMono(tFun(tBigfloat, tString)),
-        impl1(a => mkString(literals.showBigfloat(exBigfloat(a))))),
-      s"$ns.showBigint" -> mkPrimImpl(s"$ns.showBigint", tMono(tFun(tBigint, tString)),
-        impl1(a => mkString(literals.showBigint(exBigint(a))))),
-      s"$ns.showBoolean" -> mkPrimImpl(s"$ns.showBoolean", tMono(tFun(tBool, tString)),
-        impl1(a => mkString(literals.showBoolean(exBool(a))))),
-      s"$ns.showFloat32" -> mkPrimImpl(s"$ns.showFloat32", tMono(tFun(tFloat32, tString)),
-        impl1(a => mkString(literals.showFloat32(exFloat32(a))))),
-      s"$ns.showFloat64" -> mkPrimImpl(s"$ns.showFloat64", tMono(tFun(tFloat64, tString)),
-        impl1(a => mkString(literals.showFloat64(exFloat64(a))))),
-      s"$ns.showInt8" -> mkPrimImpl(s"$ns.showInt8", tMono(tFun(tInt8, tString)),
-        impl1(a => mkString(literals.showInt8(exInt8(a))))),
-      s"$ns.showInt16" -> mkPrimImpl(s"$ns.showInt16", tMono(tFun(tInt16, tString)),
-        impl1(a => mkString(literals.showInt16(exInt16(a))))),
-      s"$ns.showInt32" -> mkPrimImpl(s"$ns.showInt32", tMono(tFun(tInt32, tString)),
-        impl1(a => mkString(literals.showInt32(exInt32(a))))),
-      s"$ns.showInt64" -> mkPrimImpl(s"$ns.showInt64", tMono(tFun(tInt64, tString)),
-        impl1(a => mkString(literals.showInt64(exInt64(a))))),
-      s"$ns.showUint8" -> mkPrimImpl(s"$ns.showUint8", tMono(tFun(tUint8, tString)),
-        impl1(a => mkString(literals.showUint8(exUint8(a))))),
-      s"$ns.showUint16" -> mkPrimImpl(s"$ns.showUint16", tMono(tFun(tUint16, tString)),
-        impl1(a => mkString(literals.showUint16(exUint16(a))))),
-      s"$ns.showUint32" -> mkPrimImpl(s"$ns.showUint32", tMono(tFun(tUint32, tString)),
-        impl1(a => mkString(literals.showUint32(exUint32(a))))),
-      s"$ns.showUint64" -> mkPrimImpl(s"$ns.showUint64", tMono(tFun(tUint64, tString)),
-        impl1(a => mkString(literals.showUint64(exUint64(a))))),
-      s"$ns.showString" -> mkPrimImpl(s"$ns.showString", tMono(tFun(tString, tString)),
-        impl1(a => mkString(literals.showString(exString(a))))),
-      s"$ns.stringToBinary" -> mkPrimImpl(s"$ns.stringToBinary", tMono(tFun(tString, tBinary)),
-        impl1(a => mkBinary(literals.stringToBinary(exString(a))))),
-      s"$ns.uint8ToBigint" -> mkPrimImpl(s"$ns.uint8ToBigint", tMono(tFun(tUint8, tBigint)),
-        impl1(a => mkBigint(literals.uint8ToBigint(exUint8(a))))),
-      s"$ns.uint16ToBigint" -> mkPrimImpl(s"$ns.uint16ToBigint", tMono(tFun(tUint16, tBigint)),
-        impl1(a => mkBigint(literals.uint16ToBigint(exUint16(a))))),
-      s"$ns.uint32ToBigint" -> mkPrimImpl(s"$ns.uint32ToBigint", tMono(tFun(tUint32, tBigint)),
-        impl1(a => mkBigint(literals.uint32ToBigint(exUint32(a))))),
-      s"$ns.uint64ToBigint" -> mkPrimImpl(s"$ns.uint64ToBigint", tMono(tFun(tUint64, tBigint)),
-        impl1(a => mkBigint(literals.uint64ToBigint(exUint64(a))))),
     )
 
   // ===== Logic primitives =====
@@ -1066,50 +950,6 @@ object Libraries:
         impl1(ma => mkList(exMaybe(ma).toSeq))),
     )
 
-  // ===== Pairs primitives =====
-
-  private def pairsPrimitives(): Map[String, Primitive] =
-    val ns = "hydra.lib.pairs"
-    val a = tVar("a")
-    val b = tVar("b")
-    val c = tVar("c")
-    val d = tVar("d")
-    Map(
-      // Higher-order: bimap
-      s"$ns.bimap" -> mkPrimImpl(s"$ns.bimap", tScheme(Seq("a", "b", "c", "d"),
-        tFun(tFun(a, c), tFun(tFun(b, d), tFun(tPair(a, b), tPair(c, d))))),
-        impl3 { (f, g, p) =>
-          val (a, b) = exPair(p)
-          mkPairTerm(app(f, a), app(g, b))
-        }),
-      // First-order
-      s"$ns.first" -> mkPrimImpl(s"$ns.first", tScheme(Seq("a", "b"),
-        tFun(tPair(a, b), a)),
-        impl1(p => exPair(p)._1)),
-      s"$ns.second" -> mkPrimImpl(s"$ns.second", tScheme(Seq("a", "b"),
-        tFun(tPair(a, b), b)),
-        impl1(p => exPair(p)._2)),
-    )
-
-  // ===== Regex primitives =====
-
-  private def regexPrimitives(): Map[String, Primitive] =
-    val ns = "hydra.lib.regex"
-    Map(
-      s"$ns.find" -> mkPrimImpl(s"$ns.find", tMono(tFun(tString, tFun(tString, tOpt(tString)))),
-        impl2((pat, input) => mkMaybe(regex.find(exString(pat))(exString(input)).map(mkString)))),
-      s"$ns.findAll" -> mkPrimImpl(s"$ns.findAll", tMono(tFun(tString, tFun(tString, tList(tString)))),
-        impl2((pat, input) => mkList(regex.findAll(exString(pat))(exString(input)).map(mkString)))),
-      s"$ns.matches" -> mkPrimImpl(s"$ns.matches", tMono(tFun(tString, tFun(tString, tBool))),
-        impl2((pat, input) => mkBool(regex.matches(exString(pat))(exString(input))))),
-      s"$ns.replace" -> mkPrimImpl(s"$ns.replace", tMono(tFun(tString, tFun(tString, tFun(tString, tString)))),
-        impl3((pat, repl, input) => mkString(regex.replace(exString(pat))(exString(repl))(exString(input))))),
-      s"$ns.replaceAll" -> mkPrimImpl(s"$ns.replaceAll", tMono(tFun(tString, tFun(tString, tFun(tString, tString)))),
-        impl3((pat, repl, input) => mkString(regex.replaceAll(exString(pat))(exString(repl))(exString(input))))),
-      s"$ns.split" -> mkPrimImpl(s"$ns.split", tMono(tFun(tString, tFun(tString, tList(tString)))),
-        impl2((pat, input) => mkList(regex.split(exString(pat))(exString(input)).map(mkString)))),
-    )
-
   // ===== Sets primitives =====
 
   private def setsPrimitives(): Map[String, Primitive] =
@@ -1166,6 +1006,25 @@ object Libraries:
         impl1(ss => mkSet(exList(ss).flatMap(exSet).toSet))),
     )
 
+  // ===== Regex primitives =====
+
+  private def regexPrimitives(): Map[String, Primitive] =
+    val ns = "hydra.lib.regex"
+    Map(
+      s"$ns.find" -> mkPrimImpl(s"$ns.find", tMono(tFun(tString, tFun(tString, tOpt(tString)))),
+        impl2((pat, input) => mkMaybe(regex.find(exString(pat))(exString(input)).map(mkString)))),
+      s"$ns.findAll" -> mkPrimImpl(s"$ns.findAll", tMono(tFun(tString, tFun(tString, tList(tString)))),
+        impl2((pat, input) => mkList(regex.findAll(exString(pat))(exString(input)).map(mkString)))),
+      s"$ns.matches" -> mkPrimImpl(s"$ns.matches", tMono(tFun(tString, tFun(tString, tBool))),
+        impl2((pat, input) => mkBool(regex.matches(exString(pat))(exString(input))))),
+      s"$ns.replace" -> mkPrimImpl(s"$ns.replace", tMono(tFun(tString, tFun(tString, tFun(tString, tString)))),
+        impl3((pat, repl, input) => mkString(regex.replace(exString(pat))(exString(repl))(exString(input))))),
+      s"$ns.replaceAll" -> mkPrimImpl(s"$ns.replaceAll", tMono(tFun(tString, tFun(tString, tFun(tString, tString)))),
+        impl3((pat, repl, input) => mkString(regex.replaceAll(exString(pat))(exString(repl))(exString(input))))),
+      s"$ns.split" -> mkPrimImpl(s"$ns.split", tMono(tFun(tString, tFun(tString, tList(tString)))),
+        impl2((pat, input) => mkList(regex.split(exString(pat))(exString(input)).map(mkString)))),
+    )
+
   // ===== Strings primitives =====
 
   private def stringsPrimitives(): Map[String, Primitive] =
@@ -1199,11 +1058,152 @@ object Libraries:
         impl1(ss => mkString(strings.unlines(exList(ss).map(exString))))),
     )
 
+  // ===== Literals primitives =====
+
+  private def literalsPrimitives(): Map[String, Primitive] =
+    val ns = "hydra.lib.literals"
+    Map(
+      // Conversion primitives
+      s"$ns.bigfloatToBigint" -> mkPrimImpl(s"$ns.bigfloatToBigint", tMono(tFun(tBigfloat, tBigint)),
+        impl1(a => mkBigint(literals.bigfloatToBigint(exBigfloat(a))))),
+      s"$ns.bigfloatToFloat32" -> mkPrimImpl(s"$ns.bigfloatToFloat32", tMono(tFun(tBigfloat, tFloat32)),
+        impl1(a => mkFloat32(literals.bigfloatToFloat32(exBigfloat(a))))),
+      s"$ns.bigfloatToFloat64" -> mkPrimImpl(s"$ns.bigfloatToFloat64", tMono(tFun(tBigfloat, tFloat64)),
+        impl1(a => mkFloat64(literals.bigfloatToFloat64(exBigfloat(a))))),
+      s"$ns.bigintToBigfloat" -> mkPrimImpl(s"$ns.bigintToBigfloat", tMono(tFun(tBigint, tBigfloat)),
+        impl1(a => mkBigfloat(literals.bigintToBigfloat(exBigint(a))))),
+      s"$ns.bigintToInt8" -> mkPrimImpl(s"$ns.bigintToInt8", tMono(tFun(tBigint, tInt8)),
+        impl1(a => mkInt8(literals.bigintToInt8(exBigint(a))))),
+      s"$ns.bigintToInt16" -> mkPrimImpl(s"$ns.bigintToInt16", tMono(tFun(tBigint, tInt16)),
+        impl1(a => mkInt16(literals.bigintToInt16(exBigint(a))))),
+      s"$ns.bigintToInt32" -> mkPrimImpl(s"$ns.bigintToInt32", tMono(tFun(tBigint, tInt32)),
+        impl1(a => mkInt32(literals.bigintToInt32(exBigint(a))))),
+      s"$ns.bigintToInt64" -> mkPrimImpl(s"$ns.bigintToInt64", tMono(tFun(tBigint, tInt64)),
+        impl1(a => mkInt64(literals.bigintToInt64(exBigint(a))))),
+      s"$ns.bigintToUint8" -> mkPrimImpl(s"$ns.bigintToUint8", tMono(tFun(tBigint, tUint8)),
+        impl1(a => mkUint8(literals.bigintToUint8(exBigint(a))))),
+      s"$ns.bigintToUint16" -> mkPrimImpl(s"$ns.bigintToUint16", tMono(tFun(tBigint, tUint16)),
+        impl1(a => mkUint16(literals.bigintToUint16(exBigint(a))))),
+      s"$ns.bigintToUint32" -> mkPrimImpl(s"$ns.bigintToUint32", tMono(tFun(tBigint, tUint32)),
+        impl1(a => mkUint32(literals.bigintToUint32(exBigint(a))))),
+      s"$ns.bigintToUint64" -> mkPrimImpl(s"$ns.bigintToUint64", tMono(tFun(tBigint, tUint64)),
+        impl1(a => mkUint64(literals.bigintToUint64(exBigint(a))))),
+      s"$ns.binaryToBytes" -> mkPrimImpl(s"$ns.binaryToBytes", tMono(tFun(tBinary, tList(tInt32))),
+        impl1(a => mkList(literals.binaryToBytes(exBinary(a)).map(mkInt32)))),
+      s"$ns.binaryToString" -> mkPrimImpl(s"$ns.binaryToString", tMono(tFun(tBinary, tString)),
+        impl1(a => mkString(literals.binaryToString(exBinary(a))))),
+      s"$ns.float32ToBigfloat" -> mkPrimImpl(s"$ns.float32ToBigfloat", tMono(tFun(tFloat32, tBigfloat)),
+        impl1(a => mkBigfloat(literals.float32ToBigfloat(exFloat32(a))))),
+      s"$ns.float64ToBigfloat" -> mkPrimImpl(s"$ns.float64ToBigfloat", tMono(tFun(tFloat64, tBigfloat)),
+        impl1(a => mkBigfloat(literals.float64ToBigfloat(exFloat64(a))))),
+      s"$ns.int8ToBigint" -> mkPrimImpl(s"$ns.int8ToBigint", tMono(tFun(tInt8, tBigint)),
+        impl1(a => mkBigint(literals.int8ToBigint(exInt8(a))))),
+      s"$ns.int16ToBigint" -> mkPrimImpl(s"$ns.int16ToBigint", tMono(tFun(tInt16, tBigint)),
+        impl1(a => mkBigint(literals.int16ToBigint(exInt16(a))))),
+      s"$ns.int32ToBigint" -> mkPrimImpl(s"$ns.int32ToBigint", tMono(tFun(tInt32, tBigint)),
+        impl1(a => mkBigint(literals.int32ToBigint(exInt32(a))))),
+      s"$ns.int64ToBigint" -> mkPrimImpl(s"$ns.int64ToBigint", tMono(tFun(tInt64, tBigint)),
+        impl1(a => mkBigint(literals.int64ToBigint(exInt64(a))))),
+      // Read primitives
+      s"$ns.readBigfloat" -> mkPrimImpl(s"$ns.readBigfloat", tMono(tFun(tString, tOpt(tBigfloat))),
+        impl1(s => mkMaybe(literals.readBigfloat(exString(s)).map(mkBigfloat)))),
+      s"$ns.readBigint" -> mkPrimImpl(s"$ns.readBigint", tMono(tFun(tString, tOpt(tBigint))),
+        impl1(s => mkMaybe(literals.readBigint(exString(s)).map(mkBigint)))),
+      s"$ns.readBoolean" -> mkPrimImpl(s"$ns.readBoolean", tMono(tFun(tString, tOpt(tBool))),
+        impl1(s => mkMaybe(literals.readBoolean(exString(s)).map(mkBool)))),
+      s"$ns.readFloat32" -> mkPrimImpl(s"$ns.readFloat32", tMono(tFun(tString, tOpt(tFloat32))),
+        impl1(s => mkMaybe(literals.readFloat32(exString(s)).map(mkFloat32)))),
+      s"$ns.readFloat64" -> mkPrimImpl(s"$ns.readFloat64", tMono(tFun(tString, tOpt(tFloat64))),
+        impl1(s => mkMaybe(literals.readFloat64(exString(s)).map(mkFloat64)))),
+      s"$ns.readInt8" -> mkPrimImpl(s"$ns.readInt8", tMono(tFun(tString, tOpt(tInt8))),
+        impl1(s => mkMaybe(literals.readInt8(exString(s)).map(mkInt8)))),
+      s"$ns.readInt16" -> mkPrimImpl(s"$ns.readInt16", tMono(tFun(tString, tOpt(tInt16))),
+        impl1(s => mkMaybe(literals.readInt16(exString(s)).map(mkInt16)))),
+      s"$ns.readInt32" -> mkPrimImpl(s"$ns.readInt32", tMono(tFun(tString, tOpt(tInt32))),
+        impl1(s => mkMaybe(literals.readInt32(exString(s)).map(mkInt32)))),
+      s"$ns.readInt64" -> mkPrimImpl(s"$ns.readInt64", tMono(tFun(tString, tOpt(tInt64))),
+        impl1(s => mkMaybe(literals.readInt64(exString(s)).map(mkInt64)))),
+      s"$ns.readString" -> mkPrimImpl(s"$ns.readString", tMono(tFun(tString, tOpt(tString))),
+        impl1(s => mkMaybe(literals.readString(exString(s)).map(mkString)))),
+      s"$ns.readUint8" -> mkPrimImpl(s"$ns.readUint8", tMono(tFun(tString, tOpt(tUint8))),
+        impl1(s => mkMaybe(literals.readUint8(exString(s)).map(mkUint8)))),
+      s"$ns.readUint16" -> mkPrimImpl(s"$ns.readUint16", tMono(tFun(tString, tOpt(tUint16))),
+        impl1(s => mkMaybe(literals.readUint16(exString(s)).map(mkUint16)))),
+      s"$ns.readUint32" -> mkPrimImpl(s"$ns.readUint32", tMono(tFun(tString, tOpt(tUint32))),
+        impl1(s => mkMaybe(literals.readUint32(exString(s)).map(mkUint32)))),
+      s"$ns.readUint64" -> mkPrimImpl(s"$ns.readUint64", tMono(tFun(tString, tOpt(tUint64))),
+        impl1(s => mkMaybe(literals.readUint64(exString(s)).map(mkUint64)))),
+      // Show primitives
+      s"$ns.showBigfloat" -> mkPrimImpl(s"$ns.showBigfloat", tMono(tFun(tBigfloat, tString)),
+        impl1(a => mkString(literals.showBigfloat(exBigfloat(a))))),
+      s"$ns.showBigint" -> mkPrimImpl(s"$ns.showBigint", tMono(tFun(tBigint, tString)),
+        impl1(a => mkString(literals.showBigint(exBigint(a))))),
+      s"$ns.showBoolean" -> mkPrimImpl(s"$ns.showBoolean", tMono(tFun(tBool, tString)),
+        impl1(a => mkString(literals.showBoolean(exBool(a))))),
+      s"$ns.showFloat32" -> mkPrimImpl(s"$ns.showFloat32", tMono(tFun(tFloat32, tString)),
+        impl1(a => mkString(literals.showFloat32(exFloat32(a))))),
+      s"$ns.showFloat64" -> mkPrimImpl(s"$ns.showFloat64", tMono(tFun(tFloat64, tString)),
+        impl1(a => mkString(literals.showFloat64(exFloat64(a))))),
+      s"$ns.showInt8" -> mkPrimImpl(s"$ns.showInt8", tMono(tFun(tInt8, tString)),
+        impl1(a => mkString(literals.showInt8(exInt8(a))))),
+      s"$ns.showInt16" -> mkPrimImpl(s"$ns.showInt16", tMono(tFun(tInt16, tString)),
+        impl1(a => mkString(literals.showInt16(exInt16(a))))),
+      s"$ns.showInt32" -> mkPrimImpl(s"$ns.showInt32", tMono(tFun(tInt32, tString)),
+        impl1(a => mkString(literals.showInt32(exInt32(a))))),
+      s"$ns.showInt64" -> mkPrimImpl(s"$ns.showInt64", tMono(tFun(tInt64, tString)),
+        impl1(a => mkString(literals.showInt64(exInt64(a))))),
+      s"$ns.showUint8" -> mkPrimImpl(s"$ns.showUint8", tMono(tFun(tUint8, tString)),
+        impl1(a => mkString(literals.showUint8(exUint8(a))))),
+      s"$ns.showUint16" -> mkPrimImpl(s"$ns.showUint16", tMono(tFun(tUint16, tString)),
+        impl1(a => mkString(literals.showUint16(exUint16(a))))),
+      s"$ns.showUint32" -> mkPrimImpl(s"$ns.showUint32", tMono(tFun(tUint32, tString)),
+        impl1(a => mkString(literals.showUint32(exUint32(a))))),
+      s"$ns.showUint64" -> mkPrimImpl(s"$ns.showUint64", tMono(tFun(tUint64, tString)),
+        impl1(a => mkString(literals.showUint64(exUint64(a))))),
+      s"$ns.showString" -> mkPrimImpl(s"$ns.showString", tMono(tFun(tString, tString)),
+        impl1(a => mkString(literals.showString(exString(a))))),
+      s"$ns.stringToBinary" -> mkPrimImpl(s"$ns.stringToBinary", tMono(tFun(tString, tBinary)),
+        impl1(a => mkBinary(literals.stringToBinary(exString(a))))),
+      s"$ns.uint8ToBigint" -> mkPrimImpl(s"$ns.uint8ToBigint", tMono(tFun(tUint8, tBigint)),
+        impl1(a => mkBigint(literals.uint8ToBigint(exUint8(a))))),
+      s"$ns.uint16ToBigint" -> mkPrimImpl(s"$ns.uint16ToBigint", tMono(tFun(tUint16, tBigint)),
+        impl1(a => mkBigint(literals.uint16ToBigint(exUint16(a))))),
+      s"$ns.uint32ToBigint" -> mkPrimImpl(s"$ns.uint32ToBigint", tMono(tFun(tUint32, tBigint)),
+        impl1(a => mkBigint(literals.uint32ToBigint(exUint32(a))))),
+      s"$ns.uint64ToBigint" -> mkPrimImpl(s"$ns.uint64ToBigint", tMono(tFun(tUint64, tBigint)),
+        impl1(a => mkBigint(literals.uint64ToBigint(exUint64(a))))),
+    )
+
+  // ===== Pairs primitives =====
+
+  private def pairsPrimitives(): Map[String, Primitive] =
+    val ns = "hydra.lib.pairs"
+    val a = tVar("a")
+    val b = tVar("b")
+    val c = tVar("c")
+    val d = tVar("d")
+    Map(
+      // Higher-order: bimap
+      s"$ns.bimap" -> mkPrimImpl(s"$ns.bimap", tScheme(Seq("a", "b", "c", "d"),
+        tFun(tFun(a, c), tFun(tFun(b, d), tFun(tPair(a, b), tPair(c, d))))),
+        impl3 { (f, g, p) =>
+          val (a, b) = exPair(p)
+          mkPairTerm(app(f, a), app(g, b))
+        }),
+      // First-order
+      s"$ns.first" -> mkPrimImpl(s"$ns.first", tScheme(Seq("a", "b"),
+        tFun(tPair(a, b), a)),
+        impl1(p => exPair(p)._1)),
+      s"$ns.second" -> mkPrimImpl(s"$ns.second", tScheme(Seq("a", "b"),
+        tFun(tPair(a, b), b)),
+        impl1(p => exPair(p)._2)),
+    )
+
   /** All standard primitives. */
   def standardPrimitives(): Map[String, Primitive] =
     charsPrimitives() ++
-    eithersPrimitives() ++
     equalityPrimitives() ++
+    eithersPrimitives() ++
     listsPrimitives() ++
     literalsPrimitives() ++
     logicPrimitives() ++

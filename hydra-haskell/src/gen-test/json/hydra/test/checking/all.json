@@ -47,7 +47,8 @@
     "hydra.test.checking.collections",
     "hydra.test.checking.failures",
     "hydra.test.checking.fundamentals",
-    "hydra.test.checking.nominalTypes"],
+    "hydra.test.checking.nominalTypes",
+    "hydra.rewriting"],
   "typeDependencies": [
     "hydra.paths",
     "hydra.ast",
@@ -57,6 +58,7 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
+    "hydra.error.module",
     "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",

@@ -488,6 +488,11 @@ public interface Testing {
       public hydra.core.Term visit(hydra.testing.TestCase.ValidateCoreTerm y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TestCase"), new hydra.core.Field(new hydra.core.Name("validateCoreTerm"), hydra.encode.Testing.validateCoreTermTestCase((y).value))));
       }
+
+      @Override
+      public hydra.core.Term visit(hydra.testing.TestCase.Universal y) {
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TestCase"), new hydra.core.Field(new hydra.core.Name("universal"), hydra.encode.Testing.universalTestCase((y).value))));
+      }
     });
   }
 
@@ -611,6 +616,12 @@ public interface Testing {
         (java.util.function.Function<String, hydra.core.Term>) (x2 -> new hydra.core.Term.Literal(new hydra.core.Literal.String_(x2))),
         hydra.encode.Typing::typeSubst,
         (x).expected))))));
+  }
+
+  static hydra.core.Term universalTestCase(hydra.testing.UniversalTestCase x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.UniversalTestCase"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("actual"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).actual))),
+      new hydra.core.Field(new hydra.core.Name("expected"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).expected))))));
   }
 
   static hydra.core.Term unshadowVariablesTestCase(hydra.testing.UnshadowVariablesTestCase x) {

@@ -91,60 +91,8 @@ public interface Transform {
     return new hydra.module.Module(hydra.test.Transform.addGenerationPrefix((m).namespace), (m).definitions, (m).termDependencies, (m).typeDependencies, (m).description);
   }
 
-  static hydra.util.Maybe<hydra.testing.TestCaseWithMetadata> transformTestCase(hydra.testing.TestCaseWithMetadata tcm) {
-    hydra.util.Maybe<String> desc = (tcm).description;
-    String name_ = (tcm).name;
-    hydra.util.ConsList<hydra.testing.Tag> tags_ = (tcm).tags;
-    hydra.testing.TestCase tc = (tcm).case_;
-    return (tc).accept(new hydra.testing.TestCase.PartialVisitor<>() {
-      @Override
-      public hydra.util.Maybe<hydra.testing.TestCaseWithMetadata> otherwise(hydra.testing.TestCase instance) {
-        return (hydra.util.Maybe<hydra.testing.TestCaseWithMetadata>) (hydra.util.Maybe.<hydra.testing.TestCaseWithMetadata>nothing());
-      }
-
-      @Override
-      public hydra.util.Maybe<hydra.testing.TestCaseWithMetadata> visit(hydra.testing.TestCase.CaseConversion ccase) {
-        hydra.util.CaseConvention fromConv = (ccase).value.fromConvention;
-        String fromStr = (ccase).value.fromString;
-        hydra.util.CaseConvention toConv = (ccase).value.toConvention;
-        String toStr = (ccase).value.toString;
-        return hydra.util.Maybe.just(new hydra.testing.TestCaseWithMetadata(name_, new hydra.testing.TestCase.DelegatedEvaluation(new hydra.testing.DelegatedEvaluationTestCase(hydra.test.Transform.buildConvertCaseCall(
-          fromConv,
-          toConv,
-          fromStr), new hydra.core.Term.Literal(new hydra.core.Literal.String_(toStr)))), desc, tags_));
-      }
-
-      @Override
-      public hydra.util.Maybe<hydra.testing.TestCaseWithMetadata> visit(hydra.testing.TestCase.Evaluation ecase) {
-        hydra.core.Term input_ = (ecase).value.input;
-        hydra.core.Term output_ = (ecase).value.output;
-        return hydra.util.Maybe.just(new hydra.testing.TestCaseWithMetadata(name_, new hydra.testing.TestCase.DelegatedEvaluation(new hydra.testing.DelegatedEvaluationTestCase(input_, output_)), desc, tags_));
-      }
-
-      @Override
-      public hydra.util.Maybe<hydra.testing.TestCaseWithMetadata> visit(hydra.testing.TestCase.DelegatedEvaluation ignored) {
-        return hydra.util.Maybe.just(tcm);
-      }
-
-      @Override
-      public hydra.util.Maybe<hydra.testing.TestCaseWithMetadata> visit(hydra.testing.TestCase.TopologicalSort tscase) {
-        hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>> adjList = (tscase).value.adjacencyList;
-        hydra.util.Either<hydra.util.ConsList<hydra.util.ConsList<Integer>>, hydra.util.ConsList<Integer>> expected = (tscase).value.expected;
-        return hydra.util.Maybe.just(new hydra.testing.TestCaseWithMetadata(name_, new hydra.testing.TestCase.DelegatedEvaluation(new hydra.testing.DelegatedEvaluationTestCase(hydra.test.Transform.buildTopologicalSortCall(adjList), hydra.test.Transform.encodeEitherListList(expected))), desc, tags_));
-      }
-
-      @Override
-      public hydra.util.Maybe<hydra.testing.TestCaseWithMetadata> visit(hydra.testing.TestCase.TopologicalSortSCC scccase) {
-        hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>> adjList = (scccase).value.adjacencyList;
-        hydra.util.ConsList<hydra.util.ConsList<Integer>> expected = (scccase).value.expected;
-        return hydra.util.Maybe.just(new hydra.testing.TestCaseWithMetadata(name_, new hydra.testing.TestCase.DelegatedEvaluation(new hydra.testing.DelegatedEvaluationTestCase(hydra.test.Transform.buildTopologicalSortSCCCall(adjList), hydra.test.Transform.encodeListList(expected))), desc, tags_));
-      }
-
-      @Override
-      public hydra.util.Maybe<hydra.testing.TestCaseWithMetadata> visit(hydra.testing.TestCase.ValidateCoreTerm ignored) {
-        return hydra.util.Maybe.just(tcm);
-      }
-    });
+  static <T0> hydra.util.Maybe<T0> transformTestCase(T0 tcm) {
+    return hydra.util.Maybe.just(tcm);
   }
 
   static hydra.util.Maybe<hydra.testing.TestGroup> transformToCompiledTests(hydra.testing.TestGroup tg) {

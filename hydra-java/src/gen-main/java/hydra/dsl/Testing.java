@@ -1100,6 +1100,10 @@ public interface Testing {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TestCase"), new hydra.core.Field(new hydra.core.Name("unifyTypes"), (x).value))));
   }
 
+  static hydra.phantoms.TTerm<hydra.testing.TestCase> testCaseUniversal(hydra.phantoms.TTerm<hydra.testing.UniversalTestCase> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TestCase"), new hydra.core.Field(new hydra.core.Name("universal"), (x).value))));
+  }
+
   static hydra.phantoms.TTerm<hydra.testing.TestCase> testCaseUnshadowVariables(hydra.phantoms.TTerm<hydra.testing.UnshadowVariablesTestCase> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TestCase"), new hydra.core.Field(new hydra.core.Name("unshadowVariables"), (x).value))));
   }
@@ -1722,6 +1726,32 @@ public interface Testing {
       new hydra.core.Field(new hydra.core.Name("left"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.testing.UnifyTypesTestCase"), new hydra.core.Name("left"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("right"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.testing.UnifyTypesTestCase"), new hydra.core.Name("right"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("expected"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.testing.UnifyTypesTestCase"), new hydra.core.Name("expected"))))), (original).value)))))));
+  }
+
+  static hydra.phantoms.TTerm<hydra.testing.UniversalTestCase> universalTestCase(hydra.phantoms.TTerm<String> actual, hydra.phantoms.TTerm<String> expected) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.UniversalTestCase"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("actual"), (actual).value),
+      new hydra.core.Field(new hydra.core.Name("expected"), (expected).value)))));
+  }
+
+  static hydra.phantoms.TTerm<String> universalTestCaseActual(hydra.phantoms.TTerm<hydra.testing.UniversalTestCase> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.testing.UniversalTestCase"), new hydra.core.Name("actual"))))), (x).value)));
+  }
+
+  static hydra.phantoms.TTerm<String> universalTestCaseExpected(hydra.phantoms.TTerm<hydra.testing.UniversalTestCase> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.testing.UniversalTestCase"), new hydra.core.Name("expected"))))), (x).value)));
+  }
+
+  static hydra.phantoms.TTerm<hydra.testing.UniversalTestCase> universalTestCaseWithActual(hydra.phantoms.TTerm<hydra.testing.UniversalTestCase> original, hydra.phantoms.TTerm<String> newVal) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.UniversalTestCase"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("actual"), (newVal).value),
+      new hydra.core.Field(new hydra.core.Name("expected"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.testing.UniversalTestCase"), new hydra.core.Name("expected"))))), (original).value)))))));
+  }
+
+  static hydra.phantoms.TTerm<hydra.testing.UniversalTestCase> universalTestCaseWithExpected(hydra.phantoms.TTerm<hydra.testing.UniversalTestCase> original, hydra.phantoms.TTerm<String> newVal) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.UniversalTestCase"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("actual"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.testing.UniversalTestCase"), new hydra.core.Name("actual"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("expected"), (newVal).value)))));
   }
 
   static hydra.phantoms.TTerm<hydra.testing.UnshadowVariablesTestCase> unshadowVariablesTestCase(hydra.phantoms.TTerm<hydra.core.Term> input, hydra.phantoms.TTerm<hydra.core.Term> output) {

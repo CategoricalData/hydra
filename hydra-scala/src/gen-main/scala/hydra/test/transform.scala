@@ -67,43 +67,7 @@ def encodeListList(lists: Seq[Seq[Int]]): hydra.core.Term =
 def transformModule(m: hydra.module.Module): hydra.module.Module =
   hydra.module.Module(hydra.test.transform.addGenerationPrefix(m.namespace), (m.definitions), (m.termDependencies), (m.typeDependencies), (m.description))
 
-def transformTestCase(tcm: hydra.testing.TestCaseWithMetadata): Option[hydra.testing.TestCaseWithMetadata] =
-  {
-  lazy val `name_`: scala.Predef.String = (tcm.name)
-  lazy val tc: hydra.testing.TestCase = (tcm.`case`)
-  lazy val desc: Option[scala.Predef.String] = (tcm.description)
-  lazy val `tags_`: Seq[hydra.testing.Tag] = (tcm.tags)
-  tc match
-    case hydra.testing.TestCase.caseConversion(v_TestCase_caseConversion_ccase) => {
-      lazy val fromConv: hydra.util.CaseConvention = (v_TestCase_caseConversion_ccase.fromConvention)
-      lazy val toConv: hydra.util.CaseConvention = (v_TestCase_caseConversion_ccase.toConvention)
-      lazy val fromStr: scala.Predef.String = (v_TestCase_caseConversion_ccase.fromString)
-      lazy val toStr: scala.Predef.String = (v_TestCase_caseConversion_ccase.`toString_`)
-      Some(hydra.testing.TestCaseWithMetadata(`name_`, hydra.testing.TestCase.delegatedEvaluation(hydra.testing.DelegatedEvaluationTestCase(hydra.test.transform.buildConvertCaseCall(fromConv)(toConv)(fromStr),
-         hydra.core.Term.literal(hydra.core.Literal.string(toStr)))), desc, `tags_`))
-    }
-    case hydra.testing.TestCase.evaluation(v_TestCase_evaluation_ecase) => {
-      lazy val `input_`: hydra.core.Term = (v_TestCase_evaluation_ecase.input)
-      lazy val `output_`: hydra.core.Term = (v_TestCase_evaluation_ecase.output)
-      Some(hydra.testing.TestCaseWithMetadata(`name_`, hydra.testing.TestCase.delegatedEvaluation(hydra.testing.DelegatedEvaluationTestCase(`input_`,
-         `output_`)), desc, `tags_`))
-    }
-    case hydra.testing.TestCase.delegatedEvaluation(v_TestCase_delegatedEvaluation__) => Some(tcm)
-    case hydra.testing.TestCase.topologicalSort(v_TestCase_topologicalSort_tscase) => {
-      lazy val adjList: Seq[Tuple2[Int, Seq[Int]]] = (v_TestCase_topologicalSort_tscase.adjacencyList)
-      lazy val expected: Either[Seq[Seq[Int]], Seq[Int]] = (v_TestCase_topologicalSort_tscase.expected)
-      Some(hydra.testing.TestCaseWithMetadata(`name_`, hydra.testing.TestCase.delegatedEvaluation(hydra.testing.DelegatedEvaluationTestCase(hydra.test.transform.buildTopologicalSortCall(adjList),
-         hydra.test.transform.encodeEitherListList(expected))), desc, `tags_`))
-    }
-    case hydra.testing.TestCase.topologicalSortSCC(v_TestCase_topologicalSortSCC_scccase) => {
-      lazy val adjList: Seq[Tuple2[Int, Seq[Int]]] = (v_TestCase_topologicalSortSCC_scccase.adjacencyList)
-      lazy val expected: Seq[Seq[Int]] = (v_TestCase_topologicalSortSCC_scccase.expected)
-      Some(hydra.testing.TestCaseWithMetadata(`name_`, hydra.testing.TestCase.delegatedEvaluation(hydra.testing.DelegatedEvaluationTestCase(hydra.test.transform.buildTopologicalSortSCCCall(adjList),
-         hydra.test.transform.encodeListList(expected))), desc, `tags_`))
-    }
-    case hydra.testing.TestCase.validateCoreTerm(v_TestCase_validateCoreTerm__) => Some(tcm)
-    case _ => None
-}
+def transformTestCase[T0](tcm: T0): Option[T0] = Some(tcm)
 
 def transformToCompiledTests(tg: hydra.testing.TestGroup): Option[hydra.testing.TestGroup] =
   {

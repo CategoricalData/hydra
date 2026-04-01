@@ -79,12 +79,10 @@ _CaseConversionTestCase_fromString = Core.Name "fromString"
 
 _CaseConversionTestCase_toString = Core.Name "toString"
 
--- | A test case in which we delegate evaluation of an input term and an expected output term to a target programming language like Haskell, Java, or Python, checking whether the term evaluates as expected when translated into that language
+-- | DEPRECATED: Delegated evaluation test case (to be removed)
 data DelegatedEvaluationTestCase =
   DelegatedEvaluationTestCase {
-    -- | The first of two terms which should evaluate to the same expression
     delegatedEvaluationTestCaseInput :: Core.Term,
-    -- | The second of two terms which should evaluate to the same expression
     delegatedEvaluationTestCaseOutput :: Core.Term}
   deriving (Eq, Ord, Read, Show)
 
@@ -582,7 +580,7 @@ data TestCase =
   TestCaseDeannotateTerm DeannotateTermTestCase |
   -- | A deannotate type test
   TestCaseDeannotateType DeannotateTypeTestCase |
-  -- | A delegated evaluation test
+  -- | DEPRECATED: Delegated evaluation test (to be removed)
   TestCaseDelegatedEvaluation DelegatedEvaluationTestCase |
   -- | An eta expansion test
   TestCaseEtaExpansion EtaExpansionTestCase |
@@ -651,7 +649,9 @@ data TestCase =
   -- | An unshadow variables test
   TestCaseUnshadowVariables UnshadowVariablesTestCase |
   -- | A core term validation test
-  TestCaseValidateCoreTerm ValidateCoreTermTestCase
+  TestCaseValidateCoreTerm ValidateCoreTermTestCase |
+  -- | A universal test case (string comparison)
+  TestCaseUniversal UniversalTestCase
   deriving (Eq, Ord, Read, Show)
 
 _TestCase = Core.Name "hydra.testing.TestCase"
@@ -733,6 +733,8 @@ _TestCase_joinTypes = Core.Name "joinTypes"
 _TestCase_unshadowVariables = Core.Name "unshadowVariables"
 
 _TestCase_validateCoreTerm = Core.Name "validateCoreTerm"
+
+_TestCase_universal = Core.Name "universal"
 
 -- | One of a number of test case variants, together with metadata including a test name, an optional description, and optional tags
 data TestCaseWithMetadata =
@@ -1043,3 +1045,18 @@ _ValidateCoreTermTestCase_typed = Core.Name "typed"
 _ValidateCoreTermTestCase_input = Core.Name "input"
 
 _ValidateCoreTermTestCase_output = Core.Name "output"
+
+-- | A universal test case: the actual and expected values are both strings
+data UniversalTestCase =
+  UniversalTestCase {
+    -- | The actual result (a string-valued expression)
+    universalTestCaseActual :: String,
+    -- | The expected result (a string literal)
+    universalTestCaseExpected :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_UniversalTestCase = Core.Name "hydra.testing.UniversalTestCase"
+
+_UniversalTestCase_actual = Core.Name "actual"
+
+_UniversalTestCase_expected = Core.Name "expected"

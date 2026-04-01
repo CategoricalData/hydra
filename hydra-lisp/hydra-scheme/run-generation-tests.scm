@@ -17,7 +17,7 @@
         (hydra lib names) (hydra literals) (hydra module) (hydra names)
         (hydra parsers) (hydra phantoms) (hydra query) (hydra reflect)
         (hydra relational) (hydra schemas) (hydra tabular)
-        (hydra templates) (hydra topology)
+        (hydra tarjan) (hydra templates) (hydra topology)
         (hydra util) (hydra variants))
 (define-syntax assert (syntax-rules () ((assert expr) (when (not expr) (error "assertion failed" (quote expr))))))
 (include "src/gen-test/scheme/generation/hydra/test/lib/chars-test.scm")

@@ -168,6 +168,7 @@ enum TestCase :
    case joinTypes(value: hydra.testing.JoinTypesTestCase) extends TestCase
    case unshadowVariables(value: hydra.testing.UnshadowVariablesTestCase) extends TestCase
    case validateCoreTerm(value: hydra.testing.ValidateCoreTermTestCase) extends TestCase
+   case universal(value: hydra.testing.UniversalTestCase) extends TestCase
 
 case class TestCaseWithMetadata(name: scala.Predef.String, `case`: hydra.testing.TestCase, description: Option[scala.Predef.String],
    tags: Seq[hydra.testing.Tag])
@@ -208,3 +209,5 @@ case class UnifyTypesTestCase(schemaTypes: Seq[hydra.core.Name], left: hydra.cor
 case class JoinTypesTestCase(left: hydra.core.Type, right: hydra.core.Type, expected: Either[Unit, Seq[hydra.typing.TypeConstraint]])
 
 case class ValidateCoreTermTestCase(typed: Boolean, input: hydra.core.Term, output: Option[hydra.error.core.InvalidTermError])
+
+case class UniversalTestCase(actual: scala.Predef.String, expected: scala.Predef.String)

@@ -56,8 +56,8 @@ def buildNamespacesForTestGroup(mod: hydra.module.Module)(tgroup: hydra.testing.
    hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]] =
   {
   lazy val `testCases_`: Seq[hydra.testing.TestCaseWithMetadata] = hydra.ext.haskell.testing.collectTestCases(tgroup)
-  lazy val testTerms: Seq[hydra.core.Term] = hydra.lib.lists.concat[hydra.core.Term](hydra.lib.lists.map[hydra.testing.TestCaseWithMetadata,
-     Seq[hydra.core.Term]](hydra.ext.haskell.testing.extractTestTerms)(`testCases_`))
+  def testTerms[T0]: Seq[T0] =
+    hydra.lib.lists.concat[T0](hydra.lib.lists.map[hydra.testing.TestCaseWithMetadata, Seq[T0]](hydra.ext.haskell.testing.extractTestTerms)(`testCases_`))
   lazy val testBindings: Seq[hydra.core.Binding] = hydra.lib.lists.map[hydra.core.Term, hydra.core.Binding]((term: hydra.core.Term) => hydra.core.Binding("_test_",
      term, None))(testTerms)
   lazy val tempModule: hydra.module.Module = hydra.module.Module(mod.namespace, hydra.lib.lists.map[hydra.core.Binding,
@@ -134,11 +134,7 @@ def extractEncodedTermVariableNames(graf: hydra.graph.Graph)(term: hydra.core.Te
   hydra.rewriting.foldOverTerm(hydra.coders.TraversalOrder.pre)((v1: scala.collection.immutable.Set[hydra.core.Name]) =>
   (v2: hydra.core.Term) => hydra.ext.haskell.testing.collectNames(graf)(v1)(v2))(hydra.lib.sets.empty[hydra.core.Name])(term)
 
-def extractTestTerms(tcm: hydra.testing.TestCaseWithMetadata): Seq[hydra.core.Term] =
-  tcm.`case` match
-  case hydra.testing.TestCase.delegatedEvaluation(v_TestCase_delegatedEvaluation_delCase) => Seq(v_TestCase_delegatedEvaluation_delCase.input,
-     (v_TestCase_delegatedEvaluation_delCase.output))
-  case _ => Seq()
+def extractTestTerms[T0, T1](tcm: T0): Seq[T1] = Seq()
 
 def findHaskellImports[T0](namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName])(`names_`: T0): Seq[scala.Predef.String] =
   {
@@ -161,35 +157,17 @@ def generateHaskellTestFile(testModule: hydra.module.Module)(testGroup: hydra.te
      Tuple2[scala.Predef.String, scala.Predef.String]](hydra.ext.haskell.testing.buildNamespacesForTestGroup(testModule)(testGroup)(g))((namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]) =>
   hydra.ext.haskell.testing.generateTestFileWithCodec(hydra.ext.haskell.testing.haskellTestCodec(namespaces))(testModule)(testGroup)(namespaces)(g))
 
-def generateTestCaseWithCodec(g: hydra.graph.Graph)(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName])(codec: hydra.testing.TestCodec)(depth: Int)(tcm: hydra.testing.TestCaseWithMetadata): Either[scala.Predef.String,
-   Seq[scala.Predef.String]] =
+def generateTestCaseWithCodec[T0, T1, T2, T3, T4, T5](g: T0)(namespaces: T1)(codec: T2)(depth: T3)(tcm: hydra.testing.TestCaseWithMetadata): Either[T4,
+   Seq[T5]] =
   {
   lazy val `name_`: scala.Predef.String = (tcm.name)
   lazy val tcase: hydra.testing.TestCase = (tcm.`case`)
-  tcase match
-    case hydra.testing.TestCase.delegatedEvaluation(v_TestCase_delegatedEvaluation_delCase) => {
-      lazy val `input_`: hydra.core.Term = (v_TestCase_delegatedEvaluation_delCase.input)
-      lazy val `output_`: hydra.core.Term = (v_TestCase_delegatedEvaluation_delCase.output)
-      lazy val formattedName: scala.Predef.String = codec.formatTestName(`name_`)
-      lazy val continuationIndent: Int = hydra.lib.math.add(hydra.lib.math.mul(depth)(2))(4)
-      hydra.lib.eithers.bind[scala.Predef.String, scala.Predef.String, Seq[scala.Predef.String]](codec.encodeTerm(`input_`)(g))((inputCode: scala.Predef.String) =>
-        hydra.lib.eithers.bind[scala.Predef.String, scala.Predef.String, Seq[scala.Predef.String]](codec.encodeTerm(`output_`)(g))((outputCode: scala.Predef.String) =>
-        hydra.lib.eithers.bind[scala.Predef.String, Option[scala.Predef.String], Seq[scala.Predef.String]](hydra.ext.haskell.testing.generateTypeAnnotationFor(g)(namespaces)(`input_`)(`output_`))((typeAnnotation: Option[scala.Predef.String]) =>
-        {
-        lazy val indentedInputCode: scala.Predef.String = hydra.ext.haskell.testing.indentContinuationLines(continuationIndent)(inputCode)
-        lazy val indentedOutputCode: scala.Predef.String = hydra.ext.haskell.testing.indentContinuationLines(continuationIndent)(outputCode)
-        lazy val finalOutputCode: scala.Predef.String = hydra.lib.maybes.maybe[scala.Predef.String, scala.Predef.String](indentedOutputCode)((anno: scala.Predef.String) => hydra.lib.strings.cat2(indentedOutputCode)(anno))(typeAnnotation)
-        Right(Seq(hydra.lib.strings.cat(Seq("H.it ", hydra.lib.literals.showString(formattedName), " $ H.shouldBe")),
-           hydra.lib.strings.cat(Seq("  (", indentedInputCode, ")")), hydra.lib.strings.cat(Seq("  (",
-           finalOutputCode, ")"))))
-      })))
-    }
-    case _ => Right(Seq())
+  Right(Seq())
 }
 
-def generateTestFileWithCodec(codec: hydra.testing.TestCodec)(testModule: hydra.module.Module)(testGroup: hydra.testing.TestGroup)(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName])(g: hydra.graph.Graph): Either[scala.Predef.String,
+def generateTestFileWithCodec[T0, T1, T2](codec: hydra.testing.TestCodec)(testModule: hydra.module.Module)(testGroup: hydra.testing.TestGroup)(namespaces: T0)(g: T1): Either[T2,
    Tuple2[scala.Predef.String, scala.Predef.String]] =
-  hydra.lib.eithers.map[scala.Predef.String, Tuple2[scala.Predef.String, scala.Predef.String], scala.Predef.String]((testBody: scala.Predef.String) =>
+  hydra.lib.eithers.map[scala.Predef.String, Tuple2[scala.Predef.String, scala.Predef.String], T2]((testBody: scala.Predef.String) =>
   {
   lazy val testModuleContent: scala.Predef.String = hydra.ext.haskell.testing.buildTestModuleWithCodec(codec)(testModule)(testGroup)(testBody)(namespaces)
   lazy val ext: scala.Predef.String = (codec.fileExtension)
@@ -199,27 +177,27 @@ def generateTestFileWithCodec(codec: hydra.testing.TestCodec)(testModule: hydra.
   Tuple2(filePath, testModuleContent)
 })(hydra.ext.haskell.testing.generateTestGroupHierarchy(g)(namespaces)(codec)(1)(testGroup))
 
-def generateTestGroupHierarchy(g: hydra.graph.Graph)(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName])(codec: hydra.testing.TestCodec)(depth: Int)(testGroup: hydra.testing.TestGroup): Either[scala.Predef.String,
+def generateTestGroupHierarchy[T0, T1, T2, T3](g: T0)(namespaces: T1)(codec: T2)(depth: Int)(testGroup: hydra.testing.TestGroup): Either[T3,
    scala.Predef.String] =
   {
   lazy val `cases_`: Seq[hydra.testing.TestCaseWithMetadata] = (testGroup.cases)
   lazy val subgroups: Seq[hydra.testing.TestGroup] = (testGroup.subgroups)
   lazy val indent: scala.Predef.String = hydra.lib.strings.fromList(hydra.lib.lists.replicate[Int](hydra.lib.math.mul(depth)(2))(32))
-  hydra.lib.eithers.bind[scala.Predef.String, Seq[Seq[scala.Predef.String]], scala.Predef.String](hydra.lib.eithers.mapList[hydra.testing.TestCaseWithMetadata,
-     Seq[scala.Predef.String], scala.Predef.String]((tc: hydra.testing.TestCaseWithMetadata) =>
+  hydra.lib.eithers.bind[T3, Seq[Seq[scala.Predef.String]], scala.Predef.String](hydra.lib.eithers.mapList[hydra.testing.TestCaseWithMetadata,
+     Seq[scala.Predef.String], T3]((tc: hydra.testing.TestCaseWithMetadata) =>
     hydra.ext.haskell.testing.generateTestCaseWithCodec(g)(namespaces)(codec)(depth)(tc))(`cases_`))((testCaseLinesRaw: Seq[Seq[scala.Predef.String]]) =>
     {
     lazy val testCaseLines: Seq[Seq[scala.Predef.String]] = hydra.lib.lists.map[Seq[scala.Predef.String],
        Seq[scala.Predef.String]]((`lines_`: Seq[scala.Predef.String]) =>
       hydra.lib.lists.map[scala.Predef.String, scala.Predef.String]((line: scala.Predef.String) => hydra.lib.strings.cat2(indent)(line))(`lines_`))(testCaseLinesRaw)
     lazy val testCasesStr: scala.Predef.String = hydra.lib.strings.intercalate("\n")(hydra.lib.lists.concat[scala.Predef.String](testCaseLines))
-    hydra.lib.eithers.map[scala.Predef.String, scala.Predef.String, scala.Predef.String]((subgroupsStr: scala.Predef.String) =>
+    hydra.lib.eithers.map[scala.Predef.String, scala.Predef.String, T3]((subgroupsStr: scala.Predef.String) =>
       hydra.lib.strings.cat(Seq(testCasesStr, hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.logic.or(hydra.lib.equality.equal[scala.Predef.String](testCasesStr)(""))(hydra.lib.equality.equal[scala.Predef.String](subgroupsStr)("")))("")("\n"),
-         subgroupsStr)))(hydra.lib.eithers.map[Seq[scala.Predef.String], scala.Predef.String, scala.Predef.String]((blocks: Seq[scala.Predef.String]) => hydra.lib.strings.intercalate("\n")(blocks))(hydra.lib.eithers.mapList[hydra.testing.TestGroup,
-         scala.Predef.String, scala.Predef.String]((subgroup: hydra.testing.TestGroup) =>
+         subgroupsStr)))(hydra.lib.eithers.map[Seq[scala.Predef.String], scala.Predef.String, T3]((blocks: Seq[scala.Predef.String]) => hydra.lib.strings.intercalate("\n")(blocks))(hydra.lib.eithers.mapList[hydra.testing.TestGroup,
+         scala.Predef.String, T3]((subgroup: hydra.testing.TestGroup) =>
       {
       lazy val `groupName_`: scala.Predef.String = (subgroup.name)
-      hydra.lib.eithers.map[scala.Predef.String, scala.Predef.String, scala.Predef.String]((content: scala.Predef.String) =>
+      hydra.lib.eithers.map[scala.Predef.String, scala.Predef.String, T3]((content: scala.Predef.String) =>
         hydra.lib.strings.cat(Seq(indent, "H.describe ", hydra.lib.literals.showString(`groupName_`),
            " $ do\n", content)))(hydra.ext.haskell.testing.generateTestGroupHierarchy(g)(namespaces)(codec)(hydra.lib.math.add(depth)(1))(subgroup))
     })(subgroups)))

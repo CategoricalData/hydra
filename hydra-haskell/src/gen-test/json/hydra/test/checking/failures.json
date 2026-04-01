@@ -93,7 +93,7 @@
             "variables": []}]}}],
   "description": ["Type checking failure test cases"],
   "namespace": "hydra.test.checking.failures",
-  "termDependencies": ["hydra.test.testGraph"],
+  "termDependencies": ["hydra.test.testGraph", "hydra.rewriting"],
   "typeDependencies": [
     "hydra.paths",
     "hydra.ast",
@@ -103,6 +103,7 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
+    "hydra.error.module",
     "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",

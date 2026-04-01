@@ -6,6 +6,19 @@ module Hydra.Test.Rewriting where
 
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.Lib.Eithers as Eithers
+import qualified Hydra.Lib.Equality as Equality
+import qualified Hydra.Lib.Lists as Lists
+import qualified Hydra.Lib.Logic as Logic
+import qualified Hydra.Lib.Maps as Maps
+import qualified Hydra.Lib.Math as Math
+import qualified Hydra.Lib.Pairs as Pairs
+import qualified Hydra.Lib.Sets as Sets
+import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Reduction as Reduction
+import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Test.TestGraph as TestGraph
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -28,69 +41,105 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string literal has no free variables",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFreeVariables (Testing.FreeVariablesTestCase {
-                Testing.freeVariablesTestCaseInput = (Core.TermLiteral (Core.LiteralString "foo")),
-                Testing.freeVariablesTestCaseOutput = S.empty})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Strings.cat [
+                  "{",
+                  (Strings.intercalate ", " (Lists.map (\n -> Core.unName n) (Sets.toList (Rewriting.freeVariablesInTerm (Core.TermLiteral (Core.LiteralString "foo")))))),
+                  "}"]),
+                Testing.universalTestCaseExpected = (Strings.cat [
+                  "{",
+                  (Strings.intercalate ", " (Lists.map (\n -> Core.unName n) (Sets.toList S.empty))),
+                  "}"])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "single variable",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFreeVariables (Testing.FreeVariablesTestCase {
-                Testing.freeVariablesTestCaseInput = (Core.TermVariable (Core.Name "x")),
-                Testing.freeVariablesTestCaseOutput = (S.fromList [
-                  Core.Name "x"])})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Strings.cat [
+                  "{",
+                  (Strings.intercalate ", " (Lists.map (\n -> Core.unName n) (Sets.toList (Rewriting.freeVariablesInTerm (Core.TermVariable (Core.Name "x")))))),
+                  "}"]),
+                Testing.universalTestCaseExpected = (Strings.cat [
+                  "{",
+                  (Strings.intercalate ", " (Lists.map (\n -> Core.unName n) (Sets.toList (S.fromList [
+                    Core.Name "x"])))),
+                  "}"])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "bound variable is not free",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFreeVariables (Testing.FreeVariablesTestCase {
-                Testing.freeVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                  Core.lambdaParameter = (Core.Name "y"),
-                  Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))),
-                Testing.freeVariablesTestCaseOutput = S.empty})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Strings.cat [
+                  "{",
+                  (Strings.intercalate ", " (Lists.map (\n -> Core.unName n) (Sets.toList (Rewriting.freeVariablesInTerm (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.Name "y"),
+                    Core.lambdaDomain = Nothing,
+                    Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))))))),
+                  "}"]),
+                Testing.universalTestCaseExpected = (Strings.cat [
+                  "{",
+                  (Strings.intercalate ", " (Lists.map (\n -> Core.unName n) (Sets.toList S.empty))),
+                  "}"])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unbound variable in lambda body",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFreeVariables (Testing.FreeVariablesTestCase {
-                Testing.freeVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                  Core.lambdaParameter = (Core.Name "y"),
-                  Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
-                Testing.freeVariablesTestCaseOutput = (S.fromList [
-                  Core.Name "x"])})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Strings.cat [
+                  "{",
+                  (Strings.intercalate ", " (Lists.map (\n -> Core.unName n) (Sets.toList (Rewriting.freeVariablesInTerm (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.Name "y"),
+                    Core.lambdaDomain = Nothing,
+                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))))))),
+                  "}"]),
+                Testing.universalTestCaseExpected = (Strings.cat [
+                  "{",
+                  (Strings.intercalate ", " (Lists.map (\n -> Core.unName n) (Sets.toList (S.fromList [
+                    Core.Name "x"])))),
+                  "}"])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "mixed free and bound variables",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFreeVariables (Testing.FreeVariablesTestCase {
-                Testing.freeVariablesTestCaseInput = (Core.TermList [
-                  Core.TermVariable (Core.Name "x"),
-                  (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "y"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))]),
-                Testing.freeVariablesTestCaseOutput = (S.fromList [
-                  Core.Name "x"])})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Strings.cat [
+                  "{",
+                  (Strings.intercalate ", " (Lists.map (\n -> Core.unName n) (Sets.toList (Rewriting.freeVariablesInTerm (Core.TermList [
+                    Core.TermVariable (Core.Name "x"),
+                    (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "y"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))]))))),
+                  "}"]),
+                Testing.universalTestCaseExpected = (Strings.cat [
+                  "{",
+                  (Strings.intercalate ", " (Lists.map (\n -> Core.unName n) (Sets.toList (S.fromList [
+                    Core.Name "x"])))),
+                  "}"])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "multiple free variables",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFreeVariables (Testing.FreeVariablesTestCase {
-                Testing.freeVariablesTestCaseInput = (Core.TermList [
-                  Core.TermVariable (Core.Name "x"),
-                  (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "y"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))]),
-                Testing.freeVariablesTestCaseOutput = (S.fromList [
-                  Core.Name "x",
-                  (Core.Name "y")])})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Strings.cat [
+                  "{",
+                  (Strings.intercalate ", " (Lists.map (\n -> Core.unName n) (Sets.toList (Rewriting.freeVariablesInTerm (Core.TermList [
+                    Core.TermVariable (Core.Name "x"),
+                    (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "y"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))]))))),
+                  "}"]),
+                Testing.universalTestCaseExpected = (Strings.cat [
+                  "{",
+                  (Strings.intercalate ", " (Lists.map (\n -> Core.unName n) (Sets.toList (S.fromList [
+                    Core.Name "x",
+                    (Core.Name "y")])))),
+                  "}"])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -100,48 +149,48 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "const application with literal",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseSimplifyTerm (Testing.SimplifyTermTestCase {
-                Testing.simplifyTermTestCaseInput = (Core.TermApplication (Core.Application {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.simplifyTerm (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "foo"))}))),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                Testing.simplifyTermTestCaseOutput = (Core.TermLiteral (Core.LiteralString "foo"))})),
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralString "foo")))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "identity application",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseSimplifyTerm (Testing.SimplifyTermTestCase {
-                Testing.simplifyTermTestCaseInput = (Core.TermApplication (Core.Application {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.simplifyTerm (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermList [
                       Core.TermVariable (Core.Name "x"),
                       (Core.TermVariable (Core.Name "x"))])}))),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "y"))})),
-                Testing.simplifyTermTestCaseOutput = (Core.TermList [
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "y"))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermList [
                   Core.TermVariable (Core.Name "y"),
-                  (Core.TermVariable (Core.Name "y"))])})),
+                  (Core.TermVariable (Core.Name "y"))]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unused parameter",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseSimplifyTerm (Testing.SimplifyTermTestCase {
-                Testing.simplifyTermTestCaseInput = (Core.TermApplication (Core.Application {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.simplifyTerm (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "foo"))}))),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "y"))})),
-                Testing.simplifyTermTestCaseOutput = (Core.TermLiteral (Core.LiteralString "foo"))})),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "y"))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralString "foo")))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "nested lambda applications",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseSimplifyTerm (Testing.SimplifyTermTestCase {
-                Testing.simplifyTermTestCaseInput = (Core.TermApplication (Core.Application {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.simplifyTerm (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
@@ -153,10 +202,10 @@ allTests =
                           Core.TermLiteral (Core.LiteralString "foo"),
                           (Core.TermVariable (Core.Name "a"))])}))),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "y"))})),
-                Testing.simplifyTermTestCaseOutput = (Core.TermList [
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "y"))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralString "foo"),
-                  (Core.TermVariable (Core.Name "y"))])})),
+                  (Core.TermVariable (Core.Name "y"))]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -166,24 +215,24 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "non-let term unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFlattenLetTerms (Testing.FlattenLetTermsTestCase {
-                Testing.flattenLetTermsTestCaseInput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                Testing.flattenLetTermsTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.flattenLetTerms (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "list term unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFlattenLetTerms (Testing.FlattenLetTermsTestCase {
-                Testing.flattenLetTermsTestCaseInput = (Core.TermList [
-                  Core.TermLiteral (Core.LiteralString "foo")]),
-                Testing.flattenLetTermsTestCaseOutput = (Core.TermList [
-                  Core.TermLiteral (Core.LiteralString "foo")])})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.flattenLetTerms (Core.TermList [
+                  Core.TermLiteral (Core.LiteralString "foo")]))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermList [
+                  Core.TermLiteral (Core.LiteralString "foo")]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "sequential lets in body are flattened",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFlattenLetTerms (Testing.FlattenLetTermsTestCase {
-                Testing.flattenLetTermsTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.flattenLetTerms (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -197,8 +246,8 @@ allTests =
                         Core.bindingType = Nothing}],
                     Core.letBody = (Core.TermList [
                       Core.TermVariable (Core.Name "x"),
-                      (Core.TermVariable (Core.Name "y"))])}))})),
-                Testing.flattenLetTermsTestCaseOutput = (Core.TermLet (Core.Let {
+                      (Core.TermVariable (Core.Name "y"))])}))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -210,13 +259,13 @@ allTests =
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermList [
                     Core.TermVariable (Core.Name "x"),
-                    (Core.TermVariable (Core.Name "y"))])}))})),
+                    (Core.TermVariable (Core.Name "y"))])})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "nested binding in let value is flattened",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFlattenLetTerms (Testing.FlattenLetTermsTestCase {
-                Testing.flattenLetTermsTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.flattenLetTerms (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "a"),
@@ -240,8 +289,8 @@ allTests =
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermList [
                     Core.TermVariable (Core.Name "a"),
-                    (Core.TermVariable (Core.Name "b"))])})),
-                Testing.flattenLetTermsTestCaseOutput = (Core.TermLet (Core.Let {
+                    (Core.TermVariable (Core.Name "b"))])})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "a"),
@@ -263,13 +312,13 @@ allTests =
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermList [
                     Core.TermVariable (Core.Name "a"),
-                    (Core.TermVariable (Core.Name "b"))])}))})),
+                    (Core.TermVariable (Core.Name "b"))])})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "multiple levels of nesting are flattened",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFlattenLetTerms (Testing.FlattenLetTermsTestCase {
-                Testing.flattenLetTermsTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.flattenLetTerms (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "a"),
@@ -307,8 +356,8 @@ allTests =
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermList [
                     Core.TermVariable (Core.Name "a"),
-                    (Core.TermVariable (Core.Name "b"))])})),
-                Testing.flattenLetTermsTestCaseOutput = (Core.TermLet (Core.Let {
+                    (Core.TermVariable (Core.Name "b"))])})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "a"),
@@ -342,7 +391,7 @@ allTests =
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermList [
                     Core.TermVariable (Core.Name "a"),
-                    (Core.TermVariable (Core.Name "b"))])}))})),
+                    (Core.TermVariable (Core.Name "b"))])})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -352,8 +401,8 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "simple let with lambda in body",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseLiftLambdaAboveLet (Testing.LiftLambdaAboveLetTestCase {
-                Testing.liftLambdaAboveLetTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.liftLambdaAboveLet (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -362,8 +411,8 @@ allTests =
                   Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})),
-                Testing.liftLambdaAboveLetTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "y"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -372,45 +421,45 @@ allTests =
                         Core.bindingName = (Core.Name "x"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                         Core.bindingType = Nothing}],
-                    Core.letBody = (Core.TermVariable (Core.Name "x"))}))})))})),
+                    Core.letBody = (Core.TermVariable (Core.Name "x"))}))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "bare lambda unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseLiftLambdaAboveLet (Testing.LiftLambdaAboveLetTestCase {
-                Testing.liftLambdaAboveLetTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.liftLambdaAboveLet (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
-                Testing.liftLambdaAboveLetTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})),
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "bare let unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseLiftLambdaAboveLet (Testing.LiftLambdaAboveLetTestCase {
-                Testing.liftLambdaAboveLetTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.liftLambdaAboveLet (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermVariable (Core.Name "x"))})),
-                Testing.liftLambdaAboveLetTestCaseOutput = (Core.TermLet (Core.Let {
+                  Core.letBody = (Core.TermVariable (Core.Name "x"))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermVariable (Core.Name "x"))}))})),
+                  Core.letBody = (Core.TermVariable (Core.Name "x"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "lambda with let in body unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseLiftLambdaAboveLet (Testing.LiftLambdaAboveLetTestCase {
-                Testing.liftLambdaAboveLetTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.liftLambdaAboveLet (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "y"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -419,8 +468,8 @@ allTests =
                         Core.bindingName = (Core.Name "x"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                         Core.bindingType = Nothing}],
-                    Core.letBody = (Core.TermVariable (Core.Name "x"))}))}))),
-                Testing.liftLambdaAboveLetTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.letBody = (Core.TermVariable (Core.Name "x"))}))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "y"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -429,13 +478,13 @@ allTests =
                         Core.bindingName = (Core.Name "x"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                         Core.bindingType = Nothing}],
-                    Core.letBody = (Core.TermVariable (Core.Name "x"))}))})))})),
+                    Core.letBody = (Core.TermVariable (Core.Name "x"))}))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "let with two nested lambdas",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseLiftLambdaAboveLet (Testing.LiftLambdaAboveLetTestCase {
-                Testing.liftLambdaAboveLetTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.liftLambdaAboveLet (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -447,8 +496,8 @@ allTests =
                     Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "z"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})))})),
-                Testing.liftLambdaAboveLetTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "y"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -460,13 +509,13 @@ allTests =
                           Core.bindingName = (Core.Name "x"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.bindingType = Nothing}],
-                      Core.letBody = (Core.TermVariable (Core.Name "x"))}))})))})))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "x"))}))})))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "lambda inside let body already above let",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseLiftLambdaAboveLet (Testing.LiftLambdaAboveLetTestCase {
-                Testing.liftLambdaAboveLetTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.liftLambdaAboveLet (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -478,8 +527,8 @@ allTests =
                           Core.bindingName = (Core.Name "z"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.bindingType = Nothing}],
-                      Core.letBody = (Core.TermVariable (Core.Name "z"))}))})))}))),
-                Testing.liftLambdaAboveLetTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.letBody = (Core.TermVariable (Core.Name "z"))}))})))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -491,13 +540,13 @@ allTests =
                           Core.bindingName = (Core.Name "z"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.bindingType = Nothing}],
-                      Core.letBody = (Core.TermVariable (Core.Name "z"))}))})))})))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "z"))}))})))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "let without lambda in body unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseLiftLambdaAboveLet (Testing.LiftLambdaAboveLetTestCase {
-                Testing.liftLambdaAboveLetTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.liftLambdaAboveLet (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -507,8 +556,8 @@ allTests =
                       Core.bindingName = (Core.Name "y"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "hello")),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "y"))))})),
-                Testing.liftLambdaAboveLetTestCaseOutput = (Core.TermLet (Core.Let {
+                  Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "y"))))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -518,13 +567,13 @@ allTests =
                       Core.bindingName = (Core.Name "y"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "hello")),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "y"))))}))})),
+                  Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "y"))))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "multiple let bindings with lambda",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseLiftLambdaAboveLet (Testing.LiftLambdaAboveLetTestCase {
-                Testing.liftLambdaAboveLetTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.liftLambdaAboveLet (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -537,8 +586,8 @@ allTests =
                   Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "z"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})),
-                Testing.liftLambdaAboveLetTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "z"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -551,13 +600,13 @@ allTests =
                         Core.bindingName = (Core.Name "y"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "hello")),
                         Core.bindingType = Nothing}],
-                    Core.letBody = (Core.TermVariable (Core.Name "x"))}))})))})),
+                    Core.letBody = (Core.TermVariable (Core.Name "x"))}))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "nested lets with lambda at innermost level",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseLiftLambdaAboveLet (Testing.LiftLambdaAboveLetTestCase {
-                Testing.liftLambdaAboveLetTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.liftLambdaAboveLet (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -572,8 +621,8 @@ allTests =
                     Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "z"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}))})),
-                Testing.liftLambdaAboveLetTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "z"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -588,13 +637,13 @@ allTests =
                           Core.bindingName = (Core.Name "y"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "hello")),
                           Core.bindingType = Nothing}],
-                      Core.letBody = (Core.TermVariable (Core.Name "x"))}))}))})))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "x"))}))}))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "lambda between two lets",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseLiftLambdaAboveLet (Testing.LiftLambdaAboveLetTestCase {
-                Testing.liftLambdaAboveLetTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.liftLambdaAboveLet (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -609,8 +658,8 @@ allTests =
                           Core.bindingName = (Core.Name "z"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "hello")),
                           Core.bindingType = Nothing}],
-                      Core.letBody = (Core.TermVariable (Core.Name "x"))}))})))})),
-                Testing.liftLambdaAboveLetTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.letBody = (Core.TermVariable (Core.Name "x"))}))})))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "y"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -625,13 +674,13 @@ allTests =
                           Core.bindingName = (Core.Name "z"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "hello")),
                           Core.bindingType = Nothing}],
-                      Core.letBody = (Core.TermVariable (Core.Name "x"))}))}))})))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "x"))}))}))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "multiple lambdas between nested lets",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseLiftLambdaAboveLet (Testing.LiftLambdaAboveLetTestCase {
-                Testing.liftLambdaAboveLetTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.liftLambdaAboveLet (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "a"),
@@ -649,8 +698,8 @@ allTests =
                             Core.bindingName = (Core.Name "b"),
                             Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                             Core.bindingType = Nothing}],
-                        Core.letBody = (Core.TermVariable (Core.Name "a"))}))})))})))})),
-                Testing.liftLambdaAboveLetTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.letBody = (Core.TermVariable (Core.Name "a"))}))})))})))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -668,13 +717,13 @@ allTests =
                             Core.bindingName = (Core.Name "b"),
                             Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                             Core.bindingType = Nothing}],
-                        Core.letBody = (Core.TermVariable (Core.Name "a"))}))}))})))})))})),
+                        Core.letBody = (Core.TermVariable (Core.Name "a"))}))}))})))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "multiple lambdas already above let",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseLiftLambdaAboveLet (Testing.LiftLambdaAboveLetTestCase {
-                Testing.liftLambdaAboveLetTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.liftLambdaAboveLet (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -686,8 +735,8 @@ allTests =
                           Core.bindingName = (Core.Name "z"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.bindingType = Nothing}],
-                      Core.letBody = (Core.TermVariable (Core.Name "z"))}))})))}))),
-                Testing.liftLambdaAboveLetTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.letBody = (Core.TermVariable (Core.Name "z"))}))})))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -699,13 +748,13 @@ allTests =
                           Core.bindingName = (Core.Name "z"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.bindingType = Nothing}],
-                      Core.letBody = (Core.TermVariable (Core.Name "z"))}))})))})))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "z"))}))})))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "annotation above let containing lambda",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseLiftLambdaAboveLet (Testing.LiftLambdaAboveLetTestCase {
-                Testing.liftLambdaAboveLetTestCaseInput = (Core.TermAnnotated (Core.AnnotatedTerm {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.liftLambdaAboveLet (Core.TermAnnotated (Core.AnnotatedTerm {
                   Core.annotatedTermBody = (Core.TermLet (Core.Let {
                     Core.letBindings = [
                       Core.Binding {
@@ -716,8 +765,8 @@ allTests =
                       Core.lambdaParameter = (Core.Name "y"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})),
-                  Core.annotatedTermAnnotation = M.empty})),
-                Testing.liftLambdaAboveLetTestCaseOutput = (Core.TermAnnotated (Core.AnnotatedTerm {
+                  Core.annotatedTermAnnotation = M.empty})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermAnnotated (Core.AnnotatedTerm {
                   Core.annotatedTermBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
@@ -728,13 +777,13 @@ allTests =
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.bindingType = Nothing}],
                       Core.letBody = (Core.TermVariable (Core.Name "x"))}))}))),
-                  Core.annotatedTermAnnotation = M.empty}))})),
+                  Core.annotatedTermAnnotation = M.empty})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "annotation above lambda in let body",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseLiftLambdaAboveLet (Testing.LiftLambdaAboveLetTestCase {
-                Testing.liftLambdaAboveLetTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.liftLambdaAboveLet (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -745,8 +794,8 @@ allTests =
                       Core.lambdaParameter = (Core.Name "y"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
-                    Core.annotatedTermAnnotation = M.empty}))})),
-                Testing.liftLambdaAboveLetTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.annotatedTermAnnotation = M.empty}))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "y"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -757,13 +806,13 @@ allTests =
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.bindingType = Nothing}],
                       Core.letBody = (Core.TermVariable (Core.Name "x"))})),
-                    Core.annotatedTermAnnotation = M.empty}))})))})),
+                    Core.annotatedTermAnnotation = M.empty}))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "annotation between two lambdas",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseLiftLambdaAboveLet (Testing.LiftLambdaAboveLetTestCase {
-                Testing.liftLambdaAboveLetTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.liftLambdaAboveLet (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -777,8 +826,8 @@ allTests =
                         Core.lambdaParameter = (Core.Name "z"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
-                      Core.annotatedTermAnnotation = M.empty}))})))})),
-                Testing.liftLambdaAboveLetTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.annotatedTermAnnotation = M.empty}))})))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "y"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -792,13 +841,13 @@ allTests =
                             Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                             Core.bindingType = Nothing}],
                         Core.letBody = (Core.TermVariable (Core.Name "x"))})),
-                      Core.annotatedTermAnnotation = M.empty}))})))})))})),
+                      Core.annotatedTermAnnotation = M.empty}))})))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "annotation on the body of lambda in let",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseLiftLambdaAboveLet (Testing.LiftLambdaAboveLetTestCase {
-                Testing.liftLambdaAboveLetTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.liftLambdaAboveLet (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -809,8 +858,8 @@ allTests =
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermAnnotated (Core.AnnotatedTerm {
                       Core.annotatedTermBody = (Core.TermVariable (Core.Name "x")),
-                      Core.annotatedTermAnnotation = M.empty}))})))})),
-                Testing.liftLambdaAboveLetTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.annotatedTermAnnotation = M.empty}))})))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "y"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -821,13 +870,13 @@ allTests =
                         Core.bindingType = Nothing}],
                     Core.letBody = (Core.TermAnnotated (Core.AnnotatedTerm {
                       Core.annotatedTermBody = (Core.TermVariable (Core.Name "x")),
-                      Core.annotatedTermAnnotation = M.empty}))}))})))})),
+                      Core.annotatedTermAnnotation = M.empty}))}))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "annotation on lambda already above let",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseLiftLambdaAboveLet (Testing.LiftLambdaAboveLetTestCase {
-                Testing.liftLambdaAboveLetTestCaseInput = (Core.TermAnnotated (Core.AnnotatedTerm {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.liftLambdaAboveLet (Core.TermAnnotated (Core.AnnotatedTerm {
                   Core.annotatedTermBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
@@ -838,8 +887,8 @@ allTests =
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.bindingType = Nothing}],
                       Core.letBody = (Core.TermVariable (Core.Name "x"))}))}))),
-                  Core.annotatedTermAnnotation = M.empty})),
-                Testing.liftLambdaAboveLetTestCaseOutput = (Core.TermAnnotated (Core.AnnotatedTerm {
+                  Core.annotatedTermAnnotation = M.empty})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermAnnotated (Core.AnnotatedTerm {
                   Core.annotatedTermBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
@@ -850,13 +899,13 @@ allTests =
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.bindingType = Nothing}],
                       Core.letBody = (Core.TermVariable (Core.Name "x"))}))}))),
-                  Core.annotatedTermAnnotation = M.empty}))})),
+                  Core.annotatedTermAnnotation = M.empty})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "let-lambda inside a list",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseLiftLambdaAboveLet (Testing.LiftLambdaAboveLetTestCase {
-                Testing.liftLambdaAboveLetTestCaseInput = (Core.TermList [
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.liftLambdaAboveLet (Core.TermList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                   (Core.TermLet (Core.Let {
                     Core.letBindings = [
@@ -868,8 +917,8 @@ allTests =
                       Core.lambdaParameter = (Core.Name "y"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))]),
-                Testing.liftLambdaAboveLetTestCaseOutput = (Core.TermList [
+                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))]))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                   (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
@@ -881,13 +930,13 @@ allTests =
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.bindingType = Nothing}],
                       Core.letBody = (Core.TermVariable (Core.Name "x"))}))}))),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))])})),
+                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "let-lambda in multiple list elements",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseLiftLambdaAboveLet (Testing.LiftLambdaAboveLetTestCase {
-                Testing.liftLambdaAboveLetTestCaseInput = (Core.TermList [
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.liftLambdaAboveLet (Core.TermList [
                   Core.TermLet (Core.Let {
                     Core.letBindings = [
                       Core.Binding {
@@ -907,8 +956,8 @@ allTests =
                     Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "w"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "z"))})))}))]),
-                Testing.liftLambdaAboveLetTestCaseOutput = (Core.TermList [
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "z"))})))}))]))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermList [
                   Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
@@ -928,13 +977,13 @@ allTests =
                           Core.bindingName = (Core.Name "z"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                           Core.bindingType = Nothing}],
-                      Core.letBody = (Core.TermVariable (Core.Name "z"))}))})))])})),
+                      Core.letBody = (Core.TermVariable (Core.Name "z"))}))})))]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "let-lambda in a let binding value",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseLiftLambdaAboveLet (Testing.LiftLambdaAboveLetTestCase {
-                Testing.liftLambdaAboveLetTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.liftLambdaAboveLet (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -949,8 +998,8 @@ allTests =
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermVariable (Core.Name "f"))})),
-                Testing.liftLambdaAboveLetTestCaseOutput = (Core.TermLet (Core.Let {
+                  Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -965,13 +1014,13 @@ allTests =
                               Core.bindingType = Nothing}],
                           Core.letBody = (Core.TermVariable (Core.Name "x"))}))}))),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermVariable (Core.Name "f"))}))})),
+                  Core.letBody = (Core.TermVariable (Core.Name "f"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "let-lambda inside a pair",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseLiftLambdaAboveLet (Testing.LiftLambdaAboveLetTestCase {
-                Testing.liftLambdaAboveLetTestCaseInput = (Core.TermPair (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.liftLambdaAboveLet (Core.TermPair (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -980,8 +1029,8 @@ allTests =
                   Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}), (Core.TermLiteral (Core.LiteralString "test")))),
-                Testing.liftLambdaAboveLetTestCaseOutput = (Core.TermPair (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}), (Core.TermLiteral (Core.LiteralString "test")))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermPair (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "y"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -990,13 +1039,13 @@ allTests =
                         Core.bindingName = (Core.Name "x"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                         Core.bindingType = Nothing}],
-                    Core.letBody = (Core.TermVariable (Core.Name "x"))}))})), (Core.TermLiteral (Core.LiteralString "test"))))})),
+                    Core.letBody = (Core.TermVariable (Core.Name "x"))}))})), (Core.TermLiteral (Core.LiteralString "test")))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "let-lambda in both elements of a pair",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseLiftLambdaAboveLet (Testing.LiftLambdaAboveLetTestCase {
-                Testing.liftLambdaAboveLetTestCaseInput = (Core.TermPair (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.liftLambdaAboveLet (Core.TermPair (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -1014,8 +1063,8 @@ allTests =
                   Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "w"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermVariable (Core.Name "z"))})))})))),
-                Testing.liftLambdaAboveLetTestCaseOutput = (Core.TermPair (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaBody = (Core.TermVariable (Core.Name "z"))})))})))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermPair (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "y"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -1033,13 +1082,13 @@ allTests =
                         Core.bindingName = (Core.Name "z"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                         Core.bindingType = Nothing}],
-                    Core.letBody = (Core.TermVariable (Core.Name "z"))}))})))))})),
+                    Core.letBody = (Core.TermVariable (Core.Name "z"))}))}))))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "let-lambda inside lambda body",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseLiftLambdaAboveLet (Testing.LiftLambdaAboveLetTestCase {
-                Testing.liftLambdaAboveLetTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.liftLambdaAboveLet (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "outer"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -1051,8 +1100,8 @@ allTests =
                     Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "inner"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}))}))),
-                Testing.liftLambdaAboveLetTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "outer"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -1064,7 +1113,7 @@ allTests =
                           Core.bindingName = (Core.Name "x"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.bindingType = Nothing}],
-                      Core.letBody = (Core.TermVariable (Core.Name "x"))}))})))})))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "x"))}))})))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -1074,77 +1123,77 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unannotated literal unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseDeannotateTerm (Testing.DeannotateTermTestCase {
-                Testing.deannotateTermTestCaseInput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                Testing.deannotateTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.deannotateTerm (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unannotated variable unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseDeannotateTerm (Testing.DeannotateTermTestCase {
-                Testing.deannotateTermTestCaseInput = (Core.TermVariable (Core.Name "x")),
-                Testing.deannotateTermTestCaseOutput = (Core.TermVariable (Core.Name "x"))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.deannotateTerm (Core.TermVariable (Core.Name "x")))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermVariable (Core.Name "x")))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unannotated lambda unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseDeannotateTerm (Testing.DeannotateTermTestCase {
-                Testing.deannotateTermTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.deannotateTerm (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
-                Testing.deannotateTermTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})),
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "single annotation stripped",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseDeannotateTerm (Testing.DeannotateTermTestCase {
-                Testing.deannotateTermTestCaseInput = (Core.TermAnnotated (Core.AnnotatedTerm {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.deannotateTerm (Core.TermAnnotated (Core.AnnotatedTerm {
                   Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                  Core.annotatedTermAnnotation = M.empty})),
-                Testing.deannotateTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                  Core.annotatedTermAnnotation = M.empty})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "nested annotations stripped",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseDeannotateTerm (Testing.DeannotateTermTestCase {
-                Testing.deannotateTermTestCaseInput = (Core.TermAnnotated (Core.AnnotatedTerm {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.deannotateTerm (Core.TermAnnotated (Core.AnnotatedTerm {
                   Core.annotatedTermBody = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                     Core.annotatedTermAnnotation = M.empty})),
-                  Core.annotatedTermAnnotation = M.empty})),
-                Testing.deannotateTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                  Core.annotatedTermAnnotation = M.empty})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "annotated lambda stripped",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseDeannotateTerm (Testing.DeannotateTermTestCase {
-                Testing.deannotateTermTestCaseInput = (Core.TermAnnotated (Core.AnnotatedTerm {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.deannotateTerm (Core.TermAnnotated (Core.AnnotatedTerm {
                   Core.annotatedTermBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
-                  Core.annotatedTermAnnotation = M.empty})),
-                Testing.deannotateTermTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.annotatedTermAnnotation = M.empty})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})),
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "annotated application stripped",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseDeannotateTerm (Testing.DeannotateTermTestCase {
-                Testing.deannotateTermTestCaseInput = (Core.TermAnnotated (Core.AnnotatedTerm {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.deannotateTerm (Core.TermAnnotated (Core.AnnotatedTerm {
                   Core.annotatedTermBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                  Core.annotatedTermAnnotation = M.empty})),
-                Testing.deannotateTermTestCaseOutput = (Core.TermApplication (Core.Application {
+                  Core.annotatedTermAnnotation = M.empty})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -1154,69 +1203,69 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unannotated primitive type unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseDeannotateType (Testing.DeannotateTypeTestCase {
-                Testing.deannotateTypeTestCaseInput = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                Testing.deannotateTypeTestCaseOutput = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.type_ (Rewriting.deannotateType (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))),
+                Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unannotated string type unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseDeannotateType (Testing.DeannotateTypeTestCase {
-                Testing.deannotateTypeTestCaseInput = (Core.TypeLiteral Core.LiteralTypeString),
-                Testing.deannotateTypeTestCaseOutput = (Core.TypeLiteral Core.LiteralTypeString)})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.type_ (Rewriting.deannotateType (Core.TypeLiteral Core.LiteralTypeString))),
+                Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeLiteral Core.LiteralTypeString))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unannotated function type unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseDeannotateType (Testing.DeannotateTypeTestCase {
-                Testing.deannotateTypeTestCaseInput = (Core.TypeFunction (Core.FunctionType {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.type_ (Rewriting.deannotateType (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                  Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})),
-                Testing.deannotateTypeTestCaseOutput = (Core.TypeFunction (Core.FunctionType {
+                  Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})))),
+                Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                  Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)}))})),
+                  Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "single annotation stripped",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseDeannotateType (Testing.DeannotateTypeTestCase {
-                Testing.deannotateTypeTestCaseInput = (Core.TypeAnnotated (Core.AnnotatedType {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.type_ (Rewriting.deannotateType (Core.TypeAnnotated (Core.AnnotatedType {
                   Core.annotatedTypeBody = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                  Core.annotatedTypeAnnotation = M.empty})),
-                Testing.deannotateTypeTestCaseOutput = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+                  Core.annotatedTypeAnnotation = M.empty})))),
+                Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "nested annotations stripped",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseDeannotateType (Testing.DeannotateTypeTestCase {
-                Testing.deannotateTypeTestCaseInput = (Core.TypeAnnotated (Core.AnnotatedType {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.type_ (Rewriting.deannotateType (Core.TypeAnnotated (Core.AnnotatedType {
                   Core.annotatedTypeBody = (Core.TypeAnnotated (Core.AnnotatedType {
                     Core.annotatedTypeBody = (Core.TypeLiteral Core.LiteralTypeString),
                     Core.annotatedTypeAnnotation = M.empty})),
-                  Core.annotatedTypeAnnotation = M.empty})),
-                Testing.deannotateTypeTestCaseOutput = (Core.TypeLiteral Core.LiteralTypeString)})),
+                  Core.annotatedTypeAnnotation = M.empty})))),
+                Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeLiteral Core.LiteralTypeString))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "annotated list type stripped",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseDeannotateType (Testing.DeannotateTypeTestCase {
-                Testing.deannotateTypeTestCaseInput = (Core.TypeAnnotated (Core.AnnotatedType {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.type_ (Rewriting.deannotateType (Core.TypeAnnotated (Core.AnnotatedType {
                   Core.annotatedTypeBody = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
-                  Core.annotatedTypeAnnotation = M.empty})),
-                Testing.deannotateTypeTestCaseOutput = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))})),
+                  Core.annotatedTypeAnnotation = M.empty})))),
+                Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "annotated function type stripped",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseDeannotateType (Testing.DeannotateTypeTestCase {
-                Testing.deannotateTypeTestCaseInput = (Core.TypeAnnotated (Core.AnnotatedType {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.type_ (Rewriting.deannotateType (Core.TypeAnnotated (Core.AnnotatedType {
                   Core.annotatedTypeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                     Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})),
-                  Core.annotatedTypeAnnotation = M.empty})),
-                Testing.deannotateTypeTestCaseOutput = (Core.TypeFunction (Core.FunctionType {
+                  Core.annotatedTypeAnnotation = M.empty})))),
+                Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                  Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)}))})),
+                  Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -1226,56 +1275,96 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "isolated bindings",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseTopologicalSortBindings (Testing.TopologicalSortBindingsTestCase {
-                Testing.topologicalSortBindingsTestCaseBindings = [
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.list (\group -> Core_.list (\pair -> Strings.cat [
+                  "(",
+                  (Core.unName (Pairs.first pair)),
+                  ", ",
+                  (Core_.term (Pairs.second pair)),
+                  ")"]) group) (Rewriting.topologicalSortBindingMap (Maps.fromList [
                   (Core.Name "a", (Core.TermLiteral (Core.LiteralString "foo"))),
-                  (Core.Name "b", (Core.TermLiteral (Core.LiteralString "bar")))],
-                Testing.topologicalSortBindingsTestCaseExpected = [
+                  (Core.Name "b", (Core.TermLiteral (Core.LiteralString "bar")))]))),
+                Testing.universalTestCaseExpected = (Core_.list (\group -> Core_.list (\pair -> Strings.cat [
+                  "(",
+                  (Core.unName (Pairs.first pair)),
+                  ", ",
+                  (Core_.term (Pairs.second pair)),
+                  ")"]) group) [
                   [
                     (Core.Name "a", (Core.TermLiteral (Core.LiteralString "foo")))],
                   [
-                    (Core.Name "b", (Core.TermLiteral (Core.LiteralString "bar")))]]})),
+                    (Core.Name "b", (Core.TermLiteral (Core.LiteralString "bar")))]])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "single recursive binding",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseTopologicalSortBindings (Testing.TopologicalSortBindingsTestCase {
-                Testing.topologicalSortBindingsTestCaseBindings = [
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.list (\group -> Core_.list (\pair -> Strings.cat [
+                  "(",
+                  (Core.unName (Pairs.first pair)),
+                  ", ",
+                  (Core_.term (Pairs.second pair)),
+                  ")"]) group) (Rewriting.topologicalSortBindingMap (Maps.fromList [
                   (Core.Name "a", (Core.TermList [
-                    Core.TermVariable (Core.Name "a")]))],
-                Testing.topologicalSortBindingsTestCaseExpected = [
+                    Core.TermVariable (Core.Name "a")]))]))),
+                Testing.universalTestCaseExpected = (Core_.list (\group -> Core_.list (\pair -> Strings.cat [
+                  "(",
+                  (Core.unName (Pairs.first pair)),
+                  ", ",
+                  (Core_.term (Pairs.second pair)),
+                  ")"]) group) [
                   [
                     (Core.Name "a", (Core.TermList [
-                      Core.TermVariable (Core.Name "a")]))]]})),
+                      Core.TermVariable (Core.Name "a")]))]])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "mutually recursive bindings",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseTopologicalSortBindings (Testing.TopologicalSortBindingsTestCase {
-                Testing.topologicalSortBindingsTestCaseBindings = [
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.list (\group -> Core_.list (\pair -> Strings.cat [
+                  "(",
+                  (Core.unName (Pairs.first pair)),
+                  ", ",
+                  (Core_.term (Pairs.second pair)),
+                  ")"]) group) (Rewriting.topologicalSortBindingMap (Maps.fromList [
                   (Core.Name "a", (Core.TermList [
                     Core.TermVariable (Core.Name "b")])),
                   (Core.Name "b", (Core.TermList [
-                    Core.TermVariable (Core.Name "a")]))],
-                Testing.topologicalSortBindingsTestCaseExpected = [
+                    Core.TermVariable (Core.Name "a")]))]))),
+                Testing.universalTestCaseExpected = (Core_.list (\group -> Core_.list (\pair -> Strings.cat [
+                  "(",
+                  (Core.unName (Pairs.first pair)),
+                  ", ",
+                  (Core_.term (Pairs.second pair)),
+                  ")"]) group) [
                   [
                     (Core.Name "a", (Core.TermList [
                       Core.TermVariable (Core.Name "b")])),
                     (Core.Name "b", (Core.TermList [
-                      Core.TermVariable (Core.Name "a")]))]]})),
+                      Core.TermVariable (Core.Name "a")]))]])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "mixed bindings",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseTopologicalSortBindings (Testing.TopologicalSortBindingsTestCase {
-                Testing.topologicalSortBindingsTestCaseBindings = [
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.list (\group -> Core_.list (\pair -> Strings.cat [
+                  "(",
+                  (Core.unName (Pairs.first pair)),
+                  ", ",
+                  (Core_.term (Pairs.second pair)),
+                  ")"]) group) (Rewriting.topologicalSortBindingMap (Maps.fromList [
                   (Core.Name "a", (Core.TermVariable (Core.Name "b"))),
                   (Core.Name "b", (Core.TermList [
                     Core.TermVariable (Core.Name "a"),
                     (Core.TermVariable (Core.Name "c"))])),
                   (Core.Name "c", (Core.TermLiteral (Core.LiteralString "foo"))),
-                  (Core.Name "d", (Core.TermLiteral (Core.LiteralString "bar")))],
-                Testing.topologicalSortBindingsTestCaseExpected = [
+                  (Core.Name "d", (Core.TermLiteral (Core.LiteralString "bar")))]))),
+                Testing.universalTestCaseExpected = (Core_.list (\group -> Core_.list (\pair -> Strings.cat [
+                  "(",
+                  (Core.unName (Pairs.first pair)),
+                  ", ",
+                  (Core_.term (Pairs.second pair)),
+                  ")"]) group) [
                   [
                     (Core.Name "c", (Core.TermLiteral (Core.LiteralString "foo")))],
                   [
@@ -1284,7 +1373,7 @@ allTests =
                       Core.TermVariable (Core.Name "a"),
                       (Core.TermVariable (Core.Name "c"))]))],
                   [
-                    (Core.Name "d", (Core.TermLiteral (Core.LiteralString "bar")))]]})),
+                    (Core.Name "d", (Core.TermLiteral (Core.LiteralString "bar")))]])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -1294,34 +1383,34 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "literal without type variables unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseNormalizeTypeVariables (Testing.NormalizeTypeVariablesTestCase {
-                Testing.normalizeTypeVariablesTestCaseInput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                Testing.normalizeTypeVariablesTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.normalizeTypeVariablesInTerm (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "simple let without type annotations unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseNormalizeTypeVariables (Testing.NormalizeTypeVariablesTestCase {
-                Testing.normalizeTypeVariablesTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.normalizeTypeVariablesInTerm (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "foo")),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                Testing.normalizeTypeVariablesTestCaseOutput = (Core.TermLet (Core.Let {
+                  Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "foo")),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
+                  Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "let with monomorphic type scheme unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseNormalizeTypeVariables (Testing.NormalizeTypeVariablesTestCase {
-                Testing.normalizeTypeVariablesTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.normalizeTypeVariablesInTerm (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
@@ -1330,8 +1419,8 @@ allTests =
                         Core.typeSchemeVariables = [],
                         Core.typeSchemeType = (Core.TypeLiteral Core.LiteralTypeString),
                         Core.typeSchemeConstraints = Nothing}))}],
-                  Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                Testing.normalizeTypeVariablesTestCaseOutput = (Core.TermLet (Core.Let {
+                  Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
@@ -1340,13 +1429,13 @@ allTests =
                         Core.typeSchemeVariables = [],
                         Core.typeSchemeType = (Core.TypeLiteral Core.LiteralTypeString),
                         Core.typeSchemeConstraints = Nothing}))}],
-                  Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
+                  Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "let with monomorphic binding referencing string",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseNormalizeTypeVariables (Testing.NormalizeTypeVariablesTestCase {
-                Testing.normalizeTypeVariablesTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.normalizeTypeVariablesInTerm (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
@@ -1355,8 +1444,8 @@ allTests =
                         Core.typeSchemeVariables = [],
                         Core.typeSchemeType = (Core.TypeLiteral Core.LiteralTypeString),
                         Core.typeSchemeConstraints = Nothing}))}],
-                  Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                Testing.normalizeTypeVariablesTestCaseOutput = (Core.TermLet (Core.Let {
+                  Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
@@ -1365,13 +1454,13 @@ allTests =
                         Core.typeSchemeVariables = [],
                         Core.typeSchemeType = (Core.TypeLiteral Core.LiteralTypeString),
                         Core.typeSchemeConstraints = Nothing}))}],
-                  Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
+                  Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "polymorphic binding with free type variable unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseNormalizeTypeVariables (Testing.NormalizeTypeVariablesTestCase {
-                Testing.normalizeTypeVariablesTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.normalizeTypeVariablesInTerm (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
@@ -1380,8 +1469,8 @@ allTests =
                         Core.typeSchemeVariables = [],
                         Core.typeSchemeType = (Core.TypeVariable (Core.Name "a")),
                         Core.typeSchemeConstraints = Nothing}))}],
-                  Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                Testing.normalizeTypeVariablesTestCaseOutput = (Core.TermLet (Core.Let {
+                  Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
@@ -1390,13 +1479,13 @@ allTests =
                         Core.typeSchemeVariables = [],
                         Core.typeSchemeType = (Core.TypeVariable (Core.Name "a")),
                         Core.typeSchemeConstraints = Nothing}))}],
-                  Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
+                  Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "monomorphic binding with typed lambda unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseNormalizeTypeVariables (Testing.NormalizeTypeVariablesTestCase {
-                Testing.normalizeTypeVariablesTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.normalizeTypeVariablesInTerm (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
@@ -1410,8 +1499,8 @@ allTests =
                     Core.lambdaDomain = (Just (Core.TypeFunction (Core.FunctionType {
                       Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                       Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))),
-                    Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))})),
-                Testing.normalizeTypeVariablesTestCaseOutput = (Core.TermLet (Core.Let {
+                    Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
@@ -1425,13 +1514,13 @@ allTests =
                     Core.lambdaDomain = (Just (Core.TypeFunction (Core.FunctionType {
                       Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                       Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))),
-                    Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))}))})),
+                    Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "polymorphic binding with typed lambda in body unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseNormalizeTypeVariables (Testing.NormalizeTypeVariablesTestCase {
-                Testing.normalizeTypeVariablesTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.normalizeTypeVariablesInTerm (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
@@ -1445,8 +1534,8 @@ allTests =
                     Core.lambdaDomain = (Just (Core.TypeFunction (Core.FunctionType {
                       Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                       Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))),
-                    Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))})),
-                Testing.normalizeTypeVariablesTestCaseOutput = (Core.TermLet (Core.Let {
+                    Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
@@ -1460,13 +1549,13 @@ allTests =
                     Core.lambdaDomain = (Just (Core.TypeFunction (Core.FunctionType {
                       Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                       Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))),
-                    Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))}))})),
+                    Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "polymorphic identity function normalized",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseNormalizeTypeVariables (Testing.NormalizeTypeVariablesTestCase {
-                Testing.normalizeTypeVariablesTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.normalizeTypeVariablesInTerm (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "id"),
@@ -1483,8 +1572,8 @@ allTests =
                         Core.typeSchemeConstraints = Nothing}))}],
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
-                Testing.normalizeTypeVariablesTestCaseOutput = (Core.TermLet (Core.Let {
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "id"),
@@ -1501,13 +1590,13 @@ allTests =
                         Core.typeSchemeConstraints = Nothing}))}],
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))}))})),
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "polymorphic const function normalized",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseNormalizeTypeVariables (Testing.NormalizeTypeVariablesTestCase {
-                Testing.normalizeTypeVariablesTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.normalizeTypeVariablesInTerm (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "const"),
@@ -1532,8 +1621,8 @@ allTests =
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "const")),
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))})),
-                Testing.normalizeTypeVariablesTestCaseOutput = (Core.TermLet (Core.Let {
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "const"),
@@ -1558,13 +1647,13 @@ allTests =
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "const")),
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))}))})),
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "binding rewriting does not affect body with typed lambda",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseNormalizeTypeVariables (Testing.NormalizeTypeVariablesTestCase {
-                Testing.normalizeTypeVariablesTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.normalizeTypeVariablesInTerm (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "id"),
@@ -1584,8 +1673,8 @@ allTests =
                     Core.lambdaDomain = (Just (Core.TypeFunction (Core.FunctionType {
                       Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                       Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))),
-                    Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))})),
-                Testing.normalizeTypeVariablesTestCaseOutput = (Core.TermLet (Core.Let {
+                    Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "id"),
@@ -1605,13 +1694,13 @@ allTests =
                     Core.lambdaDomain = (Just (Core.TypeFunction (Core.FunctionType {
                       Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                       Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))),
-                    Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))}))})),
+                    Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "nested polymorphic lets normalized",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseNormalizeTypeVariables (Testing.NormalizeTypeVariablesTestCase {
-                Testing.normalizeTypeVariablesTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.normalizeTypeVariablesInTerm (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "id"),
@@ -1645,8 +1734,8 @@ allTests =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
                       Core.applicationArgument = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "id2")),
-                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))}))}))})),
-                Testing.normalizeTypeVariablesTestCaseOutput = (Core.TermLet (Core.Let {
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))}))}))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "id"),
@@ -1680,13 +1769,13 @@ allTests =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
                       Core.applicationArgument = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "id2")),
-                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))}))}))}))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))}))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "nested same substitution in bindings and environment",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseNormalizeTypeVariables (Testing.NormalizeTypeVariablesTestCase {
-                Testing.normalizeTypeVariablesTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.normalizeTypeVariablesInTerm (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "id"),
@@ -1718,8 +1807,8 @@ allTests =
                           Core.typeSchemeConstraints = Nothing}))}],
                     Core.letBody = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))}))})),
-                Testing.normalizeTypeVariablesTestCaseOutput = (Core.TermLet (Core.Let {
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))}))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "id"),
@@ -1751,13 +1840,13 @@ allTests =
                           Core.typeSchemeConstraints = Nothing}))}],
                     Core.letBody = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))}))}))})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "parent type variable shadows child variable",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseNormalizeTypeVariables (Testing.NormalizeTypeVariablesTestCase {
-                Testing.normalizeTypeVariablesTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.normalizeTypeVariablesInTerm (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "id"),
@@ -1791,8 +1880,8 @@ allTests =
                         Core.typeSchemeConstraints = Nothing}))}],
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
-                Testing.normalizeTypeVariablesTestCaseOutput = (Core.TermLet (Core.Let {
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "id"),
@@ -1826,13 +1915,13 @@ allTests =
                         Core.typeSchemeConstraints = Nothing}))}],
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))}))})),
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "no shadowing distinct type variables",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseNormalizeTypeVariables (Testing.NormalizeTypeVariablesTestCase {
-                Testing.normalizeTypeVariablesTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.normalizeTypeVariablesInTerm (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "id"),
@@ -1866,8 +1955,8 @@ allTests =
                         Core.typeSchemeConstraints = Nothing}))}],
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
-                Testing.normalizeTypeVariablesTestCaseOutput = (Core.TermLet (Core.Let {
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "id"),
@@ -1901,13 +1990,13 @@ allTests =
                         Core.typeSchemeConstraints = Nothing}))}],
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))}))})),
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "locally free type variable in nested binding",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseNormalizeTypeVariables (Testing.NormalizeTypeVariablesTestCase {
-                Testing.normalizeTypeVariablesTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.normalizeTypeVariablesInTerm (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "fun1"),
@@ -1953,8 +2042,8 @@ allTests =
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "fun1")),
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
-                Testing.normalizeTypeVariablesTestCaseOutput = (Core.TermLet (Core.Let {
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "fun1"),
@@ -2000,7 +2089,7 @@ allTests =
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "fun1")),
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))}))})),
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -2010,127 +2099,127 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "integer literal unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEtaExpansion (Testing.EtaExpansionTestCase {
-                Testing.etaExpansionTestCaseInput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                Testing.etaExpansionTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\_ -> "eta expansion failed") (\t -> Core_.term t) (Reduction.etaExpandTypedTerm TestGraph.testContext TestGraph.testGraph (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string list unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEtaExpansion (Testing.EtaExpansionTestCase {
-                Testing.etaExpansionTestCaseInput = (Core.TermList [
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\_ -> "eta expansion failed") (\t -> Core_.term t) (Reduction.etaExpandTypedTerm TestGraph.testContext TestGraph.testGraph (Core.TermList [
                   Core.TermLiteral (Core.LiteralString "foo"),
-                  (Core.TermLiteral (Core.LiteralString "bar"))]),
-                Testing.etaExpansionTestCaseOutput = (Core.TermList [
+                  (Core.TermLiteral (Core.LiteralString "bar"))]))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralString "foo"),
-                  (Core.TermLiteral (Core.LiteralString "bar"))])})),
+                  (Core.TermLiteral (Core.LiteralString "bar"))]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "fully applied binary function unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEtaExpansion (Testing.EtaExpansionTestCase {
-                Testing.etaExpansionTestCaseInput = (Core.TermApplication (Core.Application {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\_ -> "eta expansion failed") (\t -> Core_.term t) (Reduction.etaExpandTypedTerm TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.splitOn"))),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "bar"))})),
-                Testing.etaExpansionTestCaseOutput = (Core.TermApplication (Core.Application {
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "bar"))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.splitOn"))),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "bar"))}))})),
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "bar"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "lambda with fully applied primitive unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEtaExpansion (Testing.EtaExpansionTestCase {
-                Testing.etaExpansionTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\_ -> "eta expansion failed") (\t -> Core_.term t) (Reduction.etaExpandTypedTerm TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.splitOn"))),
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralString ","))})),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))),
-                Testing.etaExpansionTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.splitOn"))),
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralString ","))})),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})))})),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "lambda returning constant unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEtaExpansion (Testing.EtaExpansionTestCase {
-                Testing.etaExpansionTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\_ -> "eta expansion failed") (\t -> Core_.term t) (Reduction.etaExpandTypedTerm TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))),
-                Testing.etaExpansionTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))})),
+                  Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "bare unary primitive unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEtaExpansion (Testing.EtaExpansionTestCase {
-                Testing.etaExpansionTestCaseInput = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.toLower"))),
-                Testing.etaExpansionTestCaseOutput = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.toLower")))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\_ -> "eta expansion failed") (\t -> Core_.term t) (Reduction.etaExpandTypedTerm TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.toLower"))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.toLower"))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "bare binary primitive unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEtaExpansion (Testing.EtaExpansionTestCase {
-                Testing.etaExpansionTestCaseInput = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.splitOn"))),
-                Testing.etaExpansionTestCaseOutput = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.splitOn")))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\_ -> "eta expansion failed") (\t -> Core_.term t) (Reduction.etaExpandTypedTerm TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.splitOn"))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.splitOn"))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "partially applied binary primitive expands to one lambda",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEtaExpansion (Testing.EtaExpansionTestCase {
-                Testing.etaExpansionTestCaseInput = (Core.TermApplication (Core.Application {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\_ -> "eta expansion failed") (\t -> Core_.term t) (Reduction.etaExpandTypedTerm TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.splitOn"))),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "foo"))})),
-                Testing.etaExpansionTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "foo"))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "v1"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.splitOn"))),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "foo"))})),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "v1"))}))})))})),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "v1"))}))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "projection expands to lambda",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEtaExpansion (Testing.EtaExpansionTestCase {
-                Testing.etaExpansionTestCaseInput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\_ -> "eta expansion failed") (\t -> Core_.term t) (Reduction.etaExpandTypedTerm TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                   Core.projectionTypeName = (Core.Name "Person"),
-                  Core.projectionField = (Core.Name "firstName")})))),
-                Testing.etaExpansionTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.projectionField = (Core.Name "firstName")})))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "v1"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                       Core.projectionTypeName = (Core.Name "Person"),
                       Core.projectionField = (Core.Name "firstName")})))),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "v1"))}))})))})),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "v1"))}))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "partial application inside lambda expands",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEtaExpansion (Testing.EtaExpansionTestCase {
-                Testing.etaExpansionTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\_ -> "eta expansion failed") (\t -> Core_.term t) (Reduction.etaExpandTypedTerm TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.splitOn"))),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))),
-                Testing.etaExpansionTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -2140,62 +2229,62 @@ allTests =
                       Core.applicationFunction = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.splitOn"))),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "v1"))}))})))})))})),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "v1"))}))})))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "let with constant body unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEtaExpansion (Testing.EtaExpansionTestCase {
-                Testing.etaExpansionTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\_ -> "eta expansion failed") (\t -> Core_.term t) (Reduction.etaExpandTypedTerm TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137))),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                Testing.etaExpansionTestCaseOutput = (Core.TermLet (Core.Let {
+                  Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137))),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
+                  Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "let with bare primitive value unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEtaExpansion (Testing.EtaExpansionTestCase {
-                Testing.etaExpansionTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\_ -> "eta expansion failed") (\t -> Core_.term t) (Reduction.etaExpandTypedTerm TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
                       Core.bindingTerm = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.splitOn"))),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermVariable (Core.Name "foo"))})),
-                Testing.etaExpansionTestCaseOutput = (Core.TermLet (Core.Let {
+                  Core.letBody = (Core.TermVariable (Core.Name "foo"))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
                       Core.bindingTerm = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.splitOn"))),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermVariable (Core.Name "foo"))}))})),
+                  Core.letBody = (Core.TermVariable (Core.Name "foo"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "fully applied unary unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEtaExpansion (Testing.EtaExpansionTestCase {
-                Testing.etaExpansionTestCaseInput = (Core.TermApplication (Core.Application {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\_ -> "eta expansion failed") (\t -> Core_.term t) (Reduction.etaExpandTypedTerm TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.toLower"))),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "FOO"))})),
-                Testing.etaExpansionTestCaseOutput = (Core.TermApplication (Core.Application {
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "FOO"))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.toLower"))),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "FOO"))}))})),
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "FOO"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "partial application in list expands",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEtaExpansion (Testing.EtaExpansionTestCase {
-                Testing.etaExpansionTestCaseInput = (Core.TermList [
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\_ -> "eta expansion failed") (\t -> Core_.term t) (Reduction.etaExpandTypedTerm TestGraph.testContext TestGraph.testGraph (Core.TermList [
                   Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
@@ -2203,8 +2292,8 @@ allTests =
                       Core.TermLiteral (Core.LiteralString "foo")])})),
                   (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.splitOn"))),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "bar"))}))]),
-                Testing.etaExpansionTestCaseOutput = (Core.TermList [
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "bar"))}))]))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermList [
                   Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
@@ -2217,7 +2306,7 @@ allTests =
                       Core.applicationFunction = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.splitOn"))),
                         Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "bar"))})),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "v1"))}))})))])})),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "v1"))}))})))]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -2227,76 +2316,105 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "collect labels from single node - pre-order",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
-                Testing.foldOverTermTestCaseInput = (Core.TermPair (Core.TermLiteral (Core.LiteralString "a"), (Core.TermList []))),
-                Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
-                Testing.foldOverTermTestCaseOperation = Testing.FoldOperationCollectLabels,
-                Testing.foldOverTermTestCaseOutput = (Core.TermList [
-                  Core.TermLiteral (Core.LiteralString "a")])})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Core.TermList (Lists.map (\lit -> Core.TermLiteral lit) (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Lists.concat [
+                  acc,
+                  case term of
+                    Core.TermPair v0 -> case (Pairs.first v0) of
+                      Core.TermLiteral v1 -> [
+                        v1]
+                      _ -> []
+                    _ -> []]) [] (Core.TermPair (Core.TermLiteral (Core.LiteralString "a"), (Core.TermList []))))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermList [
+                  Core.TermLiteral (Core.LiteralString "a")]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "collect labels from tree - pre-order",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
-                Testing.foldOverTermTestCaseInput = (Core.TermPair (Core.TermLiteral (Core.LiteralString "a"), (Core.TermList [
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Core.TermList (Lists.map (\lit -> Core.TermLiteral lit) (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Lists.concat [
+                  acc,
+                  case term of
+                    Core.TermPair v0 -> case (Pairs.first v0) of
+                      Core.TermLiteral v1 -> [
+                        v1]
+                      _ -> []
+                    _ -> []]) [] (Core.TermPair (Core.TermLiteral (Core.LiteralString "a"), (Core.TermList [
                   Core.TermPair (Core.TermLiteral (Core.LiteralString "b"), (Core.TermList [])),
                   (Core.TermPair (Core.TermLiteral (Core.LiteralString "c"), (Core.TermList [
-                    Core.TermPair (Core.TermLiteral (Core.LiteralString "d"), (Core.TermList []))])))]))),
-                Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
-                Testing.foldOverTermTestCaseOperation = Testing.FoldOperationCollectLabels,
-                Testing.foldOverTermTestCaseOutput = (Core.TermList [
+                    Core.TermPair (Core.TermLiteral (Core.LiteralString "d"), (Core.TermList []))])))]))))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralString "a"),
                   (Core.TermLiteral (Core.LiteralString "b")),
                   (Core.TermLiteral (Core.LiteralString "c")),
-                  (Core.TermLiteral (Core.LiteralString "d"))])})),
+                  (Core.TermLiteral (Core.LiteralString "d"))]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "collect labels from single node - post-order",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
-                Testing.foldOverTermTestCaseInput = (Core.TermPair (Core.TermLiteral (Core.LiteralString "a"), (Core.TermList []))),
-                Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPost,
-                Testing.foldOverTermTestCaseOperation = Testing.FoldOperationCollectLabels,
-                Testing.foldOverTermTestCaseOutput = (Core.TermList [
-                  Core.TermLiteral (Core.LiteralString "a")])})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Core.TermList (Lists.map (\lit -> Core.TermLiteral lit) (Rewriting.foldOverTerm Coders.TraversalOrderPost (\acc -> \term -> Lists.concat [
+                  acc,
+                  case term of
+                    Core.TermPair v0 -> case (Pairs.first v0) of
+                      Core.TermLiteral v1 -> [
+                        v1]
+                      _ -> []
+                    _ -> []]) [] (Core.TermPair (Core.TermLiteral (Core.LiteralString "a"), (Core.TermList []))))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermList [
+                  Core.TermLiteral (Core.LiteralString "a")]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "collect labels from tree - post-order",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
-                Testing.foldOverTermTestCaseInput = (Core.TermPair (Core.TermLiteral (Core.LiteralString "a"), (Core.TermList [
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Core.TermList (Lists.map (\lit -> Core.TermLiteral lit) (Rewriting.foldOverTerm Coders.TraversalOrderPost (\acc -> \term -> Lists.concat [
+                  acc,
+                  case term of
+                    Core.TermPair v0 -> case (Pairs.first v0) of
+                      Core.TermLiteral v1 -> [
+                        v1]
+                      _ -> []
+                    _ -> []]) [] (Core.TermPair (Core.TermLiteral (Core.LiteralString "a"), (Core.TermList [
                   Core.TermPair (Core.TermLiteral (Core.LiteralString "b"), (Core.TermList [])),
                   (Core.TermPair (Core.TermLiteral (Core.LiteralString "c"), (Core.TermList [
-                    Core.TermPair (Core.TermLiteral (Core.LiteralString "d"), (Core.TermList []))])))]))),
-                Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPost,
-                Testing.foldOverTermTestCaseOperation = Testing.FoldOperationCollectLabels,
-                Testing.foldOverTermTestCaseOutput = (Core.TermList [
+                    Core.TermPair (Core.TermLiteral (Core.LiteralString "d"), (Core.TermList []))])))]))))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralString "b"),
                   (Core.TermLiteral (Core.LiteralString "d")),
                   (Core.TermLiteral (Core.LiteralString "c")),
-                  (Core.TermLiteral (Core.LiteralString "a"))])})),
+                  (Core.TermLiteral (Core.LiteralString "a"))]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "sum int32 literals",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
-                Testing.foldOverTermTestCaseInput = (Core.TermList [
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
+                  Core.TermLiteral v0 -> case v0 of
+                    Core.LiteralInteger v1 -> case v1 of
+                      Core.IntegerValueInt32 v2 -> v2
+                      _ -> 0
+                    _ -> 0
+                  _ -> 0)) 0 (Core.TermList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)),
                   (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))]),
-                Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
-                Testing.foldOverTermTestCaseOperation = Testing.FoldOperationSumInt32Literals,
-                Testing.foldOverTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 52)))})),
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))])))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 52))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "collect list lengths - pre-order",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
-                Testing.foldOverTermTestCaseInput = (Core.TermList [
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Core.TermList (Lists.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 n))) (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Lists.concat [
+                  acc,
+                  case term of
+                    Core.TermList v0 -> [
+                      Lists.length v0]
+                    _ -> []]) [] (Core.TermList [
                   Core.TermList [
                     Core.TermLiteral (Core.LiteralString "foo"),
                     (Core.TermLiteral (Core.LiteralString "bar"))],
@@ -2306,19 +2424,22 @@ allTests =
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
                     Core.applicationArgument = (Core.TermList [
-                      Core.TermLiteral (Core.LiteralString "quux")])}))]),
-                Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
-                Testing.foldOverTermTestCaseOperation = Testing.FoldOperationCollectListLengths,
-                Testing.foldOverTermTestCaseOutput = (Core.TermList [
+                      Core.TermLiteral (Core.LiteralString "quux")])}))]))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))])})),
+                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "collect list lengths - post-order",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
-                Testing.foldOverTermTestCaseInput = (Core.TermList [
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Core.TermList (Lists.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 n))) (Rewriting.foldOverTerm Coders.TraversalOrderPost (\acc -> \term -> Lists.concat [
+                  acc,
+                  case term of
+                    Core.TermList v0 -> [
+                      Lists.length v0]
+                    _ -> []]) [] (Core.TermList [
                   Core.TermList [
                     Core.TermLiteral (Core.LiteralString "foo"),
                     (Core.TermLiteral (Core.LiteralString "bar"))],
@@ -2328,13 +2449,11 @@ allTests =
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
                     Core.applicationArgument = (Core.TermList [
-                      Core.TermLiteral (Core.LiteralString "quux")])}))]),
-                Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPost,
-                Testing.foldOverTermTestCaseOperation = Testing.FoldOperationCollectListLengths,
-                Testing.foldOverTermTestCaseOutput = (Core.TermList [
+                      Core.TermLiteral (Core.LiteralString "quux")])}))]))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))])})),
+                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -2344,130 +2463,120 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "String type in left side of either is replaced",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteType (Testing.RewriteTypeTestCase {
-                Testing.rewriteTypeTestCaseInput = (Core.TypeEither (Core.EitherType {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeLiteral Core.LiteralTypeString),
-                  Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
-                Testing.rewriteTypeTestCaseRewriter = Testing.TypeRewriterReplaceStringWithInt32,
-                Testing.rewriteTypeTestCaseOutput = (Core.TypeEither (Core.EitherType {
+                  Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))),
+                Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                  Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))})),
+                  Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "String type in right side of either is replaced",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteType (Testing.RewriteTypeTestCase {
-                Testing.rewriteTypeTestCaseInput = (Core.TypeEither (Core.EitherType {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                  Core.eitherTypeRight = (Core.TypeLiteral Core.LiteralTypeString)})),
-                Testing.rewriteTypeTestCaseRewriter = Testing.TypeRewriterReplaceStringWithInt32,
-                Testing.rewriteTypeTestCaseOutput = (Core.TypeEither (Core.EitherType {
+                  Core.eitherTypeRight = (Core.TypeLiteral Core.LiteralTypeString)})))),
+                Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                  Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))})),
+                  Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "String types in both sides of either are replaced",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteType (Testing.RewriteTypeTestCase {
-                Testing.rewriteTypeTestCaseInput = (Core.TypeEither (Core.EitherType {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeLiteral Core.LiteralTypeString),
-                  Core.eitherTypeRight = (Core.TypeLiteral Core.LiteralTypeString)})),
-                Testing.rewriteTypeTestCaseRewriter = Testing.TypeRewriterReplaceStringWithInt32,
-                Testing.rewriteTypeTestCaseOutput = (Core.TypeEither (Core.EitherType {
+                  Core.eitherTypeRight = (Core.TypeLiteral Core.LiteralTypeString)})))),
+                Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                  Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))})),
+                  Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "String type in nested either (left of left) is replaced",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteType (Testing.RewriteTypeTestCase {
-                Testing.rewriteTypeTestCaseInput = (Core.TypeEither (Core.EitherType {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (Core.TypeLiteral Core.LiteralTypeString),
                     Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
-                  Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))})),
-                Testing.rewriteTypeTestCaseRewriter = Testing.TypeRewriterReplaceStringWithInt32,
-                Testing.rewriteTypeTestCaseOutput = (Core.TypeEither (Core.EitherType {
+                  Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))})))),
+                Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                     Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
-                  Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))}))})),
+                  Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "String type in nested either (right of right) is replaced",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteType (Testing.RewriteTypeTestCase {
-                Testing.rewriteTypeTestCaseInput = (Core.TypeEither (Core.EitherType {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64)),
                   Core.eitherTypeRight = (Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                    Core.eitherTypeRight = (Core.TypeLiteral Core.LiteralTypeString)}))})),
-                Testing.rewriteTypeTestCaseRewriter = Testing.TypeRewriterReplaceStringWithInt32,
-                Testing.rewriteTypeTestCaseOutput = (Core.TypeEither (Core.EitherType {
+                    Core.eitherTypeRight = (Core.TypeLiteral Core.LiteralTypeString)}))})))),
+                Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64)),
                   Core.eitherTypeRight = (Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                    Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}))})),
+                    Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "String types in complex nested either are all replaced",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteType (Testing.RewriteTypeTestCase {
-                Testing.rewriteTypeTestCaseInput = (Core.TypeEither (Core.EitherType {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (Core.TypeLiteral Core.LiteralTypeString),
                     Core.eitherTypeRight = (Core.TypeLiteral Core.LiteralTypeString)})),
                   Core.eitherTypeRight = (Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (Core.TypeLiteral Core.LiteralTypeString),
-                    Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))}))})),
-                Testing.rewriteTypeTestCaseRewriter = Testing.TypeRewriterReplaceStringWithInt32,
-                Testing.rewriteTypeTestCaseOutput = (Core.TypeEither (Core.EitherType {
+                    Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))}))})))),
+                Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                     Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
                   Core.eitherTypeRight = (Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                    Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))}))}))})),
+                    Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "String in list type is replaced",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteType (Testing.RewriteTypeTestCase {
-                Testing.rewriteTypeTestCaseInput = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString)),
-                Testing.rewriteTypeTestCaseRewriter = Testing.TypeRewriterReplaceStringWithInt32,
-                Testing.rewriteTypeTestCaseOutput = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString)))),
+                Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "String in function domain is replaced",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteType (Testing.RewriteTypeTestCase {
-                Testing.rewriteTypeTestCaseInput = (Core.TypeFunction (Core.FunctionType {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeLiteral Core.LiteralTypeString),
-                  Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))})),
-                Testing.rewriteTypeTestCaseRewriter = Testing.TypeRewriterReplaceStringWithInt32,
-                Testing.rewriteTypeTestCaseOutput = (Core.TypeFunction (Core.FunctionType {
+                  Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))})))),
+                Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                  Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))}))})),
+                  Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "String in function codomain is replaced",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteType (Testing.RewriteTypeTestCase {
-                Testing.rewriteTypeTestCaseInput = (Core.TypeFunction (Core.FunctionType {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64)),
-                  Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})),
-                Testing.rewriteTypeTestCaseRewriter = Testing.TypeRewriterReplaceStringWithInt32,
-                Testing.rewriteTypeTestCaseOutput = (Core.TypeFunction (Core.FunctionType {
+                  Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})))),
+                Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64)),
-                  Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))})),
+                  Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "String in optional type is replaced",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteType (Testing.RewriteTypeTestCase {
-                Testing.rewriteTypeTestCaseInput = (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString)),
-                Testing.rewriteTypeTestCaseRewriter = Testing.TypeRewriterReplaceStringWithInt32,
-                Testing.rewriteTypeTestCaseOutput = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString)))),
+                Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -2477,118 +2586,109 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string literal foo replaced with bar",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermLiteral (Core.LiteralString "foo")),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermLiteral (Core.LiteralString "bar"))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermLiteral (Core.LiteralString "foo")))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralString "bar")))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in variable not changed",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermVariable (Core.Name "x")),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermVariable (Core.Name "x"))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermVariable (Core.Name "x")))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermVariable (Core.Name "x")))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in list",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermList [
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermList [
                   Core.TermLiteral (Core.LiteralString "foo"),
-                  (Core.TermLiteral (Core.LiteralString "baz"))]),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermList [
+                  (Core.TermLiteral (Core.LiteralString "baz"))]))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralString "bar"),
-                  (Core.TermLiteral (Core.LiteralString "baz"))])})),
+                  (Core.TermLiteral (Core.LiteralString "baz"))]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "multiple strings in list",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermList [
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermList [
                   Core.TermLiteral (Core.LiteralString "foo"),
                   (Core.TermLiteral (Core.LiteralString "foo")),
-                  (Core.TermLiteral (Core.LiteralString "baz"))]),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermList [
+                  (Core.TermLiteral (Core.LiteralString "baz"))]))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralString "bar"),
                   (Core.TermLiteral (Core.LiteralString "bar")),
-                  (Core.TermLiteral (Core.LiteralString "baz"))])})),
+                  (Core.TermLiteral (Core.LiteralString "baz"))]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in optional (just)",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "foo")))),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "bar"))))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "foo")))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "bar")))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in function application",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermApplication (Core.Application {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "print")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermApplication (Core.Application {
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "print")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "bar"))}))})),
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "bar"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in lambda body",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "foo"))}))),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "foo"))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "bar"))})))})),
+                  Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "bar"))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in nested applications",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermApplication (Core.Application {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))})),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermApplication (Core.Application {
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "bar"))}))}))})),
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "bar"))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in record field",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermRecord (Core.Record {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermRecord (Core.Record {
                   Core.recordTypeName = (Core.Name "Person"),
                   Core.recordFields = [
                     Core.Field {
                       Core.fieldName = (Core.Name "name"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}]})),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermRecord (Core.Record {
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}]})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermRecord (Core.Record {
                   Core.recordTypeName = (Core.Name "Person"),
                   Core.recordFields = [
                     Core.Field {
                       Core.fieldName = (Core.Name "name"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))}]}))})),
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))}]})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "strings in multiple record fields",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermRecord (Core.Record {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermRecord (Core.Record {
                   Core.recordTypeName = (Core.Name "Data"),
                   Core.recordFields = [
                     Core.Field {
@@ -2599,9 +2699,8 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))},
                     Core.Field {
                       Core.fieldName = (Core.Name "c"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}]})),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermRecord (Core.Record {
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}]})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermRecord (Core.Record {
                   Core.recordTypeName = (Core.Name "Data"),
                   Core.recordFields = [
                     Core.Field {
@@ -2612,61 +2711,58 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))},
                     Core.Field {
                       Core.fieldName = (Core.Name "c"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))}]}))})),
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))}]})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in pair",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermPair (Core.TermLiteral (Core.LiteralString "foo"), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermPair (Core.TermLiteral (Core.LiteralString "bar"), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermPair (Core.TermLiteral (Core.LiteralString "foo"), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermPair (Core.TermLiteral (Core.LiteralString "bar"), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in let binding value",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "foo")),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermVariable (Core.Name "x"))})),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermLet (Core.Let {
+                  Core.letBody = (Core.TermVariable (Core.Name "x"))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "bar")),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermVariable (Core.Name "x"))}))})),
+                  Core.letBody = (Core.TermVariable (Core.Name "x"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in let body",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermLiteral (Core.LiteralString "foo"))})),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermLet (Core.Let {
+                  Core.letBody = (Core.TermLiteral (Core.LiteralString "foo"))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermLiteral (Core.LiteralString "bar"))}))})),
+                  Core.letBody = (Core.TermLiteral (Core.LiteralString "bar"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in first case branch",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = Nothing,
                   Core.caseStatementCases = [
@@ -2675,9 +2771,8 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))},
                     Core.Field {
                       Core.fieldName = (Core.Name "error"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})))),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = Nothing,
                   Core.caseStatementCases = [
@@ -2686,13 +2781,13 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))},
                     Core.Field {
                       Core.fieldName = (Core.Name "error"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]}))))})),
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in second case branch",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = Nothing,
                   Core.caseStatementCases = [
@@ -2701,9 +2796,8 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))},
                     Core.Field {
                       Core.fieldName = (Core.Name "error"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}]})))),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}]})))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = Nothing,
                   Core.caseStatementCases = [
@@ -2712,13 +2806,13 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))},
                     Core.Field {
                       Core.fieldName = (Core.Name "error"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))}]}))))})),
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))}]})))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in default branch",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = (Just (Core.TermLiteral (Core.LiteralString "foo"))),
                   Core.caseStatementCases = [
@@ -2727,9 +2821,8 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))},
                     Core.Field {
                       Core.fieldName = (Core.Name "error"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})))),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = (Just (Core.TermLiteral (Core.LiteralString "bar"))),
                   Core.caseStatementCases = [
@@ -2738,13 +2831,13 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))},
                     Core.Field {
                       Core.fieldName = (Core.Name "error"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]}))))})),
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string deeply nested in record in list in application",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermApplication (Core.Application {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "process")),
                   Core.applicationArgument = (Core.TermList [
                     Core.TermRecord (Core.Record {
@@ -2752,9 +2845,8 @@ allTests =
                       Core.recordFields = [
                         Core.Field {
                           Core.fieldName = (Core.Name "value"),
-                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}]})])})),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermApplication (Core.Application {
+                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}]})])})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "process")),
                   Core.applicationArgument = (Core.TermList [
                     Core.TermRecord (Core.Record {
@@ -2762,53 +2854,50 @@ allTests =
                       Core.recordFields = [
                         Core.Field {
                           Core.fieldName = (Core.Name "value"),
-                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))}]})])}))})),
+                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))}]})])})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in union inject value",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermUnion (Core.Injection {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermUnion (Core.Injection {
                   Core.injectionTypeName = (Core.Name "Result"),
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "success"),
-                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}})),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermUnion (Core.Injection {
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermUnion (Core.Injection {
                   Core.injectionTypeName = (Core.Name "Result"),
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "success"),
-                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))}}))})),
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))}})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in wrapped term",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermWrap (Core.WrappedTerm {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermWrap (Core.WrappedTerm {
                   Core.wrappedTermTypeName = (Core.Name "Email"),
-                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "foo"))})),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermWrap (Core.WrappedTerm {
+                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "foo"))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermWrap (Core.WrappedTerm {
                   Core.wrappedTermTypeName = (Core.Name "Email"),
-                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "bar"))}))})),
+                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "bar"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in annotated term body",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermAnnotated (Core.AnnotatedTerm {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermAnnotated (Core.AnnotatedTerm {
                   Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "foo")),
-                  Core.annotatedTermAnnotation = M.empty})),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermAnnotated (Core.AnnotatedTerm {
+                  Core.annotatedTermAnnotation = M.empty})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermAnnotated (Core.AnnotatedTerm {
                   Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "bar")),
-                  Core.annotatedTermAnnotation = M.empty}))})),
+                  Core.annotatedTermAnnotation = M.empty})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in first of multiple let bindings",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -2818,9 +2907,8 @@ allTests =
                       Core.bindingName = (Core.Name "y"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "baz")),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermVariable (Core.Name "x"))})),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermLet (Core.Let {
+                  Core.letBody = (Core.TermVariable (Core.Name "x"))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -2830,13 +2918,13 @@ allTests =
                       Core.bindingName = (Core.Name "y"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "baz")),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermVariable (Core.Name "x"))}))})),
+                  Core.letBody = (Core.TermVariable (Core.Name "x"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in second of multiple let bindings",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -2846,9 +2934,8 @@ allTests =
                       Core.bindingName = (Core.Name "y"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "foo")),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermVariable (Core.Name "y"))})),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermLet (Core.Let {
+                  Core.letBody = (Core.TermVariable (Core.Name "y"))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -2858,13 +2945,13 @@ allTests =
                       Core.bindingName = (Core.Name "y"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "bar")),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermVariable (Core.Name "y"))}))})),
+                  Core.letBody = (Core.TermVariable (Core.Name "y"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in all let bindings and body",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -2874,9 +2961,8 @@ allTests =
                       Core.bindingName = (Core.Name "y"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "foo")),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermLiteral (Core.LiteralString "foo"))})),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermLet (Core.Let {
+                  Core.letBody = (Core.TermLiteral (Core.LiteralString "foo"))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -2886,65 +2972,61 @@ allTests =
                       Core.bindingName = (Core.Name "y"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "bar")),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermLiteral (Core.LiteralString "bar"))}))})),
+                  Core.letBody = (Core.TermLiteral (Core.LiteralString "bar"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in set",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermSet (S.fromList [
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermSet (S.fromList [
                   Core.TermLiteral (Core.LiteralString "baz"),
-                  (Core.TermLiteral (Core.LiteralString "foo"))])),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermSet (S.fromList [
+                  (Core.TermLiteral (Core.LiteralString "foo"))])))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermSet (S.fromList [
                   Core.TermLiteral (Core.LiteralString "bar"),
-                  (Core.TermLiteral (Core.LiteralString "baz"))]))})),
+                  (Core.TermLiteral (Core.LiteralString "baz"))])))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in type lambda body",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermTypeLambda (Core.TypeLambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermTypeLambda (Core.TypeLambda {
                   Core.typeLambdaParameter = (Core.Name "a"),
-                  Core.typeLambdaBody = (Core.TermLiteral (Core.LiteralString "foo"))})),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermTypeLambda (Core.TypeLambda {
+                  Core.typeLambdaBody = (Core.TermLiteral (Core.LiteralString "foo"))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermTypeLambda (Core.TypeLambda {
                   Core.typeLambdaParameter = (Core.Name "a"),
-                  Core.typeLambdaBody = (Core.TermLiteral (Core.LiteralString "bar"))}))})),
+                  Core.typeLambdaBody = (Core.TermLiteral (Core.LiteralString "bar"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in type application body",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermTypeApplication (Core.TypeApplicationTerm {
                   Core.typeApplicationTermBody = (Core.TermLiteral (Core.LiteralString "foo")),
-                  Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)})),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                  Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermTypeApplication (Core.TypeApplicationTerm {
                   Core.typeApplicationTermBody = (Core.TermLiteral (Core.LiteralString "bar")),
-                  Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)}))})),
+                  Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in nested type lambdas",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermTypeLambda (Core.TypeLambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermTypeLambda (Core.TypeLambda {
                   Core.typeLambdaParameter = (Core.Name "a"),
                   Core.typeLambdaBody = (Core.TermTypeLambda (Core.TypeLambda {
                     Core.typeLambdaParameter = (Core.Name "b"),
-                    Core.typeLambdaBody = (Core.TermLiteral (Core.LiteralString "foo"))}))})),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermTypeLambda (Core.TypeLambda {
+                    Core.typeLambdaBody = (Core.TermLiteral (Core.LiteralString "foo"))}))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermTypeLambda (Core.TypeLambda {
                   Core.typeLambdaParameter = (Core.Name "a"),
                   Core.typeLambdaBody = (Core.TermTypeLambda (Core.TypeLambda {
                     Core.typeLambdaParameter = (Core.Name "b"),
-                    Core.typeLambdaBody = (Core.TermLiteral (Core.LiteralString "bar"))}))}))})),
+                    Core.typeLambdaBody = (Core.TermLiteral (Core.LiteralString "bar"))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in case branch within let binding",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "handler"),
@@ -2959,9 +3041,8 @@ allTests =
                             Core.fieldName = (Core.Name "err"),
                             Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})))),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermVariable (Core.Name "handler"))})),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermLet (Core.Let {
+                  Core.letBody = (Core.TermVariable (Core.Name "handler"))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "handler"),
@@ -2976,13 +3057,13 @@ allTests =
                             Core.fieldName = (Core.Name "err"),
                             Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})))),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermVariable (Core.Name "handler"))}))})),
+                  Core.letBody = (Core.TermVariable (Core.Name "handler"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in annotated wrapped record field",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-                Testing.rewriteTermTestCaseInput = (Core.TermAnnotated (Core.AnnotatedTerm {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermAnnotated (Core.AnnotatedTerm {
                   Core.annotatedTermBody = (Core.TermWrap (Core.WrappedTerm {
                     Core.wrappedTermTypeName = (Core.Name "User"),
                     Core.wrappedTermBody = (Core.TermRecord (Core.Record {
@@ -2991,9 +3072,8 @@ allTests =
                         Core.Field {
                           Core.fieldName = (Core.Name "name"),
                           Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}]}))})),
-                  Core.annotatedTermAnnotation = M.empty})),
-                Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-                Testing.rewriteTermTestCaseOutput = (Core.TermAnnotated (Core.AnnotatedTerm {
+                  Core.annotatedTermAnnotation = M.empty})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermAnnotated (Core.AnnotatedTerm {
                   Core.annotatedTermBody = (Core.TermWrap (Core.WrappedTerm {
                     Core.wrappedTermTypeName = (Core.Name "User"),
                     Core.wrappedTermBody = (Core.TermRecord (Core.Record {
@@ -3002,7 +3082,7 @@ allTests =
                         Core.Field {
                           Core.fieldName = (Core.Name "name"),
                           Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))}]}))})),
-                  Core.annotatedTermAnnotation = M.empty}))})),
+                  Core.annotatedTermAnnotation = M.empty})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -3012,22 +3092,32 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "path tracking through application - sum literals",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
-                Testing.foldOverTermTestCaseInput = (Core.TermApplication (Core.Application {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
+                  Core.TermLiteral v0 -> case v0 of
+                    Core.LiteralInteger v1 -> case v1 of
+                      Core.IntegerValueInt32 v2 -> v2
+                      _ -> 0
+                    _ -> 0
+                  _ -> 0)) 0 (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
-                Testing.foldOverTermTestCaseOperation = Testing.FoldOperationSumInt32Literals,
-                Testing.foldOverTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "path tracking through nested applications",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
-                Testing.foldOverTermTestCaseInput = (Core.TermApplication (Core.Application {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
+                  Core.TermLiteral v0 -> case v0 of
+                    Core.LiteralInteger v1 -> case v1 of
+                      Core.IntegerValueInt32 v2 -> v2
+                      _ -> 0
+                    _ -> 0
+                  _ -> 0)) 0 (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
@@ -3039,16 +3129,20 @@ allTests =
                           Core.TermVariable (Core.Name "x"),
                           (Core.TermVariable (Core.Name "y"))])})))}))),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))})),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))})),
-                Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
-                Testing.foldOverTermTestCaseOperation = Testing.FoldOperationSumInt32Literals,
-                Testing.foldOverTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))})),
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "path tracking through let bindings",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
-                Testing.foldOverTermTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
+                  Core.TermLiteral v0 -> case v0 of
+                    Core.LiteralInteger v1 -> case v1 of
+                      Core.IntegerValueInt32 v2 -> v2
+                      _ -> 0
+                    _ -> 0
+                  _ -> 0)) 0 (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -3056,16 +3150,20 @@ allTests =
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermList [
                     Core.TermVariable (Core.Name "x"),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 32)))])})),
-                Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
-                Testing.foldOverTermTestCaseOperation = Testing.FoldOperationSumInt32Literals,
-                Testing.foldOverTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 32)))])}))))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "path tracking through record fields",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
-                Testing.foldOverTermTestCaseInput = (Core.TermRecord (Core.Record {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
+                  Core.TermLiteral v0 -> case v0 of
+                    Core.LiteralInteger v1 -> case v1 of
+                      Core.IntegerValueInt32 v2 -> v2
+                      _ -> 0
+                    _ -> 0
+                  _ -> 0)) 0 (Core.TermRecord (Core.Record {
                   Core.recordTypeName = (Core.Name "Point"),
                   Core.recordFields = [
                     Core.Field {
@@ -3073,16 +3171,20 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))},
                     Core.Field {
                       Core.fieldName = (Core.Name "y"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20)))}]})),
-                Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
-                Testing.foldOverTermTestCaseOperation = Testing.FoldOperationSumInt32Literals,
-                Testing.foldOverTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 30)))})),
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20)))}]}))))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 30))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "path tracking through case branches",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
-                Testing.foldOverTermTestCaseInput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
+                  Core.TermLiteral v0 -> case v0 of
+                    Core.LiteralInteger v1 -> case v1 of
+                      Core.IntegerValueInt32 v2 -> v2
+                      _ -> 0
+                    _ -> 0
+                  _ -> 0)) 0 (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = Nothing,
                   Core.caseStatementCases = [
@@ -3091,79 +3193,107 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))},
                     Core.Field {
                       Core.fieldName = (Core.Name "err"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}]})))),
-                Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
-                Testing.foldOverTermTestCaseOperation = Testing.FoldOperationSumInt32Literals,
-                Testing.foldOverTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))})),
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}]}))))))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "path tracking through pair",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
-                Testing.foldOverTermTestCaseInput = (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 7))))),
-                Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
-                Testing.foldOverTermTestCaseOperation = Testing.FoldOperationSumInt32Literals,
-                Testing.foldOverTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 12)))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
+                  Core.TermLiteral v0 -> case v0 of
+                    Core.LiteralInteger v1 -> case v1 of
+                      Core.IntegerValueInt32 v2 -> v2
+                      _ -> 0
+                    _ -> 0
+                  _ -> 0)) 0 (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 7)))))))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 12))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "path tracking through optional",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
-                Testing.foldOverTermTestCaseInput = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
-                Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
-                Testing.foldOverTermTestCaseOperation = Testing.FoldOperationSumInt32Literals,
-                Testing.foldOverTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
+                  Core.TermLiteral v0 -> case v0 of
+                    Core.LiteralInteger v1 -> case v1 of
+                      Core.IntegerValueInt32 v2 -> v2
+                      _ -> 0
+                    _ -> 0
+                  _ -> 0)) 0 (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "path tracking through wrapped term",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
-                Testing.foldOverTermTestCaseInput = (Core.TermWrap (Core.WrappedTerm {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
+                  Core.TermLiteral v0 -> case v0 of
+                    Core.LiteralInteger v1 -> case v1 of
+                      Core.IntegerValueInt32 v2 -> v2
+                      _ -> 0
+                    _ -> 0
+                  _ -> 0)) 0 (Core.TermWrap (Core.WrappedTerm {
                   Core.wrappedTermTypeName = (Core.Name "Age"),
-                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 25)))})),
-                Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
-                Testing.foldOverTermTestCaseOperation = Testing.FoldOperationSumInt32Literals,
-                Testing.foldOverTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 25)))})),
+                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 25)))}))))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 25))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "path tracking through type lambda",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
-                Testing.foldOverTermTestCaseInput = (Core.TermTypeLambda (Core.TypeLambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
+                  Core.TermLiteral v0 -> case v0 of
+                    Core.LiteralInteger v1 -> case v1 of
+                      Core.IntegerValueInt32 v2 -> v2
+                      _ -> 0
+                    _ -> 0
+                  _ -> 0)) 0 (Core.TermTypeLambda (Core.TypeLambda {
                   Core.typeLambdaParameter = (Core.Name "a"),
-                  Core.typeLambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 100)))})),
-                Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
-                Testing.foldOverTermTestCaseOperation = Testing.FoldOperationSumInt32Literals,
-                Testing.foldOverTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 100)))})),
+                  Core.typeLambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 100)))}))))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 100))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "path tracking through type application",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
-                Testing.foldOverTermTestCaseInput = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
+                  Core.TermLiteral v0 -> case v0 of
+                    Core.LiteralInteger v1 -> case v1 of
+                      Core.IntegerValueInt32 v2 -> v2
+                      _ -> 0
+                    _ -> 0
+                  _ -> 0)) 0 (Core.TermTypeApplication (Core.TypeApplicationTerm {
                   Core.typeApplicationTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 50))),
-                  Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)})),
-                Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
-                Testing.foldOverTermTestCaseOperation = Testing.FoldOperationSumInt32Literals,
-                Testing.foldOverTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 50)))})),
+                  Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)}))))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 50))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "path tracking through set elements",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
-                Testing.foldOverTermTestCaseInput = (Core.TermSet (S.fromList [
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
+                  Core.TermLiteral v0 -> case v0 of
+                    Core.LiteralInteger v1 -> case v1 of
+                      Core.IntegerValueInt32 v2 -> v2
+                      _ -> 0
+                    _ -> 0
+                  _ -> 0)) 0 (Core.TermSet (S.fromList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])),
-                Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
-                Testing.foldOverTermTestCaseOperation = Testing.FoldOperationSumInt32Literals,
-                Testing.foldOverTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 6)))})),
+                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 6))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "deep nesting - application in lambda in let",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
-                Testing.foldOverTermTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
+                  Core.TermLiteral v0 -> case v0 of
+                    Core.LiteralInteger v1 -> case v1 of
+                      Core.IntegerValueInt32 v2 -> v2
+                      _ -> 0
+                    _ -> 0
+                  _ -> 0)) 0 (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -3174,33 +3304,39 @@ allTests =
                           Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))}))}))),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))})),
-                Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
-                Testing.foldOverTermTestCaseOperation = Testing.FoldOperationSumInt32Literals,
-                Testing.foldOverTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 15)))})),
+                  Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 15))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "collect list lengths in nested structure",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
-                Testing.foldOverTermTestCaseInput = (Core.TermList [
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Core.TermList (Lists.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 n))) (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Lists.concat [
+                  acc,
+                  case term of
+                    Core.TermList v0 -> [
+                      Lists.length v0]
+                    _ -> []]) [] (Core.TermList [
                   Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))],
                   (Core.TermList [
-                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))])]),
-                Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
-                Testing.foldOverTermTestCaseOperation = Testing.FoldOperationCollectListLengths,
-                Testing.foldOverTermTestCaseOutput = (Core.TermList [
+                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))])]))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))])})),
+                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "collect list lengths in let body",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
-                Testing.foldOverTermTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Core.TermList (Lists.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 n))) (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Lists.concat [
+                  acc,
+                  case term of
+                    Core.TermList v0 -> [
+                      Lists.length v0]
+                    _ -> []]) [] (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "xs"),
@@ -3209,12 +3345,10 @@ allTests =
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
-                Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
-                Testing.foldOverTermTestCaseOperation = Testing.FoldOperationCollectListLengths,
-                Testing.foldOverTermTestCaseOutput = (Core.TermList [
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))])})),
+                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -3224,35 +3358,35 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "literal unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "variable unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermVariable (Core.Name "x")),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermVariable (Core.Name "x"))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermVariable (Core.Name "x")))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermVariable (Core.Name "x")))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "single lambda unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})),
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "distinct lambda parameters unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -3260,11 +3394,59 @@ allTests =
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermList [
                       Core.TermVariable (Core.Name "x"),
-                      (Core.TermVariable (Core.Name "y"))])})))}))),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      (Core.TermVariable (Core.Name "y"))])})))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.Name "y"),
+                    Core.lambdaDomain = Nothing,
+                    Core.lambdaBody = (Core.TermList [
+                      Core.TermVariable (Core.Name "x"),
+                      (Core.TermVariable (Core.Name "y"))])})))}))))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "let with no shadowing unchanged",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermLet (Core.Let {
+                  Core.letBindings = [
+                    Core.Binding {
+                      Core.bindingName = (Core.Name "x"),
+                      Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                      Core.bindingType = Nothing}],
+                  Core.letBody = (Core.TermVariable (Core.Name "x"))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
+                  Core.letBindings = [
+                    Core.Binding {
+                      Core.bindingName = (Core.Name "x"),
+                      Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                      Core.bindingType = Nothing}],
+                  Core.letBody = (Core.TermVariable (Core.Name "x"))})))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "let and lambda with distinct names unchanged",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermLet (Core.Let {
+                  Core.letBindings = [
+                    Core.Binding {
+                      Core.bindingName = (Core.Name "x"),
+                      Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                      Core.bindingType = Nothing}],
+                  Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.Name "y"),
+                    Core.lambdaDomain = Nothing,
+                    Core.lambdaBody = (Core.TermList [
+                      Core.TermVariable (Core.Name "x"),
+                      (Core.TermVariable (Core.Name "y"))])})))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
+                  Core.letBindings = [
+                    Core.Binding {
+                      Core.bindingName = (Core.Name "x"),
+                      Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                      Core.bindingType = Nothing}],
+                  Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermList [
@@ -3273,76 +3455,28 @@ allTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "let with no shadowing unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermLet (Core.Let {
-                  Core.letBindings = [
-                    Core.Binding {
-                      Core.bindingName = (Core.Name "x"),
-                      Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                      Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermVariable (Core.Name "x"))})),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermLet (Core.Let {
-                  Core.letBindings = [
-                    Core.Binding {
-                      Core.bindingName = (Core.Name "x"),
-                      Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                      Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermVariable (Core.Name "x"))}))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "let and lambda with distinct names unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermLet (Core.Let {
-                  Core.letBindings = [
-                    Core.Binding {
-                      Core.bindingName = (Core.Name "x"),
-                      Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                      Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                    Core.lambdaParameter = (Core.Name "y"),
-                    Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermList [
-                      Core.TermVariable (Core.Name "x"),
-                      (Core.TermVariable (Core.Name "y"))])})))})),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermLet (Core.Let {
-                  Core.letBindings = [
-                    Core.Binding {
-                      Core.bindingName = (Core.Name "x"),
-                      Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                      Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                    Core.lambdaParameter = (Core.Name "y"),
-                    Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermList [
-                      Core.TermVariable (Core.Name "x"),
-                      (Core.TermVariable (Core.Name "y"))])})))}))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "inner lambda shadows outer lambda",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}))),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x2"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))})))})),
+                    Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "inner lambda shadows outer - body references both",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermList [
@@ -3350,8 +3484,8 @@ allTests =
                     (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))])}))),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))])}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermList [
@@ -3359,13 +3493,13 @@ allTests =
                     (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x2"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))])})))})),
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))])}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "triple nested lambda same name",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -3374,8 +3508,8 @@ allTests =
                     Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})))}))),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -3384,13 +3518,13 @@ allTests =
                     Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x3"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "x3"))})))})))})))})),
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x3"))})))})))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "two parameters shadow sequentially",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -3404,8 +3538,8 @@ allTests =
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermList [
                           Core.TermVariable (Core.Name "x"),
-                          (Core.TermVariable (Core.Name "y"))])})))})))})))}))),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                          (Core.TermVariable (Core.Name "y"))])})))})))})))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -3419,13 +3553,13 @@ allTests =
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermList [
                           Core.TermVariable (Core.Name "x2"),
-                          (Core.TermVariable (Core.Name "y2"))])})))})))})))})))})),
+                          (Core.TermVariable (Core.Name "y2"))])})))})))})))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "lambda shadows let-bound variable",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -3434,8 +3568,8 @@ allTests =
                   Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermLet (Core.Let {
+                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -3444,13 +3578,13 @@ allTests =
                   Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x2"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))}))})),
+                    Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "lambda shadows one of multiple let bindings",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -3465,8 +3599,8 @@ allTests =
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermList [
                       Core.TermVariable (Core.Name "x"),
-                      (Core.TermVariable (Core.Name "y"))])})))})),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermLet (Core.Let {
+                      (Core.TermVariable (Core.Name "y"))])})))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -3481,13 +3615,13 @@ allTests =
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermList [
                       Core.TermVariable (Core.Name "x2"),
-                      (Core.TermVariable (Core.Name "y"))])})))}))})),
+                      (Core.TermVariable (Core.Name "y"))])})))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "inner let body with lambda shadowing outer let",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -3502,8 +3636,8 @@ allTests =
                     Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}))})),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermLet (Core.Let {
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -3518,13 +3652,13 @@ allTests =
                     Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x2"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))}))}))})),
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "shadowed lambda in function position of application",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "f"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -3532,8 +3666,8 @@ allTests =
                       Core.lambdaParameter = (Core.Name "f"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermVariable (Core.Name "f"))}))),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "f"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -3541,13 +3675,13 @@ allTests =
                       Core.lambdaParameter = (Core.Name "f2"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermVariable (Core.Name "f2"))}))),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))})))})),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "shadowed lambdas in list elements",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermList [
@@ -3558,8 +3692,8 @@ allTests =
                     (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))])}))),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))])}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermList [
@@ -3570,13 +3704,13 @@ allTests =
                     (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x2"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))])})))})),
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))])}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "shadowed lambda in record field",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermRecord (Core.Record {
@@ -3590,8 +3724,8 @@ allTests =
                           Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))},
                       Core.Field {
                         Core.fieldName = (Core.Name "snd"),
-                        Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}]}))}))),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}]}))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermRecord (Core.Record {
@@ -3605,13 +3739,13 @@ allTests =
                           Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))},
                       Core.Field {
                         Core.fieldName = (Core.Name "snd"),
-                        Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}]}))})))})),
+                        Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}]}))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "shadowed lambda in case branch",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
@@ -3626,8 +3760,8 @@ allTests =
                         Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}]}))))}))),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                          Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}]}))))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
@@ -3642,72 +3776,72 @@ allTests =
                         Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "x2"),
                           Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))}]}))))})))})),
+                          Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))}]}))))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "shadowed lambda in pair",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermPair (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})), (Core.TermVariable (Core.Name "x"))))}))),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})), (Core.TermVariable (Core.Name "x"))))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermPair (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x2"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})), (Core.TermVariable (Core.Name "x"))))})))})),
+                    Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})), (Core.TermVariable (Core.Name "x"))))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "shadowed lambda inside optional",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermMaybe (Just (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))))}))),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermMaybe (Just (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x2"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))))})))})),
+                    Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "shadowed lambda inside set element",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermSet (S.fromList [
                     Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))]))}))),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))]))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermSet (S.fromList [
                     Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x2"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))}))]))})))})),
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))}))]))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "shadowed lambda in union injection",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -3717,8 +3851,8 @@ allTests =
                       Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}}))}))),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}}))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -3728,13 +3862,13 @@ allTests =
                       Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x2"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))}}))})))})),
+                        Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))}}))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "shadowed lambda inside wrapped term",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermWrap (Core.WrappedTerm {
@@ -3742,8 +3876,8 @@ allTests =
                     Core.wrappedTermBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}))}))),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermWrap (Core.WrappedTerm {
@@ -3751,13 +3885,13 @@ allTests =
                     Core.wrappedTermBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x2"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))}))})))})),
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))}))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "shadowed lambda inside type lambda",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermTypeLambda (Core.TypeLambda {
@@ -3765,8 +3899,8 @@ allTests =
                     Core.typeLambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}))}))),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermTypeLambda (Core.TypeLambda {
@@ -3774,13 +3908,13 @@ allTests =
                     Core.typeLambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x2"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))}))})))})),
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))}))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "shadowed lambda inside type application",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
@@ -3788,8 +3922,8 @@ allTests =
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
-                    Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)}))}))),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)}))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
@@ -3797,13 +3931,13 @@ allTests =
                       Core.lambdaParameter = (Core.Name "x2"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))}))),
-                    Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)}))})))})),
+                    Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)}))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "shadowed lambda inside annotated term",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -3811,8 +3945,8 @@ allTests =
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
-                    Core.annotatedTermAnnotation = M.empty}))}))),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.annotatedTermAnnotation = M.empty}))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -3820,13 +3954,13 @@ allTests =
                       Core.lambdaParameter = (Core.Name "x2"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))}))),
-                    Core.annotatedTermAnnotation = M.empty}))})))})),
+                    Core.annotatedTermAnnotation = M.empty}))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "shadowing at multiple depths",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -3840,8 +3974,8 @@ allTests =
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermList [
                           Core.TermVariable (Core.Name "x"),
-                          (Core.TermVariable (Core.Name "y"))])})))})))})))}))),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                          (Core.TermVariable (Core.Name "y"))])})))})))})))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -3855,13 +3989,13 @@ allTests =
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermList [
                           Core.TermVariable (Core.Name "x2"),
-                          (Core.TermVariable (Core.Name "y2"))])})))})))})))})))})),
+                          (Core.TermVariable (Core.Name "y2"))])})))})))})))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "let then lambda then lambda all same name",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -3873,8 +4007,8 @@ allTests =
                     Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})))})),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermLet (Core.Let {
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -3886,13 +4020,13 @@ allTests =
                     Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x3"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "x3"))})))})))}))})),
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x3"))})))})))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "lambda with shadowing in let binding value",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -3906,8 +4040,8 @@ allTests =
                         Core.bindingType = Nothing}],
                     Core.letBody = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "y")),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -3921,37 +4055,37 @@ allTests =
                         Core.bindingType = Nothing}],
                     Core.letBody = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "y")),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))})),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "application without shadowing unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermApplication (Core.Application {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermApplication (Core.Application {
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "list of literals unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermList [
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermList [
+                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
+                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "nested record unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
-                Testing.unshadowVariablesTestCaseInput = (Core.TermRecord (Core.Record {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.unshadowVariables (Core.TermRecord (Core.Record {
                   Core.recordTypeName = (Core.Name "Point"),
                   Core.recordFields = [
                     Core.Field {
@@ -3959,8 +4093,8 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))},
                     Core.Field {
                       Core.fieldName = (Core.Name "y"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20)))}]})),
-                Testing.unshadowVariablesTestCaseOutput = (Core.TermRecord (Core.Record {
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20)))}]})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermRecord (Core.Record {
                   Core.recordTypeName = (Core.Name "Point"),
                   Core.recordFields = [
                     Core.Field {
@@ -3968,7 +4102,7 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))},
                     Core.Field {
                       Core.fieldName = (Core.Name "y"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20)))}]}))})),
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20)))}]})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}

@@ -266,6 +266,8 @@ def testCase(v1: hydra.testing.TestCase): hydra.core.Term =
      hydra.core.Field("unshadowVariables", hydra.encode.testing.unshadowVariablesTestCase(v_TestCase_unshadowVariables_y))))
   case hydra.testing.TestCase.validateCoreTerm(v_TestCase_validateCoreTerm_y) => hydra.core.Term.union(hydra.core.Injection("hydra.testing.TestCase",
      hydra.core.Field("validateCoreTerm", hydra.encode.testing.validateCoreTermTestCase(v_TestCase_validateCoreTerm_y))))
+  case hydra.testing.TestCase.universal(v_TestCase_universal_y) => hydra.core.Term.union(hydra.core.Injection("hydra.testing.TestCase",
+     hydra.core.Field("universal", hydra.encode.testing.universalTestCase(v_TestCase_universal_y))))
 
 def testCaseWithMetadata(x: hydra.testing.TestCaseWithMetadata): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.testing.TestCaseWithMetadata", Seq(hydra.core.Field("name",
@@ -341,6 +343,10 @@ def unifyTypesTestCase(x: hydra.testing.UnifyTypesTestCase): hydra.core.Term =
      hydra.core.Field("left", hydra.encode.core.`type`(x.left)), hydra.core.Field("right", hydra.encode.core.`type`(x.right)),
      hydra.core.Field("expected", hydra.core.Term.either(hydra.lib.eithers.bimap[scala.Predef.String,
      hydra.typing.TypeSubst, hydra.core.Term, hydra.core.Term]((x2: scala.Predef.String) => hydra.core.Term.literal(hydra.core.Literal.string(x2)))(hydra.encode.typing.typeSubst)(x.expected))))))
+
+def universalTestCase(x: hydra.testing.UniversalTestCase): hydra.core.Term =
+  hydra.core.Term.record(hydra.core.Record("hydra.testing.UniversalTestCase", Seq(hydra.core.Field("actual",
+     hydra.core.Term.literal(hydra.core.Literal.string(x.actual))), hydra.core.Field("expected", hydra.core.Term.literal(hydra.core.Literal.string(x.expected))))))
 
 def unshadowVariablesTestCase(x: hydra.testing.UnshadowVariablesTestCase): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.testing.UnshadowVariablesTestCase", Seq(hydra.core.Field("input",

@@ -31,7 +31,7 @@
         ((and (pair? m) (eq? (car m) 'just)) (cadr m))
         (else m)))
 
-    ;; Apply a function to an argument (applicative).
+    ;; apply :: Maybe (a -> b) -> Maybe a -> Maybe b
     (define hydra_lib_maybes_apply
       (lambda (mf)
         (lambda (mx)
@@ -41,7 +41,7 @@
                   (list 'nothing)
                   (list 'just ((maybe-value mf) (maybe-value mx))))))))
 
-    ;; Chain operations on optional values, handling Nothing cases automatically.
+    ;; bind :: Maybe a -> (a -> Maybe b) -> Maybe b
     (define hydra_lib_maybes_bind
       (lambda (m)
         (lambda (f)
@@ -49,7 +49,7 @@
               (list 'nothing)
               (f (maybe-value m))))))
 
-    ;; Handle an optional value with the maybe value as the first argument.
+    ;; cases :: Maybe a -> b -> (a -> b) -> b
     ;; Thunk-aware: if def is a zero-arg procedure (thunk), only called when Maybe is Nothing
     (define hydra_lib_maybes_cases
       (lambda (m)
@@ -59,7 +59,7 @@
                 (if (procedure? def) (def) def)
                 (f (maybe-value m)))))))
 
-    ;; Filter out Nothing values from a list.
+    ;; cat :: [Maybe a] -> [a]
     (define hydra_lib_maybes_cat
       (lambda (ms)
         (let loop ((rest ms) (acc '()))
@@ -69,7 +69,7 @@
                   (loop (cdr rest) (cons (maybe-value (car rest)) acc))
                   (loop (cdr rest) acc))))))
 
-    ;; Compose two Maybe-returning functions (Kleisli composition).
+    ;; compose :: (a -> Maybe b) -> (b -> Maybe c) -> a -> Maybe c
     (define hydra_lib_maybes_compose
       (lambda (g)
         (lambda (f)
@@ -79,14 +79,14 @@
                   (list 'nothing)
                   (f (maybe-value result))))))))
 
-    ;; Extract value from a Just, or error on Nothing (partial function).
+    ;; from_just :: Maybe a -> a
     (define hydra_lib_maybes_from_just
       (lambda (m)
         (if (maybe-nothing? m)
             (error "fromJust: Nothing")
             (maybe-value m))))
 
-    ;; Get a value from an optional value, or return a default value.
+    ;; from_maybe :: a -> Maybe a -> a
     ;; Thunk-aware: if def is a zero-arg procedure (thunk), only called when Maybe is Nothing
     (define hydra_lib_maybes_from_maybe
       (lambda (def)
@@ -95,17 +95,17 @@
               (if (procedure? def) (def) def)
               (maybe-value m)))))
 
-    ;; Check if a value is Just.
+    ;; is_just :: Maybe a -> Bool
     (define hydra_lib_maybes_is_just
       (lambda (m)
         (not (maybe-nothing? m))))
 
-    ;; Check if a value is Nothing.
+    ;; is_nothing :: Maybe a -> Bool
     (define hydra_lib_maybes_is_nothing
       (lambda (m)
         (maybe-nothing? m)))
 
-    ;; Map a function over an optional value.
+    ;; map :: (a -> b) -> Maybe a -> Maybe b
     (define hydra_lib_maybes_map
       (lambda (f)
         (lambda (m)
@@ -113,7 +113,7 @@
               (list 'nothing)
               (list 'just (f (maybe-value m)))))))
 
-    ;; Map a function over a list and collect Just results.
+    ;; map_maybe :: (a -> Maybe b) -> [a] -> [b]
     (define hydra_lib_maybes_map_maybe
       (lambda (f)
         (lambda (xs)
@@ -125,7 +125,7 @@
                       (loop (cdr rest) (cons (maybe-value result) acc))
                       (loop (cdr rest) acc))))))))
 
-    ;; Eliminate an optional value with a default and a function.
+    ;; maybe :: b -> (a -> b) -> Maybe a -> b
     ;; Thunk-aware: if def is a zero-arg procedure (thunk), only called when Maybe is Nothing
     (define hydra_lib_maybes_maybe
       (lambda (def)
@@ -135,12 +135,12 @@
                 (if (procedure? def) (def) def)
                 (f (maybe-value m)))))))
 
-    ;; Lift a value into the Maybe type.
+    ;; pure :: a -> Maybe a
     (define hydra_lib_maybes_pure
       (lambda (x)
         (list 'just x)))
 
-    ;; Convert a Maybe to a list: Just x becomes [x], Nothing becomes [].
+    ;; to_list :: Maybe a -> [a]
     (define hydra_lib_maybes_to_list
       (lambda (m)
         (if (maybe-nothing? m)

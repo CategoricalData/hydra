@@ -29,4 +29,23 @@ public interface Util {
       }
     });
   }
+
+  static String comparison(hydra.util.Comparison c) {
+    return (c).accept(new hydra.util.Comparison.PartialVisitor<>() {
+      @Override
+      public String visit(hydra.util.Comparison.LessThan ignored) {
+        return "lessThan";
+      }
+
+      @Override
+      public String visit(hydra.util.Comparison.EqualTo ignored) {
+        return "equalTo";
+      }
+
+      @Override
+      public String visit(hydra.util.Comparison.GreaterThan ignored) {
+        return "greaterThan";
+      }
+    });
+  }
 }

@@ -3412,29 +3412,13 @@
                     "domain": [
                       {
                         "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {
-                                    "literal": {
-                                      "string": "The second of two terms which should evaluate to the same expression"}}}],
-                              "body": {"variable": "hydra.core.Term"}}},
+                          "argument": {"variable": "hydra.core.Term"},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "output"}}},
               "domain": [
                 {
                   "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {
-                                "string": "The first of two terms which should evaluate to the same expression"}}}],
-                        "body": {"variable": "hydra.core.Term"}}},
+                    "argument": {"variable": "hydra.core.Term"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "input"}}},
         "type": [
@@ -3450,27 +3434,11 @@
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
-                        "argument": {
-                          "annotated": {
-                            "annotation": [
-                              {
-                                "@key": "description",
-                                "@value": {
-                                  "literal": {
-                                    "string": "The second of two terms which should evaluate to the same expression"}}}],
-                            "body": {"variable": "hydra.core.Term"}}},
+                        "argument": {"variable": "hydra.core.Term"},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {
-                                "string": "The first of two terms which should evaluate to the same expression"}}}],
-                        "body": {"variable": "hydra.core.Term"}}},
+                    "argument": {"variable": "hydra.core.Term"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -3543,15 +3511,7 @@
               "function": {
                 "codomain": {
                   "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {
-                                "string": "The first of two terms which should evaluate to the same expression"}}}],
-                        "body": {"variable": "hydra.core.Term"}}},
+                    "argument": {"variable": "hydra.core.Term"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -3628,15 +3588,7 @@
               "function": {
                 "codomain": {
                   "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {
-                                "string": "The second of two terms which should evaluate to the same expression"}}}],
-                        "body": {"variable": "hydra.core.Term"}}},
+                    "argument": {"variable": "hydra.core.Term"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -3753,15 +3705,7 @@
                     "domain": [
                       {
                         "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {
-                                    "literal": {
-                                      "string": "The first of two terms which should evaluate to the same expression"}}}],
-                              "body": {"variable": "hydra.core.Term"}}},
+                          "argument": {"variable": "hydra.core.Term"},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -3783,15 +3727,7 @@
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
-                        "argument": {
-                          "annotated": {
-                            "annotation": [
-                              {
-                                "@key": "description",
-                                "@value": {
-                                  "literal": {
-                                    "string": "The first of two terms which should evaluate to the same expression"}}}],
-                            "body": {"variable": "hydra.core.Term"}}},
+                        "argument": {"variable": "hydra.core.Term"},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -3908,15 +3844,7 @@
                     "domain": [
                       {
                         "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {
-                                    "literal": {
-                                      "string": "The second of two terms which should evaluate to the same expression"}}}],
-                              "body": {"variable": "hydra.core.Term"}}},
+                          "argument": {"variable": "hydra.core.Term"},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -3938,15 +3866,7 @@
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
-                        "argument": {
-                          "annotated": {
-                            "annotation": [
-                              {
-                                "@key": "description",
-                                "@value": {
-                                  "literal": {
-                                    "string": "The second of two terms which should evaluate to the same expression"}}}],
-                            "body": {"variable": "hydra.core.Term"}}},
+                        "argument": {"variable": "hydra.core.Term"},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -30930,7 +30850,8 @@
                         "annotation": [
                           {
                             "@key": "description",
-                            "@value": {"literal": {"string": "A delegated evaluation test"}}}],
+                            "@value": {
+                              "literal": {"string": "DEPRECATED: Delegated evaluation test (to be removed)"}}}],
                         "body": {"variable": "hydra.testing.DelegatedEvaluationTestCase"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "x"}}},
@@ -30950,7 +30871,8 @@
                         "annotation": [
                           {
                             "@key": "description",
-                            "@value": {"literal": {"string": "A delegated evaluation test"}}}],
+                            "@value": {
+                              "literal": {"string": "DEPRECATED: Delegated evaluation test (to be removed)"}}}],
                         "body": {"variable": "hydra.testing.DelegatedEvaluationTestCase"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
@@ -33482,6 +33404,80 @@
                             "@key": "description",
                             "@value": {"literal": {"string": "A core term validation test"}}}],
                         "body": {"variable": "hydra.testing.ValidateCoreTermTestCase"}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.dsl.testing.testCaseUniversal",
+        "term": {
+          "function": {
+            "lambda": {
+              "body": {
+                "wrap": {
+                  "body": {
+                    "union": {
+                      "field": {
+                        "name": "union",
+                        "term": {
+                          "record": {
+                            "fields": [
+                              {
+                                "name": "typeName",
+                                "term": {
+                                  "wrap": {
+                                    "body": {"literal": {"string": "hydra.testing.TestCase"}},
+                                    "typeName": "hydra.core.Name"}}},
+                              {
+                                "name": "field",
+                                "term": {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "name",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "universal"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "term",
+                                        "term": {
+                                          "application": {
+                                            "argument": {"variable": "x"},
+                                            "function": {"function": {"elimination": {"wrap": "hydra.phantoms.TTerm"}}}}}}],
+                                    "typeName": "hydra.core.Field"}}}],
+                            "typeName": "hydra.core.Injection"}}},
+                      "typeName": "hydra.core.Term"}},
+                  "typeName": "hydra.phantoms.TTerm"}},
+              "domain": [
+                {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A universal test case (string comparison)"}}}],
+                        "body": {"variable": "hydra.testing.UniversalTestCase"}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "parameter": "x"}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {
+                  "application": {
+                    "argument": {"variable": "hydra.testing.TestCase"},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A universal test case (string comparison)"}}}],
+                        "body": {"variable": "hydra.testing.UniversalTestCase"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -49425,6 +49421,598 @@
                 "domain": {
                   "application": {
                     "argument": {"variable": "hydra.testing.ValidateCoreTermTestCase"},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.dsl.testing.universalTestCase",
+        "term": {
+          "function": {
+            "lambda": {
+              "body": {
+                "function": {
+                  "lambda": {
+                    "body": {
+                      "wrap": {
+                        "body": {
+                          "union": {
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "hydra.testing.UniversalTestCase"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {
+                                                  "name": "name",
+                                                  "term": {
+                                                    "wrap": {
+                                                      "body": {"literal": {"string": "actual"}},
+                                                      "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "application": {
+                                                      "argument": {"variable": "actual"},
+                                                      "function": {"function": {"elimination": {"wrap": "hydra.phantoms.TTerm"}}}}}}],
+                                              "typeName": "hydra.core.Field"}},
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {
+                                                  "name": "name",
+                                                  "term": {
+                                                    "wrap": {
+                                                      "body": {"literal": {"string": "expected"}},
+                                                      "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "application": {
+                                                      "argument": {"variable": "expected"},
+                                                      "function": {"function": {"elimination": {"wrap": "hydra.phantoms.TTerm"}}}}}}],
+                                              "typeName": "hydra.core.Field"}}]}}],
+                                  "typeName": "hydra.core.Record"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "typeName": "hydra.phantoms.TTerm"}},
+                    "domain": [
+                      {
+                        "application": {
+                          "argument": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "description",
+                                  "@value": {"literal": {"string": "The expected result (a string literal)"}}}],
+                              "body": {"literal": {"string": {}}}}},
+                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
+                    "parameter": "expected"}}},
+              "domain": [
+                {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "The actual result (a string-valued expression)"}}}],
+                        "body": {"literal": {"string": {}}}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "parameter": "actual"}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {
+                  "function": {
+                    "codomain": {
+                      "application": {
+                        "argument": {"variable": "hydra.testing.UniversalTestCase"},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "domain": {
+                      "application": {
+                        "argument": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "@key": "description",
+                                "@value": {"literal": {"string": "The expected result (a string literal)"}}}],
+                            "body": {"literal": {"string": {}}}}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "The actual result (a string-valued expression)"}}}],
+                        "body": {"literal": {"string": {}}}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.dsl.testing.universalTestCaseActual",
+        "term": {
+          "function": {
+            "lambda": {
+              "body": {
+                "wrap": {
+                  "body": {
+                    "union": {
+                      "field": {
+                        "name": "application",
+                        "term": {
+                          "record": {
+                            "fields": [
+                              {
+                                "name": "function",
+                                "term": {
+                                  "union": {
+                                    "field": {
+                                      "name": "function",
+                                      "term": {
+                                        "union": {
+                                          "field": {
+                                            "name": "elimination",
+                                            "term": {
+                                              "union": {
+                                                "field": {
+                                                  "name": "record",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "typeName",
+                                                          "term": {
+                                                            "wrap": {
+                                                              "body": {"literal": {"string": "hydra.testing.UniversalTestCase"}},
+                                                              "typeName": "hydra.core.Name"}}},
+                                                        {
+                                                          "name": "field",
+                                                          "term": {
+                                                            "wrap": {
+                                                              "body": {"literal": {"string": "actual"}},
+                                                              "typeName": "hydra.core.Name"}}}],
+                                                      "typeName": "hydra.core.Projection"}}},
+                                                "typeName": "hydra.core.Elimination"}}},
+                                          "typeName": "hydra.core.Function"}}},
+                                    "typeName": "hydra.core.Term"}}},
+                              {
+                                "name": "argument",
+                                "term": {
+                                  "application": {
+                                    "argument": {"variable": "x"},
+                                    "function": {"function": {"elimination": {"wrap": "hydra.phantoms.TTerm"}}}}}}],
+                            "typeName": "hydra.core.Application"}}},
+                      "typeName": "hydra.core.Term"}},
+                  "typeName": "hydra.phantoms.TTerm"}},
+              "domain": [
+                {
+                  "application": {
+                    "argument": {"variable": "hydra.testing.UniversalTestCase"},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "parameter": "x"}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "The actual result (a string-valued expression)"}}}],
+                        "body": {"literal": {"string": {}}}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "domain": {
+                  "application": {
+                    "argument": {"variable": "hydra.testing.UniversalTestCase"},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.dsl.testing.universalTestCaseExpected",
+        "term": {
+          "function": {
+            "lambda": {
+              "body": {
+                "wrap": {
+                  "body": {
+                    "union": {
+                      "field": {
+                        "name": "application",
+                        "term": {
+                          "record": {
+                            "fields": [
+                              {
+                                "name": "function",
+                                "term": {
+                                  "union": {
+                                    "field": {
+                                      "name": "function",
+                                      "term": {
+                                        "union": {
+                                          "field": {
+                                            "name": "elimination",
+                                            "term": {
+                                              "union": {
+                                                "field": {
+                                                  "name": "record",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "typeName",
+                                                          "term": {
+                                                            "wrap": {
+                                                              "body": {"literal": {"string": "hydra.testing.UniversalTestCase"}},
+                                                              "typeName": "hydra.core.Name"}}},
+                                                        {
+                                                          "name": "field",
+                                                          "term": {
+                                                            "wrap": {
+                                                              "body": {"literal": {"string": "expected"}},
+                                                              "typeName": "hydra.core.Name"}}}],
+                                                      "typeName": "hydra.core.Projection"}}},
+                                                "typeName": "hydra.core.Elimination"}}},
+                                          "typeName": "hydra.core.Function"}}},
+                                    "typeName": "hydra.core.Term"}}},
+                              {
+                                "name": "argument",
+                                "term": {
+                                  "application": {
+                                    "argument": {"variable": "x"},
+                                    "function": {"function": {"elimination": {"wrap": "hydra.phantoms.TTerm"}}}}}}],
+                            "typeName": "hydra.core.Application"}}},
+                      "typeName": "hydra.core.Term"}},
+                  "typeName": "hydra.phantoms.TTerm"}},
+              "domain": [
+                {
+                  "application": {
+                    "argument": {"variable": "hydra.testing.UniversalTestCase"},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "parameter": "x"}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The expected result (a string literal)"}}}],
+                        "body": {"literal": {"string": {}}}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "domain": {
+                  "application": {
+                    "argument": {"variable": "hydra.testing.UniversalTestCase"},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.dsl.testing.universalTestCaseWithActual",
+        "term": {
+          "function": {
+            "lambda": {
+              "body": {
+                "function": {
+                  "lambda": {
+                    "body": {
+                      "wrap": {
+                        "body": {
+                          "union": {
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "hydra.testing.UniversalTestCase"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {
+                                                  "name": "name",
+                                                  "term": {
+                                                    "wrap": {
+                                                      "body": {"literal": {"string": "actual"}},
+                                                      "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "application": {
+                                                      "argument": {"variable": "newVal"},
+                                                      "function": {"function": {"elimination": {"wrap": "hydra.phantoms.TTerm"}}}}}}],
+                                              "typeName": "hydra.core.Field"}},
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {
+                                                  "name": "name",
+                                                  "term": {
+                                                    "wrap": {
+                                                      "body": {"literal": {"string": "expected"}},
+                                                      "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "union": {
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "union": {
+                                                                    "field": {
+                                                                      "name": "function",
+                                                                      "term": {
+                                                                        "union": {
+                                                                          "field": {
+                                                                            "name": "elimination",
+                                                                            "term": {
+                                                                              "union": {
+                                                                                "field": {
+                                                                                  "name": "record",
+                                                                                  "term": {
+                                                                                    "record": {
+                                                                                      "fields": [
+                                                                                        {
+                                                                                          "name": "typeName",
+                                                                                          "term": {
+                                                                                            "wrap": {
+                                                                                              "body": {"literal": {"string": "hydra.testing.UniversalTestCase"}},
+                                                                                              "typeName": "hydra.core.Name"}}},
+                                                                                        {
+                                                                                          "name": "field",
+                                                                                          "term": {
+                                                                                            "wrap": {
+                                                                                              "body": {"literal": {"string": "expected"}},
+                                                                                              "typeName": "hydra.core.Name"}}}],
+                                                                                      "typeName": "hydra.core.Projection"}}},
+                                                                                "typeName": "hydra.core.Elimination"}}},
+                                                                          "typeName": "hydra.core.Function"}}},
+                                                                    "typeName": "hydra.core.Term"}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "original"},
+                                                                    "function": {"function": {"elimination": {"wrap": "hydra.phantoms.TTerm"}}}}}}],
+                                                            "typeName": "hydra.core.Application"}}},
+                                                      "typeName": "hydra.core.Term"}}}],
+                                              "typeName": "hydra.core.Field"}}]}}],
+                                  "typeName": "hydra.core.Record"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "typeName": "hydra.phantoms.TTerm"}},
+                    "domain": [
+                      {
+                        "application": {
+                          "argument": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "description",
+                                  "@value": {
+                                    "literal": {"string": "The actual result (a string-valued expression)"}}}],
+                              "body": {"literal": {"string": {}}}}},
+                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
+                    "parameter": "newVal"}}},
+              "domain": [
+                {
+                  "application": {
+                    "argument": {"variable": "hydra.testing.UniversalTestCase"},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "parameter": "original"}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {
+                  "function": {
+                    "codomain": {
+                      "application": {
+                        "argument": {"variable": "hydra.testing.UniversalTestCase"},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "domain": {
+                      "application": {
+                        "argument": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "@key": "description",
+                                "@value": {
+                                  "literal": {"string": "The actual result (a string-valued expression)"}}}],
+                            "body": {"literal": {"string": {}}}}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+                "domain": {
+                  "application": {
+                    "argument": {"variable": "hydra.testing.UniversalTestCase"},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.dsl.testing.universalTestCaseWithExpected",
+        "term": {
+          "function": {
+            "lambda": {
+              "body": {
+                "function": {
+                  "lambda": {
+                    "body": {
+                      "wrap": {
+                        "body": {
+                          "union": {
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "hydra.testing.UniversalTestCase"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {
+                                                  "name": "name",
+                                                  "term": {
+                                                    "wrap": {
+                                                      "body": {"literal": {"string": "actual"}},
+                                                      "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "union": {
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "union": {
+                                                                    "field": {
+                                                                      "name": "function",
+                                                                      "term": {
+                                                                        "union": {
+                                                                          "field": {
+                                                                            "name": "elimination",
+                                                                            "term": {
+                                                                              "union": {
+                                                                                "field": {
+                                                                                  "name": "record",
+                                                                                  "term": {
+                                                                                    "record": {
+                                                                                      "fields": [
+                                                                                        {
+                                                                                          "name": "typeName",
+                                                                                          "term": {
+                                                                                            "wrap": {
+                                                                                              "body": {"literal": {"string": "hydra.testing.UniversalTestCase"}},
+                                                                                              "typeName": "hydra.core.Name"}}},
+                                                                                        {
+                                                                                          "name": "field",
+                                                                                          "term": {
+                                                                                            "wrap": {
+                                                                                              "body": {"literal": {"string": "actual"}},
+                                                                                              "typeName": "hydra.core.Name"}}}],
+                                                                                      "typeName": "hydra.core.Projection"}}},
+                                                                                "typeName": "hydra.core.Elimination"}}},
+                                                                          "typeName": "hydra.core.Function"}}},
+                                                                    "typeName": "hydra.core.Term"}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "original"},
+                                                                    "function": {"function": {"elimination": {"wrap": "hydra.phantoms.TTerm"}}}}}}],
+                                                            "typeName": "hydra.core.Application"}}},
+                                                      "typeName": "hydra.core.Term"}}}],
+                                              "typeName": "hydra.core.Field"}},
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {
+                                                  "name": "name",
+                                                  "term": {
+                                                    "wrap": {
+                                                      "body": {"literal": {"string": "expected"}},
+                                                      "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "application": {
+                                                      "argument": {"variable": "newVal"},
+                                                      "function": {"function": {"elimination": {"wrap": "hydra.phantoms.TTerm"}}}}}}],
+                                              "typeName": "hydra.core.Field"}}]}}],
+                                  "typeName": "hydra.core.Record"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "typeName": "hydra.phantoms.TTerm"}},
+                    "domain": [
+                      {
+                        "application": {
+                          "argument": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "description",
+                                  "@value": {"literal": {"string": "The expected result (a string literal)"}}}],
+                              "body": {"literal": {"string": {}}}}},
+                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
+                    "parameter": "newVal"}}},
+              "domain": [
+                {
+                  "application": {
+                    "argument": {"variable": "hydra.testing.UniversalTestCase"},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "parameter": "original"}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {
+                  "function": {
+                    "codomain": {
+                      "application": {
+                        "argument": {"variable": "hydra.testing.UniversalTestCase"},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "domain": {
+                      "application": {
+                        "argument": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "@key": "description",
+                                "@value": {"literal": {"string": "The expected result (a string literal)"}}}],
+                            "body": {"literal": {"string": {}}}}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+                "domain": {
+                  "application": {
+                    "argument": {"variable": "hydra.testing.UniversalTestCase"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}}],
   "description": ["DSL functions for hydra.testing"],

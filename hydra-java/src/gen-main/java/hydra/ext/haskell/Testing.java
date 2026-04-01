@@ -23,12 +23,9 @@ public interface Testing {
 
   static hydra.util.Either<String, hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>> buildNamespacesForTestGroup(hydra.module.Module mod, hydra.testing.TestGroup tgroup, hydra.graph.Graph graph_) {
     hydra.util.ConsList<hydra.testing.TestCaseWithMetadata> testCases_ = hydra.ext.haskell.Testing.collectTestCases(tgroup);
-    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> testTerms = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
-      hydra.ext.haskell.Testing::extractTestTerms,
-      testCases_)));
     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> testBindings = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.core.Term, hydra.core.Binding>) (term -> new hydra.core.Binding(new hydra.core.Name("_test_"), term, (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing()))),
-      testTerms.get()));
+      hydra.ext.haskell.Testing.buildNamespacesForTestGroup_testTerms(testCases_)));
     hydra.util.Lazy<hydra.module.Module> tempModule = new hydra.util.Lazy<>(() -> new hydra.module.Module((mod).namespace, hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.core.Binding, hydra.module.Definition>) (b -> new hydra.module.Definition.Term(new hydra.module.TermDefinition((b).name, (b).term, (b).type))),
       testBindings.get()), (mod).termDependencies, (mod).typeDependencies, (mod).description));
@@ -45,11 +42,17 @@ public interface Testing {
           (java.util.function.Function<hydra.core.Term, hydra.util.PersistentSet<hydra.core.Name>>) (t -> hydra.ext.haskell.Testing.extractEncodedTermVariableNames(
             graph_,
             t)),
-          testTerms.get())));
+          hydra.ext.haskell.Testing.buildNamespacesForTestGroup_testTerms(testCases_))));
         return hydra.util.Either.<String, hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>>right(hydra.ext.haskell.Testing.addNamespacesToNamespaces(
           baseNamespaces,
           encodedNames.get()));
       }));
+  }
+
+  static <T0> hydra.util.ConsList<T0> buildNamespacesForTestGroup_testTerms(hydra.util.ConsList<hydra.testing.TestCaseWithMetadata> testCases_) {
+    return hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
+      p0 -> hydra.ext.haskell.Testing.<hydra.testing.TestCaseWithMetadata, T0>extractTestTerms(p0),
+      testCases_));
   }
 
   static <T0> String buildTestModuleWithCodec(hydra.testing.TestCodec codec, hydra.module.Module testModule, hydra.testing.TestGroup testGroup, String testBody, T0 namespaces) {
@@ -250,20 +253,8 @@ public interface Testing {
       term);
   }
 
-  static hydra.util.ConsList<hydra.core.Term> extractTestTerms(hydra.testing.TestCaseWithMetadata tcm) {
-    return (tcm).case_.accept(new hydra.testing.TestCase.PartialVisitor<>() {
-      @Override
-      public hydra.util.ConsList<hydra.core.Term> otherwise(hydra.testing.TestCase instance) {
-        return (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty());
-      }
-
-      @Override
-      public hydra.util.ConsList<hydra.core.Term> visit(hydra.testing.TestCase.DelegatedEvaluation delCase) {
-        return hydra.util.ConsList.of(
-          (delCase).value.input,
-          (delCase).value.output);
-      }
-    });
+  static <T0, T1> hydra.util.ConsList<T1> extractTestTerms(T0 tcm) {
+    return (hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>empty());
   }
 
   static <T0> hydra.util.ConsList<String> findHaskellImports(hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName> namespaces, T0 names_) {
@@ -304,67 +295,13 @@ public interface Testing {
         g)));
   }
 
-  static hydra.util.Either<String, hydra.util.ConsList<String>> generateTestCaseWithCodec(hydra.graph.Graph g, hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName> namespaces, hydra.testing.TestCodec codec, Integer depth, hydra.testing.TestCaseWithMetadata tcm) {
+  static <T0, T1, T2, T3, T4, T5> hydra.util.Either<T4, hydra.util.ConsList<T5>> generateTestCaseWithCodec(T0 g, T1 namespaces, T2 codec, T3 depth, hydra.testing.TestCaseWithMetadata tcm) {
     String name_ = (tcm).name;
     hydra.testing.TestCase tcase = (tcm).case_;
-    return (tcase).accept(new hydra.testing.TestCase.PartialVisitor<>() {
-      @Override
-      public hydra.util.Either<String, hydra.util.ConsList<String>> otherwise(hydra.testing.TestCase instance) {
-        return hydra.util.Either.<String, hydra.util.ConsList<String>>right((hydra.util.ConsList<String>) (hydra.util.ConsList.<String>empty()));
-      }
-
-      @Override
-      public hydra.util.Either<String, hydra.util.ConsList<String>> visit(hydra.testing.TestCase.DelegatedEvaluation delCase) {
-        Integer continuationIndent = hydra.lib.math.Add.apply(
-          hydra.lib.math.Mul.apply(
-            depth,
-            2),
-          4);
-        String formattedName = (codec).formatTestName.apply(name_);
-        hydra.core.Term input_ = (delCase).value.input;
-        hydra.core.Term output_ = (delCase).value.output;
-        return hydra.lib.eithers.Bind.apply(
-          (codec).encodeTerm.apply(input_).apply(g),
-          (java.util.function.Function<String, hydra.util.Either<String, hydra.util.ConsList<String>>>) (inputCode -> hydra.lib.eithers.Bind.apply(
-            (codec).encodeTerm.apply(output_).apply(g),
-            (java.util.function.Function<String, hydra.util.Either<String, hydra.util.ConsList<String>>>) (outputCode -> hydra.lib.eithers.Bind.apply(
-              hydra.ext.haskell.Testing.generateTypeAnnotationFor(
-                g,
-                namespaces,
-                input_,
-                output_),
-              (java.util.function.Function<hydra.util.Maybe<String>, hydra.util.Either<String, hydra.util.ConsList<String>>>) (typeAnnotation -> {
-                String indentedOutputCode = hydra.ext.haskell.Testing.indentContinuationLines(
-                  continuationIndent,
-                  outputCode);
-                hydra.util.Lazy<String> finalOutputCode = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
-                  () -> indentedOutputCode,
-                  (java.util.function.Function<String, String>) (anno -> hydra.lib.strings.Cat2.apply(
-                    indentedOutputCode,
-                    anno)),
-                  typeAnnotation));
-                String indentedInputCode = hydra.ext.haskell.Testing.indentContinuationLines(
-                  continuationIndent,
-                  inputCode);
-                return hydra.util.Either.<String, hydra.util.ConsList<String>>right(hydra.util.ConsList.of(
-                  hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
-                    "H.it ",
-                    hydra.lib.literals.ShowString.apply(formattedName),
-                    " $ H.shouldBe")),
-                  hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
-                    "  (",
-                    indentedInputCode,
-                    ")")),
-                  hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
-                    "  (",
-                    finalOutputCode.get(),
-                    ")"))));
-              }))))));
-      }
-    });
+    return hydra.util.Either.<T4, hydra.util.ConsList<T5>>right((hydra.util.ConsList<T5>) (hydra.util.ConsList.<T5>empty()));
   }
 
-  static hydra.util.Either<String, hydra.util.Pair<String, String>> generateTestFileWithCodec(hydra.testing.TestCodec codec, hydra.module.Module testModule, hydra.testing.TestGroup testGroup, hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName> namespaces, hydra.graph.Graph g) {
+  static <T0, T1, T2> hydra.util.Either<T2, hydra.util.Pair<String, String>> generateTestFileWithCodec(hydra.testing.TestCodec codec, hydra.module.Module testModule, hydra.testing.TestGroup testGroup, T0 namespaces, T1 g) {
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<String, hydra.util.Pair<String, String>>) (testBody -> {
         String ext = (codec).fileExtension.value;
@@ -376,7 +313,7 @@ public interface Testing {
           new hydra.util.CaseConvention.Pascal(),
           new hydra.module.FileExtension(ext),
           specNs);
-        hydra.util.Lazy<String> testModuleContent = new hydra.util.Lazy<>(() -> hydra.ext.haskell.Testing.buildTestModuleWithCodec(
+        hydra.util.Lazy<String> testModuleContent = new hydra.util.Lazy<>(() -> hydra.ext.haskell.Testing.<T0>buildTestModuleWithCodec(
           codec,
           testModule,
           testGroup,
@@ -392,7 +329,7 @@ public interface Testing {
         testGroup));
   }
 
-  static hydra.util.Either<String, String> generateTestGroupHierarchy(hydra.graph.Graph g, hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName> namespaces, hydra.testing.TestCodec codec, Integer depth, hydra.testing.TestGroup testGroup) {
+  static <T0, T1, T2, T3> hydra.util.Either<T3, String> generateTestGroupHierarchy(T0 g, T1 namespaces, T2 codec, Integer depth, hydra.testing.TestGroup testGroup) {
     hydra.util.ConsList<hydra.testing.TestCaseWithMetadata> cases_ = (testGroup).cases;
     hydra.util.Lazy<String> indent = new hydra.util.Lazy<>(() -> hydra.lib.strings.FromList.apply(hydra.lib.lists.Replicate.apply(
       hydra.lib.math.Mul.apply(
@@ -402,14 +339,14 @@ public interface Testing {
     hydra.util.ConsList<hydra.testing.TestGroup> subgroups = (testGroup).subgroups;
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.MapList.apply(
-        (java.util.function.Function<hydra.testing.TestCaseWithMetadata, hydra.util.Either<String, hydra.util.ConsList<String>>>) (tc -> hydra.ext.haskell.Testing.generateTestCaseWithCodec(
+        (java.util.function.Function<hydra.testing.TestCaseWithMetadata, hydra.util.Either<T3, hydra.util.ConsList<String>>>) (tc -> hydra.ext.haskell.Testing.<T0, T1, T2, Integer, T3, String>generateTestCaseWithCodec(
           g,
           namespaces,
           codec,
           depth,
           tc)),
         cases_),
-      (java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<String>>, hydra.util.Either<String, String>>) (testCaseLinesRaw -> {
+      (java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<String>>, hydra.util.Either<T3, String>>) (testCaseLinesRaw -> {
         hydra.util.Lazy<hydra.util.ConsList<hydra.util.ConsList<String>>> testCaseLines = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
           (java.util.function.Function<hydra.util.ConsList<String>, hydra.util.ConsList<String>>) (lines_ -> hydra.lib.lists.Map.apply(
             (java.util.function.Function<String, String>) (line -> hydra.lib.strings.Cat2.apply(
@@ -439,7 +376,7 @@ public interface Testing {
               "\n",
               blocks)),
             hydra.lib.eithers.MapList.apply(
-              (java.util.function.Function<hydra.testing.TestGroup, hydra.util.Either<String, String>>) (subgroup -> {
+              (java.util.function.Function<hydra.testing.TestGroup, hydra.util.Either<T3, String>>) (subgroup -> {
                 String groupName_ = (subgroup).name;
                 return hydra.lib.eithers.Map.apply(
                   (java.util.function.Function<String, String>) (content -> hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
@@ -448,7 +385,7 @@ public interface Testing {
                     hydra.lib.literals.ShowString.apply(groupName_),
                     " $ do\n",
                     content))),
-                  hydra.ext.haskell.Testing.generateTestGroupHierarchy(
+                  hydra.ext.haskell.Testing.<T0, T1, T2, T3>generateTestGroupHierarchy(
                     g,
                     namespaces,
                     codec,

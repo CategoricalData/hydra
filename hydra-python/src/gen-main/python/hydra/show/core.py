@@ -20,6 +20,7 @@ import hydra.lib.sets
 import hydra.lib.strings
 
 T0 = TypeVar("T0")
+T1 = TypeVar("T1")
 
 def float_type(ft: hydra.core.FloatType) -> str:
     r"""Show a float type as a string."""
@@ -479,6 +480,11 @@ def term(t: hydra.core.Term) -> str:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
+def either(show_a: Callable[[T0], str], show_b: Callable[[T1], str], e: Either[T0, T1]) -> str:
+    r"""Show an Either value using given functions for left and right."""
+
+    return hydra.lib.eithers.either((lambda a: hydra.lib.strings.cat2("left(", hydra.lib.strings.cat2(show_a(a), ")"))), (lambda b: hydra.lib.strings.cat2("right(", hydra.lib.strings.cat2(show_b(b), ")"))), e)
+
 def list(f: Callable[[T0], str], xs: frozenlist[T0]) -> str:
     r"""Show a list using a given function to show each element."""
 
@@ -487,7 +493,33 @@ def list(f: Callable[[T0], str], xs: frozenlist[T0]) -> str:
         return hydra.lib.lists.map(f, xs)
     return hydra.lib.strings.cat(("[", hydra.lib.strings.intercalate(", ", element_strs()), "]"))
 
+def map(show_k: Callable[[T0], str], show_v: Callable[[T1], str], m: FrozenDict[T0, T1]) -> str:
+    r"""Show a map using given functions to show keys and values."""
+
+    @lru_cache(1)
+    def pair_strs() -> frozenlist[str]:
+        return hydra.lib.lists.map((lambda p: hydra.lib.strings.cat((show_k(hydra.lib.pairs.first(p)), ": ", show_v(hydra.lib.pairs.second(p))))), hydra.lib.maps.to_list(m))
+    return hydra.lib.strings.cat(("{", hydra.lib.strings.intercalate(", ", pair_strs()), "}"))
+
+def maybe(f: Callable[[T0], str], mx: Maybe[T0]) -> str:
+    r"""Show a Maybe value using a given function to show the element."""
+
+    return hydra.lib.maybes.maybe((lambda : "nothing"), (lambda x: hydra.lib.strings.cat2("just(", hydra.lib.strings.cat2(f(x), ")"))), mx)
+
+def pair(show_a: Callable[[T0], str], show_b: Callable[[T1], str], p: tuple[T0, T1]) -> str:
+    r"""Show a pair using given functions to show each element."""
+
+    return hydra.lib.strings.cat(("(", show_a(hydra.lib.pairs.first(p)), ", ", show_b(hydra.lib.pairs.second(p)), ")"))
+
 def read_term(s: str) -> Maybe[hydra.core.Term]:
     r"""A placeholder for reading terms from their serialized form. Not implemented."""
 
     return Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(s)))))
+
+def set(f: Callable[[T0], str], xs: frozenset[T0]) -> str:
+    r"""Show a set using a given function to show each element."""
+
+    @lru_cache(1)
+    def element_strs() -> frozenlist[str]:
+        return hydra.lib.lists.map(f, hydra.lib.sets.to_list(xs))
+    return hydra.lib.strings.cat(("{", hydra.lib.strings.intercalate(", ", element_strs()), "}"))
