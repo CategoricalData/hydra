@@ -96,7 +96,6 @@ jobs:
           restore-keys: sbt-
       - run: sbt test
         working-directory: hydra-scala
-        continue-on-error: true  # 39 tests require kernel term bindings not yet implemented for Scala
 
   common-lisp:
     name: Common Lisp tests
