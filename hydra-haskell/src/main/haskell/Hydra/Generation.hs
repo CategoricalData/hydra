@@ -11,7 +11,7 @@ import Hydra.Dsl.Bootstrap
 import Hydra.Ext.Haskell.Coder
 import Hydra.Ext.Haskell.Language
 import Hydra.Module (_Module)
-import Hydra.Testing (TestGenerator(..), TestCodec(..), TestGroup(..), TestCaseWithMetadata(..), TestCase(..))
+import Hydra.Testing (TestGroup(..), TestCaseWithMetadata(..), TestCase(..))
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Writer as JsonWriter
 import Hydra.Sources.Libraries
@@ -50,6 +50,13 @@ import Data.Char (isAlphaNum, isUpper, toLower, toUpper)
 import Debug.Trace (trace)
 import qualified Hydra.Lib.Strings as Strings
 
+
+-- | A test generator for a specific target language
+data TestGenerator a = TestGenerator {
+  testGeneratorNamespacesForModule :: Module -> Graph -> Either String (Namespaces a),
+  testGeneratorGenerateTestFile :: Module -> TestGroup -> Graph -> Either String (String, String),
+  testGeneratorAggregatorFile :: Maybe (FilePath -> [Module] -> (FilePath, String))
+}
 
 -- | Format an InContext Error with trace information
 formatError :: Context.InContext Error.Error -> String

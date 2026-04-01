@@ -6,12 +6,10 @@ import hydra.graph.Primitive;
 import hydra.test.TestSuite;
 import hydra.test.TestGraph;
 import hydra.testing.*;
-import hydra.tools.PrettyPrinter;
 import hydra.lib.Libraries;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.ConsList;
 import hydra.util.Maybe;
-import hydra.util.Pair;
 
 import org.junit.jupiter.api.DynamicContainer;
 import org.junit.jupiter.api.DynamicNode;
@@ -34,11 +32,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Java executor for Hydra's language-agnostic test suite.
+ *
+ * All test cases are now UniversalTestCase instances (string comparison).
+ * Legacy per-type handlers have been removed.
  */
 public class TestSuiteRunner {
-
-    // Unit value used as state for flows that don't need state (equivalent to Haskell's ())
-    private static final hydra.util.Unit UNIT = new hydra.util.Unit();
 
     // Benchmark output support
     private static final String BENCHMARK_OUTPUT = System.getenv("HYDRA_BENCHMARK_OUTPUT");
@@ -49,61 +47,11 @@ public class TestSuiteRunner {
     // Cached test infrastructure
     private static Graph testGraph;
 
-    /**
-     * Compare two terms for equality, with tolerance for floating-point precision and BigDecimal scale differences.
-     */
-    private static boolean termsEqual(Term expected, Term actual) {
-        if (expected.equals(actual)) {
-            return true;
-        }
-        // Handle float precision: compare float64 values with ULP tolerance
-        if (expected instanceof Term.Literal && actual instanceof Term.Literal) {
-            Literal el = ((Term.Literal) expected).value;
-            Literal al = ((Term.Literal) actual).value;
-            if (el instanceof Literal.Float_ && al instanceof Literal.Float_) {
-                FloatValue ef = ((Literal.Float_) el).value;
-                FloatValue af = ((Literal.Float_) al).value;
-                if (ef instanceof FloatValue.Float64 && af instanceof FloatValue.Float64) {
-                    double e = ((FloatValue.Float64) ef).value;
-                    double a = ((FloatValue.Float64) af).value;
-                    return Math.abs(e - a) <= 2 * Math.ulp(e);
-                }
-                if (ef instanceof FloatValue.Float32 && af instanceof FloatValue.Float32) {
-                    float e = ((FloatValue.Float32) ef).value;
-                    float a = ((FloatValue.Float32) af).value;
-                    return Math.abs(e - a) <= 2 * Math.ulp(e);
-                }
-                if (ef instanceof FloatValue.Bigfloat && af instanceof FloatValue.Bigfloat) {
-                    java.math.BigDecimal e = ((FloatValue.Bigfloat) ef).value;
-                    java.math.BigDecimal a = ((FloatValue.Bigfloat) af).value;
-                    return e.compareTo(a) == 0;
-                }
-            }
-        }
-        return false;
-    }
-
     private static synchronized Graph getTestGraph() {
         if (testGraph == null) {
             testGraph = buildTestGraph();
         }
         return testGraph;
-    }
-
-    private static Graph emptyGraph() {
-        hydra.util.PersistentMap<Name, Primitive> primitives = hydra.util.PersistentMap.empty();
-        for (PrimitiveFunction prim : Libraries.standardPrimitives()) {
-            primitives = primitives.insert(prim.name(), prim.toNative());
-        }
-        return new Graph(
-            hydra.util.PersistentMap.empty(),
-            hydra.util.PersistentMap.empty(),
-            hydra.util.PersistentMap.empty(),
-            hydra.util.PersistentSet.empty(),
-            hydra.util.PersistentMap.empty(),
-            primitives,
-            hydra.util.PersistentMap.empty(),
-            hydra.util.PersistentSet.empty());
     }
 
     private static hydra.context.Context emptyContext() {
@@ -114,42 +62,12 @@ public class TestSuiteRunner {
     }
 
     /**
-     * Assert that an Either is a Right value. If it's a Left, fail with a message.
-     */
-    @SuppressWarnings("rawtypes")
-    private static void assertEitherRight(hydra.util.Either<?, ?> either, String message) {
-        if (either instanceof hydra.util.Either.Left) {
-            Object leftVal = ((hydra.util.Either.Left) either).value;
-            String detail = "";
-            if (leftVal instanceof hydra.context.InContext) {
-                Object obj = ((hydra.context.InContext<?>) leftVal).object;
-                if (obj instanceof hydra.errors.Error_) {
-                    detail = ": " + hydra.show.Errors.error((hydra.errors.Error_) obj);
-                } else if (obj instanceof hydra.errors.UnificationError) {
-                    detail = ": " + obj;
-                } else {
-                    detail = ": " + obj;
-                }
-            } else {
-                detail = ": " + leftVal;
-            }
-            fail(message + detail);
-        }
-    }
-
-    /**
-     * Extract the Right value from an Either.
-     */
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    private static <R> R eitherRight(hydra.util.Either<?, R> either) {
-        return ((hydra.util.Either.Right<?, R>) either).value;
-    }
-
-    /**
      * Build the test graph with schema, test data, and primitives.
      * Mirrors the Haskell testGraph in TestUtils.hs.
+     *
+     * This is public because TestEnv.java delegates to it.
      */
-    static Graph buildTestGraph() {
+    public static Graph buildTestGraph() {
         // Build primitives map
         hydra.util.PersistentMap<Name, Primitive> primitives = hydra.util.PersistentMap.empty();
         for (PrimitiveFunction prim : Libraries.standardPrimitives()) {
@@ -248,8 +166,6 @@ public class TestSuiteRunner {
      * These are hand-written because the generated source modules exceed JVM method size limits.
      */
     private static void addConstantBindings(List<Binding> bindings) {
-        // hydra.lexical.emptyGraph = record(Graph){boundTerms={}, boundTypes={}, classConstraints={},
-        //   lambdaVariables=set(), metadata={}, primitives={}, schemaTypes={}, typeVariables=set()}
         addConstantBinding(bindings, "hydra.lexical.emptyGraph",
             record("hydra.graph.Graph",
                 field("boundTerms", new Term.Map(hydra.util.PersistentMap.empty())),
@@ -267,9 +183,6 @@ public class TestSuiteRunner {
      * These are hand-written because the generated source modules exceed JVM method size limits.
      */
     private static void addAnnotationsBindings(List<Binding> bindings) {
-        // hydra.rewriting.deannotateTerm = \t -> case t of
-        //   annotated(at) -> deannotateTerm(at.body)
-        //   _ -> t
         addConstantBinding(bindings, "hydra.rewriting.deannotateTerm",
             lambda("t",
                 apply(
@@ -279,8 +192,6 @@ public class TestSuiteRunner {
                                 apply(project("hydra.core.AnnotatedTerm", "body"), var("at")))))),
                     var("t"))));
 
-        // hydra.annotations.termAnnotationInternal = \term ->
-        //   Recursively collect annotations from nested Annotated nodes.
         addConstantBinding(bindings, "hydra.annotations.termAnnotationInternal",
             lambda("term",
                 let_("toPairs",
@@ -300,8 +211,6 @@ public class TestSuiteRunner {
                         apply(primitive("hydra.lib.lists.concat"),
                             apply(apply(var("toPairs"), list()), var("term")))))));
 
-        // hydra.annotations.setAnnotation = \key -> \val -> \m ->
-        //   maybe(delete(key, m), \v -> insert(key, v, m), val)
         addConstantBinding(bindings, "hydra.annotations.setAnnotation",
             lambda("key",
                 lambda("val",
@@ -313,10 +222,6 @@ public class TestSuiteRunner {
                                     var("key")), var("v")), var("m")))),
                             var("val"))))));
 
-        // hydra.annotations.setTermAnnotation = \key -> \val -> \term ->
-        //   let stripped = deannotateTerm(term)
-        //       anns = setAnnotation(key, val, termAnnotationInternal(term))
-        //   in if null(anns) then stripped else inject(Term){annotated=record(AnnotatedTerm){body=stripped, annotation=anns}}
         addConstantBinding(bindings, "hydra.annotations.setTermAnnotation",
             lambda("key",
                 lambda("val",
@@ -333,8 +238,6 @@ public class TestSuiteRunner {
                                             field("body", var("stripped")),
                                             field("annotation", var("anns")))))))))));
 
-        // hydra.annotations.setTermDescription = \d ->
-        //   setTermAnnotation(key_description, maybes.map(\s -> inject(Term){literal=inject(Literal){string=s}}, d))
         addConstantBinding(bindings, "hydra.annotations.setTermDescription",
             lambda("d",
                 apply(apply(var("hydra.annotations.setTermAnnotation"),
@@ -345,19 +248,12 @@ public class TestSuiteRunner {
                                 inject("hydra.core.Literal", "string", var("s"))))),
                         var("d")))));
 
-        // hydra.annotations.getDescription = \cx -> \g -> \anns ->
-        //   maybe(right(nothing),
-        //         \term -> case term of { literal(l) -> case l of { string(s) -> right(just(s)); _ -> left(...) }; _ -> left(...) },
-        //         maps.lookup(key_description, anns))
-        // Note: simplified string extraction (inlined) instead of calling ExtractCore.string
         addConstantBinding(bindings, "hydra.annotations.getDescription",
             lambda("cx",
                 lambda("g",
                     lambda("anns",
                         apply(apply(apply(primitive("hydra.lib.maybes.maybe"),
-                            // default: right(nothing)
                             right(nothing())),
-                            // function: \descTerm -> extract string from term, return right(just(s))
                             lambda("descTerm",
                                 apply(
                                     match("hydra.core.Term", Maybe.just(
@@ -373,17 +269,10 @@ public class TestSuiteRunner {
                                                     field("string", lambda("s", right(just(var("s")))))),
                                                 var("lit"))))),
                                     var("descTerm")))),
-                            // the maybe value: maps.lookup(key_description, anns)
                             apply(apply(primitive("hydra.lib.maps.lookup"),
                                 var("hydra.constants.key_description")),
                                 var("anns")))))));
 
-        // hydra.annotations.getTermDescription = \cx -> \g -> \term ->
-        //   let peel = \t -> case t of
-        //     typeLambda(tl) -> peel(tl.body)
-        //     typeApplication(ta) -> peel(ta.body)
-        //     _ -> t
-        //   in getDescription(cx)(g)(termAnnotationInternal(peel(term)))
         addConstantBinding(bindings, "hydra.annotations.getTermDescription",
             lambda("cx",
                 lambda("g",
@@ -403,7 +292,6 @@ public class TestSuiteRunner {
                                 apply(var("hydra.annotations.termAnnotationInternal"),
                                     apply(var("peel"), var("term")))))))));
 
-        // hydra.annotations.getTermAnnotation = \key -> \term -> maps.lookup(key, termAnnotationInternal(term))
         addConstantBinding(bindings, "hydra.annotations.getTermAnnotation",
             lambda("key",
                 lambda("term",
@@ -412,107 +300,132 @@ public class TestSuiteRunner {
     }
 
     /**
-     * Assert two terms are alpha-equivalent with respect to type variable naming.
-     * Normalizes type variable names by order of first occurrence in the shown representation.
+     * Build kernel type definitions needed by inference/checking tests.
+     * These types are normally provided by kernelTypesModules in Haskell.
      */
-    private static void assertAlphaEquivalent(Term expected, Term actual, String message) {
-        String expectedStr = hydra.show.Core.term(expected);
-        String actualStr = hydra.show.Core.term(actual);
-        assertEquals(normalizeTypeVarNames(expectedStr), normalizeTypeVarNames(actualStr), message);
+    private static Map<Name, Type> buildKernelTypes() {
+        Map<Name, Type> types = new HashMap<>();
+
+        // CoderDirection: enum with encode, decode
+        types.put(new Name("hydra.coders.CoderDirection"),
+            new Type.Union(ConsList.of(
+                new FieldType(new Name("encode"), new Type.Unit()),
+                new FieldType(new Name("decode"), new Type.Unit()))));
+
+        Name contextName = new Name("hydra.context.Context");
+        Name inContextName = new Name("hydra.context.InContext");
+        Name errorName = new Name("hydra.errors.Error");
+        Type inContextError = new Type.Application(new ApplicationType(
+            new Type.Variable(inContextName),
+            new Type.Variable(errorName)));
+        java.util.function.Function<Type, Type> eitherInContextError = v ->
+            new Type.Either(new EitherType(inContextError, v));
+
+        // Coder: forall v1 v2. {encode: ..., decode: ...}
+        Type encodeType = new Type.Function(new FunctionType(
+            new Type.Variable(contextName),
+            new Type.Function(new FunctionType(
+                new Type.Variable(new Name("v1")),
+                eitherInContextError.apply(new Type.Variable(new Name("v2")))))));
+        Type decodeType = new Type.Function(new FunctionType(
+            new Type.Variable(contextName),
+            new Type.Function(new FunctionType(
+                new Type.Variable(new Name("v2")),
+                eitherInContextError.apply(new Type.Variable(new Name("v1")))))));
+        Type coderBody = new Type.Record(ConsList.of(
+            new FieldType(new Name("encode"), encodeType),
+            new FieldType(new Name("decode"), decodeType)));
+        types.put(new Name("hydra.util.Coder"),
+            new Type.Forall(new ForallType(new Name("v1"),
+                new Type.Forall(new ForallType(new Name("v2"), coderBody)))));
+
+        // Context
+        types.put(contextName,
+            new Type.Record(ConsList.of(
+                new FieldType(new Name("trace"), new Type.List(new Type.Literal(new LiteralType.String_()))),
+                new FieldType(new Name("messages"), new Type.List(new Type.Literal(new LiteralType.String_()))),
+                new FieldType(new Name("other"), new Type.Map(new MapType(
+                    new Type.Variable(new Name("hydra.core.Name")),
+                    new Type.Variable(new Name("hydra.core.Term"))))))));
+
+        // InContext
+        types.put(inContextName,
+            new Type.Forall(new ForallType(new Name("e"),
+                new Type.Record(ConsList.of(
+                    new FieldType(new Name("object"), new Type.Variable(new Name("e"))),
+                    new FieldType(new Name("context"), new Type.Variable(contextName)))))));
+
+        // Error types
+        Name otherErrorName = new Name("hydra.errors.OtherError");
+        types.put(otherErrorName,
+            new Type.Wrap(new Type.Literal(new LiteralType.String_())));
+        types.put(errorName,
+            new Type.Union(ConsList.of(
+                new FieldType(new Name("other"), new Type.Variable(otherErrorName)))));
+
+        // Type (hydra.core.Type)
+        Name typeName = new Name("hydra.core.Type");
+        types.put(typeName,
+            new Type.Union(ConsList.of(
+                new FieldType(new Name("annotated"), new Type.Variable(new Name("annotatedType"))),
+                new FieldType(new Name("application"), new Type.Variable(new Name("applicationElim"))),
+                new FieldType(new Name("either"), new Type.Variable(new Name("eitherType"))),
+                new FieldType(new Name("forall"), new Type.Variable(new Name("forallType"))),
+                new FieldType(new Name("function"), new Type.Variable(new Name("functionType"))),
+                new FieldType(new Name("list"), new Type.Variable(typeName)),
+                new FieldType(new Name("literal"), new Type.Variable(new Name("literalType"))),
+                new FieldType(new Name("map"), new Type.Variable(new Name("mapType"))),
+                new FieldType(new Name("maybe"), new Type.Variable(typeName)),
+                new FieldType(new Name("pair"), new Type.Variable(new Name("pairType"))),
+                new FieldType(new Name("record"), new Type.Variable(new Name("rowType"))),
+                new FieldType(new Name("set"), new Type.Variable(typeName)),
+                new FieldType(new Name("union"), new Type.Variable(new Name("rowType"))),
+                new FieldType(new Name("unit"), new Type.Unit()),
+                new FieldType(new Name("variable"), new Type.Variable(new Name("name"))),
+                new FieldType(new Name("wrap"), new Type.Variable(new Name("wrappedType"))))));
+
+        // Name
+        types.put(new Name("hydra.core.Name"),
+            new Type.Wrap(new Type.Literal(new LiteralType.String_())));
+
+        // ForallType
+        types.put(new Name("hydra.core.ForallType"),
+            new Type.Record(ConsList.of(
+                new FieldType(new Name("parameter"), new Type.Variable(new Name("hydra.core.Name"))),
+                new FieldType(new Name("body"), new Type.Variable(typeName)))));
+
+        // Comparison
+        types.put(new Name("hydra.util.Comparison"),
+            new Type.Union(ConsList.of(
+                new FieldType(new Name("lessThan"), new Type.Unit()),
+                new FieldType(new Name("equalTo"), new Type.Unit()),
+                new FieldType(new Name("greaterThan"), new Type.Unit()))));
+
+        // CaseConvention
+        types.put(new Name("hydra.util.CaseConvention"),
+            new Type.Union(ConsList.of(
+                new FieldType(new Name("camel"), new Type.Unit()),
+                new FieldType(new Name("pascal"), new Type.Unit()),
+                new FieldType(new Name("lowerSnake"), new Type.Unit()),
+                new FieldType(new Name("upperSnake"), new Type.Unit()))));
+
+        // Precision
+        types.put(new Name("hydra.util.Precision"),
+            new Type.Union(ConsList.of(
+                new FieldType(new Name("arbitrary"), new Type.Unit()),
+                new FieldType(new Name("bits"), new Type.Literal(new LiteralType.Integer_(new IntegerType.Int32()))))));
+
+        return types;
     }
 
-    private static void assertAlphaEquivalent(Type expected, Type actual, String message) {
-        String expectedStr = hydra.show.Core.type(expected);
-        String actualStr = hydra.show.Core.type(actual);
-        assertEquals(normalizeTypeVarNames(expectedStr), normalizeTypeVarNames(actualStr), message);
-    }
-
-    /**
-     * Normalize type variable names for alpha-equivalence comparison.
-     * Extracts the Λ binder chain and renames all type variables to canonical names
-     * based on the binder's position: first Λ-bound var becomes t0, second becomes t1, etc.
-     * This makes alpha-equivalent terms compare equal as strings.
-     */
-    private static String normalizeTypeVarNames(String s) {
-        // Extract Λ binder chain: "Λt3.Λt7.body" → binders=[t3, t7], body="body"
-        List<String> binders = new ArrayList<>();
-        String remaining = s;
-        while (remaining.startsWith("Λ")) {
-            int dotIdx = remaining.indexOf('.');
-            if (dotIdx < 0) break;
-            String binder = remaining.substring(1, dotIdx);
-            binders.add(binder);
-            remaining = remaining.substring(dotIdx + 1);
-        }
-        if (binders.isEmpty()) return s;
-
-        // Determine renaming by order of first occurrence in the body (not binder position).
-        // This handles cases where Java inference assigns type variables in a different order.
-        Set<String> binderSet = new java.util.HashSet<>(binders);
-        List<String> orderedByFirstOccurrence = new ArrayList<>();
-        java.util.regex.Pattern varPattern = java.util.regex.Pattern.compile("\\b(t\\d+)\\b");
-        java.util.regex.Matcher m = varPattern.matcher(remaining);
-        while (m.find()) {
-            String varName = m.group(1);
-            if (binderSet.contains(varName) && !orderedByFirstOccurrence.contains(varName)) {
-                orderedByFirstOccurrence.add(varName);
-            }
-        }
-        // Add any binders not found in the body (to handle unused type vars)
-        for (String b : binders) {
-            if (!orderedByFirstOccurrence.contains(b)) {
-                orderedByFirstOccurrence.add(b);
-            }
-        }
-
-        // Build renaming: rename by first-occurrence order
-        Map<String, String> renaming = new HashMap<>();
-        for (int i = 0; i < orderedByFirstOccurrence.size(); i++) {
-            renaming.put(orderedByFirstOccurrence.get(i), "tv" + i);
-        }
-
-        // Apply renaming to body only
-        String normalizedBody = remaining;
-        for (Map.Entry<String, String> entry : renaming.entrySet()) {
-            normalizedBody = normalizedBody.replaceAll("\\b" + java.util.regex.Pattern.quote(entry.getKey()) + "\\b",
-                java.util.regex.Matcher.quoteReplacement(entry.getValue()));
-        }
-        for (int i = 0; i < orderedByFirstOccurrence.size(); i++) {
-            normalizedBody = normalizedBody.replaceAll("\\btv" + i + "\\b", "t" + i);
-        }
-
-        // Reconstruct binder chain in first-occurrence order
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < orderedByFirstOccurrence.size(); i++) {
-            sb.append("Λt").append(i).append(".");
-        }
-        sb.append(normalizedBody);
-        return sb.toString();
-    }
-
-    /**
-     * Run a beta-reduction test case. Used by ReductionTest.
-     */
-    public static void runReductionTestCase(boolean eager, String name, Term input, Term output) {
-        Graph graph = getTestGraph();
-        String suffix = " (" + name + ")";
-
-        hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, Term> reduced =
-            hydra.Reduction.reduceTerm(emptyContext(), graph, eager, input);
-        if (reduced.isRight()) {
-            Term result = ((hydra.util.Either.Right<hydra.context.InContext<hydra.errors.Error_>, Term>) reduced).value;
-            if (!result.equals(output)) {
-                assertEquals(hydra.show.Core.term(output),
-                    hydra.show.Core.term(result),
-                    "Original term does not reduce to expected term" + suffix);
-                assertEquals(output, result,
-                    "Original term does not reduce to expected term" + suffix);
-            }
-        } else {
-            hydra.context.InContext<hydra.errors.Error_> err =
-                ((hydra.util.Either.Left<hydra.context.InContext<hydra.errors.Error_>, Term>) reduced).value;
-            fail("Reduction failed: " + hydra.show.Errors.error(err.object) + suffix);
-        }
+    private static boolean shouldSkip(TestCaseWithMetadata tc) {
+        Tag disabledTag = new Tag("disabled");
+        Tag disabledForPythonTag = new Tag("disabledForPython");
+        // Note: disabledForPython tests are also skipped in Java because the same beta-reduction
+        // term explosion occurs (e.g. deeply nested withTrace/mutateTrace). The Haskell evaluator
+        // handles these efficiently via lazy evaluation, but Java's eager reducer cannot.
+        return tc.tags.contains(disabledTag)
+            || tc.tags.contains(disabledForPythonTag);
     }
 
     @TestFactory
@@ -545,9 +458,7 @@ public class TestSuiteRunner {
         }
 
         // Test cases
-        int idx = 0;
         for (TestCaseWithMetadata tc : group.cases) {
-            idx++;
             String name = tc.name + tc.description.map(d -> ": " + d).orElse("");
             if (shouldSkip(tc)) {
                 continue;
@@ -580,836 +491,21 @@ public class TestSuiteRunner {
         return nodes.stream();
     }
 
-    private static boolean shouldSkip(TestCaseWithMetadata tc) {
-        Tag disabledTag = new Tag("disabled");
-        Tag disabledForPythonTag = new Tag("disabledForPython");
-        // Note: disabledForPython tests are also skipped in Java because the same beta-reduction
-        // term explosion occurs (e.g. deeply nested withTrace/mutateTrace). The Haskell evaluator
-        // handles these efficiently via lazy evaluation, but Java's eager reducer cannot.
-        return tc.tags.contains(disabledTag)
-            || tc.tags.contains(disabledForPythonTag);
-    }
-
     private static final Duration TEST_TIMEOUT = Duration.ofSeconds(10);
 
     private static DynamicTest runTestCase(String name, TestCaseWithMetadata tc) {
-        return tc.case_.accept(new TestCase.PartialVisitor<>() {
-            @Override
-            public DynamicTest otherwise(TestCase instance) {
-                return DynamicTest.dynamicTest(name + " [unhandled]",
-                    () -> fail("Unhandled test case type: " + instance.getClass().getSimpleName()));
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.AlphaConversion instance) {
-                AlphaConversionTestCase tc = instance.value;
-                return withTimeout(name, () ->
-                    assertEquals(tc.result,
-                        hydra.Reduction.alphaConvert(tc.oldVariable, tc.newVariable, tc.term)));
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.CaseConversion instance) {
-                CaseConversionTestCase tc = instance.value;
-                return withTimeout(name, () ->
-                    assertEquals(tc.toString,
-                        hydra.Formatting.convertCase(tc.fromConvention, tc.toConvention, tc.fromString)));
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.DeannotateTerm instance) {
-                DeannotateTermTestCase tc = instance.value;
-                return withTimeout(name, () ->
-                    assertEquals(tc.output,
-                        hydra.Rewriting.deannotateTerm(tc.input)));
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.DeannotateType instance) {
-                DeannotateTypeTestCase tc = instance.value;
-                return withTimeout(name, () ->
-                    assertEquals(tc.output,
-                        hydra.Rewriting.deannotateType(tc.input)));
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.DelegatedEvaluation instance) {
-                return withTimeout(name, () -> {});
-            }
-            @Override
-            public DynamicTest visit(TestCase.EtaExpansion instance) {
-                EtaExpansionTestCase tc = instance.value;
-                return withTimeout(name, () -> {
-                    Graph graph = getTestGraph();
-                    hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, Term> result =
-                        hydra.Reduction.etaExpandTypedTerm(emptyContext(), graph, tc.input);
-                    assertTrue(result.isRight(),
-                        "Eta expansion failed: " + (result.isLeft()
-                            ? hydra.show.Errors.error(((hydra.util.Either.Left<hydra.context.InContext<hydra.errors.Error_>, Term>) result).value.object)
-                            : ""));
-                    assertEquals(tc.output, ((hydra.util.Either.Right<hydra.context.InContext<hydra.errors.Error_>, Term>) result).value);
-                });
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.Evaluation instance) {
-                EvaluationTestCase tc = instance.value;
-                return withTimeout(name, () -> {
-                    Graph graph = getTestGraph();
-                    hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, Term> reduced;
-                    try {
-                        reduced = hydra.Reduction.reduceTerm(emptyContext(), graph, true, tc.input);
-                    } catch (Exception e) {
-                        throw new IllegalArgumentException(
-                            "Exception during reduceTerm for input: " + hydra.show.Core.term(tc.input), e);
-                    }
-                    assertTrue(reduced.isRight(),
-                        "Evaluation failed for input: " + hydra.show.Core.term(tc.input)
-                        + "\nExpected: " + hydra.show.Core.term(tc.output)
-                        + "\nError: " + (reduced.isLeft()
-                            ? hydra.show.Errors.error(((hydra.util.Either.Left<hydra.context.InContext<hydra.errors.Error_>, Term>) reduced).value.object)
-                            : ""));
-                    Term result = ((hydra.util.Either.Right<hydra.context.InContext<hydra.errors.Error_>, Term>) reduced).value;
-                    if (!termsEqual(tc.output, result)) {
-                        String expectedStr = hydra.show.Core.term(tc.output);
-                        String actualStr = hydra.show.Core.term(result);
-                        assertEquals(expectedStr, actualStr,
-                            "Original term does not reduce to expected term");
-                        fail("Readable match but direct comparison failed");
-                    }
-                });
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.Inference instance) {
-                InferenceTestCase tc = instance.value;
-                return withTimeout(name, () -> {
-                    Graph graph = getTestGraph();
-                    hydra.context.Context cx = emptyContext();
-                    var result = hydra.Inference.inferTypeOf(cx, graph, tc.input);
-                    assertEitherRight(result, "Inference failed");
-                    var resultPair = eitherRight(result);
-                    Term inferredTerm = resultPair.first.first;
-                    TypeScheme resultScheme = resultPair.first.second;
-                    assertEquals(
-                        hydra.show.Core.typeScheme(tc.output),
-                        hydra.show.Core.typeScheme(resultScheme),
-                        "Type scheme mismatch");
-                    // Also check that inferred term has types stripped correctly
-                    assertEquals(
-                        hydra.show.Core.term(hydra.Rewriting.removeTypesFromTerm(inferredTerm)),
-                        hydra.show.Core.term(hydra.Rewriting.removeTypesFromTerm(tc.input)),
-                        "Inferred term mismatch");
-                });
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.InferenceFailure instance) {
-                InferenceFailureTestCase tc = instance.value;
-                return withTimeout(name, () -> {
-                    Graph graph = getTestGraph();
-                    hydra.context.Context cx = emptyContext();
-                    var result = hydra.Inference.inferTypeOf(cx, graph, tc.input);
-                    assertTrue(result instanceof hydra.util.Either.Left,
-                        "Expected inference failure but got success");
-                });
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.TypeChecking instance) {
-                TypeCheckingTestCase tc = instance.value;
-                return withTimeout(name, () -> {
-                    Graph graph = getTestGraph();
-                    hydra.context.Context cx = emptyContext();
-
-                    // Infer type
-                    var inferResult = hydra.Inference.inferTypeOf(cx, graph, tc.input);
-                    assertEitherRight(inferResult, "Inference failed");
-                    var inferPair = eitherRight(inferResult);
-                    Term inferredTerm = inferPair.first.first;
-                    Type inferredType = typeSchemeToType(inferPair.first.second);
-                    hydra.context.Context inferCx = inferPair.second;
-
-                    // Reconstruct type - use context from inference to continue fresh name counter
-                    var typeOfResult =
-                        hydra.Checking.typeOf(inferCx, graph, hydra.util.ConsList.of(), inferredTerm);
-                    assertEitherRight(typeOfResult, "Type reconstruction failed");
-                    Type reconstructedType = eitherRight(typeOfResult).first;
-
-                    // Compare inferred term using alpha-equivalence for type variables,
-                    // since Java's inference may assign them in a different order than Haskell
-                    assertAlphaEquivalent(tc.outputTerm, inferredTerm, "Inferred term");
-                    assertAlphaEquivalent(tc.outputType, inferredType, "Inferred type");
-                    assertAlphaEquivalent(tc.outputType, reconstructedType, "Reconstructed type");
-                });
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.TypeCheckingFailure instance) {
-                TypeCheckingFailureTestCase tc = instance.value;
-                return withTimeout(name, () -> {
-                    // TODO: implement when test data is available
-                });
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.TypeReduction instance) {
-                TypeReductionTestCase tc = instance.value;
-                return withTimeout(name, () -> {
-                    Graph graph = getTestGraph();
-                    hydra.context.Context cx = emptyContext();
-                    var result = hydra.Reduction.betaReduceType(cx, graph, tc.input);
-                    assertEitherRight(result, "Type reduction failed");
-                    assertEquals(tc.output, eitherRight(result));
-                });
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.TopologicalSort instance) {
-                TopologicalSortTestCase tc = instance.value;
-                return withTimeout(name, () ->
-                    assertEquals(tc.expected, hydra.Sorting.topologicalSort(tc.adjacencyList)));
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.TopologicalSortSCC instance) {
-                TopologicalSortSCCTestCase tc = instance.value;
-                return withTimeout(name, () ->
-                    assertEquals(tc.expected, hydra.Sorting.topologicalSortComponents(tc.adjacencyList)));
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.TopologicalSortBindings instance) {
-                TopologicalSortBindingsTestCase tc = instance.value;
-                return withTimeout(name, () -> {
-                    hydra.util.PersistentMap<Name, Term> bindingMap = hydra.lib.maps.FromList.apply(tc.bindings);
-                    hydra.util.ConsList<hydra.util.ConsList<Pair<Name, Term>>> result =
-                        hydra.Rewriting.topologicalSortBindingMap(bindingMap);
-                    // Compare as sets of sets (order within SCCs doesn't matter)
-                    Set<Set<Pair<Name, Term>>> resultSet = new HashSet<>();
-                    for (hydra.util.ConsList<Pair<Name, Term>> group : result) {
-                        resultSet.add(new HashSet<>(group));
-                    }
-                    Set<Set<Pair<Name, Term>>> expectedSet = new HashSet<>();
-                    for (hydra.util.ConsList<Pair<Name, Term>> group : tc.expected) {
-                        expectedSet.add(new HashSet<>(group));
-                    }
-                    assertEquals(expectedSet, resultSet);
-                });
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.Serialization instance) {
-                SerializationTestCase tc = instance.value;
-                return withTimeout(name, () ->
-                    assertEquals(tc.output,
-                        hydra.Serialization.printExpr(
-                            hydra.Serialization.parenthesize(tc.input))));
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.FlattenLetTerms instance) {
-                FlattenLetTermsTestCase tc = instance.value;
-                return withTimeout(name, () ->
-                    assertEquals(tc.output, hydra.Rewriting.flattenLetTerms(tc.input)));
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.FreeVariables instance) {
-                FreeVariablesTestCase tc = instance.value;
-                return withTimeout(name, () ->
-                    assertEquals(tc.output, hydra.Rewriting.freeVariablesInTerm(tc.input)));
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.LiftLambdaAboveLet instance) {
-                LiftLambdaAboveLetTestCase tc = instance.value;
-                return withTimeout(name, () ->
-                    assertEquals(tc.output, hydra.Rewriting.liftLambdaAboveLet(tc.input)));
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.SimplifyTerm instance) {
-                SimplifyTermTestCase tc = instance.value;
-                return withTimeout(name, () ->
-                    assertEquals(tc.output, hydra.Rewriting.simplifyTerm(tc.input)));
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.NormalizeTypeVariables instance) {
-                NormalizeTypeVariablesTestCase tc = instance.value;
-                return withTimeout(name, () ->
-                    assertEquals(tc.output, hydra.Rewriting.normalizeTypeVariablesInTerm(tc.input)));
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.FoldOverTerm instance) {
-                FoldOverTermTestCase tc = instance.value;
-                return withTimeout(name, () ->
-                    assertEquals(tc.output, runFoldOperation(tc.traversalOrder, tc.operation, tc.input)));
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.RewriteTerm instance) {
-                RewriteTermTestCase tc = instance.value;
-                return withTimeout(name, () ->
-                    assertEquals(tc.output, runTermRewriter(tc.rewriter, tc.input)));
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.RewriteType instance) {
-                RewriteTypeTestCase tc = instance.value;
-                return withTimeout(name, () ->
-                    assertEquals(tc.output, runTypeRewriter(tc.rewriter, tc.input)));
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.HoistSubterms instance) {
-                HoistSubtermsTestCase tc = instance.value;
-                return withTimeout(name, () ->
-                    assertEquals(tc.output,
-                        hydra.Hoisting.hoistSubterms(
-                            predicateFn(tc.predicate), emptyGraph(), tc.input)));
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.HoistCaseStatements instance) {
-                HoistCaseStatementsTestCase tc = instance.value;
-                return withTimeout(name, () ->
-                    assertEquals(tc.output,
-                        hydra.Hoisting.hoistCaseStatements(emptyGraph(), tc.input)));
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.HoistLetBindings instance) {
-                HoistLetBindingsTestCase tc = instance.value;
-                return withTimeout(name, () -> {
-                    Let result = hydra.Hoisting.hoistAllLetBindings(tc.input);
-                    assertEquals(
-                        hydra.show.Core.let(tc.output),
-                        hydra.show.Core.let(result));
-                });
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.HoistPolymorphicLetBindings instance) {
-                HoistPolymorphicLetBindingsTestCase tc = instance.value;
-                return withTimeout(name, () -> {
-                    Let result = hydra.Hoisting.hoistPolymorphicLetBindings(
-                        b -> true, tc.input);
-                    assertEquals(
-                        hydra.show.Core.let(tc.output),
-                        hydra.show.Core.let(result));
-                });
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.JsonParser instance) {
-                ParserTestCase<hydra.json.model.Value> tc = instance.value;
-                return withTimeout(name, () ->
-                    assertEquals(tc.output, hydra.json.Parser.parseJson(tc.input)));
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.JsonWriter instance) {
-                WriterTestCase<hydra.json.model.Value> tc = instance.value;
-                return withTimeout(name, () ->
-                    assertEquals(tc.output, hydra.json.Writer.printJson(tc.input)));
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.JsonDecode instance) {
-                JsonDecodeTestCase tc = instance.value;
-                return withTimeout(name, () -> {
-                    hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> emptyTypes = hydra.util.PersistentMap.empty();
-                    var decodeResult = hydra.json.Decode.fromJson(emptyTypes, new Name("test"), tc.type, tc.json);
-
-                    tc.expected.accept(new hydra.util.Either.Visitor<>() {
-                        @Override
-                        public Object visit(hydra.util.Either.Left<String, Term> left) {
-                            // Expected failure
-                            assertTrue(decodeResult instanceof hydra.util.Either.Left,
-                                "Expected decode failure but succeeded");
-                            return null;
-                        }
-                        @Override
-                        public Object visit(hydra.util.Either.Right<String, Term> right) {
-                            // Expected success
-                            assertEitherRight(decodeResult, "JSON decode failed");
-                            assertEquals(right.value, eitherRight(decodeResult));
-                            return null;
-                        }
-                    });
-                });
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.JsonEncode instance) {
-                JsonEncodeTestCase tc = instance.value;
-                return withTimeout(name, () -> {
-                    var encodeResult = hydra.json.Encode.toJson(tc.term);
-
-                    tc.expected.accept(new hydra.util.Either.Visitor<>() {
-                        @Override
-                        public Object visit(hydra.util.Either.Left<String, hydra.json.model.Value> left) {
-                            // Expected failure
-                            assertTrue(encodeResult instanceof hydra.util.Either.Left,
-                                "Expected encode failure but succeeded");
-                            return null;
-                        }
-                        @Override
-                        public Object visit(hydra.util.Either.Right<String, hydra.json.model.Value> right) {
-                            // Expected success
-                            assertEitherRight(encodeResult, "JSON encode failed");
-                            assertEquals(right.value, eitherRight(encodeResult));
-                            return null;
-                        }
-                    });
-                });
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.JsonRoundtrip instance) {
-                JsonRoundtripTestCase tc = instance.value;
-                return withTimeout(name, () -> {
-                    // Encode
-                    var encodeResult = hydra.json.Encode.toJson(tc.term);
-                    assertEitherRight(encodeResult, "JSON encode failed");
-                    hydra.json.model.Value encoded = eitherRight(encodeResult);
-
-                    // Decode back
-                    hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> emptyTypes = hydra.util.PersistentMap.empty();
-                    var decodeResult = hydra.json.Decode.fromJson(emptyTypes, new Name("test"), tc.type, encoded);
-                    assertEitherRight(decodeResult, "JSON decode failed");
-                    Term decoded = eitherRight(decodeResult);
-                    if (!termsEqual(tc.term, decoded)) {
-                        assertEquals(
-                            hydra.show.Core.term(tc.term),
-                            hydra.show.Core.term(decoded),
-                            "JSON roundtrip term mismatch");
-                    }
-                });
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.SubstInType instance) {
-                SubstInTypeTestCase tc = instance.value;
-                return withTimeout(name, () -> {
-                    // Build TypeSubst from list of (Name, Type) pairs
-                    hydra.util.PersistentMap<Name, Type> substMap = hydra.util.PersistentMap.empty();
-                    for (hydra.util.Pair<Name, Type> pair : tc.substitution) {
-                        substMap = substMap.insert(pair.first, pair.second);
-                    }
-                    hydra.typing.TypeSubst subst = new hydra.typing.TypeSubst(substMap);
-                    Type result = hydra.Substitution.substInType(subst, tc.input);
-                    assertEquals(tc.output, result);
-                });
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.VariableOccursInType instance) {
-                VariableOccursInTypeTestCase tc = instance.value;
-                return withTimeout(name, () -> {
-                    boolean result = hydra.Unification.variableOccursInType(tc.variable, tc.type);
-                    assertEquals(tc.expected, result);
-                });
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.UnifyTypes instance) {
-                UnifyTypesTestCase tc = instance.value;
-                return withTimeout(name, () -> {
-                    // Build schema types map from the list of names
-                    hydra.util.PersistentMap<Name, hydra.core.TypeScheme> schemaTypes = hydra.util.PersistentMap.empty();
-                    for (Name n : tc.schemaTypes) {
-                        schemaTypes = schemaTypes.insert(n, new hydra.core.TypeScheme(
-                            hydra.util.ConsList.empty(),
-                            new Type.Variable(n),
-                            hydra.util.Maybe.nothing()));
-                    }
-                    hydra.context.Context cx = emptyContext();
-                    var result =
-                        hydra.Unification.unifyTypes(cx, schemaTypes, tc.left, tc.right, "test");
-
-                    tc.expected.accept(new hydra.util.Either.Visitor<String, hydra.typing.TypeSubst, Void>() {
-                        @Override
-                        public Void visit(hydra.util.Either.Left<String, hydra.typing.TypeSubst> left) {
-                            // Expected failure
-                            assertTrue(result instanceof hydra.util.Either.Left,
-                                "Expected unification failure but got success");
-                            return null;
-                        }
-
-                        @Override
-                        public Void visit(hydra.util.Either.Right<String, hydra.typing.TypeSubst> right) {
-                            // Expected success
-                            assertEitherRight(result, "Expected unification success but got failure");
-                            assertEquals(right.value, eitherRight(result));
-                            return null;
-                        }
-                    });
-                });
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.JoinTypes instance) {
-                JoinTypesTestCase tc = instance.value;
-                return withTimeout(name, () -> {
-                    hydra.context.Context cx = emptyContext();
-                    var result =
-                        hydra.Unification.joinTypes(cx, tc.left, tc.right, "test");
-
-                    tc.expected.accept(new hydra.util.Either.Visitor<Void, hydra.util.ConsList<hydra.typing.TypeConstraint>, Void>() {
-                        @Override
-                        public Void visit(hydra.util.Either.Left<Void, hydra.util.ConsList<hydra.typing.TypeConstraint>> left) {
-                            // Expected failure
-                            assertTrue(result instanceof hydra.util.Either.Left,
-                                "Expected join failure but got success");
-                            return null;
-                        }
-
-                        @Override
-                        public Void visit(hydra.util.Either.Right<Void, hydra.util.ConsList<hydra.typing.TypeConstraint>> right) {
-                            // Expected success
-                            assertEitherRight(result, "Expected join success but got failure");
-                            assertEquals(right.value, eitherRight(result));
-                            return null;
-                        }
-                    });
-                });
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.UnshadowVariables instance) {
-                UnshadowVariablesTestCase tc = instance.value;
-                return withTimeout(name, () ->
-                    assertEquals(hydra.show.Core.term(tc.output),
-                        hydra.show.Core.term(hydra.Rewriting.unshadowVariables(tc.input))));
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.ValidateCoreTerm instance) {
-                ValidateCoreTermTestCase tc = instance.value;
-                return withTimeout(name, () ->
-                    assertEquals(tc.output,
-                        hydra.validate.Core.term(tc.typed, hydra.Lexical.emptyGraph(), tc.input)));
-            }
-
+        return tc.case_.accept(new TestCase.Visitor<>() {
             @Override
             public DynamicTest visit(TestCase.Universal instance) {
-                UniversalTestCase tc = instance.value;
+                UniversalTestCase utc = instance.value;
                 return withTimeout(name, () ->
-                    assertEquals(tc.expected, tc.actual));
+                    assertEquals(utc.expected, utc.actual));
             }
         });
     }
 
     private static DynamicTest withTimeout(String name, org.junit.jupiter.api.function.Executable executable) {
         return DynamicTest.dynamicTest(name, () -> assertTimeoutPreemptively(TEST_TIMEOUT, executable));
-    }
-
-    /**
-     * Convert a TypeScheme back to a Type by wrapping forall binders around the body.
-     */
-    private static Type typeSchemeToType(TypeScheme ts) {
-        Type result = ts.type;
-        // Wrap in reverse order so the first parameter is the outermost forall
-        for (int i = ts.variables.size() - 1; i >= 0; i--) {
-            result = new Type.Forall(new ForallType(ts.variables.get(i), result));
-        }
-        return result;
-    }
-
-    // ---- Helper methods ----
-
-    private static Term runFoldOperation(hydra.coders.TraversalOrder order, FoldOperation op, Term input) {
-        return op.accept(new FoldOperation.Visitor<>() {
-            @Override
-            public Term visit(FoldOperation.SumInt32Literals instance) {
-                int sum = hydra.Rewriting.foldOverTerm(order,
-                    acc -> t -> acc + getInt32(t), 0, input);
-                return new Term.Literal(new Literal.Integer_(new IntegerValue.Int32(sum)));
-            }
-
-            @Override
-            public Term visit(FoldOperation.CollectListLengths instance) {
-                java.util.function.Function<List<Integer>, java.util.function.Function<Term, List<Integer>>> fld =
-                    acc -> t -> {
-                        List<Integer> result = new ArrayList<>(acc);
-                        result.addAll(getListLength(t));
-                        return result;
-                    };
-                List<Integer> lengths = hydra.Rewriting.foldOverTerm(order,
-                    fld, new ArrayList<>(), input);
-                List<Term> terms = new ArrayList<>();
-                for (int len : lengths) {
-                    terms.add(new Term.Literal(new Literal.Integer_(new IntegerValue.Int32(len))));
-                }
-                return new Term.List(hydra.util.ConsList.fromList(terms));
-            }
-
-            @Override
-            public Term visit(FoldOperation.CollectLabels instance) {
-                java.util.function.Function<List<Literal>, java.util.function.Function<Term, List<Literal>>> fld =
-                    acc -> t -> {
-                        List<Literal> result = new ArrayList<>(acc);
-                        result.addAll(getLabel(t));
-                        return result;
-                    };
-                List<Literal> labels = hydra.Rewriting.foldOverTerm(order,
-                    fld, new ArrayList<>(), input);
-                List<Term> terms = new ArrayList<>();
-                for (Literal label : labels) {
-                    terms.add(new Term.Literal(label));
-                }
-                return new Term.List(hydra.util.ConsList.fromList(terms));
-            }
-        });
-    }
-
-    private static int getInt32(Term t) {
-        if (t instanceof Term.Literal) {
-            Literal lit = ((Term.Literal) t).value;
-            if (lit instanceof Literal.Integer_) {
-                IntegerValue iv = ((Literal.Integer_) lit).value;
-                if (iv instanceof IntegerValue.Int32) {
-                    return ((IntegerValue.Int32) iv).value;
-                }
-            }
-        }
-        return 0;
-    }
-
-    private static List<Integer> getListLength(Term t) {
-        if (t instanceof Term.List) {
-            return List.of(((Term.List) t).value.size());
-        }
-        return List.of();
-    }
-
-    private static List<Literal> getLabel(Term t) {
-        if (t instanceof Term.Pair) {
-            Term first = ((Term.Pair) t).value.first;
-            if (first instanceof Term.Literal) {
-                Literal lit = ((Term.Literal) first).value;
-                if (lit instanceof Literal.String_) {
-                    return List.of(lit);
-                }
-            }
-        }
-        return List.of();
-    }
-
-    private static Term runTermRewriter(TermRewriter rewriter, Term input) {
-        return hydra.Rewriting.rewriteTerm(
-            recurse -> term -> rewriter.accept(new TermRewriter.Visitor<>() {
-                @Override
-                public Term visit(TermRewriter.ReplaceFooWithBar instance) {
-                    if (term instanceof Term.Literal) {
-                        Literal lit = ((Term.Literal) term).value;
-                        if (lit instanceof Literal.String_ && ((Literal.String_) lit).value.equals("foo")) {
-                            return new Term.Literal(new Literal.String_("bar"));
-                        }
-                    }
-                    return recurse.apply(term);
-                }
-
-                @Override
-                public Term visit(TermRewriter.ReplaceInt32WithInt64 instance) {
-                    if (term instanceof Term.Literal) {
-                        Literal lit = ((Term.Literal) term).value;
-                        if (lit instanceof Literal.Integer_) {
-                            IntegerValue iv = ((Literal.Integer_) lit).value;
-                            if (iv instanceof IntegerValue.Int32) {
-                                return new Term.Literal(new Literal.Integer_(
-                                    new IntegerValue.Int64((long) ((IntegerValue.Int32) iv).value)));
-                            }
-                        }
-                    }
-                    return recurse.apply(term);
-                }
-            }),
-            input);
-    }
-
-    private static Type runTypeRewriter(TypeRewriter rewriter, Type input) {
-        return hydra.Rewriting.rewriteType(
-            recurse -> typ -> rewriter.accept(new TypeRewriter.Visitor<>() {
-                @Override
-                public Type visit(TypeRewriter.ReplaceStringWithInt32 instance) {
-                    if (typ instanceof Type.Literal) {
-                        LiteralType lt = ((Type.Literal) typ).value;
-                        if (lt instanceof LiteralType.String_) {
-                            return new Type.Literal(new LiteralType.Integer_(new IntegerType.Int32()));
-                        }
-                    }
-                    return recurse.apply(typ);
-                }
-            }),
-            input);
-    }
-
-    private static java.util.function.Function<Pair<hydra.util.ConsList<hydra.paths.SubtermStep>, Term>, Boolean> predicateFn(
-            HoistPredicate pred) {
-        return pred.accept(new HoistPredicate.Visitor<>() {
-            @Override
-            public java.util.function.Function<Pair<hydra.util.ConsList<hydra.paths.SubtermStep>, Term>, Boolean> visit(
-                    HoistPredicate.Nothing instance) {
-                return pair -> false;
-            }
-
-            @Override
-            public java.util.function.Function<Pair<hydra.util.ConsList<hydra.paths.SubtermStep>, Term>, Boolean> visit(
-                    HoistPredicate.Lists instance) {
-                return pair -> pair.second instanceof Term.List;
-            }
-
-            @Override
-            public java.util.function.Function<Pair<hydra.util.ConsList<hydra.paths.SubtermStep>, Term>, Boolean> visit(
-                    HoistPredicate.Applications instance) {
-                return pair -> pair.second instanceof Term.Application;
-            }
-
-            @Override
-            public java.util.function.Function<Pair<hydra.util.ConsList<hydra.paths.SubtermStep>, Term>, Boolean> visit(
-                    HoistPredicate.CaseStatements instance) {
-                return pair -> pair.second instanceof Term.Function
-                    && ((Term.Function) pair.second).value instanceof Function.Elimination;
-            }
-        });
-    }
-
-    /**
-     * Build kernel type definitions needed by inference/checking tests.
-     * These types are normally provided by kernelTypesModules in Haskell.
-     */
-    // ---- Benchmark output ----
-
-    private static Map<Name, Type> buildKernelTypes() {
-        Map<Name, Type> types = new HashMap<>();
-
-        // CoderDirection: enum with encode, decode
-        types.put(new Name("hydra.coders.CoderDirection"),
-            new Type.Union(ConsList.of(
-                new FieldType(new Name("encode"), new Type.Unit()),
-                new FieldType(new Name("decode"), new Type.Unit()))));
-
-        // Coder: ∀v1.∀v2. {encode: Context -> v1 -> Either (InContext Error) v2, decode: Context -> v2 -> Either (InContext Error) v1}
-        Name coderName = new Name("hydra.util.Coder");
-        Name contextName = new Name("hydra.context.Context");
-        Name inContextName = new Name("hydra.context.InContext");
-        Name errorName = new Name("hydra.errors.Error");
-        // InContext Error = Application(InContext, Error)
-        Type inContextError = new Type.Application(new ApplicationType(
-            new Type.Variable(inContextName),
-            new Type.Variable(errorName)));
-        // Either (InContext Error) v — uses built-in Type.Either
-        java.util.function.Function<Type, Type> eitherInContextError = v ->
-            new Type.Either(new EitherType(inContextError, v));
-        // encode: Context -> v1 -> Either (InContext Error) v2
-        Type encodeType = new Type.Function(new FunctionType(
-            new Type.Variable(contextName),
-            new Type.Function(new FunctionType(
-                new Type.Variable(new Name("v1")),
-                eitherInContextError.apply(new Type.Variable(new Name("v2")))))));
-        // decode: Context -> v2 -> Either (InContext Error) v1
-        Type decodeType = new Type.Function(new FunctionType(
-            new Type.Variable(contextName),
-            new Type.Function(new FunctionType(
-                new Type.Variable(new Name("v2")),
-                eitherInContextError.apply(new Type.Variable(new Name("v1")))))));
-        Type coderBody = new Type.Record(ConsList.of(
-            new FieldType(new Name("encode"), encodeType),
-            new FieldType(new Name("decode"), decodeType)));
-        // Wrap in foralls: ∀v1.∀v2. coderBody
-        types.put(coderName,
-            new Type.Forall(new ForallType(new Name("v1"),
-                new Type.Forall(new ForallType(new Name("v2"), coderBody)))));
-
-        // Context: record with trace, messages, other
-        types.put(contextName,
-            new Type.Record(ConsList.of(
-                new FieldType(new Name("trace"), new Type.List(new Type.Literal(new LiteralType.String_()))),
-                new FieldType(new Name("messages"), new Type.List(new Type.Literal(new LiteralType.String_()))),
-                new FieldType(new Name("other"), new Type.Map(new MapType(
-                    new Type.Variable(new Name("hydra.core.Name")),
-                    new Type.Variable(new Name("hydra.core.Term"))))))));
-
-        // InContext: ∀e. record with object (e) and context (Context)
-        types.put(inContextName,
-            new Type.Forall(new ForallType(new Name("e"),
-                new Type.Record(ConsList.of(
-                    new FieldType(new Name("object"), new Type.Variable(new Name("e"))),
-                    new FieldType(new Name("context"), new Type.Variable(contextName)))))));
-
-        // Error: union type with multiple error variants
-        Name otherErrorName = new Name("hydra.errors.OtherError");
-        types.put(otherErrorName,
-            new Type.Wrap(
-                new Type.Literal(new LiteralType.String_())));
-        types.put(errorName,
-            new Type.Union(ConsList.of(
-                new FieldType(new Name("other"), new Type.Variable(otherErrorName)))));
-
-        // Type: the hydra.core.Type union — large recursive type
-        Name typeName = new Name("hydra.core.Type");
-        types.put(typeName,
-            new Type.Union(ConsList.of(
-                new FieldType(new Name("annotated"), new Type.Variable(new Name("annotatedType"))),
-                new FieldType(new Name("application"), new Type.Variable(new Name("applicationElim"))),
-                new FieldType(new Name("either"), new Type.Variable(new Name("eitherType"))),
-                new FieldType(new Name("forall"), new Type.Variable(new Name("forallType"))),
-                new FieldType(new Name("function"), new Type.Variable(new Name("functionType"))),
-                new FieldType(new Name("list"), new Type.Variable(typeName)),
-                new FieldType(new Name("literal"), new Type.Variable(new Name("literalType"))),
-                new FieldType(new Name("map"), new Type.Variable(new Name("mapType"))),
-                new FieldType(new Name("maybe"), new Type.Variable(typeName)),
-                new FieldType(new Name("pair"), new Type.Variable(new Name("pairType"))),
-                new FieldType(new Name("record"), new Type.Variable(new Name("rowType"))),
-                new FieldType(new Name("set"), new Type.Variable(typeName)),
-                new FieldType(new Name("union"), new Type.Variable(new Name("rowType"))),
-                new FieldType(new Name("unit"), new Type.Unit()),
-                new FieldType(new Name("variable"), new Type.Variable(new Name("name"))),
-                new FieldType(new Name("wrap"), new Type.Variable(new Name("wrappedType"))))));
-
-        // Name: wrapper over string
-        Name nameName = new Name("hydra.core.Name");
-        types.put(nameName,
-            new Type.Wrap(
-                new Type.Literal(new LiteralType.String_())));
-
-        // ForallType: record with parameter (Name) and body (Type)
-        Name forallTypeName = new Name("hydra.core.ForallType");
-        types.put(forallTypeName,
-            new Type.Record(ConsList.of(
-                new FieldType(new Name("parameter"), new Type.Variable(nameName)),
-                new FieldType(new Name("body"), new Type.Variable(typeName)))));
-
-        // Comparison: enum with lessThan, equalTo, greaterThan
-        Name comparisonName = new Name("hydra.util.Comparison");
-        types.put(comparisonName,
-            new Type.Union(ConsList.of(
-                new FieldType(new Name("lessThan"), new Type.Unit()),
-                new FieldType(new Name("equalTo"), new Type.Unit()),
-                new FieldType(new Name("greaterThan"), new Type.Unit()))));
-
-        // CaseConvention: enum with camel, pascal, lowerSnake, upperSnake
-        Name caseConventionName = new Name("hydra.util.CaseConvention");
-        types.put(caseConventionName,
-            new Type.Union(ConsList.of(
-                new FieldType(new Name("camel"), new Type.Unit()),
-                new FieldType(new Name("pascal"), new Type.Unit()),
-                new FieldType(new Name("lowerSnake"), new Type.Unit()),
-                new FieldType(new Name("upperSnake"), new Type.Unit()))));
-
-        // Precision: union with arbitrary (unit) and bits (int32)
-        Name precisionName = new Name("hydra.util.Precision");
-        types.put(precisionName,
-            new Type.Union(ConsList.of(
-                new FieldType(new Name("arbitrary"), new Type.Unit()),
-                new FieldType(new Name("bits"), new Type.Literal(new LiteralType.Integer_(new IntegerType.Int32()))))));
-
-        return types;
     }
 
     // ---- Benchmark output ----
