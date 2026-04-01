@@ -82,17 +82,17 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
 module_ = Module (Namespace "hydra.ext.javaScript.language")
-  [toTermDefinition javaScriptLanguage, toTermDefinition javaScriptReservedWords]
+  [toDefinition javaScriptLanguage, toDefinition javaScriptReservedWords]
   [Lexical.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints and reserved words for JavaScript (ECMAScript 2024)"
 
-javaScriptLanguage :: TBinding Language
+javaScriptLanguage :: TTermDefinition Language
 javaScriptLanguage = define "javaScriptLanguage" $
     doc "Language constraints for JavaScript (ECMAScript 2024)" $ lets [
     "eliminationVariants">: Sets.fromList $ list [
@@ -167,7 +167,7 @@ javaScriptLanguage = define "javaScriptLanguage" $
         (var "typeVariants")
         (var "typePredicate"))
 
-javaScriptReservedWords :: TBinding (S.Set String)
+javaScriptReservedWords :: TTermDefinition (S.Set String)
 javaScriptReservedWords = define "javaScriptReservedWords" $
   doc "A set of reserved words in JavaScript" $
   lets [

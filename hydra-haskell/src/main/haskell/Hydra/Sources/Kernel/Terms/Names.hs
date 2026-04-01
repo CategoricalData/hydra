@@ -66,19 +66,19 @@ module_ = Module ns elements
     Just ("Functions for working with qualified names.")
   where
    elements = [
-     toTermDefinition compactName,
-     toTermDefinition localNameOf,
-     toTermDefinition namespaceOf,
-     toTermDefinition namespaceToFilePath,
-     toTermDefinition qname,
-     toTermDefinition qualifyName,
-     toTermDefinition uniqueLabel,
-     toTermDefinition unqualifyName]
+     toDefinition compactName,
+     toDefinition localNameOf,
+     toDefinition namespaceOf,
+     toDefinition namespaceToFilePath,
+     toDefinition qname,
+     toDefinition qualifyName,
+     toDefinition uniqueLabel,
+     toDefinition unqualifyName]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-compactName :: TBinding (M.Map Namespace String -> Name -> String)
+compactName :: TTermDefinition (M.Map Namespace String -> Name -> String)
 compactName = define "compactName" $
   doc "Given a mapping of namespaces to prefixes, convert a name to a compact string representation" $
   lambda "namespaces" $ lambda "name" $ lets [
@@ -93,17 +93,17 @@ compactName = define "compactName" $
             (Maps.lookup (var "ns") (var "namespaces")))
         (var "mns")
 
-localNameOf :: TBinding (Name -> String)
+localNameOf :: TTermDefinition (Name -> String)
 localNameOf = define "localNameOf" $
   doc "Extract the local part of a name" $
   unaryFunction Module.qualifiedNameLocal <.> qualifyName
 
-namespaceOf :: TBinding (Name -> Maybe Namespace)
+namespaceOf :: TTermDefinition (Name -> Maybe Namespace)
 namespaceOf = define "namespaceOf" $
   doc "Extract the namespace of a name, if any" $
   unaryFunction Module.qualifiedNameNamespace <.> qualifyName
 
-namespaceToFilePath :: TBinding (CaseConvention -> FileExtension -> Namespace -> String)
+namespaceToFilePath :: TTermDefinition (CaseConvention -> FileExtension -> Namespace -> String)
 namespaceToFilePath = define "namespaceToFilePath" $
   doc "Convert a namespace to a file path with the given case convention and file extension" $
   lambda "caseConv" $ lambda "ext" $ lambda "ns" $ lets [
@@ -112,7 +112,7 @@ namespaceToFilePath = define "namespaceToFilePath" $
       (Strings.splitOn (string ".") (Module.unNamespace $ var "ns"))]
     $ (Strings.intercalate (string "/") $ var "parts") ++ string "." ++ (Module.unFileExtension $ var "ext")
 
-qname :: TBinding (Namespace -> String -> Name)
+qname :: TTermDefinition (Namespace -> String -> Name)
 qname = define "qname" $
   doc "Construct a qualified (dot-separated) name" $
   lambda "ns" $ lambda "name" $
@@ -120,7 +120,7 @@ qname = define "qname" $
       Strings.cat $
         list [apply (unwrap _Namespace) (var "ns"), string ".", var "name"]
 
-qualifyName :: TBinding (Name -> QualifiedName)
+qualifyName :: TTermDefinition (Name -> QualifiedName)
 qualifyName = define "qualifyName" $
   doc "Split a dot-separated name into a namespace and local name" $
   lambda "name" $ lets [
@@ -132,7 +132,7 @@ qualifyName = define "qualifyName" $
         (just $ wrap _Namespace (Strings.intercalate (string ".") (Lists.reverse (Lists.tail $ var "parts"))))
         (Lists.head $ var "parts"))
 
-uniqueLabel :: TBinding (S.Set String -> String -> String)
+uniqueLabel :: TTermDefinition (S.Set String -> String -> String)
 uniqueLabel = define "uniqueLabel" $
   doc "Generate a unique label by appending a suffix if the label is already in use" $
   lambda "visited" $ lambda "l" $
@@ -140,7 +140,7 @@ uniqueLabel = define "uniqueLabel" $
     (uniqueLabel @@ var "visited" @@ Strings.cat2 (var "l") (string "'"))
     (var "l")
 
-unqualifyName :: TBinding (QualifiedName -> Name)
+unqualifyName :: TTermDefinition (QualifiedName -> Name)
 unqualifyName = define "unqualifyName" $
   doc "Convert a qualified name to a dot-separated name" $
   lambda "qname" $ lets [

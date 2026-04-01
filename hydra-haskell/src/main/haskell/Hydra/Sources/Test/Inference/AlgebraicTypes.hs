@@ -25,20 +25,20 @@ module_ = Module ns elements
     (Just "Inference tests for algebraic data types")
   where
     elements = [
-      Phantoms.toTermDefinition allTests,
-      Phantoms.toTermDefinition testGroupForCollectionPrimitives,
-      Phantoms.toTermDefinition testGroupForEithers,
-      Phantoms.toTermDefinition testGroupForFolds,
-      Phantoms.toTermDefinition testGroupForLists,
-      Phantoms.toTermDefinition testGroupForMaps,
-      Phantoms.toTermDefinition testGroupForOptionals,
-      Phantoms.toTermDefinition testGroupForPairs,
-      Phantoms.toTermDefinition testGroupForSets]
+      Phantoms.toDefinition allTests,
+      Phantoms.toDefinition testGroupForCollectionPrimitives,
+      Phantoms.toDefinition testGroupForEithers,
+      Phantoms.toDefinition testGroupForFolds,
+      Phantoms.toDefinition testGroupForLists,
+      Phantoms.toDefinition testGroupForMaps,
+      Phantoms.toDefinition testGroupForOptionals,
+      Phantoms.toDefinition testGroupForPairs,
+      Phantoms.toDefinition testGroupForSets]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
   Phantoms.doc "Algebraic data type tests" $
   supergroup "Algebraic terms" [
@@ -51,7 +51,7 @@ allTests = define "allTests" $
     testGroupForPairs,
     testGroupForSets]
 
-testGroupForCollectionPrimitives :: TBinding TestGroup
+testGroupForCollectionPrimitives :: TTermDefinition TestGroup
 testGroupForCollectionPrimitives = define "testGroupForCollectionPrimitives" $
   supergroup "Collection primitives" [
 
@@ -123,7 +123,7 @@ testGroupForCollectionPrimitives = define "testGroupForCollectionPrimitives" $
         (primitive _maps_map @@ primitive _sets_fromList @@ (primitive _maps_fromList @@ list [pair (string "a") (list [int32 1, int32 2])]))
         (T.map T.string (T.set T.int32))]]
 
-testGroupForEithers :: TBinding TestGroup
+testGroupForEithers :: TTermDefinition TestGroup
 testGroupForEithers = define "testGroupForEithers" $
   supergroup "Either terms" [
     subgroup "Left values" [
@@ -174,7 +174,7 @@ testGroupForEithers = define "testGroupForEithers" $
         (pair (list [left $ string "error", right $ int32 42]) (list []))
         ["t0"] (T.pair (T.list $ T.either_ T.string T.int32) (T.list $ T.var "t0"))]]
 
-testGroupForFolds :: TBinding TestGroup
+testGroupForFolds :: TTermDefinition TestGroup
 testGroupForFolds = define "testGroupForFolds" $
   supergroup "Eliminations" [
     subgroup "List eliminations (folds)" [
@@ -207,7 +207,7 @@ testGroupForFolds = define "testGroupForFolds" $
   where
     foldAdd = primitive _lists_foldl @@ primitive _math_add
 
-testGroupForLists :: TBinding TestGroup
+testGroupForLists :: TTermDefinition TestGroup
 testGroupForLists = define "testGroupForLists" $
   supergroup "List terms" [
     subgroup "List of strings" [
@@ -239,7 +239,7 @@ testGroupForLists = define "testGroupForLists" $
         (lambda "x" (list [var "x", string "foo", var "x"]))
         (T.function T.string (T.list T.string))]]
 
-testGroupForMaps :: TBinding TestGroup
+testGroupForMaps :: TTermDefinition TestGroup
 testGroupForMaps = define "testGroupForMaps" $
   subgroup "Map terms" [
     expectMono 1 [tag_disabledForMinimalInference]
@@ -255,7 +255,7 @@ testGroupForMaps = define "testGroupForMaps" $
         [(var "x", float64 0.1), (var "y", float64 0.2)])
       ["t0"] [("t0", ["ordering"])] (T.function (T.var "t0") (T.function (T.var "t0") (T.map (T.var "t0") T.float64)))]
 
-testGroupForOptionals :: TBinding TestGroup
+testGroupForOptionals :: TTermDefinition TestGroup
 testGroupForOptionals = define "testGroupForOptionals" $
   subgroup "Optional terms" [
     expectMono 1 [tag_disabledForMinimalInference]
@@ -265,7 +265,7 @@ testGroupForOptionals = define "testGroupForOptionals" $
       (optional nothing)
       ["t0"] (T.optional $ T.var "t0")]
 
-testGroupForPairs :: TBinding TestGroup
+testGroupForPairs :: TTermDefinition TestGroup
 testGroupForPairs = define "testGroupForPairs" $
   supergroup "Pair terms" [
     subgroup "Monotyped pairs" [
@@ -319,7 +319,7 @@ testGroupForPairs = define "testGroupForPairs" $
         (pair (list []) (list []))
         ["t0", "t1"] (T.pair (T.list $ T.var "t0") (T.list $ T.var "t1"))]]
 
-testGroupForSets :: TBinding TestGroup
+testGroupForSets :: TTermDefinition TestGroup
 testGroupForSets = define "testGroupForSets" $
   subgroup "Set terms" [
     expectMono 1 [tag_disabledForMinimalInference]

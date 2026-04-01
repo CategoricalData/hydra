@@ -64,13 +64,13 @@ module_ = Module ns elements
     Just ("Utilities for working with subterm steps and paths.")
   where
    elements = [
-     toTermDefinition subtermStep,
-     toTermDefinition termToSubtermGraph]
+     toDefinition subtermStep,
+     toDefinition termToSubtermGraph]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-subtermStep :: TBinding (SubtermStep -> Maybe String)
+subtermStep :: TTermDefinition (SubtermStep -> Maybe String)
 subtermStep = define "subtermStep" $
   doc "Convert a subterm step to a string representation" $
   "step" ~>
@@ -100,7 +100,7 @@ subtermStep = define "subtermStep" $
     _SubtermStep_injectionTerm>>: constant nothing,
     _SubtermStep_wrappedTerm>>: constant nothing]
 
-termToSubtermGraph :: TBinding (M.Map Namespace String -> Term -> SubtermGraph)
+termToSubtermGraph :: TTermDefinition (M.Map Namespace String -> Term -> SubtermGraph)
 termToSubtermGraph = define "termToSubtermGraph" $
   doc "Build a subterm graph from a term" $
   lambda "namespaces" $ lambda "term" $ lets [

@@ -33,7 +33,7 @@ module_ = Module ns elements
     kernelTypesNamespaces $
     Just "Test cases for Ord instance comparisons on complex Hydra types"
   where
-    elements = [Phantoms.toTermDefinition allTests]
+    elements = [Phantoms.toDefinition allTests]
 
 showBool :: TTerm (Bool -> String)
 showBool = Phantoms.lambda "b" $ Literals.showBoolean (Phantoms.var "b")
@@ -369,7 +369,7 @@ unionComparisonTests = subgroup "Union comparison" [
 -- All tests
 -- ============================================================
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for Ord instance comparisons on complex Hydra types" $
     supergroup "ordering" [

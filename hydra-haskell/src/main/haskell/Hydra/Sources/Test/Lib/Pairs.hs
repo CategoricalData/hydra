@@ -34,7 +34,7 @@ module_ = Module ns elements
     kernelTypesNamespaces $
     Just "Test cases for hydra.lib.pairs primitives"
   where
-    elements = [Phantoms.toTermDefinition allTests]
+    elements = [Phantoms.toDefinition allTests]
 
 showInt32 :: TTerm (Int -> String)
 showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")
@@ -82,7 +82,7 @@ pairsSecond = subgroup "second" [
       (Pairs.second (Phantoms.pair (Phantoms.int32 fst) (Phantoms.string snd)))
       (Phantoms.string result)
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.pairs primitives" $
     supergroup "hydra.lib.pairs primitives" [

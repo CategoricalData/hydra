@@ -102,7 +102,7 @@ _CppEnvironment_boundTypeVariables = Name "boundTypeVariables"
 
 -- Term-level definitions
 
-def :: String -> TTerm a -> TBinding a
+def :: String -> TTerm a -> TTermDefinition a
 def = definitionInModule module_
 
 ns :: Namespace
@@ -115,48 +115,48 @@ module_ = Module ns elements
     Just "C++ utilities for constructing C++ syntax trees"
   where
     elements = [
-      toTermDefinition constParameter,
-      toTermDefinition cppClassDeclaration,
-      toTermDefinition cppEnumDeclaration,
-      toTermDefinition cppEnumForwardDeclaration,
-      toTermDefinition cppPostfixExpressionToCppExpression,
-      toTermDefinition cppPrimaryExpressionToCppExpression,
-      toTermDefinition cppUnaryExpressionToCppExpression,
-      toTermDefinition cppUnaryExpressionToCppLogicalOrExpression,
-      toTermDefinition createCastExpr,
-      toTermDefinition createCompoundStmt,
-      toTermDefinition createConstRefType,
-      toTermDefinition createConstType,
-      toTermDefinition createConstructorBody,
-      toTermDefinition createEnumAccessExpr,
-      toTermDefinition createFunctionCallExpr,
-      toTermDefinition createHeaderFile,
-      toTermDefinition createIdentifierExpr,
-      toTermDefinition createLambdaExpr,
-      toTermDefinition createLiteralBoolExpr,
-      toTermDefinition createLiteralIntExpr,
-      toTermDefinition createLiteralStringExpr,
-      toTermDefinition createMemberAccessExpr,
-      toTermDefinition createQualifiedType,
-      toTermDefinition createReferenceType,
-      toTermDefinition createReturnStmt,
-      toTermDefinition createReturnVoidStmt,
-      toTermDefinition createTemplateType,
-      toTermDefinition createThisExpr,
-      toTermDefinition createThrowStmt,
-      toTermDefinition createTypeIdNameCall,
-      toTermDefinition createTypeNameExpr,
-      toTermDefinition createVariantExpr,
-      toTermDefinition emptyFunctionBody,
-      toTermDefinition extractPostfixExpression,
-      toTermDefinition memberSpecificationProtected,
-      toTermDefinition memberSpecificationPublic,
-      toTermDefinition stringExpression,
-      toTermDefinition toConstType,
-      toTermDefinition unnamedParameter]
+      toDefinition constParameter,
+      toDefinition cppClassDeclaration,
+      toDefinition cppEnumDeclaration,
+      toDefinition cppEnumForwardDeclaration,
+      toDefinition cppPostfixExpressionToCppExpression,
+      toDefinition cppPrimaryExpressionToCppExpression,
+      toDefinition cppUnaryExpressionToCppExpression,
+      toDefinition cppUnaryExpressionToCppLogicalOrExpression,
+      toDefinition createCastExpr,
+      toDefinition createCompoundStmt,
+      toDefinition createConstRefType,
+      toDefinition createConstType,
+      toDefinition createConstructorBody,
+      toDefinition createEnumAccessExpr,
+      toDefinition createFunctionCallExpr,
+      toDefinition createHeaderFile,
+      toDefinition createIdentifierExpr,
+      toDefinition createLambdaExpr,
+      toDefinition createLiteralBoolExpr,
+      toDefinition createLiteralIntExpr,
+      toDefinition createLiteralStringExpr,
+      toDefinition createMemberAccessExpr,
+      toDefinition createQualifiedType,
+      toDefinition createReferenceType,
+      toDefinition createReturnStmt,
+      toDefinition createReturnVoidStmt,
+      toDefinition createTemplateType,
+      toDefinition createThisExpr,
+      toDefinition createThrowStmt,
+      toDefinition createTypeIdNameCall,
+      toDefinition createTypeNameExpr,
+      toDefinition createVariantExpr,
+      toDefinition emptyFunctionBody,
+      toDefinition extractPostfixExpression,
+      toDefinition memberSpecificationProtected,
+      toDefinition memberSpecificationPublic,
+      toDefinition stringExpression,
+      toDefinition toConstType,
+      toDefinition unnamedParameter]
 
 -- | Create a const reference parameter
-constParameter :: TBinding (String -> Cpp.TypeExpression -> Cpp.Parameter)
+constParameter :: TTermDefinition (String -> Cpp.TypeExpression -> Cpp.Parameter)
 constParameter = def "constParameter" $
   doc "Create a const reference parameter" $
   lambdas ["name", "typ"] $
@@ -175,7 +175,7 @@ constParameter = def "constParameter" $
       Cpp._Parameter_defaultValue>>: nothing]
 
 -- | Create a C++ class declaration
-cppClassDeclaration :: TBinding (String -> [Cpp.BaseSpecifier] -> Maybe Cpp.ClassBody -> Cpp.Declaration)
+cppClassDeclaration :: TTermDefinition (String -> [Cpp.BaseSpecifier] -> Maybe Cpp.ClassBody -> Cpp.Declaration)
 cppClassDeclaration = def "cppClassDeclaration" $
   doc "Create a C++ class declaration" $
   lambdas ["name", "baseSpecs", "mbody"] $
@@ -189,7 +189,7 @@ cppClassDeclaration = def "cppClassDeclaration" $
         Cpp._ClassDeclaration_body>>: var "mbody"]
 
 -- | Create a C++ enum class declaration
-cppEnumDeclaration :: TBinding (String -> Maybe Cpp.ClassBody -> Cpp.Declaration)
+cppEnumDeclaration :: TTermDefinition (String -> Maybe Cpp.ClassBody -> Cpp.Declaration)
 cppEnumDeclaration = def "cppEnumDeclaration" $
   doc "Create a C++ enum class declaration" $
   lambdas ["name", "mbody"] $
@@ -203,7 +203,7 @@ cppEnumDeclaration = def "cppEnumDeclaration" $
         Cpp._ClassDeclaration_body>>: var "mbody"]
 
 -- | Create a C++ enum class forward declaration
-cppEnumForwardDeclaration :: TBinding (String -> Cpp.Declaration)
+cppEnumForwardDeclaration :: TTermDefinition (String -> Cpp.Declaration)
 cppEnumForwardDeclaration = def "cppEnumForwardDeclaration" $
   doc "Create a C++ enum class forward declaration" $
   lambda "name" $
@@ -217,7 +217,7 @@ cppEnumForwardDeclaration = def "cppEnumForwardDeclaration" $
         Cpp._ClassDeclaration_body>>: nothing]
 
 -- | Convert a PostfixExpression to an Expression
-cppPostfixExpressionToCppExpression :: TBinding (Cpp.PostfixExpression -> Cpp.Expression)
+cppPostfixExpressionToCppExpression :: TTermDefinition (Cpp.PostfixExpression -> Cpp.Expression)
 cppPostfixExpressionToCppExpression = def "cppPostfixExpressionToCppExpression" $
   doc "Convert a PostfixExpression to an Expression" $
   lambda "pf" $
@@ -225,7 +225,7 @@ cppPostfixExpressionToCppExpression = def "cppPostfixExpressionToCppExpression" 
       (inject Cpp._UnaryExpression Cpp._UnaryExpression_postfix $ var "pf")
 
 -- | Convert a PrimaryExpression to an Expression
-cppPrimaryExpressionToCppExpression :: TBinding (Cpp.PrimaryExpression -> Cpp.Expression)
+cppPrimaryExpressionToCppExpression :: TTermDefinition (Cpp.PrimaryExpression -> Cpp.Expression)
 cppPrimaryExpressionToCppExpression = def "cppPrimaryExpressionToCppExpression" $
   doc "Convert a PrimaryExpression to an Expression" $
   lambda "prim" $
@@ -233,7 +233,7 @@ cppPrimaryExpressionToCppExpression = def "cppPrimaryExpressionToCppExpression" 
       (inject Cpp._PostfixExpression Cpp._PostfixExpression_primary $ var "prim")
 
 -- | Convert a UnaryExpression to an Expression
-cppUnaryExpressionToCppExpression :: TBinding (Cpp.UnaryExpression -> Cpp.Expression)
+cppUnaryExpressionToCppExpression :: TTermDefinition (Cpp.UnaryExpression -> Cpp.Expression)
 cppUnaryExpressionToCppExpression = def "cppUnaryExpressionToCppExpression" $
   doc "Convert a UnaryExpression to an Expression" $
   lambda "ue" $
@@ -243,7 +243,7 @@ cppUnaryExpressionToCppExpression = def "cppUnaryExpressionToCppExpression" $
           cppUnaryExpressionToCppLogicalOrExpression @@ var "ue"
 
 -- | Convert a UnaryExpression to a LogicalOrExpression
-cppUnaryExpressionToCppLogicalOrExpression :: TBinding (Cpp.UnaryExpression -> Cpp.LogicalOrExpression)
+cppUnaryExpressionToCppLogicalOrExpression :: TTermDefinition (Cpp.UnaryExpression -> Cpp.LogicalOrExpression)
 cppUnaryExpressionToCppLogicalOrExpression = def "cppUnaryExpressionToCppLogicalOrExpression" $
   doc "Convert a UnaryExpression to a LogicalOrExpression" $
   lambda "ue" $
@@ -260,7 +260,7 @@ cppUnaryExpressionToCppLogicalOrExpression = def "cppUnaryExpressionToCppLogical
                         var "ue"
 
 -- | Create a cast expression
-createCastExpr :: TBinding (Cpp.TypeExpression -> Cpp.Expression -> Cpp.Expression)
+createCastExpr :: TTermDefinition (Cpp.TypeExpression -> Cpp.Expression -> Cpp.Expression)
 createCastExpr = def "createCastExpr" $
   doc "Create a cast expression" $
   lambdas ["targetType", "expr"] $
@@ -270,27 +270,27 @@ createCastExpr = def "createCastExpr" $
           (inject Cpp._PrimaryExpression Cpp._PrimaryExpression_parenthesized $ var "expr"))
 
 -- | Create a compound statement
-createCompoundStmt :: TBinding ([Cpp.Statement] -> Cpp.CompoundStatement)
+createCompoundStmt :: TTermDefinition ([Cpp.Statement] -> Cpp.CompoundStatement)
 createCompoundStmt = def "createCompoundStmt" $
   doc "Create a compound statement" $
   lambda "stmts" $ wrap Cpp._CompoundStatement $ var "stmts"
 
 -- | Create a const reference type
-createConstRefType :: TBinding (Cpp.TypeExpression -> Cpp.TypeExpression)
+createConstRefType :: TTermDefinition (Cpp.TypeExpression -> Cpp.TypeExpression)
 createConstRefType = def "createConstRefType" $
   doc "Create a const reference type" $
   lambda "baseType" $
     createReferenceType @@ (createConstType @@ var "baseType")
 
 -- | Create a const-qualified type
-createConstType :: TBinding (Cpp.TypeExpression -> Cpp.TypeExpression)
+createConstType :: TTermDefinition (Cpp.TypeExpression -> Cpp.TypeExpression)
 createConstType = def "createConstType" $
   doc "Create a const-qualified type" $
   lambda "baseType" $
     createQualifiedType @@ var "baseType" @@ (inject Cpp._TypeQualifier Cpp._TypeQualifier_const unit)
 
 -- | Create a constructor body (default if no params, empty otherwise)
-createConstructorBody :: TBinding ([Cpp.Parameter] -> Cpp.FunctionBody)
+createConstructorBody :: TTermDefinition ([Cpp.Parameter] -> Cpp.FunctionBody)
 createConstructorBody = def "createConstructorBody" $
   doc "Create a constructor body (default if no params, empty otherwise)" $
   lambda "params" $
@@ -299,7 +299,7 @@ createConstructorBody = def "createConstructorBody" $
       emptyFunctionBody
 
 -- | Create an enum access expression (e.g., EnumName.valueName)
-createEnumAccessExpr :: TBinding (String -> String -> Cpp.Expression)
+createEnumAccessExpr :: TTermDefinition (String -> String -> Cpp.Expression)
 createEnumAccessExpr = def "createEnumAccessExpr" $
   doc "Create an enum access expression" $
   lambdas ["enumName", "valueName"] $
@@ -312,7 +312,7 @@ createEnumAccessExpr = def "createEnumAccessExpr" $
           Cpp._MemberAccessOperation_member>>: var "valueName"])
 
 -- | Create a function call expression
-createFunctionCallExpr :: TBinding (String -> [Cpp.Expression] -> Cpp.Expression)
+createFunctionCallExpr :: TTermDefinition (String -> [Cpp.Expression] -> Cpp.Expression)
 createFunctionCallExpr = def "createFunctionCallExpr" $
   doc "Create a function call expression" $
   lambdas ["funcName", "args"] $
@@ -325,7 +325,7 @@ createFunctionCallExpr = def "createFunctionCallExpr" $
           Cpp._FunctionCallOperation_arguments>>: var "args"])
 
 -- | Create a header file with pragma once
-createHeaderFile :: TBinding ([Cpp.IncludeDirective] -> [Cpp.Declaration] -> Cpp.Program)
+createHeaderFile :: TTermDefinition ([Cpp.IncludeDirective] -> [Cpp.Declaration] -> Cpp.Program)
 createHeaderFile = def "createHeaderFile" $
   doc "Create a header file with pragma once" $
   lambdas ["includes", "decls"] $
@@ -337,7 +337,7 @@ createHeaderFile = def "createHeaderFile" $
       Cpp._Program_declarations>>: var "decls"]
 
 -- | Create an identifier expression
-createIdentifierExpr :: TBinding (String -> Cpp.Expression)
+createIdentifierExpr :: TTermDefinition (String -> Cpp.Expression)
 createIdentifierExpr = def "createIdentifierExpr" $
   doc "Create an identifier expression" $
   lambda "name" $
@@ -345,7 +345,7 @@ createIdentifierExpr = def "createIdentifierExpr" $
       (inject Cpp._PrimaryExpression Cpp._PrimaryExpression_identifier $ var "name")
 
 -- | Create a lambda expression
-createLambdaExpr :: TBinding ([Cpp.Parameter] -> Cpp.Expression -> Cpp.Expression)
+createLambdaExpr :: TTermDefinition ([Cpp.Parameter] -> Cpp.Expression -> Cpp.Expression)
 createLambdaExpr = def "createLambdaExpr" $
   doc "Create a lambda expression" $
   lambdas ["params", "body"] $
@@ -363,7 +363,7 @@ createLambdaExpr = def "createLambdaExpr" $
                 list [inject Cpp._Statement Cpp._Statement_expression $ var "body"]])
 
 -- | Create a boolean literal expression
-createLiteralBoolExpr :: TBinding (Bool -> Cpp.Expression)
+createLiteralBoolExpr :: TTermDefinition (Bool -> Cpp.Expression)
 createLiteralBoolExpr = def "createLiteralBoolExpr" $
   doc "Create a boolean literal expression" $
   lambda "val" $
@@ -373,7 +373,7 @@ createLiteralBoolExpr = def "createLiteralBoolExpr" $
           wrap Cpp._BooleanLiteral $ var "val")
 
 -- | Create an integer literal expression
-createLiteralIntExpr :: TBinding (I.Int32 -> Cpp.Expression)
+createLiteralIntExpr :: TTermDefinition (I.Int32 -> Cpp.Expression)
 createLiteralIntExpr = def "createLiteralIntExpr" $
   doc "Create an integer literal expression" $
   lambda "val" $
@@ -384,7 +384,7 @@ createLiteralIntExpr = def "createLiteralIntExpr" $
             var "val")
 
 -- | Create a string literal expression
-createLiteralStringExpr :: TBinding (String -> Cpp.Expression)
+createLiteralStringExpr :: TTermDefinition (String -> Cpp.Expression)
 createLiteralStringExpr = def "createLiteralStringExpr" $
   doc "Create a string literal expression" $
   lambda "val" $
@@ -394,7 +394,7 @@ createLiteralStringExpr = def "createLiteralStringExpr" $
           wrap Cpp._StringLiteral $ var "val")
 
 -- | Create a member access expression (e.g., obj.member)
-createMemberAccessExpr :: TBinding (Cpp.Expression -> String -> Cpp.Expression)
+createMemberAccessExpr :: TTermDefinition (Cpp.Expression -> String -> Cpp.Expression)
 createMemberAccessExpr = def "createMemberAccessExpr" $
   doc "Create a member access expression" $
   lambdas ["objExpr", "member"] $
@@ -405,7 +405,7 @@ createMemberAccessExpr = def "createMemberAccessExpr" $
           Cpp._MemberAccessOperation_member>>: var "member"])
 
 -- | Create a qualified type with a qualifier
-createQualifiedType :: TBinding (Cpp.TypeExpression -> Cpp.TypeQualifier -> Cpp.TypeExpression)
+createQualifiedType :: TTermDefinition (Cpp.TypeExpression -> Cpp.TypeQualifier -> Cpp.TypeExpression)
 createQualifiedType = def "createQualifiedType" $
   doc "Create a qualified type with a qualifier" $
   lambdas ["baseType", "qualifier"] $
@@ -415,14 +415,14 @@ createQualifiedType = def "createQualifiedType" $
         Cpp._QualifiedType_qualifier>>: var "qualifier"]
 
 -- | Create a reference type
-createReferenceType :: TBinding (Cpp.TypeExpression -> Cpp.TypeExpression)
+createReferenceType :: TTermDefinition (Cpp.TypeExpression -> Cpp.TypeExpression)
 createReferenceType = def "createReferenceType" $
   doc "Create a reference type" $
   lambda "baseType" $
     createQualifiedType @@ var "baseType" @@ (inject Cpp._TypeQualifier Cpp._TypeQualifier_lvalueRef unit)
 
 -- | Create a return statement with a value
-createReturnStmt :: TBinding (Cpp.Expression -> Cpp.Statement)
+createReturnStmt :: TTermDefinition (Cpp.Expression -> Cpp.Statement)
 createReturnStmt = def "createReturnStmt" $
   doc "Create a return statement with a value" $
   lambda "expr" $
@@ -430,14 +430,14 @@ createReturnStmt = def "createReturnStmt" $
       inject Cpp._JumpStatement Cpp._JumpStatement_returnValue $ var "expr"
 
 -- | Create a void return statement
-createReturnVoidStmt :: TBinding Cpp.Statement
+createReturnVoidStmt :: TTermDefinition Cpp.Statement
 createReturnVoidStmt = def "createReturnVoidStmt" $
   doc "Create a void return statement" $
   inject Cpp._Statement Cpp._Statement_jump $
     inject Cpp._JumpStatement Cpp._JumpStatement_returnVoid unit
 
 -- | Create a template type (e.g., std::shared_ptr<T>)
-createTemplateType :: TBinding (String -> [Cpp.TypeExpression] -> Cpp.TypeExpression)
+createTemplateType :: TTermDefinition (String -> [Cpp.TypeExpression] -> Cpp.TypeExpression)
 createTemplateType = def "createTemplateType" $
   doc "Create a template type" $
   lambdas ["name", "args"] $
@@ -450,7 +450,7 @@ createTemplateType = def "createTemplateType" $
             (var "args")]
 
 -- | Create a *this expression
-createThisExpr :: TBinding Cpp.Expression
+createThisExpr :: TTermDefinition Cpp.Expression
 createThisExpr = def "createThisExpr" $
   doc "Create a *this expression" $
   cppPostfixExpressionToCppExpression @@
@@ -458,7 +458,7 @@ createThisExpr = def "createThisExpr" $
       inject Cpp._PrimaryExpression Cpp._PrimaryExpression_identifier $ string "*this")
 
 -- | Create a throw statement
-createThrowStmt :: TBinding (String -> Cpp.Expression -> Cpp.Statement)
+createThrowStmt :: TTermDefinition (String -> Cpp.Expression -> Cpp.Statement)
 createThrowStmt = def "createThrowStmt" $
   doc "Create a throw statement" $
   lambdas ["exceptionType", "arg"] $
@@ -467,7 +467,7 @@ createThrowStmt = def "createThrowStmt" $
         createFunctionCallExpr @@ var "exceptionType" @@ list [var "arg"]
 
 -- | Create a typeid(...).name() call expression
-createTypeIdNameCall :: TBinding Cpp.Expression
+createTypeIdNameCall :: TTermDefinition Cpp.Expression
 createTypeIdNameCall = def "createTypeIdNameCall" $
   doc "Create a typeid(...).name() call expression" $
   cppPostfixExpressionToCppExpression @@
@@ -489,7 +489,7 @@ createTypeIdNameCall = def "createTypeIdNameCall" $
         Cpp._FunctionCallOperation_arguments>>: list ([] :: [TTerm Cpp.Expression])])
 
 -- | Create a type name expression
-createTypeNameExpr :: TBinding (String -> Cpp.Expression)
+createTypeNameExpr :: TTermDefinition (String -> Cpp.Expression)
 createTypeNameExpr = def "createTypeNameExpr" $
   doc "Create a type name expression" $
   lambda "typeName" $
@@ -498,7 +498,7 @@ createTypeNameExpr = def "createTypeNameExpr" $
         inject Cpp._PrimaryExpression Cpp._PrimaryExpression_identifier $ var "typeName")
 
 -- | Create a variant expression
-createVariantExpr :: TBinding Cpp.Expression
+createVariantExpr :: TTermDefinition Cpp.Expression
 createVariantExpr = def "createVariantExpr" $
   doc "Create a variant expression" $
   cppPostfixExpressionToCppExpression @@
@@ -506,14 +506,14 @@ createVariantExpr = def "createVariantExpr" $
       inject Cpp._PrimaryExpression Cpp._PrimaryExpression_identifier $ string "variant")
 
 -- | An empty function body
-emptyFunctionBody :: TBinding Cpp.FunctionBody
+emptyFunctionBody :: TTermDefinition Cpp.FunctionBody
 emptyFunctionBody = def "emptyFunctionBody" $
   doc "An empty function body" $
   inject Cpp._FunctionBody Cpp._FunctionBody_compound $
     wrap Cpp._CompoundStatement $ list ([] :: [TTerm Cpp.Statement])
 
 -- | Extract the PostfixExpression from a fully-wrapped Expression
-extractPostfixExpression :: TBinding (Cpp.Expression -> Cpp.PostfixExpression)
+extractPostfixExpression :: TTermDefinition (Cpp.Expression -> Cpp.PostfixExpression)
 extractPostfixExpression = def "extractPostfixExpression" $
   doc "Extract the PostfixExpression from a fully-wrapped Expression" $
   lambda "expr" $
@@ -565,21 +565,21 @@ extractPostfixExpression = def "extractPostfixExpression" $
         inject Cpp._PrimaryExpression Cpp._PrimaryExpression_identifier $ string "error"
 
 -- | Protected access specifier member specification
-memberSpecificationProtected :: TBinding Cpp.MemberSpecification
+memberSpecificationProtected :: TTermDefinition Cpp.MemberSpecification
 memberSpecificationProtected = def "memberSpecificationProtected" $
   doc "Protected access specifier member specification" $
   inject Cpp._MemberSpecification Cpp._MemberSpecification_accessLabel $
     inject Cpp._AccessSpecifier Cpp._AccessSpecifier_protected unit
 
 -- | Public access specifier member specification
-memberSpecificationPublic :: TBinding Cpp.MemberSpecification
+memberSpecificationPublic :: TTermDefinition Cpp.MemberSpecification
 memberSpecificationPublic = def "memberSpecificationPublic" $
   doc "Public access specifier member specification" $
   inject Cpp._MemberSpecification Cpp._MemberSpecification_accessLabel $
     inject Cpp._AccessSpecifier Cpp._AccessSpecifier_public unit
 
 -- | Create a string expression
-stringExpression :: TBinding (String -> Cpp.Expression)
+stringExpression :: TTermDefinition (String -> Cpp.Expression)
 stringExpression = def "stringExpression" $
   doc "Create a string expression" $
   lambda "s" $
@@ -589,7 +589,7 @@ stringExpression = def "stringExpression" $
           wrap Cpp._StringLiteral $ var "s")
 
 -- | Add const qualifier to a type
-toConstType :: TBinding (Cpp.TypeExpression -> Cpp.TypeExpression)
+toConstType :: TTermDefinition (Cpp.TypeExpression -> Cpp.TypeExpression)
 toConstType = def "toConstType" $
   doc "Add const qualifier to a type" $
   lambda "baseType" $
@@ -599,7 +599,7 @@ toConstType = def "toConstType" $
         Cpp._QualifiedType_qualifier>>: inject Cpp._TypeQualifier Cpp._TypeQualifier_const unit]
 
 -- | Create an unnamed parameter
-unnamedParameter :: TBinding (String -> Cpp.TypeExpression -> Cpp.Parameter)
+unnamedParameter :: TTermDefinition (String -> Cpp.TypeExpression -> Cpp.Parameter)
 unnamedParameter = def "unnamedParameter" $
   doc "Create an unnamed parameter" $
   lambdas ["name", "typ"] $

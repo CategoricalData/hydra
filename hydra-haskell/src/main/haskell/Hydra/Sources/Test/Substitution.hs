@@ -29,9 +29,9 @@ module_ = Module ns elements
     kernelTypesNamespaces
     (Just "Test cases for type and term substitution operations")
   where
-    elements = [Phantoms.toTermDefinition allTests]
+    elements = [Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 -- Helper to build names
@@ -152,7 +152,7 @@ substInTypeTests = subgroup "substInType" [
 -- All tests
 -- ============================================================
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
     doc "Test cases for type and term substitution operations" $
     supergroup "substitution" [

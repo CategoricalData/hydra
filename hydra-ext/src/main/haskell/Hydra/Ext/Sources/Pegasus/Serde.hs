@@ -85,7 +85,7 @@ import qualified Hydra.Ext.Pegasus.Pdl as PDL
 import qualified Hydra.Ext.Sources.Pegasus.Pdl as PdlSyntax
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 ns :: Namespace
@@ -98,27 +98,27 @@ module_ = Module ns elements
     Just "Serialization functions for converting Pegasus PDL AST to abstract expressions"
   where
     elements = [
-      toTermDefinition exprAnnotations,
-      toTermDefinition exprEnumField,
-      toTermDefinition exprImport,
-      toTermDefinition exprNamedSchema,
-      toTermDefinition exprPrimitiveType,
-      toTermDefinition exprQualifiedName,
-      toTermDefinition exprRecordField,
-      toTermDefinition exprSchema,
-      toTermDefinition exprSchemaFile,
-      toTermDefinition exprUnionMember,
-      toTermDefinition withAnnotations]
+      toDefinition exprAnnotations,
+      toDefinition exprEnumField,
+      toDefinition exprImport,
+      toDefinition exprNamedSchema,
+      toDefinition exprPrimitiveType,
+      toDefinition exprQualifiedName,
+      toDefinition exprRecordField,
+      toDefinition exprSchema,
+      toDefinition exprSchemaFile,
+      toDefinition exprUnionMember,
+      toDefinition withAnnotations]
 
 
-exprAnnotations :: TBinding (PDL.Annotations -> Maybe Expr)
+exprAnnotations :: TTermDefinition (PDL.Annotations -> Maybe Expr)
 exprAnnotations = define "exprAnnotations" $
   doc "Convert PDL annotations to an optional expression (doc comment)" $
   lambda "anns" $ lets [
     "d">: project PDL._Annotations PDL._Annotations_doc @@ var "anns"] $
     Maybes.map (lambda "s" $ Serialization.cst @@ (Formatting.javaStyleComment @@ var "s")) (var "d")
 
-exprEnumField :: TBinding (PDL.EnumField -> Expr)
+exprEnumField :: TTermDefinition (PDL.EnumField -> Expr)
 exprEnumField = define "exprEnumField" $
   doc "Convert a PDL enum field to an expression" $
   lambda "ef" $ lets [
@@ -126,14 +126,14 @@ exprEnumField = define "exprEnumField" $
     "anns">: project PDL._EnumField PDL._EnumField_annotations @@ var "ef"] $
     withAnnotations @@ var "anns" @@ (Serialization.cst @@ var "name")
 
-exprImport :: TBinding (PDL.QualifiedName -> Expr)
+exprImport :: TTermDefinition (PDL.QualifiedName -> Expr)
 exprImport = define "exprImport" $
   doc "Convert a qualified name to an import expression" $
   lambda "qn" $ Serialization.spaceSep @@ list [
     Serialization.cst @@ string "import",
     exprQualifiedName @@ var "qn"]
 
-exprNamedSchema :: TBinding (PDL.NamedSchema -> Expr)
+exprNamedSchema :: TTermDefinition (PDL.NamedSchema -> Expr)
 exprNamedSchema = define "exprNamedSchema" $
   doc "Convert a named schema to an expression" $
   lambda "ns" $ lets [
@@ -163,7 +163,7 @@ exprNamedSchema = define "exprNamedSchema" $
             Serialization.cst @@ string "=",
             exprSchema @@ var "schema"]])
 
-exprPrimitiveType :: TBinding (PDL.PrimitiveType -> Expr)
+exprPrimitiveType :: TTermDefinition (PDL.PrimitiveType -> Expr)
 exprPrimitiveType = define "exprPrimitiveType" $
   doc "Convert a primitive type to an expression" $
   lambda "pt" $ Serialization.cst @@
@@ -176,7 +176,7 @@ exprPrimitiveType = define "exprPrimitiveType" $
       PDL._PrimitiveType_long>>: constant $ string "long",
       PDL._PrimitiveType_string>>: constant $ string "string"])
 
-exprQualifiedName :: TBinding (PDL.QualifiedName -> Expr)
+exprQualifiedName :: TTermDefinition (PDL.QualifiedName -> Expr)
 exprQualifiedName = define "exprQualifiedName" $
   doc "Convert a qualified name to an expression" $
   lambda "qn" $ lets [
@@ -187,7 +187,7 @@ exprQualifiedName = define "exprQualifiedName" $
       Maybes.pure (var "name")]] $
     Serialization.cst @@ (Strings.intercalate (string ".") (var "parts"))
 
-exprRecordField :: TBinding (PDL.RecordField -> Expr)
+exprRecordField :: TTermDefinition (PDL.RecordField -> Expr)
 exprRecordField = define "exprRecordField" $
   doc "Convert a record field to an expression" $
   lambda "rf" $ lets [
@@ -203,7 +203,7 @@ exprRecordField = define "exprRecordField" $
           nothing,
         Maybes.pure (exprSchema @@ var "schema")]))
 
-exprSchema :: TBinding (PDL.Schema -> Expr)
+exprSchema :: TTermDefinition (PDL.Schema -> Expr)
 exprSchema = define "exprSchema" $
   doc "Convert a schema to an expression" $
   lambda "schema" $
@@ -225,7 +225,7 @@ exprSchema = define "exprSchema" $
           Serialization.bracketList @@ Serialization.fullBlockStyle @@
             (Lists.map exprUnionMember (unwrap PDL._UnionSchema @@ var "us"))]]
 
-exprSchemaFile :: TBinding (PDL.SchemaFile -> Expr)
+exprSchemaFile :: TTermDefinition (PDL.SchemaFile -> Expr)
 exprSchemaFile = define "exprSchemaFile" $
   doc "Convert a schema file to an expression" $
   lambda "sf" $ lets [
@@ -250,7 +250,7 @@ exprSchemaFile = define "exprSchemaFile" $
         list [var "namespaceSec", var "packageSec", var "importsSec"],
         var "schemaSecs"])
 
-exprUnionMember :: TBinding (PDL.UnionMember -> Expr)
+exprUnionMember :: TTermDefinition (PDL.UnionMember -> Expr)
 exprUnionMember = define "exprUnionMember" $
   doc "Convert a union member to an expression" $
   lambda "um" $ lets [
@@ -264,7 +264,7 @@ exprUnionMember = define "exprUnionMember" $
           (var "alias"),
         Maybes.pure (exprSchema @@ var "schema")]))
 
-withAnnotations :: TBinding (PDL.Annotations -> Expr -> Expr)
+withAnnotations :: TTermDefinition (PDL.Annotations -> Expr -> Expr)
 withAnnotations = define "withAnnotations" $
   doc "Prepend annotations (doc comment) to an expression" $
   lambda "anns" $ lambda "expr" $

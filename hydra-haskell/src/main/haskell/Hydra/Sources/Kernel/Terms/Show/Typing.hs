@@ -64,13 +64,13 @@ module_ = Module ns elements
     Just "String representations of hydra.typing types"
   where
    elements = [
-     toTermDefinition typeConstraint,
-     toTermDefinition typeSubst]
+     toDefinition typeConstraint,
+     toDefinition typeSubst]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-typeConstraint :: TBinding (TypeConstraint -> String)
+typeConstraint :: TTermDefinition (TypeConstraint -> String)
 typeConstraint = define "typeConstraint" $
   doc "Show a type constraint as a string" $
   lambda "tc" $ lets [
@@ -81,7 +81,7 @@ typeConstraint = define "typeConstraint" $
       string "≡",
       ShowCore.type_ @@ var "rtyp"]
 
-typeSubst :: TBinding (TypeSubst -> String)
+typeSubst :: TTermDefinition (TypeSubst -> String)
 typeSubst = define "typeSubst" $
   doc "Show a type substitution as a string" $
   lambda "ts" $ lets [

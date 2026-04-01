@@ -31,3 +31,15 @@ tTerm a x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.phantoms.TTerm"),
       Core.wrappedTermBody = (Core_.term (Phantoms.unTTerm x))})
+
+tTermDefinition :: t0 -> Phantoms.TTermDefinition t1 -> Core.Term
+tTermDefinition a x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.phantoms.TTermDefinition"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core_.name (Phantoms.tTermDefinitionName x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "term"),
+          Core.fieldTerm = (tTerm a (Phantoms.tTermDefinitionTerm x))}]})

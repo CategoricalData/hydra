@@ -98,7 +98,7 @@ import qualified Hydra.Sources.Test.Utils as TestUtils
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as SerializationSource
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 
@@ -112,16 +112,16 @@ module_ = Module ns elements
     Just "Python test code generation codec for pytest-based generation tests"
   where
     elements = [
-      toTermDefinition buildPythonTestModule,
-      toTermDefinition formatPythonTestName,
-      toTermDefinition generatePythonTestCase,
-      toTermDefinition generatePythonTestFile,
-      toTermDefinition generatePythonTestGroupHierarchy,
-      toTermDefinition generateTestFileWithPythonCodec]
+      toDefinition buildPythonTestModule,
+      toDefinition formatPythonTestName,
+      toDefinition generatePythonTestCase,
+      toDefinition generatePythonTestFile,
+      toDefinition generatePythonTestGroupHierarchy,
+      toDefinition generateTestFileWithPythonCodec]
 
 
 -- | Build complete Python test module
-buildPythonTestModule :: TBinding (Module -> TestGroup -> String -> String)
+buildPythonTestModule :: TTermDefinition (Module -> TestGroup -> String -> String)
 buildPythonTestModule = define "buildPythonTestModule" $
   doc "Build the complete Python test module content" $
   lambda "testModule" $ lambda "testGroup" $ lambda "testBody" $ lets [
@@ -135,7 +135,7 @@ buildPythonTestModule = define "buildPythonTestModule" $
 
 
 -- | Format a test name for Python (snake_case, valid identifier)
-formatPythonTestName :: TBinding (String -> String)
+formatPythonTestName :: TTermDefinition (String -> String)
 formatPythonTestName = define "formatPythonTestName" $
   doc "Format a test name for Python (snake_case with test_ prefix)" $
   lambda "name" $
@@ -149,7 +149,7 @@ formatPythonTestName = define "formatPythonTestName" $
 
 
 -- | Generate a single test case for Python/pytest
-generatePythonTestCase :: TBinding ([String] -> TestCaseWithMetadata -> Either String [String])
+generatePythonTestCase :: TTermDefinition ([String] -> TestCaseWithMetadata -> Either String [String])
 generatePythonTestCase = define "generatePythonTestCase" $
   doc "Generate a single pytest test case from a test case with metadata" $
   lambda "groupPath" $ lambda "tcm" $ lets [
@@ -169,7 +169,7 @@ generatePythonTestCase = define "generatePythonTestCase" $
 
 
 -- | Generate Python test file for a test group
-generatePythonTestFile :: TBinding (Module -> TestGroup -> Graph -> Either String (String, String))
+generatePythonTestFile :: TTermDefinition (Module -> TestGroup -> Graph -> Either String (String, String))
 generatePythonTestFile = define "generatePythonTestFile" $
   doc "Generate a Python test file for a test group" $
   lambda "testModule" $ lambda "testGroup" $ lambda "_g" $
@@ -179,7 +179,7 @@ generatePythonTestFile = define "generatePythonTestFile" $
 
 
 -- | Generate Python test group hierarchy
-generatePythonTestGroupHierarchy :: TBinding ([String] -> TestGroup -> Either String String)
+generatePythonTestGroupHierarchy :: TTermDefinition ([String] -> TestGroup -> Either String String)
 generatePythonTestGroupHierarchy = define "generatePythonTestGroupHierarchy" $
   doc "Generate test hierarchy for Python with nested subgroups" $
   lambda "groupPath" $ lambda "testGroup" $ lets [
@@ -210,7 +210,7 @@ generatePythonTestGroupHierarchy = define "generatePythonTestGroupHierarchy" $
 
 
 -- | Generate test file using Python codec
-generateTestFileWithPythonCodec :: TBinding (Module -> TestGroup -> Either String (String, String))
+generateTestFileWithPythonCodec :: TTermDefinition (Module -> TestGroup -> Either String (String, String))
 generateTestFileWithPythonCodec = define "generateTestFileWithPythonCodec" $
   doc "Generate a complete test file for Python" $
   lambda "testModule" $ lambda "testGroup" $

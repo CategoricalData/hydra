@@ -68,18 +68,18 @@ module_ = Module ns elements
     Just "Helper functions for decoding terms to domain types"
   where
     elements = [
-      toTermDefinition decodeEither,
-      toTermDefinition decodeList,
-      toTermDefinition decodeMap,
-      toTermDefinition decodeMaybe,
-      toTermDefinition decodePair,
-      toTermDefinition decodeSet,
-      toTermDefinition decodeUnit,
-      toTermDefinition decodeWrapped,
-      toTermDefinition requireField,
-      toTermDefinition toFieldMap]
+      toDefinition decodeEither,
+      toDefinition decodeList,
+      toDefinition decodeMap,
+      toDefinition decodeMaybe,
+      toDefinition decodePair,
+      toDefinition decodeSet,
+      toDefinition decodeUnit,
+      toDefinition decodeWrapped,
+      toDefinition requireField,
+      toDefinition toFieldMap]
 
-define :: String -> TTerm x -> TBinding x
+define :: String -> TTerm x -> TTermDefinition x
 define = definitionInModule module_
 
 --------------------------------------------------------------------------------
@@ -98,7 +98,7 @@ stripWithDecodingError g term = Eithers.bimap
 --------------------------------------------------------------------------------
 
 -- | Decode an Either value using the provided left and right decoders
-decodeEither :: TBinding ((Graph -> Term -> Either DecodingError a) -> (Graph -> Term -> Either DecodingError b) -> Graph -> Term -> Either DecodingError (Either a b))
+decodeEither :: TTermDefinition ((Graph -> Term -> Either DecodingError a) -> (Graph -> Term -> Either DecodingError b) -> Graph -> Term -> Either DecodingError (Either a b))
 decodeEither = define "decodeEither" $
   doc "Decode an Either value using the provided left and right decoders" $
   "leftDecoder" ~> "rightDecoder" ~> "g" ~> "term" ~>
@@ -115,7 +115,7 @@ decodeEither = define "decodeEither" $
           (var "e")])
 
 -- | Decode a list of elements using the provided element decoder
-decodeList :: TBinding ((Graph -> Term -> Either DecodingError a) -> Graph -> Term -> Either DecodingError [a])
+decodeList :: TTermDefinition ((Graph -> Term -> Either DecodingError a) -> Graph -> Term -> Either DecodingError [a])
 decodeList = define "decodeList" $
   doc "Decode a list of elements using the provided element decoder" $
   "elemDecoder" ~> "g" ~> "term" ~>
@@ -126,7 +126,7 @@ decodeList = define "decodeList" $
       _Term_list>>: "els" ~> Eithers.mapList (var "elemDecoder" @@ var "g") $ var "els"])
 
 -- | Decode a Map using the provided key and value decoders
-decodeMap :: TBinding ((Graph -> Term -> Either DecodingError k) -> (Graph -> Term -> Either DecodingError v) -> Graph -> Term -> Either DecodingError (M.Map k v))
+decodeMap :: TTermDefinition ((Graph -> Term -> Either DecodingError k) -> (Graph -> Term -> Either DecodingError v) -> Graph -> Term -> Either DecodingError (M.Map k v))
 decodeMap = define "decodeMap" $
   doc "Decode a Map using the provided key and value decoders" $
   "keyDecoder" ~> "valDecoder" ~> "g" ~> "term" ~>
@@ -144,7 +144,7 @@ decodeMap = define "decodeMap" $
             (Maps.toList $ var "m"))])
 
 -- | Decode a Maybe value using the provided element decoder
-decodeMaybe :: TBinding ((Graph -> Term -> Either DecodingError a) -> Graph -> Term -> Either DecodingError (Maybe a))
+decodeMaybe :: TTermDefinition ((Graph -> Term -> Either DecodingError a) -> Graph -> Term -> Either DecodingError (Maybe a))
 decodeMaybe = define "decodeMaybe" $
   doc "Decode a Maybe value using the provided element decoder" $
   "elemDecoder" ~> "g" ~> "term" ~>
@@ -155,7 +155,7 @@ decodeMaybe = define "decodeMaybe" $
       _Term_maybe>>: "opt" ~> Eithers.mapMaybe (var "elemDecoder" @@ var "g") $ var "opt"])
 
 -- | Decode a Pair using the provided first and second decoders
-decodePair :: TBinding ((Graph -> Term -> Either DecodingError a) -> (Graph -> Term -> Either DecodingError b) -> Graph -> Term -> Either DecodingError (a, b))
+decodePair :: TTermDefinition ((Graph -> Term -> Either DecodingError a) -> (Graph -> Term -> Either DecodingError b) -> Graph -> Term -> Either DecodingError (a, b))
 decodePair = define "decodePair" $
   doc "Decode a Pair using the provided first and second decoders" $
   "firstDecoder" ~> "secondDecoder" ~> "g" ~> "term" ~>
@@ -169,7 +169,7 @@ decodePair = define "decodePair" $
             (var "secondDecoder" @@ var "g" @@ (Pairs.second $ var "p")))])
 
 -- | Decode a Set using the provided element decoder
-decodeSet :: TBinding ((Graph -> Term -> Either DecodingError a) -> Graph -> Term -> Either DecodingError (S.Set a))
+decodeSet :: TTermDefinition ((Graph -> Term -> Either DecodingError a) -> Graph -> Term -> Either DecodingError (S.Set a))
 decodeSet = define "decodeSet" $
   doc "Decode a Set using the provided element decoder" $
   "elemDecoder" ~> "g" ~> "term" ~>
@@ -182,7 +182,7 @@ decodeSet = define "decodeSet" $
           (Eithers.mapList (var "elemDecoder" @@ var "g") (Sets.toList $ var "s"))])
 
 -- | Decode a unit value
-decodeUnit :: TBinding (Graph -> Term -> Either DecodingError ())
+decodeUnit :: TTermDefinition (Graph -> Term -> Either DecodingError ())
 decodeUnit = define "decodeUnit" $
   doc "Decode a unit value" $
   "g" ~> "term" ~>
@@ -193,7 +193,7 @@ decodeUnit = define "decodeUnit" $
       _Term_unit>>: constant $ right unit])
 
 -- | Decode a wrapped value using the provided body decoder
-decodeWrapped :: TBinding ((Graph -> Term -> Either DecodingError a) -> Graph -> Term -> Either DecodingError a)
+decodeWrapped :: TTermDefinition ((Graph -> Term -> Either DecodingError a) -> Graph -> Term -> Either DecodingError a)
 decodeWrapped = define "decodeWrapped" $
   doc "Decode a wrapped value using the provided body decoder" $
   "bodyDecoder" ~> "g" ~> "term" ~>
@@ -206,7 +206,7 @@ decodeWrapped = define "decodeWrapped" $
 
 -- | Require a field from a field map and decode it using the provided decoder
 -- Returns Left with a "missing field" error if the field is not present
-requireField :: TBinding (String -> (Graph -> Term -> Either DecodingError a) -> M.Map Name Term -> Graph -> Either DecodingError a)
+requireField :: TTermDefinition (String -> (Graph -> Term -> Either DecodingError a) -> M.Map Name Term -> Graph -> Either DecodingError a)
 requireField = define "requireField" $
   doc "Require a field from a record's field map and decode it" $
   "fieldName" ~> "decoder" ~> "fieldMap" ~> "g" ~>
@@ -216,7 +216,7 @@ requireField = define "requireField" $
     (Maps.lookup (Phantoms.wrap _Name $ var "fieldName") $ var "fieldMap")
 
 -- | Convert a Record to a Map from field Name to Term
-toFieldMap :: TBinding (Record -> M.Map Name Term)
+toFieldMap :: TTermDefinition (Record -> M.Map Name Term)
 toFieldMap = define "toFieldMap" $
   doc "Convert a Record's fields to a Map from Name to Term" $
   "record" ~>

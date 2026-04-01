@@ -43,31 +43,31 @@ module_ = Module ns elements
     Just ("A module defining the graph used in the test suite.")
   where
    elements = [
-     Phantoms.toTermDefinition testTerms,
-     Phantoms.toTermDefinition testTypes,
-     Phantoms.toTermDefinition testNamespace,
-     Phantoms.toTermDefinition testSchemaNamespace,
-     Phantoms.toTermDefinition testGraph,
-     Phantoms.toTermDefinition testContext]
+     Phantoms.toDefinition testTerms,
+     Phantoms.toDefinition testTypes,
+     Phantoms.toDefinition testNamespace,
+     Phantoms.toDefinition testSchemaNamespace,
+     Phantoms.toDefinition testGraph,
+     Phantoms.toDefinition testContext]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-testTerms :: TBinding (M.Map Name Term)
+testTerms :: TTermDefinition (M.Map Name Term)
 testTerms = define "testTerms" $
   Maps.fromList $ Phantoms.list [
     Phantoms.pair (name "testDataArthur") TestTerms.testDataArthur]
 
-testNamespace :: TBinding Namespace
+testNamespace :: TTermDefinition Namespace
 testNamespace = define "testNamespace" $ DModule.namespace $ Phantoms.string "testGraph"
 
-testGraph :: TBinding Graph
+testGraph :: TTermDefinition Graph
 testGraph = define "testGraph" $ asTerm Lexical.emptyGraph
 
-testContext :: TBinding Context
+testContext :: TTermDefinition Context
 testContext = define "testContext" $ asTerm Lexical.emptyContext
 
-testTypes :: TBinding (M.Map Name Type)
+testTypes :: TTermDefinition (M.Map Name Type)
 testTypes = define "testTypes" $
   Maps.fromList $ Phantoms.list [
     Phantoms.pair TestTypes.testTypeBuddyListAName TestTypes.testTypeBuddyListA,
@@ -93,5 +93,5 @@ testTypes = define "testTypes" $
     Phantoms.pair TestTypes.testTypeUnionPolymorphicRecursiveName TestTypes.testTypeUnionPolymorphicRecursive,
     Phantoms.pair TestTypes.testTypeUnitName TestTypes.testTypeUnit]
 
-testSchemaNamespace :: TBinding Namespace
+testSchemaNamespace :: TTermDefinition Namespace
 testSchemaNamespace = define "testSchemaNamespace" $ DModule.namespace $ Phantoms.string "testSchemaGraph"

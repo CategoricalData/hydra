@@ -80,17 +80,17 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
 module_ = Module (Namespace "hydra.ext.go.language")
-  [toTermDefinition goLanguage, toTermDefinition goReservedWords]
+  [toDefinition goLanguage, toDefinition goReservedWords]
   [Lexical.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints and reserved words for Go 1.22+"
 
-goLanguage :: TBinding Language
+goLanguage :: TTermDefinition Language
 goLanguage = define "goLanguage" $
     doc "Language constraints for Go 1.22+" $ lets [
     -- Go supports record projection, union elimination via type switch, and wrap/unwrap
@@ -178,7 +178,7 @@ goLanguage = define "goLanguage" $
         (var "typeVariants")
         (var "typePredicate"))
 
-goReservedWords :: TBinding (S.Set String)
+goReservedWords :: TTermDefinition (S.Set String)
 goReservedWords = define "goReservedWords" $
   doc "A set of reserved words in Go" $
   lets [

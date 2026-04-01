@@ -67,16 +67,16 @@ module_ = Module ns elements
       <> " https://hackage.haskell.org/package/GraphSCC.")
   where
    elements = [
-     toTermDefinition adjacencyListsToGraph,
-     toTermDefinition stronglyConnectedComponents,
-     toTermDefinition initialState,
-     toTermDefinition popStackUntil,
-     toTermDefinition strongConnect]
+     toDefinition adjacencyListsToGraph,
+     toDefinition stronglyConnectedComponents,
+     toDefinition initialState,
+     toDefinition popStackUntil,
+     toDefinition strongConnect]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-adjacencyListsToGraph :: TBinding ([(key, [key])] -> (Topo.Graph, Topo.Vertex -> key))
+adjacencyListsToGraph :: TTermDefinition ([(key, [key])] -> (Topo.Graph, Topo.Vertex -> key))
 adjacencyListsToGraph = define "adjacencyListsToGraph" $
   doc ("Given a list of adjacency lists represented as (key, [key]) pairs,"
     <> " construct a graph along with a function mapping each vertex (an Int)"
@@ -108,12 +108,12 @@ adjacencyListsToGraph = define "adjacencyListsToGraph" $
   "vertexToKey" <~ ("v" ~> Maybes.fromJust (Maps.lookup (var "v") (var "vertexMap"))) $
   pair (var "graph") (var "vertexToKey")
 
-initialState :: TBinding Topo.TarjanState
+initialState :: TTermDefinition Topo.TarjanState
 initialState = define "initialState" $
   doc "Initial state for Tarjan's algorithm" $
   Topology.tarjanState (int32 0) Maps.empty Maps.empty (list ([] :: [TTerm Topo.Vertex])) Sets.empty (list ([] :: [TTerm [Topo.Vertex]]))
 
-popStackUntil :: TBinding (Topo.Vertex -> Topo.TarjanState -> ([Topo.Vertex], Topo.TarjanState))
+popStackUntil :: TTermDefinition (Topo.Vertex -> Topo.TarjanState -> ([Topo.Vertex], Topo.TarjanState))
 popStackUntil = define "popStackUntil" $
   doc "Pop vertices off the stack until the given vertex is reached, collecting the current strongly connected component" $
   "v" ~> "st0" ~>
@@ -128,7 +128,7 @@ popStackUntil = define "popStackUntil" $
       (var "go" @@ var "acc'" @@ var "newSt2")) $
   var "go" @@ list ([] :: [TTerm Topo.Vertex]) @@ var "st0"
 
-strongConnect :: TBinding (Topo.Graph -> Topo.Vertex -> Topo.TarjanState -> Topo.TarjanState)
+strongConnect :: TTermDefinition (Topo.Graph -> Topo.Vertex -> Topo.TarjanState -> Topo.TarjanState)
 strongConnect = define "strongConnect" $
   doc "Visit a vertex and recursively explore its successors" $
   "graph" ~> "v" ~> "st" ~>
@@ -166,7 +166,7 @@ strongConnect = define "strongConnect" $
      Topology.tarjanStateWithSccs (var "stPopped") (Lists.cons (var "comp") (Topology.tarjanStateSccs (var "stPopped"))))
     (var "stAfterNeighbors")
 
-stronglyConnectedComponents :: TBinding (Topo.Graph -> [[Topo.Vertex]])
+stronglyConnectedComponents :: TTermDefinition (Topo.Graph -> [[Topo.Vertex]])
 stronglyConnectedComponents = define "stronglyConnectedComponents" $
   doc "Compute the strongly connected components of the given graph. The components are returned in reverse topological order" $
   "graph" ~>

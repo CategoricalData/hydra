@@ -74,77 +74,77 @@ module_ = Module ns elements
     Just ("Utilities for constructing generic program code ASTs, used for the serialization phase of source code generation.")
   where
    elements = [
-     toTermDefinition angleBraces,
-     toTermDefinition angleBracesList,
-     toTermDefinition bracesListAdaptive,
-     toTermDefinition bracketList,
-     toTermDefinition bracketListAdaptive,
-     toTermDefinition brackets,
-     toTermDefinition commaSep,
-     toTermDefinition curlyBlock,
-     toTermDefinition curlyBraces,
-     toTermDefinition curlyBracesList,
-     toTermDefinition cst,
-     toTermDefinition customIndent,
-     toTermDefinition customIndentBlock,
-     toTermDefinition dotSep,
-     toTermDefinition doubleNewlineSep,
-     toTermDefinition doubleSpace,
-     toTermDefinition expressionLength,
-     toTermDefinition fullBlockStyle,
-     toTermDefinition halfBlockStyle,
-     toTermDefinition ifx,
-     toTermDefinition indent,
-     toTermDefinition indentBlock,
-     toTermDefinition indentSubsequentLines,
-     toTermDefinition infixWs,
-     toTermDefinition infixWsList,
-     toTermDefinition inlineStyle,
-     toTermDefinition newlineSep,
-     toTermDefinition noPadding,
-     toTermDefinition noSep,
-     toTermDefinition num,
-     toTermDefinition op,
-     toTermDefinition orOp,
-     toTermDefinition orSep,
-     toTermDefinition parenList,
-     toTermDefinition parens,
-     toTermDefinition parentheses,
-     toTermDefinition parenthesize,
-     toTermDefinition prefix,
-     toTermDefinition printExpr,
-     toTermDefinition semicolonSep,
-     toTermDefinition sep,
-     toTermDefinition spaceSep,
-     toTermDefinition structuralSep,
-     toTermDefinition structuralSpaceSep,
-     toTermDefinition squareBrackets,
-     toTermDefinition suffix,
-     toTermDefinition sym,
-     toTermDefinition symbolSep,
-     toTermDefinition tabIndent,
-     toTermDefinition tabIndentDoubleSpace,
-     toTermDefinition tabIndentSingleSpace,
-     toTermDefinition unsupportedType,
-     toTermDefinition unsupportedVariant,
-     toTermDefinition withComma,
-     toTermDefinition withSemi]
+     toDefinition angleBraces,
+     toDefinition angleBracesList,
+     toDefinition bracesListAdaptive,
+     toDefinition bracketList,
+     toDefinition bracketListAdaptive,
+     toDefinition brackets,
+     toDefinition commaSep,
+     toDefinition curlyBlock,
+     toDefinition curlyBraces,
+     toDefinition curlyBracesList,
+     toDefinition cst,
+     toDefinition customIndent,
+     toDefinition customIndentBlock,
+     toDefinition dotSep,
+     toDefinition doubleNewlineSep,
+     toDefinition doubleSpace,
+     toDefinition expressionLength,
+     toDefinition fullBlockStyle,
+     toDefinition halfBlockStyle,
+     toDefinition ifx,
+     toDefinition indent,
+     toDefinition indentBlock,
+     toDefinition indentSubsequentLines,
+     toDefinition infixWs,
+     toDefinition infixWsList,
+     toDefinition inlineStyle,
+     toDefinition newlineSep,
+     toDefinition noPadding,
+     toDefinition noSep,
+     toDefinition num,
+     toDefinition op,
+     toDefinition orOp,
+     toDefinition orSep,
+     toDefinition parenList,
+     toDefinition parens,
+     toDefinition parentheses,
+     toDefinition parenthesize,
+     toDefinition prefix,
+     toDefinition printExpr,
+     toDefinition semicolonSep,
+     toDefinition sep,
+     toDefinition spaceSep,
+     toDefinition structuralSep,
+     toDefinition structuralSpaceSep,
+     toDefinition squareBrackets,
+     toDefinition suffix,
+     toDefinition sym,
+     toDefinition symbolSep,
+     toDefinition tabIndent,
+     toDefinition tabIndentDoubleSpace,
+     toDefinition tabIndentSingleSpace,
+     toDefinition unsupportedType,
+     toDefinition unsupportedVariant,
+     toDefinition withComma,
+     toDefinition withSemi]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-angleBraces :: TBinding Brackets
+angleBraces :: TTermDefinition Brackets
 angleBraces = define "angleBraces" $
   Ast.brackets (Ast.symbol (string "<")) (Ast.symbol (string ">"))
 
-angleBracesList :: TBinding (BlockStyle -> [Expr] -> Expr)
+angleBracesList :: TTermDefinition (BlockStyle -> [Expr] -> Expr)
 angleBracesList = define "angleBracesList" $
   "style" ~> "els" ~>
     Logic.ifElse (Lists.null $ var "els")
       (cst @@ string "<>")
       (brackets @@ angleBraces @@ var "style" @@ (commaSep @@ var "style" @@ var "els"))
 
-bracesListAdaptive :: TBinding ([Expr] -> Expr)
+bracesListAdaptive :: TTermDefinition ([Expr] -> Expr)
 bracesListAdaptive = define "bracesListAdaptive" $
   doc "Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression." $
   "els" ~>
@@ -153,7 +153,7 @@ bracesListAdaptive = define "bracesListAdaptive" $
     (curlyBracesList @@ nothing @@ halfBlockStyle @@ var "els")
     (var "inlineList")
 
-bracketListAdaptive :: TBinding ([Expr] -> Expr)
+bracketListAdaptive :: TTermDefinition ([Expr] -> Expr)
 bracketListAdaptive = define "bracketListAdaptive" $
   doc "Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression." $
   "els" ~>
@@ -162,36 +162,36 @@ bracketListAdaptive = define "bracketListAdaptive" $
     (bracketList @@ halfBlockStyle @@ var "els")
     (var "inlineList")
 
-bracketList :: TBinding (BlockStyle -> [Expr] -> Expr)
+bracketList :: TTermDefinition (BlockStyle -> [Expr] -> Expr)
 bracketList = define "bracketList" $
   "style" ~> "els" ~>
     Logic.ifElse (Lists.null $ var "els")
       (cst @@ string "[]")
       (brackets @@ squareBrackets @@ var "style" @@ (commaSep @@ var "style" @@ var "els"))
 
-brackets :: TBinding (Brackets -> BlockStyle -> Expr -> Expr)
+brackets :: TTermDefinition (Brackets -> BlockStyle -> Expr -> Expr)
 brackets = define "brackets" $
   "br" ~> "style" ~> "e" ~>
     Ast.exprBrackets $ Ast.bracketExpr (var "br") (var "e") (var "style")
 
-commaSep :: TBinding (BlockStyle -> [Expr] -> Expr)
+commaSep :: TTermDefinition (BlockStyle -> [Expr] -> Expr)
 commaSep = define "commaSep" $
   symbolSep @@ string ","
 
-cst :: TBinding (String -> Expr)
+cst :: TTermDefinition (String -> Expr)
 cst = define "cst" $
   "s" ~> Ast.exprConst $ sym @@ var "s"
 
-curlyBlock :: TBinding (BlockStyle -> Expr -> Expr)
+curlyBlock :: TTermDefinition (BlockStyle -> Expr -> Expr)
 curlyBlock = define "curlyBlock" $
   "style" ~> "e" ~>
     curlyBracesList @@ nothing @@ var "style" @@ (list [var "e"])
 
-curlyBraces :: TBinding Brackets
+curlyBraces :: TTermDefinition Brackets
 curlyBraces = define "curlyBraces" $
   Ast.brackets (Ast.symbol (string "{")) (Ast.symbol (string "}"))
 
-curlyBracesList :: TBinding (Maybe String -> BlockStyle -> [Expr] -> Expr)
+curlyBracesList :: TTermDefinition (Maybe String -> BlockStyle -> [Expr] -> Expr)
 curlyBracesList = define "curlyBracesList" $
   "msymb" ~> "style" ~> "els" ~>
     Logic.ifElse (Lists.null $ var "els")
@@ -199,7 +199,7 @@ curlyBracesList = define "curlyBracesList" $
       (brackets @@ curlyBraces @@ var "style" @@
         (symbolSep @@ (Maybes.fromMaybe (string ",") (var "msymb")) @@ var "style" @@ var "els"))
 
-customIndentBlock :: TBinding (String -> [Expr] -> Expr)
+customIndentBlock :: TTermDefinition (String -> [Expr] -> Expr)
 customIndentBlock = define "customIndentBlock" $
   "idt" ~> "els" ~>
     "idtOp" <~ (Ast.op
@@ -213,12 +213,12 @@ customIndentBlock = define "customIndentBlock" $
         (ifx @@ var "idtOp" @@ var "head" @@ (newlineSep @@ Lists.drop (int32 1) (var "els"))))
       (Lists.safeHead $ var "els")
 
-customIndent :: TBinding (String -> String -> String)
+customIndent :: TTermDefinition (String -> String -> String)
 customIndent = define "customIndent" $
   "idt" ~> "s" ~> Strings.cat $
     Lists.intersperse (string "\n") $ Lists.map ("line" ~> var "idt" ++ var "line") $ Strings.lines $ var "s"
 
-dotSep :: TBinding ([Expr] -> Expr)
+dotSep :: TTermDefinition ([Expr] -> Expr)
 dotSep = define "dotSep" $
   sep @@ (Ast.op
     (sym @@ string ".")
@@ -226,7 +226,7 @@ dotSep = define "dotSep" $
     (Ast.precedence $ int32 0)
     Ast.associativityNone)
 
-doubleNewlineSep :: TBinding ([Expr] -> Expr)
+doubleNewlineSep :: TTermDefinition ([Expr] -> Expr)
 doubleNewlineSep = define "doubleNewlineSep" $
   sep @@ (Ast.op
     (sym @@ string "")
@@ -234,11 +234,11 @@ doubleNewlineSep = define "doubleNewlineSep" $
     (Ast.precedence $ int32 0)
     Ast.associativityNone)
 
-doubleSpace :: TBinding String
+doubleSpace :: TTermDefinition String
 doubleSpace = define "doubleSpace" $
   string "  "
 
-expressionLength :: TBinding (Expr -> Int)
+expressionLength :: TTermDefinition (Expr -> Int)
 expressionLength = define "expressionLength" $
   doc "Find the approximate length (number of characters, including spaces and newlines) of an expression without actually printing it." $
   "e" ~>
@@ -294,38 +294,38 @@ expressionLength = define "expressionLength" $
     _Expr_brackets>>: "be" ~> var "bracketExprLength" @@ var "be",
     _Expr_seq>>: "se" ~> var "seqExprLength" @@ var "se"]
 
-fullBlockStyle :: TBinding BlockStyle
+fullBlockStyle :: TTermDefinition BlockStyle
 fullBlockStyle = define "fullBlockStyle" $
   Ast.blockStyle (just doubleSpace) true true
 
-halfBlockStyle :: TBinding BlockStyle
+halfBlockStyle :: TTermDefinition BlockStyle
 halfBlockStyle = define "halfBlockStyle" $
   Ast.blockStyle (just doubleSpace) true false
 
-ifx :: TBinding (Op -> Expr -> Expr -> Expr)
+ifx :: TTermDefinition (Op -> Expr -> Expr -> Expr)
 ifx = define "ifx" $
   "op" ~> "lhs" ~> "rhs" ~>
     Ast.exprOp $ Ast.opExpr (var "op") (var "lhs") (var "rhs")
 
-indentBlock :: TBinding ([Expr] -> Expr)
+indentBlock :: TTermDefinition ([Expr] -> Expr)
 indentBlock = define "indentBlock" $
   customIndentBlock @@ doubleSpace
 
-indent :: TBinding (String -> String)
+indent :: TTermDefinition (String -> String)
 indent = define "indent" $
   customIndent @@ doubleSpace
 
-indentSubsequentLines :: TBinding (String -> Expr -> Expr)
+indentSubsequentLines :: TTermDefinition (String -> Expr -> Expr)
 indentSubsequentLines = define "indentSubsequentLines" $
   "idt" ~> "e" ~>
     Ast.exprIndent $ Ast.indentedExpression (Ast.indentStyleSubsequentLines $ var "idt") (var "e")
 
-infixWs :: TBinding (String -> Expr -> Expr -> Expr)
+infixWs :: TTermDefinition (String -> Expr -> Expr -> Expr)
 infixWs = define "infixWs" $
   "op" ~> "l" ~> "r" ~>
     spaceSep @@ list [var "l", cst @@ var "op", var "r"]
 
-infixWsList :: TBinding (String -> [Expr] -> Expr)
+infixWsList :: TTermDefinition (String -> [Expr] -> Expr)
 infixWsList = define "infixWsList" $
   "op" ~> "opers" ~>
   "opExpr" <~ cst @@ var "op" $
@@ -335,11 +335,11 @@ infixWsList = define "infixWsList" $
       (Lists.cons (var "r") $ Lists.cons (var "opExpr") (var "e"))) $
   spaceSep @@ (Lists.foldl (var "foldFun") (list ([] :: [TTerm Expr])) $ Lists.reverse $ var "opers")
 
-inlineStyle :: TBinding BlockStyle
+inlineStyle :: TTermDefinition BlockStyle
 inlineStyle = define "inlineStyle" $
   Ast.blockStyle nothing false false
 
-newlineSep :: TBinding ([Expr] -> Expr)
+newlineSep :: TTermDefinition ([Expr] -> Expr)
 newlineSep = define "newlineSep" $
   sep @@ (Ast.op
     (sym @@ string "")
@@ -347,11 +347,11 @@ newlineSep = define "newlineSep" $
     (Ast.precedence $ int32 0)
     Ast.associativityNone)
 
-noPadding :: TBinding Padding
+noPadding :: TTermDefinition Padding
 noPadding = define "noPadding" $
   Ast.padding Ast.wsNone Ast.wsNone
 
-noSep :: TBinding ([Expr] -> Expr)
+noSep :: TTermDefinition ([Expr] -> Expr)
 noSep = define "noSep" $
   sep @@ (Ast.op
     (sym @@ string "")
@@ -359,11 +359,11 @@ noSep = define "noSep" $
     (Ast.precedence $ int32 0)
     Ast.associativityNone)
 
-num :: TBinding (Int -> Expr)
+num :: TTermDefinition (Int -> Expr)
 num = define "num" $
   "i" ~> cst @@ (Literals.showInt32 $ var "i")
 
-op :: TBinding (String -> Int -> Associativity -> Op)
+op :: TTermDefinition (String -> Int -> Associativity -> Op)
 op = define "op" $
   "s" ~> "p" ~> "assoc" ~>
     Ast.op
@@ -372,7 +372,7 @@ op = define "op" $
       (Ast.precedence $ var "p")
       (var "assoc")
 
-orOp :: TBinding (Bool -> Op)
+orOp :: TTermDefinition (Bool -> Op)
 orOp = define "orOp" $
   "newlines" ~> Ast.op
     (sym @@ string "|")
@@ -380,7 +380,7 @@ orOp = define "orOp" $
     (Ast.precedence $ int32 0)
     Ast.associativityNone
 
-orSep :: TBinding (BlockStyle -> [Expr] -> Expr)
+orSep :: TTermDefinition (BlockStyle -> [Expr] -> Expr)
 orSep = define "orSep" $
   "style" ~> "l" ~>
     "newlines" <~ Ast.blockStyleNewlineBeforeContent (var "style") $
@@ -388,7 +388,7 @@ orSep = define "orSep" $
       ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ (orOp @@ var "newlines") @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "l")))
       (Lists.safeHead $ var "l")
 
-parenList :: TBinding (Bool -> [Expr] -> Expr)
+parenList :: TTermDefinition (Bool -> [Expr] -> Expr)
 parenList = define "parenList" $
   "newlines" ~> "els" ~>
     "style" <~ (Logic.ifElse (Logic.and (var "newlines") (Equality.gt (Lists.length $ var "els") (int32 1)))
@@ -398,15 +398,15 @@ parenList = define "parenList" $
       (cst @@ string "()")
       (brackets @@ parentheses @@ var "style" @@ (commaSep @@ var "style" @@ var "els"))
 
-parens :: TBinding (Expr -> Expr)
+parens :: TTermDefinition (Expr -> Expr)
 parens = define "parens" $
   brackets @@ parentheses @@ inlineStyle
 
-parentheses :: TBinding Brackets
+parentheses :: TTermDefinition Brackets
 parentheses = define "parentheses" $
   Ast.brackets (Ast.symbol (string "(")) (Ast.symbol (string ")"))
 
-parenthesize :: TBinding (Expr -> Expr)
+parenthesize :: TTermDefinition (Expr -> Expr)
 parenthesize = define "parenthesize" $
   "exp" ~>
     "assocLeft" <~ ("a" ~> cases _Associativity (var "a")
@@ -467,7 +467,7 @@ parenthesize = define "parenthesize" $
                 (parens @@ var "rhs'")]] $
         Ast.exprOp $ Ast.opExpr (var "op") (var "lhs2") (var "rhs2")]
 
-prefix :: TBinding (String -> Expr -> Expr)
+prefix :: TTermDefinition (String -> Expr -> Expr)
 prefix = define "prefix" $
   "p" ~> "expr" ~>
   "preOp" <~ Ast.op
@@ -477,7 +477,7 @@ prefix = define "prefix" $
     Ast.associativityNone $
   ifx @@ var "preOp" @@ (cst @@ string "") @@ var "expr"
 
-printExpr :: TBinding (Expr -> String)
+printExpr :: TTermDefinition (Expr -> String)
 printExpr = define "printExpr" $
   "e" ~>
   "pad" <~ ("ws" ~> cases _Ws (var "ws") Nothing [
@@ -537,18 +537,18 @@ printExpr = define "printExpr" $
       "suf" <~ Logic.ifElse (var "nlAfter") (string "\n") (string "") $
       var "l" ++ var "pre" ++ var "ibody" ++ var "suf" ++ var "r"]
 
-semicolonSep :: TBinding ([Expr] -> Expr)
+semicolonSep :: TTermDefinition ([Expr] -> Expr)
 semicolonSep = define "semicolonSep" $
   symbolSep @@ string ";" @@ inlineStyle
 
-sep :: TBinding (Op -> [Expr] -> Expr)
+sep :: TTermDefinition (Op -> [Expr] -> Expr)
 sep = define "sep" $
   "op" ~> "els" ~>
     Maybes.maybe (cst @@ string "")
       ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ var "op" @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "els")))
       (Lists.safeHead $ var "els")
 
-spaceSep :: TBinding ([Expr] -> Expr)
+spaceSep :: TTermDefinition ([Expr] -> Expr)
 spaceSep = define "spaceSep" $
   sep @@ (Ast.op
     (sym @@ string "")
@@ -556,7 +556,7 @@ spaceSep = define "spaceSep" $
     (Ast.precedence $ int32 0)
     Ast.associativityNone)
 
-structuralSep :: TBinding (Op -> [Expr] -> Expr)
+structuralSep :: TTermDefinition (Op -> [Expr] -> Expr)
 structuralSep = define "structuralSep" $
   doc "Like sep, but produces a SeqExpr instead of an OpExpr chain. SeqExpr is treated as structural layout and is not subject to parenthesization." $
   "op" ~> "els" ~>
@@ -566,7 +566,7 @@ structuralSep = define "structuralSep" $
         (Lists.head $ var "els")
         (Ast.exprSeq $ Ast.seqExpr (var "op") (var "els")))
 
-structuralSpaceSep :: TBinding ([Expr] -> Expr)
+structuralSpaceSep :: TTermDefinition ([Expr] -> Expr)
 structuralSpaceSep = define "structuralSpaceSep" $
   doc "Like spaceSep, but produces a SeqExpr. Use for structural layout that should not trigger parenthesization of children." $
   structuralSep @@ (Ast.op
@@ -575,11 +575,11 @@ structuralSpaceSep = define "structuralSpaceSep" $
     (Ast.precedence $ int32 0)
     Ast.associativityNone)
 
-squareBrackets :: TBinding Brackets
+squareBrackets :: TTermDefinition Brackets
 squareBrackets = define "squareBrackets" $
   Ast.brackets (Ast.symbol (string "[")) (Ast.symbol (string "]"))
 
-suffix :: TBinding (String -> Expr -> Expr)
+suffix :: TTermDefinition (String -> Expr -> Expr)
 suffix = define "suffix" $
   doc "Append a suffix string to an expression" $
   "s" ~> "expr" ~>
@@ -590,11 +590,11 @@ suffix = define "suffix" $
     Ast.associativityNone $
   ifx @@ var "sufOp" @@ var "expr" @@ (cst @@ string "")
 
-sym :: TBinding (String -> Symbol)
+sym :: TTermDefinition (String -> Symbol)
 sym = define "sym" $
   "s" ~> Ast.symbol (var "s")
 
-symbolSep :: TBinding (String -> BlockStyle -> [Expr] -> Expr)
+symbolSep :: TTermDefinition (String -> BlockStyle -> [Expr] -> Expr)
 symbolSep = define "symbolSep" $
   "symb" ~> "style" ~> "l" ~>
     "breakCount" <~ (Lists.length $ Lists.filter identity $ list [
@@ -614,33 +614,33 @@ symbolSep = define "symbolSep" $
       ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ var "commaOp" @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "l")))
       (Lists.safeHead $ var "l")
 
-tabIndent :: TBinding (Expr -> Expr)
+tabIndent :: TTermDefinition (Expr -> Expr)
 tabIndent = define "tabIndent" $
   "e" ~> Ast.exprIndent $ Ast.indentedExpression
     (Ast.indentStyleAllLines $ string "    ")
     (var "e")
 
-tabIndentDoubleSpace :: TBinding ([Expr] -> Expr)
+tabIndentDoubleSpace :: TTermDefinition ([Expr] -> Expr)
 tabIndentDoubleSpace = define "tabIndentDoubleSpace" $
   "exprs" ~> tabIndent @@ (doubleNewlineSep @@ var "exprs")
 
-tabIndentSingleSpace :: TBinding ([Expr] -> Expr)
+tabIndentSingleSpace :: TTermDefinition ([Expr] -> Expr)
 tabIndentSingleSpace = define "tabIndentSingleSpace" $
   "exprs" ~> tabIndent @@ (newlineSep @@ var "exprs")
 
-unsupportedType :: TBinding (String -> Expr)
+unsupportedType :: TTermDefinition (String -> Expr)
 unsupportedType = define "unsupportedType" $
   "label" ~> cst @@ (string "[" ++ var "label" ++ string "]")
 
-unsupportedVariant :: TBinding (String -> a -> Expr)
+unsupportedVariant :: TTermDefinition (String -> a -> Expr)
 unsupportedVariant = define "unsupportedVariant" $
   "label" ~> "obj" ~>
     cst @@ (string "[unsupported " ++ var "label" ++ string ": " ++ (Literals.showString $ var "obj") ++ string "]")
 
-withComma :: TBinding (Expr -> Expr)
+withComma :: TTermDefinition (Expr -> Expr)
 withComma = define "withComma" $
   "e" ~> noSep @@ list [var "e", cst @@ string ","]
 
-withSemi :: TBinding (Expr -> Expr)
+withSemi :: TTermDefinition (Expr -> Expr)
 withSemi = define "withSemi" $
   "e" ~> noSep @@ list [var "e", cst @@ string ";"]

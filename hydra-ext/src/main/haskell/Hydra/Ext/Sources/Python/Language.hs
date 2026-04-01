@@ -80,17 +80,17 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
 module_ = Module (Namespace "hydra.ext.python.language")
-  [toTermDefinition pythonLanguage, toTermDefinition pythonReservedWords]
+  [toDefinition pythonLanguage, toDefinition pythonReservedWords]
   [Lexical.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints and reserved words for Python 3"
 
-pythonLanguage :: TBinding Language
+pythonLanguage :: TTermDefinition Language
 pythonLanguage = define "pythonLanguage" $
     doc "Language constraints for Python 3" $ lets [
     "eliminationVariants">: Sets.fromList $ list [ -- TODO: verify whether all are supported
@@ -162,7 +162,7 @@ pythonLanguage = define "pythonLanguage" $
         (var "typeVariants")
         (var "typePredicate"))
 
-pythonReservedWords :: TBinding (S.Set String)
+pythonReservedWords :: TTermDefinition (S.Set String)
 pythonReservedWords = define "pythonReservedWords" $
   doc "A set of reserved words in Python" $
   lets [

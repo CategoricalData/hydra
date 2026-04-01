@@ -28,35 +28,35 @@ module_ = Module ns elements
     (Just "Term definitions for the test suite")
   where
     elements = [
-      Phantoms.toTermDefinition latlonRecord,
-      Phantoms.toTermDefinition testDataArthur,
-      Phantoms.toTermDefinition testElementArthur,
-      Phantoms.toTermDefinition testElementFirstName]
+      Phantoms.toDefinition latlonRecord,
+      Phantoms.toDefinition testDataArthur,
+      Phantoms.toDefinition testElementArthur,
+      Phantoms.toDefinition testElementFirstName]
 
-defineTerm :: String -> TTerm a -> TBinding a
+defineTerm :: String -> TTerm a -> TTermDefinition a
 defineTerm = definitionInModule module_
 
-latlonRecord :: TBinding (Float -> Float -> Term)
+latlonRecord :: TTermDefinition (Float -> Float -> Term)
 latlonRecord = defineTerm "latlonRecord" $
   Phantoms.lambdas ["lat", "lon"] $ record TestTypes.testTypeLatLonName [
     "lat">: float32Lift $ varPhantom "lat",
     "lon">: float32Lift $ varPhantom "lon"]
 
-testDataArthur :: TBinding Term
+testDataArthur :: TTermDefinition Term
 testDataArthur = defineTerm "testDataArthur" $
   record TestTypes.testTypePersonName [
     "firstName">: string "Arthur",
     "lastName">: string "Dent",
     "age">: int32 42]
 
-testElementArthur :: TBinding Binding
+testElementArthur :: TTermDefinition Binding
 testElementArthur = defineTerm "testElementArthur" $
   Core.binding
     (name "firstName")
     testDataArthur
     (Phantoms.just $ Core.typeScheme (Phantoms.list ([] :: [TTerm Name])) (Core.typeVariable TestTypes.testTypePersonName) Phantoms.nothing)
 
-testElementFirstName :: TBinding Binding
+testElementFirstName :: TTermDefinition Binding
 testElementFirstName = defineTerm "testElementFirstName" $
   Core.binding
     (name "firstName")

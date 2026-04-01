@@ -34,12 +34,12 @@ module_ = Module ns elements
     (Just "Test cases for eta expansion of terms")
   where
     elements = [
-      Phantoms.toTermDefinition allTests]
+      Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = Phantoms.definitionInModule module_
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
   Phantoms.doc "Test cases for eta expansion of terms" $
   testGroup (Phantoms.string "eta expansion") Phantoms.nothing (Phantoms.list subgroups) (Phantoms.list ([] :: [TTerm TestCaseWithMetadata]))

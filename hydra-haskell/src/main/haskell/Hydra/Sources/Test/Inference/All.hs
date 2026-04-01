@@ -29,7 +29,7 @@ module_ :: Module
 module_ = Module ns elements namespaces kernelTypesNamespaces $
     Just "Hydra's inference test suite"
   where
-    elements = [Phantoms.toTermDefinition allTests]
+    elements = [Phantoms.toDefinition allTests]
     namespaces = [
       AlgebraicTypes.ns,
       AlgorithmW.ns,
@@ -39,7 +39,7 @@ module_ = Module ns elements namespaces kernelTypesNamespaces $
       KernelExamples.ns,
       NominalTypes.ns]
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     doc "The group of all inference tests" $
     Testing.testGroup (string "inference") nothing (list subgroups) (list ([] :: [TTerm TestCaseWithMetadata]))

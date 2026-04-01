@@ -87,7 +87,7 @@ import qualified Hydra.Ext.Java.Syntax as Java
 import qualified Hydra.Ext.Sources.Java.Syntax as JavaSyntax
 
 
-def :: String -> TTerm a -> TBinding a
+def :: String -> TTerm a -> TTermDefinition a
 def = definitionInModule module_
 
 ns :: Namespace
@@ -100,180 +100,180 @@ module_ = Module ns elements
     Just "Java serializer: converts Java AST to concrete syntax"
   where
     elements = [
-      toTermDefinition escapeJavaChar,
-      toTermDefinition escapeJavaString,
-      toTermDefinition hexDigit,
-      toTermDefinition javaUnicodeEscape,
-      toTermDefinition padHex4,
-      toTermDefinition sanitizeJavaComment,
-      toTermDefinition singleLineComment,
-      toTermDefinition withComments,
-      toTermDefinition writeAdditionalBound,
-      toTermDefinition writeAdditiveExpression,
-      toTermDefinition writeAmbiguousName,
-      toTermDefinition writeAndExpression,
-      toTermDefinition writeAnnotatedIdentifier,
-      toTermDefinition writeAnnotation,
-      toTermDefinition writeAnnotationTypeDeclaration,
-      toTermDefinition writeArrayAccess,
-      toTermDefinition writeArrayCreationExpression,
-      toTermDefinition writeArrayInitializer,
-      toTermDefinition writeArrayType,
-      toTermDefinition writeAssertStatement,
-      toTermDefinition writeAssignment,
-      toTermDefinition writeAssignmentExpression,
-      toTermDefinition writeBlock,
-      toTermDefinition writeBlockStatement,
-      toTermDefinition writeBreakStatement,
-      toTermDefinition writeCastExpression,
-      toTermDefinition writeCastExpression_Lambda,
-      toTermDefinition writeCastExpression_NotPlusMinus,
-      toTermDefinition writeCastExpression_Primitive,
-      toTermDefinition writeCastExpression_RefAndBounds,
-      toTermDefinition writeClassBody,
-      toTermDefinition writeClassBodyDeclaration,
-      toTermDefinition writeClassBodyDeclarationWithComments,
-      toTermDefinition writeClassDeclaration,
-      toTermDefinition writeClassInstanceCreationExpression,
-      toTermDefinition writeClassInstanceCreationExpression_Qualifier,
-      toTermDefinition writeClassLiteral,
-      toTermDefinition writeClassMemberDeclaration,
-      toTermDefinition writeClassModifier,
-      toTermDefinition writeClassOrInterfaceType,
-      toTermDefinition writeClassOrInterfaceTypeToInstantiate,
-      toTermDefinition writeClassType,
-      toTermDefinition writeCompilationUnit,
-      toTermDefinition writeConditionalAndExpression,
-      toTermDefinition writeConditionalExpression,
-      toTermDefinition writeConditionalExpression_TernaryCond,
-      toTermDefinition writeConditionalExpression_TernaryLambda,
-      toTermDefinition writeConditionalOrExpression,
-      toTermDefinition writeConstantDeclaration,
-      toTermDefinition writeConstantModifier,
-      toTermDefinition writeConstructorBody,
-      toTermDefinition writeConstructorDeclaration,
-      toTermDefinition writeConstructorDeclarator,
-      toTermDefinition writeConstructorModifier,
-      toTermDefinition writeContinueStatement,
-      toTermDefinition writeDims,
-      toTermDefinition writeDoStatement,
-      toTermDefinition writeElementValue,
-      toTermDefinition writeElementValuePair,
-      toTermDefinition writeEnumDeclaration,
-      toTermDefinition writeEqualityExpression,
-      toTermDefinition writeExclusiveOrExpression,
-      toTermDefinition writeExplicitConstructorInvocation,
-      toTermDefinition writeExpression,
-      toTermDefinition writeExpressionName,
-      toTermDefinition writeExpressionStatement,
-      toTermDefinition writeFieldAccess,
-      toTermDefinition writeFieldDeclaration,
-      toTermDefinition writeFieldModifier,
-      toTermDefinition writeFloatingPointLiteral,
-      toTermDefinition writeFloatingPointType,
-      toTermDefinition writeForStatement,
-      toTermDefinition writeFormalParameter,
-      toTermDefinition writeFormalParameter_Simple,
-      toTermDefinition writeIdentifier,
-      toTermDefinition writeIfThenElseStatement,
-      toTermDefinition writeIfThenStatement,
-      toTermDefinition writeImportDeclaration,
-      toTermDefinition writeInclusiveOrExpression,
-      toTermDefinition writeInstanceInitializer,
-      toTermDefinition writeIntegerLiteral,
-      toTermDefinition writeIntegralType,
-      toTermDefinition writeInterfaceBody,
-      toTermDefinition writeInterfaceDeclaration,
-      toTermDefinition writeInterfaceMemberDeclaration,
-      toTermDefinition writeInterfaceMethodDeclaration,
-      toTermDefinition writeInterfaceMethodModifier,
-      toTermDefinition writeInterfaceModifier,
-      toTermDefinition writeInterfaceType,
-      toTermDefinition writeLabeledStatement,
-      toTermDefinition writeLambdaBody,
-      toTermDefinition writeLambdaExpression,
-      toTermDefinition writeLambdaParameters,
-      toTermDefinition writeLeftHandSide,
-      toTermDefinition writeLiteral,
-      toTermDefinition writeLocalName,
-      toTermDefinition writeLocalVariableDeclaration,
-      toTermDefinition writeLocalVariableDeclarationStatement,
-      toTermDefinition writeMarkerAnnotation,
-      toTermDefinition writeMethodBody,
-      toTermDefinition writeMethodDeclaration,
-      toTermDefinition writeMethodDeclarator,
-      toTermDefinition writeMethodHeader,
-      toTermDefinition writeMethodInvocation,
-      toTermDefinition writeMethodModifier,
-      toTermDefinition writeMethodName,
-      toTermDefinition writeMethodReference,
-      toTermDefinition writeMultiplicativeExpression,
-      toTermDefinition writeNormalAnnotation,
-      toTermDefinition writeNormalClassDeclaration,
-      toTermDefinition writeNormalInterfaceDeclaration,
-      toTermDefinition writeNumericType,
-      toTermDefinition writePackageDeclaration,
-      toTermDefinition writePackageModifier,
-      toTermDefinition writePackageName,
-      toTermDefinition writePackageOrTypeName,
-      toTermDefinition writePostDecrementExpression,
-      toTermDefinition writePostIncrementExpression,
-      toTermDefinition writePostfixExpression,
-      toTermDefinition writePreDecrementExpression,
-      toTermDefinition writePreIncrementExpression,
-      toTermDefinition writePrimary,
-      toTermDefinition writePrimaryNoNewArrayExpressionExpression,
-      toTermDefinition writePrimitiveType,
-      toTermDefinition writePrimitiveTypeWithAnnotations,
-      toTermDefinition writeReceiverParameter,
-      toTermDefinition writeReferenceType,
-      toTermDefinition writeRelationalExpression,
-      toTermDefinition writeRelationalExpression_GreaterThan,
-      toTermDefinition writeRelationalExpression_GreaterThanEqual,
-      toTermDefinition writeRelationalExpression_InstanceOf,
-      toTermDefinition writeRelationalExpression_LessThan,
-      toTermDefinition writeRelationalExpression_LessThanEqual,
-      toTermDefinition writeResult,
-      toTermDefinition writeReturnStatement,
-      toTermDefinition writeShiftExpression,
-      toTermDefinition writeSimpleTypeName,
-      toTermDefinition writeSingleElementAnnotation,
-      toTermDefinition writeStatement,
-      toTermDefinition writeStatementExpression,
-      toTermDefinition writeStatementWithoutTrailingSubstatement,
-      toTermDefinition writeStaticInitializer,
-      toTermDefinition writeStringLiteral,
-      toTermDefinition writeSwitchStatement,
-      toTermDefinition writeSynchronizedStatement,
-      toTermDefinition writeThrowStatement,
-      toTermDefinition writeThrows,
-      toTermDefinition writeTryStatement,
-      toTermDefinition writeType,
-      toTermDefinition writeTypeArgument,
-      toTermDefinition writeTypeArgumentsOrDiamond,
-      toTermDefinition writeTypeBound,
-      toTermDefinition writeTypeDeclaration,
-      toTermDefinition writeTypeDeclarationWithComments,
-      toTermDefinition writeTypeIdentifier,
-      toTermDefinition writeTypeName,
-      toTermDefinition writeTypeParameter,
-      toTermDefinition writeTypeParameterModifier,
-      toTermDefinition writeTypeVariable,
-      toTermDefinition writeUnannType,
-      toTermDefinition writeUnaryExpression,
-      toTermDefinition writeUnaryExpressionNotPlusMinus,
-      toTermDefinition writeUnqualifiedClassInstanceCreationExpression,
-      toTermDefinition writeVariableArityParameter,
-      toTermDefinition writeVariableDeclarator,
-      toTermDefinition writeVariableDeclaratorId,
-      toTermDefinition writeVariableInitializer,
-      toTermDefinition writeVariableModifier,
-      toTermDefinition writeWhileStatement,
-      toTermDefinition writeWildcard,
-      toTermDefinition writeWildcardBounds]
+      toDefinition escapeJavaChar,
+      toDefinition escapeJavaString,
+      toDefinition hexDigit,
+      toDefinition javaUnicodeEscape,
+      toDefinition padHex4,
+      toDefinition sanitizeJavaComment,
+      toDefinition singleLineComment,
+      toDefinition withComments,
+      toDefinition writeAdditionalBound,
+      toDefinition writeAdditiveExpression,
+      toDefinition writeAmbiguousName,
+      toDefinition writeAndExpression,
+      toDefinition writeAnnotatedIdentifier,
+      toDefinition writeAnnotation,
+      toDefinition writeAnnotationTypeDeclaration,
+      toDefinition writeArrayAccess,
+      toDefinition writeArrayCreationExpression,
+      toDefinition writeArrayInitializer,
+      toDefinition writeArrayType,
+      toDefinition writeAssertStatement,
+      toDefinition writeAssignment,
+      toDefinition writeAssignmentExpression,
+      toDefinition writeBlock,
+      toDefinition writeBlockStatement,
+      toDefinition writeBreakStatement,
+      toDefinition writeCastExpression,
+      toDefinition writeCastExpression_Lambda,
+      toDefinition writeCastExpression_NotPlusMinus,
+      toDefinition writeCastExpression_Primitive,
+      toDefinition writeCastExpression_RefAndBounds,
+      toDefinition writeClassBody,
+      toDefinition writeClassBodyDeclaration,
+      toDefinition writeClassBodyDeclarationWithComments,
+      toDefinition writeClassDeclaration,
+      toDefinition writeClassInstanceCreationExpression,
+      toDefinition writeClassInstanceCreationExpression_Qualifier,
+      toDefinition writeClassLiteral,
+      toDefinition writeClassMemberDeclaration,
+      toDefinition writeClassModifier,
+      toDefinition writeClassOrInterfaceType,
+      toDefinition writeClassOrInterfaceTypeToInstantiate,
+      toDefinition writeClassType,
+      toDefinition writeCompilationUnit,
+      toDefinition writeConditionalAndExpression,
+      toDefinition writeConditionalExpression,
+      toDefinition writeConditionalExpression_TernaryCond,
+      toDefinition writeConditionalExpression_TernaryLambda,
+      toDefinition writeConditionalOrExpression,
+      toDefinition writeConstantDeclaration,
+      toDefinition writeConstantModifier,
+      toDefinition writeConstructorBody,
+      toDefinition writeConstructorDeclaration,
+      toDefinition writeConstructorDeclarator,
+      toDefinition writeConstructorModifier,
+      toDefinition writeContinueStatement,
+      toDefinition writeDims,
+      toDefinition writeDoStatement,
+      toDefinition writeElementValue,
+      toDefinition writeElementValuePair,
+      toDefinition writeEnumDeclaration,
+      toDefinition writeEqualityExpression,
+      toDefinition writeExclusiveOrExpression,
+      toDefinition writeExplicitConstructorInvocation,
+      toDefinition writeExpression,
+      toDefinition writeExpressionName,
+      toDefinition writeExpressionStatement,
+      toDefinition writeFieldAccess,
+      toDefinition writeFieldDeclaration,
+      toDefinition writeFieldModifier,
+      toDefinition writeFloatingPointLiteral,
+      toDefinition writeFloatingPointType,
+      toDefinition writeForStatement,
+      toDefinition writeFormalParameter,
+      toDefinition writeFormalParameter_Simple,
+      toDefinition writeIdentifier,
+      toDefinition writeIfThenElseStatement,
+      toDefinition writeIfThenStatement,
+      toDefinition writeImportDeclaration,
+      toDefinition writeInclusiveOrExpression,
+      toDefinition writeInstanceInitializer,
+      toDefinition writeIntegerLiteral,
+      toDefinition writeIntegralType,
+      toDefinition writeInterfaceBody,
+      toDefinition writeInterfaceDeclaration,
+      toDefinition writeInterfaceMemberDeclaration,
+      toDefinition writeInterfaceMethodDeclaration,
+      toDefinition writeInterfaceMethodModifier,
+      toDefinition writeInterfaceModifier,
+      toDefinition writeInterfaceType,
+      toDefinition writeLabeledStatement,
+      toDefinition writeLambdaBody,
+      toDefinition writeLambdaExpression,
+      toDefinition writeLambdaParameters,
+      toDefinition writeLeftHandSide,
+      toDefinition writeLiteral,
+      toDefinition writeLocalName,
+      toDefinition writeLocalVariableDeclaration,
+      toDefinition writeLocalVariableDeclarationStatement,
+      toDefinition writeMarkerAnnotation,
+      toDefinition writeMethodBody,
+      toDefinition writeMethodDeclaration,
+      toDefinition writeMethodDeclarator,
+      toDefinition writeMethodHeader,
+      toDefinition writeMethodInvocation,
+      toDefinition writeMethodModifier,
+      toDefinition writeMethodName,
+      toDefinition writeMethodReference,
+      toDefinition writeMultiplicativeExpression,
+      toDefinition writeNormalAnnotation,
+      toDefinition writeNormalClassDeclaration,
+      toDefinition writeNormalInterfaceDeclaration,
+      toDefinition writeNumericType,
+      toDefinition writePackageDeclaration,
+      toDefinition writePackageModifier,
+      toDefinition writePackageName,
+      toDefinition writePackageOrTypeName,
+      toDefinition writePostDecrementExpression,
+      toDefinition writePostIncrementExpression,
+      toDefinition writePostfixExpression,
+      toDefinition writePreDecrementExpression,
+      toDefinition writePreIncrementExpression,
+      toDefinition writePrimary,
+      toDefinition writePrimaryNoNewArrayExpressionExpression,
+      toDefinition writePrimitiveType,
+      toDefinition writePrimitiveTypeWithAnnotations,
+      toDefinition writeReceiverParameter,
+      toDefinition writeReferenceType,
+      toDefinition writeRelationalExpression,
+      toDefinition writeRelationalExpression_GreaterThan,
+      toDefinition writeRelationalExpression_GreaterThanEqual,
+      toDefinition writeRelationalExpression_InstanceOf,
+      toDefinition writeRelationalExpression_LessThan,
+      toDefinition writeRelationalExpression_LessThanEqual,
+      toDefinition writeResult,
+      toDefinition writeReturnStatement,
+      toDefinition writeShiftExpression,
+      toDefinition writeSimpleTypeName,
+      toDefinition writeSingleElementAnnotation,
+      toDefinition writeStatement,
+      toDefinition writeStatementExpression,
+      toDefinition writeStatementWithoutTrailingSubstatement,
+      toDefinition writeStaticInitializer,
+      toDefinition writeStringLiteral,
+      toDefinition writeSwitchStatement,
+      toDefinition writeSynchronizedStatement,
+      toDefinition writeThrowStatement,
+      toDefinition writeThrows,
+      toDefinition writeTryStatement,
+      toDefinition writeType,
+      toDefinition writeTypeArgument,
+      toDefinition writeTypeArgumentsOrDiamond,
+      toDefinition writeTypeBound,
+      toDefinition writeTypeDeclaration,
+      toDefinition writeTypeDeclarationWithComments,
+      toDefinition writeTypeIdentifier,
+      toDefinition writeTypeName,
+      toDefinition writeTypeParameter,
+      toDefinition writeTypeParameterModifier,
+      toDefinition writeTypeVariable,
+      toDefinition writeUnannType,
+      toDefinition writeUnaryExpression,
+      toDefinition writeUnaryExpressionNotPlusMinus,
+      toDefinition writeUnqualifiedClassInstanceCreationExpression,
+      toDefinition writeVariableArityParameter,
+      toDefinition writeVariableDeclarator,
+      toDefinition writeVariableDeclaratorId,
+      toDefinition writeVariableInitializer,
+      toDefinition writeVariableModifier,
+      toDefinition writeWhileStatement,
+      toDefinition writeWildcard,
+      toDefinition writeWildcardBounds]
 
 -- | Escape a single character (given as its code point) for use in a Java string or char literal.
-escapeJavaChar :: TBinding (Int -> String)
+escapeJavaChar :: TTermDefinition (Int -> String)
 escapeJavaChar = def "escapeJavaChar" $
   lambda "c" $
     Logic.ifElse (Equality.equal (var "c") (int32 34))   -- '"'
@@ -296,13 +296,13 @@ escapeJavaChar = def "escapeJavaChar" $
                     (javaUnicodeEscape @@ var "c"))))))))
 
 -- | Escape a string for use in a Java string literal.
-escapeJavaString :: TBinding (String -> String)
+escapeJavaString :: TTermDefinition (String -> String)
 escapeJavaString = def "escapeJavaString" $
   lambda "s" $
     Strings.cat (Lists.map (lambda "c" $ escapeJavaChar @@ var "c") (Strings.toList (var "s")))
 
 -- | Convert a value 0-15 to an uppercase hex digit character code.
-hexDigit :: TBinding (Int -> Int)
+hexDigit :: TTermDefinition (Int -> Int)
 hexDigit = def "hexDigit" $
   lambda "n" $
     Logic.ifElse (Equality.lt (var "n") (int32 10))
@@ -310,7 +310,7 @@ hexDigit = def "hexDigit" $
       (Math.add (Math.sub (var "n") (int32 10)) (int32 65))  -- 'A' = 65
 
 -- | Convert an integer to a 4-digit uppercase hex string (zero-padded).
-padHex4 :: TBinding (Int -> String)
+padHex4 :: TTermDefinition (Int -> String)
 padHex4 = def "padHex4" $
   lambda "n" $
     "d3" <~ Math.div (var "n") (int32 4096) $     -- n / 16^3
@@ -324,7 +324,7 @@ padHex4 = def "padHex4" $
 
 -- | Convert an integer to a \\uXXXX escape sequence.
 -- For supplementary plane characters (> 0xFFFF), produces a UTF-16 surrogate pair.
-javaUnicodeEscape :: TBinding (Int -> String)
+javaUnicodeEscape :: TTermDefinition (Int -> String)
 javaUnicodeEscape = def "javaUnicodeEscape" $
   lambda "n" $
     Logic.ifElse (Equality.gt (var "n") (int32 65535))
@@ -337,7 +337,7 @@ javaUnicodeEscape = def "javaUnicodeEscape" $
       -- Basic multilingual plane
       (Strings.cat2 (string "\\u") (padHex4 @@ var "n"))
 
-sanitizeJavaComment :: TBinding (String -> String)
+sanitizeJavaComment :: TTermDefinition (String -> String)
 sanitizeJavaComment = def "sanitizeJavaComment" $
   doc "Sanitize a string for use in a Java comment" $
   lambda "s" $
@@ -346,13 +346,13 @@ sanitizeJavaComment = def "sanitizeJavaComment" $
         (Strings.intercalate (string "&lt;")
           (Strings.splitOn (string "<") (var "s"))))
 
-singleLineComment :: TBinding (String -> Expr)
+singleLineComment :: TTermDefinition (String -> Expr)
 singleLineComment = def "singleLineComment" $
   doc "Create a single-line Java comment" $
   lambda "c" $
     Serialization.cst @@ (Strings.cat2 (string "// ") (sanitizeJavaComment @@ var "c"))
 
-withComments :: TBinding (Maybe String -> Expr -> Expr)
+withComments :: TTermDefinition (Maybe String -> Expr -> Expr)
 withComments = def "withComments" $
   doc "Wrap an expression with optional Javadoc comments" $
   lambda "mc" $ lambda "expr" $
@@ -368,156 +368,156 @@ withComments = def "withComments" $
         var "expr"])
       (var "mc")
 
-writeIdentifier :: TBinding (Java.Identifier -> Expr)
+writeIdentifier :: TTermDefinition (Java.Identifier -> Expr)
 writeIdentifier = def "writeIdentifier" $
   lambda "id" $
     Serialization.cst @@ (unwrap Java._Identifier @@ var "id")
 
-writeTypeIdentifier :: TBinding (Java.TypeIdentifier -> Expr)
+writeTypeIdentifier :: TTermDefinition (Java.TypeIdentifier -> Expr)
 writeTypeIdentifier = def "writeTypeIdentifier" $
   lambda "tid" $
     writeIdentifier @@ (unwrap Java._TypeIdentifier @@ var "tid")
 
-writeSimpleTypeName :: TBinding (Java.SimpleTypeName -> Expr)
+writeSimpleTypeName :: TTermDefinition (Java.SimpleTypeName -> Expr)
 writeSimpleTypeName = def "writeSimpleTypeName" $
   lambda "stn" $
     writeTypeIdentifier @@ (unwrap Java._SimpleTypeName @@ var "stn")
 
-writeMethodName :: TBinding (Java.MethodName -> Expr)
+writeMethodName :: TTermDefinition (Java.MethodName -> Expr)
 writeMethodName = def "writeMethodName" $
   lambda "mn" $
     writeIdentifier @@ (unwrap Java._MethodName @@ var "mn")
 
-writeUnannType :: TBinding (Java.UnannType -> Expr)
+writeUnannType :: TTermDefinition (Java.UnannType -> Expr)
 writeUnannType = def "writeUnannType" $
   lambda "ut" $
     writeType @@ (unwrap Java._UnannType @@ var "ut")
 
-writeInterfaceType :: TBinding (Java.InterfaceType -> Expr)
+writeInterfaceType :: TTermDefinition (Java.InterfaceType -> Expr)
 writeInterfaceType = def "writeInterfaceType" $
   lambda "it" $
     writeClassType @@ (unwrap Java._InterfaceType @@ var "it")
 
-writePackageModifier :: TBinding (Java.PackageModifier -> Expr)
+writePackageModifier :: TTermDefinition (Java.PackageModifier -> Expr)
 writePackageModifier = def "writePackageModifier" $
   lambda "pm" $
     writeAnnotation @@ (unwrap Java._PackageModifier @@ var "pm")
 
-writeTypeParameterModifier :: TBinding (Java.TypeParameterModifier -> Expr)
+writeTypeParameterModifier :: TTermDefinition (Java.TypeParameterModifier -> Expr)
 writeTypeParameterModifier = def "writeTypeParameterModifier" $
   lambda "tpm" $
     writeAnnotation @@ (unwrap Java._TypeParameterModifier @@ var "tpm")
 
 
-writeAnnotationTypeDeclaration :: TBinding (Java.AnnotationTypeDeclaration -> Expr)
+writeAnnotationTypeDeclaration :: TTermDefinition (Java.AnnotationTypeDeclaration -> Expr)
 writeAnnotationTypeDeclaration = def "writeAnnotationTypeDeclaration" $
   lambda "_" $ Serialization.cst @@ string "STUB:AnnotationTypeDeclaration"
 
-writeArrayAccess :: TBinding (Java.ArrayAccess -> Expr)
+writeArrayAccess :: TTermDefinition (Java.ArrayAccess -> Expr)
 writeArrayAccess = def "writeArrayAccess" $
   lambda "_" $ Serialization.cst @@ string "STUB:ArrayAccess"
 
-writeAssertStatement :: TBinding (Java.AssertStatement -> Expr)
+writeAssertStatement :: TTermDefinition (Java.AssertStatement -> Expr)
 writeAssertStatement = def "writeAssertStatement" $
   lambda "_" $ Serialization.cst @@ string "STUB:AssertStatement"
 
-writeCastExpression_Lambda :: TBinding (Java.CastExpression_Lambda -> Expr)
+writeCastExpression_Lambda :: TTermDefinition (Java.CastExpression_Lambda -> Expr)
 writeCastExpression_Lambda = def "writeCastExpression_Lambda" $
   lambda "_" $ Serialization.cst @@ string "STUB:CastExpression_Lambda"
 
-writeClassLiteral :: TBinding (Java.ClassLiteral -> Expr)
+writeClassLiteral :: TTermDefinition (Java.ClassLiteral -> Expr)
 writeClassLiteral = def "writeClassLiteral" $
   lambda "_" $ Serialization.cst @@ string "STUB:ClassLiteral"
 
-writeConditionalExpression_TernaryCond :: TBinding (Java.ConditionalExpression_TernaryCond -> Expr)
+writeConditionalExpression_TernaryCond :: TTermDefinition (Java.ConditionalExpression_TernaryCond -> Expr)
 writeConditionalExpression_TernaryCond = def "writeConditionalExpression_TernaryCond" $
   lambda "_" $ Serialization.cst @@ string "STUB:ConditionalExpression_TernaryCond"
 
-writeConditionalExpression_TernaryLambda :: TBinding (Java.ConditionalExpression_TernaryLambda -> Expr)
+writeConditionalExpression_TernaryLambda :: TTermDefinition (Java.ConditionalExpression_TernaryLambda -> Expr)
 writeConditionalExpression_TernaryLambda = def "writeConditionalExpression_TernaryLambda" $
   lambda "_" $ Serialization.cst @@ string "STUB:ConditionalExpression_TernaryLambda"
 
-writeConstantModifier :: TBinding (Java.ConstantModifier -> Expr)
+writeConstantModifier :: TTermDefinition (Java.ConstantModifier -> Expr)
 writeConstantModifier = def "writeConstantModifier" $
   lambda "_" $ Serialization.cst @@ string "STUB:ConstantModifier"
 
-writeDoStatement :: TBinding (Java.DoStatement -> Expr)
+writeDoStatement :: TTermDefinition (Java.DoStatement -> Expr)
 writeDoStatement = def "writeDoStatement" $
   lambda "_" $ Serialization.cst @@ string "STUB:DoStatement"
 
-writeEnumDeclaration :: TBinding (Java.EnumDeclaration -> Expr)
+writeEnumDeclaration :: TTermDefinition (Java.EnumDeclaration -> Expr)
 writeEnumDeclaration = def "writeEnumDeclaration" $
   lambda "_" $ Serialization.cst @@ string "STUB:EnumDeclaration"
 
-writeExplicitConstructorInvocation :: TBinding (Java.ExplicitConstructorInvocation -> Expr)
+writeExplicitConstructorInvocation :: TTermDefinition (Java.ExplicitConstructorInvocation -> Expr)
 writeExplicitConstructorInvocation = def "writeExplicitConstructorInvocation" $
   lambda "_" $ Serialization.cst @@ string "STUB:ExplicitConstructorInvocation"
 
-writeForStatement :: TBinding (Java.ForStatement -> Expr)
+writeForStatement :: TTermDefinition (Java.ForStatement -> Expr)
 writeForStatement = def "writeForStatement" $
   lambda "_" $ Serialization.cst @@ string "STUB:ForStatement"
 
-writeIfThenElseStatement :: TBinding (Java.IfThenElseStatement -> Expr)
+writeIfThenElseStatement :: TTermDefinition (Java.IfThenElseStatement -> Expr)
 writeIfThenElseStatement = def "writeIfThenElseStatement" $
   lambda "_" $ Serialization.cst @@ string "STUB:IfThenElseStatement"
 
-writeInstanceInitializer :: TBinding (Java.InstanceInitializer -> Expr)
+writeInstanceInitializer :: TTermDefinition (Java.InstanceInitializer -> Expr)
 writeInstanceInitializer = def "writeInstanceInitializer" $
   lambda "_" $ Serialization.cst @@ string "STUB:InstanceInitializer"
 
-writeLabeledStatement :: TBinding (Java.LabeledStatement -> Expr)
+writeLabeledStatement :: TTermDefinition (Java.LabeledStatement -> Expr)
 writeLabeledStatement = def "writeLabeledStatement" $
   lambda "_" $ Serialization.cst @@ string "STUB:LabeledStatement"
 
-writeMethodReference :: TBinding (Java.MethodReference -> Expr)
+writeMethodReference :: TTermDefinition (Java.MethodReference -> Expr)
 writeMethodReference = def "writeMethodReference" $
   lambda "_" $ Serialization.cst @@ string "STUB:MethodReference"
 
-writePostDecrementExpression :: TBinding (Java.PostDecrementExpression -> Expr)
+writePostDecrementExpression :: TTermDefinition (Java.PostDecrementExpression -> Expr)
 writePostDecrementExpression = def "writePostDecrementExpression" $
   lambda "_" $ Serialization.cst @@ string "STUB:PostDecrementExpression"
 
-writePostIncrementExpression :: TBinding (Java.PostIncrementExpression -> Expr)
+writePostIncrementExpression :: TTermDefinition (Java.PostIncrementExpression -> Expr)
 writePostIncrementExpression = def "writePostIncrementExpression" $
   lambda "_" $ Serialization.cst @@ string "STUB:PostIncrementExpression"
 
-writePreDecrementExpression :: TBinding (Java.PreDecrementExpression -> Expr)
+writePreDecrementExpression :: TTermDefinition (Java.PreDecrementExpression -> Expr)
 writePreDecrementExpression = def "writePreDecrementExpression" $
   lambda "_" $ Serialization.cst @@ string "STUB:PreDecrementExpression"
 
-writePreIncrementExpression :: TBinding (Java.PreIncrementExpression -> Expr)
+writePreIncrementExpression :: TTermDefinition (Java.PreIncrementExpression -> Expr)
 writePreIncrementExpression = def "writePreIncrementExpression" $
   lambda "_" $ Serialization.cst @@ string "STUB:PreIncrementExpression"
 
-writeReceiverParameter :: TBinding (Java.ReceiverParameter -> Expr)
+writeReceiverParameter :: TTermDefinition (Java.ReceiverParameter -> Expr)
 writeReceiverParameter = def "writeReceiverParameter" $
   lambda "_" $ Serialization.cst @@ string "STUB:ReceiverParameter"
 
-writeStaticInitializer :: TBinding (Java.StaticInitializer -> Expr)
+writeStaticInitializer :: TTermDefinition (Java.StaticInitializer -> Expr)
 writeStaticInitializer = def "writeStaticInitializer" $
   lambda "_" $ Serialization.cst @@ string "STUB:StaticInitializer"
 
-writeSwitchStatement :: TBinding (Java.SwitchStatement -> Expr)
+writeSwitchStatement :: TTermDefinition (Java.SwitchStatement -> Expr)
 writeSwitchStatement = def "writeSwitchStatement" $
   lambda "_" $ Serialization.cst @@ string "STUB:SwitchStatement"
 
-writeSynchronizedStatement :: TBinding (Java.SynchronizedStatement -> Expr)
+writeSynchronizedStatement :: TTermDefinition (Java.SynchronizedStatement -> Expr)
 writeSynchronizedStatement = def "writeSynchronizedStatement" $
   lambda "_" $ Serialization.cst @@ string "STUB:SynchronizedStatement"
 
-writeThrows :: TBinding (Java.Throws -> Expr)
+writeThrows :: TTermDefinition (Java.Throws -> Expr)
 writeThrows = def "writeThrows" $
   lambda "_" $ Serialization.cst @@ string "STUB:Throws"
 
-writeTryStatement :: TBinding (Java.TryStatement -> Expr)
+writeTryStatement :: TTermDefinition (Java.TryStatement -> Expr)
 writeTryStatement = def "writeTryStatement" $
   lambda "_" $ Serialization.cst @@ string "STUB:TryStatement"
 
-writeVariableArityParameter :: TBinding (Java.VariableArityParameter -> Expr)
+writeVariableArityParameter :: TTermDefinition (Java.VariableArityParameter -> Expr)
 writeVariableArityParameter = def "writeVariableArityParameter" $
   lambda "_" $ Serialization.cst @@ string "STUB:VariableArityParameter"
 
-writeWhileStatement :: TBinding (Java.WhileStatement -> Expr)
+writeWhileStatement :: TTermDefinition (Java.WhileStatement -> Expr)
 writeWhileStatement = def "writeWhileStatement" $
   lambda "ws" $ lets [
     "mcond">: project Java._WhileStatement Java._WhileStatement_cond @@ var "ws",
@@ -532,14 +532,14 @@ writeWhileStatement = def "writeWhileStatement" $
       Serialization.curlyBlock @@ Serialization.fullBlockStyle @@ (writeStatement @@ var "body")]
 
 
-writeType :: TBinding (Java.Type -> Expr)
+writeType :: TTermDefinition (Java.Type -> Expr)
 writeType = def "writeType" $
   lambda "t" $
     cases Java._Type (var "t") Nothing [
       Java._Type_primitive>>: lambda "pt" $ writePrimitiveTypeWithAnnotations @@ var "pt",
       Java._Type_reference>>: lambda "rt" $ writeReferenceType @@ var "rt"]
 
-writeAnnotation :: TBinding (Java.Annotation -> Expr)
+writeAnnotation :: TTermDefinition (Java.Annotation -> Expr)
 writeAnnotation = def "writeAnnotation" $
   lambda "ann" $
     cases Java._Annotation (var "ann") Nothing [
@@ -547,21 +547,21 @@ writeAnnotation = def "writeAnnotation" $
       Java._Annotation_marker>>: lambda "m" $ writeMarkerAnnotation @@ var "m",
       Java._Annotation_singleElement>>: lambda "s" $ writeSingleElementAnnotation @@ var "s"]
 
-writePrimitiveType :: TBinding (Java.PrimitiveType -> Expr)
+writePrimitiveType :: TTermDefinition (Java.PrimitiveType -> Expr)
 writePrimitiveType = def "writePrimitiveType" $
   lambda "pt" $
     cases Java._PrimitiveType (var "pt") Nothing [
       Java._PrimitiveType_numeric>>: lambda "nt" $ writeNumericType @@ var "nt",
       Java._PrimitiveType_boolean>>: constant $ Serialization.cst @@ string "boolean"]
 
-writeNumericType :: TBinding (Java.NumericType -> Expr)
+writeNumericType :: TTermDefinition (Java.NumericType -> Expr)
 writeNumericType = def "writeNumericType" $
   lambda "nt" $
     cases Java._NumericType (var "nt") Nothing [
       Java._NumericType_integral>>: lambda "it" $ writeIntegralType @@ var "it",
       Java._NumericType_floatingPoint>>: lambda "ft" $ writeFloatingPointType @@ var "ft"]
 
-writeIntegralType :: TBinding (Java.IntegralType -> Expr)
+writeIntegralType :: TTermDefinition (Java.IntegralType -> Expr)
 writeIntegralType = def "writeIntegralType" $
   lambda "t" $
     cases Java._IntegralType (var "t") Nothing [
@@ -571,14 +571,14 @@ writeIntegralType = def "writeIntegralType" $
       Java._IntegralType_long>>: constant $ Serialization.cst @@ string "long",
       Java._IntegralType_char>>: constant $ Serialization.cst @@ string "char"]
 
-writeFloatingPointType :: TBinding (Java.FloatingPointType -> Expr)
+writeFloatingPointType :: TTermDefinition (Java.FloatingPointType -> Expr)
 writeFloatingPointType = def "writeFloatingPointType" $
   lambda "ft" $
     cases Java._FloatingPointType (var "ft") Nothing [
       Java._FloatingPointType_float>>: constant $ Serialization.cst @@ string "float",
       Java._FloatingPointType_double>>: constant $ Serialization.cst @@ string "double"]
 
-writeReferenceType :: TBinding (Java.ReferenceType -> Expr)
+writeReferenceType :: TTermDefinition (Java.ReferenceType -> Expr)
 writeReferenceType = def "writeReferenceType" $
   lambda "rt" $
     cases Java._ReferenceType (var "rt") Nothing [
@@ -586,28 +586,28 @@ writeReferenceType = def "writeReferenceType" $
       Java._ReferenceType_variable>>: lambda "v" $ writeTypeVariable @@ var "v",
       Java._ReferenceType_array>>: lambda "at" $ writeArrayType @@ var "at"]
 
-writeClassOrInterfaceType :: TBinding (Java.ClassOrInterfaceType -> Expr)
+writeClassOrInterfaceType :: TTermDefinition (Java.ClassOrInterfaceType -> Expr)
 writeClassOrInterfaceType = def "writeClassOrInterfaceType" $
   lambda "cit" $
     cases Java._ClassOrInterfaceType (var "cit") Nothing [
       Java._ClassOrInterfaceType_class>>: lambda "ct" $ writeClassType @@ var "ct",
       Java._ClassOrInterfaceType_interface>>: lambda "it" $ writeInterfaceType @@ var "it"]
 
-writeExpression :: TBinding (Java.Expression -> Expr)
+writeExpression :: TTermDefinition (Java.Expression -> Expr)
 writeExpression = def "writeExpression" $
   lambda "e" $
     cases Java._Expression (var "e") Nothing [
       Java._Expression_lambda>>: lambda "l" $ writeLambdaExpression @@ var "l",
       Java._Expression_assignment>>: lambda "a" $ writeAssignmentExpression @@ var "a"]
 
-writeAssignmentExpression :: TBinding (Java.AssignmentExpression -> Expr)
+writeAssignmentExpression :: TTermDefinition (Java.AssignmentExpression -> Expr)
 writeAssignmentExpression = def "writeAssignmentExpression" $
   lambda "e" $
     cases Java._AssignmentExpression (var "e") Nothing [
       Java._AssignmentExpression_conditional>>: lambda "c" $ writeConditionalExpression @@ var "c",
       Java._AssignmentExpression_assignment>>: lambda "a" $ writeAssignment @@ var "a"]
 
-writeConditionalExpression :: TBinding (Java.ConditionalExpression -> Expr)
+writeConditionalExpression :: TTermDefinition (Java.ConditionalExpression -> Expr)
 writeConditionalExpression = def "writeConditionalExpression" $
   lambda "c" $
     cases Java._ConditionalExpression (var "c") Nothing [
@@ -615,35 +615,35 @@ writeConditionalExpression = def "writeConditionalExpression" $
       Java._ConditionalExpression_ternaryCond>>: lambda "tc" $ writeConditionalExpression_TernaryCond @@ var "tc",
       Java._ConditionalExpression_ternaryLambda>>: lambda "tl" $ writeConditionalExpression_TernaryLambda @@ var "tl"]
 
-writeResult :: TBinding (Java.Result -> Expr)
+writeResult :: TTermDefinition (Java.Result -> Expr)
 writeResult = def "writeResult" $
   lambda "r" $
     cases Java._Result (var "r") Nothing [
       Java._Result_type>>: lambda "t" $ writeUnannType @@ var "t",
       Java._Result_void>>: constant $ Serialization.cst @@ string "void"]
 
-writeMethodBody :: TBinding (Java.MethodBody -> Expr)
+writeMethodBody :: TTermDefinition (Java.MethodBody -> Expr)
 writeMethodBody = def "writeMethodBody" $
   lambda "b" $
     cases Java._MethodBody (var "b") Nothing [
       Java._MethodBody_block>>: lambda "block" $ writeBlock @@ var "block",
       Java._MethodBody_none>>: constant $ Serialization.cst @@ string ";"]
 
-writeClassDeclaration :: TBinding (Java.ClassDeclaration -> Expr)
+writeClassDeclaration :: TTermDefinition (Java.ClassDeclaration -> Expr)
 writeClassDeclaration = def "writeClassDeclaration" $
   lambda "d" $
     cases Java._ClassDeclaration (var "d") Nothing [
       Java._ClassDeclaration_normal>>: lambda "nd" $ writeNormalClassDeclaration @@ var "nd",
       Java._ClassDeclaration_enum>>: lambda "ed" $ writeEnumDeclaration @@ var "ed"]
 
-writeInterfaceDeclaration :: TBinding (Java.InterfaceDeclaration -> Expr)
+writeInterfaceDeclaration :: TTermDefinition (Java.InterfaceDeclaration -> Expr)
 writeInterfaceDeclaration = def "writeInterfaceDeclaration" $
   lambda "d" $
     cases Java._InterfaceDeclaration (var "d") Nothing [
       Java._InterfaceDeclaration_normalInterface>>: lambda "n" $ writeNormalInterfaceDeclaration @@ var "n",
       Java._InterfaceDeclaration_annotationType>>: lambda "a" $ writeAnnotationTypeDeclaration @@ var "a"]
 
-writeCastExpression :: TBinding (Java.CastExpression -> Expr)
+writeCastExpression :: TTermDefinition (Java.CastExpression -> Expr)
 writeCastExpression = def "writeCastExpression" $
   lambda "e" $
     cases Java._CastExpression (var "e") Nothing [
@@ -651,35 +651,35 @@ writeCastExpression = def "writeCastExpression" $
       Java._CastExpression_notPlusMinus>>: lambda "npm" $ writeCastExpression_NotPlusMinus @@ var "npm",
       Java._CastExpression_lambda>>: lambda "l" $ writeCastExpression_Lambda @@ var "l"]
 
-writeFormalParameter :: TBinding (Java.FormalParameter -> Expr)
+writeFormalParameter :: TTermDefinition (Java.FormalParameter -> Expr)
 writeFormalParameter = def "writeFormalParameter" $
   lambda "p" $
     cases Java._FormalParameter (var "p") Nothing [
       Java._FormalParameter_simple>>: lambda "s" $ writeFormalParameter_Simple @@ var "s",
       Java._FormalParameter_variableArity>>: lambda "v" $ writeVariableArityParameter @@ var "v"]
 
-writeLocalName :: TBinding (Java.LocalVariableType -> Expr)
+writeLocalName :: TTermDefinition (Java.LocalVariableType -> Expr)
 writeLocalName = def "writeLocalName" $
   lambda "t" $
     cases Java._LocalVariableType (var "t") Nothing [
       Java._LocalVariableType_type>>: lambda "ut" $ writeUnannType @@ var "ut",
       Java._LocalVariableType_var>>: constant $ Serialization.cst @@ string "var"]
 
-writeVariableInitializer :: TBinding (Java.VariableInitializer -> Expr)
+writeVariableInitializer :: TTermDefinition (Java.VariableInitializer -> Expr)
 writeVariableInitializer = def "writeVariableInitializer" $
   lambda "i" $
     cases Java._VariableInitializer (var "i") Nothing [
       Java._VariableInitializer_expression>>: lambda "e" $ writeExpression @@ var "e",
       Java._VariableInitializer_arrayInitializer>>: lambda "ai" $ writeArrayInitializer @@ var "ai"]
 
-writeVariableModifier :: TBinding (Java.VariableModifier -> Expr)
+writeVariableModifier :: TTermDefinition (Java.VariableModifier -> Expr)
 writeVariableModifier = def "writeVariableModifier" $
   lambda "m" $
     cases Java._VariableModifier (var "m") Nothing [
       Java._VariableModifier_annotation>>: lambda "ann" $ writeAnnotation @@ var "ann",
       Java._VariableModifier_final>>: constant $ Serialization.cst @@ string "final"]
 
-writeLeftHandSide :: TBinding (Java.LeftHandSide -> Expr)
+writeLeftHandSide :: TTermDefinition (Java.LeftHandSide -> Expr)
 writeLeftHandSide = def "writeLeftHandSide" $
   lambda "lhs" $
     cases Java._LeftHandSide (var "lhs") Nothing [
@@ -687,28 +687,28 @@ writeLeftHandSide = def "writeLeftHandSide" $
       Java._LeftHandSide_fieldAccess>>: lambda "fa" $ writeFieldAccess @@ var "fa",
       Java._LeftHandSide_arrayAccess>>: lambda "aa" $ writeArrayAccess @@ var "aa"]
 
-writeLambdaBody :: TBinding (Java.LambdaBody -> Expr)
+writeLambdaBody :: TTermDefinition (Java.LambdaBody -> Expr)
 writeLambdaBody = def "writeLambdaBody" $
   lambda "b" $
     cases Java._LambdaBody (var "b") Nothing [
       Java._LambdaBody_expression>>: lambda "e" $ writeExpression @@ var "e",
       Java._LambdaBody_block>>: lambda "b" $ writeBlock @@ var "b"]
 
-writeLambdaParameters :: TBinding (Java.LambdaParameters -> Expr)
+writeLambdaParameters :: TTermDefinition (Java.LambdaParameters -> Expr)
 writeLambdaParameters = def "writeLambdaParameters" $
   lambda "p" $
     cases Java._LambdaParameters (var "p") Nothing [
       Java._LambdaParameters_tuple>>: lambda "l" $ Serialization.parenList @@ false @@ Lists.map writeLambdaParameters (var "l"),
       Java._LambdaParameters_single>>: lambda "id" $ writeIdentifier @@ var "id"]
 
-writeTypeArgument :: TBinding (Java.TypeArgument -> Expr)
+writeTypeArgument :: TTermDefinition (Java.TypeArgument -> Expr)
 writeTypeArgument = def "writeTypeArgument" $
   lambda "a" $
     cases Java._TypeArgument (var "a") Nothing [
       Java._TypeArgument_reference>>: lambda "rt" $ writeReferenceType @@ var "rt",
       Java._TypeArgument_wildcard>>: lambda "w" $ writeWildcard @@ var "w"]
 
-writeTypeDeclaration :: TBinding (Java.TypeDeclaration -> Expr)
+writeTypeDeclaration :: TTermDefinition (Java.TypeDeclaration -> Expr)
 writeTypeDeclaration = def "writeTypeDeclaration" $
   lambda "d" $
     cases Java._TypeDeclaration (var "d") Nothing [
@@ -716,21 +716,21 @@ writeTypeDeclaration = def "writeTypeDeclaration" $
       Java._TypeDeclaration_interface>>: lambda "d" $ writeInterfaceDeclaration @@ var "d",
       Java._TypeDeclaration_none>>: constant $ Serialization.cst @@ string ";"]
 
-writePrimary :: TBinding (Java.Primary -> Expr)
+writePrimary :: TTermDefinition (Java.Primary -> Expr)
 writePrimary = def "writePrimary" $
   lambda "p" $
     cases Java._Primary (var "p") Nothing [
       Java._Primary_noNewArray>>: lambda "n" $ writePrimaryNoNewArrayExpressionExpression @@ var "n",
       Java._Primary_arrayCreation>>: lambda "a" $ writeArrayCreationExpression @@ var "a"]
 
-writeWildcardBounds :: TBinding (Java.WildcardBounds -> Expr)
+writeWildcardBounds :: TTermDefinition (Java.WildcardBounds -> Expr)
 writeWildcardBounds = def "writeWildcardBounds" $
   lambda "b" $
     cases Java._WildcardBounds (var "b") Nothing [
       Java._WildcardBounds_extends>>: lambda "rt" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "extends", writeReferenceType @@ var "rt"],
       Java._WildcardBounds_super>>: lambda "rt" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "super", writeReferenceType @@ var "rt"]]
 
-writeTypeArgumentsOrDiamond :: TBinding (Java.TypeArgumentsOrDiamond -> Expr)
+writeTypeArgumentsOrDiamond :: TTermDefinition (Java.TypeArgumentsOrDiamond -> Expr)
 writeTypeArgumentsOrDiamond = def "writeTypeArgumentsOrDiamond" $
   lambda "targs" $
     cases Java._TypeArgumentsOrDiamond (var "targs") Nothing [
@@ -739,12 +739,12 @@ writeTypeArgumentsOrDiamond = def "writeTypeArgumentsOrDiamond" $
       Java._TypeArgumentsOrDiamond_diamond>>: constant $ Serialization.cst @@ string "<>"]
 
 
-writeFloatingPointLiteral :: TBinding (Java.FloatingPointLiteral -> Expr)
+writeFloatingPointLiteral :: TTermDefinition (Java.FloatingPointLiteral -> Expr)
 writeFloatingPointLiteral = def "writeFloatingPointLiteral" $
   lambda "fl" $
     Serialization.cst @@ LibLiterals.showBigfloat (unwrap Java._FloatingPointLiteral @@ var "fl")
 
-writeIntegerLiteral :: TBinding (Java.IntegerLiteral -> Expr)
+writeIntegerLiteral :: TTermDefinition (Java.IntegerLiteral -> Expr)
 writeIntegerLiteral = def "writeIntegerLiteral" $
   lambda "il" $ lets [
     "i">: unwrap Java._IntegerLiteral @@ var "il",
@@ -755,14 +755,14 @@ writeIntegerLiteral = def "writeIntegerLiteral" $
       (string "")] $
     Serialization.cst @@ Strings.cat2 (LibLiterals.showBigint (var "i")) (var "suffix")
 
-writeStringLiteral :: TBinding (Java.StringLiteral -> Expr)
+writeStringLiteral :: TTermDefinition (Java.StringLiteral -> Expr)
 writeStringLiteral = def "writeStringLiteral" $
   doc "Serialize a Java string literal with proper Unicode escaping." $
   lambda "sl" $
     "s" <~ unwrap Java._StringLiteral @@ var "sl" $
     Serialization.cst @@ Strings.cat2 (string "\"") (Strings.cat2 (escapeJavaString @@ var "s") (string "\""))
 
-writeLiteral :: TBinding (Java.Literal -> Expr)
+writeLiteral :: TTermDefinition (Java.Literal -> Expr)
 writeLiteral = def "writeLiteral" $
   lambda "l" $
     cases Java._Literal (var "l") Nothing [
@@ -794,12 +794,12 @@ writeLiteral = def "writeLiteral" $
       Java._Literal_string>>: lambda "sl" $ writeStringLiteral @@ var "sl"]
 
 
-writeAmbiguousName :: TBinding (Java.AmbiguousName -> Expr)
+writeAmbiguousName :: TTermDefinition (Java.AmbiguousName -> Expr)
 writeAmbiguousName = def "writeAmbiguousName" $
   lambda "an" $
     Serialization.dotSep @@ Lists.map writeIdentifier (unwrap Java._AmbiguousName @@ var "an")
 
-writeExpressionName :: TBinding (Java.ExpressionName -> Expr)
+writeExpressionName :: TTermDefinition (Java.ExpressionName -> Expr)
 writeExpressionName = def "writeExpressionName" $
   lambda "en" $ lets [
     "mqual">: project Java._ExpressionName Java._ExpressionName_qualifier @@ var "en",
@@ -808,7 +808,7 @@ writeExpressionName = def "writeExpressionName" $
       Maybes.map writeAmbiguousName (var "mqual"),
       just $ writeIdentifier @@ var "id"])
 
-writeTypeName :: TBinding (Java.TypeName -> Expr)
+writeTypeName :: TTermDefinition (Java.TypeName -> Expr)
 writeTypeName = def "writeTypeName" $
   lambda "tn" $ lets [
     "id">: project Java._TypeName Java._TypeName_identifier @@ var "tn",
@@ -817,22 +817,22 @@ writeTypeName = def "writeTypeName" $
       Maybes.map writePackageOrTypeName (var "mqual"),
       just $ writeTypeIdentifier @@ var "id"])
 
-writePackageName :: TBinding (Java.PackageName -> Expr)
+writePackageName :: TTermDefinition (Java.PackageName -> Expr)
 writePackageName = def "writePackageName" $
   lambda "pn" $
     Serialization.dotSep @@ Lists.map writeIdentifier (unwrap Java._PackageName @@ var "pn")
 
-writePackageOrTypeName :: TBinding (Java.PackageOrTypeName -> Expr)
+writePackageOrTypeName :: TTermDefinition (Java.PackageOrTypeName -> Expr)
 writePackageOrTypeName = def "writePackageOrTypeName" $
   lambda "potn" $
     Serialization.dotSep @@ Lists.map writeIdentifier (unwrap Java._PackageOrTypeName @@ var "potn")
 
-writeAnnotatedIdentifier :: TBinding (Java.AnnotatedIdentifier -> Expr)
+writeAnnotatedIdentifier :: TTermDefinition (Java.AnnotatedIdentifier -> Expr)
 writeAnnotatedIdentifier = def "writeAnnotatedIdentifier" $
   lambda "ai" $
     writeIdentifier @@ (project Java._AnnotatedIdentifier Java._AnnotatedIdentifier_identifier @@ var "ai")
 
-writeTypeVariable :: TBinding (Java.TypeVariable -> Expr)
+writeTypeVariable :: TTermDefinition (Java.TypeVariable -> Expr)
 writeTypeVariable = def "writeTypeVariable" $
   lambda "tv" $ lets [
     "anns">: project Java._TypeVariable Java._TypeVariable_annotations @@ var "tv",
@@ -844,7 +844,7 @@ writeTypeVariable = def "writeTypeVariable" $
       just $ writeTypeIdentifier @@ var "id"])
 
 
-writeClassModifier :: TBinding (Java.ClassModifier -> Expr)
+writeClassModifier :: TTermDefinition (Java.ClassModifier -> Expr)
 writeClassModifier = def "writeClassModifier" $
   lambda "m" $
     cases Java._ClassModifier (var "m") Nothing [
@@ -857,7 +857,7 @@ writeClassModifier = def "writeClassModifier" $
       Java._ClassModifier_final>>: constant $ Serialization.cst @@ string "final",
       Java._ClassModifier_strictfp>>: constant $ Serialization.cst @@ string "strictfp"]
 
-writeFieldModifier :: TBinding (Java.FieldModifier -> Expr)
+writeFieldModifier :: TTermDefinition (Java.FieldModifier -> Expr)
 writeFieldModifier = def "writeFieldModifier" $
   lambda "m" $
     cases Java._FieldModifier (var "m") Nothing [
@@ -870,7 +870,7 @@ writeFieldModifier = def "writeFieldModifier" $
       Java._FieldModifier_transient>>: constant $ Serialization.cst @@ string "transient",
       Java._FieldModifier_volatile>>: constant $ Serialization.cst @@ string "volatile"]
 
-writeMethodModifier :: TBinding (Java.MethodModifier -> Expr)
+writeMethodModifier :: TTermDefinition (Java.MethodModifier -> Expr)
 writeMethodModifier = def "writeMethodModifier" $
   lambda "m" $
     cases Java._MethodModifier (var "m") Nothing [
@@ -884,7 +884,7 @@ writeMethodModifier = def "writeMethodModifier" $
       Java._MethodModifier_native>>: constant $ Serialization.cst @@ string "native",
       Java._MethodModifier_strictfb>>: constant $ Serialization.cst @@ string "strictfb"]
 
-writeConstructorModifier :: TBinding (Java.ConstructorModifier -> Expr)
+writeConstructorModifier :: TTermDefinition (Java.ConstructorModifier -> Expr)
 writeConstructorModifier = def "writeConstructorModifier" $
   lambda "m" $
     cases Java._ConstructorModifier (var "m") Nothing [
@@ -893,7 +893,7 @@ writeConstructorModifier = def "writeConstructorModifier" $
       Java._ConstructorModifier_protected>>: constant $ Serialization.cst @@ string "protected",
       Java._ConstructorModifier_private>>: constant $ Serialization.cst @@ string "private"]
 
-writeInterfaceModifier :: TBinding (Java.InterfaceModifier -> Expr)
+writeInterfaceModifier :: TTermDefinition (Java.InterfaceModifier -> Expr)
 writeInterfaceModifier = def "writeInterfaceModifier" $
   lambda "m" $
     cases Java._InterfaceModifier (var "m") Nothing [
@@ -905,7 +905,7 @@ writeInterfaceModifier = def "writeInterfaceModifier" $
       Java._InterfaceModifier_static>>: constant $ Serialization.cst @@ string "static",
       Java._InterfaceModifier_strictfb>>: constant $ Serialization.cst @@ string "strictfb"]
 
-writeInterfaceMethodModifier :: TBinding (Java.InterfaceMethodModifier -> Expr)
+writeInterfaceMethodModifier :: TTermDefinition (Java.InterfaceMethodModifier -> Expr)
 writeInterfaceMethodModifier = def "writeInterfaceMethodModifier" $
   lambda "m" $
     cases Java._InterfaceMethodModifier (var "m") Nothing [
@@ -918,12 +918,12 @@ writeInterfaceMethodModifier = def "writeInterfaceMethodModifier" $
       Java._InterfaceMethodModifier_strictfp>>: constant $ Serialization.cst @@ string "strictfp"]
 
 
-writeAdditionalBound :: TBinding (Java.AdditionalBound -> Expr)
+writeAdditionalBound :: TTermDefinition (Java.AdditionalBound -> Expr)
 writeAdditionalBound = def "writeAdditionalBound" $
   lambda "ab" $
     Serialization.spaceSep @@ list [Serialization.cst @@ string "&", writeInterfaceType @@ (unwrap Java._AdditionalBound @@ var "ab")]
 
-writeAdditiveExpression :: TBinding (Java.AdditiveExpression -> Expr)
+writeAdditiveExpression :: TTermDefinition (Java.AdditiveExpression -> Expr)
 writeAdditiveExpression = def "writeAdditiveExpression" $
   lambda "e" $
     cases Java._AdditiveExpression (var "e") Nothing [
@@ -937,7 +937,7 @@ writeAdditiveExpression = def "writeAdditiveExpression" $
           (writeAdditiveExpression @@ (project Java._AdditiveExpression_Binary Java._AdditiveExpression_Binary_lhs @@ var "b")) @@
           (writeMultiplicativeExpression @@ (project Java._AdditiveExpression_Binary Java._AdditiveExpression_Binary_rhs @@ var "b"))]
 
-writeMultiplicativeExpression :: TBinding (Java.MultiplicativeExpression -> Expr)
+writeMultiplicativeExpression :: TTermDefinition (Java.MultiplicativeExpression -> Expr)
 writeMultiplicativeExpression = def "writeMultiplicativeExpression" $
   lambda "e" $
     cases Java._MultiplicativeExpression (var "e") Nothing [
@@ -955,7 +955,7 @@ writeMultiplicativeExpression = def "writeMultiplicativeExpression" $
           (writeMultiplicativeExpression @@ (project Java._MultiplicativeExpression_Binary Java._MultiplicativeExpression_Binary_lhs @@ var "b")) @@
           (writeUnaryExpression @@ (project Java._MultiplicativeExpression_Binary Java._MultiplicativeExpression_Binary_rhs @@ var "b"))]
 
-writeUnaryExpression :: TBinding (Java.UnaryExpression -> Expr)
+writeUnaryExpression :: TTermDefinition (Java.UnaryExpression -> Expr)
 writeUnaryExpression = def "writeUnaryExpression" $
   lambda "e" $
     cases Java._UnaryExpression (var "e") Nothing [
@@ -965,7 +965,7 @@ writeUnaryExpression = def "writeUnaryExpression" $
       Java._UnaryExpression_minus>>: lambda "m" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "-", writeUnaryExpression @@ var "m"],
       Java._UnaryExpression_other>>: lambda "o" $ writeUnaryExpressionNotPlusMinus @@ var "o"]
 
-writeUnaryExpressionNotPlusMinus :: TBinding (Java.UnaryExpressionNotPlusMinus -> Expr)
+writeUnaryExpressionNotPlusMinus :: TTermDefinition (Java.UnaryExpressionNotPlusMinus -> Expr)
 writeUnaryExpressionNotPlusMinus = def "writeUnaryExpressionNotPlusMinus" $
   lambda "e" $
     cases Java._UnaryExpressionNotPlusMinus (var "e") Nothing [
@@ -974,7 +974,7 @@ writeUnaryExpressionNotPlusMinus = def "writeUnaryExpressionNotPlusMinus" $
       Java._UnaryExpressionNotPlusMinus_not>>: lambda "u" $ Serialization.noSep @@ list [Serialization.cst @@ string "!", writeUnaryExpression @@ var "u"],
       Java._UnaryExpressionNotPlusMinus_cast>>: lambda "c" $ writeCastExpression @@ var "c"]
 
-writePostfixExpression :: TBinding (Java.PostfixExpression -> Expr)
+writePostfixExpression :: TTermDefinition (Java.PostfixExpression -> Expr)
 writePostfixExpression = def "writePostfixExpression" $
   lambda "e" $
     cases Java._PostfixExpression (var "e") Nothing [
@@ -983,32 +983,32 @@ writePostfixExpression = def "writePostfixExpression" $
       Java._PostfixExpression_postIncrement>>: lambda "pi" $ writePostIncrementExpression @@ var "pi",
       Java._PostfixExpression_postDecrement>>: lambda "pd" $ writePostDecrementExpression @@ var "pd"]
 
-writeAndExpression :: TBinding (Java.AndExpression -> Expr)
+writeAndExpression :: TTermDefinition (Java.AndExpression -> Expr)
 writeAndExpression = def "writeAndExpression" $
   lambda "ae" $
     Serialization.infixWsList @@ string "&" @@ Lists.map writeEqualityExpression (unwrap Java._AndExpression @@ var "ae")
 
-writeExclusiveOrExpression :: TBinding (Java.ExclusiveOrExpression -> Expr)
+writeExclusiveOrExpression :: TTermDefinition (Java.ExclusiveOrExpression -> Expr)
 writeExclusiveOrExpression = def "writeExclusiveOrExpression" $
   lambda "eoe" $
     Serialization.infixWsList @@ string "^" @@ Lists.map writeAndExpression (unwrap Java._ExclusiveOrExpression @@ var "eoe")
 
-writeInclusiveOrExpression :: TBinding (Java.InclusiveOrExpression -> Expr)
+writeInclusiveOrExpression :: TTermDefinition (Java.InclusiveOrExpression -> Expr)
 writeInclusiveOrExpression = def "writeInclusiveOrExpression" $
   lambda "ioe" $
     Serialization.infixWsList @@ string "|" @@ Lists.map writeExclusiveOrExpression (unwrap Java._InclusiveOrExpression @@ var "ioe")
 
-writeConditionalAndExpression :: TBinding (Java.ConditionalAndExpression -> Expr)
+writeConditionalAndExpression :: TTermDefinition (Java.ConditionalAndExpression -> Expr)
 writeConditionalAndExpression = def "writeConditionalAndExpression" $
   lambda "cae" $
     Serialization.infixWsList @@ string "&&" @@ Lists.map writeInclusiveOrExpression (unwrap Java._ConditionalAndExpression @@ var "cae")
 
-writeConditionalOrExpression :: TBinding (Java.ConditionalOrExpression -> Expr)
+writeConditionalOrExpression :: TTermDefinition (Java.ConditionalOrExpression -> Expr)
 writeConditionalOrExpression = def "writeConditionalOrExpression" $
   lambda "coe" $
     Serialization.infixWsList @@ string "||" @@ Lists.map writeConditionalAndExpression (unwrap Java._ConditionalOrExpression @@ var "coe")
 
-writeEqualityExpression :: TBinding (Java.EqualityExpression -> Expr)
+writeEqualityExpression :: TTermDefinition (Java.EqualityExpression -> Expr)
 writeEqualityExpression = def "writeEqualityExpression" $
   lambda "e" $
     cases Java._EqualityExpression (var "e") Nothing [
@@ -1022,7 +1022,7 @@ writeEqualityExpression = def "writeEqualityExpression" $
           (writeEqualityExpression @@ (project Java._EqualityExpression_Binary Java._EqualityExpression_Binary_lhs @@ var "b")) @@
           (writeRelationalExpression @@ (project Java._EqualityExpression_Binary Java._EqualityExpression_Binary_rhs @@ var "b"))]
 
-writeRelationalExpression :: TBinding (Java.RelationalExpression -> Expr)
+writeRelationalExpression :: TTermDefinition (Java.RelationalExpression -> Expr)
 writeRelationalExpression = def "writeRelationalExpression" $
   lambda "e" $
     cases Java._RelationalExpression (var "e") Nothing [
@@ -1033,42 +1033,42 @@ writeRelationalExpression = def "writeRelationalExpression" $
       Java._RelationalExpression_greaterThanEqual>>: lambda "gte" $ writeRelationalExpression_GreaterThanEqual @@ var "gte",
       Java._RelationalExpression_instanceof>>: lambda "i" $ writeRelationalExpression_InstanceOf @@ var "i"]
 
-writeRelationalExpression_LessThan :: TBinding (Java.RelationalExpression_LessThan -> Expr)
+writeRelationalExpression_LessThan :: TTermDefinition (Java.RelationalExpression_LessThan -> Expr)
 writeRelationalExpression_LessThan = def "writeRelationalExpression_LessThan" $
   lambda "lt" $
     Serialization.infixWs @@ string "<" @@
       (writeRelationalExpression @@ (project Java._RelationalExpression_LessThan Java._RelationalExpression_LessThan_lhs @@ var "lt")) @@
       (writeShiftExpression @@ (project Java._RelationalExpression_LessThan Java._RelationalExpression_LessThan_rhs @@ var "lt"))
 
-writeRelationalExpression_GreaterThan :: TBinding (Java.RelationalExpression_GreaterThan -> Expr)
+writeRelationalExpression_GreaterThan :: TTermDefinition (Java.RelationalExpression_GreaterThan -> Expr)
 writeRelationalExpression_GreaterThan = def "writeRelationalExpression_GreaterThan" $
   lambda "gt" $
     Serialization.infixWs @@ string ">" @@
       (writeRelationalExpression @@ (project Java._RelationalExpression_GreaterThan Java._RelationalExpression_GreaterThan_lhs @@ var "gt")) @@
       (writeShiftExpression @@ (project Java._RelationalExpression_GreaterThan Java._RelationalExpression_GreaterThan_rhs @@ var "gt"))
 
-writeRelationalExpression_LessThanEqual :: TBinding (Java.RelationalExpression_LessThanEqual -> Expr)
+writeRelationalExpression_LessThanEqual :: TTermDefinition (Java.RelationalExpression_LessThanEqual -> Expr)
 writeRelationalExpression_LessThanEqual = def "writeRelationalExpression_LessThanEqual" $
   lambda "lte" $
     Serialization.infixWs @@ string "<=" @@
       (writeRelationalExpression @@ (project Java._RelationalExpression_LessThanEqual Java._RelationalExpression_LessThanEqual_lhs @@ var "lte")) @@
       (writeShiftExpression @@ (project Java._RelationalExpression_LessThanEqual Java._RelationalExpression_LessThanEqual_rhs @@ var "lte"))
 
-writeRelationalExpression_GreaterThanEqual :: TBinding (Java.RelationalExpression_GreaterThanEqual -> Expr)
+writeRelationalExpression_GreaterThanEqual :: TTermDefinition (Java.RelationalExpression_GreaterThanEqual -> Expr)
 writeRelationalExpression_GreaterThanEqual = def "writeRelationalExpression_GreaterThanEqual" $
   lambda "gte" $
     Serialization.infixWs @@ string ">=" @@
       (writeRelationalExpression @@ (project Java._RelationalExpression_GreaterThanEqual Java._RelationalExpression_GreaterThanEqual_lhs @@ var "gte")) @@
       (writeShiftExpression @@ (project Java._RelationalExpression_GreaterThanEqual Java._RelationalExpression_GreaterThanEqual_rhs @@ var "gte"))
 
-writeRelationalExpression_InstanceOf :: TBinding (Java.RelationalExpression_InstanceOf -> Expr)
+writeRelationalExpression_InstanceOf :: TTermDefinition (Java.RelationalExpression_InstanceOf -> Expr)
 writeRelationalExpression_InstanceOf = def "writeRelationalExpression_InstanceOf" $
   lambda "io" $
     Serialization.infixWs @@ string "instanceof" @@
       (writeRelationalExpression @@ (project Java._RelationalExpression_InstanceOf Java._RelationalExpression_InstanceOf_lhs @@ var "io")) @@
       (writeReferenceType @@ (project Java._RelationalExpression_InstanceOf Java._RelationalExpression_InstanceOf_rhs @@ var "io"))
 
-writeShiftExpression :: TBinding (Java.ShiftExpression -> Expr)
+writeShiftExpression :: TTermDefinition (Java.ShiftExpression -> Expr)
 writeShiftExpression = def "writeShiftExpression" $
   lambda "e" $
     cases Java._ShiftExpression (var "e") Nothing [
@@ -1086,14 +1086,14 @@ writeShiftExpression = def "writeShiftExpression" $
           (writeShiftExpression @@ (project Java._ShiftExpression_Binary Java._ShiftExpression_Binary_lhs @@ var "b")) @@
           (writeAdditiveExpression @@ (project Java._ShiftExpression_Binary Java._ShiftExpression_Binary_rhs @@ var "b"))]
 
-writeLambdaExpression :: TBinding (Java.LambdaExpression -> Expr)
+writeLambdaExpression :: TTermDefinition (Java.LambdaExpression -> Expr)
 writeLambdaExpression = def "writeLambdaExpression" $
   lambda "le" $ lets [
     "params">: project Java._LambdaExpression Java._LambdaExpression_parameters @@ var "le",
     "body">: project Java._LambdaExpression Java._LambdaExpression_body @@ var "le"] $
     Serialization.infixWs @@ string "->" @@ (writeLambdaParameters @@ var "params") @@ (writeLambdaBody @@ var "body")
 
-writeAssignment :: TBinding (Java.Assignment -> Expr)
+writeAssignment :: TTermDefinition (Java.Assignment -> Expr)
 writeAssignment = def "writeAssignment" $
   lambda "a" $ lets [
     "lhs">: project Java._Assignment Java._Assignment_lhs @@ var "a",
@@ -1115,7 +1115,7 @@ writeAssignment = def "writeAssignment" $
     Serialization.infixWs @@ var "ctop" @@ (writeLeftHandSide @@ var "lhs") @@ (writeExpression @@ var "rhs")
 
 
-writeStatement :: TBinding (Java.Statement -> Expr)
+writeStatement :: TTermDefinition (Java.Statement -> Expr)
 writeStatement = def "writeStatement" $
   lambda "s" $
     cases Java._Statement (var "s") Nothing [
@@ -1126,7 +1126,7 @@ writeStatement = def "writeStatement" $
       Java._Statement_while>>: lambda "w" $ writeWhileStatement @@ var "w",
       Java._Statement_for>>: lambda "f" $ writeForStatement @@ var "f"]
 
-writeStatementWithoutTrailingSubstatement :: TBinding (Java.StatementWithoutTrailingSubstatement -> Expr)
+writeStatementWithoutTrailingSubstatement :: TTermDefinition (Java.StatementWithoutTrailingSubstatement -> Expr)
 writeStatementWithoutTrailingSubstatement = def "writeStatementWithoutTrailingSubstatement" $
   lambda "s" $
     cases Java._StatementWithoutTrailingSubstatement (var "s") Nothing [
@@ -1143,7 +1143,7 @@ writeStatementWithoutTrailingSubstatement = def "writeStatementWithoutTrailingSu
       Java._StatementWithoutTrailingSubstatement_throw>>: lambda "t" $ writeThrowStatement @@ var "t",
       Java._StatementWithoutTrailingSubstatement_try>>: lambda "t" $ writeTryStatement @@ var "t"]
 
-writeStatementExpression :: TBinding (Java.StatementExpression -> Expr)
+writeStatementExpression :: TTermDefinition (Java.StatementExpression -> Expr)
 writeStatementExpression = def "writeStatementExpression" $
   lambda "e" $
     cases Java._StatementExpression (var "e") Nothing [
@@ -1155,17 +1155,17 @@ writeStatementExpression = def "writeStatementExpression" $
       Java._StatementExpression_methodInvocation>>: lambda "m" $ writeMethodInvocation @@ var "m",
       Java._StatementExpression_classInstanceCreation>>: lambda "cic" $ writeClassInstanceCreationExpression @@ var "cic"]
 
-writeExpressionStatement :: TBinding (Java.ExpressionStatement -> Expr)
+writeExpressionStatement :: TTermDefinition (Java.ExpressionStatement -> Expr)
 writeExpressionStatement = def "writeExpressionStatement" $
   lambda "es" $
     Serialization.withSemi @@ (writeStatementExpression @@ (unwrap Java._ExpressionStatement @@ var "es"))
 
-writeBlock :: TBinding (Java.Block -> Expr)
+writeBlock :: TTermDefinition (Java.Block -> Expr)
 writeBlock = def "writeBlock" $
   lambda "b" $
     Serialization.curlyBlock @@ Serialization.fullBlockStyle @@ (Serialization.newlineSep @@ Lists.map writeBlockStatement (unwrap Java._Block @@ var "b"))
 
-writeBlockStatement :: TBinding (Java.BlockStatement -> Expr)
+writeBlockStatement :: TTermDefinition (Java.BlockStatement -> Expr)
 writeBlockStatement = def "writeBlockStatement" $
   lambda "s" $
     cases Java._BlockStatement (var "s") Nothing [
@@ -1173,12 +1173,12 @@ writeBlockStatement = def "writeBlockStatement" $
       Java._BlockStatement_class>>: lambda "cd" $ writeClassDeclaration @@ var "cd",
       Java._BlockStatement_statement>>: lambda "s" $ writeStatement @@ var "s"]
 
-writeLocalVariableDeclarationStatement :: TBinding (Java.LocalVariableDeclarationStatement -> Expr)
+writeLocalVariableDeclarationStatement :: TTermDefinition (Java.LocalVariableDeclarationStatement -> Expr)
 writeLocalVariableDeclarationStatement = def "writeLocalVariableDeclarationStatement" $
   lambda "lvds" $
     Serialization.withSemi @@ (writeLocalVariableDeclaration @@ (unwrap Java._LocalVariableDeclarationStatement @@ var "lvds"))
 
-writeLocalVariableDeclaration :: TBinding (Java.LocalVariableDeclaration -> Expr)
+writeLocalVariableDeclaration :: TTermDefinition (Java.LocalVariableDeclaration -> Expr)
 writeLocalVariableDeclaration = def "writeLocalVariableDeclaration" $
   lambda "lvd" $ lets [
     "mods">: project Java._LocalVariableDeclaration Java._LocalVariableDeclaration_modifiers @@ var "lvd",
@@ -1189,7 +1189,7 @@ writeLocalVariableDeclaration = def "writeLocalVariableDeclaration" $
       just $ writeLocalName @@ var "t",
       just $ Serialization.commaSep @@ Serialization.inlineStyle @@ Lists.map writeVariableDeclarator (var "decls")])
 
-writeReturnStatement :: TBinding (Java.ReturnStatement -> Expr)
+writeReturnStatement :: TTermDefinition (Java.ReturnStatement -> Expr)
 writeReturnStatement = def "writeReturnStatement" $
   lambda "rs" $ lets [
     "mex">: unwrap Java._ReturnStatement @@ var "rs"] $
@@ -1197,14 +1197,14 @@ writeReturnStatement = def "writeReturnStatement" $
       just $ Serialization.cst @@ string "return",
       Maybes.map writeExpression (var "mex")]))
 
-writeThrowStatement :: TBinding (Java.ThrowStatement -> Expr)
+writeThrowStatement :: TTermDefinition (Java.ThrowStatement -> Expr)
 writeThrowStatement = def "writeThrowStatement" $
   lambda "ts" $
     Serialization.withSemi @@ (Serialization.spaceSep @@ list [
       Serialization.cst @@ string "throw",
       writeExpression @@ (unwrap Java._ThrowStatement @@ var "ts")])
 
-writeBreakStatement :: TBinding (Java.BreakStatement -> Expr)
+writeBreakStatement :: TTermDefinition (Java.BreakStatement -> Expr)
 writeBreakStatement = def "writeBreakStatement" $
   lambda "bs" $ lets [
     "mlabel">: unwrap Java._BreakStatement @@ var "bs"] $
@@ -1212,7 +1212,7 @@ writeBreakStatement = def "writeBreakStatement" $
       just $ Serialization.cst @@ string "break",
       Maybes.map writeIdentifier (var "mlabel")]))
 
-writeContinueStatement :: TBinding (Java.ContinueStatement -> Expr)
+writeContinueStatement :: TTermDefinition (Java.ContinueStatement -> Expr)
 writeContinueStatement = def "writeContinueStatement" $
   lambda "cs" $ lets [
     "mlabel">: unwrap Java._ContinueStatement @@ var "cs"] $
@@ -1220,7 +1220,7 @@ writeContinueStatement = def "writeContinueStatement" $
       just $ Serialization.cst @@ string "continue",
       Maybes.map writeIdentifier (var "mlabel")]))
 
-writeIfThenStatement :: TBinding (Java.IfThenStatement -> Expr)
+writeIfThenStatement :: TTermDefinition (Java.IfThenStatement -> Expr)
 writeIfThenStatement = def "writeIfThenStatement" $
   lambda "its" $ lets [
     "cond">: project Java._IfThenStatement Java._IfThenStatement_expression @@ var "its",
@@ -1231,7 +1231,7 @@ writeIfThenStatement = def "writeIfThenStatement" $
       Serialization.curlyBlock @@ Serialization.fullBlockStyle @@ (writeStatement @@ var "thn")]
 
 
-writePrimaryNoNewArrayExpressionExpression :: TBinding (Java.PrimaryNoNewArrayExpression -> Expr)
+writePrimaryNoNewArrayExpressionExpression :: TTermDefinition (Java.PrimaryNoNewArrayExpression -> Expr)
 writePrimaryNoNewArrayExpressionExpression = def "writePrimaryNoNewArrayExpressionExpression" $
   lambda "p" $
     cases Java._PrimaryNoNewArrayExpression (var "p") Nothing [
@@ -1246,7 +1246,7 @@ writePrimaryNoNewArrayExpressionExpression = def "writePrimaryNoNewArrayExpressi
       Java._PrimaryNoNewArrayExpression_methodInvocation>>: lambda "mi" $ writeMethodInvocation @@ var "mi",
       Java._PrimaryNoNewArrayExpression_methodReference>>: lambda "mr" $ writeMethodReference @@ var "mr"]
 
-writeFieldAccess :: TBinding (Java.FieldAccess -> Expr)
+writeFieldAccess :: TTermDefinition (Java.FieldAccess -> Expr)
 writeFieldAccess = def "writeFieldAccess" $
   lambda "fa" $ lets [
     "qual">: project Java._FieldAccess Java._FieldAccess_qualifier @@ var "fa",
@@ -1257,12 +1257,12 @@ writeFieldAccess = def "writeFieldAccess" $
       Java._FieldAccess_Qualifier_typed>>: lambda "tn" $ Serialization.dotSep @@ list [writeTypeName @@ var "tn", Serialization.cst @@ string "super", writeIdentifier @@ var "id"]]
 
 
-writeMarkerAnnotation :: TBinding (Java.MarkerAnnotation -> Expr)
+writeMarkerAnnotation :: TTermDefinition (Java.MarkerAnnotation -> Expr)
 writeMarkerAnnotation = def "writeMarkerAnnotation" $
   lambda "ma" $
     Serialization.prefix @@ string "@" @@ (writeTypeName @@ (unwrap Java._MarkerAnnotation @@ var "ma"))
 
-writeNormalAnnotation :: TBinding (Java.NormalAnnotation -> Expr)
+writeNormalAnnotation :: TTermDefinition (Java.NormalAnnotation -> Expr)
 writeNormalAnnotation = def "writeNormalAnnotation" $
   lambda "na" $ lets [
     "tname">: project Java._NormalAnnotation Java._NormalAnnotation_typeName @@ var "na",
@@ -1271,7 +1271,7 @@ writeNormalAnnotation = def "writeNormalAnnotation" $
       writeTypeName @@ var "tname",
       Serialization.commaSep @@ Serialization.inlineStyle @@ Lists.map writeElementValuePair (var "pairs")])
 
-writeSingleElementAnnotation :: TBinding (Java.SingleElementAnnotation -> Expr)
+writeSingleElementAnnotation :: TTermDefinition (Java.SingleElementAnnotation -> Expr)
 writeSingleElementAnnotation = def "writeSingleElementAnnotation" $
   lambda "sea" $ lets [
     "tname">: project Java._SingleElementAnnotation Java._SingleElementAnnotation_name @@ var "sea",
@@ -1283,7 +1283,7 @@ writeSingleElementAnnotation = def "writeSingleElementAnnotation" $
         Serialization.parenList @@ false @@ list [writeElementValue @@ var "v"]]))
       (var "mv")
 
-writeElementValue :: TBinding (Java.ElementValue -> Expr)
+writeElementValue :: TTermDefinition (Java.ElementValue -> Expr)
 writeElementValue = def "writeElementValue" $
   lambda "ev" $
     cases Java._ElementValue (var "ev") Nothing [
@@ -1292,7 +1292,7 @@ writeElementValue = def "writeElementValue" $
         Serialization.commaSep @@ Serialization.inlineStyle @@ Lists.map writeElementValue (unwrap Java._ElementValueArrayInitializer @@ var "evai"),
       Java._ElementValue_annotation>>: lambda "ann" $ writeAnnotation @@ var "ann"]
 
-writeElementValuePair :: TBinding (Java.ElementValuePair -> Expr)
+writeElementValuePair :: TTermDefinition (Java.ElementValuePair -> Expr)
 writeElementValuePair = def "writeElementValuePair" $
   lambda "evp" $ lets [
     "k">: project Java._ElementValuePair Java._ElementValuePair_key @@ var "evp",
@@ -1300,7 +1300,7 @@ writeElementValuePair = def "writeElementValuePair" $
     Serialization.infixWs @@ string "=" @@ (writeIdentifier @@ var "k") @@ (writeElementValue @@ var "v")
 
 
-writePrimitiveTypeWithAnnotations :: TBinding (Java.PrimitiveTypeWithAnnotations -> Expr)
+writePrimitiveTypeWithAnnotations :: TTermDefinition (Java.PrimitiveTypeWithAnnotations -> Expr)
 writePrimitiveTypeWithAnnotations = def "writePrimitiveTypeWithAnnotations" $
   lambda "ptwa" $ lets [
     "pt">: project Java._PrimitiveTypeWithAnnotations Java._PrimitiveTypeWithAnnotations_type @@ var "ptwa",
@@ -1309,7 +1309,7 @@ writePrimitiveTypeWithAnnotations = def "writePrimitiveTypeWithAnnotations" $
       Logic.ifElse (Lists.null (var "anns")) nothing (just $ Serialization.spaceSep @@ Lists.map writeAnnotation (var "anns")),
       just $ writePrimitiveType @@ var "pt"])
 
-writeClassType :: TBinding (Java.ClassType -> Expr)
+writeClassType :: TTermDefinition (Java.ClassType -> Expr)
 writeClassType = def "writeClassType" $
   lambda "ct" $ lets [
     "anns">: project Java._ClassType Java._ClassType_annotations @@ var "ct",
@@ -1326,7 +1326,7 @@ writeClassType = def "writeClassType" $
         just $ var "qualifiedId"]),
       Logic.ifElse (Lists.null (var "args")) nothing (just $ Serialization.angleBracesList @@ Serialization.inlineStyle @@ Lists.map writeTypeArgument (var "args"))])
 
-writeArrayType :: TBinding (Java.ArrayType -> Expr)
+writeArrayType :: TTermDefinition (Java.ArrayType -> Expr)
 writeArrayType = def "writeArrayType" $
   lambda "at" $ lets [
     "dims">: project Java._ArrayType Java._ArrayType_dims @@ var "at",
@@ -1337,12 +1337,12 @@ writeArrayType = def "writeArrayType" $
       Java._ArrayType_Variant_variable>>: lambda "tv" $ writeTypeVariable @@ var "tv"]] $
     Serialization.noSep @@ list [var "varExpr", writeDims @@ var "dims"]
 
-writeDims :: TBinding (Java.Dims -> Expr)
+writeDims :: TTermDefinition (Java.Dims -> Expr)
 writeDims = def "writeDims" $
   lambda "d" $
     Serialization.noSep @@ Lists.map (lambda "_" $ Serialization.cst @@ string "[]") (unwrap Java._Dims @@ var "d")
 
-writeTypeBound :: TBinding (Java.TypeBound -> Expr)
+writeTypeBound :: TTermDefinition (Java.TypeBound -> Expr)
 writeTypeBound = def "writeTypeBound" $
   lambda "b" $
     cases Java._TypeBound (var "b") Nothing [
@@ -1354,7 +1354,7 @@ writeTypeBound = def "writeTypeBound" $
           (writeClassOrInterfaceType @@ var "cit")
           (Serialization.spaceSep @@ Lists.cons (writeClassOrInterfaceType @@ var "cit") (Lists.map writeAdditionalBound (var "additional")))]
 
-writeTypeParameter :: TBinding (Java.TypeParameter -> Expr)
+writeTypeParameter :: TTermDefinition (Java.TypeParameter -> Expr)
 writeTypeParameter = def "writeTypeParameter" $
   lambda "tp" $ lets [
     "mods">: project Java._TypeParameter Java._TypeParameter_modifiers @@ var "tp",
@@ -1365,7 +1365,7 @@ writeTypeParameter = def "writeTypeParameter" $
       just $ writeTypeIdentifier @@ var "id",
       Maybes.map (lambda "b" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "extends", writeTypeBound @@ var "b"]) (var "bound")])
 
-writeWildcard :: TBinding (Java.Wildcard -> Expr)
+writeWildcard :: TTermDefinition (Java.Wildcard -> Expr)
 writeWildcard = def "writeWildcard" $
   lambda "w" $ lets [
     "anns">: project Java._Wildcard Java._Wildcard_annotations @@ var "w",
@@ -1376,13 +1376,13 @@ writeWildcard = def "writeWildcard" $
       Maybes.map writeWildcardBounds (var "mbounds")])
 
 
-writeClassBody :: TBinding (Java.ClassBody -> Expr)
+writeClassBody :: TTermDefinition (Java.ClassBody -> Expr)
 writeClassBody = def "writeClassBody" $
   lambda "cb" $
     Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
       (Serialization.doubleNewlineSep @@ Lists.map writeClassBodyDeclarationWithComments (unwrap Java._ClassBody @@ var "cb"))
 
-writeClassBodyDeclaration :: TBinding (Java.ClassBodyDeclaration -> Expr)
+writeClassBodyDeclaration :: TTermDefinition (Java.ClassBodyDeclaration -> Expr)
 writeClassBodyDeclaration = def "writeClassBodyDeclaration" $
   lambda "d" $
     cases Java._ClassBodyDeclaration (var "d") Nothing [
@@ -1391,14 +1391,14 @@ writeClassBodyDeclaration = def "writeClassBodyDeclaration" $
       Java._ClassBodyDeclaration_staticInitializer>>: lambda "i" $ writeStaticInitializer @@ var "i",
       Java._ClassBodyDeclaration_constructorDeclaration>>: lambda "d" $ writeConstructorDeclaration @@ var "d"]
 
-writeClassBodyDeclarationWithComments :: TBinding (Java.ClassBodyDeclarationWithComments -> Expr)
+writeClassBodyDeclarationWithComments :: TTermDefinition (Java.ClassBodyDeclarationWithComments -> Expr)
 writeClassBodyDeclarationWithComments = def "writeClassBodyDeclarationWithComments" $
   lambda "cbdwc" $ lets [
     "d">: project Java._ClassBodyDeclarationWithComments Java._ClassBodyDeclarationWithComments_value @@ var "cbdwc",
     "mc">: project Java._ClassBodyDeclarationWithComments Java._ClassBodyDeclarationWithComments_comments @@ var "cbdwc"] $
     withComments @@ var "mc" @@ (writeClassBodyDeclaration @@ var "d")
 
-writeClassMemberDeclaration :: TBinding (Java.ClassMemberDeclaration -> Expr)
+writeClassMemberDeclaration :: TTermDefinition (Java.ClassMemberDeclaration -> Expr)
 writeClassMemberDeclaration = def "writeClassMemberDeclaration" $
   lambda "d" $
     cases Java._ClassMemberDeclaration (var "d") Nothing [
@@ -1408,7 +1408,7 @@ writeClassMemberDeclaration = def "writeClassMemberDeclaration" $
       Java._ClassMemberDeclaration_interface>>: lambda "id" $ writeInterfaceDeclaration @@ var "id",
       Java._ClassMemberDeclaration_none>>: constant $ Serialization.cst @@ string ";"]
 
-writeFieldDeclaration :: TBinding (Java.FieldDeclaration -> Expr)
+writeFieldDeclaration :: TTermDefinition (Java.FieldDeclaration -> Expr)
 writeFieldDeclaration = def "writeFieldDeclaration" $
   lambda "fd" $ lets [
     "mods">: project Java._FieldDeclaration Java._FieldDeclaration_modifiers @@ var "fd",
@@ -1419,7 +1419,7 @@ writeFieldDeclaration = def "writeFieldDeclaration" $
       just $ writeUnannType @@ var "typ",
       just $ Serialization.commaSep @@ Serialization.inlineStyle @@ Lists.map writeVariableDeclarator (var "vars")]))
 
-writeVariableDeclarator :: TBinding (Java.VariableDeclarator -> Expr)
+writeVariableDeclarator :: TTermDefinition (Java.VariableDeclarator -> Expr)
 writeVariableDeclarator = def "writeVariableDeclarator" $
   lambda "vd" $ lets [
     "id">: project Java._VariableDeclarator Java._VariableDeclarator_id @@ var "vd",
@@ -1429,7 +1429,7 @@ writeVariableDeclarator = def "writeVariableDeclarator" $
       (lambda "init" $ Serialization.infixWs @@ string "=" @@ var "idSec" @@ (writeVariableInitializer @@ var "init"))
       (var "minit")
 
-writeVariableDeclaratorId :: TBinding (Java.VariableDeclaratorId -> Expr)
+writeVariableDeclaratorId :: TTermDefinition (Java.VariableDeclaratorId -> Expr)
 writeVariableDeclaratorId = def "writeVariableDeclaratorId" $
   lambda "vdi" $ lets [
     "id">: project Java._VariableDeclaratorId Java._VariableDeclaratorId_identifier @@ var "vdi",
@@ -1438,7 +1438,7 @@ writeVariableDeclaratorId = def "writeVariableDeclaratorId" $
       just $ writeIdentifier @@ var "id",
       Maybes.map writeDims (var "mdims")])
 
-writeMethodDeclaration :: TBinding (Java.MethodDeclaration -> Expr)
+writeMethodDeclaration :: TTermDefinition (Java.MethodDeclaration -> Expr)
 writeMethodDeclaration = def "writeMethodDeclaration" $
   lambda "md" $ lets [
     "anns">: project Java._MethodDeclaration Java._MethodDeclaration_annotations @@ var "md",
@@ -1453,7 +1453,7 @@ writeMethodDeclaration = def "writeMethodDeclaration" $
       Logic.ifElse (Lists.null (var "anns")) nothing (just $ Serialization.newlineSep @@ Lists.map writeAnnotation (var "anns")),
       just $ var "headerAndBody"])
 
-writeMethodHeader :: TBinding (Java.MethodHeader -> Expr)
+writeMethodHeader :: TTermDefinition (Java.MethodHeader -> Expr)
 writeMethodHeader = def "writeMethodHeader" $
   lambda "mh" $ lets [
     "params">: project Java._MethodHeader Java._MethodHeader_parameters @@ var "mh",
@@ -1466,7 +1466,7 @@ writeMethodHeader = def "writeMethodHeader" $
       just $ writeMethodDeclarator @@ var "decl",
       Maybes.map writeThrows (var "mthrows")])
 
-writeMethodDeclarator :: TBinding (Java.MethodDeclarator -> Expr)
+writeMethodDeclarator :: TTermDefinition (Java.MethodDeclarator -> Expr)
 writeMethodDeclarator = def "writeMethodDeclarator" $
   lambda "md" $ lets [
     "id">: project Java._MethodDeclarator Java._MethodDeclarator_identifier @@ var "md",
@@ -1475,7 +1475,7 @@ writeMethodDeclarator = def "writeMethodDeclarator" $
       writeIdentifier @@ var "id",
       Serialization.parenList @@ false @@ Lists.map writeFormalParameter (var "params")]
 
-writeFormalParameter_Simple :: TBinding (Java.FormalParameter_Simple -> Expr)
+writeFormalParameter_Simple :: TTermDefinition (Java.FormalParameter_Simple -> Expr)
 writeFormalParameter_Simple = def "writeFormalParameter_Simple" $
   lambda "fps" $ lets [
     "mods">: project Java._FormalParameter_Simple Java._FormalParameter_Simple_modifiers @@ var "fps",
@@ -1486,7 +1486,7 @@ writeFormalParameter_Simple = def "writeFormalParameter_Simple" $
       just $ writeUnannType @@ var "typ",
       just $ writeVariableDeclaratorId @@ var "id"])
 
-writeConstructorDeclaration :: TBinding (Java.ConstructorDeclaration -> Expr)
+writeConstructorDeclaration :: TTermDefinition (Java.ConstructorDeclaration -> Expr)
 writeConstructorDeclaration = def "writeConstructorDeclaration" $
   lambda "cd" $ lets [
     "mods">: project Java._ConstructorDeclaration Java._ConstructorDeclaration_modifiers @@ var "cd",
@@ -1499,7 +1499,7 @@ writeConstructorDeclaration = def "writeConstructorDeclaration" $
       Maybes.map writeThrows (var "mthrows"),
       just $ writeConstructorBody @@ var "body"])
 
-writeConstructorDeclarator :: TBinding (Java.ConstructorDeclarator -> Expr)
+writeConstructorDeclarator :: TTermDefinition (Java.ConstructorDeclarator -> Expr)
 writeConstructorDeclarator = def "writeConstructorDeclarator" $
   lambda "cd" $ lets [
     "tparams">: project Java._ConstructorDeclarator Java._ConstructorDeclarator_parameters @@ var "cd",
@@ -1510,7 +1510,7 @@ writeConstructorDeclarator = def "writeConstructorDeclarator" $
       just $ writeSimpleTypeName @@ var "name",
       just $ Serialization.parenList @@ false @@ Lists.map writeFormalParameter (var "fparams")])
 
-writeConstructorBody :: TBinding (Java.ConstructorBody -> Expr)
+writeConstructorBody :: TTermDefinition (Java.ConstructorBody -> Expr)
 writeConstructorBody = def "writeConstructorBody" $
   lambda "cb" $ lets [
     "minvoc">: project Java._ConstructorBody Java._ConstructorBody_invocation @@ var "cb",
@@ -1520,13 +1520,13 @@ writeConstructorBody = def "writeConstructorBody" $
       just $ Serialization.newlineSep @@ Lists.map writeBlockStatement (var "stmts")]))
 
 
-writeInterfaceBody :: TBinding (Java.InterfaceBody -> Expr)
+writeInterfaceBody :: TTermDefinition (Java.InterfaceBody -> Expr)
 writeInterfaceBody = def "writeInterfaceBody" $
   lambda "ib" $
     Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
       (Serialization.doubleNewlineSep @@ Lists.map writeInterfaceMemberDeclaration (unwrap Java._InterfaceBody @@ var "ib"))
 
-writeInterfaceMemberDeclaration :: TBinding (Java.InterfaceMemberDeclaration -> Expr)
+writeInterfaceMemberDeclaration :: TTermDefinition (Java.InterfaceMemberDeclaration -> Expr)
 writeInterfaceMemberDeclaration = def "writeInterfaceMemberDeclaration" $
   lambda "d" $
     cases Java._InterfaceMemberDeclaration (var "d") Nothing [
@@ -1535,7 +1535,7 @@ writeInterfaceMemberDeclaration = def "writeInterfaceMemberDeclaration" $
       Java._InterfaceMemberDeclaration_class>>: lambda "cd" $ writeClassDeclaration @@ var "cd",
       Java._InterfaceMemberDeclaration_interface>>: lambda "id" $ writeInterfaceDeclaration @@ var "id"]
 
-writeInterfaceMethodDeclaration :: TBinding (Java.InterfaceMethodDeclaration -> Expr)
+writeInterfaceMethodDeclaration :: TTermDefinition (Java.InterfaceMethodDeclaration -> Expr)
 writeInterfaceMethodDeclaration = def "writeInterfaceMethodDeclaration" $
   lambda "imd" $ lets [
     "mods">: project Java._InterfaceMethodDeclaration Java._InterfaceMethodDeclaration_modifiers @@ var "imd",
@@ -1546,7 +1546,7 @@ writeInterfaceMethodDeclaration = def "writeInterfaceMethodDeclaration" $
       just $ writeMethodHeader @@ var "header",
       just $ writeMethodBody @@ var "body"])
 
-writeConstantDeclaration :: TBinding (Java.ConstantDeclaration -> Expr)
+writeConstantDeclaration :: TTermDefinition (Java.ConstantDeclaration -> Expr)
 writeConstantDeclaration = def "writeConstantDeclaration" $
   lambda "cd" $ lets [
     "mods">: project Java._ConstantDeclaration Java._ConstantDeclaration_modifiers @@ var "cd",
@@ -1558,7 +1558,7 @@ writeConstantDeclaration = def "writeConstantDeclaration" $
       just $ Serialization.commaSep @@ Serialization.inlineStyle @@ Lists.map writeVariableDeclarator (var "vars")]))
 
 
-writeNormalClassDeclaration :: TBinding (Java.NormalClassDeclaration -> Expr)
+writeNormalClassDeclaration :: TTermDefinition (Java.NormalClassDeclaration -> Expr)
 writeNormalClassDeclaration = def "writeNormalClassDeclaration" $
   lambda "ncd" $ lets [
     "mods">: project Java._NormalClassDeclaration Java._NormalClassDeclaration_modifiers @@ var "ncd",
@@ -1578,7 +1578,7 @@ writeNormalClassDeclaration = def "writeNormalClassDeclaration" $
         (just $ Serialization.spaceSep @@ list [Serialization.cst @@ string "implements", Serialization.commaSep @@ Serialization.inlineStyle @@ Lists.map writeInterfaceType (var "superi")]),
       just $ writeClassBody @@ var "body"])
 
-writeNormalInterfaceDeclaration :: TBinding (Java.NormalInterfaceDeclaration -> Expr)
+writeNormalInterfaceDeclaration :: TTermDefinition (Java.NormalInterfaceDeclaration -> Expr)
 writeNormalInterfaceDeclaration = def "writeNormalInterfaceDeclaration" $
   lambda "nid" $ lets [
     "mods">: project Java._NormalInterfaceDeclaration Java._NormalInterfaceDeclaration_modifiers @@ var "nid",
@@ -1596,7 +1596,7 @@ writeNormalInterfaceDeclaration = def "writeNormalInterfaceDeclaration" $
         (just $ Serialization.spaceSep @@ list [Serialization.cst @@ string "extends", Serialization.commaSep @@ Serialization.inlineStyle @@ Lists.map writeInterfaceType (var "extends")]),
       just $ writeInterfaceBody @@ var "body"])
 
-writeTypeDeclarationWithComments :: TBinding (Java.TypeDeclarationWithComments -> Expr)
+writeTypeDeclarationWithComments :: TTermDefinition (Java.TypeDeclarationWithComments -> Expr)
 writeTypeDeclarationWithComments = def "writeTypeDeclarationWithComments" $
   lambda "tdwc" $ lets [
     "d">: project Java._TypeDeclarationWithComments Java._TypeDeclarationWithComments_value @@ var "tdwc",
@@ -1604,7 +1604,7 @@ writeTypeDeclarationWithComments = def "writeTypeDeclarationWithComments" $
     withComments @@ var "mc" @@ (writeTypeDeclaration @@ var "d")
 
 
-writePackageDeclaration :: TBinding (Java.PackageDeclaration -> Expr)
+writePackageDeclaration :: TTermDefinition (Java.PackageDeclaration -> Expr)
 writePackageDeclaration = def "writePackageDeclaration" $
   lambda "pd" $ lets [
     "mods">: project Java._PackageDeclaration Java._PackageDeclaration_modifiers @@ var "pd",
@@ -1615,7 +1615,7 @@ writePackageDeclaration = def "writePackageDeclaration" $
         Serialization.cst @@ string "package",
         Serialization.cst @@ (Strings.intercalate (string ".") (Lists.map (lambda "id" $ unwrap Java._Identifier @@ var "id") (var "ids")))]]))
 
-writeImportDeclaration :: TBinding (Java.ImportDeclaration -> Expr)
+writeImportDeclaration :: TTermDefinition (Java.ImportDeclaration -> Expr)
 writeImportDeclaration = def "writeImportDeclaration" $
   lambda "imp" $
     cases Java._ImportDeclaration (var "imp") Nothing [
@@ -1627,7 +1627,7 @@ writeImportDeclaration = def "writeImportDeclaration" $
       Java._ImportDeclaration_singleStaticImport>>: lambda "_" $ Serialization.cst @@ string "STUB:ImportDeclarationSingleStaticImport",
       Java._ImportDeclaration_staticImportOnDemand>>: lambda "_" $ Serialization.cst @@ string "STUB:ImportDeclarationStaticImportOnDemand"]
 
-writeCompilationUnit :: TBinding (Java.CompilationUnit -> Expr)
+writeCompilationUnit :: TTermDefinition (Java.CompilationUnit -> Expr)
 writeCompilationUnit = def "writeCompilationUnit" $
   lambda "u" $
     cases Java._CompilationUnit (var "u") Nothing [
@@ -1644,7 +1644,7 @@ writeCompilationUnit = def "writeCompilationUnit" $
         Serialization.doubleNewlineSep @@ Maybes.cat (list [var "warning", var "pkgSec", var "importsSec", var "typesSec"])]
 
 
-writeMethodInvocation :: TBinding (Java.MethodInvocation -> Expr)
+writeMethodInvocation :: TTermDefinition (Java.MethodInvocation -> Expr)
 writeMethodInvocation = def "writeMethodInvocation" $
   lambda "mi" $ lets [
     "header">: project Java._MethodInvocation Java._MethodInvocation_header @@ var "mi",
@@ -1669,14 +1669,14 @@ writeMethodInvocation = def "writeMethodInvocation" $
     Serialization.noSep @@ list [var "headerSec", var "argSec"]
 
 
-writeCastExpression_NotPlusMinus :: TBinding (Java.CastExpression_NotPlusMinus -> Expr)
+writeCastExpression_NotPlusMinus :: TTermDefinition (Java.CastExpression_NotPlusMinus -> Expr)
 writeCastExpression_NotPlusMinus = def "writeCastExpression_NotPlusMinus" $
   lambda "npm" $ lets [
     "rb">: project Java._CastExpression_NotPlusMinus Java._CastExpression_NotPlusMinus_refAndBounds @@ var "npm",
     "ex">: project Java._CastExpression_NotPlusMinus Java._CastExpression_NotPlusMinus_expression @@ var "npm"] $
     Serialization.spaceSep @@ list [writeCastExpression_RefAndBounds @@ var "rb", writeUnaryExpression @@ var "ex"]
 
-writeCastExpression_RefAndBounds :: TBinding (Java.CastExpression_RefAndBounds -> Expr)
+writeCastExpression_RefAndBounds :: TTermDefinition (Java.CastExpression_RefAndBounds -> Expr)
 writeCastExpression_RefAndBounds = def "writeCastExpression_RefAndBounds" $
   lambda "rab" $ lets [
     "rt">: project Java._CastExpression_RefAndBounds Java._CastExpression_RefAndBounds_type @@ var "rab",
@@ -1685,7 +1685,7 @@ writeCastExpression_RefAndBounds = def "writeCastExpression_RefAndBounds" $
       just $ writeReferenceType @@ var "rt",
       Logic.ifElse (Lists.null (var "adds")) nothing (just $ Serialization.spaceSep @@ Lists.map writeAdditionalBound (var "adds"))])]
 
-writeCastExpression_Primitive :: TBinding (Java.CastExpression_Primitive -> Expr)
+writeCastExpression_Primitive :: TTermDefinition (Java.CastExpression_Primitive -> Expr)
 writeCastExpression_Primitive = def "writeCastExpression_Primitive" $
   lambda "cp" $ lets [
     "pt">: project Java._CastExpression_Primitive Java._CastExpression_Primitive_type @@ var "cp",
@@ -1695,7 +1695,7 @@ writeCastExpression_Primitive = def "writeCastExpression_Primitive" $
       writeUnaryExpression @@ var "ex"]
 
 
-writeClassInstanceCreationExpression :: TBinding (Java.ClassInstanceCreationExpression -> Expr)
+writeClassInstanceCreationExpression :: TTermDefinition (Java.ClassInstanceCreationExpression -> Expr)
 writeClassInstanceCreationExpression = def "writeClassInstanceCreationExpression" $
   lambda "cice" $ lets [
     "mqual">: project Java._ClassInstanceCreationExpression Java._ClassInstanceCreationExpression_qualifier @@ var "cice",
@@ -1705,14 +1705,14 @@ writeClassInstanceCreationExpression = def "writeClassInstanceCreationExpression
       (lambda "q" $ Serialization.dotSep @@ list [writeClassInstanceCreationExpression_Qualifier @@ var "q", writeUnqualifiedClassInstanceCreationExpression @@ var "e"])
       (var "mqual")
 
-writeClassInstanceCreationExpression_Qualifier :: TBinding (Java.ClassInstanceCreationExpression_Qualifier -> Expr)
+writeClassInstanceCreationExpression_Qualifier :: TTermDefinition (Java.ClassInstanceCreationExpression_Qualifier -> Expr)
 writeClassInstanceCreationExpression_Qualifier = def "writeClassInstanceCreationExpression_Qualifier" $
   lambda "q" $
     cases Java._ClassInstanceCreationExpression_Qualifier (var "q") Nothing [
       Java._ClassInstanceCreationExpression_Qualifier_expression>>: lambda "en" $ writeExpressionName @@ var "en",
       Java._ClassInstanceCreationExpression_Qualifier_primary>>: lambda "p" $ writePrimary @@ var "p"]
 
-writeUnqualifiedClassInstanceCreationExpression :: TBinding (Java.UnqualifiedClassInstanceCreationExpression -> Expr)
+writeUnqualifiedClassInstanceCreationExpression :: TTermDefinition (Java.UnqualifiedClassInstanceCreationExpression -> Expr)
 writeUnqualifiedClassInstanceCreationExpression = def "writeUnqualifiedClassInstanceCreationExpression" $
   lambda "ucice" $ lets [
     "targs">: project Java._UnqualifiedClassInstanceCreationExpression Java._UnqualifiedClassInstanceCreationExpression_typeArguments @@ var "ucice",
@@ -1725,7 +1725,7 @@ writeUnqualifiedClassInstanceCreationExpression = def "writeUnqualifiedClassInst
       just $ Serialization.noSep @@ list [writeClassOrInterfaceTypeToInstantiate @@ var "cit", Serialization.parenList @@ false @@ Lists.map writeExpression (var "args")],
       Maybes.map writeClassBody (var "mbody")])
 
-writeClassOrInterfaceTypeToInstantiate :: TBinding (Java.ClassOrInterfaceTypeToInstantiate -> Expr)
+writeClassOrInterfaceTypeToInstantiate :: TTermDefinition (Java.ClassOrInterfaceTypeToInstantiate -> Expr)
 writeClassOrInterfaceTypeToInstantiate = def "writeClassOrInterfaceTypeToInstantiate" $
   lambda "coitti" $ lets [
     "ids">: project Java._ClassOrInterfaceTypeToInstantiate Java._ClassOrInterfaceTypeToInstantiate_identifiers @@ var "coitti",
@@ -1735,7 +1735,7 @@ writeClassOrInterfaceTypeToInstantiate = def "writeClassOrInterfaceTypeToInstant
       Maybes.map writeTypeArgumentsOrDiamond (var "margs")])
 
 
-writeArrayCreationExpression :: TBinding (Java.ArrayCreationExpression -> Expr)
+writeArrayCreationExpression :: TTermDefinition (Java.ArrayCreationExpression -> Expr)
 writeArrayCreationExpression = def "writeArrayCreationExpression" $
   lambda "ace" $
     cases Java._ArrayCreationExpression (var "ace") Nothing [
@@ -1750,7 +1750,7 @@ writeArrayCreationExpression = def "writeArrayCreationExpression" $
       Java._ArrayCreationExpression_primitive>>: lambda "_" $ Serialization.cst @@ string "STUB:ArrayCreationExpression",
       Java._ArrayCreationExpression_classOrInterface>>: lambda "_" $ Serialization.cst @@ string "STUB:ArrayCreationExpression"]
 
-writeArrayInitializer :: TBinding (Java.ArrayInitializer -> Expr)
+writeArrayInitializer :: TTermDefinition (Java.ArrayInitializer -> Expr)
 writeArrayInitializer = def "writeArrayInitializer" $
   lambda "ai" $ lets [
     "groups">: unwrap Java._ArrayInitializer @@ var "ai"] $

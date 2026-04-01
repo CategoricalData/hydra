@@ -92,7 +92,7 @@ type Result a = Either (InContext Error) a
 type HydraAvroAdapter = Adapter Type Avro.Schema Term JM.Value
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 avroSchemaPhantomNs :: Namespace
@@ -114,33 +114,33 @@ module_ = Module ns elements
     Just "Hydra-to-Avro encoder: converts Hydra types and terms to Avro schemas and JSON values"
   where
     elements = [
-      toTermDefinition buildAvroField,
-      toTermDefinition emptyEncodeEnvironment,
-      toTermDefinition encodeType,
-      toTermDefinition encodeTypeInner,
-      toTermDefinition encodeTypeWithEnv,
-      toTermDefinition enumAdapter,
-      toTermDefinition err,
-      toTermDefinition extractAnnotations,
-      toTermDefinition floatAdapter,
-      toTermDefinition floatValueToDouble,
-      toTermDefinition foldFieldAdapters,
-      toTermDefinition hydraAnnotationsToAvro,
-      toTermDefinition hydraAvroAdapter,
-      toTermDefinition hydraNameToAvroName,
-      toTermDefinition integerAdapter,
-      toTermDefinition integerValueToDouble,
-      toTermDefinition literalAdapter,
-      toTermDefinition localName,
-      toTermDefinition nameNamespace,
-      toTermDefinition namedTypeAdapter,
-      toTermDefinition recordTermCoder,
-      toTermDefinition termToJsonValue,
-      toTermDefinition typeToName,
-      toTermDefinition unionAsRecordAdapter]
+      toDefinition buildAvroField,
+      toDefinition emptyEncodeEnvironment,
+      toDefinition encodeType,
+      toDefinition encodeTypeInner,
+      toDefinition encodeTypeWithEnv,
+      toDefinition enumAdapter,
+      toDefinition err,
+      toDefinition extractAnnotations,
+      toDefinition floatAdapter,
+      toDefinition floatValueToDouble,
+      toDefinition foldFieldAdapters,
+      toDefinition hydraAnnotationsToAvro,
+      toDefinition hydraAvroAdapter,
+      toDefinition hydraNameToAvroName,
+      toDefinition integerAdapter,
+      toDefinition integerValueToDouble,
+      toDefinition literalAdapter,
+      toDefinition localName,
+      toDefinition nameNamespace,
+      toDefinition namedTypeAdapter,
+      toDefinition recordTermCoder,
+      toDefinition termToJsonValue,
+      toDefinition typeToName,
+      toDefinition unionAsRecordAdapter]
 
 
-buildAvroField :: TBinding ((Name, HydraAvroAdapter) -> Avro.Field)
+buildAvroField :: TTermDefinition ((Name, HydraAvroAdapter) -> Avro.Field)
 buildAvroField = define "buildAvroField" $
   doc "Build an Avro field from a name-adapter pair" $
   lambda "nameAd" $ lets [
@@ -155,7 +155,7 @@ buildAvroField = define "buildAvroField" $
       Avro._Field_aliases>>: nothing,
       Avro._Field_annotations>>: Maps.empty]
 
-emptyEncodeEnvironment :: TBinding (M.Map Name Type -> AvroEnv.EncodeEnvironment)
+emptyEncodeEnvironment :: TTermDefinition (M.Map Name Type -> AvroEnv.EncodeEnvironment)
 emptyEncodeEnvironment = define "emptyEncodeEnvironment" $
   doc "Create an empty encode environment with the given type map" $
   lambda "typeMap" $
@@ -163,14 +163,14 @@ emptyEncodeEnvironment = define "emptyEncodeEnvironment" $
       AvroEnv._EncodeEnvironment_typeMap>>: var "typeMap",
       AvroEnv._EncodeEnvironment_emitted>>: Maps.empty]
 
-encodeType :: TBinding (Context -> M.Map Name Type -> Name -> Result HydraAvroAdapter)
+encodeType :: TTermDefinition (Context -> M.Map Name Type -> Name -> Result HydraAvroAdapter)
 encodeType = define "encodeType" $
   doc "Encode a Hydra type to an Avro schema adapter, given the type map and a root name" $
   lambda "cx" $ lambda "typeMap" $ lambda "name_" $
     Eithers.map (lambda "adEnv" $ Pairs.first (var "adEnv"))
       (encodeTypeWithEnv @@ var "cx" @@ var "name_" @@ (emptyEncodeEnvironment @@ var "typeMap"))
 
-encodeTypeInner :: TBinding (Context -> Maybe Name -> Type -> AvroEnv.EncodeEnvironment -> Result (HydraAvroAdapter, AvroEnv.EncodeEnvironment))
+encodeTypeInner :: TTermDefinition (Context -> Maybe Name -> Type -> AvroEnv.EncodeEnvironment -> Result (HydraAvroAdapter, AvroEnv.EncodeEnvironment))
 encodeTypeInner = define "encodeTypeInner" $
   doc "Core encoding logic: recursively encode a Hydra type to an Avro schema" $
   lambda "cx" $ lambda "mName" $ lambda "typ" $ lambda "env" $ lets [
@@ -301,7 +301,7 @@ encodeTypeInner = define "encodeTypeInner" $
           (Maps.lookup (var "name_") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_emitted @@ var "env"))
     ]
 
-encodeTypeWithEnv :: TBinding (Context -> Name -> AvroEnv.EncodeEnvironment -> Result (HydraAvroAdapter, AvroEnv.EncodeEnvironment))
+encodeTypeWithEnv :: TTermDefinition (Context -> Name -> AvroEnv.EncodeEnvironment -> Result (HydraAvroAdapter, AvroEnv.EncodeEnvironment))
 encodeTypeWithEnv = define "encodeTypeWithEnv" $
   doc "Encode with full environment threading. Returns the adapter and updated environment" $
   lambda "cx" $ lambda "name_" $ lambda "env" $
@@ -310,7 +310,7 @@ encodeTypeWithEnv = define "encodeTypeWithEnv" $
       (lambda "typ" $ encodeTypeInner @@ var "cx" @@ just (var "name_") @@ var "typ" @@ var "env")
       (Maps.lookup (var "name_") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_typeMap @@ var "env"))
 
-enumAdapter :: TBinding (Context -> Type -> Maybe Name -> M.Map Name Term -> [FieldType] -> AvroEnv.EncodeEnvironment -> Result (HydraAvroAdapter, AvroEnv.EncodeEnvironment))
+enumAdapter :: TTermDefinition (Context -> Type -> Maybe Name -> M.Map Name Term -> [FieldType] -> AvroEnv.EncodeEnvironment -> Result (HydraAvroAdapter, AvroEnv.EncodeEnvironment))
 enumAdapter = define "enumAdapter" $
   doc "Adapter for all-unit union types (enums)" $
   lambda "cx" $ lambda "typ" $ lambda "mName" $ lambda "annotations" $ lambda "fieldTypes" $ lambda "env0" $ lets [
@@ -343,13 +343,13 @@ enumAdapter = define "enumAdapter" $
         (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_emitted @@ var "env0")]] $
     right (pair (var "adapter_") (var "env1"))
 
-err :: TBinding (Context -> String -> Result a)
+err :: TTermDefinition (Context -> String -> Result a)
 err = define "err" $
   doc "Construct an error result with a message in context" $
   lambda "cx" $ lambda "msg" $
     Ctx.failInContext (Error.errorOther $ Error.otherError (var "msg")) (var "cx")
 
-extractAnnotations :: TBinding (Type -> (M.Map Name Term, Type))
+extractAnnotations :: TTermDefinition (Type -> (M.Map Name Term, Type))
 extractAnnotations = define "extractAnnotations" $
   doc "Extract annotations from a potentially annotated type" $
   lambda "typ" $
@@ -362,7 +362,7 @@ extractAnnotations = define "extractAnnotations" $
         "bareType">: Pairs.second (var "innerResult")] $
         pair (Maps.union (var "anns") (var "innerAnns")) (var "bareType")]
 
-floatAdapter :: TBinding (Context -> Type -> FloatType -> Result HydraAvroAdapter)
+floatAdapter :: TTermDefinition (Context -> Type -> FloatType -> Result HydraAvroAdapter)
 floatAdapter = define "floatAdapter" $
   doc "Create an adapter for float types" $
   lambda "cx" $ lambda "typ" $ lambda "ft" $ lets [
@@ -401,7 +401,7 @@ floatAdapter = define "floatAdapter" $
           cases JM._Value (var "j") Nothing [
             JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalFloat (Core.floatValueFloat64 (Literals.bigfloatToFloat64 (var "d")))))])]
 
-floatValueToDouble :: TBinding (FloatValue -> Double)
+floatValueToDouble :: TTermDefinition (FloatValue -> Double)
 floatValueToDouble = define "floatValueToDouble" $
   doc "Convert any float value to a double (bigfloat)" $
   lambda "fv" $
@@ -410,7 +410,7 @@ floatValueToDouble = define "floatValueToDouble" $
       _FloatValue_float32>>: lambda "f" $ Literals.float32ToBigfloat (var "f"),
       _FloatValue_float64>>: lambda "d" $ Literals.float64ToBigfloat (var "d")]
 
-foldFieldAdapters :: TBinding (Context -> [FieldType] -> AvroEnv.EncodeEnvironment -> Result ([(Name, HydraAvroAdapter)], AvroEnv.EncodeEnvironment))
+foldFieldAdapters :: TTermDefinition (Context -> [FieldType] -> AvroEnv.EncodeEnvironment -> Result ([(Name, HydraAvroAdapter)], AvroEnv.EncodeEnvironment))
 foldFieldAdapters = define "foldFieldAdapters" $
   doc "Fold over field types, building adapters and threading the environment" $
   lambda "cx" $ lambda "fieldTypes" $ lambda "env0" $
@@ -431,7 +431,7 @@ foldFieldAdapters = define "foldFieldAdapters" $
     emptyFieldAdapters :: [TTerm (Name, HydraAvroAdapter)]
     emptyFieldAdapters = []
 
-hydraAnnotationsToAvro :: TBinding (M.Map Name Term -> M.Map String JM.Value)
+hydraAnnotationsToAvro :: TTermDefinition (M.Map Name Term -> M.Map String JM.Value)
 hydraAnnotationsToAvro = define "hydraAnnotationsToAvro" $
   doc "Convert Hydra annotations to Avro annotation map" $
   lambda "anns" $
@@ -442,20 +442,20 @@ hydraAnnotationsToAvro = define "hydraAnnotationsToAvro" $
         pair (unwrap _Name @@ var "k") (termToJsonValue @@ var "v"))
       (Maps.toList (var "anns")))
 
-hydraAvroAdapter :: TBinding (Context -> M.Map Name Type -> Type -> Result HydraAvroAdapter)
+hydraAvroAdapter :: TTermDefinition (Context -> M.Map Name Type -> Type -> Result HydraAvroAdapter)
 hydraAvroAdapter = define "hydraAvroAdapter" $
   doc "Encode a single type without a type map (for simple/anonymous types)" $
   lambda "cx" $ lambda "typeMap" $ lambda "typ" $
     Eithers.map (lambda "adEnv" $ Pairs.first (var "adEnv"))
       (encodeTypeInner @@ var "cx" @@ (nothing :: TTerm (Maybe Name)) @@ var "typ" @@ (emptyEncodeEnvironment @@ var "typeMap"))
 
-hydraNameToAvroName :: TBinding (Name -> (String, Maybe String))
+hydraNameToAvroName :: TTermDefinition (Name -> (String, Maybe String))
 hydraNameToAvroName = define "hydraNameToAvroName" $
   doc "Convert a Hydra Name to an Avro qualified name (local name, optional namespace)" $
   lambda "name_" $
     pair (localName @@ var "name_") (nameNamespace @@ var "name_")
 
-integerAdapter :: TBinding (Context -> Type -> IntegerType -> Result HydraAvroAdapter)
+integerAdapter :: TTermDefinition (Context -> Type -> IntegerType -> Result HydraAvroAdapter)
 integerAdapter = define "integerAdapter" $
   doc "Create an adapter for integer types" $
   lambda "cx" $ lambda "typ" $ lambda "it" $ lets [
@@ -494,7 +494,7 @@ integerAdapter = define "integerAdapter" $
           cases JM._Value (var "j") Nothing [
             JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt64 (Literals.bigintToInt64 (Math.truncate (Literals.bigfloatToFloat64 (var "d")))))))])]
 
-integerValueToDouble :: TBinding (IntegerValue -> Double)
+integerValueToDouble :: TTermDefinition (IntegerValue -> Double)
 integerValueToDouble = define "integerValueToDouble" $
   doc "Convert any integer value to a double (bigfloat)" $
   lambda "iv" $
@@ -509,7 +509,7 @@ integerValueToDouble = define "integerValueToDouble" $
       _IntegerValue_uint32>>: lambda "i" $ Literals.bigintToBigfloat (Literals.uint32ToBigint (var "i")),
       _IntegerValue_uint64>>: lambda "i" $ Literals.bigintToBigfloat (Literals.uint64ToBigint (var "i"))]
 
-literalAdapter :: TBinding (Context -> Type -> LiteralType -> Result HydraAvroAdapter)
+literalAdapter :: TTermDefinition (Context -> Type -> LiteralType -> Result HydraAvroAdapter)
 literalAdapter = define "literalAdapter" $
   doc "Create an adapter for literal types" $
   lambda "cx" $ lambda "typ" $ lambda "lt" $ lets [
@@ -555,7 +555,7 @@ literalAdapter = define "literalAdapter" $
       _LiteralType_integer>>: lambda "it" $ integerAdapter @@ var "cx" @@ var "typ" @@ var "it",
       _LiteralType_float>>: lambda "ft" $ floatAdapter @@ var "cx" @@ var "typ" @@ var "ft"]
 
-localName :: TBinding (Name -> String)
+localName :: TTermDefinition (Name -> String)
 localName = define "localName" $
   doc "Extract the local part of a qualified name" $
   lambda "name_" $ lets [
@@ -563,7 +563,7 @@ localName = define "localName" $
     "parts">: Strings.splitOn (string ".") (var "s")] $
     Lists.last (var "parts")
 
-nameNamespace :: TBinding (Name -> Maybe String)
+nameNamespace :: TTermDefinition (Name -> Maybe String)
 nameNamespace = define "nameNamespace" $
   doc "Extract the namespace from a qualified name, if any" $
   lambda "name_" $ lets [
@@ -573,7 +573,7 @@ nameNamespace = define "nameNamespace" $
       nothing
       (just (Strings.intercalate (string ".") (Lists.init (var "parts"))))
 
-namedTypeAdapter :: TBinding (Context -> Type -> Maybe Name -> M.Map Name Term -> [FieldType] -> AvroEnv.EncodeEnvironment
+namedTypeAdapter :: TTermDefinition (Context -> Type -> Maybe Name -> M.Map Name Term -> [FieldType] -> AvroEnv.EncodeEnvironment
   -> ([Avro.Field] -> Avro.NamedType)
   -> (Context -> Name -> [(Name, HydraAvroAdapter)]
       -> (Context -> Term -> Result JM.Value, Context -> JM.Value -> Result Term))
@@ -610,7 +610,7 @@ namedTypeAdapter = define "namedTypeAdapter" $
       (lambda "existingAd" $ right (pair (var "existingAd") (var "env0")))
       (Maps.lookup (var "typeName") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_emitted @@ var "env0"))
 
-recordTermCoder :: TBinding (Context -> Name -> [(Name, HydraAvroAdapter)]
+recordTermCoder :: TTermDefinition (Context -> Name -> [(Name, HydraAvroAdapter)]
   -> (Context -> Term -> Result JM.Value, Context -> JM.Value -> Result Term))
 recordTermCoder = define "recordTermCoder" $
   doc "Build a record term coder from field adapters" $
@@ -641,7 +641,7 @@ recordTermCoder = define "recordTermCoder" $
             (Eithers.mapList (var "decodeField") (var "fieldAdapters"))]] $
     pair (var "encode") (var "decode")
 
-termToJsonValue :: TBinding (Term -> JM.Value)
+termToJsonValue :: TTermDefinition (Term -> JM.Value)
 termToJsonValue = define "termToJsonValue" $
   doc "Convert a Hydra term to a JSON value (for annotation values)" $
   lambda "term" $
@@ -672,7 +672,7 @@ termToJsonValue = define "termToJsonValue" $
           (injectUnit JM._Value JM._Value_null)
           (inject JM._Value JM._Value_string (string "<record>"))]
 
-typeToName :: TBinding (Type -> Name)
+typeToName :: TTermDefinition (Type -> Name)
 typeToName = define "typeToName" $
   doc "Generate a default name for an anonymous type" $
   lambda "t" $
@@ -680,7 +680,7 @@ typeToName = define "typeToName" $
       _Type_record>>: constant $ Core.name (string "Record"),
       _Type_union>>: constant $ Core.name (string "Union")]
 
-unionAsRecordAdapter :: TBinding (Context -> Type -> Maybe Name -> M.Map Name Term -> [FieldType] -> AvroEnv.EncodeEnvironment -> Result (HydraAvroAdapter, AvroEnv.EncodeEnvironment))
+unionAsRecordAdapter :: TTermDefinition (Context -> Type -> Maybe Name -> M.Map Name Term -> [FieldType] -> AvroEnv.EncodeEnvironment -> Result (HydraAvroAdapter, AvroEnv.EncodeEnvironment))
 unionAsRecordAdapter = define "unionAsRecordAdapter" $
   doc "Adapter for general unions (encoded as records with optional fields)" $
   lambda "cx" $ lambda "typ" $ lambda "mName" $ lambda "annotations" $ lambda "fieldTypes" $ lambda "env0" $

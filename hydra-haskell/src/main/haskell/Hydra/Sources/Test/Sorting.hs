@@ -42,12 +42,12 @@ module_ = Module ns elements
     kernelTypesNamespaces
     (Just "Test cases for topological sorting algorithms")
   where
-    elements = [Phantoms.toTermDefinition allTests]
+    elements = [Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
     doc "Test cases for topological sorting" $
     supergroup "sorting" [

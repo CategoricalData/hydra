@@ -55,7 +55,7 @@ import qualified Data.Maybe              as Y
 ns :: Namespace
 ns = Namespace "hydra.eval.lib.math"
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
@@ -65,14 +65,14 @@ module_ = Module ns elements
     Just ("Evaluation-level implementations of Math functions for the Hydra interpreter.")
   where
     elements = [
-      toTermDefinition even_,
-      toTermDefinition odd_,
-      toTermDefinition pred_,
-      toTermDefinition succ_]
+      toDefinition even_,
+      toDefinition odd_,
+      toDefinition pred_,
+      toDefinition succ_]
 
 -- | Interpreter-friendly even.
 -- even x = equal (mod x 2) 0
-even_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+even_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
 even_ = define "even" $
   doc "Interpreter-friendly even." $
   "cx" ~> "g" ~>
@@ -89,7 +89,7 @@ even_ = define "even" $
 
 -- | Interpreter-friendly odd.
 -- odd x = not (even x)
-odd_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+odd_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
 odd_ = define "odd" $
   doc "Interpreter-friendly odd." $
   "cx" ~> "g" ~>
@@ -102,7 +102,7 @@ odd_ = define "odd" $
 
 -- | Interpreter-friendly predecessor.
 -- pred x = sub x 1
-pred_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+pred_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
 pred_ = define "pred" $
   doc "Interpreter-friendly predecessor." $
   "cx" ~> "g" ~>
@@ -117,11 +117,11 @@ pred_ = define "pred" $
 --   The recursive definition causes the interpreter to loop. The eval primitive returns a term
 --   containing ifElse(gt(lo,hi), [], cons(lo, range(add(lo,1), hi))), but reduction does not
 --   terminate. Needs investigation of the reducer's handling of recursive primitive references.
--- range_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+-- range_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 
 -- | Interpreter-friendly successor.
 -- succ x = add x 1
-succ_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+succ_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
 succ_ = define "succ" $
   doc "Interpreter-friendly successor." $
   "cx" ~> "g" ~>

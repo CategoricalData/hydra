@@ -87,7 +87,7 @@ import Hydra.Json.Model
 ns :: Namespace
 ns = Namespace "hydra.json.encode"
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
@@ -97,14 +97,14 @@ module_ = Module ns elements
     Just "JSON encoding for Hydra terms. Converts Terms to JSON Values using Either for error handling."
   where
     elements = [
-      toTermDefinition toJson,
-      toTermDefinition encodeLiteral,
-      toTermDefinition encodeFloat,
-      toTermDefinition encodeInteger]
+      toDefinition toJson,
+      toDefinition encodeLiteral,
+      toDefinition encodeFloat,
+      toDefinition encodeInteger]
 
 -- | Encode a Term to a JSON Value.
 -- Returns Left with an error message for unsupported term constructs.
-toJson :: TBinding (Term -> Either String Value)
+toJson :: TTermDefinition (Term -> Either String Value)
 toJson = define "toJson" $
   doc "Encode a Hydra term to a JSON value. Returns Left for unsupported constructs." $
   "term" ~>
@@ -211,7 +211,7 @@ toJson = define "toJson" $
         (var "e")]
 
 -- | Encode a literal value to JSON
-encodeLiteral :: TBinding (Literal -> Either String Value)
+encodeLiteral :: TTermDefinition (Literal -> Either String Value)
 encodeLiteral = define "encodeLiteral" $
   doc "Encode a Hydra literal to a JSON value" $
   "lit" ~> cases _Literal (var "lit") Nothing [
@@ -223,7 +223,7 @@ encodeLiteral = define "encodeLiteral" $
 
 -- | Encode a float value to JSON
 -- Float64 and Bigfloat use native JSON numbers; Float32 uses string to preserve exact precision
-encodeFloat :: TBinding (FloatValue -> Either String Value)
+encodeFloat :: TTermDefinition (FloatValue -> Either String Value)
 encodeFloat = define "encodeFloat" $
   doc "Encode a float value to JSON. Float64/Bigfloat use native numbers; Float32 uses string." $
   "fv" ~> cases _FloatValue (var "fv") Nothing [
@@ -234,7 +234,7 @@ encodeFloat = define "encodeFloat" $
 -- | Encode an integer value to JSON
 -- Small integers (int8, int16, int32, uint8, uint16) use native JSON numbers
 -- Large integers (int64, uint32, uint64, bigint) use strings to preserve precision
-encodeInteger :: TBinding (IntegerValue -> Either String Value)
+encodeInteger :: TTermDefinition (IntegerValue -> Either String Value)
 encodeInteger = define "encodeInteger" $
   doc "Encode an integer value to JSON. Small ints use native numbers; large ints use strings." $
   "iv" ~> cases _IntegerValue (var "iv") Nothing [

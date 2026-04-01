@@ -90,7 +90,7 @@ import qualified Hydra.Sources.CoderUtils as CoderUtils
 data JsonSchemaOptions
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 jsonSchemaPhantomNs :: Namespace
@@ -109,33 +109,33 @@ module_ = Module ns elements
     Just "JSON Schema code generator: converts Hydra modules to JSON Schema documents"
   where
     elements = [
-      toTermDefinition moduleToJsonSchema,
-      toTermDefinition constructModule,
-      toTermDefinition encodeField,
-      toTermDefinition encodeName,
-      toTermDefinition encodeNamedType,
-      toTermDefinition encodeType,
-      toTermDefinition isRequiredField,
-      toTermDefinition referenceRestriction]
+      toDefinition moduleToJsonSchema,
+      toDefinition constructModule,
+      toDefinition encodeField,
+      toDefinition encodeName,
+      toDefinition encodeNamedType,
+      toDefinition encodeType,
+      toDefinition isRequiredField,
+      toDefinition referenceRestriction]
 
 
 -- | Result type alias
 type Result a = Either (InContext Error) a
 
 
-moduleToJsonSchema :: TBinding (JsonSchemaOptions -> Module -> [Definition] -> Context -> Graph -> Result (M.Map FilePath String))
+moduleToJsonSchema :: TTermDefinition (JsonSchemaOptions -> Module -> [Definition] -> Context -> Graph -> Result (M.Map FilePath String))
 moduleToJsonSchema = define "moduleToJsonSchema" $
   doc "Convert a Hydra module to a map of JSON Schema documents" $
   lambda "opts" $ lambda "mod" $ lambda "defs" $ lambda "cx" $ lambda "g" $
     var "hydra.ext.json.schema.coder.moduleToJsonSchema" @@ var "opts" @@ var "mod" @@ var "defs" @@ var "cx" @@ var "g"
 
-constructModule :: TBinding (Context -> Graph -> JsonSchemaOptions -> Module -> [TypeDefinition] -> Result (M.Map FilePath JS.Document))
+constructModule :: TTermDefinition (Context -> Graph -> JsonSchemaOptions -> Module -> [TypeDefinition] -> Result (M.Map FilePath JS.Document))
 constructModule = define "constructModule" $
   doc "Construct JSON Schema documents from type definitions" $
   lambda "cx" $ lambda "g" $ lambda "opts" $ lambda "mod" $ lambda "typeDefs" $
     var "hydra.ext.json.schema.coder.constructModule" @@ var "cx" @@ var "g" @@ var "opts" @@ var "mod" @@ var "typeDefs"
 
-encodeField :: TBinding (Context -> Graph -> FieldType -> Result (JS.Keyword, JS.Schema))
+encodeField :: TTermDefinition (Context -> Graph -> FieldType -> Result (JS.Keyword, JS.Schema))
 encodeField = define "encodeField" $
   doc "Encode a field type as a JSON Schema keyword-schema pair" $
   lambda "cx" $ lambda "g" $ lambda "ft" $ lets [
@@ -145,13 +145,13 @@ encodeField = define "encodeField" $
       (lambda "res" $ pair (wrap JS._Keyword (Core.unName $ var "name")) (wrap JS._Schema (var "res")))
       (encodeType @@ var "cx" @@ var "g" @@ false @@ var "typ")
 
-encodeName :: TBinding (Name -> String)
+encodeName :: TTermDefinition (Name -> String)
 encodeName = define "encodeName" $
   doc "Encode a Hydra name as a safe identifier string, replacing non-alphanumeric characters with underscores" $
   lambda "name" $
     Formatting.nonAlnumToUnderscores @@ Core.unName (var "name")
 
-encodeNamedType :: TBinding (Context -> Graph -> Name -> Type -> Result [JS.Restriction])
+encodeNamedType :: TTermDefinition (Context -> Graph -> Name -> Type -> Result [JS.Restriction])
 encodeNamedType = define "encodeNamedType" $
   doc "Encode a named type as a list of JSON Schema restrictions with a title" $
   lambda "cx" $ lambda "g" $ lambda "name" $ lambda "typ" $
@@ -161,13 +161,13 @@ encodeNamedType = define "encodeNamedType" $
         var "res"])
       (encodeType @@ var "cx" @@ var "g" @@ false @@ (Rewriting.deannotateType @@ var "typ"))
 
-encodeType :: TBinding (Context -> Graph -> Bool -> Type -> Result [JS.Restriction])
+encodeType :: TTermDefinition (Context -> Graph -> Bool -> Type -> Result [JS.Restriction])
 encodeType = define "encodeType" $
   doc "Encode a Hydra type as a list of JSON Schema restrictions" $
   lambda "cx" $ lambda "g" $ lambda "optional" $ lambda "typ" $
     var "hydra.ext.json.schema.coder.encodeType" @@ var "cx" @@ var "g" @@ var "optional" @@ var "typ"
 
-isRequiredField :: TBinding (FieldType -> Bool)
+isRequiredField :: TTermDefinition (FieldType -> Bool)
 isRequiredField = define "isRequiredField" $
   doc "Determine whether a field is required (i.e., not optional/Maybe)" $
   lambda "ft" $ lets [
@@ -175,7 +175,7 @@ isRequiredField = define "isRequiredField" $
     cases _Type (Rewriting.deannotateType @@ var "typ") (Just true) [
       _Type_maybe>>: constant false]
 
-referenceRestriction :: TBinding (Name -> JS.Restriction)
+referenceRestriction :: TTermDefinition (Name -> JS.Restriction)
 referenceRestriction = define "referenceRestriction" $
   doc "Create a JSON Schema reference restriction for a named type" $
   lambda "name" $

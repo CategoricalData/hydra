@@ -80,12 +80,12 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
 module_ = Module (Namespace "hydra.ext.lisp.language")
-  [toTermDefinition lispLanguage, toTermDefinition lispReservedWords]
+  [toDefinition lispLanguage, toDefinition lispReservedWords]
   [Lexical.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints and reserved words for Lisp (covering Clojure, Emacs Lisp, Common Lisp, and Scheme)"
@@ -134,7 +134,7 @@ module_ = Module (Namespace "hydra.ext.lisp.language")
 --   Wrap                 -> value (transparent)
 --   Unit                 -> nil / '()
 
-lispLanguage :: TBinding Language
+lispLanguage :: TTermDefinition Language
 lispLanguage = define "lispLanguage" $
     doc "Language constraints for Lisp" $ lets [
     "eliminationVariants">: Sets.fromList $ list [
@@ -204,7 +204,7 @@ lispLanguage = define "lispLanguage" $
         (var "typeVariants")
         (var "typePredicate"))
 
-lispReservedWords :: TBinding (S.Set String)
+lispReservedWords :: TTermDefinition (S.Set String)
 lispReservedWords = define "lispReservedWords" $
   doc "A set of reserved words across all four Lisp dialects" $
   lets [

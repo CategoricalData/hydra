@@ -67,7 +67,7 @@ import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
 ns :: Namespace
 ns = Namespace "hydra.hoisting"
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
@@ -77,30 +77,30 @@ module_ = Module ns elements
     Just "Functions for deep term rewriting operations involving hoisting subterms or bindings into enclosing let terms."
   where
    elements = [
-     toTermDefinition augmentBindingsWithNewFreeVars,
-     toTermDefinition bindingIsPolymorphic,
-     toTermDefinition bindingUsesContextTypeVars,
-     toTermDefinition countVarOccurrences,
-     toTermDefinition hoistAllLetBindings,
-     toTermDefinition hoistCaseStatements,
-     toTermDefinition hoistCaseStatementsInGraph,
-     toTermDefinition hoistLetBindingsWithContext,
-     toTermDefinition hoistLetBindingsWithPredicate,
-     toTermDefinition hoistPolymorphicLetBindings,
-     toTermDefinition hoistSubterms,
-     toTermDefinition isApplicationFunction,
-     toTermDefinition isEliminationUnion,
-     toTermDefinition isLambdaBody,
-     toTermDefinition isUnionElimination,
-     toTermDefinition isUnionEliminationApplication,
-     toTermDefinition normalizePathForHoisting,
-     toTermDefinition shouldHoistAll,
-     toTermDefinition shouldHoistCaseStatement,
-     toTermDefinition shouldHoistPolymorphic,
-     toTermDefinition updateHoistState]
+     toDefinition augmentBindingsWithNewFreeVars,
+     toDefinition bindingIsPolymorphic,
+     toDefinition bindingUsesContextTypeVars,
+     toDefinition countVarOccurrences,
+     toDefinition hoistAllLetBindings,
+     toDefinition hoistCaseStatements,
+     toDefinition hoistCaseStatementsInGraph,
+     toDefinition hoistLetBindingsWithContext,
+     toDefinition hoistLetBindingsWithPredicate,
+     toDefinition hoistPolymorphicLetBindings,
+     toDefinition hoistSubterms,
+     toDefinition isApplicationFunction,
+     toDefinition isEliminationUnion,
+     toDefinition isLambdaBody,
+     toDefinition isUnionElimination,
+     toDefinition isUnionEliminationApplication,
+     toDefinition normalizePathForHoisting,
+     toDefinition shouldHoistAll,
+     toDefinition shouldHoistCaseStatement,
+     toDefinition shouldHoistPolymorphic,
+     toDefinition updateHoistState]
 
 -- | Check if a binding has a polymorphic type (non-empty list of type scheme variables)
-bindingIsPolymorphic :: TBinding (Binding -> Bool)
+bindingIsPolymorphic :: TTermDefinition (Binding -> Bool)
 bindingIsPolymorphic = define "bindingIsPolymorphic" $
   doc "Check if a binding has a polymorphic type (non-empty list of type scheme variables)" $
   "binding" ~>
@@ -111,7 +111,7 @@ bindingIsPolymorphic = define "bindingIsPolymorphic" $
 -- | Check if a binding's type uses any type variables from the given Graph.
 -- This checks if the free type variables in the binding's type intersect with
 -- the type variables in scope (graphTypeVariables).
-bindingUsesContextTypeVars :: TBinding (Graph -> Binding -> Bool)
+bindingUsesContextTypeVars :: TTermDefinition (Graph -> Binding -> Bool)
 bindingUsesContextTypeVars = define "bindingUsesContextTypeVars" $
   doc ("Check if a binding's type uses any type variables from the given Graph."
     <> " Returns True if the free type variables in the binding's type intersect with"
@@ -125,7 +125,7 @@ bindingUsesContextTypeVars = define "bindingUsesContextTypeVars" $
       Logic.not $ Sets.null $ Sets.intersection (var "freeInType") (var "contextTypeVars"))
 
 -- | Count the number of occurrences of a variable name in a term. Assumes no variable shadowing.
-countVarOccurrences :: TBinding (Name -> Term -> Int)
+countVarOccurrences :: TTermDefinition (Name -> Term -> Int)
 countVarOccurrences = define "countVarOccurrences" $
   doc "Count the number of occurrences of a variable name in a term. Assumes no variable shadowing." $
   "name" ~> "term" ~>
@@ -141,7 +141,7 @@ countVarOccurrences = define "countVarOccurrences" $
         (var "childCount")]
 
 -- | Augment bindings with new free variables introduced by substitution, wrapping with lambdas after any type lambdas.
-augmentBindingsWithNewFreeVars :: TBinding (Graph -> S.Set Name -> [Binding] -> ([Binding], TermSubst))
+augmentBindingsWithNewFreeVars :: TTermDefinition (Graph -> S.Set Name -> [Binding] -> ([Binding], TermSubst))
 augmentBindingsWithNewFreeVars = define "augmentBindingsWithNewFreeVars" $
   doc "Augment bindings with new free variables introduced by substitution, wrapping with lambdas after any type lambdas." $
   "cx" ~> "boundVars" ~> "bindings" ~>
@@ -189,7 +189,7 @@ augmentBindingsWithNewFreeVars = define "augmentBindingsWithNewFreeVars" $
 
 -- | Predicate for hoisting polymorphic bindings.
 -- A binding should be hoisted if it is polymorphic or uses outer type variables.
-shouldHoistPolymorphic :: TBinding (Graph -> Binding -> Bool)
+shouldHoistPolymorphic :: TTermDefinition (Graph -> Binding -> Bool)
 shouldHoistPolymorphic = define "shouldHoistPolymorphic" $
   doc ("Predicate for hoisting polymorphic bindings."
     <> " Returns True if the binding is polymorphic (has type scheme variables)"
@@ -198,12 +198,12 @@ shouldHoistPolymorphic = define "shouldHoistPolymorphic" $
   Logic.or (bindingIsPolymorphic @@ var "binding") (bindingUsesContextTypeVars @@ var "cx" @@ var "binding")
 
 -- | Predicate for hoisting all bindings unconditionally.
-shouldHoistAll :: TBinding (Graph -> Binding -> Bool)
+shouldHoistAll :: TTermDefinition (Graph -> Binding -> Bool)
 shouldHoistAll = define "shouldHoistAll" $
   doc "Predicate that always returns True, for hoisting all bindings unconditionally." $
   constant (constant true)
 
-hoistLetBindingsWithPredicate :: TBinding ((Binding -> Bool) -> (Graph -> Binding -> Bool) -> Graph -> Let -> Let)
+hoistLetBindingsWithPredicate :: TTermDefinition ((Binding -> Bool) -> (Graph -> Binding -> Bool) -> Graph -> Let -> Let)
 hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
   doc ("Transform a let-term by pulling let bindings to the top level."
     <> " The isParentBinding predicate applies to top-level bindings and determines whether their subterm bindings are"
@@ -475,7 +475,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
     (Core.letBody $ var "let0")
 
 -- | Transform a let-term by pulling all polymorphic let bindings to the top level
-hoistPolymorphicLetBindings :: TBinding ((Binding -> Bool) -> Let -> Let)
+hoistPolymorphicLetBindings :: TTermDefinition ((Binding -> Bool) -> Let -> Let)
 hoistPolymorphicLetBindings = define "hoistPolymorphicLetBindings" $
   doc ("Transform a let-term by pulling all polymorphic let bindings to the top level."
     <> " This is useful to ensure that polymorphic bindings are not nested within other terms,"
@@ -489,7 +489,7 @@ hoistPolymorphicLetBindings = define "hoistPolymorphicLetBindings" $
   "emptyCx" <~ Graph.emptyGraph $
   hoistLetBindingsWithPredicate @@ var "isParentBinding" @@ shouldHoistPolymorphic @@ var "emptyCx" @@ var "let0"
 
-hoistLetBindingsWithContext :: TBinding ((Binding -> Bool) -> Graph -> Let -> Let)
+hoistLetBindingsWithContext :: TTermDefinition ((Binding -> Bool) -> Graph -> Let -> Let)
 hoistLetBindingsWithContext = define "hoistLetBindingsWithContext" $
   doc ("Transform a let-term by pulling polymorphic let bindings to the top level, using Graph."
     <> " A binding is hoisted if:"
@@ -505,7 +505,7 @@ hoistLetBindingsWithContext = define "hoistLetBindingsWithContext" $
   "isParentBinding" ~> "cx" ~> "let0" ~>
   hoistLetBindingsWithPredicate @@ var "isParentBinding" @@ shouldHoistPolymorphic @@ var "cx" @@ var "let0"
 
-hoistAllLetBindings :: TBinding (Let -> Let)
+hoistAllLetBindings :: TTermDefinition (Let -> Let)
 hoistAllLetBindings = define "hoistAllLetBindings" $
   doc ("Transform a let-term by pulling ALL let bindings to the top level."
     <> " This is useful for targets like Java that don't support nested let expressions at all."
@@ -517,7 +517,7 @@ hoistAllLetBindings = define "hoistAllLetBindings" $
   "emptyCx" <~ Graph.emptyGraph $
   hoistLetBindingsWithPredicate @@ constant true @@ shouldHoistAll @@ var "emptyCx" @@ var "let0"
 
-hoistCaseStatements :: TBinding (Graph -> Term -> Term)
+hoistCaseStatements :: TTermDefinition (Graph -> Term -> Term)
 hoistCaseStatements = define "hoistCaseStatements" $
   doc ("Hoist case statements into local let bindings."
     <> " This is useful for targets such as Python which only support case statements (match) at the top level."
@@ -526,7 +526,7 @@ hoistCaseStatements = define "hoistCaseStatements" $
     <> " Once through an application LHS, lambda bodies no longer count as pass-through.") $
   hoistSubterms @@ shouldHoistCaseStatement
 
-hoistCaseStatementsInGraph :: TBinding ([Binding] -> [Binding])
+hoistCaseStatementsInGraph :: TTermDefinition ([Binding] -> [Binding])
 hoistCaseStatementsInGraph = define "hoistCaseStatementsInGraph" $
   doc ("Hoist case statements into local let bindings for a list of bindings."
     <> " This version operates prior to inference and uses an empty type context."
@@ -540,7 +540,7 @@ hoistCaseStatementsInGraph = define "hoistCaseStatementsInGraph" $
   Schemas.termAsBindings @@ var "term1"
 
 -- | Check if a term is a union elimination (case statement)
-isUnionElimination :: TBinding (Term -> Bool)
+isUnionElimination :: TTermDefinition (Term -> Bool)
 isUnionElimination = define "isUnionElimination" $
   doc "Check if a term is a union elimination (case statement)" $
   "term" ~> cases _Term (var "term")
@@ -548,7 +548,7 @@ isUnionElimination = define "isUnionElimination" $
     _Term_function>>: "f" ~> isEliminationUnion @@ var "f"]
 
 -- | Check if a function is an elimination for union types
-isEliminationUnion :: TBinding (Function -> Bool)
+isEliminationUnion :: TTermDefinition (Function -> Bool)
 isEliminationUnion = define "isEliminationUnion" $
   doc "Check if a function is a union elimination" $
   "f" ~> cases _Function (var "f")
@@ -559,7 +559,7 @@ isEliminationUnion = define "isEliminationUnion" $
 
 -- | Check if a term is a case statement applied to an argument (i.e. Application where the function is a union elimination).
 -- This is used for hoisting: we want to hoist the entire application, not just the bare case function.
-isUnionEliminationApplication :: TBinding (Term -> Bool)
+isUnionEliminationApplication :: TTermDefinition (Term -> Bool)
 isUnionEliminationApplication = define "isUnionEliminationApplication" $
   doc "Check if a term is an application of a union elimination (case statement applied to an argument)" $
   "term" ~> cases _Term (var "term")
@@ -571,7 +571,7 @@ isUnionEliminationApplication = define "isUnionEliminationApplication" $
 -- This ensures that hoisted bindings don't break function analysis, which expects
 -- lambdas before lets (not the other way around).
 -- e.g., instead of Let([h=...], Lambda(p, body)), this produces Lambda(p, Let([h=...], body))
-wrapLetInsideLambdas :: TBinding ([Binding] -> Term -> Term)
+wrapLetInsideLambdas :: TTermDefinition ([Binding] -> Term -> Term)
 wrapLetInsideLambdas = define "wrapLetInsideLambdas" $
   doc "Wrap bindings in a let term, pushing the let inside leading lambdas" $
   "bindings" ~> "term" ~>
@@ -591,7 +591,7 @@ wrapLetInsideLambdas = define "wrapLetInsideLambdas" $
 -- | Update state when traversing an accessor in the path for hoisting logic.
 -- State is (stillAtTopLevel, haveUsedAppLHS).
 -- Returns updated state after processing one accessor.
-updateHoistState :: TBinding (SubtermStep -> (Bool, Bool) -> (Bool, Bool))
+updateHoistState :: TTermDefinition (SubtermStep -> (Bool, Bool) -> (Bool, Bool))
 updateHoistState = define "updateHoistState" $
   doc ("Update hoisting state when traversing an accessor."
     <> " State is (atTopLevel, usedAppLHS). Returns updated state.") $
@@ -637,7 +637,7 @@ updateHoistState = define "updateHoistState" $
 -- which is semantically equivalent to let x = arg in ...
 -- We replace applicationFunction followed by lambdaBody with just letBody,
 -- which allows the case inside to remain at "top level".
-normalizePathForHoisting :: TBinding ([SubtermStep] -> [SubtermStep])
+normalizePathForHoisting :: TTermDefinition ([SubtermStep] -> [SubtermStep])
 normalizePathForHoisting = define "normalizePathForHoisting" $
   doc ("Normalize a path for hoisting by treating immediately-applied lambdas as let bindings."
     <> " Replaces [applicationFunction, lambdaBody, ...] with [letBody, ...].") $
@@ -662,14 +662,14 @@ normalizePathForHoisting = define "normalizePathForHoisting" $
   var "go" @@ var "path"
 
 -- | Check if an accessor is applicationFunction
-isApplicationFunction :: TBinding (SubtermStep -> Bool)
+isApplicationFunction :: TTermDefinition (SubtermStep -> Bool)
 isApplicationFunction = define "isApplicationFunction" $
   "acc" ~> cases _SubtermStep (var "acc")
     (Just false) [
     _SubtermStep_applicationFunction>>: constant true]
 
 -- | Check if an accessor is lambdaBody
-isLambdaBody :: TBinding (SubtermStep -> Bool)
+isLambdaBody :: TTermDefinition (SubtermStep -> Bool)
 isLambdaBody = define "isLambdaBody" $
   "acc" ~> cases _SubtermStep (var "acc")
     (Just false) [
@@ -692,7 +692,7 @@ isLambdaBody = define "isLambdaBody" $
 --   - "atRoot": can pass through annotations, let body/binding, lambda body, or ONE app LHS
 --   - "afterAppLHS": have used the one app LHS, can only pass through annotations
 --   - Any other accessor: not at top level, should hoist if it's a case
-shouldHoistCaseStatement :: TBinding (([SubtermStep], Term) -> Bool)
+shouldHoistCaseStatement :: TTermDefinition (([SubtermStep], Term) -> Bool)
 shouldHoistCaseStatement = define "shouldHoistCaseStatement" $
   doc ("Predicate for case statement hoisting."
     <> " Returns True if term is a union elimination (bare case function) or a case statement application"
@@ -715,7 +715,7 @@ shouldHoistCaseStatement = define "shouldHoistCaseStatement" $
     -- If still at top level, don't hoist. If not at top level, hoist.
     Logic.not $ Pairs.first $ var "finalState")
 
-hoistSubterms :: TBinding ((([SubtermStep], Term) -> Bool) -> Graph -> Term -> Term)
+hoistSubterms :: TTermDefinition ((([SubtermStep], Term) -> Bool) -> Graph -> Term -> Term)
 hoistSubterms = define "hoistSubterms" $
   doc ("Hoist subterms into local let bindings based on a path-aware predicate."
     <> " The predicate receives a pair of (path, term) where path is the list of SubtermSteps"

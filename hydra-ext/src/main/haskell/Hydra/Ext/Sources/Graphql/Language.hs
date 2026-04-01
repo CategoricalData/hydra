@@ -80,17 +80,17 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
 module_ = Module (Namespace "hydra.ext.graphql.language")
-  [toTermDefinition graphqlLanguage, toTermDefinition graphqlReservedWords]
+  [toDefinition graphqlLanguage, toDefinition graphqlReservedWords]
   [Lexical.ns, Rewriting.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints and reserved words for GraphQL"
 
-graphqlLanguage :: TBinding Language
+graphqlLanguage :: TTermDefinition Language
 graphqlLanguage = define "graphqlLanguage" $
   doc "Language constraints for GraphQL" $ lets [
   "eliminationVariants">: Sets.empty,
@@ -143,7 +143,7 @@ graphqlLanguage = define "graphqlLanguage" $
       (var "typeVariants")
       (var "typePredicate"))
 
-graphqlReservedWords :: TBinding (S.Set String)
+graphqlReservedWords :: TTermDefinition (S.Set String)
 graphqlReservedWords = define "graphqlReservedWords" $
   doc "A set of reserved words in GraphQL" $
   Sets.fromList $ list $ string <$> ["true", "false"]

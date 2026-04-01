@@ -72,23 +72,23 @@ module_ = Module ns elements
       <> " https://hackage.haskell.org/package/GraphSCC.")
   where
    elements = [
-     toTermDefinition adjacencyListToMap,
-     toTermDefinition adjacencyListsToGraph,
-     toTermDefinition createOrderingIsomorphism,
-     toTermDefinition findReachableNodes,
-     toTermDefinition initialState,
-     toTermDefinition popStackUntil,
-     toTermDefinition propagateTags,
-     toTermDefinition strongConnect,
-     toTermDefinition stronglyConnectedComponents,
-     toTermDefinition topologicalSort,
-     toTermDefinition topologicalSortComponents,
-     toTermDefinition topologicalSortNodes]
+     toDefinition adjacencyListToMap,
+     toDefinition adjacencyListsToGraph,
+     toDefinition createOrderingIsomorphism,
+     toDefinition findReachableNodes,
+     toDefinition initialState,
+     toDefinition popStackUntil,
+     toDefinition propagateTags,
+     toDefinition strongConnect,
+     toDefinition stronglyConnectedComponents,
+     toDefinition topologicalSort,
+     toDefinition topologicalSortComponents,
+     toDefinition topologicalSortNodes]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-adjacencyListsToGraph :: TBinding ([(key, [key])] -> (Topo.Graph, Topo.Vertex -> key))
+adjacencyListsToGraph :: TTermDefinition ([(key, [key])] -> (Topo.Graph, Topo.Vertex -> key))
 adjacencyListsToGraph = define "adjacencyListsToGraph" $
   doc ("Given a list of adjacency lists represented as (key, [key]) pairs,"
     <> " construct a graph along with a function mapping each vertex (an Int)"
@@ -120,7 +120,7 @@ adjacencyListsToGraph = define "adjacencyListsToGraph" $
   "vertexToKey" <~ ("v" ~> Maybes.fromJust (Maps.lookup (var "v") (var "vertexMap"))) $
   pair (var "graph") (var "vertexToKey")
 
-adjacencyListToMap :: TBinding ([(a, [b])] -> M.Map a [b])
+adjacencyListToMap :: TTermDefinition ([(a, [b])] -> M.Map a [b])
 adjacencyListToMap = define "adjacencyListToMap" $
   doc "Convert an adjacency list to a map, concatenating values for duplicate keys" $
   "pairs" ~>
@@ -133,7 +133,7 @@ adjacencyListToMap = define "adjacencyListToMap" $
     Maps.empty
     (var "pairs")
 
-createOrderingIsomorphism :: TBinding ([a] -> [a] -> Topo.OrderingIsomorphism b)
+createOrderingIsomorphism :: TTermDefinition ([a] -> [a] -> Topo.OrderingIsomorphism b)
 createOrderingIsomorphism = define "createOrderingIsomorphism" $
   "sourceOrd" ~> "targetOrd" ~>
   "sourceToTargetMapping" <~ ("els" ~>
@@ -144,7 +144,7 @@ createOrderingIsomorphism = define "createOrderingIsomorphism" $
     Maybes.cat $ Lists.map ("n" ~> Maps.lookup (var "n") (var "mp")) (var "sourceOrd")) $
   Topology.orderingIsomorphism (var "sourceToTargetMapping") (var "targetToSourceMapping")
 
-findReachableNodes :: TBinding ((a -> S.Set a) -> a -> S.Set a)
+findReachableNodes :: TTermDefinition ((a -> S.Set a) -> a -> S.Set a)
 findReachableNodes = define "findReachableNodes" $
   doc "Given an adjacency function and a distinguished root node, find all reachable nodes (including the root node)" $
   "adj" ~> "root" ~>
@@ -158,12 +158,12 @@ findReachableNodes = define "findReachableNodes" $
         (Sets.toList $ var "toVisit"))) $
   var "visit" @@ Sets.singleton (var "root") @@ var "root"
 
-initialState :: TBinding Topo.TarjanState
+initialState :: TTermDefinition Topo.TarjanState
 initialState = define "initialState" $
   doc "Initial state for Tarjan's algorithm" $
   Topology.tarjanState (int32 0) Maps.empty Maps.empty (list ([] :: [TTerm Topo.Vertex])) Sets.empty (list ([] :: [TTerm [Topo.Vertex]]))
 
-popStackUntil :: TBinding (Topo.Vertex -> Topo.TarjanState -> ([Topo.Vertex], Topo.TarjanState))
+popStackUntil :: TTermDefinition (Topo.Vertex -> Topo.TarjanState -> ([Topo.Vertex], Topo.TarjanState))
 popStackUntil = define "popStackUntil" $
   doc "Pop vertices off the stack until the given vertex is reached, collecting the current strongly connected component" $
   "v" ~> "st0" ~>
@@ -178,7 +178,7 @@ popStackUntil = define "popStackUntil" $
       (var "go" @@ var "acc'" @@ var "newSt2")) $
   var "go" @@ list ([] :: [TTerm Topo.Vertex]) @@ var "st0"
 
-propagateTags :: TBinding ([(a, [a])] -> [(a, [t])] -> [(a, S.Set t)])
+propagateTags :: TTermDefinition ([(a, [a])] -> [(a, [t])] -> [(a, S.Set t)])
 propagateTags = define "propagateTags" $
   doc ("Given a graph as an adjacency list of edges and a list of explicit tags per node,"
     <> " compute the full set of tags for each node by propagating tags through edges."
@@ -203,7 +203,7 @@ propagateTags = define "propagateTags" $
       (Sets.toList $ var "reachable")) $
   Lists.map ("n" ~> pair (var "n") (var "getTagsForNode" @@ var "n")) (var "allNodes")
 
-strongConnect :: TBinding (Topo.Graph -> Topo.Vertex -> Topo.TarjanState -> Topo.TarjanState)
+strongConnect :: TTermDefinition (Topo.Graph -> Topo.Vertex -> Topo.TarjanState -> Topo.TarjanState)
 strongConnect = define "strongConnect" $
   doc "Visit a vertex and recursively explore its successors" $
   "graph" ~> "v" ~> "st" ~>
@@ -241,7 +241,7 @@ strongConnect = define "strongConnect" $
      Topology.tarjanStateWithSccs (var "stPopped") (Lists.cons (var "comp") (Topology.tarjanStateSccs (var "stPopped"))))
     (var "stAfterNeighbors")
 
-stronglyConnectedComponents :: TBinding (Topo.Graph -> [[Topo.Vertex]])
+stronglyConnectedComponents :: TTermDefinition (Topo.Graph -> [[Topo.Vertex]])
 stronglyConnectedComponents = define "stronglyConnectedComponents" $
   doc "Compute the strongly connected components of the given graph. The components are returned in reverse topological order" $
   "graph" ~>
@@ -254,7 +254,7 @@ stronglyConnectedComponents = define "stronglyConnectedComponents" $
     (var "verts") $
   Lists.reverse (Lists.map (unaryFunction Lists.sort) (Topology.tarjanStateSccs (var "finalState")))
 
-topologicalSort :: TBinding ([(a, [a])] -> Either [[a]] [a])
+topologicalSort :: TTermDefinition ([(a, [a])] -> Either [[a]] [a])
 topologicalSort = define "topologicalSort" $
   doc ("Sort a directed acyclic graph (DAG) based on an adjacency list."
     <> " Yields a list of nontrivial strongly connected components if the graph has cycles, otherwise a simple list.") $
@@ -266,7 +266,7 @@ topologicalSort = define "topologicalSort" $
     (right $ Lists.concat $ var "sccs")
     (left $ var "withCycles")
 
-topologicalSortComponents :: TBinding ([(a, [a])] -> [[a]])
+topologicalSortComponents :: TTermDefinition ([(a, [a])] -> [[a]])
 topologicalSortComponents = define "topologicalSortComponents" $
   doc ("Find the strongly connected components (including cycles and isolated vertices) of a graph,"
     <> " in (reverse) topological order, i.e. dependencies before dependents") $
@@ -276,7 +276,7 @@ topologicalSortComponents = define "topologicalSortComponents" $
   Lists.map ("comp" ~> Lists.map (Pairs.second $ var "graphResult") (var "comp")) $
     stronglyConnectedComponents @@ var "g"
 
-topologicalSortNodes :: TBinding ((x -> a) -> (x -> [a]) -> [x] -> [[x]])
+topologicalSortNodes :: TTermDefinition ((x -> a) -> (x -> [a]) -> [x] -> [[x]])
 topologicalSortNodes = define "topologicalSortNodes" $
   doc ("Sort a directed acyclic graph (DAG) of nodes using two helper functions:"
     <> " one for node keys, and one for the adjacency list of connected node keys."

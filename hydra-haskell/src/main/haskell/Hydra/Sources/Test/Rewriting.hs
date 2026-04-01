@@ -49,9 +49,9 @@ module_ = Module ns elements
     kernelTypesNamespaces
     (Just "Test cases for term rewriting operations")
   where
-    elements = [Phantoms.toTermDefinition allTests]
+    elements = [Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 -- Local alias for polymorphic application (Phantoms.@@ applies TBindings; Terms.@@ only works on TTerm Term)
@@ -180,11 +180,11 @@ etaCase cname input output = universalCase cname
   (showTerm output)
 
 -- | Helper for Term -> Term kernel function test cases
-termCase :: String -> TBinding (Term -> Term) -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+termCase :: String -> TTermDefinition (Term -> Term) -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
 termCase cname func input output = universalCase cname (showTerm (func # input)) (showTerm output)
 
 -- | Helper for Type -> Type kernel function test cases
-typeCase :: String -> TBinding (Type -> Type) -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
+typeCase :: String -> TTermDefinition (Type -> Type) -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
 typeCase cname func input output = universalCase cname (showType (func # input)) (showType output)
 
 -- | Universal rewriteTerm test case: applies replaceFooWithBar rewriter
@@ -338,7 +338,7 @@ rewriteAndFoldTermWithPathGroup = subgroup "rewriteAndFoldTermWithPath" [
       foldOpCollectListLengths
       (list [int32 2, int32 1])]
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Test cases for term rewriting operations" $
     supergroup "rewriting" [

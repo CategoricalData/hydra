@@ -25,74 +25,74 @@ module_ = Module ns elements
     (Just "Type definitions for the test suite")
   where
     elements = [
-      toTermDefinition testTypeBuddyListA,
-      toTermDefinition testTypeBuddyListAName,
-      toTermDefinition testTypeBuddyListB,
-      toTermDefinition testTypeBuddyListBName,
-      toTermDefinition testTypeComparison,
-      toTermDefinition testTypeComparisonName,
-      toTermDefinition testTypeEither,
-      toTermDefinition testTypeEitherName,
-      toTermDefinition testTypeHydraLiteralType,
-      toTermDefinition testTypeHydraLiteralTypeName,
-      toTermDefinition testTypeHydraType,
-      toTermDefinition testTypeHydraTypeName,
-      toTermDefinition testTypeIntList,
-      toTermDefinition testTypeIntListName,
-      toTermDefinition testTypeLatLon,
-      toTermDefinition testTypeLatLonName,
-      toTermDefinition testTypeLatLonPoly,
-      toTermDefinition testTypeLatLonPolyName,
-      toTermDefinition testTypeList,
-      toTermDefinition testTypeListName,
-      toTermDefinition testTypeNumber,
-      toTermDefinition testTypeNumberName,
-      toTermDefinition testTypePerson,
-      toTermDefinition testTypePersonName,
-      toTermDefinition testTypePersonOrSomething,
-      toTermDefinition testTypePersonOrSomethingName,
-      toTermDefinition testTypePolymorphicWrapper,
-      toTermDefinition testTypePolymorphicWrapperName,
-      toTermDefinition testTypeSimpleNumber,
-      toTermDefinition testTypeSimpleNumberName,
-      toTermDefinition testTypeStringAlias,
-      toTermDefinition testTypeStringAliasName,
-      toTermDefinition testTypeSymmetricTriple,
-      toTermDefinition testTypeSymmetricTripleName,
-      toTermDefinition testTypeTimestamp,
-      toTermDefinition testTypeTimestampName,
-      toTermDefinition testTypeTriple,
-      toTermDefinition testTypeTripleName,
-      toTermDefinition testTypeUnionMonomorphic,
-      toTermDefinition testTypeUnionMonomorphicName,
-      toTermDefinition testTypeUnionPolymorphicRecursive,
-      toTermDefinition testTypeUnionPolymorphicRecursiveName,
-      toTermDefinition testTypeUnit,
-      toTermDefinition testTypeUnitName,
+      toDefinition testTypeBuddyListA,
+      toDefinition testTypeBuddyListAName,
+      toDefinition testTypeBuddyListB,
+      toDefinition testTypeBuddyListBName,
+      toDefinition testTypeComparison,
+      toDefinition testTypeComparisonName,
+      toDefinition testTypeEither,
+      toDefinition testTypeEitherName,
+      toDefinition testTypeHydraLiteralType,
+      toDefinition testTypeHydraLiteralTypeName,
+      toDefinition testTypeHydraType,
+      toDefinition testTypeHydraTypeName,
+      toDefinition testTypeIntList,
+      toDefinition testTypeIntListName,
+      toDefinition testTypeLatLon,
+      toDefinition testTypeLatLonName,
+      toDefinition testTypeLatLonPoly,
+      toDefinition testTypeLatLonPolyName,
+      toDefinition testTypeList,
+      toDefinition testTypeListName,
+      toDefinition testTypeNumber,
+      toDefinition testTypeNumberName,
+      toDefinition testTypePerson,
+      toDefinition testTypePersonName,
+      toDefinition testTypePersonOrSomething,
+      toDefinition testTypePersonOrSomethingName,
+      toDefinition testTypePolymorphicWrapper,
+      toDefinition testTypePolymorphicWrapperName,
+      toDefinition testTypeSimpleNumber,
+      toDefinition testTypeSimpleNumberName,
+      toDefinition testTypeStringAlias,
+      toDefinition testTypeStringAliasName,
+      toDefinition testTypeSymmetricTriple,
+      toDefinition testTypeSymmetricTripleName,
+      toDefinition testTypeTimestamp,
+      toDefinition testTypeTimestampName,
+      toDefinition testTypeTriple,
+      toDefinition testTypeTripleName,
+      toDefinition testTypeUnionMonomorphic,
+      toDefinition testTypeUnionMonomorphicName,
+      toDefinition testTypeUnionPolymorphicRecursive,
+      toDefinition testTypeUnionPolymorphicRecursiveName,
+      toDefinition testTypeUnit,
+      toDefinition testTypeUnitName,
       -- Additional utility types
-      toTermDefinition concatType,
-      toTermDefinition compareStringsType,
-      toTermDefinition eitherStringOrInt8TypeName,
-      toTermDefinition eitherStringOrInt8Type,
-      toTermDefinition exampleProjectionType,
-      toTermDefinition listOfInt8sType,
-      toTermDefinition listOfInt16sType,
-      toTermDefinition listOfListsOfStringsType,
-      toTermDefinition listOfSetOfStringsType,
-      toTermDefinition listOfStringsType,
-      toTermDefinition mapOfStringsToIntsType,
-      toTermDefinition optionalInt8Type,
-      toTermDefinition optionalInt16Type,
-      toTermDefinition optionalStringType,
-      toTermDefinition setOfStringsType,
-      toTermDefinition stringOrIntName,
-      toTermDefinition stringOrIntType,
-      toTermDefinition testTypeName]
+      toDefinition concatType,
+      toDefinition compareStringsType,
+      toDefinition eitherStringOrInt8TypeName,
+      toDefinition eitherStringOrInt8Type,
+      toDefinition exampleProjectionType,
+      toDefinition listOfInt8sType,
+      toDefinition listOfInt16sType,
+      toDefinition listOfListsOfStringsType,
+      toDefinition listOfSetOfStringsType,
+      toDefinition listOfStringsType,
+      toDefinition mapOfStringsToIntsType,
+      toDefinition optionalInt8Type,
+      toDefinition optionalInt16Type,
+      toDefinition optionalStringType,
+      toDefinition setOfStringsType,
+      toDefinition stringOrIntName,
+      toDefinition stringOrIntType,
+      toDefinition testTypeName]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-defineType :: String -> TTerm Type -> TBinding Type
+defineType :: String -> TTerm Type -> TTermDefinition Type
 defineType name = define name . firstClassType
 
 -- Helper to create fully qualified names within this module
@@ -101,302 +101,302 @@ testTypesName :: String -> TTerm Name
 testTypesName localName = name localName
 
 -- Type name definitions
-testTypeBuddyListAName :: TBinding Name
+testTypeBuddyListAName :: TTermDefinition Name
 testTypeBuddyListAName = define "testTypeBuddyListAName" $
   testTypesName "BuddyListA"
 
-testTypeBuddyListBName :: TBinding Name
+testTypeBuddyListBName :: TTermDefinition Name
 testTypeBuddyListBName = define "testTypeBuddyListBName" $
   testTypesName "BuddyListB"
 
-testTypeComparisonName :: TBinding Name
+testTypeComparisonName :: TTermDefinition Name
 testTypeComparisonName = define "testTypeComparisonName" $
   testTypesName "Comparison"
 
-testTypeEitherName :: TBinding Name
+testTypeEitherName :: TTermDefinition Name
 testTypeEitherName = define "testTypeEitherName" $
   testTypesName "Either"
 
-testTypeHydraLiteralTypeName :: TBinding Name
+testTypeHydraLiteralTypeName :: TTermDefinition Name
 testTypeHydraLiteralTypeName = define "testTypeHydraLiteralTypeName" $
   testTypesName "HydraLiteralType"
 
-testTypeHydraTypeName :: TBinding Name
+testTypeHydraTypeName :: TTermDefinition Name
 testTypeHydraTypeName = define "testTypeHydraTypeName" $
   testTypesName "HydraType"
 
-testTypeIntListName :: TBinding Name
+testTypeIntListName :: TTermDefinition Name
 testTypeIntListName = define "testTypeIntListName" $
   testTypesName "IntList"
 
-testTypeLatLonName :: TBinding Name
+testTypeLatLonName :: TTermDefinition Name
 testTypeLatLonName = define "testTypeLatLonName" $
   testTypesName "LatLon"
 
-testTypeLatLonPolyName :: TBinding Name
+testTypeLatLonPolyName :: TTermDefinition Name
 testTypeLatLonPolyName = define "testTypeLatLonPolyName" $
   testTypesName "LatLonPoly"
 
-testTypeListName :: TBinding Name
+testTypeListName :: TTermDefinition Name
 testTypeListName = define "testTypeListName" $
   testTypesName "List"
 
-testTypeNumberName :: TBinding Name
+testTypeNumberName :: TTermDefinition Name
 testTypeNumberName = define "testTypeNumberName" $
   testTypesName "Number"
 
-testTypePersonName :: TBinding Name
+testTypePersonName :: TTermDefinition Name
 testTypePersonName = define "testTypePersonName" $
   testTypesName "Person"
 
-testTypePersonOrSomethingName :: TBinding Name
+testTypePersonOrSomethingName :: TTermDefinition Name
 testTypePersonOrSomethingName = define "testTypePersonOrSomethingName" $
   testTypesName "PersonOrSomething"
 
-testTypePolymorphicWrapperName :: TBinding Name
+testTypePolymorphicWrapperName :: TTermDefinition Name
 testTypePolymorphicWrapperName = define "testTypePolymorphicWrapperName" $
   testTypesName "PolymorphicWrapper"
 
-testTypeSimpleNumberName :: TBinding Name
+testTypeSimpleNumberName :: TTermDefinition Name
 testTypeSimpleNumberName = define "testTypeSimpleNumberName" $
   testTypesName "SimpleNumber"
 
-testTypeStringAliasName :: TBinding Name
+testTypeStringAliasName :: TTermDefinition Name
 testTypeStringAliasName = define "testTypeStringAliasName" $
   testTypesName "StringAlias"
 
-testTypeSymmetricTripleName :: TBinding Name
+testTypeSymmetricTripleName :: TTermDefinition Name
 testTypeSymmetricTripleName = define "testTypeSymmetricTripleName" $
   testTypesName "SymmetricTriple"
 
-testTypeTimestampName :: TBinding Name
+testTypeTimestampName :: TTermDefinition Name
 testTypeTimestampName = define "testTypeTimestampName" $
   testTypesName "Timestamp"
 
-testTypeTripleName :: TBinding Name
+testTypeTripleName :: TTermDefinition Name
 testTypeTripleName = define "testTypeTripleName" $
   testTypesName "Triple"
 
-testTypeUnionMonomorphicName :: TBinding Name
+testTypeUnionMonomorphicName :: TTermDefinition Name
 testTypeUnionMonomorphicName = define "testTypeUnionMonomorphicName" $
   testTypesName "UnionMonomorphic"
 
-testTypeUnionPolymorphicRecursiveName :: TBinding Name
+testTypeUnionPolymorphicRecursiveName :: TTermDefinition Name
 testTypeUnionPolymorphicRecursiveName = define "testTypeUnionPolymorphicRecursiveName" $
   testTypesName "UnionPolymorphicRecursive"
 
-testTypeUnitName :: TBinding Name
+testTypeUnitName :: TTermDefinition Name
 testTypeUnitName = define "testTypeUnitName" $
   testTypesName "Unit"
 
 -- Type definitions
-testTypeBuddyListA :: TBinding Type
+testTypeBuddyListA :: TTermDefinition Type
 testTypeBuddyListA = defineType "testTypeBuddyListA" $
   T.forAll "a" $ T.record (testTypeBuddyListAName) [
     "head">: T.variable "a",
     "tail">: T.maybe $
       T.apply (Core.typeVariable $ testTypeBuddyListBName) (T.variable "a")]
 
-testTypeBuddyListB :: TBinding Type
+testTypeBuddyListB :: TTermDefinition Type
 testTypeBuddyListB = defineType "testTypeBuddyListB" $
   T.forAll "a" $ T.record (testTypeBuddyListBName) [
     "head">: T.variable "a",
     "tail">: T.maybe $
       T.apply (Core.typeVariable $ testTypeBuddyListAName) (T.variable "a")]
 
-testTypeComparison :: TBinding Type
+testTypeComparison :: TTermDefinition Type
 testTypeComparison = defineType "testTypeComparison" $
   T.union (testTypeComparisonName) [
     "lessThan">: T.unit,
     "equalTo">: T.unit,
     "greaterThan">: T.unit]
 
-testTypeEither :: TBinding Type
+testTypeEither :: TTermDefinition Type
 testTypeEither = defineType "testTypeEither" $
   T.forAll "a" $ T.forAll "b" $ T.union testTypeEitherName [
     "left">: T.variable "a",
     "right">: T.variable "b"]
 
-testTypeHydraLiteralType :: TBinding Type
+testTypeHydraLiteralType :: TTermDefinition Type
 testTypeHydraLiteralType = defineType "testTypeHydraLiteralType" $
   T.union testTypeHydraLiteralTypeName [
     "boolean">: T.boolean,
     "string">: T.string]
 
-testTypeHydraType :: TBinding Type
+testTypeHydraType :: TTermDefinition Type
 testTypeHydraType = defineType "testTypeHydraType" $
   T.union testTypeHydraTypeName [
     "literal">: Core.typeVariable testTypeHydraLiteralTypeName,
     "list">: Core.typeVariable testTypeHydraTypeName]
 
-testTypeIntList :: TBinding Type
+testTypeIntList :: TTermDefinition Type
 testTypeIntList = defineType "testTypeIntList" $
   T.record testTypeIntListName [
     "head">: T.int32,
     "tail">: T.maybe $ Core.typeVariable testTypeIntListName]
 
-testTypeLatLon :: TBinding Type
+testTypeLatLon :: TTermDefinition Type
 testTypeLatLon = defineType "testTypeLatLon" $
   T.record testTypeLatLonName [
     "lat">: T.float32,
     "lon">: T.float32]
 
-testTypeLatLonPoly :: TBinding Type
+testTypeLatLonPoly :: TTermDefinition Type
 testTypeLatLonPoly = defineType "testTypeLatLonPoly" $
   T.forAll "a" $ T.record testTypeLatLonPolyName [
     "lat">: T.variable "a",
     "lon">: T.variable "a"]
 
-testTypeList :: TBinding Type
+testTypeList :: TTermDefinition Type
 testTypeList = defineType "testTypeList" $
   T.forAll "a" $ T.record testTypeListName [
     "head">: T.variable "a",
     "tail">: T.maybe $
       T.apply (Core.typeVariable testTypeListName) (T.variable "a")]
 
-testTypeNumber :: TBinding Type
+testTypeNumber :: TTermDefinition Type
 testTypeNumber = defineType "testTypeNumber" $
   T.union testTypeNumberName [
     "int">: T.int32,
     "float">: T.float32]
 
-testTypePerson :: TBinding Type
+testTypePerson :: TTermDefinition Type
 testTypePerson = defineType "testTypePerson" $
   T.record testTypePersonName [
     "firstName">: T.string,
     "lastName">: T.string,
     "age">: T.int32]
 
-testTypePersonOrSomething :: TBinding Type
+testTypePersonOrSomething :: TTermDefinition Type
 testTypePersonOrSomething = defineType "testTypePersonOrSomething" $
   T.forAll "a" $ T.union testTypePersonOrSomethingName [
     "person">: Core.typeVariable testTypePersonName,
     "other">: T.variable "a"]
 
-testTypePolymorphicWrapper :: TBinding Type
+testTypePolymorphicWrapper :: TTermDefinition Type
 testTypePolymorphicWrapper = defineType "testTypePolymorphicWrapper" $
   T.forAll "a" $ Core.typeWrap (T.list $ T.variable "a")
 
-testTypeSimpleNumber :: TBinding Type
+testTypeSimpleNumber :: TTermDefinition Type
 testTypeSimpleNumber = defineType "testTypeSimpleNumber" $
   T.union testTypeSimpleNumberName [
     "int">: T.int32,
     "float">: T.float32]
 
-testTypeStringAlias :: TBinding Type
+testTypeStringAlias :: TTermDefinition Type
 testTypeStringAlias = defineType "testTypeStringAlias" $
   Core.typeWrap T.string
 
-testTypeSymmetricTriple :: TBinding Type
+testTypeSymmetricTriple :: TTermDefinition Type
 testTypeSymmetricTriple = defineType "testTypeSymmetricTriple" $
   T.forAlls ["v", "e"] $ T.wrap testTypeSymmetricTripleName $
     T.applys (Core.typeVariable testTypeTripleName) [T.variable "v", T.variable "e", T.variable "v"]
 
-testTypeTimestamp :: TBinding Type
+testTypeTimestamp :: TTermDefinition Type
 testTypeTimestamp = defineType "testTypeTimestamp" $
   T.union testTypeTimestampName [
     "unixTimeMillis">: T.uint64,
     "date">: T.string]
 
-testTypeTriple :: TBinding Type
+testTypeTriple :: TTermDefinition Type
 testTypeTriple = defineType "testTypeTriple" $
   T.forAll "a" $ T.forAll "b" $ T.forAll "c" $ T.record testTypeTripleName [
     "first">: T.variable "a",
     "second">: T.variable "b",
     "third">: T.variable "c"]
 
-testTypeUnionMonomorphic :: TBinding Type
+testTypeUnionMonomorphic :: TTermDefinition Type
 testTypeUnionMonomorphic = defineType "testTypeUnionMonomorphic" $
   T.union testTypeUnionMonomorphicName [
     "bool">: T.boolean,
     "string">: T.string,
     "unit">: T.unit]
 
-testTypeUnionPolymorphicRecursive :: TBinding Type
+testTypeUnionPolymorphicRecursive :: TTermDefinition Type
 testTypeUnionPolymorphicRecursive = defineType "testTypeUnionPolymorphicRecursive" $
   T.forAll "a" $ T.union testTypeUnionPolymorphicRecursiveName [
     "bool">: T.boolean,
     "value">: T.variable "a",
     "other">: T.apply (Core.typeVariable testTypeUnionPolymorphicRecursiveName) (T.variable "a")]
 
-testTypeUnit :: TBinding Type
+testTypeUnit :: TTermDefinition Type
 testTypeUnit = defineType "testTypeUnit" $
   T.record testTypeUnitName []
 
 -- Additional type utilities for tests
 
-concatType :: TBinding Type
+concatType :: TTermDefinition Type
 concatType = defineType "concatType" $
   T.function T.string $ T.function T.string T.string
 
-compareStringsType :: TBinding Type
+compareStringsType :: TTermDefinition Type
 compareStringsType = defineType "compareStringsType" $
   T.function T.string T.string
 
-eitherStringOrInt8TypeName :: TBinding Name
+eitherStringOrInt8TypeName :: TTermDefinition Name
 eitherStringOrInt8TypeName = define "eitherStringOrInt8TypeName" $
   testTypesName "EitherStringOrInt8"
 
-eitherStringOrInt8Type :: TBinding Type
+eitherStringOrInt8Type :: TTermDefinition Type
 eitherStringOrInt8Type = defineType "eitherStringOrInt8Type" $
   T.union eitherStringOrInt8TypeName [
     "left">: T.string,
     "right">: Core.typeLiteral $ Core.literalTypeInteger Core.integerTypeInt8]
 
-exampleProjectionType :: TBinding Type
+exampleProjectionType :: TTermDefinition Type
 exampleProjectionType = defineType "exampleProjectionType" $
   T.function (Core.typeVariable testTypePersonName) T.string
 
-listOfInt8sType :: TBinding Type
+listOfInt8sType :: TTermDefinition Type
 listOfInt8sType = defineType "listOfInt8sType" $
   T.list (Core.typeLiteral $ Core.literalTypeInteger Core.integerTypeInt8)
 
-listOfInt16sType :: TBinding Type
+listOfInt16sType :: TTermDefinition Type
 listOfInt16sType = defineType "listOfInt16sType" $
   T.list T.int16
 
-listOfListsOfStringsType :: TBinding Type
+listOfListsOfStringsType :: TTermDefinition Type
 listOfListsOfStringsType = defineType "listOfListsOfStringsType" $
   T.list $ T.list T.string
 
-listOfSetOfStringsType :: TBinding Type
+listOfSetOfStringsType :: TTermDefinition Type
 listOfSetOfStringsType = defineType "listOfSetOfStringsType" $
   T.list $ T.set T.string
 
-listOfStringsType :: TBinding Type
+listOfStringsType :: TTermDefinition Type
 listOfStringsType = defineType "listOfStringsType" $
   T.list T.string
 
-mapOfStringsToIntsType :: TBinding Type
+mapOfStringsToIntsType :: TTermDefinition Type
 mapOfStringsToIntsType = defineType "mapOfStringsToIntsType" $
   T.map T.string T.int32
 
-optionalInt8Type :: TBinding Type
+optionalInt8Type :: TTermDefinition Type
 optionalInt8Type = defineType "optionalInt8Type" $
   T.maybe (Core.typeLiteral $ Core.literalTypeInteger Core.integerTypeInt8)
 
-optionalInt16Type :: TBinding Type
+optionalInt16Type :: TTermDefinition Type
 optionalInt16Type = defineType "optionalInt16Type" $
   T.maybe T.int16
 
-optionalStringType :: TBinding Type
+optionalStringType :: TTermDefinition Type
 optionalStringType = defineType "optionalStringType" $
   T.maybe T.string
 
-setOfStringsType :: TBinding Type
+setOfStringsType :: TTermDefinition Type
 setOfStringsType = defineType "setOfStringsType" $
   T.set T.string
 
-stringOrIntName :: TBinding Name
+stringOrIntName :: TTermDefinition Name
 stringOrIntName = define "stringOrIntName" $
   testTypesName "StringOrInt"
 
-stringOrIntType :: TBinding Type
+stringOrIntType :: TTermDefinition Type
 stringOrIntType = defineType "stringOrIntType" $
   T.union stringOrIntName [
     "left">: T.string,
     "right">: T.int32]
 
-testTypeName :: TBinding Name
+testTypeName :: TTermDefinition Name
 testTypeName = define "testTypeName" $
   testTypesName "Test"

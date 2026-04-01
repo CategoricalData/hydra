@@ -54,7 +54,7 @@ import qualified Data.Maybe              as Y
 ns :: Namespace
 ns = Namespace "hydra.eval.lib.equality"
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
@@ -64,13 +64,13 @@ module_ = Module ns elements
     Just ("Evaluation-level implementations of Equality functions for the Hydra interpreter.")
   where
     elements = [
-      toTermDefinition identity_,
-      toTermDefinition max_,
-      toTermDefinition min_]
+      toDefinition identity_,
+      toDefinition max_,
+      toDefinition min_]
 
 -- | Interpreter-friendly identity function.
 -- identity x = x
-identity_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+identity_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
 identity_ = define "identity" $
   doc "Interpreter-friendly identity function." $
   "cx" ~> "g" ~>
@@ -79,7 +79,7 @@ identity_ = define "identity" $
 
 -- | Interpreter-friendly max.
 -- max x y = ifElse (gte x y) x y
-max_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+max_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 max_ = define "max" $
   doc "Interpreter-friendly max." $
   "cx" ~> "g" ~>
@@ -98,7 +98,7 @@ max_ = define "max" $
 
 -- | Interpreter-friendly min.
 -- min x y = ifElse (lte x y) x y
-min_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+min_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 min_ = define "min" $
   doc "Interpreter-friendly min." $
   "cx" ~> "g" ~>

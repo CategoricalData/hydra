@@ -80,17 +80,17 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
 module_ = Module (Namespace "hydra.ext.typeScript.language")
-  [toTermDefinition typeScriptLanguage, toTermDefinition typeScriptReservedWords]
+  [toDefinition typeScriptLanguage, toDefinition typeScriptReservedWords]
   [Rewriting.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints for TypeScript"
 
-typeScriptLanguage :: TBinding Language
+typeScriptLanguage :: TTermDefinition Language
 typeScriptLanguage = define "typeScriptLanguage" $
   doc "Language constraints for TypeScript" $ lets [
   "eliminationVariants">: Sets.empty,
@@ -135,7 +135,7 @@ typeScriptLanguage = define "typeScriptLanguage" $
       (var "typeVariants")
       (var "types"))
 
-typeScriptReservedWords :: TBinding (S.Set String)
+typeScriptReservedWords :: TTermDefinition (S.Set String)
 typeScriptReservedWords = define "typeScriptReservedWords" $
   doc ("A set of reserved words in TypeScript."
     <> " Taken directly from https://github.com/microsoft/TypeScript/issues/2536") $ lets [

@@ -28,7 +28,7 @@ module_ :: Module
 module_ = Module ns elements namespaces kernelTypesNamespaces $
     Just "Hydra's type checking test suite"
   where
-    elements = [Phantoms.toTermDefinition allTests]
+    elements = [Phantoms.toDefinition allTests]
     namespaces = [
       Advanced.ns,
       AlgebraicTypes.ns,
@@ -38,7 +38,7 @@ module_ = Module ns elements namespaces kernelTypesNamespaces $
       NominalTypes.ns,
       Namespace "hydra.rewriting"]
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     doc "The group of all type checking tests" $
     Testing.testGroup (string "checking") nothing (list subgroups) (list ([] :: [TTerm TestCaseWithMetadata]))

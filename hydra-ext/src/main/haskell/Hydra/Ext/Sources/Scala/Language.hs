@@ -80,17 +80,17 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
 module_ = Module (Namespace "hydra.ext.scala.language")
-  [toTermDefinition scalaLanguage, toTermDefinition scalaReservedWords]
+  [toDefinition scalaLanguage, toDefinition scalaReservedWords]
   [Lexical.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints and reserved words for Scala"
 
-scalaLanguage :: TBinding Language
+scalaLanguage :: TTermDefinition Language
 scalaLanguage = define "scalaLanguage" $
   doc "Language constraints for Scala" $ lets [
   "eliminationVariants">: Sets.fromList $ list [
@@ -167,7 +167,7 @@ scalaLanguage = define "scalaLanguage" $
       (var "typeVariants")
       (var "typePredicate"))
 
-scalaReservedWords :: TBinding (S.Set String)
+scalaReservedWords :: TTermDefinition (S.Set String)
 scalaReservedWords = define "scalaReservedWords" $
   doc "A set of reserved words in Scala" $ lets [
   "keywords">:

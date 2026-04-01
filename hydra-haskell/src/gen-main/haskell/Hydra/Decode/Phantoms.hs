@@ -34,3 +34,13 @@ tTerm a cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermWrap v0 -> Eithers.map (\b -> Phantoms.TTerm b) (Core_.term cx (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (Lexical.stripAndDereferenceTermEither cx raw)
+
+tTermDefinition :: t0 -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Phantoms.TTermDefinition t1)
+tTermDefinition a cx raw =
+    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+      Core.TermRecord v0 ->
+        let fieldMap = Helpers.toFieldMap v0
+        in (Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "term" (tTerm a) fieldMap cx) (\field_term -> Right (Phantoms.TTermDefinition {
+          Phantoms.tTermDefinitionName = field_name,
+          Phantoms.tTermDefinitionTerm = field_term}))))
+      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)

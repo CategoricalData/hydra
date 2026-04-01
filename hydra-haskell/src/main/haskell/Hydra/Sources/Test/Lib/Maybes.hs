@@ -36,7 +36,7 @@ module_ = Module ns elements
     kernelTypesNamespaces $
     Just "Test cases for hydra.lib.maybes primitives"
   where
-    elements = [Phantoms.toTermDefinition allTests]
+    elements = [Phantoms.toDefinition allTests]
 
 (#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
 (#) = (Phantoms.@@)
@@ -216,7 +216,7 @@ maybesToList = subgroup "toList" [
       (Maybes.toList x)
       (Phantoms.list $ Phantoms.int32 <$> expected)
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.maybes primitives" $
     supergroup "hydra.lib.maybes primitives" [

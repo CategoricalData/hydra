@@ -40,7 +40,7 @@ import qualified Hydra.Sources.Haskell.Syntax as HaskellSyntax
 import qualified Hydra.Sources.Haskell.Utils as HaskellUtilsSource
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 
@@ -55,23 +55,23 @@ module_ = Module ns elements
     Just "Haskell test code generation for HSpec-based generation tests"
   where
     elements = [
-      toTermDefinition addNamespacesToNamespaces,
-      toTermDefinition buildNamespacesForTestGroup,
-      toTermDefinition buildTestModule,
-      toTermDefinition collectNames,
-      toTermDefinition collectTestCases,
-      toTermDefinition extractEncodedTermVariableNames,
-      toTermDefinition extractTestTerms,
-      toTermDefinition findHaskellImports,
-      toTermDefinition generateHaskellTestFile,
-      toTermDefinition generateTestCase,
-      toTermDefinition generateTestFile,
-      toTermDefinition generateTestGroupHierarchy,
-      toTermDefinition namespaceToModuleName]
+      toDefinition addNamespacesToNamespaces,
+      toDefinition buildNamespacesForTestGroup,
+      toDefinition buildTestModule,
+      toDefinition collectNames,
+      toDefinition collectTestCases,
+      toDefinition extractEncodedTermVariableNames,
+      toDefinition extractTestTerms,
+      toDefinition findHaskellImports,
+      toDefinition generateHaskellTestFile,
+      toDefinition generateTestCase,
+      toDefinition generateTestFile,
+      toDefinition generateTestGroupHierarchy,
+      toDefinition namespaceToModuleName]
 
 
 -- | Add namespaces from a set of names to existing namespaces
-addNamespacesToNamespaces :: TBinding (Namespaces H.ModuleName -> S.Set Name -> Namespaces H.ModuleName)
+addNamespacesToNamespaces :: TTermDefinition (Namespaces H.ModuleName -> S.Set Name -> Namespaces H.ModuleName)
 addNamespacesToNamespaces = define "addNamespacesToNamespaces" $
   doc "Add namespaces from a set of names to existing namespaces" $
   lambda "ns0" $ lambda "names" $ lets [
@@ -85,7 +85,7 @@ addNamespacesToNamespaces = define "addNamespacesToNamespaces" $
 
 
 -- | Build namespaces for a test group including encoded term references
-buildNamespacesForTestGroup :: TBinding (Module -> TestGroup -> Graph -> Either String (Namespaces H.ModuleName))
+buildNamespacesForTestGroup :: TTermDefinition (Module -> TestGroup -> Graph -> Either String (Namespaces H.ModuleName))
 buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
   doc "Build namespaces for a test group including encoded term references" $
   lambda "mod" $ lambda "tgroup" $ lambda "graph_" $ lets [
@@ -118,7 +118,7 @@ buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
 
 
 -- | Build the complete test module for Haskell HSpec
-buildTestModule :: TBinding (Module -> TestGroup -> String -> Namespaces H.ModuleName -> String)
+buildTestModule :: TTermDefinition (Module -> TestGroup -> String -> Namespaces H.ModuleName -> String)
 buildTestModule = define "buildTestModule" $
   doc "Build the complete test module for Haskell HSpec" $
   lambda "testModule" $ lambda "testGroup" $ lambda "testBody" $ lambda "namespaces" $ lets [
@@ -152,7 +152,7 @@ buildTestModule = define "buildTestModule" $
 
 
 -- | Collect variable names from encoded terms within a single term node
-collectNames :: TBinding (Graph -> S.Set Name -> Term -> S.Set Name)
+collectNames :: TTermDefinition (Graph -> S.Set Name -> Term -> S.Set Name)
 collectNames = define "collectNames" $
   doc "Collect variable names from encoded terms within a single term node" $
   lambda "graf" $ lambda "names" $ lambda "t" $
@@ -169,7 +169,7 @@ collectNames = define "collectNames" $
 
 
 -- | Collect all test cases from a test group (recursively)
-collectTestCases :: TBinding (TestGroup -> [TestCaseWithMetadata])
+collectTestCases :: TTermDefinition (TestGroup -> [TestCaseWithMetadata])
 collectTestCases = define "collectTestCases" $
   doc "Collect all test cases from a test group recursively" $
   lambda "tg" $
@@ -179,7 +179,7 @@ collectTestCases = define "collectTestCases" $
 
 
 -- | Extract all variable names from term-encoded terms in a given term
-extractEncodedTermVariableNames :: TBinding (Graph -> Term -> S.Set Name)
+extractEncodedTermVariableNames :: TTermDefinition (Graph -> Term -> S.Set Name)
 extractEncodedTermVariableNames = define "extractEncodedTermVariableNames" $
   doc "Extract all variable names from term-encoded terms in a given term" $
   lambda "graf" $ lambda "term" $
@@ -187,7 +187,7 @@ extractEncodedTermVariableNames = define "extractEncodedTermVariableNames" $
 
 
 -- | Extract terms from a test case
-extractTestTerms :: TBinding (TestCaseWithMetadata -> [Term])
+extractTestTerms :: TTermDefinition (TestCaseWithMetadata -> [Term])
 extractTestTerms = define "extractTestTerms" $
   doc "Extract input and output terms from a test case" $
   lambda "tcm" $
@@ -195,7 +195,7 @@ extractTestTerms = define "extractTestTerms" $
 
 
 -- | Find necessary imports for Haskell based on referenced names
-findHaskellImports :: TBinding (Namespaces H.ModuleName -> S.Set Name -> [String])
+findHaskellImports :: TTermDefinition (Namespaces H.ModuleName -> S.Set Name -> [String])
 findHaskellImports = define "findHaskellImports" $
   doc "Find necessary imports for Haskell based on referenced names" $
   lambda "namespaces" $ lambda "names_" $ lets [
@@ -216,7 +216,7 @@ findHaskellImports = define "findHaskellImports" $
 
 
 -- | Generate a Haskell test file for a test group, with type inference and namespace building
-generateHaskellTestFile :: TBinding (Module -> TestGroup -> Graph -> Either String (String, String))
+generateHaskellTestFile :: TTermDefinition (Module -> TestGroup -> Graph -> Either String (String, String))
 generateHaskellTestFile = define "generateHaskellTestFile" $
   doc "Generate a Haskell test file for a test group, with type inference and namespace building" $
   lambda "testModule" $ lambda "testGroup" $ lambda "g" $
@@ -227,7 +227,7 @@ generateHaskellTestFile = define "generateHaskellTestFile" $
 
 
 -- | Generate a single HSpec test case from a universal test case
-generateTestCase :: TBinding (Int -> TestCaseWithMetadata -> Either String [String])
+generateTestCase :: TTermDefinition (Int -> TestCaseWithMetadata -> Either String [String])
 generateTestCase = define "generateTestCase" $
   doc "Generate a single HSpec test case from a universal test case" $
   lambda "depth" $ lambda "tcm" $ lets [
@@ -243,7 +243,7 @@ generateTestCase = define "generateTestCase" $
 
 
 -- | Generate a complete Haskell test file
-generateTestFile :: TBinding (Module -> TestGroup -> Namespaces H.ModuleName -> Either String (String, String))
+generateTestFile :: TTermDefinition (Module -> TestGroup -> Namespaces H.ModuleName -> Either String (String, String))
 generateTestFile = define "generateTestFile" $
   doc "Generate a complete Haskell test file" $
   lambda "testModule" $ lambda "testGroup" $ lambda "namespaces" $
@@ -258,7 +258,7 @@ generateTestFile = define "generateTestFile" $
 
 
 -- | Generate test hierarchy preserving the structure with H.describe blocks for subgroups
-generateTestGroupHierarchy :: TBinding (Int -> TestGroup -> Either String String)
+generateTestGroupHierarchy :: TTermDefinition (Int -> TestGroup -> Either String String)
 generateTestGroupHierarchy = define "generateTestGroupHierarchy" $
   doc "Generate test hierarchy preserving the structure with H.describe blocks for subgroups" $
   lambda "depth" $ lambda "testGroup" $ lets [
@@ -300,7 +300,7 @@ generateTestGroupHierarchy = define "generateTestGroupHierarchy" $
 
 
 -- | Convert namespace to Haskell module name
-namespaceToModuleName :: TBinding (Namespace -> String)
+namespaceToModuleName :: TTermDefinition (Namespace -> String)
 namespaceToModuleName = define "namespaceToModuleName" $
   doc "Convert namespace to Haskell module name" $
   lambda "ns_" $

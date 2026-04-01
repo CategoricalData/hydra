@@ -94,7 +94,7 @@ import qualified Hydra.Ext.Sources.Pg.Coder as PgCoder
 import qualified Hydra.Sources.Json.Model as JsonModel
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 ns :: Namespace
@@ -107,17 +107,17 @@ module_ = Module ns elements
     Just "Utility functions for property graph operations"
   where
     elements = [
-      toTermDefinition defaultTinkerpopAnnotations,
-      toTermDefinition examplePgSchema,
-      toTermDefinition expString,
-      toTermDefinition lazyGraphToElements,
-      toTermDefinition pgElementToJson,
-      toTermDefinition pgElementsToJson,
-      toTermDefinition propertyGraphElements,
-      toTermDefinition typeApplicationTermToPropertyGraph]
+      toDefinition defaultTinkerpopAnnotations,
+      toDefinition examplePgSchema,
+      toDefinition expString,
+      toDefinition lazyGraphToElements,
+      toDefinition pgElementToJson,
+      toDefinition pgElementsToJson,
+      toDefinition propertyGraphElements,
+      toDefinition typeApplicationTermToPropertyGraph]
 
 -- | Default Tinkerpop annotation schema
-defaultTinkerpopAnnotations :: TBinding PGM.AnnotationSchema
+defaultTinkerpopAnnotations :: TTermDefinition PGM.AnnotationSchema
 defaultTinkerpopAnnotations = define "defaultTinkerpopAnnotations" $
   doc "Default Tinkerpop annotation schema" $
   record PGM._AnnotationSchema [
@@ -138,7 +138,7 @@ defaultTinkerpopAnnotations = define "defaultTinkerpopAnnotations" $
     PGM._AnnotationSchema_ignore>>: string "ignore"]
 
 -- | Example property graph schema with string values
-examplePgSchema :: TBinding (PGM.Schema Graph () String)
+examplePgSchema :: TTermDefinition (PGM.Schema Graph () String)
 examplePgSchema = define "examplePgSchema" $
   doc "Example property graph schema with string values" $
   record PGM._Schema [
@@ -153,14 +153,14 @@ examplePgSchema = define "examplePgSchema" $
     PGM._Schema_defaultEdgeId>>: string "defaultEdgeId"]
 
 -- | Extract a string from a term using the empty graph
-expString :: TBinding (Context -> Term -> Either (InContext Error) String)
+expString :: TTermDefinition (Context -> Term -> Either (InContext Error) String)
 expString = define "expString" $
   doc "Extract a string from a term using the empty graph" $
   "cx" ~> "term" ~>
     ExtractCore.string @@ var "cx" @@ Graph.emptyGraph @@ var "term"
 
 -- | Get all elements from a property graph
-propertyGraphElements :: TBinding (PG.Graph v -> [PG.Element v])
+propertyGraphElements :: TTermDefinition (PG.Graph v -> [PG.Element v])
 propertyGraphElements = define "propertyGraphElements" $
   doc "Get all elements from a property graph" $
   "g" ~>
@@ -169,7 +169,7 @@ propertyGraphElements = define "propertyGraphElements" $
       (Lists.map ("x" ~> inject PG._Element PG._Element_edge (var "x")) (Maps.elems $ project PG._Graph PG._Graph_edges @@ var "g"))
 
 -- | Convert a type-annotated term to property graph elements
-typeApplicationTermToPropertyGraph :: TBinding (PGM.Schema Graph t v -> Type -> t -> t -> Context -> Graph
+typeApplicationTermToPropertyGraph :: TTermDefinition (PGM.Schema Graph t v -> Type -> t -> t -> Context -> Graph
   -> Either (InContext Error) (Term -> Context -> Either (InContext Error) [PG.Element v]))
 typeApplicationTermToPropertyGraph = define "typeApplicationTermToPropertyGraph" $
   doc "Convert a type-annotated term to property graph elements" $
@@ -187,7 +187,7 @@ typeApplicationTermToPropertyGraph = define "typeApplicationTermToPropertyGraph"
             (Util.coderEncode (Util.adapterCoder $ var "adapter") @@ var "cx'" @@ var "term")))
 
 -- | Get all elements from a lazy graph
-lazyGraphToElements :: TBinding (PG.LazyGraph v -> [PG.Element v])
+lazyGraphToElements :: TTermDefinition (PG.LazyGraph v -> [PG.Element v])
 lazyGraphToElements = define "lazyGraphToElements" $
   doc "Get all elements from a lazy graph" $
   "lg" ~>
@@ -196,7 +196,7 @@ lazyGraphToElements = define "lazyGraphToElements" $
       (Lists.map ("x" ~> inject PG._Element PG._Element_edge (var "x")) (project PG._LazyGraph PG._LazyGraph_edges @@ var "lg"))
 
 -- | Convert a property graph element to JSON
-pgElementToJson :: TBinding (PGM.Schema Graph t v -> PG.Element v -> Context -> Either (InContext Error) JM.Value)
+pgElementToJson :: TTermDefinition (PGM.Schema Graph t v -> PG.Element v -> Context -> Either (InContext Error) JM.Value)
 pgElementToJson = define "pgElementToJson" $
   doc "Convert a property graph element to JSON" $
   "schema" ~> "el" ~> "cx" ~>
@@ -230,7 +230,7 @@ pgElementToJson = define "pgElementToJson" $
     @@ var "el"
 
 -- | Convert a list of property graph elements to JSON
-pgElementsToJson :: TBinding (PGM.Schema Graph t v -> [PG.Element v] -> Context -> Either (InContext Error) JM.Value)
+pgElementsToJson :: TTermDefinition (PGM.Schema Graph t v -> [PG.Element v] -> Context -> Either (InContext Error) JM.Value)
 pgElementsToJson = define "pgElementsToJson" $
   doc "Convert a list of property graph elements to JSON" $
   "schema" ~> "els" ~> "cx" ~>

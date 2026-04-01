@@ -10,4 +10,6 @@
 
 (defvar hydra_encode_phantoms_t_binding (lambda (a) (lambda (x) (list :record (make-hydra_core_record "hydra.phantoms.TBinding" (list (make-hydra_core_field "name" (hydra_encode_core_name (funcall (lambda (v) (hydra_phantoms_t_binding-name v)) x))) (make-hydra_core_field "term" (funcall (hydra_encode_phantoms_t_term a) (funcall (lambda (v) (hydra_phantoms_t_binding-term v)) x)))))))))
 
+(defvar hydra_encode_phantoms_t_term_definition (lambda (a) (lambda (x) (list :record (make-hydra_core_record "hydra.phantoms.TTermDefinition" (list (make-hydra_core_field "name" (hydra_encode_core_name (funcall (lambda (v) (hydra_phantoms_t_term_definition-name v)) x))) (make-hydra_core_field "term" (funcall (hydra_encode_phantoms_t_term a) (funcall (lambda (v) (hydra_phantoms_t_term_definition-term v)) x)))))))))
+
 (provide 'hydra.encode.phantoms)

@@ -26,7 +26,7 @@ module_ :: Module
 module_ = Module ns elements [Namespace "hydra.reduction", Namespace "hydra.show.core"] [] $
     Just "Test cases for hydra.lib.equality primitives"
   where
-    elements = [Phantoms.toTermDefinition allTests]
+    elements = [Phantoms.toDefinition allTests]
 
 -- Test groups for hydra.lib.equality primitives
 
@@ -168,7 +168,7 @@ equalityGtFloats = subgroup "gt floats" [
   where
     test name x y result = primCase name _equality_gt [float64 x, float64 y] result
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.equality primitives" $
     supergroup "hydra.lib.equality primitives" [

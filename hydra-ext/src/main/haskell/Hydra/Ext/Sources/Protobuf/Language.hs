@@ -80,17 +80,17 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-definition_ :: String -> TTerm a -> TBinding a
+definition_ :: String -> TTerm a -> TTermDefinition a
 definition_ = definitionInModule module_
 
 module_ :: Module
 module_ = Module (Namespace "hydra.ext.protobuf.language")
-  [toTermDefinition protobufLanguage, toTermDefinition protobufReservedWords]
+  [toDefinition protobufLanguage, toDefinition protobufReservedWords]
   [Lexical.ns, Rewriting.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints for Protobuf v3"
 
-protobufLanguage :: TBinding Language
+protobufLanguage :: TTermDefinition Language
 protobufLanguage = definition_ "protobufLanguage" $
   doc "Language constraints for Protocol Buffers v3" $ lets [
   "eliminationVariants">: Sets.empty,
@@ -156,7 +156,7 @@ protobufLanguage = definition_ "protobufLanguage" $
       (var "typeVariants")
       (var "typePredicate"))
 
-protobufReservedWords :: TBinding (S.Set String)
+protobufReservedWords :: TTermDefinition (S.Set String)
 protobufReservedWords = definition_ "protobufReservedWords" $
   doc "A set of reserved words in Protobuf" $ lets [
   "fieldNames">:

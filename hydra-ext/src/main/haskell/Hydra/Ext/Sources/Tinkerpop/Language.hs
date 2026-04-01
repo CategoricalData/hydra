@@ -84,7 +84,7 @@ import qualified Hydra.Ext.Org.Apache.Tinkerpop.Features as TF
 import qualified Hydra.Ext.Sources.Tinkerpop.Features as TinkerpopFeatures
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 ns :: Namespace
@@ -97,7 +97,7 @@ module_ = Module ns elements
     Just "Language constraints based on TinkerPop Graph.Features"
   where
     elements = [
-      toTermDefinition tinkerpopLanguage]
+      toDefinition tinkerpopLanguage]
 
 
 -- | Populate language constraints based on TinkerPop Graph.Features.
@@ -105,7 +105,7 @@ module_ = Module ns elements
 --       for Hydra we cannot support a term or type pattern unless it is provably safe in the target environment.
 --       Otherwise, generated expressions could cause failure during runtime operations.
 -- Also note that extra features are required on top of Graph.Features, again for reasons of completeness.
-tinkerpopLanguage :: TBinding (LanguageName -> TF.Features -> TF.ExtraFeatures a -> Language)
+tinkerpopLanguage :: TTermDefinition (LanguageName -> TF.Features -> TF.ExtraFeatures a -> Language)
 tinkerpopLanguage = define "tinkerpopLanguage" $
   doc "Populate language constraints based on TinkerPop Graph.Features" $
   lambda "name" $ lambda "features" $ lambda "extras" $ lets [

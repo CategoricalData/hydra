@@ -60,7 +60,7 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 ns :: Namespace
 ns = Namespace "hydra.eval.lib.lists"
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
@@ -70,33 +70,33 @@ module_ = Module ns elements
     Just ("Evaluation-level implementations of List functions for the Hydra interpreter.")
   where
     elements = [
-      toTermDefinition apply_,
-      toTermDefinition bind_,
-      toTermDefinition concat2_,
-      toTermDefinition dropWhile_,
-      toTermDefinition elem_,
-      toTermDefinition filter_,
-      toTermDefinition find_,
-      toTermDefinition foldl_,
-      toTermDefinition foldr_,
-      toTermDefinition group_,
-      toTermDefinition intercalate_,
-      toTermDefinition intersperse_,
-      toTermDefinition map_,
-      toTermDefinition nub_,
-      toTermDefinition partition_,
-      toTermDefinition pure_,
-      toTermDefinition replicate_,
-      toTermDefinition safeHead_,
-      toTermDefinition singleton_,
-      toTermDefinition sort_,
-      toTermDefinition sortOn_,
-      toTermDefinition span_,
-      toTermDefinition zipWith_]
+      toDefinition apply_,
+      toDefinition bind_,
+      toDefinition concat2_,
+      toDefinition dropWhile_,
+      toDefinition elem_,
+      toDefinition filter_,
+      toDefinition find_,
+      toDefinition foldl_,
+      toDefinition foldr_,
+      toDefinition group_,
+      toDefinition intercalate_,
+      toDefinition intersperse_,
+      toDefinition map_,
+      toDefinition nub_,
+      toDefinition partition_,
+      toDefinition pure_,
+      toDefinition replicate_,
+      toDefinition safeHead_,
+      toDefinition singleton_,
+      toDefinition sort_,
+      toDefinition sortOn_,
+      toDefinition span_,
+      toDefinition zipWith_]
 
 -- | Interpreter-friendly applicative apply for List terms.
 -- Applies each function in funsTerm to each argument in argsTerm.
-apply_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+apply_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 apply_ = define "apply" $
   doc "Interpreter-friendly applicative apply for List terms." $
   "cx" ~> "g" ~>
@@ -110,7 +110,7 @@ apply_ = define "apply" $
 
 -- | Interpreter-friendly monadic bind for List terms.
 -- Applies funTerm to each element and concatenates the results.
-bind_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+bind_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 bind_ = define "bind" $
   doc "Interpreter-friendly monadic bind for List terms." $
   "cx" ~> "g" ~>
@@ -124,7 +124,7 @@ bind_ = define "bind" $
 
 -- | Interpreter-friendly concat2 for List terms.
 -- Concatenates two lists.
-concat2_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+concat2_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 concat2_ = define "concat2" $
   doc "Interpreter-friendly concat2 for List terms." $
   "cx" ~> "g" ~>
@@ -136,7 +136,7 @@ concat2_ = define "concat2" $
 
 -- | Interpreter-friendly dropWhile for List terms.
 -- Drops elements from the front while predTerm returns true.
-dropWhile_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+dropWhile_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 dropWhile_ = define "dropWhile" $
   doc "Interpreter-friendly dropWhile for List terms." $
   "cx" ~> "g" ~>
@@ -152,7 +152,7 @@ dropWhile_ = define "dropWhile" $
 
 -- | Interpreter-friendly filter for List terms.
 -- Keeps elements where predTerm returns true.
-filter_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+filter_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 filter_ = define "filter" $
   doc "Interpreter-friendly filter for List terms." $
   "cx" ~> "g" ~>
@@ -173,7 +173,7 @@ filter_ = define "filter" $
 
 -- | Interpreter-friendly find for List terms.
 -- Returns the first element where predTerm returns true, or Nothing if none found.
-find_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+find_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 find_ = define "find" $
   doc "Interpreter-friendly find for List terms." $
   "cx" ~> "g" ~>
@@ -190,7 +190,7 @@ find_ = define "find" $
 -- | Interpreter-friendly left fold for List terms.
 -- Folds from the left: foldl f init [e1,e2,e3] = f (f (f init e1) e2) e3
 -- Each step is reduced through the interpreter so that the accumulator is always a value.
-foldl_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
+foldl_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
 foldl_ = define "foldl" $
   doc "Interpreter-friendly left fold for List terms." $
   "cx" ~> "g" ~>
@@ -212,7 +212,7 @@ foldl_ = define "foldl" $
 -- | Interpreter-friendly right fold for List terms.
 -- Folds from the right: foldr f init [e1,e2,e3] = f e1 (f e2 (f e3 init))
 -- Each step is reduced through the interpreter so that the accumulator is always a value.
-foldr_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
+foldr_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
 foldr_ = define "foldr" $
   doc "Interpreter-friendly right fold for List terms." $
   "cx" ~> "g" ~>
@@ -233,7 +233,7 @@ foldr_ = define "foldr" $
 -- | Interpreter-friendly map for List terms.
 -- Applies funTerm to each element of listTerm.
 -- Note: builds result directly using foldl to avoid recursive primitive calls.
-map_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+map_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 map_ = define "map" $
   doc "Interpreter-friendly map for List terms." $
   "cx" ~> "g" ~>
@@ -251,7 +251,7 @@ map_ = define "map" $
 -- | Interpreter-friendly partition for List terms.
 -- Partitions elements into (satisfying predicate, not satisfying predicate).
 -- Unlike span, partition checks ALL elements, not just the prefix.
-partition_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+partition_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 partition_ = define "partition" $
   doc "Interpreter-friendly partition for List terms." $
   "cx" ~> "g" ~>
@@ -304,7 +304,7 @@ partition_ = define "partition" $
 -- | Interpreter-friendly sortOn for List terms.
 -- Sorts elements by comparing the results of applying projTerm to each.
 -- Uses insertion sort: for each element, use span to find insertion point.
-sortOn_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+sortOn_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 sortOn_ = define "sortOn" $
   doc "Interpreter-friendly sortOn for List terms." $
   "cx" ~> "g" ~>
@@ -351,7 +351,7 @@ sortOn_ = define "sortOn" $
 -- | Interpreter-friendly span for List terms.
 -- Splits the list into (takeWhile pred list, dropWhile pred list).
 -- Uses foldl with state ((stillTaking, left), right) to track the split point.
-span_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+span_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 span_ = define "span" $
   doc "Interpreter-friendly span for List terms." $
   "cx" ~> "g" ~>
@@ -429,7 +429,7 @@ span_ = define "span" $
 
 -- | Interpreter-friendly zipWith for List terms.
 -- Applies funTerm to corresponding pairs of elements.
-zipWith_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
+zipWith_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
 zipWith_ = define "zipWith" $
   doc "Interpreter-friendly zipWith for List terms." $
   "cx" ~> "g" ~>
@@ -448,7 +448,7 @@ zipWith_ = define "zipWith" $
 
 -- | Interpreter-friendly elem for List terms.
 -- Tests whether an element is in the list: elem x xs = isJust (find (equal x) xs)
-elem_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+elem_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 elem_ = define "elem" $
   doc "Interpreter-friendly elem for List terms." $
   "cx" ~> "g" ~>
@@ -470,7 +470,7 @@ elem_ = define "elem" $
 -- The interpreter's native foldl uses functionWithReduce, which reduces each step
 -- via reduceTerm — so the accumulator is always a value, not an unreduced expression.
 -- Uses safeHead+maybe instead of null+head+ifElse to avoid eager evaluation of head on empty lists.
-group_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+group_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
 group_ = define "group" $
   doc "Interpreter-friendly group for List terms." $
   "cx" ~> "g" ~>
@@ -527,7 +527,7 @@ group_ = define "group" $
 
 -- | Interpreter-friendly intercalate for List terms.
 -- intercalate sep xss = concat (intersperse sep xss)
-intercalate_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+intercalate_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 intercalate_ = define "intercalate" $
   doc "Interpreter-friendly intercalate for List terms." $
   "cx" ~> "g" ~>
@@ -543,7 +543,7 @@ intercalate_ = define "intercalate" $
 
 -- | Interpreter-friendly intersperse for List terms.
 -- intersperse sep [a,b,c] = [a,sep,b,sep,c]
-intersperse_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+intersperse_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 intersperse_ = define "intersperse" $
   doc "Interpreter-friendly intersperse for List terms." $
   "cx" ~> "g" ~>
@@ -560,7 +560,7 @@ intersperse_ = define "intersperse" $
 
 -- | Interpreter-friendly nub for List terms.
 -- Removes duplicates using equality. nub xs = foldl (\acc x -> ifElse (elem x acc) acc (concat2 acc [x])) [] xs
-nub_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+nub_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
 nub_ = define "nub" $
   doc "Interpreter-friendly nub for List terms." $
   "cx" ~> "g" ~>
@@ -597,7 +597,7 @@ nub_ = define "nub" $
 
 -- | Interpreter-friendly pure for List terms.
 -- Wraps a single element in a list: pure x = [x]
-pure_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+pure_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
 pure_ = define "pure" $
   doc "Interpreter-friendly pure for List terms." $
   "cx" ~> "g" ~>
@@ -606,7 +606,7 @@ pure_ = define "pure" $
 
 -- | Interpreter-friendly replicate for List terms.
 -- replicate n x = map (const x) (range 0 n)
-replicate_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+replicate_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 replicate_ = define "replicate" $
   doc "Interpreter-friendly replicate for List terms." $
   "cx" ~> "g" ~>
@@ -625,7 +625,7 @@ replicate_ = define "replicate" $
 
 -- | Interpreter-friendly safeHead for List terms.
 -- safeHead xs = if null xs then Nothing else Just (head xs)
-safeHead_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+safeHead_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
 safeHead_ = define "safeHead" $
   doc "Interpreter-friendly safeHead for List terms." $
   "cx" ~> "g" ~>
@@ -638,7 +638,7 @@ safeHead_ = define "safeHead" $
 
 -- | Interpreter-friendly singleton for List terms.
 -- singleton x = [x]
-singleton_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+singleton_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
 singleton_ = define "singleton" $
   doc "Interpreter-friendly singleton for List terms." $
   "cx" ~> "g" ~>
@@ -647,7 +647,7 @@ singleton_ = define "singleton" $
 
 -- | Interpreter-friendly sort for List terms.
 -- sort xs = sortOn identity xs
-sort_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+sort_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
 sort_ = define "sort" $
   doc "Interpreter-friendly sort for List terms." $
   "cx" ~> "g" ~>

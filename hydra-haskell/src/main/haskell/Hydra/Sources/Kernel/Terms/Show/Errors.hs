@@ -70,26 +70,26 @@ module_ = Module ns elements
     Just "String representations of hydra.error types"
   where
    elements = [
-     toTermDefinition checkingError,
-     toTermDefinition decodingError,
-     toTermDefinition error_,
-     toTermDefinition incorrectUnificationError,
-     toTermDefinition notAForallTypeError,
-     toTermDefinition notAFunctionTypeError,
-     toTermDefinition otherError,
-     toTermDefinition typeArityMismatchError,
-     toTermDefinition typeMismatchError,
-     toTermDefinition unboundTypeVariablesError,
-     toTermDefinition unequalTypesError,
-     toTermDefinition unificationError,
-     toTermDefinition unsupportedTermVariantError,
-     toTermDefinition untypedLambdaError,
-     toTermDefinition untypedLetBindingError]
+     toDefinition checkingError,
+     toDefinition decodingError,
+     toDefinition error_,
+     toDefinition incorrectUnificationError,
+     toDefinition notAForallTypeError,
+     toDefinition notAFunctionTypeError,
+     toDefinition otherError,
+     toDefinition typeArityMismatchError,
+     toDefinition typeMismatchError,
+     toDefinition unboundTypeVariablesError,
+     toDefinition unequalTypesError,
+     toDefinition unificationError,
+     toDefinition unsupportedTermVariantError,
+     toDefinition untypedLambdaError,
+     toDefinition untypedLetBindingError]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-checkingError :: TBinding (CheckingError -> String)
+checkingError :: TTermDefinition (CheckingError -> String)
 checkingError = define "checkingError" $
   doc "Show a checking error as a string" $
   "ce" ~> cases _CheckingError (var "ce") Nothing [
@@ -104,12 +104,12 @@ checkingError = define "checkingError" $
     _CheckingError_untypedLambda>>: untypedLambdaError,
     _CheckingError_untypedLetBinding>>: untypedLetBindingError]
 
-decodingError :: TBinding (DecodingError -> String)
+decodingError :: TTermDefinition (DecodingError -> String)
 decodingError = define "decodingError" $
   doc "Show a decoding error as a string" $
   "de" ~> Strings.cat2 (string "decoding error: ") (unwrap _DecodingError @@ var "de")
 
-error_ :: TBinding (Error -> String)
+error_ :: TTermDefinition (Error -> String)
 error_ = define "error" $
   doc "Show an error as a string" $
   "e" ~> cases _Error (var "e") Nothing [
@@ -125,14 +125,14 @@ error_ = define "error" $
     _Error_unexpectedTypeVariant>>: ShowErrorCore.unexpectedTypeVariantError,
     _Error_unification>>: unificationError]
 
-incorrectUnificationError :: TBinding (IncorrectUnificationError -> String)
+incorrectUnificationError :: TTermDefinition (IncorrectUnificationError -> String)
 incorrectUnificationError = define "incorrectUnificationError" $
   doc "Show an incorrect unification error as a string" $
   "e" ~>
   "subst" <~ project _IncorrectUnificationError _IncorrectUnificationError_substitution @@ var "e" $
   Strings.cat2 (string "incorrect unification: ") (ShowTyping.typeSubst @@ var "subst")
 
-notAForallTypeError :: TBinding (NotAForallTypeError -> String)
+notAForallTypeError :: TTermDefinition (NotAForallTypeError -> String)
 notAForallTypeError = define "notAForallTypeError" $
   doc "Show a not-a-forall-type error as a string" $
   "e" ~>
@@ -146,19 +146,19 @@ notAForallTypeError = define "notAForallTypeError" $
     string " type argument(s): ",
     Formatting.showList @@ ShowCore.type_ @@ var "args"]
 
-notAFunctionTypeError :: TBinding (NotAFunctionTypeError -> String)
+notAFunctionTypeError :: TTermDefinition (NotAFunctionTypeError -> String)
 notAFunctionTypeError = define "notAFunctionTypeError" $
   doc "Show a not-a-function-type error as a string" $
   "e" ~>
   "typ" <~ project _NotAFunctionTypeError _NotAFunctionTypeError_type @@ var "e" $
   Strings.cat2 (string "not a function type: ") (ShowCore.type_ @@ var "typ")
 
-otherError :: TBinding (OtherError -> String)
+otherError :: TTermDefinition (OtherError -> String)
 otherError = define "otherError" $
   doc "Show an other error as a string" $
   "oe" ~> unwrap _OtherError @@ var "oe"
 
-typeArityMismatchError :: TBinding (TypeArityMismatchError -> String)
+typeArityMismatchError :: TTermDefinition (TypeArityMismatchError -> String)
 typeArityMismatchError = define "typeArityMismatchError" $
   doc "Show a type arity mismatch error as a string" $
   "e" ~>
@@ -176,7 +176,7 @@ typeArityMismatchError = define "typeArityMismatchError" $
     string "): ",
     Formatting.showList @@ ShowCore.type_ @@ var "args"]
 
-typeMismatchError :: TBinding (TypeMismatchError -> String)
+typeMismatchError :: TTermDefinition (TypeMismatchError -> String)
 typeMismatchError = define "typeMismatchError" $
   doc "Show a type mismatch error as a string" $
   "e" ~>
@@ -188,7 +188,7 @@ typeMismatchError = define "typeMismatchError" $
     string " but found ",
     ShowCore.type_ @@ var "actual"]
 
-unboundTypeVariablesError :: TBinding (UnboundTypeVariablesError -> String)
+unboundTypeVariablesError :: TTermDefinition (UnboundTypeVariablesError -> String)
 unboundTypeVariablesError = define "unboundTypeVariablesError" $
   doc "Show an unbound type variables error as a string" $
   "e" ~>
@@ -200,7 +200,7 @@ unboundTypeVariablesError = define "unboundTypeVariablesError" $
     string "} in type ",
     ShowCore.type_ @@ var "typ"]
 
-unequalTypesError :: TBinding (UnequalTypesError -> String)
+unequalTypesError :: TTermDefinition (UnequalTypesError -> String)
 unequalTypesError = define "unequalTypesError" $
   doc "Show an unequal types error as a string" $
   "e" ~>
@@ -212,7 +212,7 @@ unequalTypesError = define "unequalTypesError" $
     string " in ",
     var "desc"]
 
-unificationError :: TBinding (UnificationError -> String)
+unificationError :: TTermDefinition (UnificationError -> String)
 unificationError = define "unificationError" $
   doc "Show a unification error as a string" $
   "e" ~>
@@ -227,7 +227,7 @@ unificationError = define "unificationError" $
     string ": ",
     var "msg"]
 
-unsupportedTermVariantError :: TBinding (UnsupportedTermVariantError -> String)
+unsupportedTermVariantError :: TTermDefinition (UnsupportedTermVariantError -> String)
 unsupportedTermVariantError = define "unsupportedTermVariantError" $
   doc "Show an unsupported term variant error as a string" $
   "e" ~>
@@ -235,12 +235,12 @@ unsupportedTermVariantError = define "unsupportedTermVariantError" $
     (string "unsupported term variant: ")
     (ShowMeta.termVariant @@ (project _UnsupportedTermVariantError _UnsupportedTermVariantError_termVariant @@ var "e"))
 
-untypedLambdaError :: TBinding (UntypedLambdaError -> String)
+untypedLambdaError :: TTermDefinition (UntypedLambdaError -> String)
 untypedLambdaError = define "untypedLambdaError" $
   doc "Show an untyped lambda error as a string" $
   constant $ string "untyped lambda"
 
-untypedLetBindingError :: TBinding (UntypedLetBindingError -> String)
+untypedLetBindingError :: TTermDefinition (UntypedLetBindingError -> String)
 untypedLetBindingError = define "untypedLetBindingError" $
   doc "Show an untyped let binding error as a string" $
   "e" ~>
