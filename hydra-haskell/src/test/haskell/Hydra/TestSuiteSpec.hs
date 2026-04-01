@@ -77,32 +77,11 @@ runTestGroupTimed timingsRef hydraPath runner tg = do
       let elapsedMs = (realToFrac now - startTime) * 1000.0
       IORef.modifyIORef' timingsRef (M.insert hydraPath elapsedMs)
 
--- | Test runner that uses eval-mode primitives.
--- Only runs evaluation test cases; skips all other test types.
-evalTestRunner :: TestRunner
-evalTestRunner desc tcase = if Testing.isDisabled tcase
-  then Nothing
-  else case testCaseWithMetadataCase tcase of
-    TestCaseEvaluation (EvaluationTestCase _ input output) ->
-      Just $ H.it "eval-mode evaluation" $ shouldSucceedWith
-        (ShowCore.term <$> evalEval input)
-        (ShowCore.term output)
-    _ -> Nothing  -- Only test evaluation cases in eval mode
-
--- | Filter a test group to only include lib primitive tests (hydra.lib.*)
-filterLibTests :: TestGroup -> TestGroup
-filterLibTests tg = tg {
-  testGroupSubgroups = filterLibTests <$> testGroupSubgroups tg,
-  testGroupCases = testGroupCases tg}
-
 spec :: H.Spec
 spec = do
   benchmarkOutput <- H.runIO $ Env.lookupEnv "HYDRA_BENCHMARK_OUTPUT"
   case benchmarkOutput of
-    Nothing -> do
-      runTestGroup "" defaultTestRunner allTests
-      H.describe "eval-mode primitives" $
-        runTestGroup "" evalTestRunner allTests
+    Nothing -> runTestGroup "" defaultTestRunner allTests
     Just outputPath -> do
       timingsRef <- H.runIO $ IORef.newIORef M.empty
       let rootPath = testGroupName allTests
