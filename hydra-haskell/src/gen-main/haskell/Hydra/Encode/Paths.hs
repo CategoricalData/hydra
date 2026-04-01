@@ -52,10 +52,10 @@ subtermNode x =
           Core.fieldTerm = (Core_.name (Paths.subtermNodeName x))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Paths.subtermNodeLabel x))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Paths.subtermNodeLabel x))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Paths.subtermNodeId x))}]})
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Paths.subtermNodeId x))}]})
 
 subtermPath :: Paths.SubtermPath -> Core.Term
 subtermPath x =
@@ -204,10 +204,10 @@ subtypeNode x =
           Core.fieldTerm = (Core_.name (Paths.subtypeNodeName x))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Paths.subtypeNodeLabel x))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Paths.subtypeNodeLabel x))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Paths.subtypeNodeId x))}]})
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Paths.subtypeNodeId x))}]})
 
 subtypePath :: Paths.SubtypePath -> Core.Term
 subtypePath x =

@@ -26,13 +26,13 @@ tarjanState x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "counter"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x))) (Topology.tarjanStateCounter x))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x2))) (Topology.tarjanStateCounter x))},
         Core.Field {
           Core.fieldName = (Core.Name "indices"),
-          Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap vertex (\x -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x))) m)) (Topology.tarjanStateIndices x))},
+          Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap vertex (\x2 -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x2))) m)) (Topology.tarjanStateIndices x))},
         Core.Field {
           Core.fieldName = (Core.Name "lowLinks"),
-          Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap vertex (\x -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x))) m)) (Topology.tarjanStateLowLinks x))},
+          Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap vertex (\x2 -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x2))) m)) (Topology.tarjanStateLowLinks x))},
         Core.Field {
           Core.fieldName = (Core.Name "stack"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map vertex xs)) (Topology.tarjanStateStack x))},
@@ -41,7 +41,7 @@ tarjanState x =
           Core.fieldTerm = ((\s -> Core.TermSet (Sets.map vertex s)) (Topology.tarjanStateOnStack x))},
         Core.Field {
           Core.fieldName = (Core.Name "sccs"),
-          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (\xs -> Core.TermList (Lists.map vertex xs)) xs)) (Topology.tarjanStateSccs x))}]})
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (\xs2 -> Core.TermList (Lists.map vertex xs2)) xs)) (Topology.tarjanStateSccs x))}]})
 
 vertex :: Int -> Core.Term
 vertex x = Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x))

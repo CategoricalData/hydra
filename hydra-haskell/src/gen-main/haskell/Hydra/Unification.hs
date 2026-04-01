@@ -48,7 +48,7 @@ joinTypes cx left right comment =
           joinList =
                   \lefts -> \rights -> Logic.ifElse (Equality.equal (Lists.length lefts) (Lists.length rights)) (Right (Lists.zipWith joinOne lefts rights)) cannotUnify
           joinRowTypes =
-                  \left -> \right -> Logic.ifElse (Logic.and (Equality.equal (Lists.length (Lists.map Core.fieldTypeName left)) (Lists.length (Lists.map Core.fieldTypeName right))) (Lists.foldl Logic.and True (Lists.zipWith (\left -> \right -> Equality.equal (Core.unName left) (Core.unName right)) (Lists.map Core.fieldTypeName left) (Lists.map Core.fieldTypeName right)))) (joinList (Lists.map Core.fieldTypeType left) (Lists.map Core.fieldTypeType right)) cannotUnify
+                  \left2 -> \right2 -> Logic.ifElse (Logic.and (Equality.equal (Lists.length (Lists.map Core.fieldTypeName left2)) (Lists.length (Lists.map Core.fieldTypeName right2))) (Lists.foldl Logic.and True (Lists.zipWith (\left3 -> \right3 -> Equality.equal (Core.unName left3) (Core.unName right3)) (Lists.map Core.fieldTypeName left2) (Lists.map Core.fieldTypeName right2)))) (joinList (Lists.map Core.fieldTypeType left2) (Lists.map Core.fieldTypeType right2)) cannotUnify
       in case sleft of
         Core.TypeApplication v0 -> case sright of
           Core.TypeApplication v1 -> Right [
@@ -156,9 +156,9 @@ unifyTypeLists :: Context.Context -> M.Map Core.Name t0 -> [Core.Type] -> [Core.
 unifyTypeLists cx schemaTypes l r comment =
 
       let toConstraint =
-              \l -> \r -> Typing.TypeConstraint {
-                Typing.typeConstraintLeft = l,
-                Typing.typeConstraintRight = r,
+              \l2 -> \r2 -> Typing.TypeConstraint {
+                Typing.typeConstraintLeft = l2,
+                Typing.typeConstraintRight = r2,
                 Typing.typeConstraintComment = comment}
       in (unifyTypeConstraints cx schemaTypes (Lists.zipWith toConstraint l r))
 

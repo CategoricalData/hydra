@@ -42,11 +42,11 @@ definition cx raw =
 fileExtension :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Module.FileExtension
 fileExtension cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
-      Core.TermWrap v0 -> Eithers.map (\b -> Module.FileExtension b) ((\raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+      Core.TermWrap v0 -> Eithers.map (\b -> Module.FileExtension b) ((\raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
         Core.TermLiteral v1 -> case v1 of
           Core.LiteralString v2 -> Right v2
           _ -> Left (Errors.DecodingError "expected string literal")
-        _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0))
+        _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (Lexical.stripAndDereferenceTermEither cx raw)
 
 module_ :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Module.Module
@@ -54,11 +54,11 @@ module_ cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "namespace" namespace fieldMap cx) (\field_namespace -> Eithers.bind (Helpers.requireField "definitions" (Helpers.decodeList definition) fieldMap cx) (\field_definitions -> Eithers.bind (Helpers.requireField "termDependencies" (Helpers.decodeList namespace) fieldMap cx) (\field_termDependencies -> Eithers.bind (Helpers.requireField "typeDependencies" (Helpers.decodeList namespace) fieldMap cx) (\field_typeDependencies -> Eithers.bind (Helpers.requireField "description" (Helpers.decodeMaybe (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+        in (Eithers.bind (Helpers.requireField "namespace" namespace fieldMap cx) (\field_namespace -> Eithers.bind (Helpers.requireField "definitions" (Helpers.decodeList definition) fieldMap cx) (\field_definitions -> Eithers.bind (Helpers.requireField "termDependencies" (Helpers.decodeList namespace) fieldMap cx) (\field_termDependencies -> Eithers.bind (Helpers.requireField "typeDependencies" (Helpers.decodeList namespace) fieldMap cx) (\field_typeDependencies -> Eithers.bind (Helpers.requireField "description" (Helpers.decodeMaybe (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw))) fieldMap cx) (\field_description -> Right (Module.Module {
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2))) fieldMap cx) (\field_description -> Right (Module.Module {
           Module.moduleNamespace = field_namespace,
           Module.moduleDefinitions = field_definitions,
           Module.moduleTermDependencies = field_termDependencies,
@@ -69,11 +69,11 @@ module_ cx raw =
 namespace :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Module.Namespace
 namespace cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
-      Core.TermWrap v0 -> Eithers.map (\b -> Module.Namespace b) ((\raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+      Core.TermWrap v0 -> Eithers.map (\b -> Module.Namespace b) ((\raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
         Core.TermLiteral v1 -> case v1 of
           Core.LiteralString v2 -> Right v2
           _ -> Left (Errors.DecodingError "expected string literal")
-        _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0))
+        _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (Lexical.stripAndDereferenceTermEither cx raw)
 
 namespaces :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Module.Namespaces t0)
@@ -91,11 +91,11 @@ qualifiedName cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "namespace" (Helpers.decodeMaybe namespace) fieldMap cx) (\field_namespace -> Eithers.bind (Helpers.requireField "local" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+        in (Eithers.bind (Helpers.requireField "namespace" (Helpers.decodeMaybe namespace) fieldMap cx) (\field_namespace -> Eithers.bind (Helpers.requireField "local" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_local -> Right (Module.QualifiedName {
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_local -> Right (Module.QualifiedName {
           Module.qualifiedNameNamespace = field_namespace,
           Module.qualifiedNameLocal = field_local}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)

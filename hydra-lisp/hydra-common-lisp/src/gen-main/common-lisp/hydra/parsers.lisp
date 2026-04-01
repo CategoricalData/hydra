@@ -16,7 +16,7 @@
 
 (cl:defvar hydra_parsers_pure (cl:lambda (a) (cl:lambda (input) (list :success (make-hydra_parsing_parse_success a input)))))
 
-(cl:defvar hydra_parsers_between (cl:lambda (open) (cl:lambda (close) (cl:lambda (p) ((hydra_parsers_bind open) (cl:lambda (_) ((hydra_parsers_bind p) (cl:lambda (x) ((hydra_parsers_bind close) (cl:lambda (_) (hydra_parsers_pure x)))))))))))
+(cl:defvar hydra_parsers_between (cl:lambda (open) (cl:lambda (close) (cl:lambda (p) ((hydra_parsers_bind open) (cl:lambda (_) ((hydra_parsers_bind p) (cl:lambda (x) ((hydra_parsers_bind close) (cl:lambda (_2) (hydra_parsers_pure x)))))))))))
 
 (cl:defvar hydra_parsers_char (cl:lambda (c) (hydra_parsers_satisfy (cl:lambda (x) ((hydra_lib_equality_equal x) c)))))
 

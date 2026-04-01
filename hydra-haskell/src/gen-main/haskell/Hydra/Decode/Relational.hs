@@ -21,11 +21,11 @@ import qualified Data.Set as S
 columnName :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Relational.ColumnName
 columnName cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
-      Core.TermWrap v0 -> Eithers.map (\b -> Relational.ColumnName b) ((\raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+      Core.TermWrap v0 -> Eithers.map (\b -> Relational.ColumnName b) ((\raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
         Core.TermLiteral v1 -> case v1 of
           Core.LiteralString v2 -> Right v2
           _ -> Left (Errors.DecodingError "expected string literal")
-        _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0))
+        _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (Lexical.stripAndDereferenceTermEither cx raw)
 
 columnSchema :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Relational.ColumnSchema t0)
@@ -63,11 +63,11 @@ relation v cx raw =
 relationName :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Relational.RelationName
 relationName cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
-      Core.TermWrap v0 -> Eithers.map (\b -> Relational.RelationName b) ((\raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+      Core.TermWrap v0 -> Eithers.map (\b -> Relational.RelationName b) ((\raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
         Core.TermLiteral v1 -> case v1 of
           Core.LiteralString v2 -> Right v2
           _ -> Left (Errors.DecodingError "expected string literal")
-        _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0))
+        _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (Lexical.stripAndDereferenceTermEither cx raw)
 
 relationSchema :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Relational.RelationSchema t0)

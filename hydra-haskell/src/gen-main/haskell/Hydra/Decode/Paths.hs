@@ -48,15 +48,15 @@ subtermNode cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "label" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+        in (Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "label" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_label -> Eithers.bind (Helpers.requireField "id" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_label -> Eithers.bind (Helpers.requireField "id" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_id -> Right (Paths.SubtermNode {
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_id -> Right (Paths.SubtermNode {
           Paths.subtermNodeName = field_name,
           Paths.subtermNodeLabel = field_label,
           Paths.subtermNodeId = field_id})))))
@@ -85,21 +85,21 @@ subtermStep cx raw =
                       (Core.Name "unionCasesBranch", (\input -> Eithers.map (\t -> Paths.SubtermStepUnionCasesBranch t) (Core_.name cx input))),
                       (Core.Name "letBody", (\input -> Eithers.map (\t -> Paths.SubtermStepLetBody) (Helpers.decodeUnit cx input))),
                       (Core.Name "letBinding", (\input -> Eithers.map (\t -> Paths.SubtermStepLetBinding t) (Core_.name cx input))),
-                      (Core.Name "listElement", (\input -> Eithers.map (\t -> Paths.SubtermStepListElement t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+                      (Core.Name "listElement", (\input -> Eithers.map (\t -> Paths.SubtermStepListElement t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
                         Core.TermLiteral v1 -> case v1 of
                           Core.LiteralInteger v2 -> case v2 of
                             Core.IntegerValueInt32 v3 -> Right v3
                             _ -> Left (Errors.DecodingError "expected int32 value")
                           _ -> Left (Errors.DecodingError "expected int32 literal")
                         _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx input)))),
-                      (Core.Name "mapKey", (\input -> Eithers.map (\t -> Paths.SubtermStepMapKey t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+                      (Core.Name "mapKey", (\input -> Eithers.map (\t -> Paths.SubtermStepMapKey t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
                         Core.TermLiteral v1 -> case v1 of
                           Core.LiteralInteger v2 -> case v2 of
                             Core.IntegerValueInt32 v3 -> Right v3
                             _ -> Left (Errors.DecodingError "expected int32 value")
                           _ -> Left (Errors.DecodingError "expected int32 literal")
                         _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx input)))),
-                      (Core.Name "mapValue", (\input -> Eithers.map (\t -> Paths.SubtermStepMapValue t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+                      (Core.Name "mapValue", (\input -> Eithers.map (\t -> Paths.SubtermStepMapValue t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
                         Core.TermLiteral v1 -> case v1 of
                           Core.LiteralInteger v2 -> case v2 of
                             Core.IntegerValueInt32 v3 -> Right v3
@@ -107,7 +107,7 @@ subtermStep cx raw =
                           _ -> Left (Errors.DecodingError "expected int32 literal")
                         _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx input)))),
                       (Core.Name "maybeTerm", (\input -> Eithers.map (\t -> Paths.SubtermStepMaybeTerm) (Helpers.decodeUnit cx input))),
-                      (Core.Name "productTerm", (\input -> Eithers.map (\t -> Paths.SubtermStepProductTerm t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+                      (Core.Name "productTerm", (\input -> Eithers.map (\t -> Paths.SubtermStepProductTerm t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
                         Core.TermLiteral v1 -> case v1 of
                           Core.LiteralInteger v2 -> case v2 of
                             Core.IntegerValueInt32 v3 -> Right v3
@@ -115,7 +115,7 @@ subtermStep cx raw =
                           _ -> Left (Errors.DecodingError "expected int32 literal")
                         _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx input)))),
                       (Core.Name "recordField", (\input -> Eithers.map (\t -> Paths.SubtermStepRecordField t) (Core_.name cx input))),
-                      (Core.Name "setElement", (\input -> Eithers.map (\t -> Paths.SubtermStepSetElement t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+                      (Core.Name "setElement", (\input -> Eithers.map (\t -> Paths.SubtermStepSetElement t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
                         Core.TermLiteral v1 -> case v1 of
                           Core.LiteralInteger v2 -> case v2 of
                             Core.IntegerValueInt32 v3 -> Right v3
@@ -159,15 +159,15 @@ subtypeNode cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "label" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+        in (Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "label" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_label -> Eithers.bind (Helpers.requireField "id" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_label -> Eithers.bind (Helpers.requireField "id" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_id -> Right (Paths.SubtypeNode {
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_id -> Right (Paths.SubtypeNode {
           Paths.subtypeNodeName = field_name,
           Paths.subtypeNodeLabel = field_label,
           Paths.subtypeNodeId = field_id})))))

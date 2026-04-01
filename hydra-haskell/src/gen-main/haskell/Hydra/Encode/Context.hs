@@ -23,10 +23,10 @@ context x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "trace"),
-          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (\x -> Core.TermLiteral (Core.LiteralString x)) xs)) (Context.contextTrace x))},
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) xs)) (Context.contextTrace x))},
         Core.Field {
           Core.fieldName = (Core.Name "messages"),
-          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (\x -> Core.TermLiteral (Core.LiteralString x)) xs)) (Context.contextMessages x))},
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) xs)) (Context.contextMessages x))},
         Core.Field {
           Core.fieldName = (Core.Name "other"),
           Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap Core_.name Core_.term m)) (Context.contextOther x))}]})

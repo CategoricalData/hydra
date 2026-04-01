@@ -24,11 +24,11 @@ import qualified Data.Set as S
 tag :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Testing.Tag
 tag cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
-      Core.TermWrap v0 -> Eithers.map (\b -> Testing.Tag b) ((\raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+      Core.TermWrap v0 -> Eithers.map (\b -> Testing.Tag b) ((\raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
         Core.TermLiteral v1 -> case v1 of
           Core.LiteralString v2 -> Right v2
           _ -> Left (Errors.DecodingError "expected string literal")
-        _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0))
+        _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (Lexical.stripAndDereferenceTermEither cx raw)
 
 testCase :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Testing.TestCase
@@ -52,15 +52,15 @@ testCaseWithMetadata cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "name" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+        in (Eithers.bind (Helpers.requireField "name" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "case" testCase fieldMap cx) (\field_case -> Eithers.bind (Helpers.requireField "description" (Helpers.decodeMaybe (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "case" testCase fieldMap cx) (\field_case -> Eithers.bind (Helpers.requireField "description" (Helpers.decodeMaybe (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw))) fieldMap cx) (\field_description -> Eithers.bind (Helpers.requireField "tags" (Helpers.decodeList tag) fieldMap cx) (\field_tags -> Right (Testing.TestCaseWithMetadata {
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2))) fieldMap cx) (\field_description -> Eithers.bind (Helpers.requireField "tags" (Helpers.decodeList tag) fieldMap cx) (\field_tags -> Right (Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = field_name,
           Testing.testCaseWithMetadataCase = field_case,
           Testing.testCaseWithMetadataDescription = field_description,
@@ -72,15 +72,15 @@ testGroup cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "name" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+        in (Eithers.bind (Helpers.requireField "name" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "description" (Helpers.decodeMaybe (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "description" (Helpers.decodeMaybe (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw))) fieldMap cx) (\field_description -> Eithers.bind (Helpers.requireField "subgroups" (Helpers.decodeList testGroup) fieldMap cx) (\field_subgroups -> Eithers.bind (Helpers.requireField "cases" (Helpers.decodeList testCaseWithMetadata) fieldMap cx) (\field_cases -> Right (Testing.TestGroup {
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2))) fieldMap cx) (\field_description -> Eithers.bind (Helpers.requireField "subgroups" (Helpers.decodeList testGroup) fieldMap cx) (\field_subgroups -> Eithers.bind (Helpers.requireField "cases" (Helpers.decodeList testCaseWithMetadata) fieldMap cx) (\field_cases -> Right (Testing.TestGroup {
           Testing.testGroupName = field_name,
           Testing.testGroupDescription = field_description,
           Testing.testGroupSubgroups = field_subgroups,
@@ -92,15 +92,15 @@ universalTestCase cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "actual" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+        in (Eithers.bind (Helpers.requireField "actual" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_actual -> Eithers.bind (Helpers.requireField "expected" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_actual -> Eithers.bind (Helpers.requireField "expected" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_expected -> Right (Testing.UniversalTestCase {
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_expected -> Right (Testing.UniversalTestCase {
           Testing.universalTestCaseActual = field_actual,
           Testing.universalTestCaseExpected = field_expected}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)

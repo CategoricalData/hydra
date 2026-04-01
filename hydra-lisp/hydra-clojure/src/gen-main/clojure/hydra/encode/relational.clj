@@ -4,11 +4,11 @@
 
 (declare hydra_encode_relational_column_name hydra_encode_relational_column_schema hydra_encode_relational_relation_name hydra_encode_relational_foreign_key hydra_encode_relational_primary_key hydra_encode_relational_row hydra_encode_relational_relation hydra_encode_relational_relation_schema hydra_encode_relational_relationship)
 
-(def hydra_encode_relational_column_name (fn [x] (list :wrap (->hydra_core_wrapped_term "hydra.relational.ColumnName" ((fn [x] (list :literal (list :string x))) ((fn [v] v) x))))))
+(def hydra_encode_relational_column_name (fn [x] (list :wrap (->hydra_core_wrapped_term "hydra.relational.ColumnName" ((fn [x2] (list :literal (list :string x2))) ((fn [v] v) x))))))
 
 (def hydra_encode_relational_column_schema (fn [t_] (fn [x] (list :record (->hydra_core_record "hydra.relational.ColumnSchema" (list (->hydra_core_field "name" (hydra_encode_relational_column_name ((fn [v] (:name v)) x))) (->hydra_core_field "domain" (t_ ((fn [v] (:domain v)) x)))))))))
 
-(def hydra_encode_relational_relation_name (fn [x] (list :wrap (->hydra_core_wrapped_term "hydra.relational.RelationName" ((fn [x] (list :literal (list :string x))) ((fn [v] v) x))))))
+(def hydra_encode_relational_relation_name (fn [x] (list :wrap (->hydra_core_wrapped_term "hydra.relational.RelationName" ((fn [x2] (list :literal (list :string x2))) ((fn [v] v) x))))))
 
 (def hydra_encode_relational_foreign_key (fn [x] (list :record (->hydra_core_record "hydra.relational.ForeignKey" (list (->hydra_core_field "foreignRelation" (hydra_encode_relational_relation_name ((fn [v] (:foreign_relation v)) x))) (->hydra_core_field "keys" ((fn [m] (list :map (((hydra_lib_maps_bimap hydra_encode_relational_column_name) hydra_encode_relational_column_name) m))) ((fn [v] (:keys v)) x))))))))
 

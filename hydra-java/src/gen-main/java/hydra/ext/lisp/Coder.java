@@ -198,7 +198,7 @@ public interface Coder {
       t);
   }
 
-  static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression> encodeApplication_normal(T0 cx, hydra.ext.lisp.syntax.Dialect dialect, T1 g, java.util.function.Function<hydra.ext.lisp.syntax.Expression, java.util.function.Function<hydra.util.ConsList<hydra.ext.lisp.syntax.Expression>, hydra.ext.lisp.syntax.Expression>> hydra_ext_lisp_coder_lispApp2, hydra.core.Term rawArg, hydra.core.Term rawFun) {
+  static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression> encodeApplication_normal(T0 cx, hydra.ext.lisp.syntax.Dialect dialect, T1 g, java.util.function.Function<hydra.ext.lisp.syntax.Expression, java.util.function.Function<hydra.util.ConsList<hydra.ext.lisp.syntax.Expression>, hydra.ext.lisp.syntax.Expression>> hydra_ext_lisp_coder_lispApp, hydra.core.Term rawArg, hydra.core.Term rawFun) {
     return hydra.lib.eithers.Bind.apply(
       hydra.ext.lisp.Coder.<T0, T1, T2>encodeTerm(
         dialect,
@@ -211,7 +211,7 @@ public interface Coder {
           cx,
           g,
           rawArg),
-        (java.util.function.Function<hydra.ext.lisp.syntax.Expression, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (arg -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right((hydra_ext_lisp_coder_lispApp2).apply(fun).apply(hydra.util.ConsList.of(arg)))))));
+        (java.util.function.Function<hydra.ext.lisp.syntax.Expression, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (arg -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right((hydra_ext_lisp_coder_lispApp).apply(fun).apply(hydra.util.ConsList.of(arg)))))));
   }
 
   static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression> encodeElimination(hydra.ext.lisp.syntax.Dialect dialect, T0 cx, T1 g, hydra.core.Elimination elim, hydra.util.Maybe<hydra.core.Term> marg) {

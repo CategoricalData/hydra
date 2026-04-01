@@ -68,7 +68,7 @@ precision cx raw =
             variantMap =
                     Maps.fromList [
                       (Core.Name "arbitrary", (\input -> Eithers.map (\t -> Util.PrecisionArbitrary) (Helpers.decodeUnit cx input))),
-                      (Core.Name "bits", (\input -> Eithers.map (\t -> Util.PrecisionBits t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+                      (Core.Name "bits", (\input -> Eithers.map (\t -> Util.PrecisionBits t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
                         Core.TermLiteral v1 -> case v1 of
                           Core.LiteralInteger v2 -> case v2 of
                             Core.IntegerValueInt32 v3 -> Right v3

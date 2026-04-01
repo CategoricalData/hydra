@@ -4,7 +4,7 @@
 
 (in-package :hydra.encode.core)
 
-(cl:defvar hydra_encode_core_name (cl:lambda (x) (list :wrap (make-hydra_core_wrapped_term "hydra.core.Name" ((cl:lambda (x) (list :literal (list :string x))) ((cl:lambda (v) v) x))))))
+(cl:defvar hydra_encode_core_name (cl:lambda (x) (list :wrap (make-hydra_core_wrapped_term "hydra.core.Name" ((cl:lambda (x2) (list :literal (list :string x2))) ((cl:lambda (v) v) x))))))
 
 (cl:defvar hydra_encode_core_projection (cl:lambda (x) (list :record (make-hydra_core_record "hydra.core.Projection" (cl:list (make-hydra_core_field "typeName" (hydra_encode_core_name ((cl:lambda (v) (hydra_core_projection-type_name v)) x))) (make-hydra_core_field "field" (hydra_encode_core_name ((cl:lambda (v) (hydra_core_projection-field v)) x))))))))
 

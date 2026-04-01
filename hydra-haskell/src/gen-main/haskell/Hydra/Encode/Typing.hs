@@ -85,7 +85,7 @@ typeConstraint x =
           Core.fieldTerm = (Core_.type_ (Typing.typeConstraintRight x))},
         Core.Field {
           Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Typing.typeConstraintComment x))}]})
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Typing.typeConstraintComment x))}]})
 
 typeSubst :: Typing.TypeSubst -> Core.Term
 typeSubst x =

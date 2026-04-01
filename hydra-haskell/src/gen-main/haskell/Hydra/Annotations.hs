@@ -37,7 +37,7 @@ aggregateAnnotations :: Ord t2 => ((t0 -> Maybe t1) -> (t1 -> t0) -> (t1 -> M.Ma
 aggregateAnnotations getValue getX getAnns t =
 
       let toPairs =
-              \rest -> \t -> Maybes.maybe rest (\yy -> toPairs (Lists.cons (Maps.toList (getAnns yy)) rest) (getX yy)) (getValue t)
+              \rest -> \t2 -> Maybes.maybe rest (\yy -> toPairs (Lists.cons (Maps.toList (getAnns yy)) rest) (getX yy)) (getValue t2)
       in (Maps.fromList (Lists.concat (toPairs [] t)))
 
 -- | Debug if the debug ID matches (Either version)
@@ -120,17 +120,17 @@ getTypeClasses :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context
 getTypeClasses cx graph term =
 
       let decodeClass =
-              \term ->
+              \term2 ->
                 let byName =
                         Maps.fromList [
                           (Core.Name "equality", Classes.TypeClassEquality),
                           (Core.Name "ordering", Classes.TypeClassOrdering)]
-                in (Eithers.bind (Core___.unitVariant cx (Core.Name "hydra.classes.TypeClass") graph term) (\fn -> Maybes.maybe (Left (Context.InContext {
-                  Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected: expected type class, got " (Core____.term term)))),
+                in (Eithers.bind (Core___.unitVariant cx (Core.Name "hydra.classes.TypeClass") graph term2) (\fn -> Maybes.maybe (Left (Context.InContext {
+                  Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected: expected type class, got " (Core____.term term2)))),
                   Context.inContextContext = cx})) (\x -> Right x) (Maps.lookup fn byName)))
-      in (Maybes.maybe (Right Maps.empty) (\term -> Core___.map cx (\t -> Eithers.bimap (\de -> Context.InContext {
+      in (Maybes.maybe (Right Maps.empty) (\term2 -> Core___.map cx (\t -> Eithers.bimap (\de -> Context.InContext {
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError de))),
-        Context.inContextContext = cx}) (\x -> x) (Core_.name graph t)) (Core___.setOf cx decodeClass graph) graph term) (getTermAnnotation Constants.key_classes term))
+        Context.inContextContext = cx}) (\x -> x) (Core_.name graph t)) (Core___.setOf cx decodeClass graph) graph term2) (getTermAnnotation Constants.key_classes term))
 
 -- | Get type description (Either version)
 getTypeDescription :: Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Errors.Error) (Maybe String)

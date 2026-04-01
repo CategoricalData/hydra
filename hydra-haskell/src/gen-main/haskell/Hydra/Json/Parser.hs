@@ -69,7 +69,7 @@ jsonIntegerPart =
 -- | Parse a JSON object key-value pair
 jsonKeyValue :: Parsing.Parser (String, Model.Value)
 jsonKeyValue =
-    Parsers.bind (token (Parsers.bind (Parsers.char 34) (\_ -> Parsers.bind (Parsers.many jsonStringChar) (\chars -> Parsers.bind (Parsers.char 34) (\_ -> Parsers.pure (Strings.fromList chars)))))) (\key -> Parsers.bind (token (Parsers.char 58)) (\_ -> Parsers.map (\v -> (key, v)) (Parsers.lazy (\_ -> jsonValue))))
+    Parsers.bind (token (Parsers.bind (Parsers.char 34) (\_ -> Parsers.bind (Parsers.many jsonStringChar) (\chars -> Parsers.bind (Parsers.char 34) (\_2 -> Parsers.pure (Strings.fromList chars)))))) (\key -> Parsers.bind (token (Parsers.char 58)) (\_ -> Parsers.map (\v -> (key, v)) (Parsers.lazy (\_2 -> jsonValue))))
 
 -- | Parse JSON null value
 jsonNull :: Parsing.Parser Model.Value
@@ -91,7 +91,7 @@ jsonObject =
 -- | Parse a JSON string value
 jsonString :: Parsing.Parser Model.Value
 jsonString =
-    token (Parsers.bind (Parsers.char 34) (\_ -> Parsers.bind (Parsers.many jsonStringChar) (\chars -> Parsers.bind (Parsers.char 34) (\_ -> Parsers.pure (Model.ValueString (Strings.fromList chars))))))
+    token (Parsers.bind (Parsers.char 34) (\_ -> Parsers.bind (Parsers.many jsonStringChar) (\chars -> Parsers.bind (Parsers.char 34) (\_2 -> Parsers.pure (Model.ValueString (Strings.fromList chars))))))
 
 -- | Parse a single character in a JSON string (handling escapes)
 jsonStringChar :: Parsing.Parser Int
@@ -112,7 +112,7 @@ jsonValue =
 -- | Parse a JSON document from a string
 parseJson :: String -> Parsing.ParseResult Model.Value
 parseJson input =
-    Parsing.unParser (Parsers.bind whitespace (\_ -> Parsers.bind jsonValue (\v -> Parsers.bind whitespace (\_ -> Parsers.bind Parsers.eof (\_ -> Parsers.pure v))))) input
+    Parsing.unParser (Parsers.bind whitespace (\_ -> Parsers.bind jsonValue (\v -> Parsers.bind whitespace (\_2 -> Parsers.bind Parsers.eof (\_3 -> Parsers.pure v))))) input
 
 -- | Parse a token followed by optional whitespace
 token :: Parsing.Parser t0 -> Parsing.Parser t0

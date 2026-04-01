@@ -320,9 +320,9 @@ term t =
             "{",
             (Strings.intercalate ", " (Lists.map entry (Maps.toList v0))),
             "}"])
-        Core.TermMaybe v0 -> Maybes.maybe "nothing" (\t -> Strings.cat [
+        Core.TermMaybe v0 -> Maybes.maybe "nothing" (\t2 -> Strings.cat [
           "just(",
-          (term t),
+          (term t2),
           ")"]) v0
         Core.TermPair v0 -> Strings.cat [
           "(",

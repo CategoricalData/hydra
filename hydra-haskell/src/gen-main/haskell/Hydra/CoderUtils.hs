@@ -285,7 +285,7 @@ nameToFilePath nsConv localConv ext name =
           ns = Module.qualifiedNameNamespace qualName
           local = Module.qualifiedNameLocal qualName
           nsToFilePath =
-                  \ns -> Strings.intercalate "/" (Lists.map (\part -> Formatting.convertCase Util.CaseConventionCamel nsConv part) (Strings.splitOn "." (Module.unNamespace ns)))
+                  \ns2 -> Strings.intercalate "/" (Lists.map (\part -> Formatting.convertCase Util.CaseConventionCamel nsConv part) (Strings.splitOn "." (Module.unNamespace ns2)))
           prefix = Maybes.maybe "" (\n -> Strings.cat2 (nsToFilePath n) "/") ns
           suffix = Formatting.convertCase Util.CaseConventionPascal localConv local
       in (Strings.cat [

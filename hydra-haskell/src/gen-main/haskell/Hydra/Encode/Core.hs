@@ -443,7 +443,7 @@ name :: Core.Name -> Core.Term
 name x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-      Core.wrappedTermBody = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Core.unName x))})
+      Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Core.unName x))})
 
 pairType :: Core.PairType -> Core.Term
 pairType x =

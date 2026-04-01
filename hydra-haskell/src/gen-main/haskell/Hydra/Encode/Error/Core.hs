@@ -26,7 +26,7 @@ constantConditionError x =
           Core.fieldTerm = (Paths.subtermPath (Core__.constantConditionErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralBoolean x)) (Core__.constantConditionErrorValue x))}]})
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralBoolean x2)) (Core__.constantConditionErrorValue x))}]})
 
 duplicateBindingError :: Core__.DuplicateBindingError -> Core.Term
 duplicateBindingError x =

@@ -728,13 +728,13 @@ typeDecl namespaces name typ cx g =
                               Core.TermUnion v0 -> Logic.ifElse (Equality.equal (Core.injectionTypeName v0) (Core.Name "hydra.core.Type")) (Just (Core.injectionField v0)) Nothing
                               _ -> Nothing
                         decodeString =
-                                \term -> case (Rewriting.deannotateTerm term) of
+                                \term2 -> case (Rewriting.deannotateTerm term2) of
                                   Core.TermLiteral v0 -> case v0 of
                                     Core.LiteralString v1 -> Just v1
                                     _ -> Nothing
                                   _ -> Nothing
                         decodeName =
-                                \term -> case (Rewriting.deannotateTerm term) of
+                                \term2 -> case (Rewriting.deannotateTerm term2) of
                                   Core.TermWrap v0 -> Logic.ifElse (Equality.equal (Core.wrappedTermTypeName v0) (Core.Name "hydra.core.Name")) (Maybes.map (\x -> Core.Name x) (decodeString (Core.wrappedTermBody v0))) Nothing
                                   _ -> Nothing
                         forType =

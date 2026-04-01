@@ -1754,8 +1754,8 @@ public interface Coder {
     });
   }
 
-  static <T1> hydra.util.Either<T1, hydra.ext.python.syntax.Expression> encodeIntegerValue_toPyInt(java.util.function.Function<hydra.ext.python.syntax.Atom, hydra.ext.python.syntax.Expression> hydra_ext_python_utils_pyAtomToPyExpression2, java.math.BigInteger n) {
-    return hydra.util.Either.<T1, hydra.ext.python.syntax.Expression>right((hydra_ext_python_utils_pyAtomToPyExpression2).apply(new hydra.ext.python.syntax.Atom.Number_(new hydra.ext.python.syntax.Number_.Integer_(n))));
+  static <T1> hydra.util.Either<T1, hydra.ext.python.syntax.Expression> encodeIntegerValue_toPyInt(java.util.function.Function<hydra.ext.python.syntax.Atom, hydra.ext.python.syntax.Expression> hydra_ext_python_utils_pyAtomToPyExpression, java.math.BigInteger n) {
+    return hydra.util.Either.<T1, hydra.ext.python.syntax.Expression>right((hydra_ext_python_utils_pyAtomToPyExpression).apply(new hydra.ext.python.syntax.Atom.Number_(new hydra.ext.python.syntax.Number_.Integer_(n))));
   }
 
   static <T0> hydra.util.Either<T0, hydra.ext.python.syntax.Expression> encodeLiteral(hydra.core.Literal lit) {
@@ -2396,7 +2396,7 @@ public interface Coder {
     });
   }
 
-  static <T1> hydra.util.Either<T1, hydra.ext.python.syntax.Expression> encodeTermInline_withCast(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.ConsList<hydra.core.Type>, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>>>> hydra_checking_typeOf2, java.util.function.Function<hydra.ext.python.syntax.Expression, java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.Expression>> hydra_ext_python_utils_castTo2, Boolean noCast, hydra.core.Term term, hydra.ext.python.syntax.Expression pyexp) {
+  static <T1> hydra.util.Either<T1, hydra.ext.python.syntax.Expression> encodeTermInline_withCast(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.ConsList<hydra.core.Type>, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>>>> hydra_checking_typeOf, java.util.function.Function<hydra.ext.python.syntax.Expression, java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.Expression>> hydra_ext_python_utils_castTo, Boolean noCast, hydra.core.Term term, hydra.ext.python.syntax.Expression pyexp) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.logic.Or.apply(
         noCast,
@@ -2407,12 +2407,12 @@ public interface Coder {
         return ((java.util.function.Supplier<hydra.util.Either<T1, hydra.ext.python.syntax.Expression>>) (() -> {
           hydra.util.Lazy<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Type>> mtyp = new hydra.util.Lazy<>(() -> hydra.lib.eithers.Map.apply(
             (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.core.Type>) (_r -> hydra.lib.pairs.First.apply(_r)),
-            (hydra_checking_typeOf2).apply(cx).apply(tc).apply((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty())).apply(term)));
+            (hydra_checking_typeOf).apply(cx).apply(tc).apply((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty())).apply(term)));
           return hydra.lib.eithers.Either.apply(
             (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Either<T1, hydra.ext.python.syntax.Expression>>) (ignored -> hydra.util.Either.<T1, hydra.ext.python.syntax.Expression>right(pyexp)),
             (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.ext.python.syntax.Expression>>) (typ -> hydra.lib.eithers.Either.apply(
               ignored -> hydra.util.Either.<T1, hydra.ext.python.syntax.Expression>right(pyexp),
-              (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<T1, hydra.ext.python.syntax.Expression>>) (pytyp -> hydra.util.Either.<T1, hydra.ext.python.syntax.Expression>right((hydra_ext_python_utils_castTo2).apply(pytyp).apply(pyexp))),
+              (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<T1, hydra.ext.python.syntax.Expression>>) (pytyp -> hydra.util.Either.<T1, hydra.ext.python.syntax.Expression>right((hydra_ext_python_utils_castTo).apply(pytyp).apply(pyexp))),
               hydra.ext.python.Coder.encodeType(
                 env,
                 typ))),
@@ -2976,12 +2976,12 @@ public interface Coder {
     });
   }
 
-  static <T0> hydra.util.Either<T0, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> encodeTypeAssignmentInner_dflt(hydra.util.Maybe<String> comment, hydra.ext.python.environment.PythonEnvironment env, java.util.function.Function<hydra.ext.python.environment.PythonEnvironment, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.util.Maybe<String>, java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>>> hydra_ext_python_coder_encodeTypeDefSingle2, hydra.core.Name name, hydra.core.Type typ) {
+  static <T0> hydra.util.Either<T0, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> encodeTypeAssignmentInner_dflt(hydra.util.Maybe<String> comment, hydra.ext.python.environment.PythonEnvironment env, java.util.function.Function<hydra.ext.python.environment.PythonEnvironment, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.util.Maybe<String>, java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>>> hydra_ext_python_coder_encodeTypeDefSingle, hydra.core.Name name, hydra.core.Type typ) {
     return hydra.lib.eithers.Bind.apply(
       hydra.ext.python.Coder.<T0>encodeType(
         env,
         typ),
-      (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<T0, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (typeExpr -> hydra.util.Either.<T0, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>right((hydra_ext_python_coder_encodeTypeDefSingle2).apply(env).apply(name).apply(comment).apply(typeExpr))));
+      (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<T0, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (typeExpr -> hydra.util.Either.<T0, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>right((hydra_ext_python_coder_encodeTypeDefSingle).apply(env).apply(name).apply(comment).apply(typeExpr))));
   }
 
   static hydra.util.ConsList<hydra.ext.python.syntax.Statement> encodeTypeDefSingle(hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name name, hydra.util.Maybe<String> comment, hydra.ext.python.syntax.Expression typeExpr) {
@@ -3010,10 +3010,10 @@ public interface Coder {
         () -> hydra.ext.python.Utils.doubleQuotedString(hydra.Serialization.printExpr(hydra.ext.python.Serde.encodeExpression(pytype)))))));
   }
 
-  static <T1> hydra.util.Either<T1, hydra.ext.python.syntax.Expression> encodeType_dflt(java.util.function.Function<String, hydra.ext.python.syntax.Expression> hydra_ext_python_utils_doubleQuotedString2, java.util.function.Function<hydra.core.Type, hydra.core.Type> hydra_rewriting_deannotateType2, java.util.function.Function<hydra.core.Type, String> hydra_show_core_type2, hydra.core.Type typ) {
-    return hydra.util.Either.<T1, hydra.ext.python.syntax.Expression>right((hydra_ext_python_utils_doubleQuotedString2).apply(hydra.lib.strings.Cat2.apply(
+  static <T1> hydra.util.Either<T1, hydra.ext.python.syntax.Expression> encodeType_dflt(java.util.function.Function<String, hydra.ext.python.syntax.Expression> hydra_ext_python_utils_doubleQuotedString, java.util.function.Function<hydra.core.Type, hydra.core.Type> hydra_rewriting_deannotateType, java.util.function.Function<hydra.core.Type, String> hydra_show_core_type, hydra.core.Type typ) {
+    return hydra.util.Either.<T1, hydra.ext.python.syntax.Expression>right((hydra_ext_python_utils_doubleQuotedString).apply(hydra.lib.strings.Cat2.apply(
       "type = ",
-      (hydra_show_core_type2).apply((hydra_rewriting_deannotateType2).apply(typ)))));
+      (hydra_show_core_type).apply((hydra_rewriting_deannotateType).apply(typ)))));
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression> encodeUnionEliminationInline(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.CaseStatement cs, hydra.ext.python.syntax.Expression pyArg) {

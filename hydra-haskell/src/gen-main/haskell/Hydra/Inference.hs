@@ -584,7 +584,7 @@ inferTypeOfLet fcx0 cx let0 =
                     let helper =
                             \level -> \bins -> \term ->
                               let nonzero =
-                                      \term -> case term of
+                                      \term2 -> case term2 of
                                         Core.TermLet v0 ->
                                           let bs = Core.letBindings v0
                                               letBody = Core.letBody v0

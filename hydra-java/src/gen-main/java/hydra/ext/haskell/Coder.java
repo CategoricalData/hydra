@@ -1073,8 +1073,8 @@ public interface Coder {
       hydra.lib.sets.ToList.apply(hydra.ext.haskell.Coder.<T1, T2>encodeTypeWithClassAssertions_clsSet(mapEntry)));
   }
 
-  static <T1> hydra.util.Either<T1, hydra.ext.haskell.syntax.Type> encodeType_ref(java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>, java.util.function.Function<hydra.core.Name, hydra.ext.haskell.syntax.Name>> hydra_ext_haskell_utils_elementReference2, hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName> namespaces, hydra.core.Name name) {
-    return hydra.util.Either.<T1, hydra.ext.haskell.syntax.Type>right(new hydra.ext.haskell.syntax.Type.Variable((hydra_ext_haskell_utils_elementReference2).apply(namespaces).apply(name)));
+  static <T1> hydra.util.Either<T1, hydra.ext.haskell.syntax.Type> encodeType_ref(java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>, java.util.function.Function<hydra.core.Name, hydra.ext.haskell.syntax.Name>> hydra_ext_haskell_utils_elementReference, hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName> namespaces, hydra.core.Name name) {
+    return hydra.util.Either.<T1, hydra.ext.haskell.syntax.Type>right(new hydra.ext.haskell.syntax.Type.Variable((hydra_ext_haskell_utils_elementReference).apply(namespaces).apply(name)));
   }
 
   static hydra.util.PersistentSet<hydra.core.Name> findOrdVariables(hydra.core.Type typ) {
