@@ -22,12 +22,6 @@ intList els = list (int32 <$> els)
 intListList :: [[Int]] -> Term
 intListList lists = list (intList <$> lists)
 
-primCase :: String -> Name -> [Term] -> Term -> TestCaseWithMetadata
-primCase cname name args output = TestCaseWithMetadata cname tcase Nothing []
-  where
-    tcase = TestCaseEvaluation $ EvaluationTestCase EvaluationStyleEager input output
-    input = L.foldl (\a arg -> a @@ arg) (primitive name) args
-
 stringList :: [String] -> Term
 stringList els = list (string <$> els)
 

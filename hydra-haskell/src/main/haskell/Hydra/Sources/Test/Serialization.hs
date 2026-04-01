@@ -63,6 +63,10 @@ allTests = define "allTests" $
 infixExpr :: AsTerm t Op => t -> TTerm Expr -> TTerm Expr -> TTerm Expr
 infixExpr opExpr lhs rhs = Serialization.ifx @@ asTerm opExpr @@ lhs @@ rhs
 
+-- Universal serialization test case: printExpr (parenthesize expr) == expected
+serCase :: String -> TTerm Expr -> TTerm String -> TTerm TestCaseWithMetadata
+serCase cname expr expected = universalCase cname (Serialization.printExpr @@ (Serialization.parenthesize @@ expr)) expected
+
 -- Helper for building a constant expression
 cstExpr :: TTerm String -> TTerm Expr
 cstExpr s = Serialization.cst @@ s

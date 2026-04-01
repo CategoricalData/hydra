@@ -35,7 +35,8 @@ module_ = Module ns elements namespaces kernelTypesNamespaces $
       Collections.ns,
       Failures.ns,
       Fundamentals.ns,
-      NominalTypes.ns]
+      NominalTypes.ns,
+      Namespace "hydra.rewriting"]
 
 allTests :: TBinding TestGroup
 allTests = definitionInModule module_ "allTests" $

@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 -- | Test cases for Ord instance comparisons on complex Hydra types
 module Hydra.Sources.Test.Ordering where
 
@@ -17,36 +19,42 @@ import qualified Data.Map                     as M
 
 import Hydra.Testing
 import Hydra.Sources.Libraries
+import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
+import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
+import qualified Hydra.Sources.Kernel.Terms.Show.Util as ShowUtil
 
 
 ns :: Namespace
 ns = Namespace "hydra.test.ordering"
 
 module_ :: Module
-module_ = Module ns elements [] [] $
+module_ = Module ns elements
+    [Namespace "hydra.reduction", Namespace "hydra.show.core", ShowUtil.ns]
+    kernelTypesNamespaces $
     Just "Test cases for Ord instance comparisons on complex Hydra types"
   where
     elements = [Phantoms.toTermDefinition allTests]
 
--- Helper for comparison result - exactly matching Equality.hs style
-compResult :: String -> TTerm Term
-compResult resultField = injectUnit (name "hydra.util.Comparison") resultField
+showBool :: TTerm (Bool -> String)
+showBool = Phantoms.lambda "b" $ Literals.showBoolean (Phantoms.var "b")
 
--- Coerce any TTerm to TTerm Term (safe since TTerm is just a newtype wrapper)
-toTerm :: TTerm a -> TTerm Term
-toTerm (TTerm t) = TTerm t
+compResult :: String -> TTerm Comparison
+compResult "lessThan" = Phantoms.injectUnit _Comparison _Comparison_lessThan
+compResult "equalTo" = Phantoms.injectUnit _Comparison _Comparison_equalTo
+compResult "greaterThan" = Phantoms.injectUnit _Comparison _Comparison_greaterThan
+compResult _ = error "Invalid comparison"
 
--- Test comparing two values with _equality_compare (exactly matching Equality.hs style)
+-- Test comparing two values
 compareTest :: String -> TTerm a -> TTerm a -> String -> TTerm TestCaseWithMetadata
-compareTest testName x y resultField = primCase testName _equality_compare [toTerm x, toTerm y] (compResult resultField)
+compareTest testName x y resultField = evalPair testName (asTerm ShowUtil.comparison)
+  (Equality.compare x y)
+  (compResult resultField)
 
--- Test equality with _equality_equal
-equalTest :: String -> TTerm a -> TTerm a -> TTerm b -> TTerm TestCaseWithMetadata
-equalTest testName x y result = primCase testName _equality_equal [toTerm x, toTerm y] (toTerm result)
-
--- Test less than with _equality_lt
-ltTest :: String -> TTerm a -> TTerm a -> TTerm b -> TTerm TestCaseWithMetadata
-ltTest testName x y result = primCase testName _equality_lt [toTerm x, toTerm y] (toTerm result)
+-- Test equality
+equalTest :: String -> TTerm a -> TTerm a -> Bool -> TTerm TestCaseWithMetadata
+equalTest testName x y result = evalPair testName showBool
+  (Equality.equal x y)
+  (Phantoms.boolean result)
 
 -- ============================================================
 -- Name comparison tests
@@ -77,14 +85,14 @@ nameComparisonTests = subgroup "Name comparison" [
     (nameTerm "hydra.core.Term")
     "equalTo",
   -- Boolean equality
-  equalTest "name equality true"
+  equalTest "name equality true" 
     (nameTerm "foo")
     (nameTerm "foo")
-    true,
-  equalTest "name equality false"
+    True,
+  equalTest "name equality false" 
     (nameTerm "foo")
     (nameTerm "bar")
-    false]
+    False]
 
 -- ============================================================
 -- Literal comparison tests
@@ -141,14 +149,14 @@ typeComparisonTests = subgroup "Type comparison" [
     (T.list T.int32)
     "equalTo",
   -- Equality tests
-  equalTest "type equality true"
+  equalTest "type equality true" 
     T.int32
     T.int32
-    true,
-  equalTest "type equality false"
+    True,
+  equalTest "type equality false" 
     T.int32
     T.string
-    false]
+    False]
 
 -- ============================================================
 -- Term comparison tests
@@ -230,14 +238,14 @@ recordComparisonTests = subgroup "Record comparison (monomorphic)" [
     (latLonTerm 10.0 20.0)
     "equalTo",
   -- Equality tests
-  equalTest "person equality true"
+  equalTest "person equality true" 
     (personTerm "Alice" "Smith" 30)
     (personTerm "Alice" "Smith" 30)
-    true,
-  equalTest "person equality false"
+    True,
+  equalTest "person equality false" 
     (personTerm "Alice" "Smith" 30)
     (personTerm "Bob" "Smith" 30)
-    false]
+    False]
 
 -- ============================================================
 -- Polymorphic type comparison tests
@@ -303,14 +311,14 @@ polymorphicComparisonTests = subgroup "Polymorphic type comparison" [
     (personOrSomethingPersonTerm "Alice" "Smith" 30)
     "equalTo",
   -- Equality tests
-  equalTest "LatLonPoly Int32 equality true"
+  equalTest "LatLonPoly Int32 equality true" 
     (latLonPolyInt32Term 10 20)
     (latLonPolyInt32Term 10 20)
-    true,
-  equalTest "LatLonPoly Int32 equality false"
+    True,
+  equalTest "LatLonPoly Int32 equality false" 
     (latLonPolyInt32Term 10 20)
     (latLonPolyInt32Term 10 25)
-    false]
+    False]
 
 -- ============================================================
 -- Union type comparison tests
@@ -344,18 +352,18 @@ unionComparisonTests = subgroup "Union comparison" [
     (numberIntTerm 1)
     "lessThan",  -- "float" < "int" alphabetically
   -- Equality
-  equalTest "Number int equality true"
+  equalTest "Number int equality true" 
     (numberIntTerm 42)
     (numberIntTerm 42)
-    true,
-  equalTest "Number int equality false (different value)"
+    True,
+  equalTest "Number int equality false (different value)" 
     (numberIntTerm 42)
     (numberIntTerm 43)
-    false,
-  equalTest "Number equality false (different variant)"
+    False,
+  equalTest "Number equality false (different variant)" 
     (numberIntTerm 42)
     (numberFloatTerm 42.0)
-    false]
+    False]
 
 -- ============================================================
 -- All tests

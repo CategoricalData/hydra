@@ -27,7 +27,7 @@ import qualified Hydra.Sources.Decode.Core as TermDecodeCore
 import qualified Hydra.Sources.Encode.Core as TermEncodeCore
 import Hydra.Sources.Kernel.Types.Core
 import Hydra.Sources.Libraries
-import Hydra.Test.TestGraph
+import Hydra.Test.TestGraph hiding (testGraph, testContext)
 import Hydra.Test.TestTypes
 import Hydra.Test.TestTerms
 import qualified Hydra.Dsl.Terms as Terms

@@ -2,6 +2,7 @@ module Hydra.Sources.Kernel.Terms.Validate.Packaging where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
+import Hydra.Error.Packaging (InvalidModuleError, InvalidPackageError)
 import Hydra.Packaging (Package)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Error.Packaging       as ErrorPackaging

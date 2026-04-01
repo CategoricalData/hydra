@@ -149,7 +149,7 @@ public class TestSuiteRunner {
      * Build the test graph with schema, test data, and primitives.
      * Mirrors the Haskell testGraph in TestUtils.hs.
      */
-    private static Graph buildTestGraph() {
+    static Graph buildTestGraph() {
         // Build primitives map
         hydra.util.PersistentMap<Name, Primitive> primitives = hydra.util.PersistentMap.empty();
         for (PrimitiveFunction prim : Libraries.standardPrimitives()) {
@@ -634,10 +634,8 @@ public class TestSuiteRunner {
 
             @Override
             public DynamicTest visit(TestCase.DelegatedEvaluation instance) {
-                // Delegated evaluation runs in target language - always passes
                 return withTimeout(name, () -> {});
             }
-
             @Override
             public DynamicTest visit(TestCase.EtaExpansion instance) {
                 EtaExpansionTestCase tc = instance.value;
@@ -1095,6 +1093,13 @@ public class TestSuiteRunner {
                 return withTimeout(name, () ->
                     assertEquals(tc.output,
                         hydra.validate.Core.term(tc.typed, hydra.Lexical.emptyGraph(), tc.input)));
+            }
+
+            @Override
+            public DynamicTest visit(TestCase.Universal instance) {
+                UniversalTestCase tc = instance.value;
+                return withTimeout(name, () ->
+                    assertEquals(tc.expected, tc.actual));
             }
         });
     }

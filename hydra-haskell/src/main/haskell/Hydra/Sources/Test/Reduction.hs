@@ -23,7 +23,7 @@ ns :: Namespace
 ns = Namespace "hydra.test.reduction"
 
 module_ :: Module
-module_ = Module ns elements [] [] $
+module_ = Module ns elements [Namespace "hydra.reduction", Namespace "hydra.inference", Namespace "hydra.show.core"] [] $
     Just "Test cases for term reduction/evaluation mechanics"
   where
     elements = [Phantoms.toTermDefinition allTests]

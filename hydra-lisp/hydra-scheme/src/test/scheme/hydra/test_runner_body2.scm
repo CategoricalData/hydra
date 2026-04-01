@@ -722,7 +722,6 @@
               ((eq? case-type 'json_decode)             (run-json-decode-test full case-data))
               ((eq? case-type 'json_encode)             (run-json-encode-test full case-data))
               ;; Skip remaining unimplemented test types
-              ((eq? case-type 'delegated_evaluation)    (list 0 0 1))
               (else                                     (list 0 0 1))))))))
 
 (define (run-test-group path group)

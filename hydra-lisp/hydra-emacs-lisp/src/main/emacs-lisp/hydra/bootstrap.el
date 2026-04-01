@@ -179,10 +179,9 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
 ;; Module loading from JSON
 ;; ============================================================================
 
-(defun bootstrap-load-module-from-json (bs-graph schema-map ns-str &optional json-dir)
+(defun bootstrap-load-module-from-json (bs-graph schema-map ns-str)
   "Load a single module from its JSON file."
-  (let* ((json-base (or json-dir bootstrap-json-dir))
-         (file-path (format "%s/%s.json" json-base (bootstrap-namespace-to-path ns-str)))
+  (let* ((file-path (format "%s/%s.json" bootstrap-json-dir (bootstrap-namespace-to-path ns-str)))
          (json-obj (bootstrap-read-json-file file-path))
          (hydra-json (bootstrap-json-to-hydra json-obj))
          (mod-type (list :variable "hydra.module.Module"))
@@ -213,7 +212,7 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
         (schema-map (bootstrap-schema-map)))
     (mapcar (lambda (ns)
               (princ (format "  Loaded: %s\n" ns))
-              (bootstrap-load-module-from-json bs-graph schema-map ns json-dir))
+              (bootstrap-load-module-from-json bs-graph schema-map ns))
             namespaces)))
 
 ;; ============================================================================
@@ -241,34 +240,24 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
    ((or (string= target "clojure") (string= target "scheme")
         (string= target "common-lisp") (string= target "emacs-lisp"))
     (let* ((dialect-alist '(("clojure" . :clojure) ("scheme" . :scheme)
-                            ("common-lisp" . :common_lisp) ("emacs-lisp" . :emacs_lisp)))
+                            ("common-lisp" . :commonLisp) ("emacs-lisp" . :emacsLisp)))
            (ext-alist '(("clojure" . ".clj") ("scheme" . ".scm")
                         ("common-lisp" . ".lisp") ("emacs-lisp" . ".el")))
            (dialect (cdr (assoc target dialect-alist)))
            (ext (cdr (assoc target ext-alist)))
-           (mtl (if (fboundp 'hydra_ext_lisp_coder_module_to_lisp)
-                    (symbol-function 'hydra_ext_lisp_coder_module_to_lisp)
-                  (error "hydra_ext_lisp_coder_module_to_lisp not fboundp")))
-           (pte (if (fboundp 'hydra_ext_lisp_serde_program_to_expr)
-                    (symbol-function 'hydra_ext_lisp_serde_program_to_expr)
-                  (error "hydra_ext_lisp_serde_program_to_expr not fboundp"))))
+           (mtl (symbol-value 'hydra_ext_lisp_coder_module_to_lisp))
+           (pte (symbol-value 'hydra_ext_lisp_serde_program_to_expr)))
       (list (lambda (mod)
               (lambda (defs)
                 (lambda (cx)
                   (lambda (g)
-                    (let* ((m1 (funcall mtl (list dialect nil)))
-                           (m2 (funcall m1 mod))
-                           (m3 (funcall m2 defs))
-                           (m4 (funcall m3 cx))
-                           (result (funcall m4 g)))
+                    (let ((result (funcall (funcall (funcall (funcall (funcall mtl (list dialect nil)) mod) defs) cx) g)))
                       (if (eq (car result) :left)
                           result
                         (let* ((program (cadr result))
-                               (pte-result (funcall pte program))
-                               (par-result (when pte-result
-                                             (funcall 'hydra_serialization_parenthesize pte-result)))
-                               (code (when par-result
-                                       (funcall 'hydra_serialization_print_expr par-result)))
+                               (code (funcall 'hydra_serialization_print_expr
+                                       (funcall 'hydra_serialization_parenthesize
+                                         (funcall pte program))))
                                (ns-val (let ((ns (cdr (assoc :namespace mod))))
                                          (if (stringp ns) ns (cdr (assoc :value ns)))))
                                (fp (format "%s%s" (bootstrap-namespace-to-path ns-val) ext)))
@@ -283,88 +272,47 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
 ;; ============================================================================
 
 (defun bootstrap-generate-sources (coder language flags out-dir universe-mods mods-to-generate)
-  "Generate source files by calling CODER directly per module.
-This bypasses generateSourceFiles to avoid bytecode stack overflow in Emacs.
-Writes output to OUT-DIR."
+  "Generate source files using CODER for LANGUAGE with FLAGS.
+Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the subset to generate."
   (let* ((bs-graph (bootstrap-graph))
          (cx (funcall 'make-hydra_context_in_context nil nil))
-         ;; Use empty graph — bootstrap-graph with primitives causes void-function nil
-         ;; because the Lisp coder doesn't need primitives for code gen
-         (g (list (cons :bound_terms nil) (cons :bound_types nil)
-                  (cons :class_constraints nil) (cons :lambda_variables nil)
-                  (cons :metadata nil) (cons :primitives nil)
-                  (cons :schema_types nil) (cons :type_variables nil)))
+         (do-infer (car flags))
+         (do-expand (cadr flags))
+         (do-hoist-case (nth 2 flags))
+         (do-hoist-poly (nth 3 flags))
          (t0 (float-time))
-         (result (let ((all-files nil))
-                       (dolist (mod mods-to-generate)
-                         (let* ((defs (cdr (assoc :definitions mod)))
-                                (mod-result (condition-case mod-err
-                                                (let* ((r1 (funcall coder mod))
-                                                       (r2 (funcall r1 defs))
-                                                       (r3 (funcall r2 cx))
-                                                       (r4 (funcall r3 g)))
-                                                  r4)
-                                              (error (princ (format "  ERROR: %s\n" mod-err)) nil))))
-                           (unless (and mod-result (eq (car mod-result) :right))
-                             (let ((ns-val (let ((ns (cdr (assoc :namespace mod))))
-                                            (if (stringp ns) ns (cdr (assoc :value ns))))))
-                               (princ (format "  FAIL %s: %S\n" ns-val (if mod-result (car mod-result) "nil")))))
-                           (when (and mod-result (eq (car mod-result) :right))
-                             (dolist (pair (cadr mod-result))
-                               (push pair all-files)))))
-                       (list :right (nreverse all-files))))
+         (result (condition-case err
+                     (funcall (funcall (funcall (funcall (funcall (funcall (funcall (funcall
+                       (funcall (funcall
+                         (symbol-value 'hydra_code_generation_generate_source_files)
+                         coder) language) do-infer) do-expand) do-hoist-case) do-hoist-poly)
+                       bs-graph) universe-mods) mods-to-generate) cx)
+                   (error (princ (format "  GENERATE ERROR: %s\n" err)) (list :left (format "%s" err)))))
          (t1 (float-time)))
     (when (eq (car result) :left)
       (error "Code generation failed: %s" (cadr result)))
     (let ((files (cadr result)))
       (princ (format "  Code generation took %.1fs for %d files\n"
                      (- t1 t0) (length files)))
-      (let ((written 0) (skipped 0))
-        (dolist (pair files)
-          (let* ((fp (if (consp pair) (car pair) pair))
-                 (content (if (consp pair)
-                              (if (consp (cdr pair)) (cadr pair) (cdr pair))
-                            nil))
-                 (path (format "%s/%s" out-dir fp)))
-            (if (and content (stringp content) (> (length content) 0))
-                (progn
-                  (let* ((content (if (not (= (aref content (1- (length content))) ?\n))
-                                      (concat content "\n")
-                                    content))
-                         (dir (file-name-directory path)))
-                    (make-directory dir t)
-                    (with-temp-file path
-                      (insert content)))
-                  (cl-incf written))
-              (cl-incf skipped))))
-        (princ (format "  Written %d files, skipped %d.\n" written skipped))
-        written))))
+      (dolist (pair files)
+        (let* ((path (format "%s/%s" out-dir (car pair)))
+               (content (cadr pair))
+               (content (if (and (> (length content) 0)
+                                 (not (= (aref content (1- (length content))) ?\n)))
+                            (concat content "\n")
+                          content))
+               (dir (file-name-directory path)))
+          (make-directory dir t)
+          (with-temp-file path
+            (insert content))))
+      (length files))))
 
 ;; ============================================================================
 ;; Main
 ;; ============================================================================
 
-;; Re-set function bindings after coder modules are loaded and byte-compiled.
-;; Also resolve symbol chains: the loader's retry mechanism may leave some
-;; variables pointing to symbol names rather than actual function values.
+;; Re-set function bindings after coder modules are loaded
 (hydra-set-function-bindings)
-(mapatoms
- (lambda (sym)
-   (let ((name (symbol-name sym)))
-     (when (and (> (length name) 6)
-                (string-prefix-p "hydra_" name)
-                (boundp sym))
-       ;; Resolve symbol chains
-       (let ((v (symbol-value sym))
-             (n 0))
-         (while (and (symbolp v) (< n 10) (boundp v))
-           (setq v (symbol-value v))
-           (setq n (1+ n)))
-         (when (and (functionp v) (not (eq v (symbol-value sym))))
-           (set sym v)))
-       ;; Set function cell
-       (when (functionp (symbol-value sym))
-         (fset sym (symbol-value sym)))))))
 
 ;; Ensure target_python_version is set (may be dropped by loader retry mechanism)
 (unless (boundp 'hydra_ext_python_coder_target_python_version)
@@ -377,8 +325,8 @@ Writes output to OUT-DIR."
                           (substring bootstrap-target 1))))
   (let ((coder (car coder-info))
         (language (cadr coder-info))
-        (flags (caddr coder-info))
-        (subdir (cadddr coder-info)))
+        (flags (nth 2 coder-info))
+        (subdir (nth 3 coder-info)))
 
     (princ (format "==========================================\n"))
     (princ (format "Mapping JSON to %s (via Emacs Lisp host)\n" target-cap))
@@ -387,9 +335,8 @@ Writes output to OUT-DIR."
     ;; Load main modules
     (princ (format "\nStep 1: Loading main modules from JSON...\n"))
     (let* ((main-ns (bootstrap-read-manifest-field bootstrap-json-dir "mainModules"))
-           ;; Skip eval/lib modules — their deeply nested closures overflow Emacs's C stack
-           ;; during code generation. They are not needed when doInfer=false.
-           (all-ns main-ns)
+           (eval-ns (bootstrap-read-manifest-field bootstrap-json-dir "evalLibModules"))
+           (all-ns (append main-ns eval-ns))
            (all-mods (bootstrap-load-modules-from-json bootstrap-json-dir all-ns))
            (total-bindings (cl-reduce #'+ (mapcar (lambda (m)
                                                     (length (cdr (assoc :definitions m))))
@@ -422,7 +369,7 @@ Writes output to OUT-DIR."
           ;; Tests
           (when bootstrap-include-tests
             (princ (format "\nLoading test modules from JSON...\n"))
-            (let* ((test-json-dir2 (let ((pos (string-match "gen-main" bootstrap-json-dir)))
+            (let* ((test-json-dir2 (let ((pos (cl-search "gen-main" bootstrap-json-dir)))
                                      (if pos
                                          (concat (substring bootstrap-json-dir 0 pos)
                                                  "gen-test"

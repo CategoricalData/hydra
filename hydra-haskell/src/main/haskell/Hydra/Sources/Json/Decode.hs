@@ -97,186 +97,14 @@ module_ = Module ns elements
     Just "JSON decoding for Hydra terms. Converts JSON Values to Terms using Either for error handling."
   where
     elements = [
+      toTermDefinition fromJson,
+      toTermDefinition decodeLiteral,
       toTermDefinition decodeFloat,
       toTermDefinition decodeInteger,
-      toTermDefinition decodeLiteral,
-      toTermDefinition expectArray,
-      toTermDefinition expectNumber,
-      toTermDefinition expectObject,
       toTermDefinition expectString,
-      toTermDefinition fromJson]
-
--- | Decode a JSON value to a float term
--- Float64 and Bigfloat are decoded from JSON numbers; Float32 from string
-decodeFloat :: TBinding (FloatType -> Value -> Either String Term)
-decodeFloat = define "decodeFloat" $
-  doc "Decode a JSON value to a float term. Float64/Bigfloat from numbers; Float32 from string." $
-  "ft" ~> "value" ~>
-  cases _FloatType (var "ft") Nothing [
-    -- Bigfloat: JSON number (Double) -> bigfloat
-    _FloatType_bigfloat>>: constant $
-      "numResult" <~ (expectNumber @@ var "value") $
-      Eithers.map
-        ("n" ~> Core.termLiteral $ Core.literalFloat $ Core.floatValueBigfloat $ var "n")
-        (var "numResult"),
-    -- Float32: JSON string -> parse as float32 (preserves exact precision)
-    _FloatType_float32>>: constant $
-      "strResult" <~ (expectString @@ var "value") $
-      Eithers.either_
-        ("err" ~> left $ var "err")
-        ("s" ~>
-          "parsed" <~ (Literals.readFloat32 $ var "s") $
-          Maybes.maybe
-            (left $ Strings.cat $ list [string "invalid float32: ", var "s"])
-            ("v" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat32 $ var "v")
-            (var "parsed"))
-        (var "strResult"),
-    -- Float64: JSON number (Double) -> float64
-    _FloatType_float64>>: constant $
-      "numResult" <~ (expectNumber @@ var "value") $
-      Eithers.map
-        ("n" ~> Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ Literals.bigfloatToFloat64 $ var "n")
-        (var "numResult")]
-
--- | Decode a JSON value to an integer term
--- Small integers (int8, int16, int32, uint8, uint16) are decoded from JSON numbers
--- Large integers (int64, uint32, uint64, bigint) are decoded from JSON strings
-decodeInteger :: TBinding (IntegerType -> Value -> Either String Term)
-decodeInteger = define "decodeInteger" $
-  doc "Decode a JSON value to an integer term. Small ints from numbers; large ints from strings." $
-  "it" ~> "value" ~>
-  cases _IntegerType (var "it") Nothing [
-    -- Large integers: decode from JSON string
-    _IntegerType_bigint>>: constant $
-      "strResult" <~ (expectString @@ var "value") $
-      Eithers.either_
-        ("err" ~> left $ var "err")
-        ("s" ~>
-          "parsed" <~ (Literals.readBigint $ var "s") $
-          Maybes.maybe
-            (left $ Strings.cat $ list [string "invalid bigint: ", var "s"])
-            ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueBigint $ var "v")
-            (var "parsed"))
-        (var "strResult"),
-    _IntegerType_int64>>: constant $
-      "strResult" <~ (expectString @@ var "value") $
-      Eithers.either_
-        ("err" ~> left $ var "err")
-        ("s" ~>
-          "parsed" <~ (Literals.readInt64 $ var "s") $
-          Maybes.maybe
-            (left $ Strings.cat $ list [string "invalid int64: ", var "s"])
-            ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueInt64 $ var "v")
-            (var "parsed"))
-        (var "strResult"),
-    _IntegerType_uint32>>: constant $
-      "strResult" <~ (expectString @@ var "value") $
-      Eithers.either_
-        ("err" ~> left $ var "err")
-        ("s" ~>
-          "parsed" <~ (Literals.readUint32 $ var "s") $
-          Maybes.maybe
-            (left $ Strings.cat $ list [string "invalid uint32: ", var "s"])
-            ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueUint32 $ var "v")
-            (var "parsed"))
-        (var "strResult"),
-    _IntegerType_uint64>>: constant $
-      "strResult" <~ (expectString @@ var "value") $
-      Eithers.either_
-        ("err" ~> left $ var "err")
-        ("s" ~>
-          "parsed" <~ (Literals.readUint64 $ var "s") $
-          Maybes.maybe
-            (left $ Strings.cat $ list [string "invalid uint64: ", var "s"])
-            ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueUint64 $ var "v")
-            (var "parsed"))
-        (var "strResult"),
-    -- Small integers: decode from JSON number
-    _IntegerType_int8>>: constant $
-      "numResult" <~ (expectNumber @@ var "value") $
-      Eithers.map
-        ("n" ~> Core.termLiteral $ Core.literalInteger $ Core.integerValueInt8 $
-          Literals.bigintToInt8 $ Literals.bigfloatToBigint $ var "n")
-        (var "numResult"),
-    _IntegerType_int16>>: constant $
-      "numResult" <~ (expectNumber @@ var "value") $
-      Eithers.map
-        ("n" ~> Core.termLiteral $ Core.literalInteger $ Core.integerValueInt16 $
-          Literals.bigintToInt16 $ Literals.bigfloatToBigint $ var "n")
-        (var "numResult"),
-    _IntegerType_int32>>: constant $
-      "numResult" <~ (expectNumber @@ var "value") $
-      Eithers.map
-        ("n" ~> Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $
-          Literals.bigintToInt32 $ Literals.bigfloatToBigint $ var "n")
-        (var "numResult"),
-    _IntegerType_uint8>>: constant $
-      "numResult" <~ (expectNumber @@ var "value") $
-      Eithers.map
-        ("n" ~> Core.termLiteral $ Core.literalInteger $ Core.integerValueUint8 $
-          Literals.bigintToUint8 $ Literals.bigfloatToBigint $ var "n")
-        (var "numResult"),
-    _IntegerType_uint16>>: constant $
-      "numResult" <~ (expectNumber @@ var "value") $
-      Eithers.map
-        ("n" ~> Core.termLiteral $ Core.literalInteger $ Core.integerValueUint16 $
-          Literals.bigintToUint16 $ Literals.bigfloatToBigint $ var "n")
-        (var "numResult")]
-
--- | Decode a JSON value to a literal term given a literal type
-decodeLiteral :: TBinding (LiteralType -> Value -> Either String Term)
-decodeLiteral = define "decodeLiteral" $
-  doc "Decode a JSON value to a literal term" $
-  "lt" ~> "value" ~>
-  cases _LiteralType (var "lt") Nothing [
-    _LiteralType_binary>>: constant $
-      "strResult" <~ (expectString @@ var "value") $
-      Eithers.map ("s" ~> Core.termLiteral $ Core.literalBinary $ Literals.stringToBinary $ var "s") (var "strResult"),
-
-    _LiteralType_boolean>>: constant $
-      cases _Value (var "value")
-        (Just $ left $ string "expected boolean") [
-        _Value_boolean>>: "b" ~> right $ Core.termLiteral $ Core.literalBoolean $ var "b"],
-
-    _LiteralType_float>>: "ft" ~> decodeFloat @@ var "ft" @@ var "value",
-
-    _LiteralType_integer>>: "it" ~> decodeInteger @@ var "it" @@ var "value",
-
-    _LiteralType_string>>: constant $
-      "strResult" <~ (expectString @@ var "value") $
-      Eithers.map ("s" ~> Core.termLiteral $ Core.literalString $ var "s") (var "strResult")]
-
--- | Extract an array from a JSON value
-expectArray :: TBinding (Value -> Either String [Value])
-expectArray = define "expectArray" $
-  doc "Extract an array from a JSON value" $
-  "value" ~> cases _Value (var "value")
-    (Just $ left $ string "expected array") [
-    _Value_array>>: "arr" ~> right $ var "arr"]
-
--- | Extract a number from a JSON value
-expectNumber :: TBinding (Value -> Either String Double)
-expectNumber = define "expectNumber" $
-  doc "Extract a number from a JSON value" $
-  "value" ~> cases _Value (var "value")
-    (Just $ left $ string "expected number") [
-    _Value_number>>: "n" ~> right $ var "n"]
-
--- | Extract an object from a JSON value
-expectObject :: TBinding (Value -> Either String (M.Map String Value))
-expectObject = define "expectObject" $
-  doc "Extract an object from a JSON value" $
-  "value" ~> cases _Value (var "value")
-    (Just $ left $ string "expected object") [
-    _Value_object>>: "obj" ~> right $ var "obj"]
-
--- | Extract a string from a JSON value
-expectString :: TBinding (Value -> Either String String)
-expectString = define "expectString" $
-  doc "Extract a string from a JSON value" $
-  "value" ~> cases _Value (var "value")
-    (Just $ left $ string "expected string") [
-    _Value_string>>: "s" ~> right $ var "s"]
+      toTermDefinition expectArray,
+      toTermDefinition expectObject,
+      toTermDefinition expectNumber]
 
 -- | Decode a JSON Value to a Term given a Type and type lookup table.
 -- Returns Left with an error message for type mismatches or invalid JSON.
@@ -499,3 +327,175 @@ fromJson = define "fromJson" $
           Core.unName $ var "name"])
         ("resolvedType" ~> fromJson @@ var "types" @@ var "name" @@ var "resolvedType" @@ var "value")
         (var "lookedUp")]
+
+-- | Decode a JSON value to a literal term given a literal type
+decodeLiteral :: TBinding (LiteralType -> Value -> Either String Term)
+decodeLiteral = define "decodeLiteral" $
+  doc "Decode a JSON value to a literal term" $
+  "lt" ~> "value" ~>
+  cases _LiteralType (var "lt") Nothing [
+    _LiteralType_binary>>: constant $
+      "strResult" <~ (expectString @@ var "value") $
+      Eithers.map ("s" ~> Core.termLiteral $ Core.literalBinary $ Literals.stringToBinary $ var "s") (var "strResult"),
+
+    _LiteralType_boolean>>: constant $
+      cases _Value (var "value")
+        (Just $ left $ string "expected boolean") [
+        _Value_boolean>>: "b" ~> right $ Core.termLiteral $ Core.literalBoolean $ var "b"],
+
+    _LiteralType_float>>: "ft" ~> decodeFloat @@ var "ft" @@ var "value",
+
+    _LiteralType_integer>>: "it" ~> decodeInteger @@ var "it" @@ var "value",
+
+    _LiteralType_string>>: constant $
+      "strResult" <~ (expectString @@ var "value") $
+      Eithers.map ("s" ~> Core.termLiteral $ Core.literalString $ var "s") (var "strResult")]
+
+-- | Decode a JSON value to a float term
+-- Float64 and Bigfloat are decoded from JSON numbers; Float32 from string
+decodeFloat :: TBinding (FloatType -> Value -> Either String Term)
+decodeFloat = define "decodeFloat" $
+  doc "Decode a JSON value to a float term. Float64/Bigfloat from numbers; Float32 from string." $
+  "ft" ~> "value" ~>
+  cases _FloatType (var "ft") Nothing [
+    -- Bigfloat: JSON number (Double) -> bigfloat
+    _FloatType_bigfloat>>: constant $
+      "numResult" <~ (expectNumber @@ var "value") $
+      Eithers.map
+        ("n" ~> Core.termLiteral $ Core.literalFloat $ Core.floatValueBigfloat $ var "n")
+        (var "numResult"),
+    -- Float32: JSON string -> parse as float32 (preserves exact precision)
+    _FloatType_float32>>: constant $
+      "strResult" <~ (expectString @@ var "value") $
+      Eithers.either_
+        ("err" ~> left $ var "err")
+        ("s" ~>
+          "parsed" <~ (Literals.readFloat32 $ var "s") $
+          Maybes.maybe
+            (left $ Strings.cat $ list [string "invalid float32: ", var "s"])
+            ("v" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat32 $ var "v")
+            (var "parsed"))
+        (var "strResult"),
+    -- Float64: JSON number (Double) -> float64
+    _FloatType_float64>>: constant $
+      "numResult" <~ (expectNumber @@ var "value") $
+      Eithers.map
+        ("n" ~> Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ Literals.bigfloatToFloat64 $ var "n")
+        (var "numResult")]
+
+-- | Decode a JSON value to an integer term
+-- Small integers (int8, int16, int32, uint8, uint16) are decoded from JSON numbers
+-- Large integers (int64, uint32, uint64, bigint) are decoded from JSON strings
+decodeInteger :: TBinding (IntegerType -> Value -> Either String Term)
+decodeInteger = define "decodeInteger" $
+  doc "Decode a JSON value to an integer term. Small ints from numbers; large ints from strings." $
+  "it" ~> "value" ~>
+  cases _IntegerType (var "it") Nothing [
+    -- Large integers: decode from JSON string
+    _IntegerType_bigint>>: constant $
+      "strResult" <~ (expectString @@ var "value") $
+      Eithers.either_
+        ("err" ~> left $ var "err")
+        ("s" ~>
+          "parsed" <~ (Literals.readBigint $ var "s") $
+          Maybes.maybe
+            (left $ Strings.cat $ list [string "invalid bigint: ", var "s"])
+            ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueBigint $ var "v")
+            (var "parsed"))
+        (var "strResult"),
+    _IntegerType_int64>>: constant $
+      "strResult" <~ (expectString @@ var "value") $
+      Eithers.either_
+        ("err" ~> left $ var "err")
+        ("s" ~>
+          "parsed" <~ (Literals.readInt64 $ var "s") $
+          Maybes.maybe
+            (left $ Strings.cat $ list [string "invalid int64: ", var "s"])
+            ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueInt64 $ var "v")
+            (var "parsed"))
+        (var "strResult"),
+    _IntegerType_uint32>>: constant $
+      "strResult" <~ (expectString @@ var "value") $
+      Eithers.either_
+        ("err" ~> left $ var "err")
+        ("s" ~>
+          "parsed" <~ (Literals.readUint32 $ var "s") $
+          Maybes.maybe
+            (left $ Strings.cat $ list [string "invalid uint32: ", var "s"])
+            ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueUint32 $ var "v")
+            (var "parsed"))
+        (var "strResult"),
+    _IntegerType_uint64>>: constant $
+      "strResult" <~ (expectString @@ var "value") $
+      Eithers.either_
+        ("err" ~> left $ var "err")
+        ("s" ~>
+          "parsed" <~ (Literals.readUint64 $ var "s") $
+          Maybes.maybe
+            (left $ Strings.cat $ list [string "invalid uint64: ", var "s"])
+            ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueUint64 $ var "v")
+            (var "parsed"))
+        (var "strResult"),
+    -- Small integers: decode from JSON number
+    _IntegerType_int8>>: constant $
+      "numResult" <~ (expectNumber @@ var "value") $
+      Eithers.map
+        ("n" ~> Core.termLiteral $ Core.literalInteger $ Core.integerValueInt8 $
+          Literals.bigintToInt8 $ Literals.bigfloatToBigint $ var "n")
+        (var "numResult"),
+    _IntegerType_int16>>: constant $
+      "numResult" <~ (expectNumber @@ var "value") $
+      Eithers.map
+        ("n" ~> Core.termLiteral $ Core.literalInteger $ Core.integerValueInt16 $
+          Literals.bigintToInt16 $ Literals.bigfloatToBigint $ var "n")
+        (var "numResult"),
+    _IntegerType_int32>>: constant $
+      "numResult" <~ (expectNumber @@ var "value") $
+      Eithers.map
+        ("n" ~> Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $
+          Literals.bigintToInt32 $ Literals.bigfloatToBigint $ var "n")
+        (var "numResult"),
+    _IntegerType_uint8>>: constant $
+      "numResult" <~ (expectNumber @@ var "value") $
+      Eithers.map
+        ("n" ~> Core.termLiteral $ Core.literalInteger $ Core.integerValueUint8 $
+          Literals.bigintToUint8 $ Literals.bigfloatToBigint $ var "n")
+        (var "numResult"),
+    _IntegerType_uint16>>: constant $
+      "numResult" <~ (expectNumber @@ var "value") $
+      Eithers.map
+        ("n" ~> Core.termLiteral $ Core.literalInteger $ Core.integerValueUint16 $
+          Literals.bigintToUint16 $ Literals.bigfloatToBigint $ var "n")
+        (var "numResult")]
+
+-- | Extract a string from a JSON value
+expectString :: TBinding (Value -> Either String String)
+expectString = define "expectString" $
+  doc "Extract a string from a JSON value" $
+  "value" ~> cases _Value (var "value")
+    (Just $ left $ string "expected string") [
+    _Value_string>>: "s" ~> right $ var "s"]
+
+-- | Extract an array from a JSON value
+expectArray :: TBinding (Value -> Either String [Value])
+expectArray = define "expectArray" $
+  doc "Extract an array from a JSON value" $
+  "value" ~> cases _Value (var "value")
+    (Just $ left $ string "expected array") [
+    _Value_array>>: "arr" ~> right $ var "arr"]
+
+-- | Extract an object from a JSON value
+expectObject :: TBinding (Value -> Either String (M.Map String Value))
+expectObject = define "expectObject" $
+  doc "Extract an object from a JSON value" $
+  "value" ~> cases _Value (var "value")
+    (Just $ left $ string "expected object") [
+    _Value_object>>: "obj" ~> right $ var "obj"]
+
+-- | Extract a number from a JSON value
+expectNumber :: TBinding (Value -> Either String Double)
+expectNumber = define "expectNumber" $
+  doc "Extract a number from a JSON value" $
+  "value" ~> cases _Value (var "value")
+    (Just $ left $ string "expected number") [
+    _Value_number>>: "n" ~> right $ var "n"]

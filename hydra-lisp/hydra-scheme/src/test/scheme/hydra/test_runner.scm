@@ -725,6 +725,17 @@
         ((string? err) err)
         (else (obj->string err))))
 
+    (define (run-universal-test path tc)
+      (let ((actual (hydra_testing_universal_test_case-actual tc))
+            (expected (hydra_testing_universal_test_case-expected tc)))
+        (if (equal? actual expected)
+          (list 1 0 0)
+          (begin
+            (display (string-append "FAIL: " path "\n"))
+            (display (string-append "  Expected: " (if (string? expected) expected (obj->string expected)) "\n"))
+            (display (string-append "  Actual:   " (if (string? actual) actual (obj->string actual)) "\n"))
+            (list 0 1 0)))))
+
     (define (run-simple-test path expected actual-fn)
       "Run a test that compares expected to the result of actual-fn."
       (guard (exn (#t
@@ -1593,7 +1604,7 @@
                   ((eq? case-type 'json_decode)             (run-json-decode-test full case-data))
                   ((eq? case-type 'json_encode)             (run-json-encode-test full case-data))
                   ;; Skip remaining unimplemented test types
-                  ((eq? case-type 'delegated_evaluation)    (list 0 0 1))
+                  ((eq? case-type 'universal)               (run-universal-test full case-data))
                   (else                                     (list 0 0 1))))))))
 
     ;; Test groups to skip entirely (e.g. R7RS has no standard regex library)

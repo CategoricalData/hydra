@@ -79,6 +79,11 @@ module_ = Module ns elements
      toTermDefinition lambda,
      toTermDefinition let_,
      toTermDefinition list_,
+     toTermDefinition maybe_,
+     toTermDefinition pair_,
+     toTermDefinition either_,
+     toTermDefinition map_,
+     toTermDefinition set_,
      toTermDefinition literal,
      toTermDefinition literalType,
      toTermDefinition term,
@@ -273,6 +278,55 @@ list_ = define "list" $
     string "[",
     Strings.intercalate (string ", ") (var "elementStrs"),
     string "]"]
+
+pair_ :: TBinding ((a -> String) -> (b -> String) -> (a, b) -> String)
+pair_ = define "pair" $
+  doc "Show a pair using given functions to show each element" $
+  "showA" ~> "showB" ~> "p" ~>
+  Strings.cat $ list [
+    string "(",
+    var "showA" @@ (Pairs.first $ var "p"),
+    string ", ",
+    var "showB" @@ (Pairs.second $ var "p"),
+    string ")"]
+
+either_ :: TBinding ((a -> String) -> (b -> String) -> Prelude.Either a b -> String)
+either_ = define "either" $
+  doc "Show an Either value using given functions for left and right" $
+  "showA" ~> "showB" ~> "e" ~>
+  Eithers.either_
+    ("a" ~> Strings.cat2 (string "left(") (Strings.cat2 (var "showA" @@ var "a") (string ")")))
+    ("b" ~> Strings.cat2 (string "right(") (Strings.cat2 (var "showB" @@ var "b") (string ")")))
+    (var "e")
+
+maybe_ :: TBinding ((a -> String) -> Maybe a -> String)
+maybe_ = define "maybe" $
+  doc "Show a Maybe value using a given function to show the element" $
+  "f" ~> "mx" ~>
+  Maybes.maybe (string "nothing") ("x" ~> Strings.cat2 (string "just(") (Strings.cat2 (var "f" @@ var "x") (string ")"))) (var "mx")
+
+map_ :: TBinding ((k -> String) -> (v -> String) -> M.Map k v -> String)
+map_ = define "map" $
+  doc "Show a map using given functions to show keys and values" $
+  "showK" ~> "showV" ~> "m" ~>
+  "pairStrs" <~ Lists.map ("p" ~> Strings.cat $ list [
+    var "showK" @@ (Pairs.first $ var "p"),
+    string ": ",
+    var "showV" @@ (Pairs.second $ var "p")]) (Maps.toList $ var "m") $
+  Strings.cat $ list [
+    string "{",
+    Strings.intercalate (string ", ") (var "pairStrs"),
+    string "}"]
+
+set_ :: TBinding ((a -> String) -> S.Set a -> String)
+set_ = define "set" $
+  doc "Show a set using a given function to show each element" $
+  "f" ~> "xs" ~>
+  "elementStrs" <~ Lists.map (var "f") (Sets.toList $ var "xs") $
+  Strings.cat $ list [
+    string "{",
+    Strings.intercalate (string ", ") (var "elementStrs"),
+    string "}"]
 
 literal :: TBinding (Literal -> String)
 literal = define "literal" $

@@ -294,9 +294,15 @@ def default_test_runner(desc: str, tcase: hydra.testing.TestCaseWithMetadata) ->
         case hydra.testing.TestCaseDeannotateType(value=tc):
             return lambda: run_deannotate_type_test(tc)
 
+
         case hydra.testing.TestCaseDelegatedEvaluation(value=tc):
-            # Delegated evaluation runs in the target language - always passes here
             return lambda: None
+        case hydra.testing.TestCaseUniversal(value=tc):
+            expected, actual = tc.expected, tc.actual
+            def run_universal():
+                if actual != expected:
+                    raise AssertionError(f"expected {expected!r} but got {actual!r}")
+            return run_universal
 
         case hydra.testing.TestCaseEtaExpansion(value=tc):
             return lambda: run_eta_expansion_test(desc, tc)

@@ -59,8 +59,6 @@
 (define *json-dir* (get-arg "--json-dir"))
 (define *output-base* (get-arg "--output" "/tmp/hydra-bootstrapping-demo"))
 (define *kernel-only* (has-flag "--kernel-only"))
-(define *types-only* (has-flag "--types-only"))
-(define *limit-modules* (let ((v (get-arg "--limit" #f))) (if v (string->number v) #f)))
 (define *include-tests* (has-flag "--include-tests"))
 
 (unless (and *target* *json-dir*)
@@ -101,70 +99,43 @@
 ;; Load the JSON reader
 (load (string-append *script-dir* "json-reader.scm"))
 
-;; Convert a define-record-type form to procedure-based constructor/accessors
-;; that create SRFI-9 compatible structs. This avoids Guile's syntax-transformer
-;; accessors while producing records that are fully compatible with SRFI-9
-;; records created by the kernel loader.
-;;
-;; Strategy: first evaluate the original define-record-type to get the vtable,
-;; then redefine the constructor and accessors as callable procedures using
-;; make-struct/no-tail and struct-ref.
+;; Convert a define-record-type form to alist-based constructor/accessors.
+;; Guile's built-in define-record-type creates syntax-transformer accessors
+;; that can't be used as first-class values in generated code.
 (define (record-type-to-alist-defines form)
   "Convert (define-record-type Name (make-Name f1 f2...) pred? (f1 acc1) (f2 acc2)...)
-   to procedure-based definitions using SRFI-9 compatible structs."
+   to a list of define forms creating alist-based records."
   (let* ((type-name (list-ref form 1))
          (constructor-form (list-ref form 2))
          (constructor-name (if (pair? constructor-form) (car constructor-form) constructor-form))
          (constructor-fields (if (pair? constructor-form) (cdr constructor-form) '()))
          (predicate (list-ref form 3))
          (field-specs (list-tail form 4))
-         ;; First, eval the original define-record-type to create the vtable
-         (dummy (eval form (interaction-environment)))
-         ;; Get the vtable by creating a dummy instance
-         (dummy-args (map (lambda (_) #f) constructor-fields))
-         (dummy-rec (apply (eval constructor-name (interaction-environment)) dummy-args))
-         (vtable (struct-vtable dummy-rec)))
+         (field-keywords (map (lambda (f) (symbol->keyword f)) constructor-fields)))
     (append
-      ;; Constructor: creates a struct compatible with SRFI-9
+      ;; Constructor
       (list `(define ,constructor-name
                (lambda ,constructor-fields
-                 (make-struct/no-tail ,vtable ,@constructor-fields))))
-      ;; Predicate (reuse the original; it works with structs)
-      ;; Accessors: struct-ref at 0-based index
-      (let loop ((specs field-specs) (idx 0) (acc '()))
-        (if (null? specs)
-            (reverse acc)
-            (let* ((spec (car specs))
+                 (list ,@(map (lambda (kw field) `(cons ,kw ,field))
+                              field-keywords constructor-fields)))))
+      ;; Predicate
+      (list `(define ,predicate (lambda (x) (and (pair? x) (pair? (car x))))))
+      ;; Accessors
+      (map (lambda (spec)
+             (let ((field-name (if (pair? spec) (car spec) spec))
                    (accessor-name (if (and (pair? spec) (>= (length spec) 2))
                                       (cadr spec) spec)))
-              (loop (cdr specs)
-                    (+ idx 1)
-                    (cons `(define ,accessor-name
-                             (lambda (rec) (struct-ref rec ,idx)))
-                          acc))))))))
+               `(define ,accessor-name
+                  (lambda (rec)
+                    (cdr (assq ,(symbol->keyword field-name) rec))))))
+           field-specs))))
 
-;; Coder module loader: strips define-library, converts record types
-;; to vector-based definitions (avoiding Guile's syntax-transformer accessors),
-;; applies performance-critical transformations (fix-letrec, fix-if-else),
-;; and compiles lambda values to bytecode for fast execution.
-;; Skips sanitize/rewrite transformations which fail on record types with
-;; field names like 'cond', 'then', 'else'.
-(use-modules (system base compile))
-(define (compile-define-value form)
-  "If form is (define name (lambda ...)), try to compile the lambda to bytecode.
-   Falls back to the original form if compilation fails."
-  (if (and (pair? form) (eq? (car form) 'define)
-           (pair? (cdr form)) (symbol? (cadr form))
-           (pair? (cddr form)) (null? (cdddr form))
-           (pair? (caddr form)) (eq? (car (caddr form)) 'lambda))
-      (catch #t
-        (lambda ()
-          (let ((compiled (compile (caddr form) #:env (current-module))))
-            `(define ,(cadr form) ,compiled)))
-        (lambda args form))  ;; fall back on any error
-      form))
+;; Simple coder module loader: strips define-library, converts record types
+;; to alist-based definitions. Avoids sanitize/rewrite transformations
+;; (which fail on record types with field names like 'cond', 'then', 'else')
+;; and avoids Guile's syntax-transformer accessors.
 (define (load-coder-module-simple path)
-  "Load a generated coder module with vector-based records and bytecode compilation."
+  "Load a generated coder module with alist-based records."
   (when (file-exists? path)
     (call-with-input-file path
       (lambda (port)
@@ -186,14 +157,9 @@
                                                (>= (length f) 4))
                                           (record-type-to-alist-defines f)
                                           (list f)))
-                                    body-forms)))
-                             ;; Apply performance-critical transformations
-                             (fixed (map fix-letrec expanded))
-                             (if-fixed (map fix-if-else fixed))
-                             ;; Compile lambdas to bytecode for fast execution
-                             (compiled (map compile-define-value if-fixed)))
+                                    body-forms))))
                         ;; Eval with retry for forward refs
-                        (hydra-eval-with-retry compiled)))
+                        (hydra-eval-with-retry expanded)))
                      (else (find-begin (cdr rest))))))
                 ;; Non-library forms
                 (else (eval form (interaction-environment))))
@@ -257,6 +223,7 @@
     "extract/helpers.scm"
     "extract/util.scm"
     "extract/json.scm"
+    "tarjan.scm"
     "coder_utils.scm"
     "adapt.scm"
     "code_generation.scm"
@@ -319,18 +286,13 @@
             (else '()))))
     (for-each
       (lambda (f)
-        (let ((path (string-append *gen-main-base* f)))
-          (when (file-exists? path)
-            (display (string-append "  Loading coder: " f "\n"))
-            (force-output (current-output-port))
-            (load-coder-module-simple path))))
+        (load-additional-module f))
       coder-files)))
 
 (display "  Loading coder modules...\n")
 (force-output (current-output-port))
 
 (load-coder-modules *target*)
-
 
 
 (display "Kernel loaded.\n")
@@ -519,7 +481,7 @@
 
 (define (generate-sources coder language flags out-dir universe-mods mods-to-generate)
   (let* ((bs-graph (bootstrap-graph))
-         (cx (make-hydra_context_context '() '() hydra_lib_maps_empty))
+         (cx (make-hydra_context_in_context '() '()))
          (do-infer (list-ref flags 0))
          (do-expand (list-ref flags 1))
          (do-hoist-case (list-ref flags 2))
@@ -528,11 +490,7 @@
          (result ((((((((((hydra_code_generation_generate_source_files
                             coder) language) do-infer) do-expand) do-hoist-case) do-hoist-poly)
                        bs-graph) universe-mods) mods-to-generate) cx)))
-    (display (string-append "  Result: " (format #f "~A" (car result)) " files=" (format #f "~A" (if (pair? (cdr result)) (length (cadr result)) "?")) "\n"))
-    (force-output (current-output-port))
     (when (eq? (car result) 'left)
-      (display (string-append "  Error: " (format "~A" (cadr result)) "\n"))
-      (force-output (current-output-port))
       (error "Code generation failed" (cadr result)))
     (let* ((files (cadr result))
            (t1 (current-time-millis)))
@@ -606,38 +564,13 @@
                                   (number->string (length mods-to-generate))
                                   " of " (number->string (length all-mods)) "\n")))
 
-        ;; types-only: keep only modules that have type definitions
-        (when *types-only*
-          (let ((before (length mods-to-generate)))
-            (set! mods-to-generate
-              (filter (lambda (m)
-                (let loop ((defs (hydra_module_module-definitions m)))
-                  (cond
-                    ((null? defs) #f)
-                    ((and (pair? (car defs)) (eq? (caar defs) 'type)) #t)
-                    (else (loop (cdr defs))))))
-                mods-to-generate))
-            (display (string-append "\nFiltering to type modules: "
-                                    (number->string (length mods-to-generate))
-                                    " of " (number->string before) "\n"))
-            (force-output (current-output-port))))
-
-        (when *limit-modules*
-          (set! mods-to-generate (list-head mods-to-generate (min *limit-modules* (length mods-to-generate))))
-          (display (string-append "\nLimited to " (number->string (length mods-to-generate)) " modules\n"))
-          (force-output (current-output-port)))
-
         (display (string-append "\nMapping " (number->string (length mods-to-generate))
                                 " modules to " target-cap "...\n"))
         (display (string-append "  Output: " out-main "\n"))
         (force-output (current-output-port))
 
-        (let* ((main-start (current-jiffy))
-               (file-count (generate-sources coder language flags out-main all-mods mods-to-generate))
-               (main-secs (/ (- (current-jiffy) main-start) (jiffies-per-second) 1.0))
-               (test-file-count 0))
+        (let ((file-count (generate-sources coder language flags out-main all-mods mods-to-generate)))
           (display (string-append "  Generated " (number->string file-count) " files.\n"))
-          (display (string-append "  Time: " (number->string (exact->inexact (/ (round (* main-secs 10)) 10))) "s\n"))
           (force-output (current-output-port))
 
           ;; Tests
@@ -661,21 +594,17 @@
                    (test-mods (load-modules-from-json test-json-dir test-ns))
                    (all-universe (append all-mods test-mods))
                    (out-test (string-append *output-base* "/scheme-to-" *target*
-                                            "/src/gen-test/" subdir))
-                   (test-start (current-jiffy)))
+                                            "/src/gen-test/" subdir)))
               (display (string-append "  Loaded " (number->string (length test-mods))
                                       " test modules.\n"))
               (display (string-append "\nMapping test modules to " target-cap "...\n"))
               (force-output (current-output-port))
-              (let ((tc (generate-sources coder language flags out-test all-universe test-mods)))
-                (let ((test-secs (/ (- (current-jiffy) test-start) (jiffies-per-second) 1.0)))
-                  (set! test-file-count tc)
-                  (display (string-append "  Generated " (number->string tc) " test files.\n"))
-                  (display (string-append "  Time: " (number->string (exact->inexact (/ (round (* test-secs 10)) 10))) "s\n"))))))
+              (let ((test-count (generate-sources coder language flags out-test all-universe test-mods)))
+                (display (string-append "  Generated " (number->string test-count)
+                                        " test files.\n")))))
 
           (display "\n==========================================\n")
-          (display (string-append "Done: " (number->string file-count) " main + "
-                                  (number->string test-file-count) " test files\n"))
+          (display (string-append "Done: " (number->string file-count) " main files\n"))
           (display (string-append "  Output: " *output-base* "/scheme-to-" *target* "\n"))
           (display "==========================================\n")
           (force-output (current-output-port)))))))

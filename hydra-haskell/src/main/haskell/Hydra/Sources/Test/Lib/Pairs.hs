@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 module Hydra.Sources.Test.Lib.Pairs where
 
 -- Standard imports for shallow DSL tests
@@ -17,20 +19,34 @@ import qualified Data.Map                     as M
 -- Additional imports specific to this file
 import Hydra.Testing
 import Hydra.Sources.Libraries
+import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
+import qualified Hydra.Dsl.Meta.Lib.Math as Math
+import qualified Hydra.Dsl.Meta.Lib.Pairs as Pairs
+import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
 
 
 ns :: Namespace
 ns = Namespace "hydra.test.lib.pairs"
 
 module_ :: Module
-module_ = Module ns elements [] [] $
+module_ = Module ns elements
+    [Namespace "hydra.reduction", Namespace "hydra.show.core"]
+    kernelTypesNamespaces $
     Just "Test cases for hydra.lib.pairs primitives"
   where
     elements = [Phantoms.toTermDefinition allTests]
 
--- Helper to create pair terms
-pairTerm :: Int -> String -> TTerm Term
-pairTerm i s = Terms.pair (int32 i) (Terms.string s)
+showInt32 :: TTerm (Int -> String)
+showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")
+
+-- Show a (Int, Int) pair as "(<int>, <int>)"
+showIntIntPair :: TTerm ((Int, Int) -> String)
+showIntIntPair = Phantoms.lambda "p" $ Strings.cat (Phantoms.list [
+  Phantoms.string "(",
+  Literals.showInt32 (Pairs.first (Phantoms.var "p")),
+  Phantoms.string ", ",
+  Literals.showInt32 (Pairs.second (Phantoms.var "p")),
+  Phantoms.string ")"])
 
 -- Test groups for hydra.lib.pairs primitives
 
@@ -39,10 +55,12 @@ pairsBimap = subgroup "bimap" [
   test "transform both elements" 5 "ab" 10 2,
   test "with zero" 0 "hello" 0 5]
   where
-    test name fst snd resultFst resultSnd = primCase name _pairs_bimap [
-      lambda "x" (primitive _math_mul @@ var "x" @@ int32 2),
-      lambda "s" (primitive _strings_length @@ var "s"),
-      pairTerm fst snd] (Terms.pair (int32 resultFst) (int32 resultSnd))
+    test name fst snd resultFst resultSnd = evalPair name showIntIntPair
+      (Pairs.bimap
+        (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2))
+        (Phantoms.lambda "s" $ Strings.length (Phantoms.var "s"))
+        (Phantoms.pair (Phantoms.int32 fst) (Phantoms.string snd)))
+      (Phantoms.pair (Phantoms.int32 resultFst) (Phantoms.int32 resultSnd))
 
 pairsFirst :: TTerm TestGroup
 pairsFirst = subgroup "first" [
@@ -50,7 +68,9 @@ pairsFirst = subgroup "first" [
   test "with zero" 0 "world" 0,
   test "negative number" (-5) "test" (-5)]
   where
-    test name fst snd result = primCase name _pairs_first [pairTerm fst snd] (int32 result)
+    test name fst snd result = evalPair name showInt32
+      (Pairs.first (Phantoms.pair (Phantoms.int32 fst) (Phantoms.string snd)))
+      (Phantoms.int32 result)
 
 pairsSecond :: TTerm TestGroup
 pairsSecond = subgroup "second" [
@@ -58,7 +78,9 @@ pairsSecond = subgroup "second" [
   test "empty string" 0 "" "",
   test "long string" 123 "testing" "testing"]
   where
-    test name fst snd result = primCase name _pairs_second [pairTerm fst snd] (Terms.string result)
+    test name fst snd result = stringEvalPair name
+      (Pairs.second (Phantoms.pair (Phantoms.int32 fst) (Phantoms.string snd)))
+      (Phantoms.string result)
 
 allTests :: TBinding TestGroup
 allTests = definitionInModule module_ "allTests" $

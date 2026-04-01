@@ -33,7 +33,7 @@ module_ = Module ns (map toTypeDef elements) [Ast.ns, Coders.ns, ErrorsCore.ns, 
       alphaConversionTestCase,
       evaluationStyle,
       caseConversionTestCase,
-      delegatedEvaluationTestCase,
+      delegatedEvaluationTestCase,  -- BOOTSTRAP: will be removed after first sync
       etaExpansionTestCase,
       deannotateTermTestCase,
       deannotateTypeTestCase,
@@ -81,7 +81,8 @@ module_ = Module ns (map toTypeDef elements) [Ast.ns, Coders.ns, ErrorsCore.ns, 
       unshadowVariablesTestCase,
       unifyTypesTestCase,
       joinTypesTestCase,
-      validateCoreTermTestCase]
+      validateCoreTermTestCase,
+      universalTestCase]
 
 alphaConversionTestCase :: Binding
 alphaConversionTestCase = define "AlphaConversionTestCase" $
@@ -122,18 +123,13 @@ caseConversionTestCase = define "CaseConversionTestCase" $
       doc "The expected output string" $
       T.string]
 
+-- BOOTSTRAP: this type will be removed after the first sync regenerates encoder/decoder modules
 delegatedEvaluationTestCase :: Binding
 delegatedEvaluationTestCase = define "DelegatedEvaluationTestCase" $
-  doc ("A test case in which we delegate evaluation of an input term and an expected output term"
-    <> " to a target programming language like Haskell, Java, or Python, checking whether the term evaluates"
-    <> " as expected when translated into that language") $
+  doc "DEPRECATED: Delegated evaluation test case (to be removed)" $
   T.record [
-    "input">:
-      doc "The first of two terms which should evaluate to the same expression"
-      Core.term,
-    "output">:
-      doc "The second of two terms which should evaluate to the same expression"
-      Core.term]
+    "input">: Core.term,
+    "output">: Core.term]
 
 etaExpansionTestCase :: Binding
 etaExpansionTestCase = define "EtaExpansionTestCase" $
@@ -524,7 +520,7 @@ testCase = define "TestCase" $
       doc "A deannotate type test"
       deannotateTypeTestCase,
     "delegatedEvaluation">:
-      doc "A delegated evaluation test"
+      doc "DEPRECATED: Delegated evaluation test (to be removed)"
       delegatedEvaluationTestCase,
     "etaExpansion">:
       doc "An eta expansion test"
@@ -627,7 +623,21 @@ testCase = define "TestCase" $
       unshadowVariablesTestCase,
     "validateCoreTerm">:
       doc "A core term validation test"
-      validateCoreTermTestCase]
+      validateCoreTermTestCase,
+    "universal">:
+      doc "A universal test case (string comparison)"
+      universalTestCase]
+
+universalTestCase :: Binding
+universalTestCase = define "UniversalTestCase" $
+  doc "A universal test case: the actual and expected values are both strings" $
+  T.record [
+    "actual">:
+      doc "The actual result (a string-valued expression)" $
+      T.string,
+    "expected">:
+      doc "The expected result (a string literal)" $
+      T.string]
 
 testCaseWithMetadata :: Binding
 testCaseWithMetadata = define "TestCaseWithMetadata" $

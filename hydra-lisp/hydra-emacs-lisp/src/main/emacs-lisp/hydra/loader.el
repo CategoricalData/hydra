@@ -37,9 +37,9 @@
     `(unless (gethash ',name hydra--defined-structs)
        (puthash ',name t hydra--defined-structs)
        (defun ,constructor (&rest args)
-         ;; Always use positional args — keyword detection is unreliable because
-         ;; Hydra values can be keyword symbols like :source, :record, etc.
-         (cl-mapcar #'cons ',field-keywords args))
+         (if (and args (keywordp (car args)))
+             (cl-loop for (k v) on args by #'cddr collect (cons k v))
+           (cl-mapcar #'cons ',field-keywords args)))
        ,@(cl-mapcar
           (lambda (field kw)
             `(defun ,(intern (format "%s-%s" name field)) (rec)
@@ -284,10 +284,6 @@
    ;; cl-defstruct → hydra-defstruct
    ((and (consp form) (eq (car form) 'cl-defstruct))
     (cons 'hydra-defstruct (cdr form)))
-   ;; defvar → setq so pre-declared symbols get their actual values
-   ((and (consp form) (eq (car form) 'defvar) (cddr form))
-    (let ((fixed (hydra-fix-curried-calls (cons 'setq (cdr form)))))
-      fixed))
    ;; letrec at top level
    ((and (consp form) (eq (car form) 'letrec))
     (hydra-transform-letrec (hydra-fix-curried-calls form)))
@@ -356,9 +352,11 @@
         (while (and failed-forms (< pass 10))
           (let ((still-failed nil))
             (dolist (form failed-forms)
-              (condition-case _err
+              (condition-case err
                   (eval (hydra-transform-form form) t)
                 (error
+                 (when (= pass 9)
+                   (message "LOAD ERROR after 10 retries: %s" (error-message-string err)))
                  (push form still-failed))))
             (setq failed-forms (nreverse still-failed))
             (hydra-set-function-bindings))
@@ -395,7 +393,7 @@
                      "parsing.el" "query.el" "relational.el" "tabular.el" "testing.el"
                      "topology.el" "typing.el" "util.el" "variants.el"
                      "json/model.el" "classes.el" "constants.el" "paths.el"
-                     "formatting.el" "rewriting.el" "sorting.el"
+                     "formatting.el" "tarjan.el" "rewriting.el" "sorting.el"
                      "names.el" "schemas.el" "arity.el" "lexical.el"
                      "literals.el" "reflect.el" "languages.el" "parsers.el"
                      "templates.el" "encoding.el" "decoding.el" "code_generation.el"
@@ -409,19 +407,13 @@
                      "json/parser.el" "json/writer.el"
                      "json/encode.el" "json/decode.el" "json/bootstrap.el"))
          (all-files (hydra-collect-el-files base))
-         (remaining (cl-remove-if (lambda (f) (or (member f priority)
-                                                   ;; Skip eval/lib modules — deeply nested closures
-                                                   ;; that overflow the C stack during loading
-                                                   (string-prefix-p "eval/lib/" f)))
-                                  all-files))
+         (remaining (cl-remove-if (lambda (f) (member f priority)) all-files))
          (ordered (append priority (sort (copy-sequence remaining) #'string<))))
     (dolist (f ordered)
       (let ((path (expand-file-name f base)))
         (when (file-exists-p path)
           (message "Loading %s..." f)
           (hydra-load-file path))))
-    ;; Set function bindings and resolve symbol chains
-    (hydra-set-function-bindings)
     ;; Byte-compile all loaded functions for ~13x speedup on curried calls
     (hydra-byte-compile-all)))
 

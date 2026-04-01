@@ -46,7 +46,6 @@ import qualified Data.Maybe                                as Y
 import qualified Hydra.Ext.Lisp.Syntax as L
 import qualified Hydra.Ext.Sources.Lisp.Syntax as LispSyntax
 import qualified Hydra.Ext.Sources.Lisp.Language as LispLanguageSource
-import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Sources.CoderUtils as CoderUtils
 
 
@@ -85,13 +84,11 @@ module_ = Module ns elements
       toTermDefinition isLazy3ArgPrimitive,
       toTermDefinition isPrimitiveRef,
       toTermDefinition lispApp,
-      toTermDefinition lispBindingMetadata,
       toTermDefinition lispKeyword,
       toTermDefinition lispLambdaExpr,
       toTermDefinition lispListExpr,
       toTermDefinition lispLitExpr,
       toTermDefinition lispNamedLambdaExpr,
-      toTermDefinition lispShouldThunkBinding,
       toTermDefinition lispNilExpr,
       toTermDefinition lispSymbol,
       toTermDefinition lispTopForm,
@@ -103,7 +100,6 @@ module_ = Module ns elements
       toTermDefinition qualifiedSnakeName,
       toTermDefinition qualifiedTypeName,
       toTermDefinition CoderUtils.reorderDefs,
-      toTermDefinition wrapInDelay,
       toTermDefinition wrapInThunk]
 
 
@@ -140,17 +136,17 @@ dialectEqual = def "dialectEqual" $
 -- | Encode a function application, detecting ifElse and other lazy primitives.
 -- Transforms (((hydra.lib.logic.ifElse C) T) E) into native (if C T E).
 -- For other lazy primitives, wraps the appropriate argument in a thunk.
-encodeApplication :: TBinding (L.Dialect -> Context -> Graph -> S.Set Name -> Term -> Term -> Either (InContext Error) L.Expression)
+encodeApplication :: TBinding (L.Dialect -> Context -> Graph -> Term -> Term -> Either (InContext Error) L.Expression)
 encodeApplication = def "encodeApplication" $
-  "dialect" ~> "cx" ~> "g" ~> "thunkedVars" ~> lambda "rawFun" $ lambda "rawArg" $
+  "dialect" ~> "cx" ~> "g" ~> lambda "rawFun" $ lambda "rawArg" $
     "dFun" <~ (Rewriting.deannotateTerm @@ var "rawFun") $
     -- Helper: encode a normal (non-special) application
     "normal" <~
-      ("fun" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ var "rawFun") $
-      "arg" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ var "rawArg") $
+      ("fun" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "rawFun") $
+      "arg" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "rawArg") $
         right (lispApp @@ var "fun" @@ list [var "arg"])) $
     -- Helper: encode a term
-    "enc" <~ (lambda "t" $ encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ var "t") $
+    "enc" <~ (lambda "t" $ encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "t") $
     cases _Term (var "dFun") (Just $ var "normal")
     [_Term_application>>: lambda "app2" $
        "midFun" <~ Core.applicationFunction (var "app2") $
@@ -208,9 +204,9 @@ encodeApplication = def "encodeApplication" $
 
 -- | Encode a Hydra elimination as a Lisp expression.
 -- Takes an optional argument for applied eliminations.
-encodeElimination :: TBinding (L.Dialect -> Context -> Graph -> S.Set Name -> Elimination -> Maybe Term -> Either (InContext Error) L.Expression)
+encodeElimination :: TBinding (L.Dialect -> Context -> Graph -> Elimination -> Maybe Term -> Either (InContext Error) L.Expression)
 encodeElimination = def "encodeElimination" $
-  "dialect" ~> "cx" ~> "g" ~> "thunkedVars" ~> lambda "elim" $ lambda "marg" $
+  "dialect" ~> "cx" ~> "g" ~> lambda "elim" $ lambda "marg" $
     cases _Elimination (var "elim") Nothing [
       -- Record projection: (:field record) or (record-type-field record)
       _Elimination_record>>: lambda "proj" $
@@ -225,7 +221,7 @@ encodeElimination = def "encodeElimination" $
                 L._FieldAccess_field>>: wrap L._Symbol (var "fname"),
                 L._FieldAccess_target>>: lispVar @@ string "v"])))
           (lambda "arg" $
-            "sarg" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ var "arg") $
+            "sarg" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "arg") $
               right (inject L._Expression L._Expression_fieldAccess $
                 record L._FieldAccess [
                   L._FieldAccess_recordType>>: wrap L._Symbol (var "tname"),
@@ -248,7 +244,7 @@ encodeElimination = def "encodeElimination" $
               lispApp @@ (lispVar @@ (dialectCar @@ var "dialect")) @@ list [lispVar @@ string "match_target"],
               lispKeyword @@ var "cfname"]) $
             -- Body: apply handler to (cadr __m)
-            "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ (Core.termApplication (Core.application (var "cfterm") (Core.termVariable (wrap _Name (string "match_value")))))) $
+            "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ (Core.termApplication (Core.application (var "cfterm") (Core.termVariable (wrap _Name (string "match_value")))))) $
               right (record L._CondClause [
                 L._CondClause_condition>>: var "condExpr",
                 L._CondClause_body>>: var "bodyExpr"]))
@@ -259,7 +255,7 @@ encodeElimination = def "encodeElimination" $
         "defExpr" <<~ (Maybes.cases (var "defCase")
           (right nothing)
           (lambda "dt" $
-            "defBody" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ var "dt") $
+            "defBody" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "dt") $
               right (just (var "defBody"))))  $
         -- Build the cond expression wrapped in a lambda taking "v"
         "condExpr" <~ (inject L._Expression L._Expression_cond $
@@ -274,7 +270,7 @@ encodeElimination = def "encodeElimination" $
           -- Unapplied: (lambda (__m) ((lambda (__mv) (cond ...)) (second __m)))
           (right (lispLambdaExpr @@ list [string "match_target"] @@ var "innerExpr"))
           (lambda "arg" $
-            "sarg" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ var "arg") $
+            "sarg" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "arg") $
               -- Applied: ((lambda (__m) ((lambda (__mv) (cond ...)) (second __m))) sarg)
               right (lispApp @@ (lispLambdaExpr @@ list [string "match_target"] @@ var "innerExpr") @@ list [var "sarg"])),
 
@@ -284,7 +280,7 @@ encodeElimination = def "encodeElimination" $
           -- Unapplied: identity function
           (right (lispLambdaExpr @@ list [string "v"] @@ (lispVar @@ string "v")))
           (lambda "arg" $
-            encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ var "arg")]
+            encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "arg")]
 
 -- | Encode a Hydra field type as a Lisp field definition
 encodeFieldDef :: TBinding (FieldType -> L.FieldDefinition)
@@ -296,84 +292,44 @@ encodeFieldDef = def "encodeFieldDef" $
         L._FieldDefinition_defaultValue>>: nothing]
 
 -- | Encode a Hydra function as a Lisp expression
-encodeFunction :: TBinding (L.Dialect -> Context -> Graph -> S.Set Name -> Function -> Either (InContext Error) L.Expression)
+encodeFunction :: TBinding (L.Dialect -> Context -> Graph -> Function -> Either (InContext Error) L.Expression)
 encodeFunction = def "encodeFunction" $
-  "dialect" ~> "cx" ~> "g" ~> "thunkedVars" ~> lambda "fun" $
+  "dialect" ~> "cx" ~> "g" ~> lambda "fun" $
     cases _Function (var "fun") Nothing [
       _Function_lambda>>: lambda "lam" $
         "param" <~ (Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (Core.lambdaParameter (var "lam")))) $
-        "body" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ Core.lambdaBody (var "lam")) $
+        "body" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.lambdaBody (var "lam")) $
           right (lispLambdaExpr @@ list [var "param"] @@ var "body"),
       _Function_primitive>>: lambda "name" $
         right (lispVar @@ (Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (var "name")))),
       _Function_elimination>>: lambda "elim" $
-        encodeElimination @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ var "elim" @@ nothing]
+        encodeElimination @@ var "dialect" @@ var "cx" @@ var "g" @@ var "elim" @@ nothing]
 
 -- | Encode let bindings as nested ((lambda (x) body) init) applications.
 -- Used for self-referential non-lambda bindings (Y-combinator fixpoint pattern)
 -- so that the loader's fix-letrec can transform them into proper letrec with thunking.
-encodeLetAsLambdaApp :: TBinding (L.Dialect -> Context -> Graph -> S.Set Name -> [Binding] -> Term -> Either (InContext Error) L.Expression)
+encodeLetAsLambdaApp :: TBinding (L.Dialect -> Context -> Graph -> [Binding] -> Term -> Either (InContext Error) L.Expression)
 encodeLetAsLambdaApp = def "encodeLetAsLambdaApp" $
-  "dialect" ~> "cx" ~> "g" ~> "thunkedVars" ~> lambda "bindings" $ lambda "body" $
-    "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ var "body") $
+  "dialect" ~> "cx" ~> "g" ~> lambda "bindings" $ lambda "body" $
+    "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "body") $
     Eithers.foldl
       (lambda "acc" $ lambda "b" $
         "bname" <~ (Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (Core.bindingName (var "b")))) $
-        "bval" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ Core.bindingTerm (var "b")) $
+        "bval" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.bindingTerm (var "b")) $
           right (lispApp @@ (lispLambdaExpr @@ list [var "bname"] @@ var "acc") @@ list [var "bval"]))
       (var "bodyExpr")
       (Lists.reverse (var "bindings"))
-
--- | Check if a binding should be thunked (wrapped in a zero-arg lambda for lazy evaluation).
--- A binding is thunked if it is complex AND not trivial AND not a lambda AND not self-referential.
--- Self-referential bindings are handled separately via eta-expansion/letrec.
--- This mirrors what the Python and Java coders do for eager target languages.
-lispShouldThunkBinding :: TBinding (Graph -> Binding -> Bool)
-lispShouldThunkBinding = def "lispShouldThunkBinding" $
-  "g" ~> "b" ~>
-  "term" <~ Core.bindingTerm (var "b") $
-  "isLambda" <~ (cases _Term (Rewriting.deannotateTerm @@ var "term")
-    (Just $ boolean False)
-    [_Term_function>>: lambda "f" $
-      cases _Function (var "f") (Just $ boolean False)
-        [_Function_lambda>>: constant (boolean True)]]) $
-  -- Thunking is disabled for now. Profiling shows delay/force overhead costs ~15%
-  -- while providing negligible benefit (all bindings are used in practice).
-  -- The infrastructure is retained for future use if selective thunking is needed.
-  boolean False
-
--- | Binding metadata for thunking: marks complex non-trivial bindings in the Graph metadata
--- so that isComplexVariable returns true for them, causing variable references to be forced.
-lispBindingMetadata :: TBinding (Graph -> Binding -> Maybe Term)
-lispBindingMetadata = def "lispBindingMetadata" $
-  "g" ~> "b" ~>
-  Logic.ifElse (lispShouldThunkBinding @@ var "g" @@ var "b")
-    (CoderUtils.bindingMetadata @@ var "g" @@ var "b")
-    nothing
 
 -- | Encode let bindings as native let/let*/letrec expressions.
 -- Self-referential bindings -> letrec (with eta-expansion for non-lambda self-refs)
 -- Single non-self-ref binding -> let
 -- Multiple non-self-ref bindings -> let* (sequential)
--- Complex non-trivial bindings are wrapped in thunks (zero-arg lambdas) for lazy evaluation.
-encodeLetAsNative :: TBinding (L.Dialect -> Context -> Graph -> S.Set Name -> [Binding] -> Term -> Either (InContext Error) L.Expression)
+encodeLetAsNative :: TBinding (L.Dialect -> Context -> Graph -> [Binding] -> Term -> Either (InContext Error) L.Expression)
 encodeLetAsNative = def "encodeLetAsNative" $
-  "dialect" ~> "cx" ~> "g" ~> "thunkedVars" ~> lambda "bindings" $ lambda "body" $
+  "dialect" ~> "cx" ~> "g" ~> lambda "bindings" $ lambda "body" $
     "isClojureTop" <~ (cases L._Dialect (var "dialect") (Just $ boolean False)
       [L._Dialect_clojure>>: constant $ boolean True]) $
-    -- Extend the graph with binding metadata so isComplexVariable works for let-bound vars.
-    -- Use lispBindingMetadata which marks complex non-trivial bindings.
-    "gExtended" <~ (Rewriting.extendGraphForLet @@ lispBindingMetadata @@ var "g" @@
-      Core.let_ (var "bindings") (var "body")) $
-    -- Compute the set of thunked binding names in this scope
-    "newThunkedNames" <~ Sets.fromList (Maybes.cat $ Lists.map
-      (lambda "b" $
-        Logic.ifElse (lispShouldThunkBinding @@ var "g" @@ var "b")
-          (just $ Core.bindingName (var "b"))
-          nothing)
-      (var "bindings")) $
-    "thunkedVarsExtended" <~ Sets.union (var "thunkedVars") (var "newThunkedNames") $
-    "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "gExtended" @@ var "thunkedVarsExtended" @@ var "body") $
+    "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "body") $
     -- For Clojure: topologically sort bindings so dependencies come before dependents.
     -- Clojure's let is sequential, so referenced bindings must be defined first.
     -- Build adjacency list: each binding depends on other bindings it references.
@@ -410,8 +366,7 @@ encodeLetAsNative = def "encodeLetAsNative" $
           [_Term_function>>: lambda "f" $
             cases _Function (var "f") (Just $ boolean False)
               [_Function_lambda>>: constant (boolean True)]]) $
-        "needsThunk" <~ (lispShouldThunkBinding @@ var "g" @@ var "b") $
-        "bval" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "gExtended" @@ var "thunkedVarsExtended" @@ Core.bindingTerm (var "b")) $
+        "bval" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.bindingTerm (var "b")) $
         -- Handle self-referential bindings:
         -- For Clojure: use named fn for self-reference (both lambda and eta-expanded)
         -- For others: use letrec (eta-expand non-lambda self-refs for letrec compat)
@@ -439,13 +394,7 @@ encodeLetAsNative = def "encodeLetAsNative" $
             (lispLambdaExpr @@ list [string "_arg"] @@
               (lispApp @@ var "bval" @@ list [lispVar @@ string "_arg"]))
             (var "bval"))) $
-        -- Thunk complex non-trivial bindings: wrap in (delay expr) for memoizing lazy evaluation.
-        -- delay/force is the Scheme equivalent of Haskell's lazy let bindings.
-        -- Don't thunk self-referential bindings (already handled above with eta-expansion)
-        "thunkedVal" <~ (Logic.ifElse (Logic.and (var "needsThunk") (Logic.not (var "isSelfRef")))
-          (wrapInDelay @@ var "wrappedVal")
-          (var "wrappedVal")) $
-          right (pair (var "bname") (var "thunkedVal")))
+          right (pair (var "bname") (var "wrappedVal")))
       (var "sortedBindings")) $
     -- Determine let kind: check if any binding references itself or another binding in the group
     "allBindingNames" <~ Sets.fromList (Lists.map (lambda "b" $ Core.bindingName (var "b")) (var "bindings")) $
@@ -585,32 +534,30 @@ encodeLiteral = def "encodeLiteral" $
                     L._IntegerLiteral_bigint>>: boolean False])
               (var "byteValues")]]
 
--- | Encode a Hydra term as a Lisp expression.
--- The thunkedVars set tracks variables that were wrapped in (lambda () ...) by
--- encodeLetAsNative. These need to be forced with (name) at reference sites.
-encodeTerm :: TBinding (L.Dialect -> Context -> Graph -> S.Set Name -> Term -> Either (InContext Error) L.Expression)
+-- | Encode a Hydra term as a Lisp expression
+encodeTerm :: TBinding (L.Dialect -> Context -> Graph -> Term -> Either (InContext Error) L.Expression)
 encodeTerm = def "encodeTerm" $
-  "dialect" ~> "cx" ~> "g" ~> "thunkedVars" ~> lambda "term" $
+  "dialect" ~> "cx" ~> "g" ~> lambda "term" $
     cases _Term (var "term") Nothing
     [_Term_annotated>>: lambda "at" $
-       encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ Core.annotatedTermBody (var "at"),
+       encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.annotatedTermBody (var "at"),
 
      _Term_application>>: lambda "app" $
        -- Check if this is a fully-applied ifElse: (((ifElse C) T) E) -> (if C T E)
        "rawFun" <~ Core.applicationFunction (var "app") $
        "rawArg" <~ Core.applicationArgument (var "app") $
-       encodeApplication @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ var "rawFun" @@ var "rawArg",
+       encodeApplication @@ var "dialect" @@ var "cx" @@ var "g" @@ var "rawFun" @@ var "rawArg",
 
      _Term_either>>: lambda "e" $
        Eithers.either_
          (lambda "l" $
-           "sl" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ var "l") $
+           "sl" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "l") $
              -- Left v -> (list :left v)
              right (lispApp @@ (lispVar @@ string "list") @@ list [
                lispKeyword @@ string "left",
                var "sl"]))
          (lambda "r" $
-           "sr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ var "r") $
+           "sr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "r") $
              -- Right v -> (list :right v)
              right (lispApp @@ (lispVar @@ string "list") @@ list [
                lispKeyword @@ string "right",
@@ -618,15 +565,15 @@ encodeTerm = def "encodeTerm" $
          (var "e"),
 
      _Term_function>>: lambda "fun" $
-       encodeFunction @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ var "fun",
+       encodeFunction @@ var "dialect" @@ var "cx" @@ var "g" @@ var "fun",
 
      _Term_let>>: lambda "lt" $
        "bindings" <~ Core.letBindings (var "lt") $
        "body" <~ Core.letBody (var "lt") $
-       encodeLetAsNative @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ var "bindings" @@ var "body",
+       encodeLetAsNative @@ var "dialect" @@ var "cx" @@ var "g" @@ var "bindings" @@ var "body",
 
      _Term_list>>: lambda "els" $
-       "sels" <<~ (Eithers.mapList (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars") (var "els")) $
+       "sels" <<~ (Eithers.mapList (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g") (var "els")) $
          right (lispListExpr @@ var "sels"),
 
      _Term_literal>>: lambda "lit" $
@@ -635,8 +582,8 @@ encodeTerm = def "encodeTerm" $
      _Term_map>>: lambda "m" $
        "pairs" <<~ (Eithers.mapList
          (lambda "entry" $
-           "k" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ Pairs.first (var "entry")) $
-           "v" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ Pairs.second (var "entry")) $
+           "k" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Pairs.first (var "entry")) $
+           "v" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Pairs.second (var "entry")) $
              right (record L._MapEntry [
                L._MapEntry_key>>: var "k",
                L._MapEntry_value>>: var "v"]))
@@ -652,14 +599,14 @@ encodeTerm = def "encodeTerm" $
            lispKeyword @@ string "nothing"]))
          -- Just val -> (list :just encodedVal)
          (lambda "val" $
-           "sval" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ var "val") $
+           "sval" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "val") $
              right (lispApp @@ (lispVar @@ string "list") @@ list [
                lispKeyword @@ string "just",
                var "sval"])),
 
      _Term_pair>>: lambda "p" $
-       "f" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ Pairs.first (var "p")) $
-       "s" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ Pairs.second (var "p")) $
+       "f" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Pairs.first (var "p")) $
+       "s" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Pairs.second (var "p")) $
          right (lispListExpr @@ list [var "f", var "s"]),
 
      _Term_record>>: lambda "rec" $
@@ -667,14 +614,14 @@ encodeTerm = def "encodeTerm" $
        "fields" <~ Core.recordFields (var "rec") $
        "sfields" <<~ (Eithers.mapList
          (lambda "f" $
-           encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ Core.fieldTerm (var "f"))
+           encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.fieldTerm (var "f"))
          (var "fields")) $
        -- Dialect-aware constructor: (make-TypeName ...) or (->TypeName ...)
        "constructorName" <~ Strings.cat2 (dialectConstructorPrefix @@ var "dialect") (qualifiedSnakeName @@ var "rname") $
          right (lispApp @@ (lispVar @@ var "constructorName") @@ var "sfields"),
 
      _Term_set>>: lambda "s" $
-       "sels" <<~ (Eithers.mapList (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars") (Sets.toList (var "s"))) $
+       "sels" <<~ (Eithers.mapList (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g") (Sets.toList (var "s"))) $
          right (inject L._Expression L._Expression_set $
            record L._SetLiteral [
              L._SetLiteral_elements>>: var "sels"]),
@@ -694,7 +641,7 @@ encodeTerm = def "encodeTerm" $
            lispKeyword @@ (Formatting.convertCaseCamelToLowerSnake @@ var "fname"),
            asTerm lispNilExpr]))
          -- Non-unit variant: (list :variantName value)
-         ("sval" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ var "fterm") $
+         ("sval" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "fterm") $
            right (lispApp @@ (lispVar @@ string "list") @@ list [
              lispKeyword @@ (Formatting.convertCaseCamelToLowerSnake @@ var "fname"),
              var "sval"])),
@@ -703,24 +650,16 @@ encodeTerm = def "encodeTerm" $
        right (asTerm lispNilExpr),
 
      _Term_variable>>: lambda "name" $
-       "sname" <~ (Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (var "name"))) $
-       "varExpr" <~ (lispVar @@ var "sname") $
-       -- Check if this variable was thunked (wrapped in (delay ...) by encodeLetAsNative).
-       -- Only variables in the thunkedVars set need forcing — NOT all complex variables.
-       -- Use (force name) to evaluate the promise, which memoizes the result.
-       "isThunked" <~ (Sets.member (var "name") (var "thunkedVars")) $
-       Logic.ifElse (var "isThunked")
-         (right (lispApp @@ (lispVar @@ string "force") @@ list [var "varExpr"]))
-         (right (var "varExpr")),
+       right (lispVar @@ (Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (var "name")))),
 
      _Term_typeApplication>>: lambda "ta" $
-       encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ Core.typeApplicationTermBody (var "ta"),
+       encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.typeApplicationTermBody (var "ta"),
 
      _Term_typeLambda>>: lambda "tl" $
-       encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ Core.typeLambdaBody (var "tl"),
+       encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.typeLambdaBody (var "tl"),
 
      _Term_wrap>>: lambda "wt" $
-       encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "thunkedVars" @@ Core.wrappedTermBody (var "wt")]
+       encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.wrappedTermBody (var "wt")]
 
 -- | Encode a Hydra term definition as a Lisp top-level form
 encodeTermDefinition :: TBinding (L.Dialect -> Context -> Graph -> TermDefinition -> Either (InContext Error) L.TopLevelFormWithComments)
@@ -731,10 +670,9 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "lname" <~ (qualifiedSnakeName @@ var "name") $
     "dterm" <~ (Rewriting.deannotateTerm @@ var "term") $
     -- Check if the term is a lambda (function) or a value
-    -- Top-level definitions start with an empty thunkedVars set
     cases _Term (var "dterm") (Just $
       -- Non-function: encode as a variable definition
-      "sterm" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Sets.empty @@ var "term") $
+      "sterm" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "term") $
         right (lispTopForm @@ (inject L._TopLevelForm L._TopLevelForm_variable $
           record L._VariableDefinition [
             L._VariableDefinition_name>>: wrap L._Symbol (var "lname"),
@@ -742,7 +680,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
             L._VariableDefinition_doc>>: nothing])))
     [_Term_function>>: lambda "fun" $
        cases _Function (var "fun") (Just $
-         "sterm" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Sets.empty @@ var "term") $
+         "sterm" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "term") $
            right (lispTopForm @@ (inject L._TopLevelForm L._TopLevelForm_variable $
              record L._VariableDefinition [
                L._VariableDefinition_name>>: wrap L._Symbol (var "lname"),
@@ -751,7 +689,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
        [_Function_lambda>>: lambda "lam" $
           -- Encode as (def name (fn [param] body)) to avoid Clojure compile-time
           -- symbol resolution issues with Y-combinator patterns in recursive bindings
-          "sterm" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Sets.empty @@ var "term") $
+          "sterm" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "term") $
             right (lispTopForm @@ (inject L._TopLevelForm L._TopLevelForm_variable $
               record L._VariableDefinition [
                 L._VariableDefinition_name>>: wrap L._Symbol (var "lname"),
@@ -1119,14 +1057,6 @@ qualifiedTypeName :: TBinding (Name -> String)
 qualifiedTypeName = def "qualifiedTypeName" $
   lambda "name" $
     Formatting.capitalize @@ (Names.localNameOf @@ var "name")
-
--- | Wrap an expression in (delay expr) for memoizing lazy evaluation.
--- Produces a promise that evaluates on first (force name) and caches the result.
--- In Clojure: (delay expr), in Scheme: (delay expr), etc.
-wrapInDelay :: TBinding (L.Expression -> L.Expression)
-wrapInDelay = def "wrapInDelay" $
-  "expr" ~>
-    lispApp @@ (lispVar @@ string "delay") @@ list [var "expr"]
 
 -- | Wrap an expression in a zero-argument lambda for lazy evaluation.
 -- Produces (fn [] expr) in Clojure, (lambda () expr) in Scheme, etc.

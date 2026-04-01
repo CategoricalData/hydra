@@ -36,6 +36,17 @@ __pycache__/
 # Node
 node_modules/
 
+# sbt build artifacts
+project/target/
+
+# Run logs
+runs/
+
+# Analysis notebooks and debug scripts
+analysis/
+debug_*.py
+debug_*.hs
+
 # Other
 *.log
 *.swp

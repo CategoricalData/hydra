@@ -38,16 +38,6 @@ library:
     - src/gen-main/haskell
 
 executables:
-  update-generation-tests:
-    main: Main.hs
-    source-dirs:
-      - src/exec/update-generation-tests
-      - src/gen-test/haskell
-    ghc-options: [-rtsopts]
-    dependencies:
-      - hydra
-      - hspec                      >= 2.11.0 && < 2.12
-
   update-kernel-tests:
     main: Main.hs
     source-dirs:

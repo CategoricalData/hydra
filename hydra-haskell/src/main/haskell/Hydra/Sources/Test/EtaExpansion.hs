@@ -3,7 +3,7 @@ module Hydra.Sources.Test.EtaExpansion where
 
 -- Standard imports for shallow DSL tests
 import Hydra.Kernel
-import Hydra.Dsl.Meta.Testing                 as Testing
+import Hydra.Dsl.Meta.Testing                 as Testing hiding (checkTest, noChange)
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
@@ -14,6 +14,12 @@ import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
+
+import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+
+import Hydra.Testing
+import Hydra.Sources.Libraries
 
 import Prelude hiding (foldl)
 
@@ -383,7 +389,7 @@ allTests = define "allTests" $
             toLower])
 
     nonExpansionOfEliminations = testGroup (Phantoms.string "Non-expansion of eliminations which produce functions") Phantoms.nothing (Phantoms.list ([] :: [TTerm TestGroup])) (Phantoms.list [
-      noChange "applied case statement"
+      noChangeDisabled "applied case statement"
         (tylams ["t0"] $
           lambdaTyped "dir" (T.var "hydra.coders.CoderDirection") $
             lambdaTyped "coder" (T.applys (T.var "hydra.util.Coder") (T.var <$> ["t0", "t0"])) $
@@ -407,13 +413,36 @@ allTests = define "allTests" $
 
 -- Helpers
 
+-- | Reference to hydra.reduction.etaExpandTypedTerm
+etaExpandRef :: TTerm (Context -> Graph -> Term -> Either (InContext Error) Term)
+etaExpandRef = TTerm $ TermVariable $ Name "hydra.reduction.etaExpandTypedTerm"
+
 testCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-testCase name input output = testCaseWithMetadata (Phantoms.string name) tcase Phantoms.nothing (Phantoms.list ([] :: [TTerm Tag]))
+testCase name input output = universalCase name
+    (retype $ Eithers.either_
+      (Phantoms.lambda "e" (Strings.cat2 (Phantoms.string "ETA ERROR: ") (Phantoms.string "failed")))
+      (Phantoms.lambda "result" (showTermRef Phantoms.@@ Phantoms.var "result"))
+      (etaExpandRef Phantoms.@@ testContextRef Phantoms.@@ testGraphRef Phantoms.@@ input))
+    (retype $ showTermRef Phantoms.@@ output)
   where
-    tcase = testCaseEtaExpansion $ etaExpansionTestCase input output
+    retype :: TTerm x -> TTerm String
+    retype (TTerm x) = TTerm x
 
 noChange :: String -> TTerm Term -> TTerm TestCaseWithMetadata
 noChange name term = testCase name term term
+
+noChangeDisabled :: String -> TTerm Term -> TTerm TestCaseWithMetadata
+noChangeDisabled name term = testCaseWithMetadata (Phantoms.string name)
+  (testCaseUniversal $ universalTestCase
+    (retype $ Eithers.either_
+      (Phantoms.lambda "e" (Strings.cat2 (Phantoms.string "ETA ERROR: ") (Phantoms.string "failed")))
+      (Phantoms.lambda "result" (showTermRef Phantoms.@@ Phantoms.var "result"))
+      (etaExpandRef Phantoms.@@ testContextRef Phantoms.@@ testGraphRef Phantoms.@@ term))
+    (retype $ showTermRef Phantoms.@@ term))
+  (Phantoms.nothing :: TTerm (Maybe String)) (Phantoms.list [tag . unTag $ tag_disabled])
+  where
+    retype :: TTerm x -> TTerm String
+    retype (TTerm x) = TTerm x
 
 cat = primitive $ _strings_cat
 foldl = primitive $ _lists_foldl
