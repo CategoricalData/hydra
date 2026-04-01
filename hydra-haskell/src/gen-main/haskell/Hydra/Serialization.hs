@@ -423,7 +423,7 @@ printExpr e =
               doIndent = Ast.blockStyleIndent style
               nlBefore = Ast.blockStyleNewlineBeforeContent style
               nlAfter = Ast.blockStyleNewlineAfterContent style
-              ibody = Maybes.maybe body (\idt -> customIndent idt body) doIndent
+              ibody = Maybes.maybe body (\idt2 -> customIndent idt2 body) doIndent
               pre = Logic.ifElse nlBefore "\n" ""
               suf = Logic.ifElse nlAfter "\n" ""
           in (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 l pre) ibody) suf) r)

@@ -337,7 +337,7 @@ public interface Unification {
     });
   }
 
-  static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.UnificationError>, hydra.util.ConsList<T0>> joinTypes_assertEqual(hydra.context.Context cx, java.util.function.Function<hydra.core.Type, String> hydra_show_core_type2, hydra.core.Type sleft, hydra.core.Type sright) {
+  static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.UnificationError>, hydra.util.ConsList<T0>> joinTypes_assertEqual(hydra.context.Context cx, java.util.function.Function<hydra.core.Type, String> hydra_show_core_type, hydra.core.Type sleft, hydra.core.Type sright) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Equal.apply(
         sleft,
@@ -345,19 +345,19 @@ public interface Unification {
       () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.UnificationError>, hydra.util.ConsList<T0>>right((hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty())),
       () -> hydra.Unification.<hydra.util.ConsList<T0>>joinTypes_cannotUnify(
         cx,
-        hydra_show_core_type2,
+        hydra_show_core_type,
         sleft,
         sright));
   }
 
-  static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.UnificationError>, T0> joinTypes_cannotUnify(hydra.context.Context cx, java.util.function.Function<hydra.core.Type, String> hydra_show_core_type2, hydra.core.Type sleft, hydra.core.Type sright) {
+  static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.UnificationError>, T0> joinTypes_cannotUnify(hydra.context.Context cx, java.util.function.Function<hydra.core.Type, String> hydra_show_core_type, hydra.core.Type sleft, hydra.core.Type sright) {
     return hydra.util.Either.<hydra.context.InContext<hydra.errors.UnificationError>, T0>left((hydra.context.InContext<hydra.errors.UnificationError>) (new hydra.context.InContext<hydra.errors.UnificationError>(new hydra.errors.UnificationError(sleft, sright, hydra.lib.strings.Cat2.apply(
       hydra.lib.strings.Cat2.apply(
         hydra.lib.strings.Cat2.apply(
           "cannot unify ",
-          (hydra_show_core_type2).apply(sleft)),
+          (hydra_show_core_type).apply(sleft)),
         " with "),
-      (hydra_show_core_type2).apply(sright))), cx)));
+      (hydra_show_core_type).apply(sright))), cx)));
   }
 
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.UnificationError>, hydra.typing.TypeSubst> unifyTypeConstraints(hydra.context.Context cx, hydra.util.PersistentMap<hydra.core.Name, T0> schemaTypes, hydra.util.ConsList<hydra.typing.TypeConstraint> constraints) {

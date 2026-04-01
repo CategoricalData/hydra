@@ -47,7 +47,7 @@ apply pf pa =
 
 -- | Parse something between an opening and closing parser
 between :: Parsing.Parser t0 -> Parsing.Parser t1 -> Parsing.Parser t2 -> Parsing.Parser t2
-between open close p = bind open (\_ -> bind p (\x -> bind close (\_ -> pure x)))
+between open close p = bind open (\_ -> bind p (\x -> bind close (\_2 -> pure x)))
 
 -- | Sequence two parsers, passing the result of the first to a function that produces the second
 bind :: Parsing.Parser t0 -> (t0 -> Parsing.Parser t1) -> Parsing.Parser t1

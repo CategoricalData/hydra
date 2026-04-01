@@ -20,7 +20,7 @@ decodingError :: Errors.DecodingError -> Core.Term
 decodingError x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-      Core.wrappedTermBody = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Errors.unDecodingError x))})
+      Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Errors.unDecodingError x))})
 
 error :: Errors.Error -> Core.Term
 error x =
@@ -85,7 +85,7 @@ otherError :: Errors.OtherError -> Core.Term
 otherError x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.errors.OtherError"),
-      Core.wrappedTermBody = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Errors.unOtherError x))})
+      Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Errors.unOtherError x))})
 
 unificationError :: Errors.UnificationError -> Core.Term
 unificationError x =
@@ -100,4 +100,4 @@ unificationError x =
           Core.fieldTerm = (Core_.type_ (Errors.unificationErrorRightType x))},
         Core.Field {
           Core.fieldName = (Core.Name "message"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Errors.unificationErrorMessage x))}]})
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Errors.unificationErrorMessage x))}]})

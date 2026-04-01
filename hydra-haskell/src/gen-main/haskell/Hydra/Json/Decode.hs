@@ -204,7 +204,7 @@ fromJson types tname typ value =
           in (Eithers.either (\err -> Left err) (\obj -> processUnion obj) objResult)
         Core.TypeUnit ->
           let objResult = expectObject value
-          in (Eithers.map (\_ -> Core.TermUnit) objResult)
+          in (Eithers.map (\_2 -> Core.TermUnit) objResult)
         Core.TypeWrap v0 ->
           let decoded = fromJson types tname v0 value
           in (Eithers.map (\v -> Core.TermWrap (Core.WrappedTerm {

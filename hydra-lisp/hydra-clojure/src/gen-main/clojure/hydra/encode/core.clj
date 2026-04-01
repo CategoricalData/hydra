@@ -4,7 +4,7 @@
 
 (declare hydra_encode_core_name hydra_encode_core_projection hydra_encode_core_float_type hydra_encode_core_integer_type hydra_encode_core_literal_type hydra_encode_core_type_variable_metadata hydra_encode_core_float_value hydra_encode_core_integer_value hydra_encode_core_literal hydra_encode_core_annotated_term hydra_encode_core_annotated_type hydra_encode_core_application hydra_encode_core_application_type hydra_encode_core_binding hydra_encode_core_case_statement hydra_encode_core_either_type hydra_encode_core_elimination hydra_encode_core_field hydra_encode_core_field_type hydra_encode_core_forall_type hydra_encode_core_function hydra_encode_core_function_type hydra_encode_core_injection hydra_encode_core_lambda hydra_encode_core_let hydra_encode_core_map_type hydra_encode_core_pair_type hydra_encode_core_record hydra_encode_core_term hydra_encode_core_type hydra_encode_core_type_application_term hydra_encode_core_type_lambda hydra_encode_core_type_scheme hydra_encode_core_wrapped_term)
 
-(def hydra_encode_core_name (fn [x] (list :wrap (->hydra_core_wrapped_term "hydra.core.Name" ((fn [x] (list :literal (list :string x))) ((fn [v] v) x))))))
+(def hydra_encode_core_name (fn [x] (list :wrap (->hydra_core_wrapped_term "hydra.core.Name" ((fn [x2] (list :literal (list :string x2))) ((fn [v] v) x))))))
 
 (def hydra_encode_core_projection (fn [x] (list :record (->hydra_core_record "hydra.core.Projection" (list (->hydra_core_field "typeName" (hydra_encode_core_name ((fn [v] (:type_name v)) x))) (->hydra_core_field "field" (hydra_encode_core_name ((fn [v] (:field v)) x))))))))
 

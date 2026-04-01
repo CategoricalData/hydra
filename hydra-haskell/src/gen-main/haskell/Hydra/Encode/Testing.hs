@@ -19,7 +19,7 @@ tag :: Testing.Tag -> Core.Term
 tag x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.testing.Tag"),
-      Core.wrappedTermBody = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Testing.unTag x))})
+      Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Testing.unTag x))})
 
 testCase :: Testing.TestCase -> Core.Term
 testCase x =
@@ -37,13 +37,13 @@ testCaseWithMetadata x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Testing.testCaseWithMetadataName x))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Testing.testCaseWithMetadataName x))},
         Core.Field {
           Core.fieldName = (Core.Name "case"),
           Core.fieldTerm = (testCase (Testing.testCaseWithMetadataCase x))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x -> Core.TermLiteral (Core.LiteralString x)) opt)) (Testing.testCaseWithMetadataDescription x))},
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Testing.testCaseWithMetadataDescription x))},
         Core.Field {
           Core.fieldName = (Core.Name "tags"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map tag xs)) (Testing.testCaseWithMetadataTags x))}]})
@@ -55,10 +55,10 @@ testGroup x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Testing.testGroupName x))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Testing.testGroupName x))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x -> Core.TermLiteral (Core.LiteralString x)) opt)) (Testing.testGroupDescription x))},
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Testing.testGroupDescription x))},
         Core.Field {
           Core.fieldName = (Core.Name "subgroups"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map testGroup xs)) (Testing.testGroupSubgroups x))},
@@ -73,7 +73,7 @@ universalTestCase x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "actual"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Testing.universalTestCaseActual x))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Testing.universalTestCaseActual x))},
         Core.Field {
           Core.fieldName = (Core.Name "expected"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Testing.universalTestCaseExpected x))}]})
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Testing.universalTestCaseExpected x))}]})

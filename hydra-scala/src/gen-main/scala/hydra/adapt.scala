@@ -37,13 +37,14 @@ import hydra.lib.strings
 def adaptDataGraph(constraints: hydra.coders.LanguageConstraints)(doExpand: Boolean)(els0: Seq[hydra.core.Binding])(cx: hydra.context.Context)(graph0: hydra.graph.Graph): Either[scala.Predef.String,
    Tuple2[hydra.graph.Graph, Seq[hydra.core.Binding]]] =
   {
-  def transform(g: hydra.graph.Graph)(gterm: hydra.core.Term): hydra.core.Term =
+  def transformTerm(g: hydra.graph.Graph)(term: hydra.core.Term): hydra.core.Term =
     {
     lazy val tx: hydra.graph.Graph = g
-    lazy val gterm1: hydra.core.Term = hydra.rewriting.unshadowVariables(hydra.adapt.pushTypeAppsInward(gterm))
-    lazy val gterm2: hydra.core.Term = hydra.rewriting.unshadowVariables(hydra.lib.logic.ifElse[hydra.core.Term](doExpand)(hydra.adapt.pushTypeAppsInward(hydra.reduction.etaExpandTermNew(tx)(gterm1)))(gterm1))
-    hydra.rewriting.liftLambdaAboveLet(gterm2)
+    lazy val t1: hydra.core.Term = hydra.rewriting.unshadowVariables(hydra.adapt.pushTypeAppsInward(term))
+    lazy val t2: hydra.core.Term = hydra.rewriting.unshadowVariables(hydra.lib.logic.ifElse[hydra.core.Term](doExpand)(hydra.adapt.pushTypeAppsInward(hydra.reduction.etaExpandTermNew(tx)(t1)))(t1))
+    hydra.rewriting.liftLambdaAboveLet(t2)
   }
+  def transformBinding(g: hydra.graph.Graph)(el: hydra.core.Binding): hydra.core.Binding = hydra.core.Binding(el.name, transformTerm(g)(el.term), (el.`type`))
   lazy val litmap: Map[hydra.core.LiteralType, hydra.core.LiteralType] = hydra.adapt.adaptLiteralTypesMap(constraints)
   lazy val prims0: Map[hydra.core.Name, hydra.graph.Primitive] = (graph0.primitives)
   lazy val schemaTypes0: Map[hydra.core.Name, hydra.core.TypeScheme] = (graph0.schemaTypes)
@@ -65,52 +66,55 @@ def adaptDataGraph(constraints: hydra.coders.LanguageConstraints)(doExpand: Bool
     {
     lazy val adaptedSchemaTypes: Map[hydra.core.Name, hydra.core.TypeScheme] = schemaResult
     {
-      lazy val gterm0: hydra.core.Term = hydra.core.Term.let(hydra.core.Let(els0, hydra.core.Term.unit))
-      {
-        lazy val gterm1: hydra.core.Term = hydra.lib.logic.ifElse[hydra.core.Term](doExpand)(transform(graph0)(gterm0))(gterm0)
-        hydra.lib.eithers.bind[scala.Predef.String, hydra.core.Term, Tuple2[hydra.graph.Graph, Seq[hydra.core.Binding]]](hydra.adapt.adaptTerm(constraints)(litmap)(cx)(graph0)(gterm1))((gterm2: hydra.core.Term) =>
-          hydra.lib.eithers.bind[scala.Predef.String, hydra.core.Term, Tuple2[hydra.graph.Graph, Seq[hydra.core.Binding]]](hydra.rewriting.rewriteTermM((v1: (hydra.core.Term => Either[scala.Predef.String,
-             hydra.core.Term])) =>
-          (v2: hydra.core.Term) => hydra.adapt.adaptLambdaDomains(constraints)(litmap)(v1)(v2))(gterm2))((gterm3: hydra.core.Term) =>
-          {
-          lazy val els1Raw: Seq[hydra.core.Binding] = hydra.schemas.termAsBindings(gterm3)
-          {
-            def processBinding(el: hydra.core.Binding): Either[scala.Predef.String, hydra.core.Binding] =
-              hydra.lib.eithers.bind[scala.Predef.String, hydra.core.Term, hydra.core.Binding](hydra.rewriting.rewriteTermM((v1: (hydra.core.Term => Either[scala.Predef.String,
-                 hydra.core.Term])) =>
-              (v2: hydra.core.Term) => hydra.adapt.adaptNestedTypes(constraints)(litmap)(v1)(v2))(el.term))((newTerm: hydra.core.Term) =>
-              hydra.lib.eithers.bind[scala.Predef.String, Option[hydra.core.TypeScheme], hydra.core.Binding](hydra.lib.maybes.maybe[Either[scala.Predef.String,
-                 Option[hydra.core.TypeScheme]], hydra.core.TypeScheme](Right(None))((ts: hydra.core.TypeScheme) =>
-              hydra.lib.eithers.bind[scala.Predef.String, hydra.core.TypeScheme, Option[hydra.core.TypeScheme]](hydra.adapt.adaptTypeScheme(constraints)(litmap)(ts))((ts1: hydra.core.TypeScheme) => Right(Some(ts1))))(el.`type`))((adaptedType: Option[hydra.core.TypeScheme]) => Right(hydra.core.Binding(el.name,
-                 newTerm, adaptedType))))
-            hydra.lib.eithers.bind[scala.Predef.String, Seq[hydra.core.Binding], Tuple2[hydra.graph.Graph,
-               Seq[hydra.core.Binding]]](hydra.lib.eithers.mapList[hydra.core.Binding, hydra.core.Binding,
-               scala.Predef.String](processBinding)(els1Raw))((els1: Seq[hydra.core.Binding]) =>
-              hydra.lib.eithers.bind[scala.Predef.String, Seq[Tuple2[hydra.core.Name, hydra.graph.Primitive]],
-                 Tuple2[hydra.graph.Graph, Seq[hydra.core.Binding]]](hydra.lib.eithers.mapList[Tuple2[hydra.core.Name,
-                 hydra.graph.Primitive], Tuple2[hydra.core.Name, hydra.graph.Primitive], scala.Predef.String]((kv: Tuple2[hydra.core.Name,
-                 hydra.graph.Primitive]) =>
-              hydra.lib.eithers.bind[scala.Predef.String, hydra.graph.Primitive, Tuple2[hydra.core.Name,
-                 hydra.graph.Primitive]](hydra.adapt.adaptPrimitive(constraints)(litmap)(hydra.lib.pairs.second[hydra.core.Name,
-                 hydra.graph.Primitive](kv)))((prim1: hydra.graph.Primitive) =>
-              Right(Tuple2(hydra.lib.pairs.first[hydra.core.Name, hydra.graph.Primitive](kv), prim1))))(hydra.lib.maps.toList[hydra.core.Name,
-                 hydra.graph.Primitive](prims0)))((primPairs: Seq[Tuple2[hydra.core.Name, hydra.graph.Primitive]]) =>
-              {
-              lazy val prims1: Map[hydra.core.Name, hydra.graph.Primitive] = hydra.lib.maps.fromList[hydra.core.Name, hydra.graph.Primitive](primPairs)
-              {
-                lazy val adaptedGraphRaw: hydra.graph.Graph = hydra.lexical.buildGraph(els1)(hydra.lib.maps.empty[hydra.core.Name,
-                   Option[hydra.core.Term]])(prims1)
-                {
-                  lazy val adaptedGraph: hydra.graph.Graph = hydra.graph.Graph(adaptedGraphRaw.boundTerms,
-                     (adaptedGraphRaw.boundTypes), (adaptedGraphRaw.classConstraints), (adaptedGraphRaw.lambdaVariables),
-                     (adaptedGraphRaw.metadata), (adaptedGraphRaw.primitives), adaptedSchemaTypes, (adaptedGraphRaw.typeVariables))
-                  Right(Tuple2(adaptedGraph, els1))
-                }
-              }
-            }))
-          }
-        }))
+      def adaptBinding(el: hydra.core.Binding): Either[scala.Predef.String, hydra.core.Term] =
+        {
+        lazy val transformed: hydra.core.Binding = transformBinding(graph0)(el)
+        lazy val wrapped: hydra.core.Term = hydra.core.Term.let(hydra.core.Let(hydra.lib.lists.pure[hydra.core.Binding](transformed), hydra.core.Term.unit))
+        hydra.lib.eithers.bind[scala.Predef.String, hydra.core.Term, hydra.core.Term](hydra.adapt.adaptTerm(constraints)(litmap)(cx)(graph0)(wrapped))((adapted: hydra.core.Term) =>
+          hydra.rewriting.rewriteTermM((v1: (hydra.core.Term => Either[scala.Predef.String, hydra.core.Term])) =>
+          (v2: hydra.core.Term) => hydra.adapt.adaptLambdaDomains(constraints)(litmap)(v1)(v2))(adapted))
       }
+      hydra.lib.eithers.bind[scala.Predef.String, Seq[hydra.core.Term], Tuple2[hydra.graph.Graph, Seq[hydra.core.Binding]]](hydra.lib.eithers.mapList[hydra.core.Binding,
+         hydra.core.Term, scala.Predef.String](adaptBinding)(els0))((adaptedTerms: Seq[hydra.core.Term]) =>
+        {
+        lazy val els1Raw: Seq[hydra.core.Binding] = hydra.lib.lists.concat[hydra.core.Binding](hydra.lib.lists.map[hydra.core.Term,
+           Seq[hydra.core.Binding]](hydra.schemas.termAsBindings)(adaptedTerms))
+        {
+          def processBinding(el: hydra.core.Binding): Either[scala.Predef.String, hydra.core.Binding] =
+            hydra.lib.eithers.bind[scala.Predef.String, hydra.core.Term, hydra.core.Binding](hydra.rewriting.rewriteTermM((v1: (hydra.core.Term => Either[scala.Predef.String,
+               hydra.core.Term])) =>
+            (v2: hydra.core.Term) => hydra.adapt.adaptNestedTypes(constraints)(litmap)(v1)(v2))(el.term))((newTerm: hydra.core.Term) =>
+            hydra.lib.eithers.bind[scala.Predef.String, Option[hydra.core.TypeScheme], hydra.core.Binding](hydra.lib.maybes.maybe[Either[scala.Predef.String,
+               Option[hydra.core.TypeScheme]], hydra.core.TypeScheme](Right(None))((ts: hydra.core.TypeScheme) =>
+            hydra.lib.eithers.bind[scala.Predef.String, hydra.core.TypeScheme, Option[hydra.core.TypeScheme]](hydra.adapt.adaptTypeScheme(constraints)(litmap)(ts))((ts1: hydra.core.TypeScheme) => Right(Some(ts1))))(el.`type`))((adaptedType: Option[hydra.core.TypeScheme]) => Right(hydra.core.Binding(el.name,
+               newTerm, adaptedType))))
+          hydra.lib.eithers.bind[scala.Predef.String, Seq[hydra.core.Binding], Tuple2[hydra.graph.Graph,
+             Seq[hydra.core.Binding]]](hydra.lib.eithers.mapList[hydra.core.Binding, hydra.core.Binding,
+             scala.Predef.String](processBinding)(els1Raw))((els1: Seq[hydra.core.Binding]) =>
+            hydra.lib.eithers.bind[scala.Predef.String, Seq[Tuple2[hydra.core.Name, hydra.graph.Primitive]],
+               Tuple2[hydra.graph.Graph, Seq[hydra.core.Binding]]](hydra.lib.eithers.mapList[Tuple2[hydra.core.Name,
+               hydra.graph.Primitive], Tuple2[hydra.core.Name, hydra.graph.Primitive], scala.Predef.String]((kv: Tuple2[hydra.core.Name,
+               hydra.graph.Primitive]) =>
+            hydra.lib.eithers.bind[scala.Predef.String, hydra.graph.Primitive, Tuple2[hydra.core.Name,
+               hydra.graph.Primitive]](hydra.adapt.adaptPrimitive(constraints)(litmap)(hydra.lib.pairs.second[hydra.core.Name,
+               hydra.graph.Primitive](kv)))((prim1: hydra.graph.Primitive) =>
+            Right(Tuple2(hydra.lib.pairs.first[hydra.core.Name, hydra.graph.Primitive](kv), prim1))))(hydra.lib.maps.toList[hydra.core.Name,
+               hydra.graph.Primitive](prims0)))((primPairs: Seq[Tuple2[hydra.core.Name, hydra.graph.Primitive]]) =>
+            {
+            lazy val prims1: Map[hydra.core.Name, hydra.graph.Primitive] = hydra.lib.maps.fromList[hydra.core.Name, hydra.graph.Primitive](primPairs)
+            {
+              lazy val adaptedGraphRaw: hydra.graph.Graph = hydra.lexical.buildGraph(els1)(hydra.lib.maps.empty[hydra.core.Name,
+                 Option[hydra.core.Term]])(prims1)
+              {
+                lazy val adaptedGraph: hydra.graph.Graph = hydra.graph.Graph(adaptedGraphRaw.boundTerms,
+                   (adaptedGraphRaw.boundTypes), (adaptedGraphRaw.classConstraints), (adaptedGraphRaw.lambdaVariables),
+                   (adaptedGraphRaw.metadata), (adaptedGraphRaw.primitives), adaptedSchemaTypes, (adaptedGraphRaw.typeVariables))
+                Right(Tuple2(adaptedGraph, els1))
+              }
+            }
+          }))
+        }
+      })
     }
   })
 }

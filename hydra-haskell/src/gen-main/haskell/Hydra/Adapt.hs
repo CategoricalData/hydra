@@ -43,26 +43,33 @@ import qualified Data.Set as S
 adaptDataGraph :: Coders.LanguageConstraints -> Bool -> [Core.Binding] -> Context.Context -> Graph.Graph -> Either String (Graph.Graph, [Core.Binding])
 adaptDataGraph constraints doExpand els0 cx graph0 =
 
-      let transform =
-              \g -> \gterm ->
+      let transformTerm =
+              \g -> \term ->
                 let tx = g
-                    gterm1 = Rewriting.unshadowVariables (pushTypeAppsInward gterm)
-                    gterm2 =
-                            Rewriting.unshadowVariables (Logic.ifElse doExpand (pushTypeAppsInward (Reduction.etaExpandTermNew tx gterm1)) gterm1)
-                in (Rewriting.liftLambdaAboveLet gterm2)
+                    t1 = Rewriting.unshadowVariables (pushTypeAppsInward term)
+                    t2 = Rewriting.unshadowVariables (Logic.ifElse doExpand (pushTypeAppsInward (Reduction.etaExpandTermNew tx t1)) t1)
+                in (Rewriting.liftLambdaAboveLet t2)
+          transformBinding =
+                  \g -> \el -> Core.Binding {
+                    Core.bindingName = (Core.bindingName el),
+                    Core.bindingTerm = (transformTerm g (Core.bindingTerm el)),
+                    Core.bindingType = (Core.bindingType el)}
           litmap = adaptLiteralTypesMap constraints
           prims0 = Graph.graphPrimitives graph0
           schemaTypes0 = Graph.graphSchemaTypes graph0
           schemaBindings = Schemas.typesToElements (Maps.map (\ts -> Rewriting.typeSchemeToFType ts) schemaTypes0)
       in (Eithers.bind (Logic.ifElse (Maps.null schemaTypes0) (Right Maps.empty) (Eithers.bind (Eithers.bimap (\ic -> Errors.unDecodingError (Context.inContextObject ic)) (\x -> x) (Schemas.graphAsTypes cx graph0 schemaBindings)) (\tmap0 -> Eithers.bind (adaptGraphSchema constraints litmap tmap0) (\tmap1 -> Right (Maps.map (\t -> Schemas.typeToTypeScheme t) tmap1))))) (\schemaResult ->
         let adaptedSchemaTypes = schemaResult
-            gterm0 =
-                    Core.TermLet (Core.Let {
-                      Core.letBindings = els0,
-                      Core.letBody = Core.TermUnit})
-            gterm1 = Logic.ifElse doExpand (transform graph0 gterm0) gterm0
-        in (Eithers.bind (adaptTerm constraints litmap cx graph0 gterm1) (\gterm2 -> Eithers.bind (Rewriting.rewriteTermM (adaptLambdaDomains constraints litmap) gterm2) (\gterm3 ->
-          let els1Raw = Schemas.termAsBindings gterm3
+            adaptBinding =
+                    \el ->
+                      let transformed = transformBinding graph0 el
+                          wrapped =
+                                  Core.TermLet (Core.Let {
+                                    Core.letBindings = (Lists.pure transformed),
+                                    Core.letBody = Core.TermUnit})
+                      in (Eithers.bind (adaptTerm constraints litmap cx graph0 wrapped) (\adapted -> Rewriting.rewriteTermM (adaptLambdaDomains constraints litmap) adapted))
+        in (Eithers.bind (Eithers.mapList adaptBinding els0) (\adaptedTerms ->
+          let els1Raw = Lists.concat (Lists.map Schemas.termAsBindings adaptedTerms)
               processBinding =
                       \el -> Eithers.bind (Rewriting.rewriteTermM (adaptNestedTypes constraints litmap) (Core.bindingTerm el)) (\newTerm -> Eithers.bind (Maybes.maybe (Right Nothing) (\ts -> Eithers.bind (adaptTypeScheme constraints litmap ts) (\ts1 -> Right (Just ts1))) (Core.bindingType el)) (\adaptedType -> Right (Core.Binding {
                         Core.bindingName = (Core.bindingName el),
@@ -81,7 +88,7 @@ adaptDataGraph constraints doExpand els0 cx graph0 =
                           Graph.graphPrimitives = (Graph.graphPrimitives adaptedGraphRaw),
                           Graph.graphSchemaTypes = adaptedSchemaTypes,
                           Graph.graphTypeVariables = (Graph.graphTypeVariables adaptedGraphRaw)}
-            in (Right (adaptedGraph, els1))))))))))
+            in (Right (adaptedGraph, els1)))))))))
 
 -- | Attempt to adapt a floating-point type using the given language constraints
 adaptFloatType :: Coders.LanguageConstraints -> Core.FloatType -> Maybe Core.FloatType
@@ -90,7 +97,7 @@ adaptFloatType constraints ft =
       let supported = Sets.member ft (Coders.languageConstraintsFloatTypes constraints)
           alt = adaptFloatType constraints
           forUnsupported =
-                  \ft -> case ft of
+                  \ft2 -> case ft2 of
                     Core.FloatTypeBigfloat -> alt Core.FloatTypeFloat64
                     Core.FloatTypeFloat32 -> alt Core.FloatTypeFloat64
                     Core.FloatTypeFloat64 -> alt Core.FloatTypeBigfloat
@@ -114,7 +121,7 @@ adaptIntegerType constraints it =
       let supported = Sets.member it (Coders.languageConstraintsIntegerTypes constraints)
           alt = adaptIntegerType constraints
           forUnsupported =
-                  \it -> case it of
+                  \it2 -> case it2 of
                     Core.IntegerTypeBigint -> Nothing
                     Core.IntegerTypeInt8 -> alt Core.IntegerTypeUint16
                     Core.IntegerTypeInt16 -> alt Core.IntegerTypeUint32
@@ -156,7 +163,7 @@ adaptLiteralType :: Coders.LanguageConstraints -> Core.LiteralType -> Maybe Core
 adaptLiteralType constraints lt =
 
       let forUnsupported =
-              \lt -> case lt of
+              \lt2 -> case lt2 of
                 Core.LiteralTypeBinary -> Just Core.LiteralTypeString
                 Core.LiteralTypeBoolean -> Maybes.map (\x -> Core.LiteralTypeInteger x) (adaptIntegerType constraints Core.IntegerTypeInt8)
                 Core.LiteralTypeFloat v0 -> Maybes.map (\x -> Core.LiteralTypeFloat x) (adaptFloatType constraints v0)
@@ -206,7 +213,7 @@ adaptTerm :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralTy
 adaptTerm constraints litmap cx graph term0 =
 
       let rewrite =
-              \recurse -> \term0 ->
+              \recurse -> \term02 ->
                 let forSupported =
                         \term -> case term of
                           Core.TermLiteral v0 ->
@@ -223,7 +230,7 @@ adaptTerm constraints litmap cx graph term0 =
                             \term ->
                               let supportedVariant = Sets.member (Reflect.termVariant term) (Coders.languageConstraintsTermVariants constraints)
                               in (Logic.ifElse supportedVariant (forSupported term) (forUnsupported term))
-                in (Eithers.bind (recurse term0) (\term1 -> case term1 of
+                in (Eithers.bind (recurse term02) (\term1 -> case term1 of
                   Core.TermTypeApplication v0 -> Eithers.bind (adaptType constraints litmap (Core.typeApplicationTermType v0)) (\atyp -> Right (Core.TermTypeApplication (Core.TypeApplicationTerm {
                     Core.typeApplicationTermBody = (Core.typeApplicationTermBody v0),
                     Core.typeApplicationTermType = atyp})))
@@ -385,7 +392,7 @@ literalTypeSupported :: Coders.LanguageConstraints -> Core.LiteralType -> Bool
 literalTypeSupported constraints lt =
 
       let forType =
-              \lt -> case lt of
+              \lt2 -> case lt2 of
                 Core.LiteralTypeFloat v0 -> Sets.member v0 (Coders.languageConstraintsFloatTypes constraints)
                 Core.LiteralTypeInteger v0 -> Sets.member v0 (Coders.languageConstraintsIntegerTypes constraints)
                 _ -> True
@@ -590,10 +597,10 @@ simpleLanguageAdapter lang cx g typ =
         Util.adapterSource = typ,
         Util.adapterTarget = adaptedType,
         Util.adapterCoder = Util.Coder {
-          Util.coderEncode = (\cx -> \term -> Eithers.bimap (\_s -> Context.InContext {
+          Util.coderEncode = (\cx2 -> \term -> Eithers.bimap (\_s -> Context.InContext {
             Context.inContextObject = (Errors.ErrorOther (Errors.OtherError _s)),
-            Context.inContextContext = cx}) (\_x -> _x) (adaptTerm constraints litmap cx g term)),
-          Util.coderDecode = (\cx -> \term -> Right term)}})))
+            Context.inContextContext = cx2}) (\_x -> _x) (adaptTerm constraints litmap cx2 g term)),
+          Util.coderDecode = (\cx2 -> \term -> Right term)}})))
 
 -- | Find a list of alternatives for a given term, if any
 termAlternatives :: Context.Context -> Graph.Graph -> Core.Term -> Either String [Core.Term]

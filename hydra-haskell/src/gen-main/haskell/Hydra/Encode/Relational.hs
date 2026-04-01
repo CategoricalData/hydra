@@ -20,7 +20,7 @@ columnName :: Relational.ColumnName -> Core.Term
 columnName x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.relational.ColumnName"),
-      Core.wrappedTermBody = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Relational.unColumnName x))})
+      Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Relational.unColumnName x))})
 
 columnSchema :: (t0 -> Core.Term) -> Relational.ColumnSchema t0 -> Core.Term
 columnSchema t x =
@@ -62,7 +62,7 @@ relationName :: Relational.RelationName -> Core.Term
 relationName x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.relational.RelationName"),
-      Core.wrappedTermBody = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Relational.unRelationName x))})
+      Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Relational.unRelationName x))})
 
 relationSchema :: (t0 -> Core.Term) -> Relational.RelationSchema t0 -> Core.Term
 relationSchema t x =

@@ -31,7 +31,7 @@ languageName :: Coders.LanguageName -> Core.Term
 languageName x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.coders.LanguageName"),
-      Core.wrappedTermBody = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Coders.unLanguageName x))})
+      Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Coders.unLanguageName x))})
 
 traversalOrder :: Coders.TraversalOrder -> Core.Term
 traversalOrder x =

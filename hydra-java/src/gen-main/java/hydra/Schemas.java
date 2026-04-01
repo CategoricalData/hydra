@@ -311,9 +311,9 @@ public interface Schemas {
         null));
   }
 
-  static <T0> hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context> freshNames_go(java.util.function.Function<hydra.context.Context, hydra.util.Pair<hydra.core.Name, hydra.context.Context>> hydra_schemas_freshName2, hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context> acc, T0 ignored) {
+  static <T0> hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context> freshNames_go(java.util.function.Function<hydra.context.Context, hydra.util.Pair<hydra.core.Name, hydra.context.Context>> hydra_schemas_freshName, hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context> acc, T0 ignored) {
     hydra.util.Lazy<hydra.context.Context> cx0 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(acc));
-    hydra.util.Pair<hydra.core.Name, hydra.context.Context> result = (hydra_schemas_freshName2).apply(cx0.get());
+    hydra.util.Pair<hydra.core.Name, hydra.context.Context> result = (hydra_schemas_freshName).apply(cx0.get());
     hydra.util.Lazy<hydra.context.Context> cx1 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(result));
     hydra.util.Lazy<hydra.core.Name> name = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(result));
     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> names = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(acc));

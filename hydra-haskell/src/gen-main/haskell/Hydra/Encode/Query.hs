@@ -187,10 +187,10 @@ range x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "min"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x))) (Query.rangeMin x))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x2))) (Query.rangeMin x))},
         Core.Field {
           Core.fieldName = (Core.Name "max"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x))) (Query.rangeMax x))}]})
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x2))) (Query.rangeMax x))}]})
 
 regexQuantifier :: Query.RegexQuantifier -> Core.Term
 regexQuantifier x =
@@ -281,4 +281,4 @@ variable :: Query.Variable -> Core.Term
 variable x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.query.Variable"),
-      Core.wrappedTermBody = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Query.unVariable x))})
+      Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Query.unVariable x))})

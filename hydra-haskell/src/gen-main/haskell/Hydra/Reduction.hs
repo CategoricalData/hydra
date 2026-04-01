@@ -106,16 +106,16 @@ etaExpandTerm graph term =
                           Core.applicationArgument = arg})) t args
                     is = Logic.ifElse (Equality.lte arity (Lists.length args)) [] (Math.range 1 (Math.sub arity (Lists.length args)))
                     pad =
-                            \indices -> \t -> Logic.ifElse (Lists.null indices) t (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            \indices -> \t2 -> Logic.ifElse (Lists.null indices) t2 (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                               Core.lambdaParameter = (Core.Name (Strings.cat2 "v" (Literals.showInt32 (Lists.head indices)))),
                               Core.lambdaDomain = Nothing,
                               Core.lambdaBody = (pad (Lists.tail indices) (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = t,
+                                Core.applicationFunction = t2,
                                 Core.applicationArgument = (Core.TermVariable (Core.Name (Strings.cat2 "v" (Literals.showInt32 (Lists.head indices)))))})))})))
                 in (pad is apps)
           rewrite =
                   \args -> \recurse -> \t ->
-                    let afterRecursion = \term -> expand args (etaExpansionArity graph term) term
+                    let afterRecursion = \term2 -> expand args (etaExpansionArity graph term2) term2
                         t2 = Rewriting.detypeTerm t
                     in case t2 of
                       Core.TermApplication v0 ->
@@ -140,7 +140,7 @@ etaExpandTermNew tx0 term0 =
                       Core.FunctionElimination _ -> 1
                       Core.FunctionLambda _ -> 0
                       Core.FunctionPrimitive v1 -> Maybes.maybe 0 Arity.typeSchemeArity (Maps.lookup v1 primTypes)
-                    Core.TermLet v0 -> termArityWithContext (Rewriting.extendGraphForLet (\_ -> \_ -> Nothing) tx v0) (Core.letBody v0)
+                    Core.TermLet v0 -> termArityWithContext (Rewriting.extendGraphForLet (\_ -> \_2 -> Nothing) tx v0) (Core.letBody v0)
                     Core.TermTypeLambda v0 -> termArityWithContext (Rewriting.extendGraphForTypeLambda tx v0) (Core.typeLambdaBody v0)
                     Core.TermTypeApplication v0 -> termArityWithContext tx (Core.typeApplicationTermBody v0)
                     Core.TermVariable v0 -> Maybes.maybe 0 Arity.typeArity (Maybes.map Rewriting.typeSchemeToFType (Maps.lookup v0 (Graph.graphBoundTypes tx)))
@@ -150,7 +150,7 @@ etaExpandTermNew tx0 term0 =
                     Core.TypeFunction v0 -> Lists.cons (Just (Core.functionTypeDomain v0)) (domainTypes (Math.sub n 1) (Just (Core.functionTypeCodomain v0)))
                     Core.TypeAnnotated v0 -> domainTypes n (Just (Core.annotatedTypeBody v0))
                     Core.TypeApplication v0 -> domainTypes n (Just (Core.applicationTypeFunction v0))
-                    Core.TypeForall _ -> Lists.map (\_ -> Nothing) (Math.range 1 n)
+                    Core.TypeForall _ -> Lists.map (\_2 -> Nothing) (Math.range 1 n)
                     _ -> Lists.map (\_ -> Nothing) (Math.range 1 n)) mt)
           peelFunctionDomains =
                   \mtyp -> \n -> Logic.ifElse (Equality.lte n 0) mtyp (Maybes.maybe Nothing (\typ -> case typ of
@@ -200,7 +200,7 @@ etaExpandTermNew tx0 term0 =
                                   Core.TermFunction v0 -> case v0 of
                                     Core.FunctionPrimitive v1 -> Maybes.map Rewriting.typeSchemeToFType (Maps.lookup v1 primTypes)
                                     _ -> Nothing
-                                  Core.TermLet v0 -> termHeadType (Rewriting.extendGraphForLet (\_ -> \_ -> Nothing) tx2 v0) (Core.letBody v0)
+                                  Core.TermLet v0 -> termHeadType (Rewriting.extendGraphForLet (\_ -> \_2 -> Nothing) tx2 v0) (Core.letBody v0)
                                   Core.TermTypeLambda v0 -> termHeadType (Rewriting.extendGraphForTypeLambda tx2 v0) (Core.typeLambdaBody v0)
                                   Core.TermTypeApplication v0 -> Maybes.bind (termHeadType tx2 (Core.typeApplicationTermBody v0)) (\htyp2 -> case htyp2 of
                                     Core.TypeForall v1 -> Just (Rewriting.replaceFreeTypeVariable (Core.forallTypeParameter v1) (Core.typeApplicationTermType v0) (Core.forallTypeBody v1))
@@ -274,7 +274,7 @@ etaExpandTermNew tx0 term0 =
                               primType = Maybes.map (\ts -> Core.typeSchemeType ts) (Maps.lookup v1 primTypes)
                           in (expand False args arty primType term)
                       Core.TermLet v0 ->
-                        let tx1 = Rewriting.extendGraphForLet (\_ -> \_ -> Nothing) tx v0
+                        let tx1 = Rewriting.extendGraphForLet (\_ -> \_2 -> Nothing) tx v0
                             mapBinding =
                                     \b -> Core.Binding {
                                       Core.bindingName = (Core.bindingName b),
@@ -324,7 +324,7 @@ etaExpandTypedTerm cx tx0 term0 =
       let rewrite =
               \topLevel -> \forced -> \typeArgs -> \recurse -> \tx -> \term ->
                 let rewriteSpine =
-                        \term -> case term of
+                        \term2 -> case term2 of
                           Core.TermAnnotated v0 -> Eithers.bind (rewriteSpine (Core.annotatedTermBody v0)) (\body ->
                             let ann = Core.annotatedTermAnnotation v0
                             in (Right (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -341,28 +341,28 @@ etaExpandTypedTerm cx tx0 term0 =
                             in (Right (Core.TermTypeApplication (Core.TypeApplicationTerm {
                               Core.typeApplicationTermBody = body,
                               Core.typeApplicationTermType = typ}))))
-                          _ -> rewrite False False [] recurse tx term
+                          _ -> rewrite False False [] recurse tx term2
                     arityOf =
-                            \tx -> \term ->
-                              let dflt = Eithers.map (\_tc -> Arity.typeArity (Pairs.first _tc)) (Checking.typeOf cx tx [] term)
+                            \tx2 -> \term2 ->
+                              let dflt = Eithers.map (\_tc -> Arity.typeArity (Pairs.first _tc)) (Checking.typeOf cx tx2 [] term2)
                                   forFunction =
-                                          \tx -> \f -> case f of
+                                          \tx3 -> \f -> case f of
                                             Core.FunctionElimination _ -> Right 1
                                             Core.FunctionLambda v0 ->
-                                              let txl = Rewriting.extendGraphForLambda tx v0
+                                              let txl = Rewriting.extendGraphForLambda tx3 v0
                                               in (arityOf txl (Core.lambdaBody v0))
-                                            Core.FunctionPrimitive v0 -> Eithers.map (\_ts -> Arity.typeSchemeArity _ts) (Lexical.requirePrimitiveType cx tx v0)
-                              in case term of
-                                Core.TermAnnotated v0 -> arityOf tx (Core.annotatedTermBody v0)
-                                Core.TermFunction v0 -> forFunction tx v0
+                                            Core.FunctionPrimitive v0 -> Eithers.map (\_ts -> Arity.typeSchemeArity _ts) (Lexical.requirePrimitiveType cx tx3 v0)
+                              in case term2 of
+                                Core.TermAnnotated v0 -> arityOf tx2 (Core.annotatedTermBody v0)
+                                Core.TermFunction v0 -> forFunction tx2 v0
                                 Core.TermLet v0 ->
-                                  let txl = Rewriting.extendGraphForLet (\_ -> \_ -> Nothing) tx v0
+                                  let txl = Rewriting.extendGraphForLet (\_ -> \_2 -> Nothing) tx2 v0
                                   in (arityOf txl (Core.letBody v0))
-                                Core.TermTypeApplication v0 -> arityOf tx (Core.typeApplicationTermBody v0)
+                                Core.TermTypeApplication v0 -> arityOf tx2 (Core.typeApplicationTermBody v0)
                                 Core.TermTypeLambda v0 ->
-                                  let txt = Rewriting.extendGraphForTypeLambda tx v0
+                                  let txt = Rewriting.extendGraphForTypeLambda tx2 v0
                                   in (arityOf txt (Core.typeLambdaBody v0))
-                                Core.TermVariable v0 -> Maybes.maybe (Eithers.map (\_tc -> Arity.typeArity (Pairs.first _tc)) (Checking.typeOf cx tx [] (Core.TermVariable v0))) (\t -> Right (Arity.typeArity t)) (Maybes.map Rewriting.typeSchemeToFType (Maps.lookup v0 (Graph.graphBoundTypes tx)))
+                                Core.TermVariable v0 -> Maybes.maybe (Eithers.map (\_tc -> Arity.typeArity (Pairs.first _tc)) (Checking.typeOf cx tx2 [] (Core.TermVariable v0))) (\t -> Right (Arity.typeArity t)) (Maybes.map Rewriting.typeSchemeToFType (Maps.lookup v0 (Graph.graphBoundTypes tx2)))
                                 _ -> dflt
                     extraVariables = \n -> Lists.map (\i -> Core.Name (Strings.cat2 "v" (Literals.showInt32 i))) (Math.range 1 n)
                     pad =
@@ -374,14 +374,14 @@ etaExpandTypedTerm cx tx0 term0 =
                                 Core.applicationArgument = (Core.TermVariable (Lists.head vars))})))})))
                     padn = \n -> \body -> pad (extraVariables n) body
                     unwind =
-                            \term -> Lists.foldl (\e -> \t -> Core.TermTypeApplication (Core.TypeApplicationTerm {
+                            \term2 -> Lists.foldl (\e -> \t -> Core.TermTypeApplication (Core.TypeApplicationTerm {
                               Core.typeApplicationTermBody = e,
-                              Core.typeApplicationTermType = t})) term typeArgs
+                              Core.typeApplicationTermType = t})) term2 typeArgs
                     forceExpansion =
                             \t -> Eithers.bind (Checking.typeOf cx tx [] t) (\typCx ->
                               let arity = Arity.typeArity (Pairs.first typCx)
                               in (Right (padn arity (unwind t))))
-                    recurseOrForce = \term -> Logic.ifElse forced (forceExpansion term) (recurse tx (unwind term))
+                    recurseOrForce = \term2 -> Logic.ifElse forced (forceExpansion term2) (recurse tx (unwind term2))
                     forCase =
                             \f -> Eithers.bind (rewrite False True [] recurse tx (Core.fieldTerm f)) (\r -> Right (Core.Field {
                               Core.fieldName = (Core.fieldName f),
@@ -398,7 +398,7 @@ etaExpandTypedTerm cx tx0 term0 =
                     forElimination =
                             \elm ->
                               let checkBase =
-                                      \elm -> case elm of
+                                      \elm2 -> case elm2 of
                                         Core.EliminationUnion v0 -> forCaseStatement v0
                                         _ -> recurse tx term
                               in (Eithers.bind (Eithers.map unwind (checkBase elm)) (\base -> Right (Logic.ifElse (Logic.or topLevel forced) (padn 1 base) base)))
@@ -419,7 +419,7 @@ etaExpandTypedTerm cx tx0 term0 =
                       in (Eithers.map unwind (recurse txl term))
                     _ -> recurseOrForce term
                   Core.TermLet v0 ->
-                    let txlt = Rewriting.extendGraphForLet (\_ -> \_ -> Nothing) tx v0
+                    let txlt = Rewriting.extendGraphForLet (\_ -> \_2 -> Nothing) tx v0
                     in (recurse txlt term)
                   Core.TermTypeApplication v0 -> rewrite topLevel forced (Lists.cons (Core.typeApplicationTermType v0) typeArgs) recurse tx (Core.typeApplicationTermBody v0)
                   Core.TermTypeLambda v0 ->
@@ -484,20 +484,20 @@ etaReduceTerm term =
 reduceTerm :: Context.Context -> Graph.Graph -> Bool -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 reduceTerm cx graph eager term =
 
-      let reduce = \eager -> reduceTerm cx graph eager
+      let reduce = \eager2 -> reduceTerm cx graph eager2
           doRecurse =
-                  \eager -> \term ->
+                  \eager2 -> \term2 ->
                     let isNonLambda =
                             \f -> case f of
                               Core.FunctionLambda _ -> False
                               _ -> True
                         isNonLambdaTerm =
-                                case term of
+                                case term2 of
                                   Core.TermFunction v0 -> isNonLambda v0
                                   Core.TermLet _ -> False
                                   _ -> True
-                    in (Logic.and eager isNonLambdaTerm)
-          reduceArg = \eager -> \arg -> Logic.ifElse eager (Right arg) (reduce False arg)
+                    in (Logic.and eager2 isNonLambdaTerm)
+          reduceArg = \eager2 -> \arg -> Logic.ifElse eager2 (Right arg) (reduce False arg)
           applyToArguments =
                   \fun -> \args -> Logic.ifElse (Lists.null args) fun (applyToArguments (Core.TermApplication (Core.Application {
                     Core.applicationFunction = fun,
@@ -532,29 +532,29 @@ reduceTerm cx graph eager term =
                         Core.applicationArgument = (Core.fieldTerm field)})))))
                     Core.EliminationWrap v0 -> Core__.wrap cx v0 graph reducedArg
           applyIfNullary =
-                  \eager -> \original -> \args ->
+                  \eager2 -> \original -> \args ->
                     let stripped = Rewriting.deannotateTerm original
                         forElimination =
-                                \elm -> \args ->
-                                  let arg = Lists.head args
-                                      remainingArgs = Lists.tail args
-                                  in (Eithers.bind (reduceArg eager (Rewriting.deannotateTerm arg)) (\reducedArg -> Eithers.bind (Eithers.bind (applyElimination elm reducedArg) (reduce eager)) (\reducedResult -> applyIfNullary eager reducedResult remainingArgs)))
+                                \elm -> \args2 ->
+                                  let arg = Lists.head args2
+                                      remainingArgs = Lists.tail args2
+                                  in (Eithers.bind (reduceArg eager2 (Rewriting.deannotateTerm arg)) (\reducedArg -> Eithers.bind (Eithers.bind (applyElimination elm reducedArg) (reduce eager2)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))
                         forLambda =
-                                \l -> \args ->
+                                \l -> \args2 ->
                                   let param = Core.lambdaParameter l
                                       body = Core.lambdaBody l
-                                      arg = Lists.head args
-                                      remainingArgs = Lists.tail args
-                                  in (Eithers.bind (reduce eager (Rewriting.deannotateTerm arg)) (\reducedArg -> Eithers.bind (reduce eager (Rewriting.replaceFreeTermVariable param reducedArg body)) (\reducedResult -> applyIfNullary eager reducedResult remainingArgs)))
+                                      arg = Lists.head args2
+                                      remainingArgs = Lists.tail args2
+                                  in (Eithers.bind (reduce eager2 (Rewriting.deannotateTerm arg)) (\reducedArg -> Eithers.bind (reduce eager2 (Rewriting.replaceFreeTermVariable param reducedArg body)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))
                         forPrimitive =
-                                \prim -> \arity -> \args ->
-                                  let argList = Lists.take arity args
-                                      remainingArgs = Lists.drop arity args
-                                  in (Eithers.bind (Eithers.mapList (reduceArg eager) argList) (\reducedArgs ->
+                                \prim -> \arity -> \args2 ->
+                                  let argList = Lists.take arity args2
+                                      remainingArgs = Lists.drop arity args2
+                                  in (Eithers.bind (Eithers.mapList (reduceArg eager2) argList) (\reducedArgs ->
                                     let strippedArgs = Lists.map Rewriting.deannotateTerm reducedArgs
-                                    in (Eithers.bind (Eithers.bimap mapErrorToString (\x -> x) (Graph.primitiveImplementation prim cx graph strippedArgs)) (\primResult -> Eithers.bind (reduce eager primResult) (\reducedResult -> applyIfNullary eager reducedResult remainingArgs)))))
+                                    in (Eithers.bind (Eithers.bimap mapErrorToString (\x -> x) (Graph.primitiveImplementation prim cx graph strippedArgs)) (\primResult -> Eithers.bind (reduce eager2 primResult) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))))
                     in case stripped of
-                      Core.TermApplication v0 -> applyIfNullary eager (Core.applicationFunction v0) (Lists.cons (Core.applicationArgument v0) args)
+                      Core.TermApplication v0 -> applyIfNullary eager2 (Core.applicationFunction v0) (Lists.cons (Core.applicationArgument v0) args)
                       Core.TermFunction v0 -> case v0 of
                         Core.FunctionElimination v1 -> Logic.ifElse (Lists.null args) (Right original) (forElimination v1 args)
                         Core.FunctionLambda v1 -> Logic.ifElse (Lists.null args) (Right original) (forLambda v1 args)
@@ -563,7 +563,7 @@ reduceTerm cx graph eager term =
                           in (Logic.ifElse (Equality.gt arity (Lists.length args)) (Right (applyToArguments original args)) (forPrimitive prim arity args)))
                       Core.TermVariable v0 ->
                         let mBinding = Lexical.dereferenceElement graph v0
-                        in (Maybes.maybe (Right (applyToArguments original args)) (\binding -> applyIfNullary eager (Core.bindingTerm binding) args) mBinding)
+                        in (Maybes.maybe (Right (applyToArguments original args)) (\binding -> applyIfNullary eager2 (Core.bindingTerm binding) args) mBinding)
                       Core.TermLet v0 ->
                         let bindings = Core.letBindings v0
                             body = Core.letBody v0
@@ -578,10 +578,10 @@ reduceTerm cx graph eager term =
                                       Core.bindingTerm = (Rewriting.replaceFreeTermVariable (Core.bindingName b) (letExpr b) (Core.bindingTerm b)),
                                       Core.bindingType = (Core.bindingType b)}
                             expandedBindings = Lists.map expandBinding bindings
-                            substituteBinding = \term -> \b -> Rewriting.replaceFreeTermVariable (Core.bindingName b) (Core.bindingTerm b) term
-                            substituteAll = \bs -> \term -> Lists.foldl substituteBinding term bs
+                            substituteBinding = \term2 -> \b -> Rewriting.replaceFreeTermVariable (Core.bindingName b) (Core.bindingTerm b) term2
+                            substituteAll = \bs -> \term2 -> Lists.foldl substituteBinding term2 bs
                             expandedBody = substituteAll expandedBindings body
-                        in (Eithers.bind (reduce eager expandedBody) (\reducedBody -> applyIfNullary eager reducedBody args))
+                        in (Eithers.bind (reduce eager2 expandedBody) (\reducedBody -> applyIfNullary eager2 reducedBody args))
                       _ -> Right (applyToArguments original args)
           mapping =
                   \recurse -> \mid -> Eithers.bind (Logic.ifElse (doRecurse eager mid) (recurse mid) (Right mid)) (\inner -> applyIfNullary eager inner [])

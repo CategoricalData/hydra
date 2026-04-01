@@ -448,7 +448,7 @@ normalizePathForHoisting path =
 
 -- | Predicate that always returns True, for hoisting all bindings unconditionally.
 shouldHoistAll :: t0 -> t1 -> Bool
-shouldHoistAll _ _ = True
+shouldHoistAll _ _2 = True
 
 -- | Predicate for case statement hoisting. Returns True if term is a union elimination (bare case function) or a case statement application (union elimination applied to an argument) AND not at top level. Top level = reachable through annotations, let body/binding, lambda bodies, or ONE app LHS. Once through an app LHS, lambda bodies no longer pass through.
 shouldHoistCaseStatement :: ([Paths.SubtermStep], Core.Term) -> Bool

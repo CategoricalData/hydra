@@ -36,7 +36,7 @@ fileExtension :: Module.FileExtension -> Core.Term
 fileExtension x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.module.FileExtension"),
-      Core.wrappedTermBody = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Module.unFileExtension x))})
+      Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Module.unFileExtension x))})
 
 module_ :: Module.Module -> Core.Term
 module_ x =
@@ -57,13 +57,13 @@ module_ x =
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map namespace xs)) (Module.moduleTypeDependencies x))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x -> Core.TermLiteral (Core.LiteralString x)) opt)) (Module.moduleDescription x))}]})
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Module.moduleDescription x))}]})
 
 namespace :: Module.Namespace -> Core.Term
 namespace x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.module.Namespace"),
-      Core.wrappedTermBody = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Module.unNamespace x))})
+      Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Module.unNamespace x))})
 
 namespaces :: (t0 -> Core.Term) -> Module.Namespaces t0 -> Core.Term
 namespaces n x =
@@ -87,7 +87,7 @@ qualifiedName x =
           Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map namespace opt)) (Module.qualifiedNameNamespace x))},
         Core.Field {
           Core.fieldName = (Core.Name "local"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Module.qualifiedNameLocal x))}]})
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Module.qualifiedNameLocal x))}]})
 
 termDefinition :: Module.TermDefinition -> Core.Term
 termDefinition x =
