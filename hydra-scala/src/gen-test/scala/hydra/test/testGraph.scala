@@ -6,7 +6,7 @@ import hydra.module.*
 
 import hydra.lib.maps
 
-lazy val testContext: hydra.context.Context = hydra.context.Context(Seq.empty, Seq.empty, Map.empty)
+lazy val testContext: hydra.context.Context = hydra.lexical.emptyContext
 
 lazy val testGraph: hydra.graph.Graph = hydra.TestSuiteRunner.buildTestGraph()
 
