@@ -1,8 +1,6 @@
 (define-library (hydra lib sets)
   (import (scheme base)
-          (scheme write)
-          (ice-9 vlist)
-          (guile))
+          (scheme write))
   (export hydra_lib_sets_delete
           hydra_lib_sets_difference
           hydra_lib_sets_empty
@@ -22,6 +20,8 @@
     ;; Sets use Guile's vhash for O(1) amortized membership test and insert.
     ;; A set is a vhash mapping elements to #t.
     ;; Sorted lists from generated code are transparently converted on first use.
+    (use-modules (ice-9 vlist))
+
     (define (obj->string x)
       (let ((p (open-output-string)))
         (write x p)
