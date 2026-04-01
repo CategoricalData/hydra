@@ -15,12 +15,12 @@ public class UniversalTestCase implements Serializable, Comparable<UniversalTest
   public static final hydra.core.Name EXPECTED = new hydra.core.Name("expected");
 
   /**
-   * The actual result (a string-valued expression)
+   * The actual result (a string produced by evaluating and showing the test expression)
    */
   public final String actual;
 
   /**
-   * The expected result (a string literal)
+   * The expected result (a string produced by showing the expected value)
    */
   public final String expected;
 
