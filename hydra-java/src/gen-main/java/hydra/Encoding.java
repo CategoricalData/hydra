@@ -927,7 +927,7 @@ public interface Encoding {
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.core.Binding>> isEncodableBinding(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Binding b) {
     return hydra.lib.eithers.Bind.apply(
-      hydra.Schemas.isSerializableByName(
+      hydra.Predicates.isSerializableByName(
         cx,
         graph,
         (b).name),

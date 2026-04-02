@@ -1479,7 +1479,7 @@
 
 (define (test-all-negnominal-types-negeliminations-negunion-eliminations-negpolymorphic-union-eliminations-negusing-kernel-types-negcase-statement-on-coderdirection-applied-to-argument)
 
-  (assert (equal? (∀t0.(hydra.coders.CoderDirection → (hydra.util.Coder @ t0 @ t0) → hydra.context.Context → t0 → either<(hydra.context.InContext @ hydra.errors.Error), t0>)) (∀t0.(hydra.coders.CoderDirection → (hydra.util.Coder @ t0 @ t0) → hydra.context.Context → t0 → either<(hydra.context.InContext @ hydra.errors.Error), t0>)))))
+  (assert (equal? (∀t0.(hydra.coders.CoderDirection → (hydra.coders.Coder @ t0 @ t0) → hydra.context.Context → t0 → either<(hydra.context.InContext @ hydra.errors.Error), t0>)) (∀t0.(hydra.coders.CoderDirection → (hydra.coders.Coder @ t0 @ t0) → hydra.context.Context → t0 → either<(hydra.context.InContext @ hydra.errors.Error), t0>)))))
 
 ;; Union eliminations with defaults
 

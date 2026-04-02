@@ -21,7 +21,7 @@ public interface Advanced {
     return new hydra.testing.TestGroup("Annotations in complex contexts", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.TestGroup>) (hydra.util.ConsList.<hydra.testing.TestGroup>empty()), hydra.util.ConsList.of(
       new hydra.testing.TestCaseWithMetadata("annotated let binding", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
         (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> "<<inference error>>"),
-        (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.type(hydra.Rewriting.typeSchemeToFType(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result))))),
+        (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.type(hydra.Scoping.typeSchemeToFType(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result))))),
         hydra.Inference.inferTypeOf(
           hydra.test.TestGraph.testContext(),
           hydra.test.TestGraph.testGraph(),
@@ -30,7 +30,7 @@ public interface Advanced {
             new hydra.core.Binding(new hydra.core.Name("y"), new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.String_("world")), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) (hydra.util.PersistentMap.<hydra.core.Name, hydra.core.Term>empty())))), (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing()))), new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Pair((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(new hydra.core.Term.Variable(new hydra.core.Name("x")), new hydra.core.Term.Variable(new hydra.core.Name("y")))))), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) (hydra.util.PersistentMap.<hydra.core.Name, hydra.core.Term>empty())))))))), hydra.show.Core.type(new hydra.core.Type.Pair(new hydra.core.PairType(new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int32())), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
       new hydra.testing.TestCaseWithMetadata("annotated record fields", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
         (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> "<<inference error>>"),
-        (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.type(hydra.Rewriting.typeSchemeToFType(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result))))),
+        (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.type(hydra.Scoping.typeSchemeToFType(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result))))),
         hydra.Inference.inferTypeOf(
           hydra.test.TestGraph.testContext(),
           hydra.test.TestGraph.testGraph(),
@@ -40,7 +40,7 @@ public interface Advanced {
             new hydra.core.Field(new hydra.core.Name("age"), new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(30))), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) (hydra.util.PersistentMap.<hydra.core.Name, hydra.core.Term>empty())))))))))), hydra.show.Core.type(new hydra.core.Type.Variable(hydra.test.TestTypes.testTypePersonName())))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
       new hydra.testing.TestCaseWithMetadata("annotated function in application", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
         (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> "<<inference error>>"),
-        (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.type(hydra.Rewriting.typeSchemeToFType(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result))))),
+        (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.type(hydra.Scoping.typeSchemeToFType(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result))))),
         hydra.Inference.inferTypeOf(
           hydra.test.TestGraph.testContext(),
           hydra.test.TestGraph.testGraph(),
@@ -51,21 +51,21 @@ public interface Advanced {
     return new hydra.testing.TestGroup("Nested annotations", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.TestGroup>) (hydra.util.ConsList.<hydra.testing.TestGroup>empty()), hydra.util.ConsList.of(
       new hydra.testing.TestCaseWithMetadata("annotation within annotation", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
         (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> "<<inference error>>"),
-        (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.type(hydra.Rewriting.typeSchemeToFType(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result))))),
+        (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.type(hydra.Scoping.typeSchemeToFType(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result))))),
         hydra.Inference.inferTypeOf(
           hydra.test.TestGraph.testContext(),
           hydra.test.TestGraph.testGraph(),
           new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(100))), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) (hydra.util.PersistentMap.<hydra.core.Name, hydra.core.Term>empty())))), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) (hydra.util.PersistentMap.<hydra.core.Name, hydra.core.Term>empty())))))), hydra.show.Core.type(new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int32()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
       new hydra.testing.TestCaseWithMetadata("annotated terms in tuple", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
         (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> "<<inference error>>"),
-        (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.type(hydra.Rewriting.typeSchemeToFType(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result))))),
+        (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.type(hydra.Scoping.typeSchemeToFType(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result))))),
         hydra.Inference.inferTypeOf(
           hydra.test.TestGraph.testContext(),
           hydra.test.TestGraph.testGraph(),
           new hydra.core.Term.Pair((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(1))), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) (hydra.util.PersistentMap.<hydra.core.Name, hydra.core.Term>empty())))), new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.String_("hello")), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) (hydra.util.PersistentMap.<hydra.core.Name, hydra.core.Term>empty())))))))))), hydra.show.Core.type(new hydra.core.Type.Pair(new hydra.core.PairType(new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int32())), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
       new hydra.testing.TestCaseWithMetadata("annotated term in function application", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
         (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> "<<inference error>>"),
-        (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.type(hydra.Rewriting.typeSchemeToFType(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result))))),
+        (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.type(hydra.Scoping.typeSchemeToFType(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result))))),
         hydra.Inference.inferTypeOf(
           hydra.test.TestGraph.testContext(),
           hydra.test.TestGraph.testGraph(),
@@ -76,14 +76,14 @@ public interface Advanced {
     return new hydra.testing.TestGroup("Top-level annotations", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.TestGroup>) (hydra.util.ConsList.<hydra.testing.TestGroup>empty()), hydra.util.ConsList.of(
       new hydra.testing.TestCaseWithMetadata("annotated literal", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
         (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> "<<inference error>>"),
-        (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.type(hydra.Rewriting.typeSchemeToFType(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result))))),
+        (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.type(hydra.Scoping.typeSchemeToFType(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result))))),
         hydra.Inference.inferTypeOf(
           hydra.test.TestGraph.testContext(),
           hydra.test.TestGraph.testGraph(),
           new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) (hydra.util.PersistentMap.<hydra.core.Name, hydra.core.Term>empty())))))), hydra.show.Core.type(new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int32()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
       new hydra.testing.TestCaseWithMetadata("annotated list", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
         (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> "<<inference error>>"),
-        (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.type(hydra.Rewriting.typeSchemeToFType(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result))))),
+        (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.type(hydra.Scoping.typeSchemeToFType(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result))))),
         hydra.Inference.inferTypeOf(
           hydra.test.TestGraph.testContext(),
           hydra.test.TestGraph.testGraph(),
@@ -92,7 +92,7 @@ public interface Advanced {
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("b")))), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) (hydra.util.PersistentMap.<hydra.core.Name, hydra.core.Term>empty())))))), hydra.show.Core.type(new hydra.core.Type.List(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
       new hydra.testing.TestCaseWithMetadata("annotated record", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
         (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> "<<inference error>>"),
-        (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.type(hydra.Rewriting.typeSchemeToFType(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result))))),
+        (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.type(hydra.Scoping.typeSchemeToFType(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result))))),
         hydra.Inference.inferTypeOf(
           hydra.test.TestGraph.testContext(),
           hydra.test.TestGraph.testGraph(),
@@ -102,7 +102,7 @@ public interface Advanced {
             new hydra.core.Field(new hydra.core.Name("age"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(25))))))), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) (hydra.util.PersistentMap.<hydra.core.Name, hydra.core.Term>empty())))))), hydra.show.Core.type(new hydra.core.Type.Variable(hydra.test.TestTypes.testTypePersonName())))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
       new hydra.testing.TestCaseWithMetadata("annotated lambda", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
         (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> "<<inference error>>"),
-        (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.type(hydra.Rewriting.typeSchemeToFType(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result))))),
+        (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.type(hydra.Scoping.typeSchemeToFType(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result))))),
         hydra.Inference.inferTypeOf(
           hydra.test.TestGraph.testContext(),
           hydra.test.TestGraph.testGraph(),

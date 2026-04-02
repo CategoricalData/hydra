@@ -51,13 +51,13 @@ import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
-import qualified Hydra.Sources.Kernel.Terms.Extract.Helpers as Helpers
+import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
-import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Predicates as Predicates
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import           Prelude hiding ((++))
 import qualified Data.Int                    as I
@@ -75,7 +75,7 @@ ns = Namespace "hydra.decoding"
 
 module_ :: Module
 module_ = Module ns elements
-    [Annotations.ns, Formatting.ns, Helpers.ns, Lexical.ns, Names.ns, Rewriting.ns, Schemas.ns, ShowCore.ns]
+    [Annotations.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, ShowCore.ns]
     kernelTypesNamespaces $
     Just "Functions for generating term decoders from type modules"
   where
@@ -644,7 +644,7 @@ decodeModule = define "decodeModule" $
             (var "decodedBindings"))
           (Lists.concat2
             (list [
-              (Module.namespace $ string "hydra.extract.helpers"),
+              (Module.namespace $ string "hydra.extract.core"),
               (Module.namespace $ string "hydra.lexical"),
               (Module.namespace $ string "hydra.rewriting")])
             (var "allDecodedDeps"))
@@ -687,7 +687,7 @@ decodeRecordTypeImpl = define "decodeRecordTypeImpl" $
   -- For each field, build a term that decodes it from fieldMap using requireField helper
   -- Returns: Either DecodingError fieldValue
   "decodeFieldTerm" <~ ("ft" ~>
-    DC.ref Helpers.requireField
+    DC.ref ExtractCore.requireField
       @@@ (DC.string $ Core.unName $ Core.fieldTypeName $ var "ft")
       @@@ (decodeType @@ (Core.fieldTypeType $ var "ft"))
       @@@ DC.var "fieldMap"
@@ -716,7 +716,7 @@ decodeRecordTypeImpl = define "decodeRecordTypeImpl" $
     DC.field _Term_record $ DC.lambda "record" $
       DC.lets [
         -- Build Map Name Term from the record's fields using toFieldMap helper
-        ("fieldMap", DC.ref Helpers.toFieldMap @@@ DC.var "record")] $
+        ("fieldMap", DC.ref ExtractCore.toFieldMap @@@ DC.var "record")] $
         var "decodeBody"]
 
 -- | Generate a decoder for a polymorphic (forall) type
@@ -740,7 +740,7 @@ decodeEitherType = define "decodeEitherType" $
   "et" ~>
   "leftDecoder" <~ decodeType @@ Core.eitherTypeLeft (var "et") $
   "rightDecoder" <~ decodeType @@ Core.eitherTypeRight (var "et") $
-  DC.ref Helpers.decodeEither @@@ var "leftDecoder" @@@ var "rightDecoder"
+  DC.ref ExtractCore.decodeEither @@@ var "leftDecoder" @@@ var "rightDecoder"
 
 -- | Generate a decoder for a list type
 decodeListType :: TTermDefinition (Type -> Term)
@@ -748,7 +748,7 @@ decodeListType = define "decodeListType" $
   doc "Generate a decoder for a list type" $
   "elemType" ~>
   "elemDecoder" <~ decodeType @@ var "elemType" $
-  DC.ref Helpers.decodeList @@@ var "elemDecoder"
+  DC.ref ExtractCore.decodeList @@@ var "elemDecoder"
 
 -- | Generate a decoder for a map type
 decodeMapType :: TTermDefinition (MapType -> Term)
@@ -757,7 +757,7 @@ decodeMapType = define "decodeMapType" $
   "mt" ~>
   "keyDecoder" <~ decodeType @@ Core.mapTypeKeys (var "mt") $
   "valDecoder" <~ decodeType @@ Core.mapTypeValues (var "mt") $
-  DC.ref Helpers.decodeMap @@@ var "keyDecoder" @@@ var "valDecoder"
+  DC.ref ExtractCore.decodeMap @@@ var "keyDecoder" @@@ var "valDecoder"
 
 -- | Generate a decoder for an optional/maybe type
 decodeMaybeType :: TTermDefinition (Type -> Term)
@@ -765,7 +765,7 @@ decodeMaybeType = define "decodeMaybeType" $
   doc "Generate a decoder for an optional type" $
   "elemType" ~>
   "elemDecoder" <~ decodeType @@ var "elemType" $
-  DC.ref Helpers.decodeMaybe @@@ var "elemDecoder"
+  DC.ref ExtractCore.decodeMaybe @@@ var "elemDecoder"
 
 -- | Generate a decoder for a pair type
 decodePairType :: TTermDefinition (PairType -> Term)
@@ -774,7 +774,7 @@ decodePairType = define "decodePairType" $
   "pt" ~>
   "firstDecoder" <~ decodeType @@ Core.pairTypeFirst (var "pt") $
   "secondDecoder" <~ decodeType @@ Core.pairTypeSecond (var "pt") $
-  DC.ref Helpers.decodePair @@@ var "firstDecoder" @@@ var "secondDecoder"
+  DC.ref ExtractCore.decodePair @@@ var "firstDecoder" @@@ var "secondDecoder"
 
 -- | Generate a decoder for a set type
 decodeSetType :: TTermDefinition (Type -> Term)
@@ -782,7 +782,7 @@ decodeSetType = define "decodeSetType" $
   doc "Generate a decoder for a set type" $
   "elemType" ~>
   "elemDecoder" <~ decodeType @@ var "elemType" $
-  DC.ref Helpers.decodeSet @@@ var "elemDecoder"
+  DC.ref ExtractCore.decodeSet @@@ var "elemDecoder"
 
 -- | Generate a decoder term for a given Type with element name context
 decodeTypeNamed :: TTermDefinition (Name -> Type -> Term)
@@ -843,7 +843,7 @@ decodeType = define "decodeType" $
 decodeUnitType :: TTermDefinition Term
 decodeUnitType = define "decodeUnitType" $
   doc "Generate a decoder for the unit type" $
-  DC.ref Helpers.decodeUnit
+  DC.ref ExtractCore.decodeUnit
 
 -- | Generate a decoder for a union type with element name
 decodeUnionTypeNamed :: TTermDefinition (Name -> [FieldType] -> Term)
@@ -915,5 +915,5 @@ isDecodableBinding :: TTermDefinition (Context -> Graph -> Binding -> Prelude.Ei
 isDecodableBinding = define "isDecodableBinding" $
   doc "Check if a binding is decodable (serializable type)" $
   "cx" ~> "graph" ~> "b" ~>
-    "serializable" <<~ Schemas.isSerializableByName @@ var "cx" @@ var "graph" @@ (Core.bindingName (var "b")) $
+    "serializable" <<~ Predicates.isSerializableByName @@ var "cx" @@ var "graph" @@ (Core.bindingName (var "b")) $
     right (Logic.ifElse (var "serializable") (just (var "b")) nothing)

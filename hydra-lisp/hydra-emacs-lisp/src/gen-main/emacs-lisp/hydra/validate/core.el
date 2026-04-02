@@ -24,6 +24,8 @@
 
 (require 'hydra.rewriting)
 
+(require 'hydra.variables)
+
 (defvar hydra_validate_core_find_duplicate (lambda (names) (let ((result (funcall (funcall (hydra_lib_lists_foldl (lambda (acc) (lambda (name) (let ((seen (hydra_lib_pairs_first acc))) (let ((dup (hydra_lib_pairs_second acc))) (funcall (funcall (hydra_lib_maybes_cases dup) (lambda () (if (funcall (hydra_lib_sets_member name) seen) (list seen (list :just name)) (list (funcall (hydra_lib_sets_insert name) seen) (list :nothing))))) (lambda (_) acc))))))) (list hydra_lib_sets_empty (list :nothing))) names))) (hydra_lib_pairs_second result))))
 
 (defvar hydra_validate_core_check_duplicate_bindings (lambda (path) (lambda (bindings) (let ((names (funcall (hydra_lib_lists_map (lambda (v) (hydra_core_binding-name v))) bindings))) (let ((dup (hydra_validate_core_find_duplicate names))) (funcall (hydra_lib_maybes_map (lambda (name) (list :duplicate_binding (make-hydra_error_core_duplicate_binding_error path name)))) dup))))))
@@ -36,9 +38,9 @@
 
 (defvar hydra_validate_core_check_shadowing (lambda (path) (lambda (cx) (lambda (names) (let ((result (funcall (funcall (hydra_lib_lists_foldl (lambda (acc) (lambda (name) (funcall (funcall (hydra_lib_maybes_cases acc) (lambda () (if (funcall (hydra_lib_logic_or (hydra_lib_maybes_is_just (funcall (hydra_lib_maps_lookup name) (funcall (lambda (v) (hydra_graph_graph-bound_terms v)) cx)))) (funcall (hydra_lib_sets_member name) (funcall (lambda (v) (hydra_graph_graph-lambda_variables v)) cx))) (list :just (list :term_variable_shadowing (make-hydra_error_core_term_variable_shadowing_error path name))) (list :nothing)))) (lambda (_) acc))))) (list :nothing)) names))) result)))))
 
-(defvar hydra_validate_core_check_undefined_type_variables_in_type (lambda (path) (lambda (cx) (lambda (typ) (lambda (mk_error) (let ((free_vars (hydra_rewriting_free_variables_in_type typ))) (let ((undefined (funcall (hydra_lib_sets_difference free_vars) (funcall (lambda (v) (hydra_graph_graph-type_variables v)) cx)))) (if (hydra_lib_sets_null undefined) (list :nothing) (let ((first_undefined (hydra_lib_lists_head (hydra_lib_sets_to_list undefined)))) (mk_error first_undefined))))))))))
+(defvar hydra_validate_core_check_undefined_type_variables_in_type (lambda (path) (lambda (cx) (lambda (typ) (lambda (mk_error) (let ((free_vars (hydra_variables_free_variables_in_type typ))) (let ((undefined (funcall (hydra_lib_sets_difference free_vars) (funcall (lambda (v) (hydra_graph_graph-type_variables v)) cx)))) (if (hydra_lib_sets_null undefined) (list :nothing) (let ((first_undefined (hydra_lib_lists_head (hydra_lib_sets_to_list undefined)))) (mk_error first_undefined))))))))))
 
-(defvar hydra_validate_core_check_undefined_type_variables_in_type_scheme (lambda (path) (lambda (cx) (lambda (ts) (lambda (mk_error) (let ((free_vars (hydra_rewriting_free_variables_in_type_scheme ts))) (let ((undefined (funcall (hydra_lib_sets_difference free_vars) (funcall (lambda (v) (hydra_graph_graph-type_variables v)) cx)))) (if (hydra_lib_sets_null undefined) (list :nothing) (let ((first_undefined (hydra_lib_lists_head (hydra_lib_sets_to_list undefined)))) (mk_error first_undefined))))))))))
+(defvar hydra_validate_core_check_undefined_type_variables_in_type_scheme (lambda (path) (lambda (cx) (lambda (ts) (lambda (mk_error) (let ((free_vars (hydra_variables_free_variables_in_type_scheme ts))) (let ((undefined (funcall (hydra_lib_sets_difference free_vars) (funcall (lambda (v) (hydra_graph_graph-type_variables v)) cx)))) (if (hydra_lib_sets_null undefined) (list :nothing) (let ((first_undefined (hydra_lib_lists_head (hydra_lib_sets_to_list undefined)))) (mk_error first_undefined))))))))))
 
 (defvar hydra_validate_core_first_error (lambda (checks) (funcall (funcall (hydra_lib_lists_foldl (lambda (acc) (lambda (check) (funcall (funcall (hydra_lib_maybes_cases acc) (lambda () check)) (lambda (_) acc))))) (list :nothing)) checks)))
 

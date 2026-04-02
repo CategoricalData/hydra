@@ -985,31 +985,31 @@ usingKernelTypesTests = define "usingKernelTypesTests" $
           nothing [
           "encode">: lambda "_" $
             lambda "v12" $
-              project (name "hydra.util.Coder") (name "encode")
+              project (name "hydra.coders.Coder") (name "encode")
                 @@ var "coder" @@ var "v12",
           "decode">: lambda "_" $
             lambda "v12" $
-              project (name "hydra.util.Coder") (name "decode")
+              project (name "hydra.coders.Coder") (name "decode")
                 @@ var "coder" @@ var "v12"]
           @@ var "dir")
     (tylams ["t0"] $
       lambdaTyped "dir" (T.var "hydra.coders.CoderDirection") $
-        lambdaTyped "coder" (T.applys (T.var "hydra.util.Coder") (T.var <$> ["t0", "t0"])) $
+        lambdaTyped "coder" (T.applys (T.var "hydra.coders.Coder") (T.var <$> ["t0", "t0"])) $
           match (name "hydra.coders.CoderDirection")
             nothing [
             "encode">: lambdaTyped "_" T.unit $
               lambdaTyped "v12" (T.var "hydra.context.Context") $
-                tyapps (project (name "hydra.util.Coder") (name "encode")) (T.var <$> ["t0", "t0"])
+                tyapps (project (name "hydra.coders.Coder") (name "encode")) (T.var <$> ["t0", "t0"])
                   @@ var "coder" @@ var "v12",
             "decode">: lambdaTyped "_" T.unit $
               lambdaTyped "v12" (T.var "hydra.context.Context") $
-                tyapps (project (name "hydra.util.Coder") (name "decode")) (T.var <$> ["t0", "t0"])
+                tyapps (project (name "hydra.coders.Coder") (name "decode")) (T.var <$> ["t0", "t0"])
                   @@ var "coder" @@ var "v12"]
           @@ var "dir")
     (T.forAll "t0" $
       T.functionMany [
         T.var "hydra.coders.CoderDirection",
-        T.applys (T.var "hydra.util.Coder") (T.var <$> ["t0", "t0"]),
+        T.applys (T.var "hydra.coders.Coder") (T.var <$> ["t0", "t0"]),
         T.var "hydra.context.Context",
         T.var "t0",
         T.either_ (T.applys (T.var "hydra.context.InContext") [T.var "hydra.errors.Error"]) (T.var "t0")])]

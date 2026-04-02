@@ -22,7 +22,7 @@ import hydra.lib.sets
 import hydra.lib.strings
 import hydra.module
 import hydra.names
-import hydra.schemas
+import hydra.predicates
 
 def encode_binding_name(n: hydra.core.Name) -> hydra.core.Name:
     r"""Generate a binding name for an encoder function from a type name."""
@@ -563,7 +563,7 @@ def encode_namespace(ns: hydra.module.Namespace) -> hydra.module.Namespace:
 def is_encodable_binding(cx: hydra.context.Context, graph: hydra.graph.Graph, b: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.errors.Error], Maybe[hydra.core.Binding]]:
     r"""Check if a binding is encodable (serializable type)."""
 
-    return hydra.lib.eithers.bind(hydra.schemas.is_serializable_by_name(cx, graph, b.name), (lambda serializable: Right(hydra.lib.logic.if_else(serializable, (lambda : Just(b)), (lambda : Nothing())))))
+    return hydra.lib.eithers.bind(hydra.predicates.is_serializable_by_name(cx, graph, b.name), (lambda serializable: Right(hydra.lib.logic.if_else(serializable, (lambda : Just(b)), (lambda : Nothing())))))
 
 def filter_type_bindings(cx: hydra.context.Context, graph: hydra.graph.Graph, bindings: frozenlist[hydra.core.Binding]) -> Either[hydra.context.InContext[hydra.errors.Error], frozenlist[hydra.core.Binding]]:
     r"""Filter bindings to only encodable type definitions."""

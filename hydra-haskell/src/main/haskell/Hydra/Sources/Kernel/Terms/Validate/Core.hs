@@ -56,6 +56,7 @@ import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
+import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
 
 
 ns :: Namespace
@@ -63,7 +64,7 @@ ns = Namespace "hydra.validate.core"
 
 module_ :: Module
 module_ = Module ns elements
-    [Rewriting.ns]
+    [Rewriting.ns, Variables.ns]
     kernelTypesNamespaces $
     Just "Validation functions for core terms and types"
   where
@@ -513,7 +514,7 @@ checkUndefinedTypeVariablesInType :: TTermDefinition (SubtermPath -> Graph -> Ty
 checkUndefinedTypeVariablesInType = define "checkUndefinedTypeVariablesInType" $
   doc "Check a type for type variables not bound in the current scope" $
   "path" ~> "cx" ~> "typ" ~> "mkError" ~>
-  "freeVars" <~ Rewriting.freeVariablesInType @@ var "typ" $
+  "freeVars" <~ Variables.freeVariablesInType @@ var "typ" $
   "undefined" <~ Sets.difference (var "freeVars") (Graph.graphTypeVariables $ var "cx") $
   Logic.ifElse (Sets.null $ var "undefined")
     noError
@@ -526,7 +527,7 @@ checkUndefinedTypeVariablesInTypeScheme :: TTermDefinition (SubtermPath -> Graph
 checkUndefinedTypeVariablesInTypeScheme = define "checkUndefinedTypeVariablesInTypeScheme" $
   doc "Check a type scheme for type variables not bound by the scheme or the current scope" $
   "path" ~> "cx" ~> "ts" ~> "mkError" ~>
-  "freeVars" <~ Rewriting.freeVariablesInTypeScheme @@ var "ts" $
+  "freeVars" <~ Variables.freeVariablesInTypeScheme @@ var "ts" $
   "undefined" <~ Sets.difference (var "freeVars") (Graph.graphTypeVariables $ var "cx") $
   Logic.ifElse (Sets.null $ var "undefined")
     noError

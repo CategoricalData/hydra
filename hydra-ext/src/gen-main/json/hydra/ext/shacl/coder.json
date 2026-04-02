@@ -1003,7 +1003,7 @@
                                                                   "argument": {
                                                                     "application": {
                                                                       "argument": {"variable": "t"},
-                                                                      "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                                                      "function": {"variable": "hydra.strip.deannotateType"}}},
                                                                   "function": {
                                                                     "function": {
                                                                       "elimination": {
@@ -1956,7 +1956,7 @@
                                                                                                                   "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
                                                                                                                   "type": {"variable": "hydra.core.Term"}}},
                                                                                                               "type": {"variable": "hydra.core.Term"}}}}},
-                                                                                                      "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                                                                                                      "function": {"variable": "hydra.strip.deannotateTerm"}}},
                                                                                                   "function": {
                                                                                                     "application": {
                                                                                                       "argument": {"variable": "g"},
@@ -3695,7 +3695,7 @@
                                       "argument": {
                                         "application": {
                                           "argument": {"variable": "typ"},
-                                          "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                          "function": {"variable": "hydra.strip.deannotateType"}}},
                                       "function": {
                                         "function": {
                                           "elimination": {
@@ -4555,7 +4555,7 @@
   "namespace": "hydra.ext.shacl.coder",
   "termDependencies": [
     "hydra.names",
-    "hydra.rewriting",
+    "hydra.strip",
     "hydra.annotations",
     "hydra.decode.core",
     "hydra.extract.core",

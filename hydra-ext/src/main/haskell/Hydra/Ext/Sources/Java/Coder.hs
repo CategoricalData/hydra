@@ -27,10 +27,16 @@ import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
+import qualified Hydra.Sources.Kernel.Terms.Variables      as Variables
+import qualified Hydra.Sources.Kernel.Terms.Dependencies   as Dependencies
+import qualified Hydra.Sources.Kernel.Terms.Scoping        as Scoping
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
 import qualified Hydra.Sources.CoderUtils                  as CoderUtils
 import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Predicates    as Predicates
+import qualified Hydra.Sources.Kernel.Terms.Resolution    as Resolution
+import qualified Hydra.Sources.Kernel.Terms.Environment   as Environment
 import qualified Hydra.Sources.Kernel.Terms.Inference      as Inference
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
@@ -78,7 +84,7 @@ ns = Namespace "hydra.ext.java.coder"
 
 module_ :: Module
 module_ = Module ns elements
-    [JavaUtilsSource.ns, JavaNamesSource.ns, JavaSerdeSource.ns, moduleNamespace JavaLanguageSource.module_, Formatting.ns, Names.ns, Rewriting.ns, CoderUtils.ns, Lexical.ns, Schemas.ns, ShowCore.ns, Annotations.ns, Constants.ns,
+    [JavaUtilsSource.ns, JavaNamesSource.ns, JavaSerdeSource.ns, moduleNamespace JavaLanguageSource.module_, Formatting.ns, Names.ns, Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns, CoderUtils.ns, Lexical.ns, Environment.ns, Predicates.ns, Resolution.ns, ShowCore.ns, Annotations.ns, Constants.ns,
       Inference.ns, Sorting.ns, Arity.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, SerializationSource.ns]
     (JavaEnvironmentSource.ns:JavaSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Java code generator: converts Hydra modules to Java source code"
@@ -298,7 +304,7 @@ annotateBodyWithCod = def "annotateBodyWithCod" $
       Annotations.setTermAnnotation @@ asTerm Constants.key_type
         @@ just (encodeTypeAsTerm @@ var "typ")
         @@ var "t") $
-    cases _Term (Rewriting.deannotateTerm @@ var "term")
+    cases _Term (Strip.deannotateTerm @@ var "term")
       (Just $ var "setAnn" @@ var "term") [
       -- For type applications, annotate the whole thing with the expected type
       _Term_typeApplication>>: lambda "_ta" $
@@ -308,7 +314,7 @@ annotateBodyWithCod = def "annotateBodyWithCod" $
       _Term_application>>: lambda "app" $
         "lhs" <~ Core.applicationFunction (var "app") $
         "rhs" <~ Core.applicationArgument (var "app") $
-        "annotatedRhs" <~ cases _Term (Rewriting.deannotateTerm @@ var "rhs")
+        "annotatedRhs" <~ cases _Term (Strip.deannotateTerm @@ var "rhs")
           (Just $ var "rhs") [
           _Term_typeApplication>>: lambda "_ta2" $
             annotateBodyWithCod @@ (extractArgType @@ var "lhs" @@ var "typ") @@ var "rhs"] $
@@ -460,7 +466,7 @@ applyOvergenSubstToTermAnnotations_go = def "applyOvergenSubstToTermAnnotations_
 -- | Recursively apply a type substitution
 applySubstFull :: TTermDefinition (M.Map Name Type -> Type -> Type)
 applySubstFull = def "applySubstFull" $
-  lambda "s" $ lambda "t" $ cases _Type (Rewriting.deannotateType @@ var "t")
+  lambda "s" $ lambda "t" $ cases _Type (Strip.deannotateType @@ var "t")
     (Just $ var "t") [
     _Type_variable>>: lambda "v" $
       Maps.findWithDefault (var "t") (var "v") (var "s"),
@@ -500,7 +506,7 @@ applySubstFull = def "applySubstFull" $
 applySubstSimple :: TTermDefinition (M.Map Name Type -> Type -> Type)
 applySubstSimple = def "applySubstSimple" $
   lambda "subst" $ lambda "t" $
-    cases _Type (Rewriting.deannotateType @@ var "t")
+    cases _Type (Strip.deannotateType @@ var "t")
       (Just $ var "t") [
       _Type_variable>>: lambda "v" $
         Maps.findWithDefault (var "t") (var "v") (var "subst")]
@@ -573,16 +579,16 @@ bindingIsFunctionType = def "bindingIsFunctionType" $
   lambda "b" $
     Maybes.maybe
       -- No type scheme: check term structure
-      (cases _Term (Rewriting.deannotateTerm @@ Core.bindingTerm (var "b"))
+      (cases _Term (Strip.deannotateTerm @@ Core.bindingTerm (var "b"))
         (Just $ boolean False) [
         _Term_function>>: lambda "_f" $ boolean True])
       -- Has type scheme: check type
       (lambda "ts" $
-        cases _Type (Rewriting.deannotateType @@ Core.typeSchemeType (var "ts"))
+        cases _Type (Strip.deannotateType @@ Core.typeSchemeType (var "ts"))
           (Just $ boolean False) [
           _Type_function>>: lambda "_ft" $ boolean True,
           _Type_forall>>: lambda "fa" $
-            cases _Type (Rewriting.deannotateType @@ Core.forallTypeBody (var "fa"))
+            cases _Type (Strip.deannotateType @@ Core.forallTypeBody (var "fa"))
               (Just $ boolean False) [
               _Type_function>>: lambda "_ft2" $ boolean True]])
       (Core.bindingType (var "b"))
@@ -611,7 +617,7 @@ bindingsToStatements = def "bindingsToStatements" $
     "flatBindings" <~ (dedupBindings @@ (project JavaHelpers._Aliases JavaHelpers._Aliases_inScopeJavaVars @@ var "aliases")
       @@ (flattenBindings @@ var "bindings")) $
     -- Extend Graph with flattened bindings
-    "gExtended" <~ (Rewriting.extendGraphForLet @@ CoderUtils.bindingMetadata @@ var "g"
+    "gExtended" <~ (Scoping.extendGraphForLet @@ CoderUtils.bindingMetadata @@ var "g"
       @@ record _Let [
         _Let_bindings>>: var "flatBindings",
         _Let_body>>: inject _Term _Term_variable (wrap _Name (string "dummy"))]) $
@@ -621,7 +627,7 @@ bindingsToStatements = def "bindingsToStatements" $
     "allDeps" <~ Maps.fromList (Lists.map
       (lambda "b" $
         "key" <~ Core.bindingName (var "b") $
-        "deps" <~ Sets.intersection (var "bindingVars") (Rewriting.freeVariablesInTerm @@ Core.bindingTerm (var "b")) $
+        "deps" <~ Sets.intersection (var "bindingVars") (Variables.freeVariablesInTerm @@ Core.bindingTerm (var "b")) $
         pair (var "key") (var "deps"))
       (var "flatBindings")) $
     -- Topological sort for correct declaration order
@@ -722,7 +728,7 @@ buildArgSubst = def "buildArgSubst" $
       (lambda "p" $
         "sdom" <~ Pairs.first (var "p") $
         "argType" <~ Pairs.second (var "p") $
-        cases _Type (Rewriting.deannotateType @@ var "sdom")
+        cases _Type (Strip.deannotateType @@ var "sdom")
           (Just $ list ([] :: [TTerm (Name, Type)])) [
           _Type_variable>>: lambda "v" $
             Logic.ifElse
@@ -766,7 +772,7 @@ buildSubstFromAnnotations_go = def "buildSubstFromAnnotations_go" $
             Eithers.either_
               (lambda "_" Maps.empty)
               (lambda "annType" $
-                cases _Term (Rewriting.deannotateTerm @@ var "body")
+                cases _Term (Strip.deannotateTerm @@ var "body")
                   (Just Maps.empty) [
                   _Term_function>>: lambda "f" $
                     cases _Function (var "f")
@@ -775,7 +781,7 @@ buildSubstFromAnnotations_go = def "buildSubstFromAnnotations_go" $
                         Maybes.cases (Core.lambdaDomain (var "lam"))
                           Maps.empty
                           (lambda "dom" $
-                            cases _Type (Rewriting.deannotateType @@ var "annType")
+                            cases _Type (Strip.deannotateType @@ var "annType")
                               (Just Maps.empty) [
                               _Type_function>>: lambda "ft" $
                                 buildTypeVarSubst @@ var "schemeVarSet"
@@ -856,8 +862,8 @@ buildTypeSubst :: TTermDefinition (S.Set Name -> Type -> Type -> M.Map Name Type
 buildTypeSubst = def "buildTypeSubst" $
   lambda "schemeVarSet" $ lambda "schemeType" $ lambda "actualType" $
     buildTypeSubst_go @@ var "schemeVarSet"
-      @@ (Rewriting.deannotateType @@ var "schemeType")
-      @@ (Rewriting.deannotateType @@ var "actualType")
+      @@ (Strip.deannotateType @@ var "schemeType")
+      @@ (Strip.deannotateType @@ var "actualType")
 
 -- | Recursive helper for buildTypeSubst. Takes deannotated types.
 buildTypeSubst_go :: TTermDefinition (S.Set Name -> Type -> Type -> M.Map Name Type)
@@ -865,8 +871,8 @@ buildTypeSubst_go = def "buildTypeSubst_go" $
   lambda "svs" $ lambda "st" $ lambda "at" $
     "goSub" <~ (lambda "a" $ lambda "b" $
       buildTypeSubst_go @@ var "svs"
-        @@ (Rewriting.deannotateType @@ var "a")
-        @@ (Rewriting.deannotateType @@ var "b")) $
+        @@ (Strip.deannotateType @@ var "a")
+        @@ (Strip.deannotateType @@ var "b")) $
     cases _Type (var "st")
       (Just (Maps.empty :: TTerm (M.Map Name Type))) [
       _Type_variable>>: lambda "v" $
@@ -939,8 +945,8 @@ buildTypeVarSubst :: TTermDefinition (S.Set Name -> Type -> Type -> M.Map Name N
 buildTypeVarSubst = def "buildTypeVarSubst" $
   lambda "schemeVarSet" $ lambda "freshTyp" $ lambda "canonTyp" $
     buildTypeVarSubst_go @@ var "schemeVarSet"
-      @@ (Rewriting.deannotateType @@ var "freshTyp")
-      @@ (Rewriting.deannotateType @@ var "canonTyp")
+      @@ (Strip.deannotateType @@ var "freshTyp")
+      @@ (Strip.deannotateType @@ var "canonTyp")
 
 -- | Recursive helper for buildTypeVarSubst. Takes deannotated types.
 buildTypeVarSubst_go :: TTermDefinition (S.Set Name -> Type -> Type -> M.Map Name Name)
@@ -948,15 +954,15 @@ buildTypeVarSubst_go = def "buildTypeVarSubst_go" $
   lambda "svs" $ lambda "ft" $ lambda "ct" $
     "goSub" <~ (lambda "a" $ lambda "b" $
       buildTypeVarSubst_go @@ var "svs"
-        @@ (Rewriting.deannotateType @@ var "a")
-        @@ (Rewriting.deannotateType @@ var "b")) $
+        @@ (Strip.deannotateType @@ var "a")
+        @@ (Strip.deannotateType @@ var "b")) $
     cases _Type (var "ft")
       (Just $ -- Default: check if ct is a forall, and if so unwrap it
         cases _Type (var "ct")
           (Just (Maps.empty :: TTerm (M.Map Name Name))) [
           _Type_forall>>: lambda "cfa" $
             buildTypeVarSubst_go @@ var "svs" @@ var "ft"
-              @@ (Rewriting.deannotateType @@ Core.forallTypeBody (var "cfa"))]) [
+              @@ (Strip.deannotateType @@ Core.forallTypeBody (var "cfa"))]) [
       _Type_variable>>: lambda "fn" $
         cases _Type (var "ct")
           (Just (Maps.empty :: TTerm (M.Map Name Name))) [
@@ -1020,7 +1026,7 @@ buildTypeVarSubst_go = def "buildTypeVarSubst_go" $
         cases _Type (var "ct")
           (Just $ -- ct is not a forall, but ft is: unwrap ft and recurse
             buildTypeVarSubst_go @@ var "svs"
-              @@ (Rewriting.deannotateType @@ Core.forallTypeBody (var "ffa"))
+              @@ (Strip.deannotateType @@ Core.forallTypeBody (var "ffa"))
               @@ var "ct") [
           _Type_forall>>: lambda "cfa" $
             var "goSub" @@ Core.forallTypeBody (var "ffa") @@ Core.forallTypeBody (var "cfa")]]
@@ -1044,7 +1050,7 @@ classifyDataReference = def "classifyDataReference" $
 classifyDataTerm :: TTermDefinition (TypeScheme -> Term -> JavaHelpers.JavaSymbolClass)
 classifyDataTerm = def "classifyDataTerm" $
   lambda "ts" $ lambda "term" $
-    Logic.ifElse (Rewriting.isLambda @@ var "term")
+    Logic.ifElse (Dependencies.isLambda @@ var "term")
       -- Lambda terms
       ("n" <~ classifyDataTerm_countLambdaParams @@ var "term" $
         Logic.ifElse (Equality.gt (var "n") (int32 1))
@@ -1065,7 +1071,7 @@ classifyDataTerm = def "classifyDataTerm" $
 classifyDataTerm_countLambdaParams :: TTermDefinition (Term -> Int)
 classifyDataTerm_countLambdaParams = def "classifyDataTerm_countLambdaParams" $
   lambda "t" $
-    cases _Term (Rewriting.deannotateTerm @@ var "t")
+    cases _Term (Strip.deannotateTerm @@ var "t")
       (Just $ int32 0) [
       _Term_function>>: lambda "f" $
         cases _Function (var "f")
@@ -1080,7 +1086,7 @@ classifyDataTerm_countLambdaParams = def "classifyDataTerm_countLambdaParams" $
 classifyDataTerm_stripTypeLambdas :: TTermDefinition (Term -> Term)
 classifyDataTerm_stripTypeLambdas = def "classifyDataTerm_stripTypeLambdas" $
   lambda "t" $
-    cases _Term (Rewriting.deannotateTerm @@ var "t")
+    cases _Term (Strip.deannotateTerm @@ var "t")
       (Just $ var "t") [
       _Term_typeLambda>>: lambda "tl" $
         classifyDataTerm_stripTypeLambdas @@ (project _TypeLambda _TypeLambda_body @@ var "tl")]
@@ -1112,7 +1118,7 @@ cmpNotZeroExpr = def "cmpNotZeroExpr" $ lets [
 -- | Collect forall-bound type parameter names from a type
 collectForallParams :: TTermDefinition (Type -> [Name])
 collectForallParams = def "collectForallParams" $
-  lambda "t" $ cases _Type (Rewriting.deannotateType @@ var "t")
+  lambda "t" $ cases _Type (Strip.deannotateType @@ var "t")
     (Just $ list ([] :: [TTerm Name])) [
     _Type_forall>>: lambda "fa" $
       Lists.cons (Core.forallTypeParameter (var "fa"))
@@ -1123,7 +1129,7 @@ collectForallParams = def "collectForallParams" $
 collectLambdaDomains :: TTermDefinition (Term -> ([Type], Term))
 collectLambdaDomains = def "collectLambdaDomains" $
   lambda "t" $
-    cases _Term (Rewriting.deannotateTerm @@ var "t")
+    cases _Term (Strip.deannotateTerm @@ var "t")
       (Just $ pair (list ([] :: [TTerm Type])) (var "t")) [
       _Term_function>>: lambda "f" $
         cases _Function (var "f")
@@ -1140,8 +1146,8 @@ collectLambdaDomains = def "collectLambdaDomains" $
 collectTypeApps :: TTermDefinition (Term -> [Type] -> (Term, [Type]))
 collectTypeApps = def "collectTypeApps" $
   lambda "t" $ lambda "acc" $
-    cases _Term (Rewriting.deannotateTerm @@ var "t")
-      (Just $ pair (Rewriting.deannotateTerm @@ var "t") (var "acc")) [
+    cases _Term (Strip.deannotateTerm @@ var "t")
+      (Just $ pair (Strip.deannotateTerm @@ var "t") (var "acc")) [
       _Term_typeApplication>>: lambda "ta" $
         collectTypeApps
           @@ Core.typeApplicationTermBody (var "ta")
@@ -1151,7 +1157,7 @@ collectTypeApps = def "collectTypeApps" $
 collectTypeApps0 :: TTermDefinition (Term -> [Type] -> (Term, [Type]))
 collectTypeApps0 = def "collectTypeApps0" $
   lambda "t" $ lambda "acc" $
-    cases _Term (Rewriting.deannotateTerm @@ var "t")
+    cases _Term (Strip.deannotateTerm @@ var "t")
       (Just $ pair (var "t") (var "acc")) [
       _Term_typeApplication>>: lambda "ta" $
         collectTypeApps0
@@ -1161,7 +1167,7 @@ collectTypeApps0 = def "collectTypeApps0" $
 -- | Collect all type variable names from a type
 collectTypeVars :: TTermDefinition (Type -> S.Set Name)
 collectTypeVars = def "collectTypeVars" $
-  lambda "typ" $ collectTypeVars_go @@ (Rewriting.deannotateType @@ var "typ")
+  lambda "typ" $ collectTypeVars_go @@ (Strip.deannotateType @@ var "typ")
 
 -- | Helper for collectTypeVars
 collectTypeVars_go :: TTermDefinition (Type -> S.Set Name)
@@ -1172,32 +1178,32 @@ collectTypeVars_go = def "collectTypeVars_go" $
       Sets.singleton (var "name"),
     _Type_function>>: lambda "ft" $
       Sets.union
-        (collectTypeVars_go @@ (Rewriting.deannotateType @@ Core.functionTypeDomain (var "ft")))
-        (collectTypeVars_go @@ (Rewriting.deannotateType @@ Core.functionTypeCodomain (var "ft"))),
+        (collectTypeVars_go @@ (Strip.deannotateType @@ Core.functionTypeDomain (var "ft")))
+        (collectTypeVars_go @@ (Strip.deannotateType @@ Core.functionTypeCodomain (var "ft"))),
     _Type_application>>: lambda "at" $
       Sets.union
-        (collectTypeVars_go @@ (Rewriting.deannotateType @@ Core.applicationTypeFunction (var "at")))
-        (collectTypeVars_go @@ (Rewriting.deannotateType @@ (project _ApplicationType _ApplicationType_argument @@ var "at"))),
+        (collectTypeVars_go @@ (Strip.deannotateType @@ Core.applicationTypeFunction (var "at")))
+        (collectTypeVars_go @@ (Strip.deannotateType @@ (project _ApplicationType _ApplicationType_argument @@ var "at"))),
     _Type_list>>: lambda "inner" $
-      collectTypeVars_go @@ (Rewriting.deannotateType @@ var "inner"),
+      collectTypeVars_go @@ (Strip.deannotateType @@ var "inner"),
     _Type_set>>: lambda "inner" $
-      collectTypeVars_go @@ (Rewriting.deannotateType @@ var "inner"),
+      collectTypeVars_go @@ (Strip.deannotateType @@ var "inner"),
     _Type_maybe>>: lambda "inner" $
-      collectTypeVars_go @@ (Rewriting.deannotateType @@ var "inner"),
+      collectTypeVars_go @@ (Strip.deannotateType @@ var "inner"),
     _Type_map>>: lambda "mt" $
       Sets.union
-        (collectTypeVars_go @@ (Rewriting.deannotateType @@ Core.mapTypeKeys (var "mt")))
-        (collectTypeVars_go @@ (Rewriting.deannotateType @@ Core.mapTypeValues (var "mt"))),
+        (collectTypeVars_go @@ (Strip.deannotateType @@ Core.mapTypeKeys (var "mt")))
+        (collectTypeVars_go @@ (Strip.deannotateType @@ Core.mapTypeValues (var "mt"))),
     _Type_pair>>: lambda "pt" $
       Sets.union
-        (collectTypeVars_go @@ (Rewriting.deannotateType @@ Core.pairTypeFirst (var "pt")))
-        (collectTypeVars_go @@ (Rewriting.deannotateType @@ Core.pairTypeSecond (var "pt"))),
+        (collectTypeVars_go @@ (Strip.deannotateType @@ Core.pairTypeFirst (var "pt")))
+        (collectTypeVars_go @@ (Strip.deannotateType @@ Core.pairTypeSecond (var "pt"))),
     _Type_either>>: lambda "et" $
       Sets.union
-        (collectTypeVars_go @@ (Rewriting.deannotateType @@ Core.eitherTypeLeft (var "et")))
-        (collectTypeVars_go @@ (Rewriting.deannotateType @@ Core.eitherTypeRight (var "et"))),
+        (collectTypeVars_go @@ (Strip.deannotateType @@ Core.eitherTypeLeft (var "et")))
+        (collectTypeVars_go @@ (Strip.deannotateType @@ Core.eitherTypeRight (var "et"))),
     _Type_forall>>: lambda "ft" $
-      collectTypeVars_go @@ (Rewriting.deannotateType @@ Core.forallTypeBody (var "ft"))]
+      collectTypeVars_go @@ (Strip.deannotateType @@ Core.forallTypeBody (var "ft"))]
 
 -- | Shared helper: ((Comparable) this.field).compareTo(otherVar.field)
 comparableCompareExpr :: TTermDefinition (String -> String -> Java.Expression)
@@ -1360,7 +1366,7 @@ correctCastType :: TTermDefinition (Term -> [Type] -> Type -> Context -> Graph -
 correctCastType = def "correctCastType" $
   lambda "innerBody" $ lambda "typeArgs" $ lambda "fallback" $
     "cx" ~> "g" ~>
-    cases _Term (Rewriting.deannotateTerm @@ var "innerBody")
+    cases _Term (Strip.deannotateTerm @@ var "innerBody")
       (Just $ right (var "fallback")) [
       _Term_pair>>: lambda "_p" $
         Logic.ifElse (Equality.equal (Lists.length (var "typeArgs")) (int32 2))
@@ -1431,8 +1437,8 @@ correctTypeAppsWithArgs = def "correctTypeAppsWithArgs" $
         (lambda "m" $ Maybes.cases (var "m") (list ([] :: [TTerm Type])) (lambda "x" $ Lists.pure (var "x"))) $
       "irDoms" <~ Lists.map (lambda "d" $ applySubstSimple @@ var "irSubst" @@ var "d") (var "schemeDoms") $
       "domsMatch" <~ Lists.null (Lists.filter
-        (lambda "p" $ Logic.not (typesMatch @@ (Rewriting.deannotateType @@ Pairs.first (var "p"))
-                                              @@ (Rewriting.deannotateType @@ Pairs.second (var "p"))))
+        (lambda "p" $ Logic.not (typesMatch @@ (Strip.deannotateType @@ Pairs.first (var "p"))
+                                              @@ (Strip.deannotateType @@ Pairs.second (var "p"))))
         (Lists.zip (var "irDoms") (var "argTypes"))) $
       Logic.ifElse (var "domsMatch")
         (right (var "fallbackTypeApps"))
@@ -1443,7 +1449,7 @@ correctTypeAppsWithArgs = def "correctTypeAppsWithArgs" $
 countFunctionParams :: TTermDefinition (Type -> Int)
 countFunctionParams = def "countFunctionParams" $
   lambda "t" $
-    cases _Type (Rewriting.deannotateType @@ var "t")
+    cases _Type (Strip.deannotateType @@ var "t")
       (Just $ int32 0) [
       _Type_function>>: lambda "ft" $
         Math.add (int32 1) (countFunctionParams @@ Core.functionTypeCodomain (var "ft"))]
@@ -1503,9 +1509,9 @@ declarationForUnionType = def "declarationForUnionType" $
     "variantClasses" <<~ (Eithers.mapList (lambda "ft" $
       "fname" <~ (project _FieldType _FieldType_name @@ var "ft") $
       "ftype" <~ (project _FieldType _FieldType_type @@ var "ft") $
-      "rfields" <~ Logic.ifElse (Schemas.isUnitType @@ (Rewriting.deannotateType @@ var "ftype"))
+      "rfields" <~ Logic.ifElse (Predicates.isUnitType @@ (Strip.deannotateType @@ var "ftype"))
         (list ([] :: [TTerm FieldType]))
-        (list [Core.fieldType (wrap _Name (string "value")) (Rewriting.deannotateType @@ var "ftype")]) $
+        (list [Core.fieldType (wrap _Name (string "value")) (Strip.deannotateType @@ var "ftype")]) $
       "varName" <~ (JavaUtilsSource.variantClassName @@ false @@ var "elName" @@ var "fname") $
       "innerDecl" <<~ (declarationForRecordType' @@ true @@ var "isSer" @@ var "aliases" @@ (list ([] :: [TTerm Java.TypeParameter]))
         @@ var "varName" @@ (Logic.ifElse (var "isSer") (just (var "elName")) nothing) @@ var "rfields" @@ var "cx" @@ var "g") $
@@ -1607,7 +1613,7 @@ declarationForUnionType = def "declarationForUnionType" $
 decodeTypeFromTerm :: TTermDefinition (Term -> Maybe Type)
 decodeTypeFromTerm = def "decodeTypeFromTerm" $
   lambda "term" $
-    cases _Term (Rewriting.deannotateTerm @@ var "term")
+    cases _Term (Strip.deannotateTerm @@ var "term")
       (Just nothing) [
       _Term_union>>: lambda "inj" $
         Logic.ifElse
@@ -1704,7 +1710,7 @@ dedupBindings = def "dedupBindings" $
           "rest2" <~ Lists.map
             (lambda "b2" $ Core.binding
               (Core.bindingName (var "b2"))
-              (Rewriting.substituteVariables @@ var "subst" @@ Core.bindingTerm (var "b2"))
+              (Variables.substituteVariables @@ var "subst" @@ Core.bindingTerm (var "b2"))
               (Core.bindingType (var "b2")))
             (var "rest") $
           Lists.cons
@@ -1724,7 +1730,7 @@ detectAccumulatorUnification = def "detectAccumulatorUnification" $
     "directPairs" <~ Lists.bind (var "doms") (lambda "d" $ extractDirectReturn @@ var "tparamSet" @@ var "d") $
     "groupedDirect" <~ (groupPairsByFirst @@ var "directPairs") $
     "directInputVars" <~ Sets.fromList (Lists.map (lambda "p" $ Pairs.first (var "p")) (var "directPairs")) $
-    "codVar" <~ (cases _Type (Rewriting.deannotateType @@ var "cod")
+    "codVar" <~ (cases _Type (Strip.deannotateType @@ var "cod")
       (Just nothing) [
       _Type_variable>>: lambda "v" $ just (var "v")]) $
     "directRefSubst" <~ (directRefSubstitution @@ var "directInputVars" @@ var "codVar" @@ var "groupedDirect") $
@@ -1800,7 +1806,7 @@ domTypeArgs :: TTermDefinition (JavaHelpers.Aliases -> Type -> Context -> Graph 
 domTypeArgs = def "domTypeArgs" $
   lambda "aliases" $ lambda "d" $
     "cx" ~> "g" ~>
-    "args" <~ (extractTypeApplicationArgs @@ (Rewriting.deannotateType @@ var "d")) $
+    "args" <~ (extractTypeApplicationArgs @@ (Strip.deannotateType @@ var "d")) $
     Logic.ifElse (Logic.not (Lists.null (var "args")))
       (Eithers.mapList (lambda "t" $
         "jt" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "t" @@ var "cx" @@ var "g") $
@@ -1878,7 +1884,7 @@ encodeApplication = def "encodeApplication" $
       (lambda "t" $ right (var "t"))) $
     "arity" <~ (Arity.typeArity @@ var "funTyp") $
     -- Determine callee name for type annotation correction
-    "deannotatedFun" <~ (Rewriting.deannotateTerm @@ var "fun") $
+    "deannotatedFun" <~ (Strip.deannotateTerm @@ var "fun") $
     "calleeName" <~ (cases _Term (var "deannotatedFun")
       (Just nothing) [
       _Term_function>>: lambda "f" $
@@ -1953,7 +1959,7 @@ encodeApplication_fallback = def "encodeApplication_fallback" $
     "t" <<~ (Maybes.cases (var "mt")
       (CoderUtils.typeOfTerm @@ var "cx" @@ var "g" @@ var "lhs")
       (lambda "typ" $ right (var "typ"))) $
-    cases _Type (Rewriting.deannotateTypeParameters @@ (Rewriting.deannotateType @@ var "t"))
+    cases _Type (Strip.deannotateTypeParameters @@ (Strip.deannotateType @@ var "t"))
       (Just $
         -- Non-function type: encode as generic .apply() call
         "jfun" <<~ (encodeTerm @@ var "env" @@ var "lhs" @@ var "cx" @@ var "g") $
@@ -1962,7 +1968,7 @@ encodeApplication_fallback = def "encodeApplication_fallback" $
       _Type_function>>: lambda "ft" $
         "dom" <~ Core.functionTypeDomain (var "ft") $
         "cod" <~ Core.functionTypeCodomain (var "ft") $
-        cases _Term (Rewriting.deannotateTerm @@ var "lhs")
+        cases _Term (Strip.deannotateTerm @@ var "lhs")
           (Just $
             -- defaultExpression: apply using .apply()
             "jfun" <<~ (encodeTerm @@ var "env" @@ var "lhs" @@ var "cx" @@ var "g") $
@@ -2003,7 +2009,7 @@ encodeDefinitions = def "encodeDefinitions" $
       JavaHelpers._JavaEnvironment_aliases>>: var "aliases",
       JavaHelpers._JavaEnvironment_graph>>: var "g"]) $
     "pkg" <~ (JavaUtilsSource.javaPackageDeclaration @@ (Module.moduleNamespace (var "mod"))) $
-    "partitioned" <~ (Schemas.partitionDefinitions @@ var "defs") $
+    "partitioned" <~ (Environment.partitionDefinitions @@ var "defs") $
     "typeDefs" <~ Pairs.first (var "partitioned") $
     "termDefs" <~ Pairs.second (var "partitioned") $
     -- Filter out typedefs (non-record/union/wrap types)
@@ -2117,7 +2123,7 @@ encodeFunction = def "encodeFunction" $
         (withLambda @@ var "env" @@ var "lam" @@ (lambda "env2" $
           "lambdaVar" <~ Core.lambdaParameter (var "lam") $
           "body" <~ Core.lambdaBody (var "lam") $
-          cases _Term (Rewriting.deannotateTerm @@ var "body")
+          cases _Term (Strip.deannotateTerm @@ var "body")
             (Just $
               -- Body is not a lambda: analyze and encode normally
               "fs" <<~ (analyzeJavaFunction @@ var "env2" @@ var "body" @@ var "cx" @@ var "g") $
@@ -2160,7 +2166,7 @@ encodeFunction = def "encodeFunction" $
                     _FunctionType_codomain>>: var "cod"])) @@ var "lam1" @@ var "cx" @@ var "g") [
 
                 _Function_lambda>>: lambda "innerLam" $
-                  cases _Type (Rewriting.deannotateType @@ var "cod")
+                  cases _Type (Strip.deannotateType @@ var "cod")
                     (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "expected function type for lambda body, but got: ")
                       (ShowCore.type_ @@ var "cod")) (var "cx")) [
                     _Type_function>>: lambda "ft" $
@@ -2411,7 +2417,7 @@ encodeNullaryConstant_typeArgsFromReturnType :: TTermDefinition (JavaHelpers.Ali
 encodeNullaryConstant_typeArgsFromReturnType = def "encodeNullaryConstant_typeArgsFromReturnType" $
   lambda "aliases" $ lambda "t" $
     "cx" ~> "g" ~>
-    cases _Type (Rewriting.deannotateType @@ var "t")
+    cases _Type (Strip.deannotateType @@ var "t")
       (Just $ right (list ([] :: [TTerm Java.TypeArgument]))) [
       _Type_set>>: "st" ~>
         "jst" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "st" @@ var "cx" @@ var "g") $
@@ -2454,7 +2460,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
       ("x" ~> var "x")
       (project _TermDefinition _TermDefinition_type @@ var "tdef") $
     -- Unshadow variables
-    ("term" <~ (Rewriting.unshadowVariables @@ var "term0") $
+    ("term" <~ (Variables.unshadowVariables @@ var "term0") $
       "fs" <<~ (analyzeJavaFunction @@ var "env" @@ var "term" @@ var "cx" @@ var "g") $
       -- Get type parameters from scheme
       "schemeVars" <~ Lists.filter (lambda "v" $ isSimpleName @@ var "v") (Core.typeSchemeVariables (var "ts")) $
@@ -2633,7 +2639,7 @@ encodeTermInternal = def "encodeTermInternal" $
         "combinedAnns" <~ Lists.foldl (lambda "acc" $ lambda "m" $ Maps.union (var "acc") (var "m")) Maps.empty (var "anns") $
         "mEitherType" <<~ (getTypeE (var "cx") (var "g") (var "combinedAnns")) $
         "branchTypes" <~ (Maybes.bind (var "mEitherType") (lambda "etyp" $
-          cases _Type (Rewriting.deannotateType @@ var "etyp")
+          cases _Type (Strip.deannotateType @@ var "etyp")
             (Just nothing) [
             _Type_either>>: lambda "et2" $
               just (pair (Core.eitherTypeLeft (var "et2")) (Core.eitherTypeRight (var "et2")))])) $
@@ -2675,7 +2681,7 @@ encodeTermInternal = def "encodeTermInternal" $
             (CoderUtils.typeOfTerm @@ var "cx" @@ var "g" @@ var "term")
             (lambda "inferredType" $ right (var "inferredType")))
           (lambda "t" $ right (var "t"))) $
-        cases _Type (Rewriting.deannotateType @@ var "typ")
+        cases _Type (Strip.deannotateType @@ var "typ")
           (Just $ encodeNullaryConstant @@ var "env" @@ var "typ" @@ var "f" @@ var "cx" @@ var "g") [
           _Type_function>>: lambda "ft" $
             encodeFunction @@ var "env" @@ (Core.functionTypeDomain (var "ft")) @@ (Core.functionTypeCodomain (var "ft")) @@ var "f" @@ var "cx" @@ var "g"]),
@@ -2817,8 +2823,8 @@ encodeTermInternal = def "encodeTermInternal" $
         -- This allows us to annotate field terms with their expected types, preventing
         -- type variable concretization in polymorphic lambdas (e.g. Coder encode/decode fields).
         "mRecordType" <~ Eithers.either_ (constant nothing) ("t" ~> just (var "t"))
-          (Schemas.requireType @@ var "cx" @@ var "g" @@ var "recName") $
-        "strippedRecTyp" <~ Maybes.map (lambda "recTyp" $ stripForalls @@ (Rewriting.deannotateType @@ var "recTyp"))
+          (Resolution.requireType @@ var "cx" @@ var "g" @@ var "recName") $
+        "strippedRecTyp" <~ Maybes.map (lambda "recTyp" $ stripForalls @@ (Strip.deannotateType @@ var "recTyp"))
           (var "mRecordType") $
         "mFieldTypeMap" <~ (Maybes.bind (var "strippedRecTyp") (lambda "bodyTyp" $
           cases _Type (var "bodyTyp")
@@ -2833,8 +2839,8 @@ encodeTermInternal = def "encodeTermInternal" $
         "mTypeSubst" <~ (Maybes.bind (var "mAnnotType") (lambda "annTyp" $
           Maybes.bind (var "mRecordType") (lambda "recTyp" $
             -- Extract type args from annotation and type params from definition
-            "args" <~ (extractTypeApplicationArgs @@ (Rewriting.deannotateType @@ var "annTyp")) $
-            "params" <~ (collectForallParams @@ (Rewriting.deannotateType @@ var "recTyp")) $
+            "args" <~ (extractTypeApplicationArgs @@ (Strip.deannotateType @@ var "annTyp")) $
+            "params" <~ (collectForallParams @@ (Strip.deannotateType @@ var "recTyp")) $
             Logic.ifElse (Logic.or (Lists.null (var "args")) (Logic.not (Equality.equal (Lists.length (var "args")) (Lists.length (var "params")))))
               nothing
               (just (Maps.fromList (Lists.zip (var "params") (var "args"))))))) $
@@ -2866,7 +2872,7 @@ encodeTermInternal = def "encodeTermInternal" $
            Maybes.cases (var "mtyp")
              (right nothing)
              (lambda "annTyp" $
-               "typeArgs" <~ (extractTypeApplicationArgs @@ (Rewriting.deannotateType @@ var "annTyp")) $
+               "typeArgs" <~ (extractTypeApplicationArgs @@ (Strip.deannotateType @@ var "annTyp")) $
                Logic.ifElse (Lists.null (var "typeArgs"))
                  (right nothing)
                  ("jTypeArgs" <<~ (Eithers.mapList (lambda "t" $
@@ -2924,7 +2930,7 @@ encodeTermInternal = def "encodeTermInternal" $
         "typeId" <~ JavaDsl.unIdentifier (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ var "injTypeName") $
         "consId" <~ JavaDsl.identifier (Strings.cat (list [var "typeId", string ".", JavaUtilsSource.sanitizeJavaName @@ (Formatting.capitalize @@ (unwrap _Name @@ var "injFieldName"))])) $
         "fieldIsUnit" <<~ (isFieldUnitType @@ var "injTypeName" @@ var "injFieldName" @@ var "cx" @@ var "g") $
-        "args" <<~ (Logic.ifElse (Logic.or (Schemas.isUnitTerm @@ (Rewriting.deannotateTerm @@ var "injFieldTerm")) (var "fieldIsUnit"))
+        "args" <<~ (Logic.ifElse (Logic.or (Predicates.isUnitTerm @@ (Strip.deannotateTerm @@ var "injFieldTerm")) (var "fieldIsUnit"))
           (right (list ([] :: [TTerm Java.Expression])))
           ("ex" <<~ (var "encode" @@ var "injFieldTerm") $
             right (list [var "ex"]))) $
@@ -3056,12 +3062,12 @@ encodeTermTCO = def "encodeTermTCO" $
           project JavaHelpers._Aliases JavaHelpers._Aliases_thunkedVars @@ var "aliases0"],
       JavaHelpers._JavaEnvironment_graph>>:
         project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_graph @@ var "env0"]) $
-    "stripped" <~ (Rewriting.deannotateAndDetypeTerm @@ var "term") $
+    "stripped" <~ (Strip.deannotateAndDetypeTerm @@ var "term") $
     -- Check if this term is a direct self-tail-call: funcName(args...)
     "gathered" <~ (CoderUtils.gatherApplications @@ var "stripped") $
     "gatherArgs" <~ (Pairs.first $ var "gathered") $
     "gatherFun" <~ (Pairs.second $ var "gathered") $
-    "strippedFun" <~ (Rewriting.deannotateAndDetypeTerm @@ var "gatherFun") $
+    "strippedFun" <~ (Strip.deannotateAndDetypeTerm @@ var "gatherFun") $
     -- Check for self-call pattern: Variable(funcName)
     "isSelfCall" <~ (cases _Term (var "strippedFun")
       (Just false) [
@@ -3071,7 +3077,7 @@ encodeTermTCO = def "encodeTermTCO" $
       -- TAIL CALL: emit param reassignment + continue
       (-- Filter out self-assignments (e.g. x = x) so params remain effectively final for lambdas
         "changePairs" <~ Lists.filter ("pair" ~>
-          Logic.not (cases _Term (Rewriting.deannotateAndDetypeTerm @@ Pairs.second (var "pair"))
+          Logic.not (cases _Term (Strip.deannotateAndDetypeTerm @@ Pairs.second (var "pair"))
             (Just false) [
             _Term_variable>>: "n" ~> Equality.equal (var "n") (Pairs.first (var "pair"))]))
           (Lists.zip (var "paramNames") (var "gatherArgs")) $
@@ -3103,7 +3109,7 @@ encodeTermTCO = def "encodeTermTCO" $
         Logic.ifElse (Equality.equal (Lists.length $ var "args2") (int32 1))
           -- Single argument: try to match as case statement
           ("arg" <~ (Lists.head $ var "args2") $
-            cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "body2") (Just $
+            cases _Term (Strip.deannotateAndDetypeTerm @@ var "body2") (Just $
               -- Default: not a case statement, encode as return
               "expr" <<~ (encodeTerm @@ var "env" @@ var "term" @@ var "cx" @@ var "g") $
               right $ list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "expr"))]) [
@@ -3121,7 +3127,7 @@ encodeTermTCO = def "encodeTermTCO" $
                         "tname" <~ (Core.caseStatementTypeName $ var "cs") $
                         "dflt" <~ (Core.caseStatementDefault $ var "cs") $
                         "cases_" <~ (Core.caseStatementCases $ var "cs") $
-                        "domArgs" <<~ (domTypeArgs @@ var "aliases" @@ (Schemas.nominalApplication @@ var "tname" @@ list ([] :: [TTerm Type])) @@ var "cx" @@ var "g") $
+                        "domArgs" <<~ (domTypeArgs @@ var "aliases" @@ (Resolution.nominalApplication @@ var "tname" @@ list ([] :: [TTerm Type])) @@ var "cx" @@ var "g") $
                         -- Encode the argument (the value being matched) and cache in a local variable
                         -- so that complex expressions (e.g. deannotateType(t_tco)) are computed once,
                         -- not duplicated across every instanceof check and cast.
@@ -3140,7 +3146,7 @@ encodeTermTCO = def "encodeTermTCO" $
                           "variantRefType" <~ (JavaUtilsSource.nameToJavaReferenceType @@ var "aliases" @@ true @@ var "domArgs"
                             @@ var "tname" @@ just (Formatting.capitalize @@ (Core.unName (var "fieldName")))) $
                           -- Extract the lambda body from this case branch
-                          cases _Term (Rewriting.deannotateTerm @@ Core.fieldTerm (var "field"))
+                          cases _Term (Strip.deannotateTerm @@ Core.fieldTerm (var "field"))
                             (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ string "TCO: case branch is not a lambda") (var "cx")) [
                             _Term_function>>: "f2" ~>
                               cases _Function (var "f2")
@@ -3218,7 +3224,7 @@ encodeType = def "encodeType" $
     "cx" ~> "g" ~>
     "inScopeTypeParams" <~ project JavaHelpers._Aliases JavaHelpers._Aliases_inScopeTypeParams @@ var "aliases" $
     "typeVarSubst" <~ project JavaHelpers._Aliases JavaHelpers._Aliases_typeVarSubst @@ var "aliases" $
-    cases _Type (Rewriting.deannotateType @@ var "t")
+    cases _Type (Strip.deannotateType @@ var "t")
       (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "can't encode unsupported type in Java: ") (ShowCore.type_ @@ var "t")) (var "cx")) [
       _Type_application>>: lambda "at" $
         "jlhs" <<~ (encodeType @@ var "aliases" @@ var "boundVars" @@ (Core.applicationTypeFunction (var "at")) @@ var "cx" @@ var "g") $
@@ -3366,7 +3372,7 @@ encodeType_resolveIfTypedef = def "encodeType_resolveIfTypedef" $
             (lambda "ts" $
               Logic.ifElse (Logic.not (Lists.null (Core.typeSchemeVariables (var "ts"))))
                 (right nothing)
-                (cases _Type (Rewriting.deannotateType @@ Core.typeSchemeType (var "ts"))
+                (cases _Type (Strip.deannotateType @@ Core.typeSchemeType (var "ts"))
                   (Just $ right (just (Core.typeSchemeType (var "ts")))) [
                   _Type_record>>: lambda "_" $ right nothing,
                   _Type_union>>: lambda "_" $ right nothing,
@@ -3561,21 +3567,21 @@ extractDirectReturn = def "extractDirectReturn" $
 extractDirectReturn_go :: TTermDefinition (S.Set Name -> Type -> [(Name, Name)])
 extractDirectReturn_go = def "extractDirectReturn_go" $
   lambda "tparamSet" $ lambda "t" $
-    cases _Type (Rewriting.deannotateType @@ var "t")
+    cases _Type (Strip.deannotateType @@ var "t")
       (Just $ list ([] :: [TTerm (Name, Name)])) [
       _Type_function>>: lambda "ft" $
-        "dom" <~ (Rewriting.deannotateType @@ Core.functionTypeDomain (var "ft")) $
+        "dom" <~ (Strip.deannotateType @@ Core.functionTypeDomain (var "ft")) $
         "cod" <~ Core.functionTypeCodomain (var "ft") $
         cases _Type (var "dom")
           (Just $ extractDirectReturn_go @@ var "tparamSet" @@ var "cod") [
           _Type_variable>>: lambda "inVar" $
             Logic.ifElse
               (Sets.member (var "inVar") (var "tparamSet"))
-              (cases _Type (Rewriting.deannotateType @@ var "cod")
+              (cases _Type (Strip.deannotateType @@ var "cod")
                 (Just $ list ([] :: [TTerm (Name, Name)])) [
                 _Type_function>>: lambda "ft2" $
-                  "midArg" <~ (Rewriting.deannotateType @@ Core.functionTypeDomain (var "ft2")) $
-                  "retPart" <~ (Rewriting.deannotateType @@ Core.functionTypeCodomain (var "ft2")) $
+                  "midArg" <~ (Strip.deannotateType @@ Core.functionTypeDomain (var "ft2")) $
+                  "retPart" <~ (Strip.deannotateType @@ Core.functionTypeCodomain (var "ft2")) $
                   cases _Type (var "midArg")
                     (Just $
                       cases _Type (var "retPart")
@@ -3605,17 +3611,17 @@ extractDirectReturn_go = def "extractDirectReturn_go" $
 extractInOutPair :: TTermDefinition (Type -> [(Name, Name)])
 extractInOutPair = def "extractInOutPair" $
   lambda "t" $
-    cases _Type (Rewriting.deannotateType @@ var "t")
+    cases _Type (Strip.deannotateType @@ var "t")
       (Just $ list ([] :: [TTerm (Name, Name)])) [
       _Type_function>>: lambda "ft" $
-        cases _Type (Rewriting.deannotateType @@ Core.functionTypeDomain (var "ft"))
+        cases _Type (Strip.deannotateType @@ Core.functionTypeDomain (var "ft"))
           (Just $ list ([] :: [TTerm (Name, Name)])) [
           _Type_variable>>: lambda "inVar" $
             "retType" <~ (unwrapReturnType @@ Core.functionTypeCodomain (var "ft")) $
-            cases _Type (Rewriting.deannotateType @@ var "retType")
+            cases _Type (Strip.deannotateType @@ var "retType")
               (Just $ list ([] :: [TTerm (Name, Name)])) [
               _Type_pair>>: lambda "pt" $
-                cases _Type (Rewriting.deannotateType @@ Core.pairTypeFirst (var "pt"))
+                cases _Type (Strip.deannotateType @@ Core.pairTypeFirst (var "pt"))
                   (Just $ list ([] :: [TTerm (Name, Name)])) [
                   _Type_variable>>: lambda "outVar" $
                     list [pair (var "inVar") (var "outVar")]]]]]
@@ -3719,10 +3725,10 @@ findMatchingLambdaVar = def "findMatchingLambdaVar" $
 findPairFirst :: TTermDefinition (Type -> Maybe Name)
 findPairFirst = def "findPairFirst" $
   lambda "t" $
-    cases _Type (Rewriting.deannotateType @@ var "t")
+    cases _Type (Strip.deannotateType @@ var "t")
       (Just nothing) [
       _Type_pair>>: lambda "pt" $
-        cases _Type (Rewriting.deannotateType @@ Core.pairTypeFirst (var "pt"))
+        cases _Type (Strip.deannotateType @@ Core.pairTypeFirst (var "pt"))
           (Just nothing) [
           _Type_variable>>: lambda "v" $ just (var "v")]]
 
@@ -3749,7 +3755,7 @@ first20Primes = def "first20Primes" $
 flattenApps :: TTermDefinition (Term -> [Term] -> ([Term], Term))
 flattenApps = def "flattenApps" $
   lambda "t" $ lambda "acc" $
-    cases _Term (Rewriting.deannotateTerm @@ var "t")
+    cases _Term (Strip.deannotateTerm @@ var "t")
       (Just $ pair (var "acc") (var "t")) [
       _Term_application>>: lambda "app" $
         flattenApps
@@ -3761,7 +3767,7 @@ flattenBindings :: TTermDefinition ([Binding] -> [Binding])
 flattenBindings = def "flattenBindings" $
   lambda "bindings" $
     Lists.bind (var "bindings") (lambda "b" $
-      cases _Term (Rewriting.deannotateTerm @@ Core.bindingTerm (var "b"))
+      cases _Term (Strip.deannotateTerm @@ Core.bindingTerm (var "b"))
         (Just $ list [var "b"]) [
         _Term_let>>: lambda "lt" $
           Lists.concat2
@@ -4004,7 +4010,7 @@ interfaceTypes = def "interfaceTypes" $
 -- | Check whether a Hydra type maps to BigDecimal or BigInteger in Java
 isBigNumericType :: TTermDefinition (Type -> Bool)
 isBigNumericType = def "isBigNumericType" $
-  lambda "typ" $ cases _Type (Rewriting.deannotateType @@ var "typ")
+  lambda "typ" $ cases _Type (Strip.deannotateType @@ var "typ")
     (Just $ boolean False) [
     _Type_literal>>: lambda "lt" $
       cases _LiteralType (var "lt") (Just $ boolean False) [
@@ -4018,7 +4024,7 @@ isBigNumericType = def "isBigNumericType" $
 -- | Check whether a Hydra type is the binary literal type (maps to byte[])
 isBinaryType :: TTermDefinition (Type -> Bool)
 isBinaryType = def "isBinaryType" $
-  lambda "typ" $ cases _Type (Rewriting.deannotateType @@ var "typ")
+  lambda "typ" $ cases _Type (Strip.deannotateType @@ var "typ")
     (Just $ boolean False) [
     _Type_literal>>: lambda "lt" $
       cases _LiteralType (var "lt") (Just $ boolean False) [
@@ -4033,14 +4039,14 @@ isFieldUnitType = def "isFieldUnitType" $
     Maybes.cases (Maps.lookup (var "typeName") (var "schemaTypes"))
       (right false)
       (lambda "ts" $
-        cases _Type (Rewriting.deannotateType @@ Core.typeSchemeType (var "ts"))
+        cases _Type (Strip.deannotateType @@ Core.typeSchemeType (var "ts"))
           (Just $ right false) [
           _Type_union>>: lambda "rt" $
             right (Maybes.cases
               (Lists.find (lambda "ft" $ Equality.equal (Core.fieldTypeName (var "ft")) (var "fieldName"))
                 (var "rt"))
               false
-              (lambda "ft" $ Schemas.isUnitType @@ (Rewriting.deannotateType @@ Core.fieldTypeType (var "ft"))))])
+              (lambda "ft" $ Predicates.isUnitType @@ (Strip.deannotateType @@ Core.fieldTypeType (var "ft"))))])
 
 -- | Check if a name (possibly qualified) is lambda-bound
 isLambdaBoundIn :: TTermDefinition (Name -> S.Set Name -> Bool)
@@ -4082,7 +4088,7 @@ isLocalVariable = def "isLocalVariable" $
 -- | Check whether a Hydra type maps to a Java type that does not implement Comparable
 isNonComparableType :: TTermDefinition (Type -> Bool)
 isNonComparableType = def "isNonComparableType" $
-  lambda "typ" $ cases _Type (Rewriting.deannotateType @@ var "typ")
+  lambda "typ" $ cases _Type (Strip.deannotateType @@ var "typ")
     (Just $ boolean False) [
     _Type_either>>: constant $ boolean True,
     _Type_function>>: constant $ boolean True,
@@ -4102,10 +4108,10 @@ isRecursiveVariable = def "isRecursiveVariable" $
 
 -- | Check whether a type is "serializable" (record, union, wrap, or forall wrapping a serializable type).
 -- These are the types that get promoted to Java class declarations.
--- Delegates to the shared isNominalType in Schemas.
+-- Delegates to the shared isNominalType in Predicates.
 isSerializableJavaType :: TTermDefinition (Type -> Bool)
 isSerializableJavaType = def "isSerializableJavaType" $
-  lambda "typ" $ Schemas.isNominalType @@ var "typ"
+  lambda "typ" $ Predicates.isNominalType @@ var "typ"
 
 -- | Check if a Name is simple (unqualified, no dots).
 isSimpleName :: TTermDefinition (Name -> Bool)
@@ -4189,7 +4195,7 @@ javaTypeArgumentsForNamedType :: TTermDefinition (Name -> Context -> Graph -> Ei
 javaTypeArgumentsForNamedType = def "javaTypeArgumentsForNamedType" $
   lambda "tname" $
     "cx" ~> "g" ~>
-    "typ" <<~ (Schemas.requireType @@ var "cx" @@ var "g" @@ var "tname") $
+    "typ" <<~ (Resolution.requireType @@ var "cx" @@ var "g" @@ var "tname") $
     right $ Lists.map (lambda "tp_" $ JavaUtilsSource.typeParameterToTypeArgument @@ var "tp_")
       (javaTypeParametersForType @@ var "typ")
 
@@ -4207,7 +4213,7 @@ javaTypeParametersForType = def "javaTypeParametersForType" $
       JavaUtilsSource.javaTypeParameter @@ (Formatting.capitalize @@ (Core.unName $ var "name")),
     "boundVars">: javaTypeParametersForType_bvars @@ var "typ",
     "freeVars">: Lists.filter (lambda "v" $ isLambdaBoundVariable @@ var "v")
-      (Sets.toList (Rewriting.freeVariablesInType @@ var "typ")),
+      (Sets.toList (Variables.freeVariablesInType @@ var "typ")),
     "vars">: (Lists.nub :: TTerm [Name] -> TTerm [Name]) (Lists.concat2 (var "boundVars") (var "freeVars"))] $
     Lists.map (var "toParam") (var "vars")
 
@@ -4254,7 +4260,7 @@ namespaceParent = def "namespaceParent" $
 needsThunking :: TTermDefinition (Term -> Bool)
 needsThunking = def "needsThunking" $
   lambda "t" $
-    cases _Term (Rewriting.deannotateTerm @@ var "t")
+    cases _Term (Strip.deannotateTerm @@ var "t")
       (Just $ Lists.foldl
         (lambda "b" $ lambda "st" $ Logic.or (var "b") (needsThunking @@ var "st"))
         (boolean False)
@@ -4300,7 +4306,7 @@ peelDomainsAndCod = def "peelDomainsAndCod" $
   lambda "n" $ lambda "t" $
     Logic.ifElse (Equality.lte (var "n") (int32 0))
       (pair (list ([] :: [TTerm Type])) (var "t"))
-      (cases _Type (Rewriting.deannotateType @@ var "t")
+      (cases _Type (Strip.deannotateType @@ var "t")
         (Just $ pair (list ([] :: [TTerm Type])) (var "t")) [
         _Type_function>>: lambda "ft" $
           "rest" <~ (peelDomainsAndCod @@ Math.sub (var "n") (int32 1) @@ Core.functionTypeCodomain (var "ft")) $
@@ -4314,7 +4320,7 @@ peelDomainTypes = def "peelDomainTypes" $
     Logic.ifElse
       (Equality.lte (var "n") (int32 0))
       (pair (list ([] :: [TTerm Type])) (var "t"))
-      (cases _Type (Rewriting.deannotateType @@ var "t")
+      (cases _Type (Strip.deannotateType @@ var "t")
         (Just $ pair (list ([] :: [TTerm Type])) (var "t")) [
         _Type_function>>: lambda "ft" $
           "rest" <~ (peelDomainTypes @@ Math.sub (var "n") (int32 1) @@ Core.functionTypeCodomain (var "ft")) $
@@ -4328,7 +4334,7 @@ peelExpectedTypes = def "peelExpectedTypes" $
   lambda "subst" $ lambda "n" $ lambda "t" $
     Logic.ifElse (Equality.equal (var "n") (int32 0))
       (list ([] :: [TTerm Type]))
-      (cases _Type (Rewriting.deannotateType @@ var "t")
+      (cases _Type (Strip.deannotateType @@ var "t")
         (Just $ list ([] :: [TTerm Type])) [
         _Type_function>>: lambda "ft" $
           Lists.cons
@@ -4344,14 +4350,14 @@ propagateType = def "propagateType" $
       Annotations.setTermAnnotation @@ Constants.key_type
         @@ just (Phantoms.encoderFor _Type @@ var "typ")
         @@ var "t") $
-    cases _Term (Rewriting.deannotateTerm @@ var "term")
+    cases _Term (Strip.deannotateTerm @@ var "term")
       (Just $ var "setTypeAnn" @@ var "term") [
       _Term_function>>: lambda "f" $
         cases _Function (var "f")
           (Just $ var "setTypeAnn" @@ var "term") [
           _Function_lambda>>: lambda "lam" $
             "annotated" <~ (var "setTypeAnn" @@ var "term") $
-            cases _Type (Rewriting.deannotateType @@ var "typ")
+            cases _Type (Strip.deannotateType @@ var "typ")
               (Just $ var "annotated") [
               _Type_function>>: lambda "ft" $
                 propagateType_propagateIntoLambda
@@ -4376,7 +4382,7 @@ propagateType = def "propagateType" $
       _Term_application>>: lambda "app" $
         "fun" <~ Core.applicationFunction (var "app") $
         "arg" <~ Core.applicationArgument (var "app") $
-        "annotatedFun" <~ (cases _Term (Rewriting.deannotateTerm @@ var "fun")
+        "annotatedFun" <~ (cases _Term (Strip.deannotateTerm @@ var "fun")
           (Just $ var "fun") [
           _Term_function>>: lambda "fn" $
             cases _Function (var "fn")
@@ -4385,7 +4391,7 @@ propagateType = def "propagateType" $
                 cases _Elimination (var "elim")
                   (Just $ var "fun") [
                   _Elimination_union>>: lambda "cs" $
-                    "dom" <~ (Schemas.nominalApplication @@ (Core.caseStatementTypeName (var "cs"))
+                    "dom" <~ (Resolution.nominalApplication @@ (Core.caseStatementTypeName (var "cs"))
                       @@ list ([] :: [TTerm Type])) $
                     "ft" <~ inject _Type _Type_function (Core.functionType (var "dom") (var "typ")) $
                     Annotations.setTermAnnotation @@ asTerm Constants.key_type
@@ -4448,14 +4454,14 @@ propagateTypesInAppChain = def "propagateTypesInAppChain" $
          @@ just (encodeTypeAsTerm @@ var "funType") @@ var "fun") $
        rebuildApps @@ var "annotatedFun" @@ var "args" @@ var "funType")
       -- Not a lambda or no args: fall back to simple annotation
-      (cases _Term (Rewriting.deannotateTerm @@ var "t")
+      (cases _Term (Strip.deannotateTerm @@ var "t")
         (Just $ Annotations.setTermAnnotation @@ asTerm Constants.key_type
           @@ just (encodeTypeAsTerm @@ var "resultType") @@ var "t") [
         _Term_application>>: lambda "app" $
           "lhs" <~ (project _Application _Application_function @@ var "app") $
           "rhs" <~ (project _Application _Application_argument @@ var "app") $
           -- Annotate case statement LHS with function type
-          "annotatedLhs" <~ (cases _Term (Rewriting.deannotateTerm @@ var "lhs")
+          "annotatedLhs" <~ (cases _Term (Strip.deannotateTerm @@ var "lhs")
             (Just $ var "lhs") [
             _Term_function>>: lambda "fn" $
               cases _Function (var "fn")
@@ -4464,7 +4470,7 @@ propagateTypesInAppChain = def "propagateTypesInAppChain" $
                   cases _Elimination (var "elim")
                     (Just $ var "lhs") [
                     _Elimination_union>>: lambda "cs" $
-                      "dom" <~ (Schemas.nominalApplication @@ (Core.caseStatementTypeName (var "cs"))
+                      "dom" <~ (Resolution.nominalApplication @@ (Core.caseStatementTypeName (var "cs"))
                         @@ list ([] :: [TTerm Type])) $
                       "ft" <~ inject _Type _Type_function (Core.functionType (var "dom") (var "fixedCod")) $
                       Annotations.setTermAnnotation @@ asTerm Constants.key_type
@@ -4479,7 +4485,7 @@ rebuildApps = def "rebuildApps" $
   lambda "f" $ lambda "args" $ lambda "fType" $
     Logic.ifElse (Lists.null (var "args"))
       (var "f")
-      (cases _Type (Rewriting.deannotateType @@ var "fType")
+      (cases _Type (Strip.deannotateType @@ var "fType")
         (Just $ Lists.foldl (lambda "acc" $ lambda "a" $
           inject _Term _Term_application (Core.application (var "acc") (var "a")))
           (var "f") (var "args")) [
@@ -4741,7 +4747,7 @@ splitConstantInitializer_splitVar = def "splitConstantInitializer_splitVar" $
 -- | Strip all forall wrappers from a type, returning the body
 stripForalls :: TTermDefinition (Type -> Type)
 stripForalls = def "stripForalls" $
-  lambda "t" $ cases _Type (Rewriting.deannotateType @@ var "t")
+  lambda "t" $ cases _Type (Strip.deannotateType @@ var "t")
     (Just $ var "t") [
     _Type_forall>>: lambda "fa" $
       stripForalls @@ Core.forallTypeBody (var "fa")]
@@ -4749,12 +4755,12 @@ stripForalls = def "stripForalls" $
 -- | Substitute type variables with types
 substituteTypeVarsWithTypes :: TTermDefinition (M.Map Name Type -> Type -> Type)
 substituteTypeVarsWithTypes = def "substituteTypeVarsWithTypes" $
-  lambda "subst" $ lambda "t" $ substituteTypeVarsWithTypes_go @@ var "subst" @@ (Rewriting.deannotateType @@ var "t")
+  lambda "subst" $ lambda "t" $ substituteTypeVarsWithTypes_go @@ var "subst" @@ (Strip.deannotateType @@ var "t")
 
 -- | Helper for substituteTypeVarsWithTypes
 substituteTypeVarsWithTypes_go :: TTermDefinition (M.Map Name Type -> Type -> Type)
 substituteTypeVarsWithTypes_go = def "substituteTypeVarsWithTypes_go" $
-  lambda "subst" $ lambda "t" $ cases _Type (Rewriting.deannotateType @@ var "t")
+  lambda "subst" $ lambda "t" $ cases _Type (Strip.deannotateType @@ var "t")
     (Just $ var "t") [
     _Type_variable>>: lambda "v" $
       Maybes.cases (Maps.lookup (var "v") (var "subst")) (var "t") (lambda "rep" $ var "rep"),
@@ -4861,8 +4867,8 @@ toClassDecl = def "toClassDecl" $
     "cx" ~> "g" ~>
     "wrap" <~ (lambda "t'" $
       declarationForRecordType @@ var "isInner" @@ var "isSer" @@ var "aliases" @@ var "tparams" @@ var "elName"
-        @@ (list [Core.fieldType (wrap _Name (string "value")) (Rewriting.deannotateType @@ var "t'")]) @@ var "cx" @@ var "g") $
-    cases _Type (Rewriting.deannotateType @@ var "t")
+        @@ (list [Core.fieldType (wrap _Name (string "value")) (Strip.deannotateType @@ var "t'")]) @@ var "cx" @@ var "g") $
+    cases _Type (Strip.deannotateType @@ var "t")
       (Just $ var "wrap" @@ var "t") [
       _Type_record>>: lambda "rt" $
         declarationForRecordType @@ var "isInner" @@ var "isSer" @@ var "aliases" @@ var "tparams" @@ var "elName"
@@ -5068,7 +5074,7 @@ typesMatch = def "typesMatch" $
 unwrapReturnType :: TTermDefinition (Type -> Type)
 unwrapReturnType = def "unwrapReturnType" $
   lambda "t" $
-    cases _Type (Rewriting.deannotateType @@ var "t")
+    cases _Type (Strip.deannotateType @@ var "t")
       (Just $ var "t") [
       _Type_function>>: lambda "ft" $
         unwrapReturnType @@ Core.functionTypeCodomain (var "ft"),
@@ -5121,7 +5127,7 @@ visitBranch = def "visitBranch" $
     "anns" <~ list [asTerm JavaUtilsSource.overrideAnnotation] $
     "result" <~ (JavaDsl.resultType (JavaDsl.unannType (var "jcod"))) $
     -- Field terms are lambdas; apply to special var that encodes to instance.value
-    cases _Term (Rewriting.deannotateTerm @@ Core.fieldTerm (var "field"))
+    cases _Term (Strip.deannotateTerm @@ Core.fieldTerm (var "field"))
       (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "visitBranch: field term is not a lambda: ") (ShowCore.term @@ Core.fieldTerm (var "field"))) (var "cx")) [
       _Term_function>>: lambda "f" $
         cases _Function (var "f")
@@ -5150,7 +5156,7 @@ visitBranch = def "visitBranch" $
 withLambda :: TTermDefinition (JavaHelpers.JavaEnvironment -> Lambda -> (JavaHelpers.JavaEnvironment -> a) -> a)
 withLambda = def "withLambda" $
   lambda "env" $ lambda "lam" $ lambda "k" $
-    Schemas.withLambdaContext @@ javaEnvGetGraph @@ javaEnvSetGraph @@ var "env" @@ var "lam" @@
+    Environment.withLambdaContext @@ javaEnvGetGraph @@ javaEnvSetGraph @@ var "env" @@ var "lam" @@
       (lambda "env1" $
         "aliases" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env1") $
         "aliases2" <~ (record JavaHelpers._Aliases [
@@ -5190,7 +5196,7 @@ withLambda = def "withLambda" $
 -- | Execute a computation in the context of a type lambda
 withTypeLambda :: TTermDefinition (JavaHelpers.JavaEnvironment -> TypeLambda -> (JavaHelpers.JavaEnvironment -> a) -> a)
 withTypeLambda = def "withTypeLambda" $
-  Schemas.withTypeLambdaContext @@ javaEnvGetGraph @@ javaEnvSetGraph
+  Environment.withTypeLambdaContext @@ javaEnvGetGraph @@ javaEnvSetGraph
 
 -- | Wrap a single expression in a Supplier lambda: () -> expr
 wrapInSupplierLambda :: TTermDefinition (Java.Expression -> Java.Expression)

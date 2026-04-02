@@ -70,7 +70,7 @@ public interface Checking {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, java.util.function.Function<hydra.util.ConsList<String>, java.util.function.Function<hydra.util.Maybe<hydra.core.Binding>, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.lang.Void>>>>>> checkRecursive = new java.util.concurrent.atomic.AtomicReference<>();
     checkRecursive.set((java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, java.util.function.Function<hydra.util.ConsList<String>, java.util.function.Function<hydra.util.Maybe<hydra.core.Binding>, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.lang.Void>>>>>) (vars -> (java.util.function.Function<hydra.util.ConsList<String>, java.util.function.Function<hydra.util.Maybe<hydra.core.Binding>, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.lang.Void>>>>) (trace -> (java.util.function.Function<hydra.util.Maybe<hydra.core.Binding>, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.lang.Void>>>) (lbinding -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.lang.Void>>) (term -> {
       java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.lang.Void>> check = (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.lang.Void>>) (typ -> {
-        hydra.util.PersistentSet<hydra.core.Name> freevars = hydra.Rewriting.freeVariablesInType(typ);
+        hydra.util.PersistentSet<hydra.core.Name> freevars = hydra.Variables.freeVariablesInType(typ);
         hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> badvars = new hydra.util.Lazy<>(() -> hydra.lib.sets.Difference.apply(
           hydra.lib.sets.Difference.apply(
             freevars,
@@ -162,7 +162,7 @@ public interface Checking {
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<java.lang.Void, hydra.context.Context>> checkNominalApplication(hydra.context.Context cx, hydra.graph.Graph tx, hydra.core.Name tname, hydra.util.ConsList<hydra.core.Type> typeArgs) {
     return hydra.lib.eithers.Bind.apply(
-      hydra.Schemas.requireSchemaType(
+      hydra.Resolution.requireSchemaType(
         cx,
         (tx).schemaTypes,
         tname),
@@ -213,7 +213,7 @@ public interface Checking {
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.typing.TypeSubst> checkTypeSubst(hydra.context.Context cx, hydra.graph.Graph tx, hydra.typing.TypeSubst subst) {
-    java.util.function.Function<hydra.core.TypeScheme, Boolean> isNominal = (java.util.function.Function<hydra.core.TypeScheme, Boolean>) (ts -> hydra.Rewriting.deannotateType((ts).type).accept(new hydra.core.Type.PartialVisitor<>() {
+    java.util.function.Function<hydra.core.TypeScheme, Boolean> isNominal = (java.util.function.Function<hydra.core.TypeScheme, Boolean>) (ts -> hydra.Strip.deannotateType((ts).type).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public Boolean otherwise(hydra.core.Type instance) {
         return false;
@@ -268,7 +268,7 @@ public interface Checking {
   }
 
   static Boolean containsInScopeTypeVars(hydra.graph.Graph tx, hydra.core.Type t) {
-    hydra.util.PersistentSet<hydra.core.Name> freeVars = hydra.Rewriting.freeVariablesInTypeSimple(t);
+    hydra.util.PersistentSet<hydra.core.Name> freeVars = hydra.Variables.freeVariablesInTypeSimple(t);
     hydra.util.PersistentSet<hydra.core.Name> vars = (tx).typeVariables;
     return hydra.lib.logic.Not.apply(hydra.lib.sets.Null.apply(hydra.lib.sets.Intersection.apply(
       vars,
@@ -302,14 +302,14 @@ public interface Checking {
       collectVars,
       (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())),
       typ));
-    return hydra.Rewriting.substituteTypeVariables(
+    return hydra.Variables.substituteTypeVariables(
       subst.get(),
       typ);
   }
 
   static hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> toFContext(hydra.graph.Graph cx) {
     return hydra.lib.maps.Map.apply(
-      hydra.Rewriting::typeSchemeToFType,
+      hydra.Scoping::typeSchemeToFType,
       (cx).boundTypes);
   }
 
@@ -590,7 +590,7 @@ public interface Checking {
 
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>> visit(hydra.core.Type.Variable v) {
-        hydra.util.Pair<hydra.core.Name, hydra.context.Context> nameResult = hydra.Schemas.freshName(cx0);
+        hydra.util.Pair<hydra.core.Name, hydra.context.Context> nameResult = hydra.Names.freshName(cx0);
         hydra.util.Lazy<hydra.context.Context> cx1 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(nameResult));
         hydra.util.Lazy<hydra.core.Name> freshN = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(nameResult));
         return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>right((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) ((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) (new hydra.util.Pair<hydra.core.Type, hydra.context.Context>(new hydra.core.Type.Variable(freshN.get()), cx1.get()))));
@@ -711,7 +711,7 @@ public interface Checking {
                     tx,
                     "case branches",
                     cods.get()),
-                  (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>) (cod -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>right((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) ((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) (new hydra.util.Pair<hydra.core.Type, hydra.context.Context>(new hydra.core.Type.Function(new hydra.core.FunctionType(hydra.Schemas.nominalApplication(
+                  (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>) (cod -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>right((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) ((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) (new hydra.util.Pair<hydra.core.Type, hydra.context.Context>(new hydra.core.Type.Function(new hydra.core.FunctionType(hydra.Resolution.nominalApplication(
                     tname,
                     typeArgs), cod)), cx3.get()))))));
               }));
@@ -762,7 +762,7 @@ public interface Checking {
     hydra.core.Term fterm = (field).term;
     hydra.core.Name tname = (injection).typeName;
     return hydra.lib.eithers.Bind.apply(
-      hydra.Schemas.requireSchemaType(
+      hydra.Resolution.requireSchemaType(
         cx,
         (tx).schemaTypes,
         tname),
@@ -777,11 +777,11 @@ public interface Checking {
             tname,
             sbody),
           (java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>) (sfields -> hydra.lib.eithers.Bind.apply(
-            hydra.Schemas.findFieldType(
+            hydra.Resolution.findFieldType(
               cx2.get(),
               fname,
               sfields),
-            (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>) (ftyp -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>right((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) ((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) (new hydra.util.Pair<hydra.core.Type, hydra.context.Context>(hydra.Schemas.nominalApplication(
+            (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>) (ftyp -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>right((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) ((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) (new hydra.util.Pair<hydra.core.Type, hydra.context.Context>(hydra.Resolution.nominalApplication(
               tname,
               typeArgs), cx2.get()))))))));
       }));
@@ -797,7 +797,7 @@ public interface Checking {
         (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>) (dom -> {
           hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>> types2 = new hydra.util.Lazy<>(() -> hydra.lib.maps.Insert.apply(
             v,
-            hydra.Rewriting.fTypeToTypeScheme(dom),
+            hydra.Scoping.fTypeToTypeScheme(dom),
             (tx).boundTypes));
           return hydra.lib.eithers.Bind.apply(
             hydra.Checking.typeOf(
@@ -828,7 +828,7 @@ public interface Checking {
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>> typeOfLet(hydra.context.Context cx, hydra.graph.Graph tx, hydra.util.ConsList<hydra.core.Type> typeArgs, hydra.core.Let letTerm) {
     java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Type>> bindingType = (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Type>>) (b -> hydra.lib.maybes.Maybe.applyLazy(
       () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Type>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Checking(new hydra.error.checking.CheckingError.UntypedLetBinding(new hydra.error.checking.UntypedLetBindingError(b))), cx))),
-      (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Type>>) (ts -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Type>right(hydra.Rewriting.typeSchemeToFType(ts))),
+      (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Type>>) (ts -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Type>right(hydra.Scoping.typeSchemeToFType(ts))),
       (b).type));
     hydra.util.ConsList<hydra.core.Binding> bs = (letTerm).bindings;
     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> bnames = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
@@ -856,7 +856,7 @@ public interface Checking {
           hydra.lib.maps.FromList.apply(hydra.lib.lists.Zip.apply(
             bnames.get(),
             hydra.lib.lists.Map.apply(
-              hydra.Rewriting::fTypeToTypeScheme,
+              hydra.Scoping::fTypeToTypeScheme,
               btypes.get()))),
           (tx).boundTypes), (tx).classConstraints, (tx).lambdaVariables, (tx).metadata, (tx).primitives, (tx).schemaTypes, (tx).typeVariables));
         return hydra.lib.eithers.Bind.apply(
@@ -1112,12 +1112,12 @@ public interface Checking {
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.UndefinedTermVariable(new hydra.error.core.UndefinedTermVariableError(new hydra.paths.SubtermPath((hydra.util.ConsList<hydra.paths.SubtermStep>) (hydra.util.ConsList.<hydra.paths.SubtermStep>empty())), name)), cx))),
       (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>) (tsRaw -> {
-        hydra.util.Pair<hydra.core.TypeScheme, hydra.context.Context> instResult = hydra.Schemas.instantiateTypeScheme(
+        hydra.util.Pair<hydra.core.TypeScheme, hydra.context.Context> instResult = hydra.Resolution.instantiateTypeScheme(
           cx,
           tsRaw);
         hydra.util.Lazy<hydra.context.Context> cx2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(instResult));
         hydra.util.Lazy<hydra.core.TypeScheme> ts = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(instResult));
-        hydra.core.Type t = hydra.Rewriting.typeSchemeToFType(ts.get());
+        hydra.core.Type t = hydra.Scoping.typeSchemeToFType(ts.get());
         return hydra.lib.eithers.Bind.apply(
           hydra.Checking.applyTypeArgumentsToType(
             cx2.get(),
@@ -1133,7 +1133,7 @@ public interface Checking {
     hydra.core.Name fname = (p).field;
     hydra.core.Name tname = (p).typeName;
     return hydra.lib.eithers.Bind.apply(
-      hydra.Schemas.requireSchemaType(
+      hydra.Resolution.requireSchemaType(
         cx,
         (tx).schemaTypes,
         tname),
@@ -1148,7 +1148,7 @@ public interface Checking {
             tname,
             sbody),
           (java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>) (sfields -> hydra.lib.eithers.Bind.apply(
-            hydra.Schemas.findFieldType(
+            hydra.Resolution.findFieldType(
               cx2.get(),
               fname,
               sfields),
@@ -1159,7 +1159,7 @@ public interface Checking {
               hydra.core.Type sftyp = hydra.Substitution.substInType(
                 subst.get(),
                 ftyp);
-              return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>right((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) ((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) (new hydra.util.Pair<hydra.core.Type, hydra.context.Context>(new hydra.core.Type.Function(new hydra.core.FunctionType(hydra.Schemas.nominalApplication(
+              return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>right((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) ((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) (new hydra.util.Pair<hydra.core.Type, hydra.context.Context>(new hydra.core.Type.Function(new hydra.core.FunctionType(hydra.Resolution.nominalApplication(
                 tname,
                 typeArgs), sftyp)), cx2.get()))));
             }))));
@@ -1197,7 +1197,7 @@ public interface Checking {
       foldResult.get(),
       (java.util.function.Function<hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>) (foldR -> {
         hydra.util.Lazy<hydra.context.Context> cx2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(foldR));
-        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>right((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) ((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) (new hydra.util.Pair<hydra.core.Type, hydra.context.Context>(hydra.Schemas.nominalApplication(
+        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>right((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) ((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) (new hydra.util.Pair<hydra.core.Type, hydra.context.Context>(hydra.Resolution.nominalApplication(
           tname,
           typeArgs), cx2.get()))));
       }));
@@ -1301,7 +1301,7 @@ public interface Checking {
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>> typeOfUnwrap(hydra.context.Context cx, hydra.graph.Graph tx, hydra.util.ConsList<hydra.core.Type> typeArgs, hydra.core.Name tname) {
     return hydra.lib.eithers.Bind.apply(
-      hydra.Schemas.requireSchemaType(
+      hydra.Resolution.requireSchemaType(
         cx,
         (tx).schemaTypes,
         tname),
@@ -1322,7 +1322,7 @@ public interface Checking {
             hydra.core.Type swrapped = hydra.Substitution.substInType(
               subst.get(),
               wrapped);
-            return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>right((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) ((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) (new hydra.util.Pair<hydra.core.Type, hydra.context.Context>(new hydra.core.Type.Function(new hydra.core.FunctionType(hydra.Schemas.nominalApplication(
+            return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>right((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) ((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) (new hydra.util.Pair<hydra.core.Type, hydra.context.Context>(new hydra.core.Type.Function(new hydra.core.FunctionType(hydra.Resolution.nominalApplication(
               tname,
               typeArgs), swrapped)), cx2.get()))));
           }));
@@ -1338,10 +1338,10 @@ public interface Checking {
       (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>) (ts -> {
         hydra.util.Lazy<hydra.util.Pair<hydra.core.Type, hydra.context.Context>> tResult = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(typeArgs),
-          () -> hydra.Schemas.instantiateType(
+          () -> hydra.Resolution.instantiateType(
             cx,
-            hydra.Rewriting.typeSchemeToFType(ts)),
-          () -> (hydra.util.Pair<hydra.core.Type, hydra.context.Context>) ((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) (new hydra.util.Pair<hydra.core.Type, hydra.context.Context>(hydra.Rewriting.typeSchemeToFType(ts), cx)))));
+            hydra.Scoping.typeSchemeToFType(ts)),
+          () -> (hydra.util.Pair<hydra.core.Type, hydra.context.Context>) ((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) (new hydra.util.Pair<hydra.core.Type, hydra.context.Context>(hydra.Scoping.typeSchemeToFType(ts), cx)))));
         hydra.util.Lazy<hydra.context.Context> cx2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(tResult.get()));
         hydra.util.Lazy<hydra.core.Type> t = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(tResult.get()));
         return hydra.lib.eithers.Bind.apply(
@@ -1366,7 +1366,7 @@ public interface Checking {
         body),
       (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>) (result -> {
         hydra.util.Lazy<hydra.context.Context> cx2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(result));
-        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>right((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) ((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) (new hydra.util.Pair<hydra.core.Type, hydra.context.Context>(hydra.Schemas.nominalApplication(
+        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>right((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) ((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) (new hydra.util.Pair<hydra.core.Type, hydra.context.Context>(hydra.Resolution.nominalApplication(
           tname,
           typeArgs), cx2.get()))));
       }));
@@ -1375,7 +1375,7 @@ public interface Checking {
   static Boolean typesAllEffectivelyEqual(hydra.graph.Graph tx, hydra.util.ConsList<hydra.core.Type> tlist) {
     hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme> types = (tx).schemaTypes;
     java.util.function.Function<hydra.core.Type, Boolean> containsFreeVar = (java.util.function.Function<hydra.core.Type, Boolean>) (t -> {
-      hydra.util.PersistentSet<hydra.core.Name> allVars = hydra.Rewriting.freeVariablesInTypeSimple(t);
+      hydra.util.PersistentSet<hydra.core.Name> allVars = hydra.Variables.freeVariablesInTypeSimple(t);
       hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> schemaNames = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.maps.Keys.apply(types)));
       return hydra.lib.logic.Not.apply(hydra.lib.sets.Null.apply(hydra.lib.sets.Difference.apply(
         allVars,
@@ -1396,7 +1396,7 @@ public interface Checking {
           tlist)),
         () -> true,
         () -> hydra.Checking.allEqual(hydra.lib.lists.Map.apply(
-          (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (t -> hydra.Checking.normalizeTypeFreeVars(hydra.Rewriting.deannotateTypeRecursive(hydra.Rewriting.replaceTypedefs(
+          (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (t -> hydra.Checking.normalizeTypeFreeVars(hydra.Strip.deannotateTypeRecursive(hydra.Dependencies.replaceTypedefs(
             types,
             t)))),
           tlist))));
@@ -1414,7 +1414,7 @@ public interface Checking {
         hydra.Checking.typesAllEffectivelyEqual(
           tx,
           hydra.util.ConsList.of(
-            hydra.Schemas.fullyStripAndNormalizeType(t1),
-            hydra.Schemas.fullyStripAndNormalizeType(t2)))));
+            hydra.Resolution.fullyStripAndNormalizeType(t1),
+            hydra.Resolution.fullyStripAndNormalizeType(t2)))));
   }
 }

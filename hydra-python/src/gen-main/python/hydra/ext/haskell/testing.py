@@ -12,6 +12,7 @@ import hydra.constants
 import hydra.context
 import hydra.core
 import hydra.decode.core
+import hydra.dependencies
 import hydra.ext.haskell.syntax
 import hydra.ext.haskell.utils
 import hydra.formatting
@@ -29,9 +30,10 @@ import hydra.lib.sets
 import hydra.lib.strings
 import hydra.module
 import hydra.names
+import hydra.predicates
 import hydra.rewriting
-import hydra.schemas
 import hydra.show.errors
+import hydra.strip
 import hydra.testing
 import hydra.util
 
@@ -59,7 +61,7 @@ def collect_test_cases(tg: hydra.testing.TestGroup) -> frozenlist[hydra.testing.
 def collect_names(graf: hydra.graph.Graph, names: frozenset[hydra.core.Name], t: hydra.core.Term) -> frozenset[hydra.core.Name]:
     r"""Collect variable names from encoded terms within a single term node."""
 
-    return hydra.lib.logic.if_else(hydra.schemas.is_encoded_term(hydra.rewriting.deannotate_term(t)), (lambda : hydra.lib.eithers.either((lambda _: names), (lambda decoded_term: hydra.lib.sets.union(names, hydra.rewriting.term_dependency_names(True, True, True, decoded_term))), hydra.lib.eithers.bimap((lambda _e: _e), (lambda _a: _a), hydra.decode.core.term(graf, t)))), (lambda : names))
+    return hydra.lib.logic.if_else(hydra.predicates.is_encoded_term(hydra.strip.deannotate_term(t)), (lambda : hydra.lib.eithers.either((lambda _: names), (lambda decoded_term: hydra.lib.sets.union(names, hydra.dependencies.term_dependency_names(True, True, True, decoded_term))), hydra.lib.eithers.bimap((lambda _e: _e), (lambda _a: _a), hydra.decode.core.term(graf, t)))), (lambda : names))
 
 def extract_encoded_term_variable_names(graf: hydra.graph.Graph, term: hydra.core.Term) -> frozenset[hydra.core.Name]:
     r"""Extract all variable names from term-encoded terms in a given term."""

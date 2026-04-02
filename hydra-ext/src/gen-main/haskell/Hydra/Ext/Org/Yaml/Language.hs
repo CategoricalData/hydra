@@ -7,7 +7,7 @@ module Hydra.Ext.Org.Yaml.Language where
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Strip as Strip
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -61,7 +61,7 @@ yamlLanguage =
           Variants.TypeVariantUnit,
           Variants.TypeVariantVoid]
     typePredicate =
-        \typ -> case (Rewriting.deannotateType typ) of
+        \typ -> case (Strip.deannotateType typ) of
           Core.TypeMaybe v0 -> case v0 of
             Core.TypeMaybe _ -> False
             _ -> True

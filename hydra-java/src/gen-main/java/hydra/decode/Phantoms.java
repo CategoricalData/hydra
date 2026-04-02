@@ -17,9 +17,9 @@ public interface Phantoms {
 
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.phantoms.TBinding<T1>> visit(hydra.core.Term.Record record) {
-          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Core.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
-            hydra.extract.Helpers.requireField(
+            hydra.extract.Core.requireField(
               "name",
               (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Name>>>) (p0 -> p1 -> hydra.decode.Core.name(
                 p0,
@@ -27,7 +27,7 @@ public interface Phantoms {
               fieldMap,
               cx),
             (java.util.function.Function<hydra.core.Name, hydra.util.Either<hydra.errors.DecodingError, hydra.phantoms.TBinding<T1>>>) (field_name -> hydra.lib.eithers.Bind.apply(
-              hydra.extract.Helpers.requireField(
+              hydra.extract.Core.requireField(
                 "term",
                 (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.phantoms.TTerm<T1>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.phantoms.TTerm<T1>>>) (v2 -> hydra.decode.Phantoms.<T0, T1>tTerm(
                   a,
@@ -77,9 +77,9 @@ public interface Phantoms {
 
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.phantoms.TTermDefinition<T1>> visit(hydra.core.Term.Record record) {
-          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Core.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
-            hydra.extract.Helpers.requireField(
+            hydra.extract.Core.requireField(
               "name",
               (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Name>>>) (p0 -> p1 -> hydra.decode.Core.name(
                 p0,
@@ -87,7 +87,7 @@ public interface Phantoms {
               fieldMap,
               cx),
             (java.util.function.Function<hydra.core.Name, hydra.util.Either<hydra.errors.DecodingError, hydra.phantoms.TTermDefinition<T1>>>) (field_name -> hydra.lib.eithers.Bind.apply(
-              hydra.extract.Helpers.requireField(
+              hydra.extract.Core.requireField(
                 "term",
                 (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.phantoms.TTerm<T1>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.phantoms.TTerm<T1>>>) (v2 -> hydra.decode.Phantoms.<T0, T1>tTerm(
                   a,

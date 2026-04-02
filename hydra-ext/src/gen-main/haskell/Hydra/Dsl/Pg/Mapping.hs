@@ -4,11 +4,11 @@
 
 module Hydra.Dsl.Pg.Mapping where
 
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Pg.Mapping as Mapping
 import qualified Hydra.Pg.Model as Model
 import qualified Hydra.Phantoms as Phantoms
-import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -2114,7 +2114,7 @@ propertySpecWithValue original newVal =
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-schema :: Phantoms.TTerm (Util.Coder Core.Type t) -> Phantoms.TTerm (Util.Coder Core.Term v) -> Phantoms.TTerm (Util.Coder Core.Type t) -> Phantoms.TTerm (Util.Coder Core.Term v) -> Phantoms.TTerm (Util.Coder Core.Type t) -> Phantoms.TTerm (Util.Coder Core.Term v) -> Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm v -> Phantoms.TTerm v -> Phantoms.TTerm (Mapping.Schema s t v)
+schema :: Phantoms.TTerm (Coders.Coder Core.Type t) -> Phantoms.TTerm (Coders.Coder Core.Term v) -> Phantoms.TTerm (Coders.Coder Core.Type t) -> Phantoms.TTerm (Coders.Coder Core.Term v) -> Phantoms.TTerm (Coders.Coder Core.Type t) -> Phantoms.TTerm (Coders.Coder Core.Term v) -> Phantoms.TTerm Mapping.AnnotationSchema -> Phantoms.TTerm v -> Phantoms.TTerm v -> Phantoms.TTerm (Mapping.Schema s t v)
 schema vertexIdTypes vertexIds edgeIdTypes edgeIds propertyTypes propertyValues annotations defaultVertexId defaultEdgeId =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.mapping.Schema"),
@@ -2171,7 +2171,7 @@ schemaDefaultVertexId x =
         Core.projectionField = (Core.Name "defaultVertexId")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-schemaEdgeIdTypes :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Util.Coder Core.Type t)
+schemaEdgeIdTypes :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Coders.Coder Core.Type t)
 schemaEdgeIdTypes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -2179,7 +2179,7 @@ schemaEdgeIdTypes x =
         Core.projectionField = (Core.Name "edgeIdTypes")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-schemaEdgeIds :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Util.Coder Core.Term v)
+schemaEdgeIds :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Coders.Coder Core.Term v)
 schemaEdgeIds x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -2187,7 +2187,7 @@ schemaEdgeIds x =
         Core.projectionField = (Core.Name "edgeIds")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-schemaPropertyTypes :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Util.Coder Core.Type t)
+schemaPropertyTypes :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Coders.Coder Core.Type t)
 schemaPropertyTypes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -2195,7 +2195,7 @@ schemaPropertyTypes x =
         Core.projectionField = (Core.Name "propertyTypes")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-schemaPropertyValues :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Util.Coder Core.Term v)
+schemaPropertyValues :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Coders.Coder Core.Term v)
 schemaPropertyValues x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -2203,7 +2203,7 @@ schemaPropertyValues x =
         Core.projectionField = (Core.Name "propertyValues")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-schemaVertexIdTypes :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Util.Coder Core.Type t)
+schemaVertexIdTypes :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Coders.Coder Core.Type t)
 schemaVertexIdTypes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -2211,7 +2211,7 @@ schemaVertexIdTypes x =
         Core.projectionField = (Core.Name "vertexIdTypes")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-schemaVertexIds :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Util.Coder Core.Term v)
+schemaVertexIds :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Coders.Coder Core.Term v)
 schemaVertexIds x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -2414,7 +2414,7 @@ schemaWithDefaultVertexId original newVal =
               Core.projectionField = (Core.Name "defaultEdgeId")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-schemaWithEdgeIdTypes :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Util.Coder Core.Type t) -> Phantoms.TTerm (Mapping.Schema s t v)
+schemaWithEdgeIdTypes :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Coders.Coder Core.Type t) -> Phantoms.TTerm (Mapping.Schema s t v)
 schemaWithEdgeIdTypes original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.mapping.Schema"),
@@ -2479,7 +2479,7 @@ schemaWithEdgeIdTypes original newVal =
               Core.projectionField = (Core.Name "defaultEdgeId")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-schemaWithEdgeIds :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Util.Coder Core.Term v) -> Phantoms.TTerm (Mapping.Schema s t v)
+schemaWithEdgeIds :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Coders.Coder Core.Term v) -> Phantoms.TTerm (Mapping.Schema s t v)
 schemaWithEdgeIds original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.mapping.Schema"),
@@ -2544,7 +2544,7 @@ schemaWithEdgeIds original newVal =
               Core.projectionField = (Core.Name "defaultEdgeId")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-schemaWithPropertyTypes :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Util.Coder Core.Type t) -> Phantoms.TTerm (Mapping.Schema s t v)
+schemaWithPropertyTypes :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Coders.Coder Core.Type t) -> Phantoms.TTerm (Mapping.Schema s t v)
 schemaWithPropertyTypes original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.mapping.Schema"),
@@ -2609,7 +2609,7 @@ schemaWithPropertyTypes original newVal =
               Core.projectionField = (Core.Name "defaultEdgeId")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-schemaWithPropertyValues :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Util.Coder Core.Term v) -> Phantoms.TTerm (Mapping.Schema s t v)
+schemaWithPropertyValues :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Coders.Coder Core.Term v) -> Phantoms.TTerm (Mapping.Schema s t v)
 schemaWithPropertyValues original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.mapping.Schema"),
@@ -2674,7 +2674,7 @@ schemaWithPropertyValues original newVal =
               Core.projectionField = (Core.Name "defaultEdgeId")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-schemaWithVertexIdTypes :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Util.Coder Core.Type t) -> Phantoms.TTerm (Mapping.Schema s t v)
+schemaWithVertexIdTypes :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Coders.Coder Core.Type t) -> Phantoms.TTerm (Mapping.Schema s t v)
 schemaWithVertexIdTypes original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.mapping.Schema"),
@@ -2739,7 +2739,7 @@ schemaWithVertexIdTypes original newVal =
               Core.projectionField = (Core.Name "defaultEdgeId")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-schemaWithVertexIds :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Util.Coder Core.Term v) -> Phantoms.TTerm (Mapping.Schema s t v)
+schemaWithVertexIds :: Phantoms.TTerm (Mapping.Schema s t v) -> Phantoms.TTerm (Coders.Coder Core.Term v) -> Phantoms.TTerm (Mapping.Schema s t v)
 schemaWithVertexIds original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.mapping.Schema"),

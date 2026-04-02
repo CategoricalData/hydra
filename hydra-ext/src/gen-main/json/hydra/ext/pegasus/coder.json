@@ -232,7 +232,7 @@
                                                   "term": {
                                                     "application": {
                                                       "argument": {"variable": "typeDefs"},
-                                                      "function": {"variable": "hydra.schemas.topologicalSortTypeDefinitions"}}},
+                                                      "function": {"variable": "hydra.dependencies.topologicalSortTypeDefinitions"}}},
                                                   "type": [
                                                     {
                                                       "constraints": null,
@@ -1080,7 +1080,7 @@
                                             "term": {
                                               "application": {
                                                 "argument": {"variable": "defs"},
-                                                "function": {"variable": "hydra.schemas.partitionDefinitions"}}},
+                                                "function": {"variable": "hydra.environment.partitionDefinitions"}}},
                                             "type": [
                                               {
                                                 "constraints": null,
@@ -2781,7 +2781,7 @@
                                                                                                           "argument": {
                                                                                                             "application": {
                                                                                                               "argument": {"variable": "t"},
-                                                                                                              "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                                                                                              "function": {"variable": "hydra.strip.deannotateType"}}},
                                                                                                           "function": {
                                                                                                             "typeApplication": {
                                                                                                               "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
@@ -2935,7 +2935,7 @@
                                         "argument": {
                                           "application": {
                                             "argument": {"variable": "t"},
-                                            "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                            "function": {"variable": "hydra.strip.deannotateType"}}},
                                         "function": {
                                           "function": {
                                             "elimination": {
@@ -3966,7 +3966,7 @@
                                     "argument": {
                                       "application": {
                                         "argument": {"variable": "typ"},
-                                        "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                        "function": {"variable": "hydra.strip.deannotateType"}}},
                                     "function": {
                                       "function": {
                                         "elimination": {
@@ -5067,7 +5067,7 @@
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {"variable": "cx"},
-                                                                  "function": {"variable": "hydra.schemas.moduleDependencyNamespaces"}}}}}}}}}}}}}}},
+                                                                  "function": {"variable": "hydra.analysis.moduleDependencyNamespaces"}}}}}}}}}}}}}}},
                                       "function": {
                                         "typeApplication": {
                                           "body": {
@@ -5437,9 +5437,10 @@
     "hydra.ext.pegasus.language",
     "hydra.formatting",
     "hydra.names",
-    "hydra.schemas",
+    "hydra.analysis",
+    "hydra.environment",
     "hydra.sorting",
-    "hydra.rewriting",
+    "hydra.strip",
     "hydra.annotations",
     "hydra.serialization",
     "hydra.show.core"],

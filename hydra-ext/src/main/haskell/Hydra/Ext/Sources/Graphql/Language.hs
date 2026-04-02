@@ -59,13 +59,12 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -86,7 +85,7 @@ define = definitionInModule module_
 module_ :: Module
 module_ = Module (Namespace "hydra.ext.graphql.language")
   [toDefinition graphqlLanguage, toDefinition graphqlReservedWords]
-  [Lexical.ns, Rewriting.ns]
+  [Lexical.ns, Strip.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints and reserved words for GraphQL"
 
@@ -126,9 +125,9 @@ graphqlLanguage = define "graphqlLanguage" $
     Variants.typeVariantRecord,
     Variants.typeVariantUnion,
     Variants.typeVariantVariable],
-  "typePredicate">: "typ" ~> cases _Type (Rewriting.deannotateType @@ var "typ")
+  "typePredicate">: "typ" ~> cases _Type (Strip.deannotateType @@ var "typ")
     (Just true) [
-    _Type_maybe>>: "inner" ~> cases _Type (Rewriting.deannotateType @@ var "inner")
+    _Type_maybe>>: "inner" ~> cases _Type (Strip.deannotateType @@ var "inner")
       (Just true) [
       _Type_maybe>>: constant false]]] $
   Coders.language

@@ -60,13 +60,12 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants      as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -92,7 +91,7 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [Rewriting.ns, moduleNamespace Literals.module_, moduleNamespace ExtractCore.module_]
+    [Strip.ns, moduleNamespace Literals.module_, moduleNamespace ExtractCore.module_]
     KernelTypes.kernelTypesNamespaces $
     Just "JSON decoding for Hydra terms. Converts JSON Values to Terms using Either for error handling."
   where
@@ -112,7 +111,7 @@ fromJson :: TTermDefinition (M.Map Name Type -> Name -> Type -> Value -> Either 
 fromJson = define "fromJson" $
   doc "Decode a JSON value to a Hydra term given a type and type name. Returns Left for type mismatches." $
   "types" ~> "tname" ~> "typ" ~> "value" ~>
-  "stripped" <~ (Rewriting.deannotateType @@ var "typ") $
+  "stripped" <~ (Strip.deannotateType @@ var "typ") $
   cases _Type (var "stripped")
     (Just $ left $ Strings.cat $ list [
       string "unsupported type for JSON decoding: ",

@@ -16,8 +16,8 @@ import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
-import hydra.rewriting
 import hydra.show.core
+import hydra.strip
 
 T0 = TypeVar("T0")
 
@@ -98,7 +98,7 @@ def to_json(term: hydra.core.Term) -> Either[str, hydra.json.model.Value]:
 
     @lru_cache(1)
     def stripped() -> hydra.core.Term:
-        return hydra.rewriting.deannotate_term(term)
+        return hydra.strip.deannotate_term(term)
     match stripped():
         case hydra.core.TermLiteral(value=lit):
             return encode_literal(lit)

@@ -17,6 +17,7 @@ import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.rewriting
 import hydra.typing
+import hydra.variables
 
 T0 = TypeVar("T0")
 
@@ -79,7 +80,7 @@ def subst_in_class_constraints(subst: hydra.typing.TypeSubst, constraints: Froze
     subst_map = subst.value
     def insert_or_merge(var_name: T0, metadata: hydra.core.TypeVariableMetadata, acc: FrozenDict[T0, hydra.core.TypeVariableMetadata]) -> FrozenDict[T0, hydra.core.TypeVariableMetadata]:
         return hydra.lib.maybes.maybe((lambda : hydra.lib.maps.insert(var_name, metadata, acc)), (lambda existing: (merged := hydra.core.TypeVariableMetadata(hydra.lib.sets.union(existing.classes, metadata.classes)), hydra.lib.maps.insert(var_name, merged, acc))[1]), hydra.lib.maps.lookup(var_name, acc))
-    return hydra.lib.lists.foldl((lambda acc, pair: (var_name := hydra.lib.pairs.first(pair), metadata := hydra.lib.pairs.second(pair), hydra.lib.maybes.maybe((lambda : insert_or_merge(var_name, metadata, acc)), (lambda target_type: (free_vars := hydra.lib.sets.to_list(hydra.rewriting.free_variables_in_type(target_type)), hydra.lib.lists.foldl((lambda acc2, free_var: insert_or_merge(free_var, metadata, acc2)), acc, free_vars))[1]), hydra.lib.maps.lookup(var_name, subst_map)))[2]), hydra.lib.maps.empty(), hydra.lib.maps.to_list(constraints))
+    return hydra.lib.lists.foldl((lambda acc, pair: (var_name := hydra.lib.pairs.first(pair), metadata := hydra.lib.pairs.second(pair), hydra.lib.maybes.maybe((lambda : insert_or_merge(var_name, metadata, acc)), (lambda target_type: (free_vars := hydra.lib.sets.to_list(hydra.variables.free_variables_in_type(target_type)), hydra.lib.lists.foldl((lambda acc2, free_var: insert_or_merge(free_var, metadata, acc2)), acc, free_vars))[1]), hydra.lib.maps.lookup(var_name, subst_map)))[2]), hydra.lib.maps.empty(), hydra.lib.maps.to_list(constraints))
 
 def subst_in_type_scheme(subst: hydra.typing.TypeSubst, ts: hydra.core.TypeScheme) -> hydra.core.TypeScheme:
     r"""Apply a type substitution to a type scheme."""

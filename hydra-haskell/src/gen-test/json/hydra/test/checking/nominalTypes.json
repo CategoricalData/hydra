@@ -221,7 +221,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -437,7 +437,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -675,7 +675,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -818,7 +818,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -1078,7 +1078,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -1355,7 +1355,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -1581,7 +1581,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -1815,7 +1815,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -2053,7 +2053,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -2282,7 +2282,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -2665,7 +2665,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -2956,7 +2956,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -3279,7 +3279,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -3521,7 +3521,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -3893,7 +3893,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -4308,7 +4308,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -4484,7 +4484,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -4660,7 +4660,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -4841,7 +4841,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -5022,7 +5022,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -5332,7 +5332,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -5586,7 +5586,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -5833,7 +5833,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -6021,7 +6021,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -6230,7 +6230,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -6439,7 +6439,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -6648,7 +6648,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -6997,7 +6997,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -7244,7 +7244,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -7475,7 +7475,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -7706,7 +7706,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -7930,7 +7930,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -8250,7 +8250,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -8646,7 +8646,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -8841,7 +8841,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -9101,7 +9101,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -9311,7 +9311,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -9684,7 +9684,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -10092,7 +10092,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -10691,7 +10691,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -11033,7 +11033,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -11514,7 +11514,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -11842,7 +11842,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -12049,7 +12049,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -12255,7 +12255,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -12757,7 +12757,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -13059,7 +13059,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -13212,7 +13212,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -13365,7 +13365,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -13557,7 +13557,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -13722,7 +13722,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -13888,7 +13888,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -14046,7 +14046,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -14308,7 +14308,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -14502,7 +14502,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -14688,7 +14688,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -14904,7 +14904,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -15100,7 +15100,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -15288,7 +15288,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -15526,7 +15526,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -15763,7 +15763,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -16031,7 +16031,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -16263,7 +16263,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -16468,7 +16468,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -16682,7 +16682,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -16902,7 +16902,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -17183,7 +17183,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -17633,7 +17633,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -18346,7 +18346,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -18671,7 +18671,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -19029,7 +19029,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -19307,7 +19307,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -19627,7 +19627,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -20002,7 +20002,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -20284,7 +20284,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -20649,7 +20649,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -21022,7 +21022,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -21329,7 +21329,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -21709,7 +21709,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -22032,7 +22032,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -22379,7 +22379,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -22728,7 +22728,7 @@
                                                                                                                                                                                                                                             "name": "typeName",
                                                                                                                                                                                                                                             "term": {
                                                                                                                                                                                                                                               "wrap": {
-                                                                                                                                                                                                                                                "body": {"literal": {"string": "hydra.util.Coder"}},
+                                                                                                                                                                                                                                                "body": {"literal": {"string": "hydra.coders.Coder"}},
                                                                                                                                                                                                                                                 "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                                                                           {
                                                                                                                                                                                                                                             "name": "field",
@@ -22865,7 +22865,7 @@
                                                                                                                                                                                                                                             "name": "typeName",
                                                                                                                                                                                                                                             "term": {
                                                                                                                                                                                                                                               "wrap": {
-                                                                                                                                                                                                                                                "body": {"literal": {"string": "hydra.util.Coder"}},
+                                                                                                                                                                                                                                                "body": {"literal": {"string": "hydra.coders.Coder"}},
                                                                                                                                                                                                                                                 "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                                                                           {
                                                                                                                                                                                                                                             "name": "field",
@@ -22971,7 +22971,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -23083,7 +23083,7 @@
                                                                                                                           "name": "variable",
                                                                                                                           "term": {
                                                                                                                             "wrap": {
-                                                                                                                              "body": {"literal": {"string": "hydra.util.Coder"}},
+                                                                                                                              "body": {"literal": {"string": "hydra.coders.Coder"}},
                                                                                                                               "typeName": "hydra.core.Name"}}},
                                                                                                                         "typeName": "hydra.core.Type"}}},
                                                                                                                   {
@@ -23442,7 +23442,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -23674,7 +23674,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -23976,7 +23976,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -24490,7 +24490,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -24854,7 +24854,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -25262,7 +25262,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -25685,7 +25685,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -26039,7 +26039,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -26374,7 +26374,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -26823,7 +26823,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -27246,7 +27246,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -28095,7 +28095,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -28641,7 +28641,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -29012,7 +29012,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -29387,7 +29387,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -29846,7 +29846,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -30080,7 +30080,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -30224,7 +30224,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -30390,7 +30390,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -30613,7 +30613,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -30802,7 +30802,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -30999,7 +30999,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -31288,7 +31288,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -31476,7 +31476,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -31650,7 +31650,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -31862,7 +31862,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -32074,7 +32074,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -32279,7 +32279,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -32510,7 +32510,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -32715,7 +32715,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -33002,7 +33002,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -33333,7 +33333,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -34033,7 +34033,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -34370,7 +34370,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -34560,7 +34560,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -34824,7 +34824,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -35028,7 +35028,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -35314,7 +35314,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -35476,7 +35476,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -35705,7 +35705,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -36070,7 +36070,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -36521,7 +36521,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -36948,7 +36948,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -37313,7 +37313,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -37603,7 +37603,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -37955,7 +37955,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -38316,7 +38316,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -38540,7 +38540,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {
@@ -38860,7 +38860,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                                                "function": {"variable": "hydra.rewriting.typeSchemeToFType"}}},
+                                                                "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                                             "function": {"variable": "hydra.show.core.type"}}},
                                                         "domain": [
                                                           {

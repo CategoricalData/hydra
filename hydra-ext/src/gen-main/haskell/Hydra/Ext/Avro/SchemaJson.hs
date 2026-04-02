@@ -4,6 +4,7 @@
 
 module Hydra.Ext.Avro.SchemaJson where
 
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Context as Context
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Ext.Org.Apache.Avro.Schema as Schema
@@ -20,7 +21,6 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Parsing as Parsing
-import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -29,18 +29,18 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Create a coder between Avro schemas and JSON values
-avroSchemaJsonCoder :: t0 -> Util.Coder Schema.Schema Model.Value
+avroSchemaJsonCoder :: t0 -> Coders.Coder Schema.Schema Model.Value
 avroSchemaJsonCoder cx =
-    Util.Coder {
-      Util.coderEncode = (\_cx -> \schema -> Right (encodeSchema schema)),
-      Util.coderDecode = (\cx2 -> \json -> decodeSchema cx2 json)}
+    Coders.Coder {
+      Coders.coderEncode = (\_cx -> \schema -> Right (encodeSchema schema)),
+      Coders.coderDecode = (\cx2 -> \json -> decodeSchema cx2 json)}
 
 -- | Create a coder between Avro schemas and JSON strings
-avroSchemaStringCoder :: t0 -> Util.Coder Schema.Schema String
+avroSchemaStringCoder :: t0 -> Coders.Coder Schema.Schema String
 avroSchemaStringCoder cx =
-    Util.Coder {
-      Util.coderEncode = (\_cx -> \schema -> Right (showJsonValue (encodeSchema schema))),
-      Util.coderDecode = (\cx2 -> \s -> Eithers.bind (Eithers.either (\e -> err cx2 e) (\v -> Right v) (stringToJsonValue s)) (\json -> decodeSchema cx2 json))}
+    Coders.Coder {
+      Coders.coderEncode = (\_cx -> \schema -> Right (showJsonValue (encodeSchema schema))),
+      Coders.coderDecode = (\cx2 -> \s -> Eithers.bind (Eithers.either (\e -> err cx2 e) (\v -> Right v) (stringToJsonValue s)) (\json -> decodeSchema cx2 json))}
 
 avro_aliases :: String
 avro_aliases = "aliases"

@@ -55,9 +55,9 @@ def bindUnboundTypeVariables(cx: hydra.graph.Graph)(term0: hydra.core.Term): hyd
           {
           lazy val bvars: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.fromList[hydra.core.Name](ts.variables)
           {
-            lazy val unboundInType: scala.collection.immutable.Set[hydra.core.Name] = hydra.rewriting.freeVariablesInType(ts.`type`)
+            lazy val unboundInType: scala.collection.immutable.Set[hydra.core.Name] = hydra.variables.freeVariablesInType(ts.`type`)
             {
-              lazy val unboundInTerm: scala.collection.immutable.Set[hydra.core.Name] = hydra.rewriting.freeTypeVariablesInTerm(bterm)
+              lazy val unboundInTerm: scala.collection.immutable.Set[hydra.core.Name] = hydra.variables.freeTypeVariablesInTerm(bterm)
               {
                 lazy val unbound: Seq[hydra.core.Name] = hydra.lib.sets.toList[hydra.core.Name](hydra.lib.sets.difference[hydra.core.Name](hydra.lib.sets.union[hydra.core.Name](unboundInType)(unboundInTerm))(hydra.lib.sets.union[hydra.core.Name](svars)(bvars)))
                 {
@@ -95,7 +95,7 @@ def finalizeInferredTerm(flowCx: hydra.context.Context)(cx: hydra.graph.Graph)(t
    hydra.core.Term] =
   {
   lazy val term2: hydra.core.Term = hydra.inference.bindUnboundTypeVariables(cx)(term)
-  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Unit, hydra.core.Term](hydra.checking.checkForUnboundTypeVariables(flowCx)(cx)(term2))((_x: Unit) => Right(hydra.rewriting.normalizeTypeVariablesInTerm(term2)))
+  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Unit, hydra.core.Term](hydra.checking.checkForUnboundTypeVariables(flowCx)(cx)(term2))((_x: Unit) => Right(hydra.variables.normalizeTypeVariablesInTerm(term2)))
 }
 
 def forInferredTerm[T0](fcx: hydra.context.Context)(cx: hydra.graph.Graph)(term: hydra.core.Term)(desc: scala.Predef.String)(f: (hydra.typing.InferenceResult => T0)): Either[hydra.context.InContext[hydra.errors.Error],
@@ -106,12 +106,12 @@ def forInferredTerm[T0](fcx: hydra.context.Context)(cx: hydra.graph.Graph)(term:
 
 def freeVariablesInContext(cx: hydra.graph.Graph): scala.collection.immutable.Set[hydra.core.Name] =
   hydra.lib.lists.foldl[scala.collection.immutable.Set[hydra.core.Name], scala.collection.immutable.Set[hydra.core.Name]](hydra.lib.sets.union[hydra.core.Name])(hydra.lib.sets.empty[hydra.core.Name])(hydra.lib.lists.map[hydra.core.TypeScheme,
-     scala.collection.immutable.Set[hydra.core.Name]](hydra.rewriting.freeVariablesInTypeSchemeSimple)(hydra.lib.maps.elems[hydra.core.Name,
+     scala.collection.immutable.Set[hydra.core.Name]](hydra.variables.freeVariablesInTypeSchemeSimple)(hydra.lib.maps.elems[hydra.core.Name,
      hydra.core.TypeScheme](cx.boundTypes)))
 
 def freshVariableType(cx: hydra.context.Context): Tuple2[hydra.core.Type, hydra.context.Context] =
   {
-  lazy val result: Tuple2[hydra.core.Name, hydra.context.Context] = hydra.schemas.freshName(cx)
+  lazy val result: Tuple2[hydra.core.Name, hydra.context.Context] = hydra.names.freshName(cx)
   lazy val name: hydra.core.Name = hydra.lib.pairs.first[hydra.core.Name, hydra.context.Context](result)
   lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Name, hydra.context.Context](result)
   Tuple2(hydra.core.Type.variable(name), cx2)
@@ -125,7 +125,7 @@ def generalize(cx: hydra.graph.Graph)(typ: hydra.core.Type): hydra.core.TypeSche
     hydra.lib.equality.lte[Int](hydra.lib.lists.length[scala.Predef.String](parts))(1)
   }
   lazy val vars: Seq[hydra.core.Name] = hydra.lib.lists.nub[hydra.core.Name](hydra.lib.lists.filter[hydra.core.Name]((v: hydra.core.Name) =>
-    hydra.lib.logic.and(hydra.inference.isUnbound(cx)(v))(isTypeVarName(v)))(hydra.rewriting.freeVariablesInTypeOrdered(typ)))
+    hydra.lib.logic.and(hydra.inference.isUnbound(cx)(v))(isTypeVarName(v)))(hydra.variables.freeVariablesInTypeOrdered(typ)))
   lazy val allConstraints: Map[hydra.core.Name, hydra.core.TypeVariableMetadata] = (cx.classConstraints)
   lazy val relevantConstraints: Map[hydra.core.Name, hydra.core.TypeVariableMetadata] = hydra.lib.maps.fromList[hydra.core.Name,
      hydra.core.TypeVariableMetadata](hydra.lib.maybes.cat[Tuple2[hydra.core.Name, hydra.core.TypeVariableMetadata]](hydra.lib.lists.map[hydra.core.Name,
@@ -356,7 +356,7 @@ def inferTypeOfApplication(fcx0: hydra.context.Context)(cx: hydra.graph.Graph)(a
                     {
                       lazy val c1: Map[hydra.core.Name, hydra.core.TypeVariableMetadata] = (rhsResult.classConstraints)
                       {
-                        lazy val vResult: Tuple2[hydra.core.Name, hydra.context.Context] = hydra.schemas.freshName(fcx3)
+                        lazy val vResult: Tuple2[hydra.core.Name, hydra.context.Context] = hydra.names.freshName(fcx3)
                         {
                           lazy val v: hydra.core.Name = hydra.lib.pairs.first[hydra.core.Name, hydra.context.Context](vResult)
                           {
@@ -412,7 +412,7 @@ def inferTypeOfCaseStatement(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(
   lazy val cases: Seq[hydra.core.Field] = (caseStmt.cases)
   lazy val fnames: Seq[hydra.core.Name] = hydra.lib.lists.map[hydra.core.Field, hydra.core.Name]((x: hydra.core.Field) => (x.name))(cases)
   hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Tuple2[hydra.core.TypeScheme, hydra.context.Context],
-     hydra.typing.InferenceResult](hydra.schemas.requireSchemaType(fcx)(cx.schemaTypes)(tname))((stRp: Tuple2[hydra.core.TypeScheme,
+     hydra.typing.InferenceResult](hydra.resolution.requireSchemaType(fcx)(cx.schemaTypes)(tname))((stRp: Tuple2[hydra.core.TypeScheme,
      hydra.context.Context]) =>
     {
     lazy val schemaType: hydra.core.TypeScheme = hydra.lib.pairs.first[hydra.core.TypeScheme, hydra.context.Context](stRp)
@@ -471,7 +471,7 @@ def inferTypeOfCaseStatement(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(
                              Tuple2[Seq[hydra.core.Type], Tuple2[hydra.typing.TypeSubst, Map[hydra.core.Name,
                              hydra.core.TypeVariableMetadata]]]](caseResults)))
                           {
-                            lazy val codvResult: Tuple2[hydra.core.Name, hydra.context.Context] = hydra.schemas.freshName(fcx4)
+                            lazy val codvResult: Tuple2[hydra.core.Name, hydra.context.Context] = hydra.names.freshName(fcx4)
                             {
                               lazy val codv: hydra.core.Name = hydra.lib.pairs.first[hydra.core.Name, hydra.context.Context](codvResult)
                               {
@@ -508,7 +508,7 @@ def inferTypeOfCaseStatement(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(
                                                  hydra.lib.maybes.map[hydra.typing.InferenceResult, hydra.core.Term]((x: hydra.typing.InferenceResult) => (x.term))(dfltResult),
                                                  hydra.lib.lists.zipWith[hydra.core.Name, hydra.core.Term,
                                                  hydra.core.Field]((n: hydra.core.Name) => (t: hydra.core.Term) => hydra.core.Field(n,
-                                                 t))(fnames)(iterms)))))))(hydra.core.Type.function(hydra.core.FunctionType(hydra.schemas.nominalApplication(tname)(hydra.lib.lists.map[hydra.core.Name,
+                                                 t))(fnames)(iterms)))))))(hydra.core.Type.function(hydra.core.FunctionType(hydra.resolution.nominalApplication(tname)(hydra.lib.lists.map[hydra.core.Name,
                                                  hydra.core.Type]((x: hydra.core.Name) => hydra.core.Type.variable(x))(svars)),
                                                  cod)))(hydra.substitution.composeTypeSubstList(hydra.lib.lists.concat[hydra.typing.TypeSubst](Seq(hydra.lib.maybes.toList[hydra.typing.TypeSubst](hydra.lib.maybes.map[hydra.typing.InferenceResult,
                                                  hydra.typing.TypeSubst]((x: hydra.typing.InferenceResult) => (x.subst))(dfltResult)),
@@ -540,7 +540,7 @@ def inferTypeOfCaseStatement(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(
 def inferTypeOfCollection(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(typCons: (hydra.core.Type => hydra.core.Type))(trmCons: (Seq[hydra.core.Term] => hydra.core.Term))(desc: scala.Predef.String)(classNames: scala.collection.immutable.Set[hydra.core.Name])(els: Seq[hydra.core.Term]): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.typing.InferenceResult] =
   {
-  lazy val varResult: Tuple2[hydra.core.Name, hydra.context.Context] = hydra.schemas.freshName(fcx)
+  lazy val varResult: Tuple2[hydra.core.Name, hydra.context.Context] = hydra.names.freshName(fcx)
   lazy val `var`: hydra.core.Name = hydra.lib.pairs.first[hydra.core.Name, hydra.context.Context](varResult)
   lazy val fcx2: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Name, hydra.context.Context](varResult)
   lazy val classConstraints: Map[hydra.core.Name, hydra.core.TypeVariableMetadata] = hydra.lib.logic.ifElse[Map[hydra.core.Name,
@@ -706,7 +706,7 @@ def inferTypeOfInjection(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(inje
     {
     lazy val fcx2: hydra.context.Context = (result.context)
     hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Tuple2[hydra.core.TypeScheme,
-       hydra.context.Context], hydra.typing.InferenceResult](hydra.schemas.requireSchemaType(fcx2)(cx.schemaTypes)(tname))((stRp: Tuple2[hydra.core.TypeScheme,
+       hydra.context.Context], hydra.typing.InferenceResult](hydra.resolution.requireSchemaType(fcx2)(cx.schemaTypes)(tname))((stRp: Tuple2[hydra.core.TypeScheme,
        hydra.context.Context]) =>
       {
       lazy val schemaType: hydra.core.TypeScheme = hydra.lib.pairs.first[hydra.core.TypeScheme, hydra.context.Context](stRp)
@@ -725,11 +725,11 @@ def inferTypeOfInjection(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(inje
                   hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Seq[hydra.core.FieldType],
                      hydra.typing.InferenceResult](hydra.extract.core.unionType(fcx3)(tname)(stype))((sfields: Seq[hydra.core.FieldType]) =>
                     hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Type,
-                       hydra.typing.InferenceResult](hydra.schemas.findFieldType(fcx3)(fname)(sfields))((ftyp: hydra.core.Type) =>
+                       hydra.typing.InferenceResult](hydra.resolution.findFieldType(fcx3)(fname)(sfields))((ftyp: hydra.core.Type) =>
                     hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.typing.InferenceResult,
                        hydra.typing.InferenceResult](hydra.inference.mapConstraints(fcx3)(cx)((subst: hydra.typing.TypeSubst) =>
                     hydra.inference.`yield`(fcx3)(hydra.inference.buildTypeApplicationTerm(svars)(hydra.core.Term.union(hydra.core.Injection(tname,
-                       hydra.core.Field(fname, iterm)))))(hydra.schemas.nominalApplication(tname)(hydra.lib.lists.map[hydra.core.Name,
+                       hydra.core.Field(fname, iterm)))))(hydra.resolution.nominalApplication(tname)(hydra.lib.lists.map[hydra.core.Name,
                        hydra.core.Type]((x: hydra.core.Name) => hydra.core.Type.variable(x))(svars)))(hydra.substitution.composeTypeSubst(isubst)(subst)))(Seq(hydra.typing.TypeConstraint(ftyp,
                        ityp, "schema type of injected field"))))((mcResult: hydra.typing.InferenceResult) => Right(mcResult))))
                 }
@@ -747,7 +747,7 @@ def inferTypeOfLambda(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(lambda:
   {
   lazy val `var`: hydra.core.Name = (lambda.parameter)
   lazy val body: hydra.core.Term = (lambda.body)
-  lazy val vdomResult: Tuple2[hydra.core.Name, hydra.context.Context] = hydra.schemas.freshName(fcx)
+  lazy val vdomResult: Tuple2[hydra.core.Name, hydra.context.Context] = hydra.names.freshName(fcx)
   lazy val vdom: hydra.core.Name = hydra.lib.pairs.first[hydra.core.Name, hydra.context.Context](vdomResult)
   lazy val fcx2: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Name, hydra.context.Context](vdomResult)
   lazy val dom: hydra.core.Type = hydra.core.Type.variable(vdom)
@@ -768,8 +768,8 @@ def inferTypeOfLambda(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(lambda:
               {
                 lazy val rtype: hydra.core.Type = hydra.core.Type.function(hydra.core.FunctionType(rdom, icod))
                 {
-                  lazy val vars: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.unions[hydra.core.Name](Seq(hydra.rewriting.freeVariablesInType(rdom),
-                     hydra.rewriting.freeVariablesInType(icod), hydra.inference.freeVariablesInContext(hydra.substitution.substInContext(isubst)(cx2))))
+                  lazy val vars: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.unions[hydra.core.Name](Seq(hydra.variables.freeVariablesInType(rdom),
+                     hydra.variables.freeVariablesInType(icod), hydra.inference.freeVariablesInContext(hydra.substitution.substInContext(isubst)(cx2))))
                   {
                     lazy val cx3: hydra.graph.Graph = hydra.substitution.substInContext(isubst)(cx)
                     {
@@ -799,7 +799,7 @@ def inferTypeOfLet(fcx0: hydra.context.Context)(cx: hydra.graph.Graph)(let0: hyd
     {
     lazy val name: hydra.core.Name = (binding.name)
     lazy val term: hydra.core.Term = (binding.term)
-    Tuple2(name, hydra.lib.lists.filter[hydra.core.Name]((n: hydra.core.Name) => hydra.lib.sets.member[hydra.core.Name](n)(nameSet))(hydra.lib.sets.toList[hydra.core.Name](hydra.rewriting.freeVariablesInTerm(term))))
+    Tuple2(name, hydra.lib.lists.filter[hydra.core.Name]((n: hydra.core.Name) => hydra.lib.sets.member[hydra.core.Name](n)(nameSet))(hydra.lib.sets.toList[hydra.core.Name](hydra.variables.freeVariablesInTerm(term))))
   }
   lazy val adjList: Seq[Tuple2[hydra.core.Name, Seq[hydra.core.Name]]] = hydra.lib.lists.map[hydra.core.Binding,
      Tuple2[hydra.core.Name, Seq[hydra.core.Name]]](toPair)(bindings0)
@@ -859,7 +859,7 @@ def inferTypeOfLetNormalized(fcx0: hydra.context.Context)(cx0: hydra.graph.Graph
   lazy val bins0: Seq[hydra.core.Binding] = (letTerm.bindings)
   lazy val body0: hydra.core.Term = (letTerm.body)
   lazy val bnames: Seq[hydra.core.Name] = hydra.lib.lists.map[hydra.core.Binding, hydra.core.Name]((x: hydra.core.Binding) => (x.name))(bins0)
-  lazy val bvarsResult: Tuple2[Seq[hydra.core.Name], hydra.context.Context] = hydra.schemas.freshNames(hydra.lib.lists.length[hydra.core.Binding](bins0))(fcx)
+  lazy val bvarsResult: Tuple2[Seq[hydra.core.Name], hydra.context.Context] = hydra.names.freshNames(hydra.lib.lists.length[hydra.core.Binding](bins0))(fcx)
   lazy val bvars: Seq[hydra.core.Name] = hydra.lib.pairs.first[Seq[hydra.core.Name], hydra.context.Context](bvarsResult)
   lazy val fcx2: hydra.context.Context = hydra.lib.pairs.second[Seq[hydra.core.Name], hydra.context.Context](bvarsResult)
   lazy val tbins0: Seq[hydra.core.Type] = hydra.lib.lists.map[hydra.core.Name, hydra.core.Type]((x: hydra.core.Name) => hydra.core.Type.variable(x))(bvars)
@@ -1035,10 +1035,10 @@ def inferTypeOfLiteral(fcx: hydra.context.Context)(lit: hydra.core.Literal): hyd
 def inferTypeOfMap(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(m: Map[hydra.core.Term, hydra.core.Term]): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.typing.InferenceResult] =
   {
-  lazy val kvarResult: Tuple2[hydra.core.Name, hydra.context.Context] = hydra.schemas.freshName(fcx)
+  lazy val kvarResult: Tuple2[hydra.core.Name, hydra.context.Context] = hydra.names.freshName(fcx)
   lazy val kvar: hydra.core.Name = hydra.lib.pairs.first[hydra.core.Name, hydra.context.Context](kvarResult)
   lazy val fcx2: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Name, hydra.context.Context](kvarResult)
-  lazy val vvarResult: Tuple2[hydra.core.Name, hydra.context.Context] = hydra.schemas.freshName(fcx2)
+  lazy val vvarResult: Tuple2[hydra.core.Name, hydra.context.Context] = hydra.names.freshName(fcx2)
   lazy val vvar: hydra.core.Name = hydra.lib.pairs.first[hydra.core.Name, hydra.context.Context](vvarResult)
   lazy val fcx3: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Name, hydra.context.Context](vvarResult)
   lazy val keyConstraints: Map[hydra.core.Name, hydra.core.TypeVariableMetadata] = hydra.lib.maps.singleton[hydra.core.Name,
@@ -1224,7 +1224,7 @@ def inferTypeOfPrimitive(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(name
      hydra.core.TypeScheme](Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2("No such primitive: ")(name)),
      fcx)))((scheme: hydra.core.TypeScheme) =>
   {
-  lazy val tsResult: Tuple2[hydra.core.TypeScheme, hydra.context.Context] = hydra.schemas.instantiateTypeScheme(fcx)(scheme)
+  lazy val tsResult: Tuple2[hydra.core.TypeScheme, hydra.context.Context] = hydra.resolution.instantiateTypeScheme(fcx)(scheme)
   {
     lazy val ts: hydra.core.TypeScheme = hydra.lib.pairs.first[hydra.core.TypeScheme, hydra.context.Context](tsResult)
     {
@@ -1245,7 +1245,7 @@ def inferTypeOfProjection(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(pro
   lazy val tname: hydra.core.Name = (proj.typeName)
   lazy val fname: hydra.core.Name = (proj.field)
   hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Tuple2[hydra.core.TypeScheme, hydra.context.Context],
-     hydra.typing.InferenceResult](hydra.schemas.requireSchemaType(fcx)(cx.schemaTypes)(tname))((stRp: Tuple2[hydra.core.TypeScheme,
+     hydra.typing.InferenceResult](hydra.resolution.requireSchemaType(fcx)(cx.schemaTypes)(tname))((stRp: Tuple2[hydra.core.TypeScheme,
      hydra.context.Context]) =>
     {
     lazy val schemaType: hydra.core.TypeScheme = hydra.lib.pairs.first[hydra.core.TypeScheme, hydra.context.Context](stRp)
@@ -1257,9 +1257,9 @@ def inferTypeOfProjection(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(pro
           lazy val stype: hydra.core.Type = (schemaType.`type`)
           hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Seq[hydra.core.FieldType],
              hydra.typing.InferenceResult](hydra.extract.core.recordType(fcx2)(tname)(stype))((sfields: Seq[hydra.core.FieldType]) =>
-            hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Type, hydra.typing.InferenceResult](hydra.schemas.findFieldType(fcx2)(fname)(sfields))((ftyp: hydra.core.Type) =>
+            hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Type, hydra.typing.InferenceResult](hydra.resolution.findFieldType(fcx2)(fname)(sfields))((ftyp: hydra.core.Type) =>
             Right(hydra.inference.`yield`(fcx2)(hydra.inference.buildTypeApplicationTerm(svars)(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.record(hydra.core.Projection(tname,
-               fname))))))(hydra.core.Type.function(hydra.core.FunctionType(hydra.schemas.nominalApplication(tname)(hydra.lib.lists.map[hydra.core.Name,
+               fname))))))(hydra.core.Type.function(hydra.core.FunctionType(hydra.resolution.nominalApplication(tname)(hydra.lib.lists.map[hydra.core.Name,
                hydra.core.Type]((x: hydra.core.Name) => hydra.core.Type.variable(x))(svars)), ftyp)))(hydra.substitution.idTypeSubst))))
         }
       }
@@ -1274,7 +1274,7 @@ def inferTypeOfRecord(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(record:
   lazy val fields: Seq[hydra.core.Field] = (record.fields)
   lazy val fnames: Seq[hydra.core.Name] = hydra.lib.lists.map[hydra.core.Field, hydra.core.Name]((x: hydra.core.Field) => (x.name))(fields)
   hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Tuple2[hydra.core.TypeScheme, hydra.context.Context],
-     hydra.typing.InferenceResult](hydra.schemas.requireSchemaType(fcx)(cx.schemaTypes)(tname))((stRp: Tuple2[hydra.core.TypeScheme,
+     hydra.typing.InferenceResult](hydra.resolution.requireSchemaType(fcx)(cx.schemaTypes)(tname))((stRp: Tuple2[hydra.core.TypeScheme,
      hydra.context.Context]) =>
     {
     lazy val schemaType: hydra.core.TypeScheme = hydra.lib.pairs.first[hydra.core.TypeScheme, hydra.context.Context](stRp)
@@ -1327,7 +1327,7 @@ def inferTypeOfRecord(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(record:
                            hydra.typing.InferenceResult](hydra.inference.mapConstraints(fcx3)(cx)((subst: hydra.typing.TypeSubst) =>
                           hydra.inference.yieldWithConstraints(fcx3)(hydra.inference.buildTypeApplicationTerm(svars)(hydra.core.Term.record(hydra.core.Record(tname,
                              hydra.lib.lists.zipWith[hydra.core.Name, hydra.core.Term, hydra.core.Field]((n: hydra.core.Name) => (t: hydra.core.Term) => hydra.core.Field(n,
-                             t))(fnames)(iterms)))))(hydra.schemas.nominalApplication(tname)(hydra.lib.lists.map[hydra.core.Name,
+                             t))(fnames)(iterms)))))(hydra.resolution.nominalApplication(tname)(hydra.lib.lists.map[hydra.core.Name,
                              hydra.core.Type]((x: hydra.core.Name) => hydra.core.Type.variable(x))(svars)))(hydra.substitution.composeTypeSubst(isubst)(subst))(hydra.substitution.substInClassConstraints(subst)(recElemConstraints)))(Seq(hydra.typing.TypeConstraint(stype,
                              ityp, "schema type of record"))))((mcResult: hydra.typing.InferenceResult) => Right(mcResult))
                       }
@@ -1386,7 +1386,7 @@ def inferTypeOfUnit(fcx: hydra.context.Context): hydra.typing.InferenceResult =
 def inferTypeOfUnwrap(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(tname: hydra.core.Name): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.typing.InferenceResult] =
   hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Tuple2[hydra.core.TypeScheme, hydra.context.Context],
-     hydra.typing.InferenceResult](hydra.schemas.requireSchemaType(fcx)(cx.schemaTypes)(tname))((stRp: Tuple2[hydra.core.TypeScheme,
+     hydra.typing.InferenceResult](hydra.resolution.requireSchemaType(fcx)(cx.schemaTypes)(tname))((stRp: Tuple2[hydra.core.TypeScheme,
      hydra.context.Context]) =>
   {
   lazy val schemaType: hydra.core.TypeScheme = hydra.lib.pairs.first[hydra.core.TypeScheme, hydra.context.Context](stRp)
@@ -1397,7 +1397,7 @@ def inferTypeOfUnwrap(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(tname: 
       {
         lazy val stype: hydra.core.Type = (schemaType.`type`)
         hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Type, hydra.typing.InferenceResult](hydra.extract.core.wrappedType(fcx2)(tname)(stype))((wtyp: hydra.core.Type) =>
-          Right(hydra.inference.`yield`(fcx2)(hydra.inference.buildTypeApplicationTerm(svars)(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.wrap(tname)))))(hydra.core.Type.function(hydra.core.FunctionType(hydra.schemas.nominalApplication(tname)(hydra.lib.lists.map[hydra.core.Name,
+          Right(hydra.inference.`yield`(fcx2)(hydra.inference.buildTypeApplicationTerm(svars)(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.wrap(tname)))))(hydra.core.Type.function(hydra.core.FunctionType(hydra.resolution.nominalApplication(tname)(hydra.lib.lists.map[hydra.core.Name,
              hydra.core.Type]((x: hydra.core.Name) => hydra.core.Type.variable(x))(svars)), wtyp)))(hydra.substitution.idTypeSubst)))
       }
     }
@@ -1410,7 +1410,7 @@ def inferTypeOfVariable(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(name:
      hydra.core.TypeScheme](Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2("Variable not bound to type: ")(name)),
      fcx)))((scheme: hydra.core.TypeScheme) =>
   {
-  lazy val tsResult: Tuple2[hydra.core.TypeScheme, hydra.context.Context] = hydra.schemas.instantiateTypeScheme(fcx)(scheme)
+  lazy val tsResult: Tuple2[hydra.core.TypeScheme, hydra.context.Context] = hydra.resolution.instantiateTypeScheme(fcx)(scheme)
   {
     lazy val ts: hydra.core.TypeScheme = hydra.lib.pairs.first[hydra.core.TypeScheme, hydra.context.Context](tsResult)
     {
@@ -1431,7 +1431,7 @@ def inferTypeOfWrappedTerm(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(wt
   lazy val tname: hydra.core.Name = (wt.typeName)
   lazy val term: hydra.core.Term = (wt.body)
   hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Tuple2[hydra.core.TypeScheme, hydra.context.Context],
-     hydra.typing.InferenceResult](hydra.schemas.requireSchemaType(fcx)(cx.schemaTypes)(tname))((stRp: Tuple2[hydra.core.TypeScheme,
+     hydra.typing.InferenceResult](hydra.resolution.requireSchemaType(fcx)(cx.schemaTypes)(tname))((stRp: Tuple2[hydra.core.TypeScheme,
      hydra.context.Context]) =>
     {
     lazy val schemaType: hydra.core.TypeScheme = hydra.lib.pairs.first[hydra.core.TypeScheme, hydra.context.Context](stRp)
@@ -1456,7 +1456,7 @@ def inferTypeOfWrappedTerm(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(wt
                     hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.typing.InferenceResult,
                        hydra.typing.InferenceResult](hydra.inference.mapConstraints(fcx3)(cx)((subst: hydra.typing.TypeSubst) =>
                       hydra.inference.`yield`(fcx3)(hydra.inference.buildTypeApplicationTerm(svars)(hydra.core.Term.wrap(hydra.core.WrappedTerm(tname,
-                         iterm))))(hydra.schemas.nominalApplication(tname)(hydra.lib.lists.map[hydra.core.Name,
+                         iterm))))(hydra.resolution.nominalApplication(tname)(hydra.lib.lists.map[hydra.core.Name,
                          hydra.core.Type]((x: hydra.core.Name) => hydra.core.Type.variable(x))(svars)))(hydra.substitution.composeTypeSubst(isubst)(subst)))(Seq(hydra.typing.TypeConstraint(stype,
                          ityp, "schema type of wrapper"))))((mcResult: hydra.typing.InferenceResult) => Right(mcResult))
                   }
@@ -1509,7 +1509,7 @@ def inferTypesOfTemporaryBindings(fcx: hydra.context.Context)(cx: hydra.graph.Gr
                        Map[hydra.core.Name, hydra.core.TypeVariableMetadata]], hydra.core.TypeScheme](Right(hydra.lib.maps.empty[hydra.core.Name,
                        hydra.core.TypeVariableMetadata]))((ts: hydra.core.TypeScheme) =>
                       {
-                      lazy val tsResult: Tuple2[hydra.core.TypeScheme, hydra.context.Context] = hydra.schemas.instantiateTypeScheme(fcx2)(ts)
+                      lazy val tsResult: Tuple2[hydra.core.TypeScheme, hydra.context.Context] = hydra.resolution.instantiateTypeScheme(fcx2)(ts)
                       {
                         lazy val instantiatedTs: hydra.core.TypeScheme = hydra.lib.pairs.first[hydra.core.TypeScheme, hydra.context.Context](tsResult)
                         {

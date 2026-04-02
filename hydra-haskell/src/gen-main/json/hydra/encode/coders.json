@@ -285,7 +285,8 @@
   "namespace": "hydra.encode.coders",
   "termDependencies": [
     "hydra.encode.core",
+    "hydra.encode.context",
+    "hydra.encode.errors",
     "hydra.encode.graph",
-    "hydra.encode.util",
     "hydra.encode.variants"],
   "typeDependencies": ["hydra.coders"]}

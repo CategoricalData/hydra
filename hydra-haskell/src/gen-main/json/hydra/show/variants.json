@@ -1,0 +1,359 @@
+{
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.show.variants.termVariant",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {"literal": {"string": "Show a term variant as a string"}}}],
+            "body": {
+              "function": {
+                "elimination": {
+                  "union": {
+                    "cases": [
+                      {
+                        "name": "annotated",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "annotated"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "application",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "application"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "either",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "either"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "function",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "function"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "let",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "let"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "list",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "list"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "literal",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "literal"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "map",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "map"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "maybe",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "maybe"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "pair",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "pair"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "record",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "record"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "set",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "set"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "typeLambda",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "typeLambda"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "typeApplication",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "typeApplication"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "union",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "union"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "unit",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "unit"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "variable",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "variable"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "wrap",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "wrap"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}}],
+                    "default": null,
+                    "typeName": "hydra.variants.TermVariant"}}}}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {"literal": {"string": {}}},
+                "domain": {"variable": "hydra.variants.TermVariant"}}},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.show.variants.typeVariant",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {"literal": {"string": "Show a type variant as a string"}}}],
+            "body": {
+              "function": {
+                "elimination": {
+                  "union": {
+                    "cases": [
+                      {
+                        "name": "annotated",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "annotated"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "application",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "application"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "either",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "either"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "forall",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "forall"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "function",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "function"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "list",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "list"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "literal",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "literal"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "map",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "map"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "maybe",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "maybe"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "pair",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "pair"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "record",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "record"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "set",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "set"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "union",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "union"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "unit",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "unit"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "variable",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "variable"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "void",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "void"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}},
+                      {
+                        "name": "wrap",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"string": "wrap"}},
+                              "domain": [{"unit": {}}],
+                              "parameter": "_"}}}}],
+                    "default": null,
+                    "typeName": "hydra.variants.TypeVariant"}}}}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {"literal": {"string": {}}},
+                "domain": {"variable": "hydra.variants.TypeVariant"}}},
+            "variables": []}]}}],
+  "description": ["String representations of hydra.variants types"],
+  "namespace": "hydra.show.variants",
+  "termDependencies": [],
+  "typeDependencies": [
+    "hydra.paths",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.context",
+    "hydra.core",
+    "hydra.error.checking",
+    "hydra.error.core",
+    "hydra.error.module",
+    "hydra.error.packaging",
+    "hydra.errors",
+    "hydra.graph",
+    "hydra.json.model",
+    "hydra.module",
+    "hydra.packaging",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants"]}

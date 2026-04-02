@@ -104,7 +104,7 @@ def doubleQuotedString(s: scala.Predef.String): hydra.ext.python.syntax.Expressi
 def findNamespaces(focusNs: hydra.module.Namespace)(defs: Seq[hydra.module.Definition]): hydra.module.Namespaces[hydra.ext.python.syntax.DottedName] =
   {
   lazy val coreNs: hydra.module.Namespace = "hydra.core"
-  lazy val namespaces: hydra.module.Namespaces[hydra.ext.python.syntax.DottedName] = hydra.schemas.namespacesForDefinitions(hydra.ext.python.names.encodeNamespace)(focusNs)(defs)
+  lazy val namespaces: hydra.module.Namespaces[hydra.ext.python.syntax.DottedName] = hydra.analysis.namespacesForDefinitions(hydra.ext.python.names.encodeNamespace)(focusNs)(defs)
   hydra.lib.logic.ifElse[hydra.module.Namespaces[hydra.ext.python.syntax.DottedName]](hydra.lib.equality.equal[scala.Predef.String](hydra.lib.pairs.first[hydra.module.Namespace,
      hydra.ext.python.syntax.DottedName](namespaces.focus))(coreNs))(namespaces)(hydra.module.Namespaces(namespaces.focus,
      hydra.lib.maps.insert[hydra.module.Namespace, hydra.ext.python.syntax.DottedName](coreNs)(hydra.ext.python.names.encodeNamespace(coreNs))(namespaces.mapping)))

@@ -68,13 +68,13 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
+import qualified Hydra.Sources.Kernel.Terms.Resolution    as Resolution
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -103,7 +103,7 @@ ns = Namespace "hydra.pg.termsToElements"
 
 module_ :: Module
 module_ = Module ns elements
-    [Annotations.ns, ExtractCore.ns, Rewriting.ns, Schemas.ns, ShowCore.ns]
+    [Annotations.ns, ExtractCore.ns, Strip.ns, Resolution.ns, ShowCore.ns]
     (PgModel.ns:PgMapping.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Functions for mapping Hydra terms to property graph elements using mapping specifications"
   where
@@ -203,7 +203,7 @@ decodeValueSpec = define "decodeValueSpec" $
   doc "Decode a value specification from a term" $
   "cx" ~> "g" ~> "term" ~>
     -- Allow an abbreviated specification consisting of only the pattern string
-    cases _Term (Rewriting.deannotateTerm @@ var "term") (Just $
+    cases _Term (Strip.deannotateTerm @@ var "term") (Just $
       readInjection @@ var "cx" @@ var "g"
         @@ list [
           pair (Core.name $ string "value") (constant $ right (inject PGM._ValueSpec PGM._ValueSpec_value $ unit)),
@@ -261,7 +261,7 @@ parseEdgeIdPattern = define "parseEdgeIdPattern" $
       ("fun" ~> right
         ("cx'" ~> "term" ~>
           Eithers.bind (var "fun" @@ var "cx'" @@ var "term")
-            ("terms" ~> Eithers.mapList (Util.coderEncode (project PGM._Schema PGM._Schema_edgeIds @@ var "schema") @@ var "cx'") (var "terms"))))
+            ("terms" ~> Eithers.mapList (Coders.coderEncode (project PGM._Schema PGM._Schema_edgeIds @@ var "schema") @@ var "cx'") (var "terms"))))
 
 -- | Parse an edge specification into a label and encoder function
 parseEdgeSpec :: TTermDefinition (Context -> Graph -> PGM.Schema s t v -> PGM.EdgeSpec
@@ -311,7 +311,7 @@ evalStep = define "evalStep" $
   "cx" ~> "step" ~> "term" ~>
     Logic.ifElse (Strings.null $ var "step")
       (right (list [var "term"]))
-      (cases _Term (Rewriting.deannotateTerm @@ var "term")
+      (cases _Term (Strip.deannotateTerm @@ var "term")
         (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError $ string "Can't traverse through term for step " ++ var "step") (var "cx"))) [
         _Term_list>>: "terms" ~>
           Eithers.map (lambda "xs" $ Lists.concat (var "xs")) (Eithers.mapList (evalStep @@ var "cx" @@ var "step") (var "terms")),
@@ -321,7 +321,7 @@ evalStep = define "evalStep" $
           Maybes.maybe
             (left $ Ctx.inContext (Error.errorOther $ Error.otherError $ string "No such field " ++ var "step" ++ string " in record") (var "cx"))
             ("t" ~> right (list [var "t"]))
-            (Maps.lookup (Core.name $ var "step") (Schemas.fieldMap @@ (Core.recordFields $ var "rec"))),
+            (Maps.lookup (Core.name $ var "step") (Resolution.fieldMap @@ (Core.recordFields $ var "rec"))),
         _Term_union>>: "inj" ~>
           Logic.ifElse (Equality.equal (Core.unName $ Core.fieldName $ Core.injectionField $ var "inj") (var "step"))
             (evalStep @@ var "cx" @@ var "step" @@ (Core.fieldTerm $ Core.injectionField $ var "inj"))
@@ -345,7 +345,7 @@ termToString :: TTermDefinition (Term -> String)
 termToString = define "termToString" $
   doc "Convert a term to its string representation" $
   "term" ~>
-    cases _Term (Rewriting.deannotateTerm @@ var "term")
+    cases _Term (Strip.deannotateTerm @@ var "term")
       (Just $ ShowCore.term @@ var "term") [
       _Term_literal>>: "lit" ~>
         cases _Literal (var "lit") (Just $ ShowCore.term @@ var "term") [
@@ -426,7 +426,7 @@ parsePropertySpec = define "parsePropertySpec" $
       ("fun" ~> right
         ("cx'" ~> "term" ~>
           Eithers.bind (var "fun" @@ var "cx'" @@ var "term")
-            ("results" ~> Eithers.bind (Eithers.mapList (Util.coderEncode (project PGM._Schema PGM._Schema_propertyValues @@ var "schema") @@ var "cx'") (var "results"))
+            ("results" ~> Eithers.bind (Eithers.mapList (Coders.coderEncode (project PGM._Schema PGM._Schema_propertyValues @@ var "schema") @@ var "cx'") (var "results"))
               ("values" ~> right (Lists.map ("v" ~> pair (var "key") (var "v")) (var "values"))))))
 
 -- | Parse a value specification into a function that processes terms
@@ -448,7 +448,7 @@ parseVertexIdPattern = define "parseVertexIdPattern" $
       ("fun" ~> right
         ("cx'" ~> "term" ~>
           Eithers.bind (var "fun" @@ var "cx'" @@ var "term")
-            ("terms" ~> Eithers.mapList (Util.coderEncode (project PGM._Schema PGM._Schema_vertexIds @@ var "schema") @@ var "cx'") (var "terms"))))
+            ("terms" ~> Eithers.mapList (Coders.coderEncode (project PGM._Schema PGM._Schema_vertexIds @@ var "schema") @@ var "cx'") (var "terms"))))
 
 -- | Parse a vertex specification into a label and encoder function
 parseVertexSpec :: TTermDefinition (Context -> Graph -> PGM.Schema s t v -> PGM.VertexSpec
@@ -530,8 +530,8 @@ termToElementsAdapter = define "termToElementsAdapter" $
   "cx" ~> "g" ~> "schema" ~> "typ" ~> lets [
     "key_elements">: Core.name (string "elements")] $
     Maybes.maybe
-      (right $ Util.adapter false (var "typ") (list ([] :: [TTerm PG.Label]))
-        (Util.coder
+      (right $ Coders.adapter false (var "typ") (list ([] :: [TTerm PG.Label]))
+        (Coders.coder
           ("_cx" ~> "_t" ~> right (list ([] :: [TTerm (PG.Element ())])))
           ("cx'" ~> "_els" ~> left (Ctx.inContext (Error.errorOther $ Error.otherError $ string "no corresponding element type") (var "cx'")))))
       ("term" ~>
@@ -540,8 +540,8 @@ termToElementsAdapter = define "termToElementsAdapter" $
             ("specs" ~> lets [
               "labels">: (Lists.nub :: TTerm [PG.Label] -> TTerm [PG.Label]) (Lists.map ("_p" ~> Pairs.first (var "_p")) (var "specs")),
               "encoders">: Lists.map ("_p" ~> Pairs.second (var "_p")) (var "specs")] $
-              right (Util.adapter false (var "typ") (var "labels")
-                (Util.coder
+              right (Coders.adapter false (var "typ") (var "labels")
+                (Coders.coder
                   ("cx'" ~> "t" ~>
                     Eithers.map ("_xs" ~> Lists.concat (var "_xs")) (Eithers.mapList ("e" ~> var "e" @@ var "cx'" @@ var "t") (var "encoders")))
                   ("cx'" ~> "_els" ~> left (Ctx.inContext (Error.errorOther $ Error.otherError $ string "element decoding is not yet supported") (var "cx'"))))))))

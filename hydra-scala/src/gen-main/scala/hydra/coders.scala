@@ -1,23 +1,34 @@
 package hydra.coders
 
+import hydra.context.*
+
 import hydra.core.*
+
+import hydra.errors.*
 
 import hydra.graph.*
 
-import hydra.util.*
-
 import hydra.variants.*
+
+import hydra.context
 
 import hydra.core
 
-import hydra.graph
+import hydra.errors
 
-import hydra.util
+import hydra.graph
 
 import hydra.variants
 
+case class Adapter[T1, T2, V1, V2](isLossy: Boolean, source: T1, target: T2, coder: hydra.coders.Coder[V1, V2])
+
 case class AdapterContext(graph: hydra.graph.Graph, language: hydra.coders.Language, adapters: Map[hydra.core.Name,
-   hydra.util.Adapter[hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]])
+   hydra.coders.Adapter[hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]])
+
+case class Bicoder[T1, T2, V1, V2](encode: (T1 => hydra.coders.Adapter[T1, T2, V1, V2]), decode: (T2 => hydra.coders.Adapter[T2, T1, V2, V1]))
+
+case class Coder[V1, V2](encode: (hydra.context.Context => V1 => Either[hydra.context.InContext[hydra.errors.Error],
+   V2]), decode: (hydra.context.Context => V2 => Either[hydra.context.InContext[hydra.errors.Error], V1]))
 
 enum CoderDirection :
    case encode extends CoderDirection
@@ -33,7 +44,7 @@ case class LanguageConstraints(eliminationVariants: scala.collection.immutable.S
 
 type LanguageName = scala.Predef.String
 
-type SymmetricAdapter [T, V] = hydra.util.Adapter[T, T, V, V]
+type SymmetricAdapter [T, V] = hydra.coders.Adapter[T, T, V, V]
 
 enum TraversalOrder :
    case pre extends TraversalOrder

@@ -78,7 +78,9 @@ import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical      as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Reflect      as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting    as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas      as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Names        as Names
+import qualified Hydra.Sources.Kernel.Terms.Resolution   as Resolution
+import qualified Hydra.Sources.Kernel.Terms.Variables    as Variables
 import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors  as ShowError
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing  as ShowTyping
@@ -93,7 +95,7 @@ ns = Namespace "hydra.inference"
 module_ :: Module
 module_ = Module ns elements
     [Annotations.ns, Checking.ns, ExtractCore.ns, Lexical.ns, Reflect.ns,
-      Rewriting.ns, Schemas.ns, ShowCore.ns, ShowError.ns, ShowTyping.ns, Sorting.ns, Substitution.ns,
+      Rewriting.ns, Names.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowTyping.ns, Sorting.ns, Substitution.ns, Variables.ns,
       Unification.ns]
     kernelTypesNamespaces $
     Just "Type inference following Algorithm W, extended for nominal terms and types"
@@ -193,8 +195,8 @@ bindUnboundTypeVariables = define "bindUnboundTypeVariables" $
           (Core.binding (var "bname") (bindUnboundTypeVariables @@ var "cx" @@ var "bterm") nothing)
           ("ts" ~>
             "bvars" <~ Sets.fromList (Core.typeSchemeVariables $ var "ts") $
-            "unboundInType" <~ Rewriting.freeVariablesInType @@ (Core.typeSchemeType $ var "ts") $
-            "unboundInTerm" <~ Rewriting.freeTypeVariablesInTerm @@ var "bterm" $
+            "unboundInType" <~ Variables.freeVariablesInType @@ (Core.typeSchemeType $ var "ts") $
+            "unboundInTerm" <~ Variables.freeTypeVariablesInTerm @@ var "bterm" $
             "unbound" <~ Sets.toList (Sets.difference
               (Sets.union (var "unboundInType") (var "unboundInTerm"))
               (Sets.union (var "svars") (var "bvars"))) $
@@ -237,7 +239,7 @@ finalizeInferredTerm = define "finalizeInferredTerm" $
   "flowCx" ~> "cx" ~> "term" ~>
   "term2" <~ bindUnboundTypeVariables @@ var "cx" @@ var "term" $
   "_" <<~ Checking.checkForUnboundTypeVariables @@ var "flowCx" @@ var "cx" @@ var "term2" $
-  right (Rewriting.normalizeTypeVariablesInTerm @@ var "term2")
+  right (Variables.normalizeTypeVariablesInTerm @@ var "term2")
 
 forInferredTerm :: TTermDefinition (Context -> Graph -> Term -> String -> (InferenceResult -> a) -> Prelude.Either (InContext Error) (a, Context))
 forInferredTerm = define "forInferredTerm" $
@@ -251,14 +253,14 @@ freeVariablesInContext = define "freeVariablesInContext" $
   doc "Get all free variables in a graph's bound types" $
   "cx" ~>
     Lists.foldl (binaryFunction Sets.union) Sets.empty $
-      Lists.map (Rewriting.freeVariablesInTypeSchemeSimple) $
+      Lists.map (Variables.freeVariablesInTypeSchemeSimple) $
         Maps.elems $ Graph.graphBoundTypes $ var "cx"
 
 freshVariableType :: TTermDefinition (Context -> (Type, Context))
 freshVariableType = define "freshVariableType" $
   doc "Generate a fresh type variable" $
   "cx" ~>
-  "result" <~ Schemas.freshName @@ var "cx" $
+  "result" <~ Names.freshName @@ var "cx" $
   "name" <~ Pairs.first (var "result") $
   "cx2" <~ Pairs.second (var "result") $
   pair (Core.typeVariable (var "name")) (var "cx2")
@@ -291,7 +293,7 @@ generalize = define "generalize" $
     "parts" <~ Strings.splitOn (string ".") (Core.unName $ var "name") $
     Equality.lte (Lists.length $ var "parts") (int32 1)) $
   "vars" <~ Lists.nub (Lists.filter ("v" ~> Logic.and (isUnbound @@ var "cx" @@ var "v") (var "isTypeVarName" @@ var "v")) $
-     Rewriting.freeVariablesInTypeOrdered @@ var "typ") $
+     Variables.freeVariablesInTypeOrdered @@ var "typ") $
   -- Extract constraints for the generalized variables from the context
   "allConstraints" <~ Graph.graphClassConstraints (var "cx") $
   "relevantConstraints" <~ Maps.fromList (Maybes.cat $ Lists.map
@@ -505,7 +507,7 @@ inferTypeOfApplication = define "inferTypeOfApplication" $
   "t1" <~ Typing.inferenceResultType (var "rhsResult") $
   "s1" <~ Typing.inferenceResultSubst (var "rhsResult") $
   "c1" <~ Typing.inferenceResultClassConstraints (var "rhsResult") $
-  "vResult" <~ Schemas.freshName @@ var "fcx3" $
+  "vResult" <~ Names.freshName @@ var "fcx3" $
   "v" <~ Pairs.first (var "vResult") $
   "fcx4" <~ Pairs.second (var "vResult") $
   "s2" <<~ Eithers.bimap
@@ -536,7 +538,7 @@ inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
   "dflt" <~ Core.caseStatementDefault (var "caseStmt") $
   "cases" <~ Core.caseStatementCases (var "caseStmt") $
   "fnames" <~ Lists.map (unaryFunction Core.fieldName) (var "cases") $
-  "stRp" <<~ Schemas.requireSchemaType @@ var "fcx" @@ (Graph.graphSchemaTypes $ var "cx") @@ var "tname" $
+  "stRp" <<~ Resolution.requireSchemaType @@ var "fcx" @@ (Graph.graphSchemaTypes $ var "cx") @@ var "tname" $
   "schemaType" <~ Pairs.first (var "stRp") $
   "fcx2" <~ Pairs.second (var "stRp") $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
@@ -557,7 +559,7 @@ inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
   "itypes" <~ Pairs.first (Pairs.second $ var "caseResults") $
   "isubst" <~ Pairs.first (Pairs.second $ Pairs.second $ var "caseResults") $
   "caseElemConstraints" <~ Pairs.second (Pairs.second $ Pairs.second $ var "caseResults") $
-  "codvResult" <~ Schemas.freshName @@ var "fcx4" $
+  "codvResult" <~ Names.freshName @@ var "fcx4" $
   "codv" <~ Pairs.first (var "codvResult") $
   "fcx5" <~ Pairs.second (var "codvResult") $
   "cod" <~ Core.typeVariable (var "codv") $
@@ -587,7 +589,7 @@ inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
             Core.caseStatement (var "tname") (Maybes.map (unaryFunction Typing.inferenceResultTerm) $ var "dfltResult") $
             Lists.zipWith ("n" ~> "t" ~> Core.field (var "n") (var "t")) (var "fnames") (var "iterms")))
       @@ (Core.typeFunction $ Core.functionType
-          (Schemas.nominalApplication @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
+          (Resolution.nominalApplication @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
           (var "cod"))
       @@ (Substitution.composeTypeSubstList
         @@ (Lists.concat $ list [
@@ -601,7 +603,7 @@ inferTypeOfCollection :: TTermDefinition (Context -> Graph -> (Type -> Type) -> 
 inferTypeOfCollection = define "inferTypeOfCollection" $
   doc "Infer the type of a collection. The classNames parameter specifies type classes (e.g. ordering) that the element type variable must satisfy." $
   "fcx" ~> "cx" ~> "typCons" ~> "trmCons" ~> "desc" ~> "classNames" ~> "els" ~>
-  "varResult" <~ Schemas.freshName @@ var "fcx" $
+  "varResult" <~ Names.freshName @@ var "fcx" $
   "var" <~ Pairs.first (var "varResult") $
   "fcx2" <~ Pairs.second (var "varResult") $
   "classConstraints" <~ Logic.ifElse (Sets.null $ var "classNames")
@@ -699,7 +701,7 @@ inferTypeOfInjection = define "inferTypeOfInjection" $
   "term" <~ Core.fieldTerm (var "field") $
   "result" <<~ inferTypeOfTerm @@ var "fcx" @@ var "cx" @@ var "term" @@ (string "injected term") $
   "fcx2" <~ Typing.inferenceResultContext (var "result") $
-  "stRp" <<~ Schemas.requireSchemaType @@ var "fcx2" @@ (Graph.graphSchemaTypes $ var "cx") @@ var "tname" $
+  "stRp" <<~ Resolution.requireSchemaType @@ var "fcx2" @@ (Graph.graphSchemaTypes $ var "cx") @@ var "tname" $
   "schemaType" <~ Pairs.first (var "stRp") $
   "fcx3" <~ Pairs.second (var "stRp") $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
@@ -708,13 +710,13 @@ inferTypeOfInjection = define "inferTypeOfInjection" $
   "ityp" <~ Typing.inferenceResultType (var "result") $
   "isubst" <~ Typing.inferenceResultSubst (var "result") $
   "sfields" <<~ ExtractCore.unionType @@ var "fcx3" @@ var "tname" @@ var "stype" $
-  "ftyp" <<~ Schemas.findFieldType @@ var "fcx3" @@ var "fname" @@ var "sfields" $
+  "ftyp" <<~ Resolution.findFieldType @@ var "fcx3" @@ var "fname" @@ var "sfields" $
   "mcResult" <<~ mapConstraints @@ var "fcx3" @@ var "cx" @@
     ("subst" ~> yield
       @@ var "fcx3"
       @@ (buildTypeApplicationTerm @@ var "svars"
         @@ (Core.termUnion $ Core.injection (var "tname") $ Core.field (var "fname") (var "iterm")))
-      @@ (Schemas.nominalApplication @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
+      @@ (Resolution.nominalApplication @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
       @@ (Substitution.composeTypeSubst @@ var "isubst" @@ var "subst")) @@
     list [Typing.typeConstraint (var "ftyp") (var "ityp") (string "schema type of injected field")] $
   right (var "mcResult")
@@ -725,7 +727,7 @@ inferTypeOfLambda = define "inferTypeOfLambda" $
   "fcx" ~> "cx" ~> "lambda" ~>
   "var" <~ Core.lambdaParameter (var "lambda") $
   "body" <~ Core.lambdaBody (var "lambda") $
-  "vdomResult" <~ Schemas.freshName @@ var "fcx" $
+  "vdomResult" <~ Names.freshName @@ var "fcx" $
   "vdom" <~ Pairs.first (var "vdomResult") $
   "fcx2" <~ Pairs.second (var "vdomResult") $
   "dom" <~ Core.typeVariable (var "vdom") $
@@ -739,8 +741,8 @@ inferTypeOfLambda = define "inferTypeOfLambda" $
   "rterm" <~ Core.termFunction (Core.functionLambda $ Core.lambda (var "var") (just $ var "rdom") (var "iterm")) $
   "rtype" <~ Core.typeFunction (Core.functionType (var "rdom") (var "icod")) $
   "vars" <~ (Sets.unions $ list [
-    Rewriting.freeVariablesInType @@ var "rdom",
-    Rewriting.freeVariablesInType @@ var "icod",
+    Variables.freeVariablesInType @@ var "rdom",
+    Variables.freeVariablesInType @@ var "icod",
     freeVariablesInContext @@ (Substitution.substInContext @@ var "isubst" @@ var "cx2")]) $
   "cx3" <~ Substitution.substInContext @@ var "isubst" @@ var "cx" $
   "iconstraints" <~ Substitution.substInClassConstraints @@ var "isubst" @@ (Typing.inferenceResultClassConstraints $ var "result") $
@@ -761,10 +763,10 @@ inferTypeOfMap :: TTermDefinition (Context -> Graph -> M.Map Term Term -> Prelud
 inferTypeOfMap = define "inferTypeOfMap" $
   doc "Infer the type of a map (Either version)" $
   "fcx" ~> "cx" ~> "m" ~>
-  "kvarResult" <~ Schemas.freshName @@ var "fcx" $
+  "kvarResult" <~ Names.freshName @@ var "fcx" $
   "kvar" <~ Pairs.first (var "kvarResult") $
   "fcx2" <~ Pairs.second (var "kvarResult") $
-  "vvarResult" <~ Schemas.freshName @@ var "fcx2" $
+  "vvarResult" <~ Names.freshName @@ var "fcx2" $
   "vvar" <~ Pairs.first (var "vvarResult") $
   "fcx3" <~ Pairs.second (var "vvarResult") $
   "keyConstraints" <~ Maps.singleton (var "kvar") (Core.typeVariableMetadata $ Sets.singleton $ Core.nameLift _TypeClass_ordering) $
@@ -859,7 +861,7 @@ inferTypeOfPrimitive = define "inferTypeOfPrimitive" $
       (Error.errorOther $ Error.otherError $ Strings.cat2 (string "No such primitive: ") (Core.unName $ var "name"))
       (var "fcx"))
     ("scheme" ~>
-      "tsResult" <~ Schemas.instantiateTypeScheme @@ var "fcx" @@ var "scheme" $
+      "tsResult" <~ Resolution.instantiateTypeScheme @@ var "fcx" @@ var "scheme" $
       "ts" <~ Pairs.first (var "tsResult") $
       "fcx2" <~ Pairs.second (var "tsResult") $
       "constraints" <~ Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints $ var "ts") $
@@ -879,19 +881,19 @@ inferTypeOfProjection = define "inferTypeOfProjection" $
   "fcx" ~> "cx" ~> "proj" ~>
   "tname" <~ Core.projectionTypeName (var "proj") $
   "fname" <~ Core.projectionField (var "proj") $
-  "stRp" <<~ Schemas.requireSchemaType @@ var "fcx" @@ (Graph.graphSchemaTypes $ var "cx") @@ var "tname" $
+  "stRp" <<~ Resolution.requireSchemaType @@ var "fcx" @@ (Graph.graphSchemaTypes $ var "cx") @@ var "tname" $
   "schemaType" <~ Pairs.first (var "stRp") $
   "fcx2" <~ Pairs.second (var "stRp") $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
   "stype" <~ Core.typeSchemeType (var "schemaType") $
   "sfields" <<~ ExtractCore.recordType @@ var "fcx2" @@ var "tname" @@ var "stype" $
-  "ftyp" <<~ Schemas.findFieldType @@ var "fcx2" @@ var "fname" @@ var "sfields" $
+  "ftyp" <<~ Resolution.findFieldType @@ var "fcx2" @@ var "fname" @@ var "sfields" $
   right (yield
     @@ var "fcx2"
     @@ (buildTypeApplicationTerm @@ var "svars"
       @@ (Core.termFunction $ Core.functionElimination $ Core.eliminationRecord $ Core.projection (var "tname") (var "fname")))
     @@ (Core.typeFunction $ Core.functionType
-      (Schemas.nominalApplication @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
+      (Resolution.nominalApplication @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
       (var "ftyp"))
     @@ Substitution.idTypeSubst)
 
@@ -902,7 +904,7 @@ inferTypeOfRecord = define "inferTypeOfRecord" $
   "tname" <~ Core.recordTypeName (var "record") $
   "fields" <~ Core.recordFields (var "record") $
   "fnames" <~ Lists.map (unaryFunction Core.fieldName) (var "fields") $
-  "stRp" <<~ Schemas.requireSchemaType @@ var "fcx" @@ (Graph.graphSchemaTypes $ var "cx") @@ var "tname" $
+  "stRp" <<~ Resolution.requireSchemaType @@ var "fcx" @@ (Graph.graphSchemaTypes $ var "cx") @@ var "tname" $
   "schemaType" <~ Pairs.first (var "stRp") $
   "fcx2" <~ Pairs.second (var "stRp") $
   "rp" <<~ inferMany @@ var "fcx2" @@ var "cx" @@ Lists.map
@@ -928,7 +930,7 @@ inferTypeOfRecord = define "inferTypeOfRecord" $
           ("n" ~> "t" ~> Core.field (var "n") (var "t"))
           (var "fnames")
           (var "iterms")))
-      @@ (Schemas.nominalApplication @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
+      @@ (Resolution.nominalApplication @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
       @@ (Substitution.composeTypeSubst @@ var "isubst" @@ var "subst")
       @@ (Substitution.substInClassConstraints @@ var "subst" @@ var "recElemConstraints")) @@
     list [Typing.typeConstraint (var "stype") (var "ityp") (string "schema type of record")] $
@@ -989,7 +991,7 @@ inferTypeOfUnwrap :: TTermDefinition (Context -> Graph -> Name -> Prelude.Either
 inferTypeOfUnwrap = define "inferTypeOfUnwrap" $
   doc "Infer the type of an unwrap operation (Either version)" $
   "fcx" ~> "cx" ~> "tname" ~>
-  "stRp" <<~ Schemas.requireSchemaType @@ var "fcx" @@ (Graph.graphSchemaTypes $ var "cx") @@ var "tname" $
+  "stRp" <<~ Resolution.requireSchemaType @@ var "fcx" @@ (Graph.graphSchemaTypes $ var "cx") @@ var "tname" $
   "schemaType" <~ Pairs.first (var "stRp") $
   "fcx2" <~ Pairs.second (var "stRp") $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
@@ -1000,7 +1002,7 @@ inferTypeOfUnwrap = define "inferTypeOfUnwrap" $
     @@ (buildTypeApplicationTerm @@ var "svars"
       @@ (Core.termFunction $ Core.functionElimination $ Core.eliminationWrap $ var "tname"))
     @@ (Core.typeFunction $ Core.functionType
-      (Schemas.nominalApplication @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
+      (Resolution.nominalApplication @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
       (var "wtyp"))
     @@ Substitution.idTypeSubst)
 
@@ -1013,7 +1015,7 @@ inferTypeOfVariable = define "inferTypeOfVariable" $
       (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Variable not bound to type: ") (Core.unName $ var "name"))
       (var "fcx"))
     ("scheme" ~>
-      "tsResult" <~ Schemas.instantiateTypeScheme @@ var "fcx" @@ var "scheme" $
+      "tsResult" <~ Resolution.instantiateTypeScheme @@ var "fcx" @@ var "scheme" $
       "ts" <~ Pairs.first (var "tsResult") $
       "fcx2" <~ Pairs.second (var "tsResult") $
       "constraints" <~ Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints $ var "ts") $
@@ -1033,7 +1035,7 @@ inferTypeOfWrappedTerm = define "inferTypeOfWrappedTerm" $
   "fcx" ~> "cx" ~> "wt" ~>
   "tname" <~ Core.wrappedTermTypeName (var "wt") $
   "term" <~ Core.wrappedTermBody (var "wt") $
-  "stRp" <<~ Schemas.requireSchemaType @@ var "fcx" @@ (Graph.graphSchemaTypes $ var "cx") @@ var "tname" $
+  "stRp" <<~ Resolution.requireSchemaType @@ var "fcx" @@ (Graph.graphSchemaTypes $ var "cx") @@ var "tname" $
   "schemaType" <~ Pairs.first (var "stRp") $
   "fcx2" <~ Pairs.second (var "stRp") $
   "result" <<~ inferTypeOfTerm @@ var "fcx2" @@ var "cx" @@ var "term" @@ (string "wrapped term") $
@@ -1048,7 +1050,7 @@ inferTypeOfWrappedTerm = define "inferTypeOfWrappedTerm" $
     @@ ("subst" ~> yield
       @@ var "fcx3"
       @@ (buildTypeApplicationTerm @@ var "svars" @@ (Core.termWrap $ Core.wrappedTerm (var "tname") (var "iterm")))
-      @@ (Schemas.nominalApplication @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
+      @@ (Resolution.nominalApplication @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
       @@ (Substitution.composeTypeSubst @@ var "isubst" @@ var "subst"))
     @@ list [Typing.typeConstraint (var "stype") (var "ityp") (string "schema type of wrapper")] $
   right (var "mcResult")
@@ -1066,7 +1068,7 @@ inferTypeOfLet = define "inferTypeOfLet" $
     "name" <~ Core.bindingName (var "binding") $
     "term" <~ Core.bindingTerm (var "binding") $
     pair (var "name") $ Lists.filter ("n" ~> Sets.member (var "n") (var "nameSet")) $
-      Sets.toList $ Rewriting.freeVariablesInTerm @@ var "term") $
+      Sets.toList $ Variables.freeVariablesInTerm @@ var "term") $
   "adjList" <~ Lists.map (var "toPair") (var "bindings0") $
   "groups" <~ Sorting.topologicalSortComponents @@ var "adjList" $
   "bindingMap" <~ Maps.fromList (Lists.zip (var "names") (var "bindings0")) $
@@ -1116,7 +1118,7 @@ inferTypeOfLetNormalized = define "inferTypeOfLetNormalized" $
   "bnames" <~ Lists.map (unaryFunction Core.bindingName) (var "bins0") $
 
   -- Phase 1: Create fresh temporary type variables
-  "bvarsResult" <~ Schemas.freshNames @@ (Lists.length $ var "bins0") @@ var "fcx" $
+  "bvarsResult" <~ Names.freshNames @@ (Lists.length $ var "bins0") @@ var "fcx" $
   "bvars" <~ Pairs.first (var "bvarsResult") $
   "fcx2" <~ Pairs.second (var "bvarsResult") $
   "tbins0" <~ Lists.map (unaryFunction Core.typeVariable) (var "bvars") $
@@ -1257,7 +1259,7 @@ inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
     "originalBindingConstraints" <<~ Maybes.maybe
       (right Maps.empty)
       ("ts" ~>
-        "tsResult" <~ Schemas.instantiateTypeScheme @@ var "fcx2" @@ var "ts" $
+        "tsResult" <~ Resolution.instantiateTypeScheme @@ var "fcx2" @@ var "ts" $
         "instantiatedTs" <~ Pairs.first (var "tsResult") $
         "freshConstraints" <~ Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints $ var "instantiatedTs") $
         -- Unify the instantiated type with the inferred type to map fresh variables

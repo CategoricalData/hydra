@@ -339,8 +339,8 @@
         (let* ((pair (car pairs))
                (name (car pair))
                (typ (cdr pair))
-               (ts (hydra_rewriting_f_type_to_type_scheme typ))
-               (stripped (hydra_rewriting_deannotate_type_recursive
+               (ts (hydra_scoping_f_type_to_type_scheme typ))
+               (stripped (hydra_strip_deannotate_type_recursive
                           (hydra_core_type_scheme-type ts))))
           (loop (cdr pairs) (cons (cons name stripped) result))))))
 

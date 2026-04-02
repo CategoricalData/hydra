@@ -65,7 +65,7 @@ public interface Coder {
         t,
         cx)))));
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>>>> forType = new java.util.concurrent.atomic.AtomicReference<>();
-    forType.set((java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>>>) (mn -> (java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>>) (mx -> (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>) (t -> hydra.Rewriting.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
+    forType.set((java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>>>) (mn -> (java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>>) (mx -> (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>) (t -> hydra.Strip.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>> otherwise(hydra.core.Type instance) {
         return (forTypeDefault).apply(mn).apply(mx).apply(t);
@@ -266,7 +266,7 @@ public interface Coder {
               hydra.extract.Core.string(
                 _cx0,
                 g,
-                hydra.Rewriting.deannotateTerm(hydra.lib.pairs.First.apply(kv))),
+                hydra.Strip.deannotateTerm(hydra.lib.pairs.First.apply(kv))),
               (java.util.function.Function<String, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>, hydra.context.Context>>>) (_ks -> {
                 hydra.util.Pair<hydra.ext.org.w3.rdf.syntax.Resource, hydra.context.Context> pair2 = hydra.ext.rdf.Utils.nextBlankNode(_cx0);
                 hydra.util.Lazy<hydra.context.Context> cx2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pair2));
@@ -376,7 +376,7 @@ public interface Coder {
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties> encodeType(hydra.core.Name tname, hydra.core.Type typ, hydra.context.Context cx) {
-    return hydra.Rewriting.deannotateType(typ).accept(new hydra.core.Type.PartialVisitor<>() {
+    return hydra.Strip.deannotateType(typ).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties> otherwise(hydra.core.Type instance) {
         return hydra.ext.shacl.Coder.unexpectedE(

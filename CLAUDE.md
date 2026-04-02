@@ -205,6 +205,7 @@ give the user a brief status update approximately every 10 minutes.
 | Command | Action |
 |---------|--------|
 | `/save()` | Save status to the plan document. Session may terminate. |
+| `/squash()` | Squash WIP commits, per "Commit workflow" section |
 | `/sync-all` | Run `bin/sync-all.sh --targets all`, propagating changes into all generated artifacts. |
 | `/sync-haskell` | Run `hydra-haskell/bin/sync-haskell.sh`. |
 | `/sync-ext` | Run `hydra-ext/bin/sync-ext.sh`. |

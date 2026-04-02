@@ -100,7 +100,7 @@ module_ =
                                                     Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))})))})),
                                             Core.applicationArgument = (Core.TermApplication (Core.Application {
                                               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeUnit")),
+                                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeUnit")),
                                                 Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                               Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
                                         (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
@@ -121,7 +121,7 @@ module_ =
                                                     Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))})))})),
                                             Core.applicationArgument = (Core.TermApplication (Core.Application {
                                               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeUnit")),
+                                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeUnit")),
                                                 Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                               Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))}))))),
                                         (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
@@ -142,7 +142,7 @@ module_ =
                                                     Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))})))})),
                                             Core.applicationArgument = (Core.TermApplication (Core.Application {
                                               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeUnit")),
+                                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeUnit")),
                                                 Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                               Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))}))))),
                                         (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
@@ -163,7 +163,7 @@ module_ =
                                                     Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))})))})),
                                             Core.applicationArgument = (Core.TermApplication (Core.Application {
                                               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeUnit")),
+                                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeUnit")),
                                                 Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                               Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))))])})),
                                     Core.bindingType = Nothing}],
@@ -290,7 +290,7 @@ module_ =
                                                     Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))})))})),
                                             Core.applicationArgument = (Core.TermApplication (Core.Application {
                                               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeUnit")),
+                                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeUnit")),
                                                 Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                               Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
                                         (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
@@ -311,7 +311,7 @@ module_ =
                                                     Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))})))})),
                                             Core.applicationArgument = (Core.TermApplication (Core.Application {
                                               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeUnit")),
+                                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeUnit")),
                                                 Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                               Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))}))))),
                                         (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
@@ -332,7 +332,7 @@ module_ =
                                                     Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))})))})),
                                             Core.applicationArgument = (Core.TermApplication (Core.Application {
                                               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeUnit")),
+                                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeUnit")),
                                                 Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                               Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))))])})),
                                     Core.bindingType = Nothing}],
@@ -459,7 +459,7 @@ module_ =
                                                     Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))})))})),
                                             Core.applicationArgument = (Core.TermApplication (Core.Application {
                                               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeUnit")),
+                                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeUnit")),
                                                 Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                               Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
                                         (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
@@ -584,12 +584,10 @@ module_ =
                   Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.util.Precision"))}))}))})),
             Core.typeSchemeConstraints = Nothing}))}))],
       Module.moduleTermDependencies = [
-        Module.Namespace "hydra.extract.helpers",
+        Module.Namespace "hydra.extract.core",
         (Module.Namespace "hydra.lexical"),
         (Module.Namespace "hydra.rewriting"),
-        (Module.Namespace "hydra.decode.context"),
-        (Module.Namespace "hydra.decode.core"),
-        (Module.Namespace "hydra.decode.errors")],
+        (Module.Namespace "hydra.decode.core")],
       Module.moduleTypeDependencies = [
         Module.Namespace "hydra.util",
         (Module.Namespace "hydra.util")],

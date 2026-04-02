@@ -26,8 +26,8 @@ import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
-import hydra.rewriting
 import hydra.show.core
+import hydra.strip
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
@@ -219,7 +219,7 @@ def normalize_term_annotations(term: hydra.core.Term) -> hydra.core.Term:
         return term_annotation_internal(term)
     @lru_cache(1)
     def stripped() -> hydra.core.Term:
-        return hydra.rewriting.deannotate_term(term)
+        return hydra.strip.deannotate_term(term)
     return hydra.lib.logic.if_else(hydra.lib.maps.null(anns()), (lambda : stripped()), (lambda : cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(stripped(), anns())))))
 
 def normalize_type_annotations(typ: hydra.core.Type) -> hydra.core.Type:
@@ -230,7 +230,7 @@ def normalize_type_annotations(typ: hydra.core.Type) -> hydra.core.Type:
         return type_annotation_internal(typ)
     @lru_cache(1)
     def stripped() -> hydra.core.Type:
-        return hydra.rewriting.deannotate_type(typ)
+        return hydra.strip.deannotate_type(typ)
     return hydra.lib.logic.if_else(hydra.lib.maps.null(anns()), (lambda : stripped()), (lambda : cast(hydra.core.Type, hydra.core.TypeAnnotated(hydra.core.AnnotatedType(stripped(), anns())))))
 
 def reset_count(key: hydra.core.Name, cx: hydra.context.Context) -> hydra.context.Context:
@@ -253,7 +253,7 @@ def set_term_annotation(key: hydra.core.Name, val: Maybe[hydra.core.Term], term:
 
     @lru_cache(1)
     def term_() -> hydra.core.Term:
-        return hydra.rewriting.deannotate_term(term)
+        return hydra.strip.deannotate_term(term)
     @lru_cache(1)
     def anns() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
         return set_annotation(key, val, term_annotation_internal(term))
@@ -274,7 +274,7 @@ def set_type_annotation(key: hydra.core.Name, val: Maybe[hydra.core.Term], typ: 
 
     @lru_cache(1)
     def typ_() -> hydra.core.Type:
-        return hydra.rewriting.deannotate_type(typ)
+        return hydra.strip.deannotate_type(typ)
     @lru_cache(1)
     def anns() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
         return set_annotation(key, val, type_annotation_internal(typ))

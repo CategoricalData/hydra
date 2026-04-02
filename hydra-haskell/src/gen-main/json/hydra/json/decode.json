@@ -31,7 +31,7 @@
                                             "term": {
                                               "application": {
                                                 "argument": {"variable": "typ"},
-                                                "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                                "function": {"variable": "hydra.strip.deannotateType"}}},
                                             "type": [
                                               {
                                                 "constraints": null,
@@ -4568,7 +4568,7 @@
   "description": [
     "JSON decoding for Hydra terms. Converts JSON Values to Terms using Either for error handling."],
   "namespace": "hydra.json.decode",
-  "termDependencies": ["hydra.rewriting", "hydra.literals", "hydra.extract.core"],
+  "termDependencies": ["hydra.strip", "hydra.literals", "hydra.extract.core"],
   "typeDependencies": [
     "hydra.paths",
     "hydra.ast",

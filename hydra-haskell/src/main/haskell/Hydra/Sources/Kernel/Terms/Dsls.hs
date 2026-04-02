@@ -28,8 +28,7 @@ import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
-import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 import qualified Hydra.Dsl.Meta.DeepCore as DC
 import           Hydra.Dsl.Meta.DeepCore ((@@@))
 import           Prelude hiding ((++))
@@ -43,7 +42,7 @@ ns = Namespace "hydra.dsls"
 
 module_ :: Module
 module_ = Module ns elements
-    [Annotations.ns, Formatting.ns, Names.ns, Rewriting.ns, Schemas.ns]
+    [Annotations.ns, Formatting.ns, Names.ns, Strip.ns]
     kernelTypesNamespaces $
     Just "Functions for generating domain-specific DSL modules from type modules"
   where
@@ -429,7 +428,7 @@ generateUnionInjector = define "generateUnionInjector" $
 -- Note: uses stripAnnotations to avoid recursive Haskell-level DSL terms,
 -- which would cause infinite recursion during code generation.
 isUnitType_ :: TTerm (Type -> Bool)
-isUnitType_ = "t" ~> cases _Type (Rewriting.deannotateType @@ var "t") (Just Phantoms.false) [
+isUnitType_ = "t" ~> cases _Type (Strip.deannotateType @@ var "t") (Just Phantoms.false) [
   _Type_unit>>: constant Phantoms.true]
 
 -- | Generate wrap/unwrap accessors for a wrapped type.
@@ -480,7 +479,7 @@ generateBindingsForType = define "generateBindingsForType" $
   "typeName" <~ (Core.bindingName (var "b")) $
   Eithers.bind (Ctx.withContext (var "cx") (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "b")))) (
     "rawType" ~>
-    "typ" <~ (Rewriting.deannotateTypeParameters @@ (Rewriting.deannotateType @@ var "rawType")) $
+    "typ" <~ (Strip.deannotateTypeParameters @@ (Strip.deannotateType @@ var "rawType")) $
     right (cases _Type (var "typ") (Just $ list ([] :: [TTerm Binding])) [
       _Type_record>>: "fts" ~>
         Lists.concat $ list [

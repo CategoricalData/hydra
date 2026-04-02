@@ -10,8 +10,8 @@ public interface Unification {
     java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.core.Type, hydra.typing.TypeConstraint>> joinOne = (java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.core.Type, hydra.typing.TypeConstraint>>) (l -> (java.util.function.Function<hydra.core.Type, hydra.typing.TypeConstraint>) (r -> new hydra.typing.TypeConstraint(l, r, hydra.lib.strings.Cat2.apply(
       "join types; ",
       comment))));
-    hydra.core.Type sleft = hydra.Rewriting.deannotateType(left);
-    hydra.core.Type sright = hydra.Rewriting.deannotateType(right);
+    hydra.core.Type sleft = hydra.Strip.deannotateType(left);
+    hydra.core.Type sright = hydra.Strip.deannotateType(right);
     java.util.function.Function<hydra.util.ConsList<hydra.core.Type>, java.util.function.Function<hydra.util.ConsList<hydra.core.Type>, hydra.util.Either<hydra.context.InContext<hydra.errors.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>>> joinList = (java.util.function.Function<hydra.util.ConsList<hydra.core.Type>, java.util.function.Function<hydra.util.ConsList<hydra.core.Type>, hydra.util.Either<hydra.context.InContext<hydra.errors.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>>>) (lefts -> (java.util.function.Function<hydra.util.ConsList<hydra.core.Type>, hydra.util.Either<hydra.context.InContext<hydra.errors.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>>) (rights -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Equal.apply(
         hydra.lib.lists.Length.apply(lefts),
@@ -379,8 +379,8 @@ public interface Unification {
               rest)));
       }));
       String comment = (c).comment;
-      hydra.core.Type sleft = hydra.Rewriting.deannotateType((c).left);
-      hydra.core.Type sright = hydra.Rewriting.deannotateType((c).right);
+      hydra.core.Type sleft = hydra.Strip.deannotateType((c).left);
+      hydra.core.Type sright = hydra.Strip.deannotateType((c).right);
       java.util.function.Function<hydra.util.ConsList<hydra.typing.TypeConstraint>, hydra.util.Either<hydra.context.InContext<hydra.errors.UnificationError>, hydra.typing.TypeSubst>> withConstraints = (java.util.function.Function<hydra.util.ConsList<hydra.typing.TypeConstraint>, hydra.util.Either<hydra.context.InContext<hydra.errors.UnificationError>, hydra.typing.TypeSubst>>) (constraints2 -> hydra.Unification.<T0>unifyTypeConstraints(
         cx,
         schemaTypes,

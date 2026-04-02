@@ -55,7 +55,7 @@ import qualified Data.Maybe                  as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Error.Core as ShowErrorCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 
@@ -65,7 +65,7 @@ ns = Namespace "hydra.show.errors"
 
 module_ :: Module
 module_ = Module ns elements
-    [ShowCore.ns, ShowErrorCore.ns, ShowMeta.ns, ShowTyping.ns, Formatting.ns]
+    [ShowCore.ns, ShowErrorCore.ns, ShowVariants.ns, ShowTyping.ns, Formatting.ns]
     kernelTypesNamespaces $
     Just "String representations of hydra.error types"
   where
@@ -233,7 +233,7 @@ unsupportedTermVariantError = define "unsupportedTermVariantError" $
   "e" ~>
   Strings.cat2
     (string "unsupported term variant: ")
-    (ShowMeta.termVariant @@ (project _UnsupportedTermVariantError _UnsupportedTermVariantError_termVariant @@ var "e"))
+    (ShowVariants.termVariant @@ (project _UnsupportedTermVariantError _UnsupportedTermVariantError_termVariant @@ var "e"))
 
 untypedLambdaError :: TTermDefinition (UntypedLambdaError -> String)
 untypedLambdaError = define "untypedLambdaError" $

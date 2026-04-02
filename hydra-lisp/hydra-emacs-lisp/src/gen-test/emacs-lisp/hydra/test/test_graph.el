@@ -30,7 +30,7 @@
 
 (setq hydra_test_test_graph_test_graph
   (let* ((std-prims (standard-library))
-         (type-to-ts (lambda (t) (funcall hydra_rewriting_f_type_to_type_scheme t)))
+         (type-to-ts (lambda (t) (funcall hydra_scoping_f_type_to_type_scheme t)))
          (boot-types-raw hydra_json_bootstrap_types_by_name)
          (kernel-schemas (mapcar (lambda (entry) (list (car entry) (funcall type-to-ts (cdr entry)))) (hydra_lib_maps_to_list boot-types-raw)))
          (test-schemas (mapcar (lambda (entry) (list (car entry) (funcall type-to-ts (cadr entry)))) (hydra_lib_maps_to_list hydra_test_test_graph_test_types)))

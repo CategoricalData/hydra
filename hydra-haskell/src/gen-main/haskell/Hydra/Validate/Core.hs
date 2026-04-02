@@ -16,6 +16,7 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -204,7 +205,7 @@ checkTerm typed path cx term =
 checkUndefinedTypeVariablesInType :: t0 -> Graph.Graph -> Core.Type -> (Core.Name -> Maybe t1) -> Maybe t1
 checkUndefinedTypeVariablesInType path cx typ mkError =
 
-      let freeVars = Rewriting.freeVariablesInType typ
+      let freeVars = Variables.freeVariablesInType typ
           undefined = Sets.difference freeVars (Graph.graphTypeVariables cx)
       in (Logic.ifElse (Sets.null undefined) Nothing (
         let firstUndefined = Lists.head (Sets.toList undefined)
@@ -214,7 +215,7 @@ checkUndefinedTypeVariablesInType path cx typ mkError =
 checkUndefinedTypeVariablesInTypeScheme :: t0 -> Graph.Graph -> Core.TypeScheme -> (Core.Name -> Maybe t1) -> Maybe t1
 checkUndefinedTypeVariablesInTypeScheme path cx ts mkError =
 
-      let freeVars = Rewriting.freeVariablesInTypeScheme ts
+      let freeVars = Variables.freeVariablesInTypeScheme ts
           undefined = Sets.difference freeVars (Graph.graphTypeVariables cx)
       in (Logic.ifElse (Sets.null undefined) Nothing (
         let firstUndefined = Lists.head (Sets.toList undefined)

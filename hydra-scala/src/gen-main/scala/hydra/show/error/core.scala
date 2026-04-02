@@ -146,14 +146,14 @@ def unexpectedTermVariantError(e: hydra.error.core.UnexpectedTermVariantError): 
   {
   lazy val expected: hydra.variants.TermVariant = (e.expectedVariant)
   lazy val actual: hydra.core.Term = (e.actualTerm)
-  hydra.lib.strings.cat(Seq("expected ", hydra.show.meta.termVariant(expected), " term but found ", hydra.show.core.term(actual)))
+  hydra.lib.strings.cat(Seq("expected ", hydra.show.variants.termVariant(expected), " term but found ", hydra.show.core.term(actual)))
 }
 
 def unexpectedTypeVariantError(e: hydra.error.core.UnexpectedTypeVariantError): scala.Predef.String =
   {
   lazy val expected: hydra.variants.TypeVariant = (e.expectedVariant)
   lazy val actual: hydra.core.Type = (e.actualType)
-  hydra.lib.strings.cat(Seq("expected ", hydra.show.meta.typeVariant(expected), " type but found ", hydra.show.core.`type`(actual)))
+  hydra.lib.strings.cat(Seq("expected ", hydra.show.variants.typeVariant(expected), " type but found ", hydra.show.core.`type`(actual)))
 }
 
 def unknownPrimitiveNameError(e: hydra.error.core.UnknownPrimitiveNameError): scala.Predef.String = hydra.lib.strings.cat(Seq("unknown primitive: ", (e.name)))

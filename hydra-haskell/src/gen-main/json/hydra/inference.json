@@ -372,7 +372,7 @@
                                                                                                                               "function": {
                                                                                                                                 "function": {
                                                                                                                                   "elimination": {"record": {"field": "type", "typeName": "hydra.core.TypeScheme"}}}}}},
-                                                                                                                          "function": {"variable": "hydra.rewriting.freeVariablesInType"}}},
+                                                                                                                          "function": {"variable": "hydra.variables.freeVariablesInType"}}},
                                                                                                                       "type": [
                                                                                                                         {
                                                                                                                           "constraints": null,
@@ -386,7 +386,7 @@
                                                                                                                           "term": {
                                                                                                                             "application": {
                                                                                                                               "argument": {"variable": "bterm"},
-                                                                                                                              "function": {"variable": "hydra.rewriting.freeTypeVariablesInTerm"}}},
+                                                                                                                              "function": {"variable": "hydra.variables.freeTypeVariablesInTerm"}}},
                                                                                                                           "type": [
                                                                                                                             {
                                                                                                                               "constraints": null,
@@ -931,7 +931,7 @@
                                                         "@right": {
                                                           "application": {
                                                             "argument": {"variable": "term2"},
-                                                            "function": {"variable": "hydra.rewriting.normalizeTypeVariablesInTerm"}}}}},
+                                                            "function": {"variable": "hydra.variables.normalizeTypeVariablesInTerm"}}}}},
                                                     "type": {
                                                       "application": {
                                                         "argument": {"variable": "hydra.errors.Error"},
@@ -1166,7 +1166,7 @@
                                   "type": {"variable": "hydra.core.TypeScheme"}}}}},
                           "function": {
                             "application": {
-                              "argument": {"variable": "hydra.rewriting.freeVariablesInTypeSchemeSimple"},
+                              "argument": {"variable": "hydra.variables.freeVariablesInTypeSchemeSimple"},
                               "function": {
                                 "typeApplication": {
                                   "body": {
@@ -1223,7 +1223,7 @@
                           "term": {
                             "application": {
                               "argument": {"variable": "cx"},
-                              "function": {"variable": "hydra.schemas.freshName"}}},
+                              "function": {"variable": "hydra.names.freshName"}}},
                           "type": [
                             {
                               "constraints": null,
@@ -1379,7 +1379,7 @@
                                             "argument": {
                                               "application": {
                                                 "argument": {"variable": "typ"},
-                                                "function": {"variable": "hydra.rewriting.freeVariablesInTypeOrdered"}}},
+                                                "function": {"variable": "hydra.variables.freeVariablesInTypeOrdered"}}},
                                             "function": {
                                               "application": {
                                                 "argument": {
@@ -4192,7 +4192,7 @@
                                                                                                               "term": {
                                                                                                                 "application": {
                                                                                                                   "argument": {"variable": "fcx3"},
-                                                                                                                  "function": {"variable": "hydra.schemas.freshName"}}},
+                                                                                                                  "function": {"variable": "hydra.names.freshName"}}},
                                                                                                               "type": [
                                                                                                                 {
                                                                                                                   "constraints": null,
@@ -5187,7 +5187,7 @@
                                                                                                                                               "term": {
                                                                                                                                                 "application": {
                                                                                                                                                   "argument": {"variable": "fcx4"},
-                                                                                                                                                  "function": {"variable": "hydra.schemas.freshName"}}},
+                                                                                                                                                  "function": {"variable": "hydra.names.freshName"}}},
                                                                                                                                               "type": [
                                                                                                                                                 {
                                                                                                                                                   "constraints": null,
@@ -5649,7 +5649,7 @@
                                                                                                                                                                                                                               "function": {
                                                                                                                                                                                                                                 "application": {
                                                                                                                                                                                                                                   "argument": {"variable": "tname"},
-                                                                                                                                                                                                                                  "function": {"variable": "hydra.schemas.nominalApplication"}}}}}},
+                                                                                                                                                                                                                                  "function": {"variable": "hydra.resolution.nominalApplication"}}}}}},
                                                                                                                                                                                                                         {"name": "codomain", "term": {"variable": "cod"}}],
                                                                                                                                                                                                                       "typeName": "hydra.core.FunctionType"}}},
                                                                                                                                                                                                                 "typeName": "hydra.core.Type"}},
@@ -5990,7 +5990,7 @@
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {"variable": "fcx"},
-                                                                  "function": {"variable": "hydra.schemas.requireSchemaType"}}}}}}},
+                                                                  "function": {"variable": "hydra.resolution.requireSchemaType"}}}}}}},
                                                       "function": {
                                                         "typeApplication": {
                                                           "body": {
@@ -6073,7 +6073,7 @@
                                                               "term": {
                                                                 "application": {
                                                                   "argument": {"variable": "fcx"},
-                                                                  "function": {"variable": "hydra.schemas.freshName"}}},
+                                                                  "function": {"variable": "hydra.names.freshName"}}},
                                                               "type": [
                                                                 {
                                                                   "constraints": null,
@@ -8024,7 +8024,7 @@
                                                                                                                                                         "function": {
                                                                                                                                                           "application": {
                                                                                                                                                             "argument": {"variable": "tname"},
-                                                                                                                                                            "function": {"variable": "hydra.schemas.nominalApplication"}}}}},
+                                                                                                                                                            "function": {"variable": "hydra.resolution.nominalApplication"}}}}},
                                                                                                                                                     "function": {
                                                                                                                                                       "application": {
                                                                                                                                                         "argument": {
@@ -8093,7 +8093,7 @@
                                                                                                                             "function": {
                                                                                                                               "application": {
                                                                                                                                 "argument": {"variable": "fcx3"},
-                                                                                                                                "function": {"variable": "hydra.schemas.findFieldType"}}}}}}},
+                                                                                                                                "function": {"variable": "hydra.resolution.findFieldType"}}}}}}},
                                                                                                                     "function": {
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {
@@ -8159,7 +8159,7 @@
                                                                             "function": {
                                                                               "application": {
                                                                                 "argument": {"variable": "fcx2"},
-                                                                                "function": {"variable": "hydra.schemas.requireSchemaType"}}}}}}},
+                                                                                "function": {"variable": "hydra.resolution.requireSchemaType"}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -8291,7 +8291,7 @@
                                               "term": {
                                                 "application": {
                                                   "argument": {"variable": "fcx"},
-                                                  "function": {"variable": "hydra.schemas.freshName"}}},
+                                                  "function": {"variable": "hydra.names.freshName"}}},
                                               "type": [
                                                 {
                                                   "constraints": null,
@@ -8549,11 +8549,11 @@
                                                                                                                 {
                                                                                                                   "application": {
                                                                                                                     "argument": {"variable": "rdom"},
-                                                                                                                    "function": {"variable": "hydra.rewriting.freeVariablesInType"}}},
+                                                                                                                    "function": {"variable": "hydra.variables.freeVariablesInType"}}},
                                                                                                                 {
                                                                                                                   "application": {
                                                                                                                     "argument": {"variable": "icod"},
-                                                                                                                    "function": {"variable": "hydra.rewriting.freeVariablesInType"}}},
+                                                                                                                    "function": {"variable": "hydra.variables.freeVariablesInType"}}},
                                                                                                                 {
                                                                                                                   "application": {
                                                                                                                     "argument": {
@@ -8889,7 +8889,7 @@
                                                                                             "argument": {
                                                                                               "application": {
                                                                                                 "argument": {"variable": "term"},
-                                                                                                "function": {"variable": "hydra.rewriting.freeVariablesInTerm"}}},
+                                                                                                "function": {"variable": "hydra.variables.freeVariablesInTerm"}}},
                                                                                             "function": {
                                                                                               "typeApplication": {
                                                                                                 "body": {"function": {"primitive": "hydra.lib.sets.toList"}},
@@ -9839,7 +9839,7 @@
                                                                     "typeApplication": {
                                                                       "body": {"function": {"primitive": "hydra.lib.lists.length"}},
                                                                       "type": {"variable": "hydra.core.Binding"}}}}},
-                                                              "function": {"variable": "hydra.schemas.freshNames"}}}}},
+                                                              "function": {"variable": "hydra.names.freshNames"}}}}},
                                                       "type": [
                                                         {
                                                           "constraints": null,
@@ -11675,7 +11675,7 @@
                                       "term": {
                                         "application": {
                                           "argument": {"variable": "fcx"},
-                                          "function": {"variable": "hydra.schemas.freshName"}}},
+                                          "function": {"variable": "hydra.names.freshName"}}},
                                       "type": [
                                         {
                                           "constraints": null,
@@ -11732,7 +11732,7 @@
                                                   "term": {
                                                     "application": {
                                                       "argument": {"variable": "fcx2"},
-                                                      "function": {"variable": "hydra.schemas.freshName"}}},
+                                                      "function": {"variable": "hydra.names.freshName"}}},
                                                   "type": [
                                                     {
                                                       "constraints": null,
@@ -13736,7 +13736,7 @@
                                                         "function": {
                                                           "application": {
                                                             "argument": {"variable": "fcx"},
-                                                            "function": {"variable": "hydra.schemas.instantiateTypeScheme"}}}}},
+                                                            "function": {"variable": "hydra.resolution.instantiateTypeScheme"}}}}},
                                                     "type": [
                                                       {
                                                         "constraints": null,
@@ -14142,7 +14142,7 @@
                                                                                                                           "function": {
                                                                                                                             "application": {
                                                                                                                               "argument": {"variable": "tname"},
-                                                                                                                              "function": {"variable": "hydra.schemas.nominalApplication"}}}}}},
+                                                                                                                              "function": {"variable": "hydra.resolution.nominalApplication"}}}}}},
                                                                                                                     {"name": "codomain", "term": {"variable": "ftyp"}}],
                                                                                                                   "typeName": "hydra.core.FunctionType"}}},
                                                                                                             "typeName": "hydra.core.Type"}},
@@ -14197,7 +14197,7 @@
                                                                                           "function": {
                                                                                             "application": {
                                                                                               "argument": {"variable": "fcx2"},
-                                                                                              "function": {"variable": "hydra.schemas.findFieldType"}}}}}}},
+                                                                                              "function": {"variable": "hydra.resolution.findFieldType"}}}}}}},
                                                                                   "function": {
                                                                                     "typeApplication": {
                                                                                       "body": {
@@ -14263,7 +14263,7 @@
                                                       "function": {
                                                         "application": {
                                                           "argument": {"variable": "fcx"},
-                                                          "function": {"variable": "hydra.schemas.requireSchemaType"}}}}}}},
+                                                          "function": {"variable": "hydra.resolution.requireSchemaType"}}}}}}},
                                               "function": {
                                                 "typeApplication": {
                                                   "body": {
@@ -14860,7 +14860,7 @@
                                                                                                                                                 "function": {
                                                                                                                                                   "application": {
                                                                                                                                                     "argument": {"variable": "tname"},
-                                                                                                                                                    "function": {"variable": "hydra.schemas.nominalApplication"}}}}},
+                                                                                                                                                    "function": {"variable": "hydra.resolution.nominalApplication"}}}}},
                                                                                                                                             "function": {
                                                                                                                                               "application": {
                                                                                                                                                 "argument": {
@@ -15072,7 +15072,7 @@
                                                           "function": {
                                                             "application": {
                                                               "argument": {"variable": "fcx"},
-                                                              "function": {"variable": "hydra.schemas.requireSchemaType"}}}}}}},
+                                                              "function": {"variable": "hydra.resolution.requireSchemaType"}}}}}}},
                                                   "function": {
                                                     "typeApplication": {
                                                       "body": {
@@ -15988,7 +15988,7 @@
                                                                                                         "function": {
                                                                                                           "application": {
                                                                                                             "argument": {"variable": "tname"},
-                                                                                                            "function": {"variable": "hydra.schemas.nominalApplication"}}}}}},
+                                                                                                            "function": {"variable": "hydra.resolution.nominalApplication"}}}}}},
                                                                                                   {"name": "codomain", "term": {"variable": "wtyp"}}],
                                                                                                 "typeName": "hydra.core.FunctionType"}}},
                                                                                           "typeName": "hydra.core.Type"}},
@@ -16075,7 +16075,7 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {"variable": "fcx"},
-                                                  "function": {"variable": "hydra.schemas.requireSchemaType"}}}}}}},
+                                                  "function": {"variable": "hydra.resolution.requireSchemaType"}}}}}}},
                                       "function": {
                                         "typeApplication": {
                                           "body": {
@@ -16173,7 +16173,7 @@
                                                         "function": {
                                                           "application": {
                                                             "argument": {"variable": "fcx"},
-                                                            "function": {"variable": "hydra.schemas.instantiateTypeScheme"}}}}},
+                                                            "function": {"variable": "hydra.resolution.instantiateTypeScheme"}}}}},
                                                     "type": [
                                                       {
                                                         "constraints": null,
@@ -16679,7 +16679,7 @@
                                                                                                                                 "function": {
                                                                                                                                   "application": {
                                                                                                                                     "argument": {"variable": "tname"},
-                                                                                                                                    "function": {"variable": "hydra.schemas.nominalApplication"}}}}},
+                                                                                                                                    "function": {"variable": "hydra.resolution.nominalApplication"}}}}},
                                                                                                                             "function": {
                                                                                                                               "application": {
                                                                                                                                 "argument": {
@@ -16780,7 +16780,7 @@
                                                       "function": {
                                                         "application": {
                                                           "argument": {"variable": "fcx"},
-                                                          "function": {"variable": "hydra.schemas.requireSchemaType"}}}}}}},
+                                                          "function": {"variable": "hydra.resolution.requireSchemaType"}}}}}}},
                                               "function": {
                                                 "typeApplication": {
                                                   "body": {
@@ -17574,7 +17574,7 @@
                                                                                                                           "function": {
                                                                                                                             "application": {
                                                                                                                               "argument": {"variable": "fcx2"},
-                                                                                                                              "function": {"variable": "hydra.schemas.instantiateTypeScheme"}}}}},
+                                                                                                                              "function": {"variable": "hydra.resolution.instantiateTypeScheme"}}}}},
                                                                                                                       "type": [
                                                                                                                         {
                                                                                                                           "constraints": null,
@@ -19363,12 +19363,14 @@
     "hydra.lexical",
     "hydra.reflect",
     "hydra.rewriting",
-    "hydra.schemas",
+    "hydra.names",
+    "hydra.resolution",
     "hydra.show.core",
     "hydra.show.errors",
     "hydra.show.typing",
     "hydra.sorting",
     "hydra.substitution",
+    "hydra.variables",
     "hydra.unification"],
   "typeDependencies": [
     "hydra.paths",

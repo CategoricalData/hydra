@@ -55,6 +55,7 @@ import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
+import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
 
 
 ns :: Namespace
@@ -62,7 +63,7 @@ ns = Namespace "hydra.substitution"
 
 module_ :: Module
 module_ = Module ns elements
-    [Rewriting.ns]
+    [Rewriting.ns, Variables.ns]
     kernelTypesNamespaces $
     Just ("Variable substitution in type and term expressions.")
   where
@@ -170,7 +171,7 @@ substInClassConstraints = define "substInClassConstraints" $
         (var "insertOrMerge" @@ var "varName" @@ var "metadata" @@ var "acc")
         -- In substitution: propagate constraint to all free variables in the target type
         ("targetType" ~>
-          "freeVars" <~ Sets.toList (Rewriting.freeVariablesInType @@ var "targetType") $
+          "freeVars" <~ Sets.toList (Variables.freeVariablesInType @@ var "targetType") $
           Lists.foldl
             ("acc2" ~> "freeVar" ~> var "insertOrMerge" @@ var "freeVar" @@ var "metadata" @@ var "acc2")
             (var "acc")

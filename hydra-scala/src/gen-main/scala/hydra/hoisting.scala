@@ -32,7 +32,7 @@ def augmentBindingsWithNewFreeVars(cx: hydra.graph.Graph)(boundVars: scala.colle
    hydra.typing.TermSubst] =
   {
   lazy val types: Map[hydra.core.Name, hydra.core.Type] = hydra.lib.maps.map[hydra.core.TypeScheme, hydra.core.Type,
-     hydra.core.Name](hydra.rewriting.typeSchemeToFType)(cx.boundTypes)
+     hydra.core.Name](hydra.scoping.typeSchemeToFType)(cx.boundTypes)
   def wrapAfterTypeLambdas(vars: Seq[Tuple2[hydra.core.Name, Option[hydra.core.Type]]])(term: hydra.core.Term): hydra.core.Term =
     term match
     case hydra.core.Term.typeLambda(v_Term_typeLambda_tl) => hydra.core.Term.typeLambda(hydra.core.TypeLambda(v_Term_typeLambda_tl.parameter,
@@ -44,7 +44,7 @@ def augmentBindingsWithNewFreeVars(cx: hydra.graph.Graph)(boundVars: scala.colle
          t))))(term)(hydra.lib.lists.reverse[Tuple2[hydra.core.Name, Option[hydra.core.Type]]](vars))
   def augment(b: hydra.core.Binding): Tuple2[hydra.core.Binding, Option[Tuple2[hydra.core.Name, hydra.core.Term]]] =
     {
-    lazy val freeVars: Seq[hydra.core.Name] = hydra.lib.sets.toList[hydra.core.Name](hydra.lib.sets.intersection[hydra.core.Name](boundVars)(hydra.rewriting.freeVariablesInTerm(b.term)))
+    lazy val freeVars: Seq[hydra.core.Name] = hydra.lib.sets.toList[hydra.core.Name](hydra.lib.sets.intersection[hydra.core.Name](boundVars)(hydra.variables.freeVariablesInTerm(b.term)))
     lazy val varTypePairs: Seq[Tuple2[hydra.core.Name, Option[hydra.core.Type]]] = hydra.lib.lists.map[hydra.core.Name,
        Tuple2[hydra.core.Name, Option[hydra.core.Type]]]((v: hydra.core.Name) =>
       Tuple2(v, hydra.lib.maps.lookup[hydra.core.Name, hydra.core.Type](v)(types)))(freeVars)
@@ -76,7 +76,7 @@ def bindingIsPolymorphic(binding: hydra.core.Binding): Boolean =
 def bindingUsesContextTypeVars(cx: hydra.graph.Graph)(binding: hydra.core.Binding): Boolean =
   hydra.lib.maybes.maybe[Boolean, hydra.core.TypeScheme](false)((ts: hydra.core.TypeScheme) =>
   {
-  lazy val freeInType: scala.collection.immutable.Set[hydra.core.Name] = hydra.rewriting.freeVariablesInType(ts.`type`)
+  lazy val freeInType: scala.collection.immutable.Set[hydra.core.Name] = hydra.variables.freeVariablesInType(ts.`type`)
   {
     lazy val contextTypeVars: scala.collection.immutable.Set[hydra.core.Name] = (cx.typeVariables)
     hydra.lib.logic.not(hydra.lib.sets.`null`[hydra.core.Name](hydra.lib.sets.intersection[hydra.core.Name](freeInType)(contextTypeVars)))
@@ -114,7 +114,7 @@ def hoistCaseStatementsInGraph(bindings: Seq[hydra.core.Binding]): Seq[hydra.cor
      hydra.core.TypeScheme], hydra.lib.sets.empty[hydra.core.Name])
   lazy val term0: hydra.core.Term = hydra.core.Term.let(hydra.core.Let(bindings, hydra.core.Term.unit))
   lazy val term1: hydra.core.Term = hydra.hoisting.hoistCaseStatements(emptyTx)(term0)
-  hydra.schemas.termAsBindings(term1)
+  hydra.environment.termAsBindings(term1)
 }
 
 def hoistLetBindingsWithContext(isParentBinding: (hydra.core.Binding => Boolean))(cx: hydra.graph.Graph)(let0: hydra.core.Let): hydra.core.Let =
@@ -133,16 +133,16 @@ def hoistLetBindingsWithPredicate(isParentBinding: (hydra.core.Binding => Boolea
     lazy val b: hydra.core.Binding = hydra.lib.pairs.first[hydra.core.Binding, Seq[hydra.core.Name]](bindingWithCapturedVars)
     lazy val capturedTermVars: Seq[hydra.core.Name] = hydra.lib.pairs.second[hydra.core.Binding, Seq[hydra.core.Name]](bindingWithCapturedVars)
     lazy val types: Map[hydra.core.Name, hydra.core.Type] = hydra.lib.maps.map[hydra.core.TypeScheme,
-       hydra.core.Type, hydra.core.Name](hydra.rewriting.typeSchemeToFType)(cx.boundTypes)
+       hydra.core.Type, hydra.core.Name](hydra.scoping.typeSchemeToFType)(cx.boundTypes)
     lazy val capturedTermVarTypePairs: Seq[Tuple2[hydra.core.Name, Option[hydra.core.Type]]] = hydra.lib.lists.map[hydra.core.Name,
        Tuple2[hydra.core.Name, Option[hydra.core.Type]]]((v: hydra.core.Name) =>
       Tuple2(v, hydra.lib.maps.lookup[hydra.core.Name, hydra.core.Type](v)(types)))(capturedTermVars)
-    lazy val capturedTermVarTypes: Seq[hydra.core.Type] = hydra.lib.lists.map[hydra.core.Type, hydra.core.Type]((typ: hydra.core.Type) => hydra.rewriting.deannotateTypeParameters(typ))(hydra.lib.maybes.cat[hydra.core.Type](hydra.lib.lists.map[Tuple2[hydra.core.Name,
+    lazy val capturedTermVarTypes: Seq[hydra.core.Type] = hydra.lib.lists.map[hydra.core.Type, hydra.core.Type]((typ: hydra.core.Type) => hydra.strip.deannotateTypeParameters(typ))(hydra.lib.maybes.cat[hydra.core.Type](hydra.lib.lists.map[Tuple2[hydra.core.Name,
        Option[hydra.core.Type]], Option[hydra.core.Type]](hydra.lib.pairs.second[hydra.core.Name, Option[hydra.core.Type]])(capturedTermVarTypePairs)))
     lazy val freeInBindingType: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.maybes.maybe[scala.collection.immutable.Set[hydra.core.Name],
-       hydra.core.TypeScheme](hydra.lib.sets.empty[hydra.core.Name])((ts: hydra.core.TypeScheme) => hydra.rewriting.freeVariablesInType(ts.`type`))(b.`type`)
+       hydra.core.TypeScheme](hydra.lib.sets.empty[hydra.core.Name])((ts: hydra.core.TypeScheme) => hydra.variables.freeVariablesInType(ts.`type`))(b.`type`)
     lazy val freeInCapturedVarTypes: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.unions[hydra.core.Name](hydra.lib.lists.map[hydra.core.Type,
-       scala.collection.immutable.Set[hydra.core.Name]]((t: hydra.core.Type) => hydra.rewriting.freeVariablesInType(t))(capturedTermVarTypes))
+       scala.collection.immutable.Set[hydra.core.Name]]((t: hydra.core.Type) => hydra.variables.freeVariablesInType(t))(capturedTermVarTypes))
     lazy val capturedTypeVars: Seq[hydra.core.Name] = hydra.lib.sets.toList[hydra.core.Name](hydra.lib.sets.intersection[hydra.core.Name](cx.typeVariables)(hydra.lib.sets.union[hydra.core.Name](freeInBindingType)(freeInCapturedVarTypes)))
     lazy val globalBindingName: hydra.core.Name = hydra.lexical.chooseUniqueName(alreadyUsedNames)(hydra.lib.strings.cat2(prefix)(b.name))
     lazy val newUsedNames: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.insert[hydra.core.Name](globalBindingName)(alreadyUsedNames)
@@ -153,11 +153,11 @@ def hoistLetBindingsWithPredicate(isParentBinding: (hydra.core.Binding => Boolea
          hydra.lib.lists.foldl[hydra.core.Type, hydra.core.Type]((t: hydra.core.Type) =>
       (a: hydra.core.Type) => hydra.core.Type.function(hydra.core.FunctionType(a, t)))(ts.`type`)(hydra.lib.lists.reverse[hydra.core.Type](capturedTermVarTypes)),
          (ts.constraints)))(b.`type`))(None)
-    lazy val strippedTerm: hydra.core.Term = hydra.rewriting.stripTypeLambdas(b.term)
+    lazy val strippedTerm: hydra.core.Term = hydra.strip.stripTypeLambdas(b.term)
     lazy val termWithLambdas: hydra.core.Term = hydra.lib.lists.foldl[hydra.core.Term, Tuple2[hydra.core.Name, Option[hydra.core.Type]]]((t: hydra.core.Term) =>
       (p: Tuple2[hydra.core.Name, Option[hydra.core.Type]]) =>
       hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda(hydra.lib.pairs.first[hydra.core.Name,
-         Option[hydra.core.Type]](p), hydra.lib.maybes.map[hydra.core.Type, hydra.core.Type]((dom: hydra.core.Type) => hydra.rewriting.deannotateTypeParameters(dom))(hydra.lib.pairs.second[hydra.core.Name,
+         Option[hydra.core.Type]](p), hydra.lib.maybes.map[hydra.core.Type, hydra.core.Type]((dom: hydra.core.Type) => hydra.strip.deannotateTypeParameters(dom))(hydra.lib.pairs.second[hydra.core.Name,
          Option[hydra.core.Type]](p)), t))))(strippedTerm)(hydra.lib.lists.reverse[Tuple2[hydra.core.Name,
          Option[hydra.core.Type]]](capturedTermVarTypePairs))
     lazy val termWithTypeLambdas: hydra.core.Term = hydra.lib.lists.foldl[hydra.core.Term, hydra.core.Name]((t: hydra.core.Term) =>
@@ -206,8 +206,8 @@ def hoistLetBindingsWithPredicate(isParentBinding: (hydra.core.Binding => Boolea
                    hydra.core.Name]((x: hydra.core.Binding) => (x.name))(hoistUs)
                 {
                   lazy val polyLetVariables: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.lists.filter[hydra.core.Name]((v: hydra.core.Name) =>
-                    hydra.lib.maybes.maybe[Boolean, hydra.core.Type](false)(hydra.schemas.fTypeIsPolymorphic)(hydra.lib.maybes.map[hydra.core.TypeScheme,
-                       hydra.core.Type](hydra.rewriting.typeSchemeToFType)(hydra.lib.maps.lookup[hydra.core.Name,
+                    hydra.lib.maybes.maybe[Boolean, hydra.core.Type](false)(hydra.resolution.fTypeIsPolymorphic)(hydra.lib.maybes.map[hydra.core.TypeScheme,
+                       hydra.core.Type](hydra.scoping.typeSchemeToFType)(hydra.lib.maps.lookup[hydra.core.Name,
                        hydra.core.TypeScheme](v)(cx.boundTypes))))(hydra.lib.sets.toList[hydra.core.Name](hydra.lib.sets.difference[hydra.core.Name](hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.maps.keys[hydra.core.Name,
                        hydra.core.Term](cx.boundTerms)))(cx.lambdaVariables))))
                   {
@@ -216,7 +216,7 @@ def hoistLetBindingsWithPredicate(isParentBinding: (hydra.core.Binding => Boolea
                     {
                       lazy val freeVariablesInEachBinding: Seq[Seq[hydra.core.Name]] = hydra.lib.lists.map[hydra.core.Binding,
                          Seq[hydra.core.Name]]((b: hydra.core.Binding) =>
-                        hydra.lib.sets.toList[hydra.core.Name](hydra.lib.sets.intersection[hydra.core.Name](boundTermVariables)(hydra.rewriting.freeVariablesInTerm(b.term))))(hoistUs)
+                        hydra.lib.sets.toList[hydra.core.Name](hydra.lib.sets.intersection[hydra.core.Name](boundTermVariables)(hydra.variables.freeVariablesInTerm(b.term))))(hoistUs)
                       {
                         lazy val bindingDependencies: Seq[Tuple2[Seq[hydra.core.Name], Seq[hydra.core.Name]]] = hydra.lib.lists.map[Seq[hydra.core.Name],
                            Tuple2[Seq[hydra.core.Name], Seq[hydra.core.Name]]]((vars: Seq[hydra.core.Name]) =>
@@ -396,7 +396,7 @@ def hoistLetBindingsWithPredicate(isParentBinding: (hydra.core.Binding => Boolea
       }
       case _ => Tuple2(Tuple2(hydra.lib.lists.concat2[hydra.core.Binding](previouslyFinishedBindings)(bindingsSoFar), alreadyUsedNames), newTerm)
   }
-  lazy val cx1: hydra.graph.Graph = hydra.rewriting.extendGraphForLet((c: hydra.graph.Graph) => (b: hydra.core.Binding) => None)(cx0)(let0)
+  lazy val cx1: hydra.graph.Graph = hydra.scoping.extendGraphForLet((c: hydra.graph.Graph) => (b: hydra.core.Binding) => None)(cx0)(let0)
   def forActiveBinding(b: hydra.core.Binding): Seq[hydra.core.Binding] =
     {
     lazy val prefix: scala.Predef.String = hydra.lib.strings.cat2(b.name)("_")
@@ -464,7 +464,7 @@ def hoistSubterms(shouldHoist: (Tuple2[Seq[hydra.paths.SubtermStep], hydra.core.
                         lazy val existingNames: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.lists.map[hydra.core.Binding,
                            hydra.core.Name]((b: hydra.core.Binding) => (b.name))(newBindings))
                         {
-                          lazy val freeVarsInSubterm: scala.collection.immutable.Set[hydra.core.Name] = hydra.rewriting.freeVariablesInTerm(subterm)
+                          lazy val freeVarsInSubterm: scala.collection.immutable.Set[hydra.core.Name] = hydra.variables.freeVariablesInTerm(subterm)
                           {
                             lazy val allReserved: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.union[hydra.core.Name](existingNames)(freeVarsInSubterm)
                             {
@@ -474,12 +474,12 @@ def hoistSubterms(shouldHoist: (Tuple2[Seq[hydra.paths.SubtermStep], hydra.core.
                                 {
                                   lazy val newLambdaVars: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.difference[hydra.core.Name](allLambdaVars)(baselineLambdaVars)
                                   {
-                                    lazy val freeVars: scala.collection.immutable.Set[hydra.core.Name] = hydra.rewriting.freeVariablesInTerm(processedTerm)
+                                    lazy val freeVars: scala.collection.immutable.Set[hydra.core.Name] = hydra.variables.freeVariablesInTerm(processedTerm)
                                     {
                                       lazy val capturedVars: Seq[hydra.core.Name] = hydra.lib.sets.toList[hydra.core.Name](hydra.lib.sets.intersection[hydra.core.Name](newLambdaVars)(freeVars))
                                       {
                                         lazy val typeMap: Map[hydra.core.Name, hydra.core.Type] = hydra.lib.maps.map[hydra.core.TypeScheme,
-                                           hydra.core.Type, hydra.core.Name](hydra.rewriting.typeSchemeToFType)(cxInner.boundTypes)
+                                           hydra.core.Type, hydra.core.Name](hydra.scoping.typeSchemeToFType)(cxInner.boundTypes)
                                         {
                                           lazy val wrappedTerm: hydra.core.Term = hydra.lib.lists.foldl[hydra.core.Term,
                                              hydra.core.Name]((body: hydra.core.Term) =>
@@ -593,7 +593,7 @@ def isUnionElimination(term: hydra.core.Term): Boolean =
 
 def isUnionEliminationApplication(term: hydra.core.Term): Boolean =
   term match
-  case hydra.core.Term.application(v_Term_application_app) => hydra.hoisting.isUnionElimination(hydra.rewriting.deannotateAndDetypeTerm(v_Term_application_app.function))
+  case hydra.core.Term.application(v_Term_application_app) => hydra.hoisting.isUnionElimination(hydra.strip.deannotateAndDetypeTerm(v_Term_application_app.function))
   case _ => false
 
 def normalizePathForHoisting(path: Seq[hydra.paths.SubtermStep]): Seq[hydra.paths.SubtermStep] =

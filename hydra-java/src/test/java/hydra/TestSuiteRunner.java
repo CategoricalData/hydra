@@ -81,7 +81,7 @@ public class TestSuiteRunner {
         allTypes.putAll(testTypes); // test types override kernel types if any overlap
         hydra.util.PersistentMap<Name, TypeScheme> schemaTypes = hydra.util.PersistentMap.empty();
         for (Map.Entry<Name, Type> entry : allTypes.entrySet()) {
-            schemaTypes = schemaTypes.insert(entry.getKey(), hydra.Schemas.typeToTypeScheme(entry.getValue()));
+            schemaTypes = schemaTypes.insert(entry.getKey(), hydra.Resolution.typeToTypeScheme(entry.getValue()));
         }
 
         // Build bound terms map from test terms + primitive bridges + kernel constants
@@ -335,7 +335,7 @@ public class TestSuiteRunner {
         Type coderBody = new Type.Record(ConsList.of(
             new FieldType(new Name("encode"), encodeType),
             new FieldType(new Name("decode"), decodeType)));
-        types.put(new Name("hydra.util.Coder"),
+        types.put(new Name("hydra.coders.Coder"),
             new Type.Forall(new ForallType(new Name("v1"),
                 new Type.Forall(new ForallType(new Name("v2"), coderBody)))));
 

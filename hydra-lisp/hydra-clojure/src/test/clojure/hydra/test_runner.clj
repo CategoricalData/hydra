@@ -314,7 +314,7 @@
               test-types-var (ns-resolve 'hydra.test.testGraph 'hydra_test_test_graph_test_types)
               test-types (if (and test-types-var (bound? test-types-var)) @test-types-var ())
               ;; Convert types to TypeSchemes using f_type_to_type_scheme (handles foralls)
-              type-to-ts-var (ns-resolve 'hydra.rewriting 'hydra_rewriting_f_type_to_type_scheme)
+              type-to-ts-var (ns-resolve 'hydra.rewriting 'hydra_scoping_f_type_to_type_scheme)
               type-to-ts (if (and type-to-ts-var (bound? type-to-ts-var)) @type-to-ts-var nil)
               ;; Build schema types from bootstrap + test types
               ;; bootstrap-types is a Clojure map {string -> type}
@@ -629,7 +629,7 @@
     (run-simple-test path (:to_string tc) #(((f (:from_convention tc)) (:to_convention tc)) (:from_string tc)))))
 
 (defn- run-deannotate-term-test [path tc]
-  (let [f (resolve-fn 'hydra.rewriting 'hydra_rewriting_deannotate_term)]
+  (let [f (resolve-fn 'hydra.rewriting 'hydra_strip_deannotate_term)]
     (run-simple-test path (:output tc) #(f (:input tc)))))
 
 (defn- run-deannotate-type-test [path tc]

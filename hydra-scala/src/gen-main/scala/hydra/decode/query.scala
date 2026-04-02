@@ -24,17 +24,17 @@ def comparisonConstraint(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hy
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.query.ComparisonConstraint])] = hydra.lib.maps.fromList[hydra.core.Name,
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.query.ComparisonConstraint]](Seq(Tuple2("equal",
        (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.query.ComparisonConstraint, hydra.errors.DecodingError]((t: Unit) => hydra.query.ComparisonConstraint.equal)(hydra.extract.helpers.decodeUnit(cx)(input))),
+      hydra.lib.eithers.map[Unit, hydra.query.ComparisonConstraint, hydra.errors.DecodingError]((t: Unit) => hydra.query.ComparisonConstraint.equal)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("notEqual", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.query.ComparisonConstraint, hydra.errors.DecodingError]((t: Unit) => hydra.query.ComparisonConstraint.notEqual)(hydra.extract.helpers.decodeUnit(cx)(input))),
+      hydra.lib.eithers.map[Unit, hydra.query.ComparisonConstraint, hydra.errors.DecodingError]((t: Unit) => hydra.query.ComparisonConstraint.notEqual)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("lessThan", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.query.ComparisonConstraint, hydra.errors.DecodingError]((t: Unit) => hydra.query.ComparisonConstraint.lessThan)(hydra.extract.helpers.decodeUnit(cx)(input))),
+      hydra.lib.eithers.map[Unit, hydra.query.ComparisonConstraint, hydra.errors.DecodingError]((t: Unit) => hydra.query.ComparisonConstraint.lessThan)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("greaterThan", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.query.ComparisonConstraint, hydra.errors.DecodingError]((t: Unit) => hydra.query.ComparisonConstraint.greaterThan)(hydra.extract.helpers.decodeUnit(cx)(input))),
+      hydra.lib.eithers.map[Unit, hydra.query.ComparisonConstraint, hydra.errors.DecodingError]((t: Unit) => hydra.query.ComparisonConstraint.greaterThan)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("lessThanOrEqual", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.query.ComparisonConstraint, hydra.errors.DecodingError]((t: Unit) => hydra.query.ComparisonConstraint.lessThanOrEqual)(hydra.extract.helpers.decodeUnit(cx)(input))),
+      hydra.lib.eithers.map[Unit, hydra.query.ComparisonConstraint, hydra.errors.DecodingError]((t: Unit) => hydra.query.ComparisonConstraint.lessThanOrEqual)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("greaterThanOrEqual", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.query.ComparisonConstraint, hydra.errors.DecodingError]((t: Unit) => hydra.query.ComparisonConstraint.greaterThanOrEqual)(hydra.extract.helpers.decodeUnit(cx)(input)))))
+      hydra.lib.eithers.map[Unit, hydra.query.ComparisonConstraint, hydra.errors.DecodingError]((t: Unit) => hydra.query.ComparisonConstraint.greaterThanOrEqual)(hydra.extract.core.decodeUnit(cx)(input)))))
     hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.query.ComparisonConstraint], (hydra.core.Term) => Either[hydra.errors.DecodingError,
        hydra.query.ComparisonConstraint]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
        hydra.query.ComparisonConstraint])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
@@ -46,14 +46,14 @@ def edge(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.Decod
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.query.Edge]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
-    lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.query.Edge](hydra.extract.helpers.requireField("type")(hydra.decode.core.name)(fieldMap)(cx))((field_type: hydra.core.Name) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, Option[hydra.core.Name], hydra.query.Edge](hydra.extract.helpers.requireField("out")((v1: hydra.graph.Graph) =>
+    lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.core.toFieldMap(v_Term_record_record)
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.query.Edge](hydra.extract.core.requireField("type")(hydra.decode.core.name)(fieldMap)(cx))((field_type: hydra.core.Name) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, Option[hydra.core.Name], hydra.query.Edge](hydra.extract.core.requireField("out")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
-      hydra.extract.helpers.decodeMaybe(hydra.decode.core.name)(v1)(v2))(fieldMap)(cx))((field_out: Option[hydra.core.Name]) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, Option[hydra.core.Name], hydra.query.Edge](hydra.extract.helpers.requireField("in")((v1: hydra.graph.Graph) =>
+      hydra.extract.core.decodeMaybe(hydra.decode.core.name)(v1)(v2))(fieldMap)(cx))((field_out: Option[hydra.core.Name]) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, Option[hydra.core.Name], hydra.query.Edge](hydra.extract.core.requireField("in")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
-      hydra.extract.helpers.decodeMaybe(hydra.decode.core.name)(v1)(v2))(fieldMap)(cx))((field_in: Option[hydra.core.Name]) => Right(hydra.query.Edge(field_type,
+      hydra.extract.core.decodeMaybe(hydra.decode.core.name)(v1)(v2))(fieldMap)(cx))((field_in: Option[hydra.core.Name]) => Right(hydra.query.Edge(field_type,
          field_out, field_in)))))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
@@ -62,11 +62,11 @@ def graphPattern(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.erro
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.query.GraphPattern]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
-    lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.query.GraphPattern](hydra.extract.helpers.requireField("graph")(hydra.decode.core.name)(fieldMap)(cx))((field_graph: hydra.core.Name) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[hydra.query.Pattern], hydra.query.GraphPattern](hydra.extract.helpers.requireField("patterns")((v1: hydra.graph.Graph) =>
+    lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.core.toFieldMap(v_Term_record_record)
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.query.GraphPattern](hydra.extract.core.requireField("graph")(hydra.decode.core.name)(fieldMap)(cx))((field_graph: hydra.core.Name) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[hydra.query.Pattern], hydra.query.GraphPattern](hydra.extract.core.requireField("patterns")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
-      hydra.extract.helpers.decodeList(hydra.decode.query.pattern)(v1)(v2))(fieldMap)(cx))((field_patterns: Seq[hydra.query.Pattern]) => Right(hydra.query.GraphPattern(field_graph,
+      hydra.extract.core.decodeList(hydra.decode.query.pattern)(v1)(v2))(fieldMap)(cx))((field_patterns: Seq[hydra.query.Pattern]) => Right(hydra.query.GraphPattern(field_graph,
          field_patterns))))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
@@ -84,7 +84,7 @@ def node(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.Decod
          Tuple2("variable", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.query.Variable, hydra.query.Node, hydra.errors.DecodingError]((t: hydra.query.Variable) => hydra.query.Node.variable(t))(hydra.decode.query.variable(cx)(input))),
          Tuple2("wildcard", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.query.Node, hydra.errors.DecodingError]((t: Unit) => hydra.query.Node.wildcard)(hydra.extract.helpers.decodeUnit(cx)(input)))))
+      hydra.lib.eithers.map[Unit, hydra.query.Node, hydra.errors.DecodingError]((t: Unit) => hydra.query.Node.wildcard)(hydra.extract.core.decodeUnit(cx)(input)))))
     hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.query.Node], (hydra.core.Term) => Either[hydra.errors.DecodingError,
        hydra.query.Node]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
        hydra.query.Node])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
@@ -117,9 +117,9 @@ def pathEquation(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.erro
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.query.PathEquation]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
-    lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.query.Path, hydra.query.PathEquation](hydra.extract.helpers.requireField("left")(hydra.decode.query.path)(fieldMap)(cx))((field_left: hydra.query.Path) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.query.Path, hydra.query.PathEquation](hydra.extract.helpers.requireField("right")(hydra.decode.query.path)(fieldMap)(cx))((field_right: hydra.query.Path) => Right(hydra.query.PathEquation(field_left,
+    lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.core.toFieldMap(v_Term_record_record)
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.query.Path, hydra.query.PathEquation](hydra.extract.core.requireField("left")(hydra.decode.query.path)(fieldMap)(cx))((field_left: hydra.query.Path) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.query.Path, hydra.query.PathEquation](hydra.extract.core.requireField("right")(hydra.decode.query.path)(fieldMap)(cx))((field_right: hydra.query.Path) => Right(hydra.query.PathEquation(field_left,
          field_right))))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
@@ -138,9 +138,9 @@ def pattern(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.De
          Tuple2("negation", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.query.Pattern, hydra.query.Pattern, hydra.errors.DecodingError]((t: hydra.query.Pattern) => hydra.query.Pattern.negation(t))(hydra.decode.query.pattern(cx)(input))),
          Tuple2("conjunction", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Seq[hydra.query.Pattern], hydra.query.Pattern, hydra.errors.DecodingError]((t: Seq[hydra.query.Pattern]) => hydra.query.Pattern.conjunction(t))(hydra.extract.helpers.decodeList(hydra.decode.query.pattern)(cx)(input))),
+      hydra.lib.eithers.map[Seq[hydra.query.Pattern], hydra.query.Pattern, hydra.errors.DecodingError]((t: Seq[hydra.query.Pattern]) => hydra.query.Pattern.conjunction(t))(hydra.extract.core.decodeList(hydra.decode.query.pattern)(cx)(input))),
          Tuple2("disjunction", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Seq[hydra.query.Pattern], hydra.query.Pattern, hydra.errors.DecodingError]((t: Seq[hydra.query.Pattern]) => hydra.query.Pattern.disjunction(t))(hydra.extract.helpers.decodeList(hydra.decode.query.pattern)(cx)(input))),
+      hydra.lib.eithers.map[Seq[hydra.query.Pattern], hydra.query.Pattern, hydra.errors.DecodingError]((t: Seq[hydra.query.Pattern]) => hydra.query.Pattern.disjunction(t))(hydra.extract.core.decodeList(hydra.decode.query.pattern)(cx)(input))),
          Tuple2("graph", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.query.GraphPattern, hydra.query.Pattern, hydra.errors.DecodingError]((t: hydra.query.GraphPattern) => hydra.query.Pattern.graph(t))(hydra.decode.query.graphPattern(cx)(input)))))
     hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.query.Pattern], (hydra.core.Term) => Either[hydra.errors.DecodingError,
@@ -154,9 +154,9 @@ def patternImplication(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydr
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.query.PatternImplication]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
-    lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.query.Pattern, hydra.query.PatternImplication](hydra.extract.helpers.requireField("antecedent")(hydra.decode.query.pattern)(fieldMap)(cx))((field_antecedent: hydra.query.Pattern) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.query.Pattern, hydra.query.PatternImplication](hydra.extract.helpers.requireField("consequent")(hydra.decode.query.pattern)(fieldMap)(cx))((field_consequent: hydra.query.Pattern) =>
+    lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.core.toFieldMap(v_Term_record_record)
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.query.Pattern, hydra.query.PatternImplication](hydra.extract.core.requireField("antecedent")(hydra.decode.query.pattern)(fieldMap)(cx))((field_antecedent: hydra.query.Pattern) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.query.Pattern, hydra.query.PatternImplication](hydra.extract.core.requireField("consequent")(hydra.decode.query.pattern)(fieldMap)(cx))((field_consequent: hydra.query.Pattern) =>
       Right(hydra.query.PatternImplication(field_antecedent, field_consequent))))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
@@ -165,13 +165,13 @@ def query(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.Deco
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.query.Query]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
-    lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[hydra.query.Variable], hydra.query.Query](hydra.extract.helpers.requireField("variables")((v1: hydra.graph.Graph) =>
+    lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.core.toFieldMap(v_Term_record_record)
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[hydra.query.Variable], hydra.query.Query](hydra.extract.core.requireField("variables")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
-      hydra.extract.helpers.decodeList(hydra.decode.query.variable)(v1)(v2))(fieldMap)(cx))((field_variables: Seq[hydra.query.Variable]) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[hydra.query.Pattern], hydra.query.Query](hydra.extract.helpers.requireField("patterns")((v1: hydra.graph.Graph) =>
+      hydra.extract.core.decodeList(hydra.decode.query.variable)(v1)(v2))(fieldMap)(cx))((field_variables: Seq[hydra.query.Variable]) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[hydra.query.Pattern], hydra.query.Query](hydra.extract.core.requireField("patterns")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
-      hydra.extract.helpers.decodeList(hydra.decode.query.pattern)(v1)(v2))(fieldMap)(cx))((field_patterns: Seq[hydra.query.Pattern]) => Right(hydra.query.Query(field_variables,
+      hydra.extract.core.decodeList(hydra.decode.query.pattern)(v1)(v2))(fieldMap)(cx))((field_patterns: Seq[hydra.query.Pattern]) => Right(hydra.query.Query(field_variables,
          field_patterns))))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
@@ -180,8 +180,8 @@ def range(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.Deco
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.query.Range]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
-    lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, Int, hydra.query.Range](hydra.extract.helpers.requireField("min")((cx2: hydra.graph.Graph) =>
+    lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.core.toFieldMap(v_Term_record_record)
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, Int, hydra.query.Range](hydra.extract.core.requireField("min")((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
       hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
          Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
@@ -192,7 +192,7 @@ def range(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.Deco
           case _ => Left("expected int32 value")
         case _ => Left("expected int32 literal")
       case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx2)(raw2)))(fieldMap)(cx))((field_min: Int) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, Int, hydra.query.Range](hydra.extract.helpers.requireField("max")((cx2: hydra.graph.Graph) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, Int, hydra.query.Range](hydra.extract.core.requireField("max")((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
       hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
          Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
@@ -217,13 +217,13 @@ def regexQuantifier(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.e
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.query.RegexQuantifier])] = hydra.lib.maps.fromList[hydra.core.Name,
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.query.RegexQuantifier]](Seq(Tuple2("one",
        (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.query.RegexQuantifier, hydra.errors.DecodingError]((t: Unit) => hydra.query.RegexQuantifier.one)(hydra.extract.helpers.decodeUnit(cx)(input))),
+      hydra.lib.eithers.map[Unit, hydra.query.RegexQuantifier, hydra.errors.DecodingError]((t: Unit) => hydra.query.RegexQuantifier.one)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("zeroOrOne", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.query.RegexQuantifier, hydra.errors.DecodingError]((t: Unit) => hydra.query.RegexQuantifier.zeroOrOne)(hydra.extract.helpers.decodeUnit(cx)(input))),
+      hydra.lib.eithers.map[Unit, hydra.query.RegexQuantifier, hydra.errors.DecodingError]((t: Unit) => hydra.query.RegexQuantifier.zeroOrOne)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("zeroOrMore", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.query.RegexQuantifier, hydra.errors.DecodingError]((t: Unit) => hydra.query.RegexQuantifier.zeroOrMore)(hydra.extract.helpers.decodeUnit(cx)(input))),
+      hydra.lib.eithers.map[Unit, hydra.query.RegexQuantifier, hydra.errors.DecodingError]((t: Unit) => hydra.query.RegexQuantifier.zeroOrMore)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("oneOrMore", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.query.RegexQuantifier, hydra.errors.DecodingError]((t: Unit) => hydra.query.RegexQuantifier.oneOrMore)(hydra.extract.helpers.decodeUnit(cx)(input))),
+      hydra.lib.eithers.map[Unit, hydra.query.RegexQuantifier, hydra.errors.DecodingError]((t: Unit) => hydra.query.RegexQuantifier.oneOrMore)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("exactly", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Int, hydra.query.RegexQuantifier, hydra.errors.DecodingError]((t: Int) => hydra.query.RegexQuantifier.exactly(t))(hydra.lib.eithers.either[scala.Predef.String,
          hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
@@ -255,9 +255,9 @@ def regexSequence(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.err
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.query.RegexSequence]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
-    lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.query.Path, hydra.query.RegexSequence](hydra.extract.helpers.requireField("path")(hydra.decode.query.path)(fieldMap)(cx))((field_path: hydra.query.Path) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.query.RegexQuantifier, hydra.query.RegexSequence](hydra.extract.helpers.requireField("quantifier")(hydra.decode.query.regexQuantifier)(fieldMap)(cx))((field_quantifier: hydra.query.RegexQuantifier) =>
+    lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.core.toFieldMap(v_Term_record_record)
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.query.Path, hydra.query.RegexSequence](hydra.extract.core.requireField("path")(hydra.decode.query.path)(fieldMap)(cx))((field_path: hydra.query.Path) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.query.RegexQuantifier, hydra.query.RegexSequence](hydra.extract.core.requireField("quantifier")(hydra.decode.query.regexQuantifier)(fieldMap)(cx))((field_quantifier: hydra.query.RegexQuantifier) =>
       Right(hydra.query.RegexSequence(field_path, field_quantifier))))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
@@ -287,10 +287,10 @@ def triplePattern(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.err
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.query.TriplePattern]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
-    lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.query.Node, hydra.query.TriplePattern](hydra.extract.helpers.requireField("subject")(hydra.decode.query.node)(fieldMap)(cx))((field_subject: hydra.query.Node) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.query.Path, hydra.query.TriplePattern](hydra.extract.helpers.requireField("predicate")(hydra.decode.query.path)(fieldMap)(cx))((field_predicate: hydra.query.Path) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.query.Node, hydra.query.TriplePattern](hydra.extract.helpers.requireField("object")(hydra.decode.query.node)(fieldMap)(cx))((field_object: hydra.query.Node) =>
+    lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.core.toFieldMap(v_Term_record_record)
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.query.Node, hydra.query.TriplePattern](hydra.extract.core.requireField("subject")(hydra.decode.query.node)(fieldMap)(cx))((field_subject: hydra.query.Node) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.query.Path, hydra.query.TriplePattern](hydra.extract.core.requireField("predicate")(hydra.decode.query.path)(fieldMap)(cx))((field_predicate: hydra.query.Path) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.query.Node, hydra.query.TriplePattern](hydra.extract.core.requireField("object")(hydra.decode.query.node)(fieldMap)(cx))((field_object: hydra.query.Node) =>
       Right(hydra.query.TriplePattern(field_subject, field_predicate, field_object)))))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))

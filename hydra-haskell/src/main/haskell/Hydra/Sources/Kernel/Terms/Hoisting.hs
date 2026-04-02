@@ -59,9 +59,13 @@ import qualified Data.Maybe                  as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Environment as Environment
+import qualified Hydra.Sources.Kernel.Terms.Resolution as Resolution
+import qualified Hydra.Sources.Kernel.Terms.Scoping as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Sorting as Sorting
+import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
+import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
 
 
 ns :: Namespace
@@ -72,7 +76,7 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [Lexical.ns, Rewriting.ns, Schemas.ns, Sorting.ns, Substitution.ns]
+    [Lexical.ns, Rewriting.ns, Environment.ns, Resolution.ns, Scoping.ns, Sorting.ns, Strip.ns, Substitution.ns, Variables.ns]
     kernelTypesNamespaces $
     Just "Functions for deep term rewriting operations involving hoisting subterms or bindings into enclosing let terms."
   where
@@ -120,7 +124,7 @@ bindingUsesContextTypeVars = define "bindingUsesContextTypeVars" $
   optCases (Core.bindingType $ var "binding")
     false  -- No type scheme means no type variables used
     ("ts" ~>
-      "freeInType" <~ Rewriting.freeVariablesInType @@ Core.typeSchemeType (var "ts") $
+      "freeInType" <~ Variables.freeVariablesInType @@ Core.typeSchemeType (var "ts") $
       "contextTypeVars" <~ Graph.graphTypeVariables (var "cx") $
       Logic.not $ Sets.null $ Sets.intersection (var "freeInType") (var "contextTypeVars"))
 
@@ -145,7 +149,7 @@ augmentBindingsWithNewFreeVars :: TTermDefinition (Graph -> S.Set Name -> [Bindi
 augmentBindingsWithNewFreeVars = define "augmentBindingsWithNewFreeVars" $
   doc "Augment bindings with new free variables introduced by substitution, wrapping with lambdas after any type lambdas." $
   "cx" ~> "boundVars" ~> "bindings" ~>
-  "types" <~ Maps.map (Rewriting.typeSchemeToFType) (Graph.graphBoundTypes (var "cx")) $
+  "types" <~ Maps.map (Scoping.typeSchemeToFType) (Graph.graphBoundTypes (var "cx")) $
   "wrapAfterTypeLambdas" <~ ("vars" ~> "term" ~>
     cases _Term (var "term")
       -- Default: wrap with lambdas (for any non-type-lambda term)
@@ -159,7 +163,7 @@ augmentBindingsWithNewFreeVars = define "augmentBindingsWithNewFreeVars" $
           (Core.typeLambdaParameter $ var "tl")
           (var "wrapAfterTypeLambdas" @@ var "vars" @@ (Core.typeLambdaBody $ var "tl"))]) $
   "augment" <~ ("b" ~>
-    "freeVars" <~ Sets.toList (Sets.intersection (var "boundVars") (Rewriting.freeVariablesInTerm @@ (Core.bindingTerm $ var "b"))) $
+    "freeVars" <~ Sets.toList (Sets.intersection (var "boundVars") (Variables.freeVariablesInTerm @@ (Core.bindingTerm $ var "b"))) $
     "varTypePairs" <~ Lists.map ("v" ~> pair (var "v") (Maps.lookup (var "v") (var "types"))) (var "freeVars") $
     "varTypes" <~ Maybes.cat (Lists.map (unaryFunction Pairs.second) (var "varTypePairs")) $
     Logic.ifElse (Logic.or (Lists.null $ var "freeVars")
@@ -225,20 +229,20 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
     "alreadyUsedNames" <~ Pairs.second (var "pair") $
     "b" <~ Pairs.first (var "bindingWithCapturedVars") $
     "capturedTermVars" <~ Pairs.second (var "bindingWithCapturedVars") $
-    "types" <~ Maps.map (Rewriting.typeSchemeToFType) (Graph.graphBoundTypes (var "cx")) $
+    "types" <~ Maps.map (Scoping.typeSchemeToFType) (Graph.graphBoundTypes (var "cx")) $
     "capturedTermVarTypePairs" <~ Lists.map
       ("v" ~> pair (var "v") (Maps.lookup (var "v") (var "types")))
       (var "capturedTermVars") $
     -- We can only construct a new type scheme if all of the captured term variables have types
     -- If there are any captured term variables, we create a function type
-    "capturedTermVarTypes" <~ Lists.map ("typ" ~> Rewriting.deannotateTypeParameters @@ var "typ") (Maybes.cat (Lists.map (unaryFunction Pairs.second) (var "capturedTermVarTypePairs"))) $
+    "capturedTermVarTypes" <~ Lists.map ("typ" ~> Strip.deannotateTypeParameters @@ var "typ") (Maybes.cat (Lists.map (unaryFunction Pairs.second) (var "capturedTermVarTypePairs"))) $
     -- Captured type vars include those free in the binding's type AND those free in captured term var types.
     -- The latter is needed because wrapping with lambdas for captured term vars introduces their types
     -- into the hoisted binding's type.
     "freeInBindingType" <~ optCases (Core.bindingType $ var "b")
       Sets.empty
-      ("ts" ~> Rewriting.freeVariablesInType @@ (Core.typeSchemeType $ var "ts")) $
-    "freeInCapturedVarTypes" <~ Sets.unions (Lists.map ("t" ~> Rewriting.freeVariablesInType @@ var "t") (var "capturedTermVarTypes")) $
+      ("ts" ~> Variables.freeVariablesInType @@ (Core.typeSchemeType $ var "ts")) $
+    "freeInCapturedVarTypes" <~ Sets.unions (Lists.map ("t" ~> Variables.freeVariablesInType @@ var "t") (var "capturedTermVarTypes")) $
     "capturedTypeVars" <~ Sets.toList (Sets.intersection
       (Graph.graphTypeVariables $ var "cx")
       (Sets.union (var "freeInBindingType") (var "freeInCapturedVarTypes"))) $
@@ -261,10 +265,10 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
 
     -- Strip only outer type lambda wrappers from the original term (preserving type application wrappers).
     -- Then re-add all type scheme variables as type lambdas.
-    "strippedTerm" <~ Rewriting.stripTypeLambdas @@ (Core.bindingTerm $ var "b") $
+    "strippedTerm" <~ Strip.stripTypeLambdas @@ (Core.bindingTerm $ var "b") $
     "termWithLambdas" <~ Lists.foldl
       ("t" ~> "p" ~> Core.termFunction $ Core.functionLambda $
-        Core.lambda (Pairs.first $ var "p") (Maybes.map ("dom" ~> Rewriting.deannotateTypeParameters @@ var "dom") (Pairs.second $ var "p")) (var "t"))
+        Core.lambda (Pairs.first $ var "p") (Maybes.map ("dom" ~> Strip.deannotateTypeParameters @@ var "dom") (Pairs.second $ var "p")) (var "t"))
       (var "strippedTerm")
       (Lists.reverse $ var "capturedTermVarTypePairs") $
     -- Add type lambdas for all new type scheme variables (captured + original scheme vars)
@@ -330,9 +334,9 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
         -- We need to include them for argument propagation, but exclude them from the final list of arguments
         -- for each hoisted binding.
         "polyLetVariables" <~ (Sets.fromList $ Lists.filter
-          ("v" ~> optCases (Maybes.map (Rewriting.typeSchemeToFType) $ Maps.lookup (var "v") (Graph.graphBoundTypes $ var "cx"))
+          ("v" ~> optCases (Maybes.map (Scoping.typeSchemeToFType) $ Maps.lookup (var "v") (Graph.graphBoundTypes $ var "cx"))
             false -- This function should not be applied to untyped terms, but we make a hopeful guess if it is
-            Schemas.fTypeIsPolymorphic)
+            Resolution.fTypeIsPolymorphic)
           (Sets.toList $ Sets.difference (Sets.fromList $ Maps.keys $ Graph.graphBoundTerms $ var "cx") (Graph.graphLambdaVariables $ var "cx"))) $
 
         "boundTermVariables" <~ Sets.union
@@ -341,7 +345,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
         "freeVariablesInEachBinding" <~ Lists.map
           ("b" ~> Sets.toList $ Sets.intersection
             (var "boundTermVariables")
-            (Rewriting.freeVariablesInTerm @@ (Core.bindingTerm $ var "b")))
+            (Variables.freeVariablesInTerm @@ (Core.bindingTerm $ var "b")))
           (var "hoistUs") $
         "bindingDependencies" <~ Lists.map
           ("vars" ~> Lists.partition
@@ -449,7 +453,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
             (Lists.concat $ list [var "previouslyFinishedBindings", var "hoistedBindingsFinal", var "bindingsSoFarFinal"])
             (var "finalUsedNames"))
           (var "finalTerm")]) $
-  "cx1" <~ Rewriting.extendGraphForLet @@ ("c" ~> "b" ~> nothing) @@ var "cx0" @@ var "let0" $
+  "cx1" <~ Scoping.extendGraphForLet @@ ("c" ~> "b" ~> nothing) @@ var "cx0" @@ var "let0" $
   -- Each binding becomes a list of bindings: the original one with substitutions in its body,
   -- as well as hoisted bindings from any level. The hoisted bindings share the original binding's namespace.
   -- Since each top-level binding has exclusive access to its hoisted bindings, it can be processed individually.
@@ -537,7 +541,7 @@ hoistCaseStatementsInGraph = define "hoistCaseStatementsInGraph" $
   -- Convert bindings to a let term, apply hoisting, extract bindings back
   "term0" <~ Core.termLet (Core.let_ (var "bindings") Core.termUnit) $
   "term1" <~ hoistCaseStatements @@ var "emptyTx" @@ var "term0" $
-  Schemas.termAsBindings @@ var "term1"
+  Environment.termAsBindings @@ var "term1"
 
 -- | Check if a term is a union elimination (case statement)
 isUnionElimination :: TTermDefinition (Term -> Bool)
@@ -565,7 +569,7 @@ isUnionEliminationApplication = define "isUnionEliminationApplication" $
   "term" ~> cases _Term (var "term")
     (Just false) [
     _Term_application>>: "app" ~>
-      isUnionElimination @@ (Rewriting.deannotateAndDetypeTerm @@ (Core.applicationFunction $ var "app"))]
+      isUnionElimination @@ (Strip.deannotateAndDetypeTerm @@ (Core.applicationFunction $ var "app"))]
 
 -- | Wrap a list of bindings in a let term, pushing the let inside any leading lambdas.
 -- This ensures that hoisted bindings don't break function analysis, which expects
@@ -772,7 +776,7 @@ hoistSubterms = define "hoistSubterms" $
             -- Use chooseUniqueName to avoid collisions with names in the enclosing scope
             ("proposedName" <~ Core.name (Strings.cat (list [string "_hoist_", var "namePrefix", string "_", Literals.showInt32 (var "newCounter")])) $
              "existingNames" <~ Sets.fromList (Lists.map (lambda "b" $ Core.bindingName (var "b")) (var "newBindings")) $
-             "freeVarsInSubterm" <~ Rewriting.freeVariablesInTerm @@ var "subterm" $
+             "freeVarsInSubterm" <~ Variables.freeVariablesInTerm @@ var "subterm" $
              "allReserved" <~ Sets.union (var "existingNames") (var "freeVarsInSubterm") $
              "bindingName" <~ Lexical.chooseUniqueName @@ var "allReserved" @@ var "proposedName" $
              -- Find lambda-bound variables that need to be captured
@@ -780,10 +784,10 @@ hoistSubterms = define "hoistSubterms" $
              "allLambdaVars" <~ Graph.graphLambdaVariables (var "cxInner") $
              -- Get names that are new lambda vars (in current scope but not baseline)
              "newLambdaVars" <~ Sets.difference (var "allLambdaVars") (var "baselineLambdaVars") $
-             "freeVars" <~ Rewriting.freeVariablesInTerm @@ var "processedTerm" $
+             "freeVars" <~ Variables.freeVariablesInTerm @@ var "processedTerm" $
              "capturedVars" <~ Sets.toList (Sets.intersection (var "newLambdaVars") (var "freeVars")) $
              -- Wrap the term in lambdas for each captured variable, looking up their types from the context
-             "typeMap" <~ Maps.map (Rewriting.typeSchemeToFType) (Graph.graphBoundTypes (var "cxInner")) $
+             "typeMap" <~ Maps.map (Scoping.typeSchemeToFType) (Graph.graphBoundTypes (var "cxInner")) $
              "wrappedTerm" <~ Lists.foldl
                ("body" ~> "varName" ~>
                  Core.termFunction $ Core.functionLambda $ Core.lambda (var "varName")

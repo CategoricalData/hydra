@@ -78,7 +78,7 @@
                                                                                             "field": {"name": "string", "term": {"literal": {"string": "foo"}}},
                                                                                             "typeName": "hydra.core.Literal"}}},
                                                                                       "typeName": "hydra.core.Term"}},
-                                                                                  "function": {"variable": "hydra.rewriting.freeVariablesInTerm"}}},
+                                                                                  "function": {"variable": "hydra.variables.freeVariablesInTerm"}}},
                                                                               "function": {
                                                                                 "typeApplication": {
                                                                                   "body": {"function": {"primitive": "hydra.lib.sets.toList"}},
@@ -196,7 +196,7 @@
                                                                                         "term": {
                                                                                           "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
                                                                                       "typeName": "hydra.core.Term"}},
-                                                                                  "function": {"variable": "hydra.rewriting.freeVariablesInTerm"}}},
+                                                                                  "function": {"variable": "hydra.variables.freeVariablesInTerm"}}},
                                                                               "function": {
                                                                                 "typeApplication": {
                                                                                   "body": {"function": {"primitive": "hydra.lib.sets.toList"}},
@@ -342,7 +342,7 @@
                                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                                             "typeName": "hydra.core.Function"}}},
                                                                                       "typeName": "hydra.core.Term"}},
-                                                                                  "function": {"variable": "hydra.rewriting.freeVariablesInTerm"}}},
+                                                                                  "function": {"variable": "hydra.variables.freeVariablesInTerm"}}},
                                                                               "function": {
                                                                                 "typeApplication": {
                                                                                   "body": {"function": {"primitive": "hydra.lib.sets.toList"}},
@@ -486,7 +486,7 @@
                                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                                             "typeName": "hydra.core.Function"}}},
                                                                                       "typeName": "hydra.core.Term"}},
-                                                                                  "function": {"variable": "hydra.rewriting.freeVariablesInTerm"}}},
+                                                                                  "function": {"variable": "hydra.variables.freeVariablesInTerm"}}},
                                                                               "function": {
                                                                                 "typeApplication": {
                                                                                   "body": {"function": {"primitive": "hydra.lib.sets.toList"}},
@@ -673,7 +673,7 @@
                                                                                                       "typeName": "hydra.core.Application"}}},
                                                                                                 "typeName": "hydra.core.Term"}}]}},
                                                                                       "typeName": "hydra.core.Term"}},
-                                                                                  "function": {"variable": "hydra.rewriting.freeVariablesInTerm"}}},
+                                                                                  "function": {"variable": "hydra.variables.freeVariablesInTerm"}}},
                                                                               "function": {
                                                                                 "typeApplication": {
                                                                                   "body": {"function": {"primitive": "hydra.lib.sets.toList"}},
@@ -853,7 +853,7 @@
                                                                                                       "typeName": "hydra.core.Application"}}},
                                                                                                 "typeName": "hydra.core.Term"}}]}},
                                                                                       "typeName": "hydra.core.Term"}},
-                                                                                  "function": {"variable": "hydra.rewriting.freeVariablesInTerm"}}},
+                                                                                  "function": {"variable": "hydra.variables.freeVariablesInTerm"}}},
                                                                               "function": {
                                                                                 "typeApplication": {
                                                                                   "body": {"function": {"primitive": "hydra.lib.sets.toList"}},
@@ -1040,7 +1040,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Application"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.simplifyTerm"}}},
+                                                                  "function": {"variable": "hydra.dependencies.simplifyTerm"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -1153,7 +1153,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Application"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.simplifyTerm"}}},
+                                                                  "function": {"variable": "hydra.dependencies.simplifyTerm"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -1264,7 +1264,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Application"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.simplifyTerm"}}},
+                                                                  "function": {"variable": "hydra.dependencies.simplifyTerm"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -1423,7 +1423,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Application"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.simplifyTerm"}}},
+                                                                  "function": {"variable": "hydra.dependencies.simplifyTerm"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -1518,7 +1518,7 @@
                                                                                   "typeName": "hydra.core.IntegerValue"}}},
                                                                             "typeName": "hydra.core.Literal"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.flattenLetTerms"}}},
+                                                                  "function": {"variable": "hydra.dependencies.flattenLetTerms"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -1587,7 +1587,7 @@
                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                 "typeName": "hydra.core.Term"}}]}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.flattenLetTerms"}}},
+                                                                  "function": {"variable": "hydra.dependencies.flattenLetTerms"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -1753,7 +1753,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.flattenLetTerms"}}},
+                                                                  "function": {"variable": "hydra.dependencies.flattenLetTerms"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -2066,7 +2066,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.flattenLetTerms"}}},
+                                                                  "function": {"variable": "hydra.dependencies.flattenLetTerms"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -2550,7 +2550,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.flattenLetTerms"}}},
+                                                                  "function": {"variable": "hydra.dependencies.flattenLetTerms"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -2946,7 +2946,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.liftLambdaAboveLet"}}},
+                                                                  "function": {"variable": "hydra.dependencies.liftLambdaAboveLet"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -3092,7 +3092,7 @@
                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                             "typeName": "hydra.core.Function"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.liftLambdaAboveLet"}}},
+                                                                  "function": {"variable": "hydra.dependencies.liftLambdaAboveLet"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -3214,7 +3214,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.liftLambdaAboveLet"}}},
+                                                                  "function": {"variable": "hydra.dependencies.liftLambdaAboveLet"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -3381,7 +3381,7 @@
                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                             "typeName": "hydra.core.Function"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.liftLambdaAboveLet"}}},
+                                                                  "function": {"variable": "hydra.dependencies.liftLambdaAboveLet"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -3596,7 +3596,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.liftLambdaAboveLet"}}},
+                                                                  "function": {"variable": "hydra.dependencies.liftLambdaAboveLet"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -3835,7 +3835,7 @@
                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                             "typeName": "hydra.core.Function"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.liftLambdaAboveLet"}}},
+                                                                  "function": {"variable": "hydra.dependencies.liftLambdaAboveLet"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -4071,7 +4071,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.liftLambdaAboveLet"}}},
+                                                                  "function": {"variable": "hydra.dependencies.liftLambdaAboveLet"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -4308,7 +4308,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.liftLambdaAboveLet"}}},
+                                                                  "function": {"variable": "hydra.dependencies.liftLambdaAboveLet"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -4564,7 +4564,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.liftLambdaAboveLet"}}},
+                                                                  "function": {"variable": "hydra.dependencies.liftLambdaAboveLet"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -4835,7 +4835,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.liftLambdaAboveLet"}}},
+                                                                  "function": {"variable": "hydra.dependencies.liftLambdaAboveLet"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -5135,7 +5135,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.liftLambdaAboveLet"}}},
+                                                                  "function": {"variable": "hydra.dependencies.liftLambdaAboveLet"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -5419,7 +5419,7 @@
                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                             "typeName": "hydra.core.Function"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.liftLambdaAboveLet"}}},
+                                                                  "function": {"variable": "hydra.dependencies.liftLambdaAboveLet"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -5652,7 +5652,7 @@
                                                                                     "type": {"variable": "hydra.core.Term"}}}}],
                                                                             "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.liftLambdaAboveLet"}}},
+                                                                  "function": {"variable": "hydra.dependencies.liftLambdaAboveLet"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -5879,7 +5879,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.liftLambdaAboveLet"}}},
+                                                                  "function": {"variable": "hydra.dependencies.liftLambdaAboveLet"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -6130,7 +6130,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.liftLambdaAboveLet"}}},
+                                                                  "function": {"variable": "hydra.dependencies.liftLambdaAboveLet"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -6381,7 +6381,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.liftLambdaAboveLet"}}},
+                                                                  "function": {"variable": "hydra.dependencies.liftLambdaAboveLet"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -6608,7 +6608,7 @@
                                                                                     "type": {"variable": "hydra.core.Term"}}}}],
                                                                             "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.liftLambdaAboveLet"}}},
+                                                                  "function": {"variable": "hydra.dependencies.liftLambdaAboveLet"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -6852,7 +6852,7 @@
                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                 "typeName": "hydra.core.Term"}}]}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.liftLambdaAboveLet"}}},
+                                                                  "function": {"variable": "hydra.dependencies.liftLambdaAboveLet"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -7161,7 +7161,7 @@
                                                                                       "typeName": "hydra.core.Let"}}},
                                                                                 "typeName": "hydra.core.Term"}}]}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.liftLambdaAboveLet"}}},
+                                                                  "function": {"variable": "hydra.dependencies.liftLambdaAboveLet"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -7473,7 +7473,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.liftLambdaAboveLet"}}},
+                                                                  "function": {"variable": "hydra.dependencies.liftLambdaAboveLet"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -7724,7 +7724,7 @@
                                                                                 "type": {"variable": "hydra.core.Term"}}},
                                                                             "type": {"variable": "hydra.core.Term"}}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.liftLambdaAboveLet"}}},
+                                                                  "function": {"variable": "hydra.dependencies.liftLambdaAboveLet"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -8026,7 +8026,7 @@
                                                                                 "type": {"variable": "hydra.core.Term"}}},
                                                                             "type": {"variable": "hydra.core.Term"}}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.liftLambdaAboveLet"}}},
+                                                                  "function": {"variable": "hydra.dependencies.liftLambdaAboveLet"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -8334,7 +8334,7 @@
                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                             "typeName": "hydra.core.Function"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.liftLambdaAboveLet"}}},
+                                                                  "function": {"variable": "hydra.dependencies.liftLambdaAboveLet"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -8510,7 +8510,7 @@
                                                                                   "typeName": "hydra.core.IntegerValue"}}},
                                                                             "typeName": "hydra.core.Literal"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                                                                  "function": {"variable": "hydra.strip.deannotateTerm"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -8570,7 +8570,7 @@
                                                                         "term": {
                                                                           "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                                                                  "function": {"variable": "hydra.strip.deannotateTerm"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -8647,7 +8647,7 @@
                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                             "typeName": "hydra.core.Function"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                                                                  "function": {"variable": "hydra.strip.deannotateTerm"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -8749,7 +8749,7 @@
                                                                                     "type": {"variable": "hydra.core.Term"}}}}],
                                                                             "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                                                                  "function": {"variable": "hydra.strip.deannotateTerm"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -8852,7 +8852,7 @@
                                                                                     "type": {"variable": "hydra.core.Term"}}}}],
                                                                             "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                                                                  "function": {"variable": "hydra.strip.deannotateTerm"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -8954,7 +8954,7 @@
                                                                                     "type": {"variable": "hydra.core.Term"}}}}],
                                                                             "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                                                                  "function": {"variable": "hydra.strip.deannotateTerm"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -9069,7 +9069,7 @@
                                                                                     "type": {"variable": "hydra.core.Term"}}}}],
                                                                             "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                                                                  "function": {"variable": "hydra.strip.deannotateTerm"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -9168,7 +9168,7 @@
                                                                                   "typeName": "hydra.core.IntegerType"}}},
                                                                             "typeName": "hydra.core.LiteralType"}}},
                                                                       "typeName": "hydra.core.Type"}},
-                                                                  "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                                                  "function": {"variable": "hydra.strip.deannotateType"}}},
                                                               "function": {"variable": "hydra.show.core.type"}}}},
                                                         {
                                                           "name": "expected",
@@ -9230,7 +9230,7 @@
                                                                             "field": {"name": "string", "term": {"unit": {}}},
                                                                             "typeName": "hydra.core.LiteralType"}}},
                                                                       "typeName": "hydra.core.Type"}},
-                                                                  "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                                                  "function": {"variable": "hydra.strip.deannotateType"}}},
                                                               "function": {"variable": "hydra.show.core.type"}}}},
                                                         {
                                                           "name": "expected",
@@ -9314,7 +9314,7 @@
                                                                                     "typeName": "hydra.core.Type"}}}],
                                                                             "typeName": "hydra.core.FunctionType"}}},
                                                                       "typeName": "hydra.core.Type"}},
-                                                                  "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                                                  "function": {"variable": "hydra.strip.deannotateType"}}},
                                                               "function": {"variable": "hydra.show.core.type"}}}},
                                                         {
                                                           "name": "expected",
@@ -9421,7 +9421,7 @@
                                                                                     "type": {"variable": "hydra.core.Term"}}}}],
                                                                             "typeName": "hydra.core.AnnotatedType"}}},
                                                                       "typeName": "hydra.core.Type"}},
-                                                                  "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                                                  "function": {"variable": "hydra.strip.deannotateType"}}},
                                                               "function": {"variable": "hydra.show.core.type"}}}},
                                                         {
                                                           "name": "expected",
@@ -9519,7 +9519,7 @@
                                                                                     "type": {"variable": "hydra.core.Term"}}}}],
                                                                             "typeName": "hydra.core.AnnotatedType"}}},
                                                                       "typeName": "hydra.core.Type"}},
-                                                                  "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                                                  "function": {"variable": "hydra.strip.deannotateType"}}},
                                                               "function": {"variable": "hydra.show.core.type"}}}},
                                                         {
                                                           "name": "expected",
@@ -9604,7 +9604,7 @@
                                                                                     "type": {"variable": "hydra.core.Term"}}}}],
                                                                             "typeName": "hydra.core.AnnotatedType"}}},
                                                                       "typeName": "hydra.core.Type"}},
-                                                                  "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                                                  "function": {"variable": "hydra.strip.deannotateType"}}},
                                                               "function": {"variable": "hydra.show.core.type"}}}},
                                                         {
                                                           "name": "expected",
@@ -9716,7 +9716,7 @@
                                                                                     "type": {"variable": "hydra.core.Term"}}}}],
                                                                             "typeName": "hydra.core.AnnotatedType"}}},
                                                                       "typeName": "hydra.core.Type"}},
-                                                                  "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                                                  "function": {"variable": "hydra.strip.deannotateType"}}},
                                                               "function": {"variable": "hydra.show.core.type"}}}},
                                                         {
                                                           "name": "expected",
@@ -9859,7 +9859,7 @@
                                                                               "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
                                                                               "type": {"variable": "hydra.core.Name"}}},
                                                                           "type": {"variable": "hydra.core.Term"}}}}},
-                                                                  "function": {"variable": "hydra.rewriting.topologicalSortBindingMap"}}},
+                                                                  "function": {"variable": "hydra.dependencies.topologicalSortBindingMap"}}},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {
@@ -10125,7 +10125,7 @@
                                                                               "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
                                                                               "type": {"variable": "hydra.core.Name"}}},
                                                                           "type": {"variable": "hydra.core.Term"}}}}},
-                                                                  "function": {"variable": "hydra.rewriting.topologicalSortBindingMap"}}},
+                                                                  "function": {"variable": "hydra.dependencies.topologicalSortBindingMap"}}},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {
@@ -10399,7 +10399,7 @@
                                                                               "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
                                                                               "type": {"variable": "hydra.core.Name"}}},
                                                                           "type": {"variable": "hydra.core.Term"}}}}},
-                                                                  "function": {"variable": "hydra.rewriting.topologicalSortBindingMap"}}},
+                                                                  "function": {"variable": "hydra.dependencies.topologicalSortBindingMap"}}},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {
@@ -10733,7 +10733,7 @@
                                                                               "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
                                                                               "type": {"variable": "hydra.core.Name"}}},
                                                                           "type": {"variable": "hydra.core.Term"}}}}},
-                                                                  "function": {"variable": "hydra.rewriting.topologicalSortBindingMap"}}},
+                                                                  "function": {"variable": "hydra.dependencies.topologicalSortBindingMap"}}},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {
@@ -11049,7 +11049,7 @@
                                                                                   "typeName": "hydra.core.IntegerValue"}}},
                                                                             "typeName": "hydra.core.Literal"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.normalizeTypeVariablesInTerm"}}},
+                                                                  "function": {"variable": "hydra.variables.normalizeTypeVariablesInTerm"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -11159,7 +11159,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.normalizeTypeVariablesInTerm"}}},
+                                                                  "function": {"variable": "hydra.variables.normalizeTypeVariablesInTerm"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -11336,7 +11336,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.normalizeTypeVariablesInTerm"}}},
+                                                                  "function": {"variable": "hydra.variables.normalizeTypeVariablesInTerm"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -11540,7 +11540,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.normalizeTypeVariablesInTerm"}}},
+                                                                  "function": {"variable": "hydra.variables.normalizeTypeVariablesInTerm"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -11742,7 +11742,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.normalizeTypeVariablesInTerm"}}},
+                                                                  "function": {"variable": "hydra.variables.normalizeTypeVariablesInTerm"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -12002,7 +12002,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.normalizeTypeVariablesInTerm"}}},
+                                                                  "function": {"variable": "hydra.variables.normalizeTypeVariablesInTerm"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -12320,7 +12320,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.normalizeTypeVariablesInTerm"}}},
+                                                                  "function": {"variable": "hydra.variables.normalizeTypeVariablesInTerm"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -12639,7 +12639,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.normalizeTypeVariablesInTerm"}}},
+                                                                  "function": {"variable": "hydra.variables.normalizeTypeVariablesInTerm"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -13034,7 +13034,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.normalizeTypeVariablesInTerm"}}},
+                                                                  "function": {"variable": "hydra.variables.normalizeTypeVariablesInTerm"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -13468,7 +13468,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.normalizeTypeVariablesInTerm"}}},
+                                                                  "function": {"variable": "hydra.variables.normalizeTypeVariablesInTerm"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -13961,7 +13961,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.normalizeTypeVariablesInTerm"}}},
+                                                                  "function": {"variable": "hydra.variables.normalizeTypeVariablesInTerm"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -14527,7 +14527,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.normalizeTypeVariablesInTerm"}}},
+                                                                  "function": {"variable": "hydra.variables.normalizeTypeVariablesInTerm"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -15106,7 +15106,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.normalizeTypeVariablesInTerm"}}},
+                                                                  "function": {"variable": "hydra.variables.normalizeTypeVariablesInTerm"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -15721,7 +15721,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.normalizeTypeVariablesInTerm"}}},
+                                                                  "function": {"variable": "hydra.variables.normalizeTypeVariablesInTerm"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -16476,7 +16476,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.normalizeTypeVariablesInTerm"}}},
+                                                                  "function": {"variable": "hydra.variables.normalizeTypeVariablesInTerm"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -31820,7 +31820,7 @@
                                                                                   "typeName": "hydra.core.IntegerValue"}}},
                                                                             "typeName": "hydra.core.Literal"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -31880,7 +31880,7 @@
                                                                         "term": {
                                                                           "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -31957,7 +31957,7 @@
                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                             "typeName": "hydra.core.Function"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -32096,7 +32096,7 @@
                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                             "typeName": "hydra.core.Function"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -32256,7 +32256,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -32438,7 +32438,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -32622,7 +32622,7 @@
                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                             "typeName": "hydra.core.Function"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -32786,7 +32786,7 @@
                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                             "typeName": "hydra.core.Function"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -32973,7 +32973,7 @@
                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                             "typeName": "hydra.core.Function"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -33208,7 +33208,7 @@
                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                             "typeName": "hydra.core.Function"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -33440,7 +33440,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -33675,7 +33675,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -33956,7 +33956,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -34192,7 +34192,7 @@
                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                             "typeName": "hydra.core.Function"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -34399,7 +34399,7 @@
                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                             "typeName": "hydra.core.Function"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -34636,7 +34636,7 @@
                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                             "typeName": "hydra.core.Function"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -34906,7 +34906,7 @@
                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                             "typeName": "hydra.core.Function"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -35146,7 +35146,7 @@
                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                             "typeName": "hydra.core.Function"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -35322,7 +35322,7 @@
                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                             "typeName": "hydra.core.Function"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -35485,7 +35485,7 @@
                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                             "typeName": "hydra.core.Function"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -35668,7 +35668,7 @@
                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                             "typeName": "hydra.core.Function"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -35861,7 +35861,7 @@
                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                             "typeName": "hydra.core.Function"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -36042,7 +36042,7 @@
                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                             "typeName": "hydra.core.Function"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -36228,7 +36228,7 @@
                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                             "typeName": "hydra.core.Function"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -36417,7 +36417,7 @@
                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                             "typeName": "hydra.core.Function"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -36646,7 +36646,7 @@
                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                             "typeName": "hydra.core.Function"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -36902,7 +36902,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Let"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -37154,7 +37154,7 @@
                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                             "typeName": "hydra.core.Function"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -37340,7 +37340,7 @@
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Application"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -37462,7 +37462,7 @@
                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                 "typeName": "hydra.core.Term"}}]}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",
@@ -37617,7 +37617,7 @@
                                                                                         "typeName": "hydra.core.Field"}}]}}],
                                                                             "typeName": "hydra.core.Record"}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
+                                                                  "function": {"variable": "hydra.variables.unshadowVariables"}}},
                                                               "function": {"variable": "hydra.show.core.term"}}}},
                                                         {
                                                           "name": "expected",

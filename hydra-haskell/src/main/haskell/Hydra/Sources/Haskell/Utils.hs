@@ -60,13 +60,13 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
+import qualified Hydra.Sources.Kernel.Terms.Analysis       as Analysis
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants      as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -97,7 +97,7 @@ ns = Namespace "hydra.ext.haskell.utils"
 
 module_ :: Module
 module_ = Module ns elements
-    [Formatting.ns, HaskellLanguage.ns, Schemas.ns, Names.ns]
+    [Analysis.ns, Formatting.ns, HaskellLanguage.ns, Names.ns]
     (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Utilities for working with Haskell syntax trees"
   where
@@ -189,7 +189,7 @@ namespacesForModule :: TTermDefinition (Module -> Context -> Graph -> Either (In
 namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
   doc "Compute the Haskell module namespaces for a Hydra module" $
   "mod" ~> "cx" ~> "g" ~>
-    "nss" <<~ Schemas.moduleDependencyNamespaces @@ var "cx" @@ var "g" @@ true @@ true @@ true @@ true @@ var "mod" $
+    "nss" <<~ Analysis.moduleDependencyNamespaces @@ var "cx" @@ var "g" @@ true @@ true @@ true @@ true @@ var "mod" $
     "ns" <~ (Module.moduleNamespace $ var "mod") $
     "toModuleName" <~ ("namespace" ~> lets [
       "namespaceStr">: unwrap _Namespace @@ var "namespace",
@@ -320,7 +320,7 @@ unionFieldReference = haskellUtilsDefinition "unionFieldReference" $
 unpackForallType :: TTermDefinition (Type -> ([Name], Type))
 unpackForallType = haskellUtilsDefinition "unpackForallType" $
   doc "Unpack nested forall types into a list of type variables and the inner type" $
-  "t" ~> cases _Type (Rewriting.deannotateType @@ var "t")
+  "t" ~> cases _Type (Strip.deannotateType @@ var "t")
     (Just $ pair (list ([] :: [TTerm Name])) (var "t")) [
     _Type_forall>>: "fat" ~> lets [
       "v">: Core.forallTypeParameter $ var "fat",

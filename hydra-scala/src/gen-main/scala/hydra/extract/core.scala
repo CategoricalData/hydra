@@ -22,6 +22,8 @@ import hydra.lib.maybes
 
 import hydra.lib.pairs
 
+import hydra.lib.sets
+
 import hydra.lib.strings
 
 def bigfloat(cx: hydra.context.Context)(graph: hydra.graph.Graph)(t: hydra.core.Term): Either[hydra.context.InContext[hydra.errors.Error], BigDecimal] =
@@ -91,6 +93,86 @@ def cases(cx: hydra.context.Context)(name: hydra.core.Name)(graph: hydra.graph.G
   case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ")("case statement"))(" but found "))(hydra.show.core.term(term))),
      cx)))
 
+def decodeEither[T0, T1](leftDecoder: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.DecodingError,
+   T0]))(rightDecoder: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.DecodingError, T1]))(g: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.DecodingError,
+   Either[T0, T1]] =
+  hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Term, Either[T0, T1]](hydra.lib.eithers.bimap[scala.Predef.String,
+     hydra.core.Term, hydra.errors.DecodingError, hydra.core.Term]((x: scala.Predef.String) => x)((x: hydra.core.Term) => x)(hydra.lexical.stripAndDereferenceTermEither(g)(term)))((stripped: hydra.core.Term) =>
+  stripped match
+  case hydra.core.Term.either(v_Term_either_e) => hydra.lib.eithers.either[hydra.core.Term, hydra.core.Term,
+     Either[hydra.errors.DecodingError, Either[T0, T1]]]((lv: hydra.core.Term) =>
+    hydra.lib.eithers.map[T0, Either[T0, T1], hydra.errors.DecodingError]((x: T0) => Left(x))(leftDecoder(g)(lv)))((rv: hydra.core.Term) =>
+    hydra.lib.eithers.map[T1, Either[T0, T1], hydra.errors.DecodingError]((x: T1) => Right(x))(rightDecoder(g)(rv)))(v_Term_either_e)
+  case _ => Left("expected either value"))
+
+def decodeList[T0](elemDecoder: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.DecodingError,
+   T0]))(g: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.DecodingError, Seq[T0]] =
+  hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Term, Seq[T0]](hydra.lib.eithers.bimap[scala.Predef.String,
+     hydra.core.Term, hydra.errors.DecodingError, hydra.core.Term]((x: scala.Predef.String) => x)((x: hydra.core.Term) => x)(hydra.lexical.stripAndDereferenceTermEither(g)(term)))((stripped: hydra.core.Term) =>
+  stripped match
+  case hydra.core.Term.list(v_Term_list_els) => hydra.lib.eithers.mapList[hydra.core.Term, T0, hydra.errors.DecodingError]((v1: hydra.core.Term) => elemDecoder(g)(v1))(v_Term_list_els)
+  case _ => Left("expected list"))
+
+def decodeMap[T0, T1](keyDecoder: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.DecodingError,
+   T0]))(valDecoder: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.DecodingError, T1]))(g: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.DecodingError,
+   Map[T0, T1]] =
+  hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Term, Map[T0, T1]](hydra.lib.eithers.bimap[scala.Predef.String,
+     hydra.core.Term, hydra.errors.DecodingError, hydra.core.Term]((x: scala.Predef.String) => x)((x: hydra.core.Term) => x)(hydra.lexical.stripAndDereferenceTermEither(g)(term)))((stripped: hydra.core.Term) =>
+  stripped match
+  case hydra.core.Term.map(v_Term_map_m) => hydra.lib.eithers.map[Seq[Tuple2[T0, T1]], Map[T0, T1], hydra.errors.DecodingError](hydra.lib.maps.fromList[T0,
+     T1])(hydra.lib.eithers.mapList[Tuple2[hydra.core.Term, hydra.core.Term], Tuple2[T0, T1], hydra.errors.DecodingError]((kv: Tuple2[hydra.core.Term,
+     hydra.core.Term]) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, T0, Tuple2[T0, T1]](keyDecoder(g)(hydra.lib.pairs.first[hydra.core.Term,
+       hydra.core.Term](kv)))((k: T0) =>
+    hydra.lib.eithers.map[T1, Tuple2[T0, T1], hydra.errors.DecodingError]((v: T1) => Tuple2(k, v))(valDecoder(g)(hydra.lib.pairs.second[hydra.core.Term,
+       hydra.core.Term](kv)))))(hydra.lib.maps.toList[hydra.core.Term, hydra.core.Term](v_Term_map_m)))
+  case _ => Left("expected map"))
+
+def decodeMaybe[T0](elemDecoder: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.DecodingError,
+   T0]))(g: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.DecodingError, Option[T0]] =
+  hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Term, Option[T0]](hydra.lib.eithers.bimap[scala.Predef.String,
+     hydra.core.Term, hydra.errors.DecodingError, hydra.core.Term]((x: scala.Predef.String) => x)((x: hydra.core.Term) => x)(hydra.lexical.stripAndDereferenceTermEither(g)(term)))((stripped: hydra.core.Term) =>
+  stripped match
+  case hydra.core.Term.maybe(v_Term_maybe_opt) => hydra.lib.eithers.mapMaybe[hydra.core.Term, T0, hydra.errors.DecodingError]((v1: hydra.core.Term) => elemDecoder(g)(v1))(v_Term_maybe_opt)
+  case _ => Left("expected optional value"))
+
+def decodePair[T0, T1](firstDecoder: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.DecodingError,
+   T0]))(secondDecoder: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.DecodingError, T1]))(g: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.DecodingError,
+   Tuple2[T0, T1]] =
+  hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Term, Tuple2[T0, T1]](hydra.lib.eithers.bimap[scala.Predef.String,
+     hydra.core.Term, hydra.errors.DecodingError, hydra.core.Term]((x: scala.Predef.String) => x)((x: hydra.core.Term) => x)(hydra.lexical.stripAndDereferenceTermEither(g)(term)))((stripped: hydra.core.Term) =>
+  stripped match
+  case hydra.core.Term.pair(v_Term_pair_p) => hydra.lib.eithers.bind[hydra.errors.DecodingError, T0, Tuple2[T0,
+     T1]](firstDecoder(g)(hydra.lib.pairs.first[hydra.core.Term, hydra.core.Term](v_Term_pair_p)))((f: T0) =>
+    hydra.lib.eithers.map[T1, Tuple2[T0, T1], hydra.errors.DecodingError]((s: T1) => Tuple2(f, s))(secondDecoder(g)(hydra.lib.pairs.second[hydra.core.Term,
+       hydra.core.Term](v_Term_pair_p))))
+  case _ => Left("expected pair"))
+
+def decodeSet[T0](elemDecoder: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.DecodingError,
+   T0]))(g: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.DecodingError, scala.collection.immutable.Set[T0]] =
+  hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Term, scala.collection.immutable.Set[T0]](hydra.lib.eithers.bimap[scala.Predef.String,
+     hydra.core.Term, hydra.errors.DecodingError, hydra.core.Term]((x: scala.Predef.String) => x)((x: hydra.core.Term) => x)(hydra.lexical.stripAndDereferenceTermEither(g)(term)))((stripped: hydra.core.Term) =>
+  stripped match
+  case hydra.core.Term.set(v_Term_set_s) => hydra.lib.eithers.map[Seq[T0], scala.collection.immutable.Set[T0],
+     hydra.errors.DecodingError](hydra.lib.sets.fromList[T0])(hydra.lib.eithers.mapList[hydra.core.Term,
+     T0, hydra.errors.DecodingError]((v1: hydra.core.Term) => elemDecoder(g)(v1))(hydra.lib.sets.toList[hydra.core.Term](v_Term_set_s)))
+  case _ => Left("expected set"))
+
+def decodeUnit(g: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.DecodingError, Unit] =
+  hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Term, Unit](hydra.lib.eithers.bimap[scala.Predef.String,
+     hydra.core.Term, hydra.errors.DecodingError, hydra.core.Term]((x: scala.Predef.String) => x)((x: hydra.core.Term) => x)(hydra.lexical.stripAndDereferenceTermEither(g)(term)))((stripped: hydra.core.Term) =>
+  stripped match
+  case hydra.core.Term.unit => Right(())
+  case _ => Left("expected a unit value"))
+
+def decodeWrapped[T0](bodyDecoder: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.DecodingError,
+   T0]))(g: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.DecodingError, T0] =
+  hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Term, T0](hydra.lib.eithers.bimap[scala.Predef.String,
+     hydra.core.Term, hydra.errors.DecodingError, hydra.core.Term]((x: scala.Predef.String) => x)((x: hydra.core.Term) => x)(hydra.lexical.stripAndDereferenceTermEither(g)(term)))((stripped: hydra.core.Term) =>
+  stripped match
+  case hydra.core.Term.wrap(v_Term_wrap_wt) => bodyDecoder(g)(v_Term_wrap_wt.body)
+  case _ => Left("expected wrapped value"))
+
 def eitherTerm[T0, T1](cx: hydra.context.Context)(leftFun: (hydra.core.Term => Either[hydra.context.InContext[hydra.errors.Error],
    T0]))(rightFun: (hydra.core.Term => Either[hydra.context.InContext[hydra.errors.Error], T1]))(graph: hydra.graph.Graph)(term0: hydra.core.Term): Either[hydra.context.InContext[hydra.errors.Error],
    Either[T0, T1]] =
@@ -105,7 +187,7 @@ def eitherTerm[T0, T1](cx: hydra.context.Context)(leftFun: (hydra.core.Term => E
 
 def eitherType(cx: hydra.context.Context)(typ: hydra.core.Type): Either[hydra.context.InContext[hydra.errors.Error], hydra.core.EitherType] =
   {
-  lazy val stripped: hydra.core.Type = hydra.rewriting.deannotateType(typ)
+  lazy val stripped: hydra.core.Type = hydra.strip.deannotateType(typ)
   stripped match
     case hydra.core.Type.either(v_Type_either_et) => Right(v_Type_either_et)
     case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ")("either type"))(" but found "))(hydra.show.core.`type`(typ))),
@@ -155,7 +237,7 @@ def floatValue(cx: hydra.context.Context)(graph: hydra.graph.Graph)(t: hydra.cor
 
 def functionType(cx: hydra.context.Context)(typ: hydra.core.Type): Either[hydra.context.InContext[hydra.errors.Error], hydra.core.FunctionType] =
   {
-  lazy val stripped: hydra.core.Type = hydra.rewriting.deannotateType(typ)
+  lazy val stripped: hydra.core.Type = hydra.strip.deannotateType(typ)
   stripped match
     case hydra.core.Type.function(v_Type_function_ft) => Right(v_Type_function_ft)
     case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ")("function type"))(" but found "))(hydra.show.core.`type`(typ))),
@@ -278,7 +360,7 @@ def listOf[T0](cx: hydra.context.Context)(f: (hydra.core.Term => Either[hydra.co
 
 def listType(cx: hydra.context.Context)(typ: hydra.core.Type): Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Type] =
   {
-  lazy val stripped: hydra.core.Type = hydra.rewriting.deannotateType(typ)
+  lazy val stripped: hydra.core.Type = hydra.strip.deannotateType(typ)
   stripped match
     case hydra.core.Type.list(v_Type_list_t) => Right(v_Type_list_t)
     case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ")("list type"))(" but found "))(hydra.show.core.`type`(typ))),
@@ -316,7 +398,7 @@ def map[T0, T1](cx: hydra.context.Context)(fk: (hydra.core.Term => Either[hydra.
 
 def mapType(cx: hydra.context.Context)(typ: hydra.core.Type): Either[hydra.context.InContext[hydra.errors.Error], hydra.core.MapType] =
   {
-  lazy val stripped: hydra.core.Type = hydra.rewriting.deannotateType(typ)
+  lazy val stripped: hydra.core.Type = hydra.strip.deannotateType(typ)
   stripped match
     case hydra.core.Type.map(v_Type_map_mt) => Right(v_Type_map_mt)
     case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ")("map type"))(" but found "))(hydra.show.core.`type`(typ))),
@@ -336,7 +418,7 @@ def maybeTerm[T0](cx: hydra.context.Context)(f: (hydra.core.Term => Either[hydra
 
 def maybeType(cx: hydra.context.Context)(typ: hydra.core.Type): Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Type] =
   {
-  lazy val stripped: hydra.core.Type = hydra.rewriting.deannotateType(typ)
+  lazy val stripped: hydra.core.Type = hydra.strip.deannotateType(typ)
   stripped match
     case hydra.core.Type.maybe(v_Type_maybe_t) => Right(v_Type_maybe_t)
     case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ")("maybe type"))(" but found "))(hydra.show.core.`type`(typ))),
@@ -368,12 +450,18 @@ def record(cx: hydra.context.Context)(expected: hydra.core.Name)(graph: hydra.gr
 
 def recordType[T0](cx: hydra.context.Context)(ename: T0)(typ: hydra.core.Type): Either[hydra.context.InContext[hydra.errors.Error], Seq[hydra.core.FieldType]] =
   {
-  lazy val stripped: hydra.core.Type = hydra.rewriting.deannotateType(typ)
+  lazy val stripped: hydra.core.Type = hydra.strip.deannotateType(typ)
   stripped match
     case hydra.core.Type.record(v_Type_record_fields) => Right(v_Type_record_fields)
     case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ")("record type"))(" but found "))(hydra.show.core.`type`(typ))),
        cx))
 }
+
+def requireField[T0, T1, T2](fieldName: scala.Predef.String)(decoder: (T0 => T1 => Either[hydra.errors.DecodingError,
+   T2]))(fieldMap: Map[hydra.core.Name, T1])(g: T0): Either[hydra.errors.DecodingError, T2] =
+  hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, T2], T1](Left(hydra.lib.strings.cat(Seq("missing field ",
+     fieldName, " in record"))))((fieldTerm: T1) => decoder(g)(fieldTerm))(hydra.lib.maps.lookup[hydra.core.Name,
+     T1](fieldName)(fieldMap))
 
 def set(cx: hydra.context.Context)(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.context.InContext[hydra.errors.Error],
    scala.collection.immutable.Set[hydra.core.Term]] =
@@ -392,7 +480,7 @@ def setOf[T0](cx: hydra.context.Context)(f: (hydra.core.Term => Either[hydra.con
 
 def setType(cx: hydra.context.Context)(typ: hydra.core.Type): Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Type] =
   {
-  lazy val stripped: hydra.core.Type = hydra.rewriting.deannotateType(typ)
+  lazy val stripped: hydra.core.Type = hydra.strip.deannotateType(typ)
   stripped match
     case hydra.core.Type.set(v_Type_set_t) => Right(v_Type_set_t)
     case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ")("set type"))(" but found "))(hydra.show.core.`type`(typ))),
@@ -415,6 +503,10 @@ def termRecord(cx: hydra.context.Context)(graph: hydra.graph.Graph)(term0: hydra
   case hydra.core.Term.record(v_Term_record_record) => Right(v_Term_record_record)
   case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ")("record"))(" but found "))(hydra.show.core.term(term))),
      cx)))
+
+def toFieldMap(record: hydra.core.Record): Map[hydra.core.Name, hydra.core.Term] =
+  hydra.lib.maps.fromList[hydra.core.Name, hydra.core.Term](hydra.lib.lists.map[hydra.core.Field, Tuple2[hydra.core.Name,
+     hydra.core.Term]]((f: hydra.core.Field) => Tuple2(f.name, (f.term)))(record.fields))
 
 def uint16(cx: hydra.context.Context)(graph: hydra.graph.Graph)(t: hydra.core.Term): Either[hydra.context.InContext[hydra.errors.Error], Int] =
   hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Literal, Int](hydra.extract.core.literal(cx)(graph)(t))((l: hydra.core.Literal) =>
@@ -458,7 +550,7 @@ def uint8Value(cx: hydra.context.Context)(v: hydra.core.IntegerValue): Either[hy
 
 def unionType[T0](cx: hydra.context.Context)(ename: T0)(typ: hydra.core.Type): Either[hydra.context.InContext[hydra.errors.Error], Seq[hydra.core.FieldType]] =
   {
-  lazy val stripped: hydra.core.Type = hydra.rewriting.deannotateType(typ)
+  lazy val stripped: hydra.core.Type = hydra.strip.deannotateType(typ)
   stripped match
     case hydra.core.Type.union(v_Type_union_fields) => Right(v_Type_union_fields)
     case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ")("union type"))(" but found "))(hydra.show.core.`type`(typ))),
@@ -488,7 +580,7 @@ def wrap(cx: hydra.context.Context)(expected: hydra.core.Name)(graph: hydra.grap
 
 def wrappedType[T0](cx: hydra.context.Context)(ename: T0)(typ: hydra.core.Type): Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Type] =
   {
-  lazy val stripped: hydra.core.Type = hydra.rewriting.deannotateType(typ)
+  lazy val stripped: hydra.core.Type = hydra.strip.deannotateType(typ)
   stripped match
     case hydra.core.Type.wrap(v_Type_wrap_innerType) => Right(v_Type_wrap_innerType)
     case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ")("wrapped type"))(" but found "))(hydra.show.core.`type`(typ))),

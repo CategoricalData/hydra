@@ -55,7 +55,7 @@ import qualified Hydra.Sources.Decode.Core as DecodeCore
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Predicates as Predicates
 import qualified Hydra.Dsl.Meta.DeepCore as DC
 import           Hydra.Dsl.Meta.DeepCore ((@@@))
 import           Prelude hiding ((++))
@@ -71,7 +71,7 @@ ns = Namespace "hydra.encoding"
 
 module_ :: Module
 module_ = Module ns elements
-    [Annotations.ns, moduleNamespace DecodeCore.module_, Formatting.ns, Names.ns, Rewriting.ns, Schemas.ns]
+    [Annotations.ns, moduleNamespace DecodeCore.module_, Formatting.ns, Names.ns, Predicates.ns, Rewriting.ns]
     kernelTypesNamespaces $
     Just "Functions for generating term encoders from type modules"
   where
@@ -725,7 +725,7 @@ isEncodableBinding :: TTermDefinition (Context -> Graph -> Binding -> Prelude.Ei
 isEncodableBinding = define "isEncodableBinding" $
   doc "Check if a binding is encodable (serializable type)" $
   "cx" ~> "graph" ~> "b" ~>
-    "serializable" <<~ Schemas.isSerializableByName @@ var "cx" @@ var "graph" @@ (Core.bindingName (var "b")) $
+    "serializable" <<~ Predicates.isSerializableByName @@ var "cx" @@ var "graph" @@ (Core.bindingName (var "b")) $
     right (Logic.ifElse (var "serializable") (just (var "b")) nothing)
 
 -- | Check whether a type is the unit type

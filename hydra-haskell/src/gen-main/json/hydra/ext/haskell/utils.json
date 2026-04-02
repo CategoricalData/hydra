@@ -1090,7 +1090,7 @@
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {"variable": "cx"},
-                                                                  "function": {"variable": "hydra.schemas.moduleDependencyNamespaces"}}}}}}}}}}}}}}},
+                                                                  "function": {"variable": "hydra.analysis.moduleDependencyNamespaces"}}}}}}}}}}}}}}},
                                       "function": {
                                         "typeApplication": {
                                           "body": {
@@ -1952,7 +1952,7 @@
                       "argument": {
                         "application": {
                           "argument": {"variable": "t"},
-                          "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                          "function": {"variable": "hydra.strip.deannotateType"}}},
                       "function": {
                         "function": {
                           "elimination": {
@@ -2091,9 +2091,9 @@
   "description": ["Utilities for working with Haskell syntax trees"],
   "namespace": "hydra.ext.haskell.utils",
   "termDependencies": [
+    "hydra.analysis",
     "hydra.formatting",
     "hydra.ext.haskell.language",
-    "hydra.schemas",
     "hydra.names"],
   "typeDependencies": [
     "hydra.ext.haskell.syntax",

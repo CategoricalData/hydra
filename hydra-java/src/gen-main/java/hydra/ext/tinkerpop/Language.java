@@ -69,7 +69,7 @@ public interface Language {
         supportsMaps),
       hydra.lib.maybes.Pure.apply(new hydra.variants.TermVariant.Maybe())))));
     java.util.function.Function<hydra.core.Type, Boolean> typePredicate = (java.util.function.Function<hydra.core.Type, Boolean>) (typ -> {
-      hydra.core.Type dt = hydra.Rewriting.deannotateType(typ);
+      hydra.core.Type dt = hydra.Strip.deannotateType(typ);
       return (dt).accept(new hydra.core.Type.PartialVisitor<>() {
         @Override
         public Boolean otherwise(hydra.core.Type instance) {
@@ -78,7 +78,7 @@ public interface Language {
 
         @Override
         public Boolean visit(hydra.core.Type.List t) {
-          return hydra.Rewriting.deannotateType((t).value).accept(new hydra.core.Type.PartialVisitor<>() {
+          return hydra.Strip.deannotateType((t).value).accept(new hydra.core.Type.PartialVisitor<>() {
             @Override
             public Boolean otherwise(hydra.core.Type instance) {
               return false;
@@ -168,7 +168,7 @@ public interface Language {
 
         @Override
         public Boolean visit(hydra.core.Type.Maybe ot) {
-          return hydra.Rewriting.deannotateType((ot).value).accept(new hydra.core.Type.PartialVisitor<>() {
+          return hydra.Strip.deannotateType((ot).value).accept(new hydra.core.Type.PartialVisitor<>() {
             @Override
             public Boolean otherwise(hydra.core.Type instance) {
               return false;

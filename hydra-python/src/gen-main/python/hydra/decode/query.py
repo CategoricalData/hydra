@@ -10,7 +10,7 @@ from typing import cast
 import hydra.core
 import hydra.decode.core
 import hydra.errors
-import hydra.extract.helpers
+import hydra.extract.core
 import hydra.lexical
 import hydra.lib.eithers
 import hydra.lib.maps
@@ -27,7 +27,7 @@ def comparison_constraint(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 fterm = field.term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.errors.DecodingError, hydra.query.ComparisonConstraint]]]:
-                    return hydra.lib.maps.from_list(((hydra.core.Name("equal"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.query.ComparisonConstraint.EQUAL), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("notEqual"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.query.ComparisonConstraint.NOT_EQUAL), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("lessThan"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.query.ComparisonConstraint.LESS_THAN), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("greaterThan"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.query.ComparisonConstraint.GREATER_THAN), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("lessThanOrEqual"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.query.ComparisonConstraint.LESS_THAN_OR_EQUAL), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("greaterThanOrEqual"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.query.ComparisonConstraint.GREATER_THAN_OR_EQUAL), hydra.extract.helpers.decode_unit(cx, input))))))
+                    return hydra.lib.maps.from_list(((hydra.core.Name("equal"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.query.ComparisonConstraint.EQUAL), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("notEqual"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.query.ComparisonConstraint.NOT_EQUAL), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("lessThan"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.query.ComparisonConstraint.LESS_THAN), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("greaterThan"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.query.ComparisonConstraint.GREATER_THAN), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("lessThanOrEqual"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.query.ComparisonConstraint.LESS_THAN_OR_EQUAL), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("greaterThanOrEqual"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.query.ComparisonConstraint.GREATER_THAN_OR_EQUAL), hydra.extract.core.decode_unit(cx, input))))))
                 return hydra.lib.maybes.maybe((lambda : Left(hydra.errors.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union"))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
 
             case _:
@@ -40,8 +40,8 @@ def edge(cx: hydra.graph.Graph, raw: hydra.core.Term):
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-                    return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("type", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_type: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("out", (lambda v12, v2: hydra.extract.helpers.decode_maybe((lambda x1, x2: hydra.decode.core.name(x1, x2)), v12, v2)), field_map(), cx), (lambda field_out: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("in", (lambda v12, v2: hydra.extract.helpers.decode_maybe((lambda x1, x2: hydra.decode.core.name(x1, x2)), v12, v2)), field_map(), cx), (lambda field_in: Right(hydra.query.Edge(field_type, field_out, field_in))))))))
+                    return hydra.extract.core.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("type", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_type: hydra.lib.eithers.bind(hydra.extract.core.require_field("out", (lambda v12, v2: hydra.extract.core.decode_maybe((lambda x1, x2: hydra.decode.core.name(x1, x2)), v12, v2)), field_map(), cx), (lambda field_out: hydra.lib.eithers.bind(hydra.extract.core.require_field("in", (lambda v12, v2: hydra.extract.core.decode_maybe((lambda x1, x2: hydra.decode.core.name(x1, x2)), v12, v2)), field_map(), cx), (lambda field_in: Right(hydra.query.Edge(field_type, field_out, field_in))))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -80,7 +80,7 @@ def node(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 fterm = field.term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.errors.DecodingError, hydra.query.Node_]]]:
-                    return hydra.lib.maps.from_list(((hydra.core.Name("term"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.Node_, hydra.query.NodeTerm(t))), hydra.decode.core.term(cx, input)))), (hydra.core.Name("variable"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.Node_, hydra.query.NodeVariable(t))), variable(cx, input)))), (hydra.core.Name("wildcard"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.Node_, hydra.query.NodeWildcard())), hydra.extract.helpers.decode_unit(cx, input))))))
+                    return hydra.lib.maps.from_list(((hydra.core.Name("term"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.Node_, hydra.query.NodeTerm(t))), hydra.decode.core.term(cx, input)))), (hydra.core.Name("variable"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.Node_, hydra.query.NodeVariable(t))), variable(cx, input)))), (hydra.core.Name("wildcard"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.Node_, hydra.query.NodeWildcard())), hydra.extract.core.decode_unit(cx, input))))))
                 return hydra.lib.maybes.maybe((lambda : Left(hydra.errors.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union"))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
 
             case _:
@@ -93,7 +93,7 @@ def range_(cx: hydra.graph.Graph, raw: hydra.core.Term):
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-                    return hydra.extract.helpers.to_field_map(record)
+                    return hydra.extract.core.to_field_map(record)
                 def _hoist_field_map_body_1(v12):
                     match v12:
                         case hydra.core.IntegerValueInt32(value=i):
@@ -136,7 +136,7 @@ def range_(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
                         case _:
                             return Left(hydra.errors.DecodingError("expected literal"))
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("min", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_field_map_body_3(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_min: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("max", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_field_map_body_6(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_max: Right(hydra.query.Range(field_min, field_max))))))
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("min", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_field_map_body_3(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_min: hydra.lib.eithers.bind(hydra.extract.core.require_field("max", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_field_map_body_6(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_max: Right(hydra.query.Range(field_min, field_max))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -193,7 +193,7 @@ def regex_quantifier(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
                             case _:
                                 return Left(hydra.errors.DecodingError("expected literal"))
-                    return hydra.lib.maps.from_list(((hydra.core.Name("one"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierOne())), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("zeroOrOne"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierZeroOrOne())), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("zeroOrMore"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierZeroOrMore())), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("oneOrMore"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierOneOrMore())), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("exactly"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierExactly(t))), hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_variant_map_3(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, input))))), (hydra.core.Name("atLeast"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierAtLeast(t))), hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_variant_map_6(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, input))))), (hydra.core.Name("range"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierRange(t))), range_(cx, input))))))
+                    return hydra.lib.maps.from_list(((hydra.core.Name("one"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierOne())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("zeroOrOne"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierZeroOrOne())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("zeroOrMore"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierZeroOrMore())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("oneOrMore"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierOneOrMore())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("exactly"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierExactly(t))), hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_variant_map_3(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, input))))), (hydra.core.Name("atLeast"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierAtLeast(t))), hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_variant_map_6(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, input))))), (hydra.core.Name("range"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierRange(t))), range_(cx, input))))))
                 return hydra.lib.maybes.maybe((lambda : Left(hydra.errors.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union"))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
 
             case _:
@@ -238,8 +238,8 @@ def regex_sequence(cx: hydra.graph.Graph, raw: hydra.core.Term):
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-                    return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("path", (lambda x1, x2: path(x1, x2)), field_map(), cx), (lambda field_path: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("quantifier", (lambda x1, x2: regex_quantifier(x1, x2)), field_map(), cx), (lambda field_quantifier: Right(hydra.query.RegexSequence(field_path, field_quantifier))))))
+                    return hydra.extract.core.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("path", (lambda x1, x2: path(x1, x2)), field_map(), cx), (lambda field_path: hydra.lib.eithers.bind(hydra.extract.core.require_field("quantifier", (lambda x1, x2: regex_quantifier(x1, x2)), field_map(), cx), (lambda field_quantifier: Right(hydra.query.RegexSequence(field_path, field_quantifier))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -251,8 +251,8 @@ def triple_pattern(cx: hydra.graph.Graph, raw: hydra.core.Term):
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-                    return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("subject", (lambda x1, x2: node(x1, x2)), field_map(), cx), (lambda field_subject: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("predicate", (lambda x1, x2: path(x1, x2)), field_map(), cx), (lambda field_predicate: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("object", (lambda x1, x2: node(x1, x2)), field_map(), cx), (lambda field_object: Right(hydra.query.TriplePattern(field_subject, field_predicate, field_object))))))))
+                    return hydra.extract.core.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("subject", (lambda x1, x2: node(x1, x2)), field_map(), cx), (lambda field_subject: hydra.lib.eithers.bind(hydra.extract.core.require_field("predicate", (lambda x1, x2: path(x1, x2)), field_map(), cx), (lambda field_predicate: hydra.lib.eithers.bind(hydra.extract.core.require_field("object", (lambda x1, x2: node(x1, x2)), field_map(), cx), (lambda field_object: Right(hydra.query.TriplePattern(field_subject, field_predicate, field_object))))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -264,8 +264,8 @@ def graph_pattern(cx: hydra.graph.Graph, raw: hydra.core.Term):
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-                    return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("graph", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_graph: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("patterns", (lambda v12, v2: hydra.extract.helpers.decode_list((lambda x1, x2: pattern(x1, x2)), v12, v2)), field_map(), cx), (lambda field_patterns: Right(hydra.query.GraphPattern(field_graph, field_patterns))))))
+                    return hydra.extract.core.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("graph", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_graph: hydra.lib.eithers.bind(hydra.extract.core.require_field("patterns", (lambda v12, v2: hydra.extract.core.decode_list((lambda x1, x2: pattern(x1, x2)), v12, v2)), field_map(), cx), (lambda field_patterns: Right(hydra.query.GraphPattern(field_graph, field_patterns))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -280,7 +280,7 @@ def pattern(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 fterm = field.term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.errors.DecodingError, hydra.query.Pattern]]]:
-                    return hydra.lib.maps.from_list(((hydra.core.Name("triple"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.Pattern, hydra.query.PatternTriple(t))), triple_pattern(cx, input)))), (hydra.core.Name("negation"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.Pattern, hydra.query.PatternNegation(t))), pattern(cx, input)))), (hydra.core.Name("conjunction"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.Pattern, hydra.query.PatternConjunction(t))), hydra.extract.helpers.decode_list((lambda x1, x2: pattern(x1, x2)), cx, input)))), (hydra.core.Name("disjunction"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.Pattern, hydra.query.PatternDisjunction(t))), hydra.extract.helpers.decode_list((lambda x1, x2: pattern(x1, x2)), cx, input)))), (hydra.core.Name("graph"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.Pattern, hydra.query.PatternGraph(t))), graph_pattern(cx, input))))))
+                    return hydra.lib.maps.from_list(((hydra.core.Name("triple"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.Pattern, hydra.query.PatternTriple(t))), triple_pattern(cx, input)))), (hydra.core.Name("negation"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.Pattern, hydra.query.PatternNegation(t))), pattern(cx, input)))), (hydra.core.Name("conjunction"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.Pattern, hydra.query.PatternConjunction(t))), hydra.extract.core.decode_list((lambda x1, x2: pattern(x1, x2)), cx, input)))), (hydra.core.Name("disjunction"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.Pattern, hydra.query.PatternDisjunction(t))), hydra.extract.core.decode_list((lambda x1, x2: pattern(x1, x2)), cx, input)))), (hydra.core.Name("graph"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.Pattern, hydra.query.PatternGraph(t))), graph_pattern(cx, input))))))
                 return hydra.lib.maybes.maybe((lambda : Left(hydra.errors.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union"))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
 
             case _:
@@ -293,8 +293,8 @@ def path_equation(cx: hydra.graph.Graph, raw: hydra.core.Term):
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-                    return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("left", (lambda x1, x2: path(x1, x2)), field_map(), cx), (lambda field_left: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("right", (lambda x1, x2: path(x1, x2)), field_map(), cx), (lambda field_right: Right(hydra.query.PathEquation(field_left, field_right))))))
+                    return hydra.extract.core.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("left", (lambda x1, x2: path(x1, x2)), field_map(), cx), (lambda field_left: hydra.lib.eithers.bind(hydra.extract.core.require_field("right", (lambda x1, x2: path(x1, x2)), field_map(), cx), (lambda field_right: Right(hydra.query.PathEquation(field_left, field_right))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -306,8 +306,8 @@ def pattern_implication(cx: hydra.graph.Graph, raw: hydra.core.Term):
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-                    return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("antecedent", (lambda x1, x2: pattern(x1, x2)), field_map(), cx), (lambda field_antecedent: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("consequent", (lambda x1, x2: pattern(x1, x2)), field_map(), cx), (lambda field_consequent: Right(hydra.query.PatternImplication(field_antecedent, field_consequent))))))
+                    return hydra.extract.core.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("antecedent", (lambda x1, x2: pattern(x1, x2)), field_map(), cx), (lambda field_antecedent: hydra.lib.eithers.bind(hydra.extract.core.require_field("consequent", (lambda x1, x2: pattern(x1, x2)), field_map(), cx), (lambda field_consequent: Right(hydra.query.PatternImplication(field_antecedent, field_consequent))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -319,8 +319,8 @@ def query(cx: hydra.graph.Graph, raw: hydra.core.Term):
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-                    return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("variables", (lambda v12, v2: hydra.extract.helpers.decode_list((lambda x1, x2: variable(x1, x2)), v12, v2)), field_map(), cx), (lambda field_variables: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("patterns", (lambda v12, v2: hydra.extract.helpers.decode_list((lambda x1, x2: pattern(x1, x2)), v12, v2)), field_map(), cx), (lambda field_patterns: Right(hydra.query.Query(field_variables, field_patterns))))))
+                    return hydra.extract.core.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("variables", (lambda v12, v2: hydra.extract.core.decode_list((lambda x1, x2: variable(x1, x2)), v12, v2)), field_map(), cx), (lambda field_variables: hydra.lib.eithers.bind(hydra.extract.core.require_field("patterns", (lambda v12, v2: hydra.extract.core.decode_list((lambda x1, x2: pattern(x1, x2)), v12, v2)), field_map(), cx), (lambda field_patterns: Right(hydra.query.Query(field_variables, field_patterns))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))

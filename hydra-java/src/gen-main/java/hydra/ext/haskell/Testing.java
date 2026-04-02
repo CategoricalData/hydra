@@ -107,12 +107,12 @@ public interface Testing {
 
   static hydra.util.PersistentSet<hydra.core.Name> collectNames(hydra.graph.Graph graf, hydra.util.PersistentSet<hydra.core.Name> names, hydra.core.Term t) {
     return hydra.lib.logic.IfElse.lazy(
-      hydra.Schemas.isEncodedTerm(hydra.Rewriting.deannotateTerm(t)),
+      hydra.Predicates.isEncodedTerm(hydra.Strip.deannotateTerm(t)),
       () -> hydra.lib.eithers.Either.apply(
         (java.util.function.Function<hydra.errors.DecodingError, hydra.util.PersistentSet<hydra.core.Name>>) (ignored -> names),
         (java.util.function.Function<hydra.core.Term, hydra.util.PersistentSet<hydra.core.Name>>) (decodedTerm -> hydra.lib.sets.Union.apply(
           names,
-          hydra.Rewriting.termDependencyNames(
+          hydra.Dependencies.termDependencyNames(
             true,
             true,
             true,

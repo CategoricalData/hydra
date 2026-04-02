@@ -29,8 +29,11 @@ import qualified Hydra.Dsl.Module                          as Module
 import qualified Hydra.Dsl.Util                            as Util
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
+import qualified Hydra.Sources.Kernel.Terms.Variables      as Variables
+import qualified Hydra.Sources.Kernel.Terms.Predicates    as Predicates
+import qualified Hydra.Sources.Kernel.Terms.Analysis      as Analysis
+import qualified Hydra.Sources.Kernel.Terms.Environment   as Environment
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
@@ -58,7 +61,7 @@ ns = Namespace "hydra.ext.lisp.coder"
 module_ :: Module
 module_ = Module ns elements
     [moduleNamespace LispLanguageSource.module_,
-      Formatting.ns, Names.ns, Rewriting.ns, Schemas.ns, Sorting.ns, Lexical.ns, CoderUtils.ns]
+      Formatting.ns, Names.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Sorting.ns, Lexical.ns, CoderUtils.ns]
     (LispSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Lisp code generator: converts Hydra type and term modules to Lisp AST"
   where
@@ -139,7 +142,7 @@ dialectEqual = def "dialectEqual" $
 encodeApplication :: TTermDefinition (L.Dialect -> Context -> Graph -> Term -> Term -> Either (InContext Error) L.Expression)
 encodeApplication = def "encodeApplication" $
   "dialect" ~> "cx" ~> "g" ~> lambda "rawFun" $ lambda "rawArg" $
-    "dFun" <~ (Rewriting.deannotateTerm @@ var "rawFun") $
+    "dFun" <~ (Strip.deannotateTerm @@ var "rawFun") $
     -- Helper: encode a normal (non-special) application
     "normal" <~
       ("fun" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "rawFun") $
@@ -151,7 +154,7 @@ encodeApplication = def "encodeApplication" $
     [_Term_application>>: lambda "app2" $
        "midFun" <~ Core.applicationFunction (var "app2") $
        "midArg" <~ Core.applicationArgument (var "app2") $
-       "dMidFun" <~ (Rewriting.deannotateTerm @@ var "midFun") $
+       "dMidFun" <~ (Strip.deannotateTerm @@ var "midFun") $
        -- 2-deep: dFun = App(midFun, midArg), applied to rawArg
        -- Check if midFun is a 2-arg lazy primitive
        "isLazy2" <~ Logic.or (isPrimitiveRef @@ string "hydra.lib.eithers.fromLeft" @@ var "dMidFun")
@@ -169,7 +172,7 @@ encodeApplication = def "encodeApplication" $
          [_Term_application>>: lambda "app3" $
             "innerFun" <~ Core.applicationFunction (var "app3") $
             "innerArg" <~ Core.applicationArgument (var "app3") $
-            "dInnerFun" <~ (Rewriting.deannotateTerm @@ var "innerFun") $
+            "dInnerFun" <~ (Strip.deannotateTerm @@ var "innerFun") $
             -- 3-deep: ifElse, maybe, or cases
             Logic.ifElse (isPrimitiveRef @@ string "hydra.lib.logic.ifElse" @@ var "dInnerFun")
               -- ifElse: (((ifElse C) T) E) -> native (if C T E)
@@ -340,7 +343,7 @@ encodeLetAsNative = def "encodeLetAsNative" $
         "adjList">: Lists.map (lambda "b" $
           pair (Core.bindingName (var "b"))
             (Sets.toList (Sets.intersection (var "allNames")
-              (Rewriting.freeVariablesInTerm @@ Core.bindingTerm (var "b")))))
+              (Variables.freeVariablesInTerm @@ Core.bindingTerm (var "b")))))
           (var "bindings"),
         "sortResult">: Sorting.topologicalSort @@ var "adjList",
         "nameToBinding">: Maps.fromList (Lists.map (lambda "b" $ pair (Core.bindingName (var "b")) (var "b")) (var "bindings"))] $
@@ -360,8 +363,8 @@ encodeLetAsNative = def "encodeLetAsNative" $
       (lambda "b" $
         "bname" <~ (Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (Core.bindingName (var "b")))) $
         "isSelfRef" <~ (Sets.member (Core.bindingName (var "b"))
-          (Rewriting.freeVariablesInTerm @@ Core.bindingTerm (var "b"))) $
-        "isLambda" <~ (cases _Term (Rewriting.deannotateTerm @@ Core.bindingTerm (var "b"))
+          (Variables.freeVariablesInTerm @@ Core.bindingTerm (var "b"))) $
+        "isLambda" <~ (cases _Term (Strip.deannotateTerm @@ Core.bindingTerm (var "b"))
           (Just $ boolean False)
           [_Term_function>>: lambda "f" $
             cases _Function (var "f") (Just $ boolean False)
@@ -402,7 +405,7 @@ encodeLetAsNative = def "encodeLetAsNative" $
       (lambda "acc" $ lambda "b" $
         Logic.or (var "acc")
           (Logic.not (Sets.null (Sets.intersection (var "allBindingNames")
-            (Rewriting.freeVariablesInTerm @@ Core.bindingTerm (var "b"))))))
+            (Variables.freeVariablesInTerm @@ Core.bindingTerm (var "b"))))))
       (boolean False)
       (var "bindings")) $
     -- For Clojure: use recursive kind if there are any cross-binding references
@@ -412,7 +415,7 @@ encodeLetAsNative = def "encodeLetAsNative" $
       (lambda "acc" $ lambda "b" $
         Logic.or (var "acc")
           (Sets.member (Core.bindingName (var "b"))
-            (Rewriting.freeVariablesInTerm @@ Core.bindingTerm (var "b"))))
+            (Variables.freeVariablesInTerm @@ Core.bindingTerm (var "b"))))
       (boolean False)
       (var "bindings")) $
     "isRecursive" <~ (var "hasSelfRef") $
@@ -631,7 +634,7 @@ encodeTerm = def "encodeTerm" $
        "field" <~ Core.injectionField (var "inj") $
        "fname" <~ Core.unName (Core.fieldName (var "field")) $
        "fterm" <~ Core.fieldTerm (var "field") $
-       "dterm" <~ (Rewriting.deannotateTerm @@ var "fterm") $
+       "dterm" <~ (Strip.deannotateTerm @@ var "fterm") $
        "isUnit" <~ (cases _Term (var "dterm") (Just $ boolean False) [
          _Term_unit>>: constant $ boolean True,
          _Term_record>>: lambda "rt" $ Lists.null (Core.recordFields (var "rt"))]) $
@@ -668,7 +671,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "name" <~ Module.termDefinitionName (var "tdef") $
     "term" <~ Module.termDefinitionTerm (var "tdef") $
     "lname" <~ (qualifiedSnakeName @@ var "name") $
-    "dterm" <~ (Rewriting.deannotateTerm @@ var "term") $
+    "dterm" <~ (Strip.deannotateTerm @@ var "term") $
     -- Check if the term is a lambda (function) or a value
     cases _Term (var "dterm") (Just $
       -- Non-function: encode as a variable definition
@@ -700,7 +703,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
 encodeType :: TTermDefinition (Context -> Graph -> Type -> Either (InContext Error) L.TypeSpecifier)
 encodeType = def "encodeType" $
   "cx" ~> "g" ~> lambda "t" $
-    "typ" <~ (Rewriting.deannotateType @@ var "t") $
+    "typ" <~ (Strip.deannotateType @@ var "t") $
     cases _Type (var "typ") (Just $
       -- Default: named type referencing the Hydra type name
       right (inject L._TypeSpecifier L._TypeSpecifier_named $
@@ -821,7 +824,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
     "name" <~ Module.typeDefinitionName (var "tdef") $
     "typ" <~ Module.typeDefinitionType (var "tdef") $
     "lname" <~ (qualifiedSnakeName @@ var "name") $
-    "dtyp" <~ (Rewriting.deannotateType @@ var "typ") $
+    "dtyp" <~ (Strip.deannotateType @@ var "typ") $
     encodeTypeBody @@ var "lname" @@ var "typ" @@ var "dtyp"
 
 -- | Check if a name is maybes.cases (3 args, arg 2 is lazy).
@@ -998,7 +1001,7 @@ moduleImports :: TTermDefinition (Namespace -> [Definition] -> [L.ImportDeclarat
 moduleImports = def "moduleImports" $
   "focusNs" ~> "defs" ~>
     "depNss" <~ Sets.toList (Sets.delete (var "focusNs")
-      (Schemas.definitionDependencyNamespaces @@ var "defs")) $
+      (Analysis.definitionDependencyNamespaces @@ var "defs")) $
     Lists.map ("ns" ~>
       record L._ImportDeclaration [
         L._ImportDeclaration_module>>: wrap L._NamespaceName (Module.unNamespace (var "ns")),
@@ -1011,12 +1014,12 @@ moduleToLisp = def "moduleToLisp" $
   "dialect" ~> "mod" ~> "defs0" ~> "cx" ~> "g" ~>
     -- Reorder definitions: types first, then topologically sorted terms
     "defs" <~ (CoderUtils.reorderDefs @@ var "defs0") $
-    "partitioned" <~ (Schemas.partitionDefinitions @@ var "defs") $
+    "partitioned" <~ (Environment.partitionDefinitions @@ var "defs") $
     "allTypeDefs" <~ Pairs.first (var "partitioned") $
     "termDefs" <~ Pairs.second (var "partitioned") $
     -- Filter out type aliases (non-nominal types)
     "typeDefs" <~ Lists.filter (lambda "td" $
-      Schemas.isNominalType @@ Module.typeDefinitionType (var "td"))
+      Predicates.isNominalType @@ Module.typeDefinitionType (var "td"))
       (var "allTypeDefs") $
     "typeItems" <<~ (Eithers.mapList (encodeTypeDefinition @@ var "cx" @@ var "g") (var "typeDefs")) $
     "termItems" <<~ (Eithers.mapList (encodeTermDefinition @@ var "dialect" @@ var "cx" @@ var "g") (var "termDefs")) $

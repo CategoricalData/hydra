@@ -346,7 +346,7 @@ public interface Transform {
               new hydra.core.Term.Application(new hydra.core.Application(spec.get(), record))),
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.util.Pair<T0, hydra.core.Term>>>>) (value -> hydra.demos.genpg.Transform.evaluateProperties_extractMaybe(
               hydra.demos.genpg.Transform.<T0>evaluateProperties_k(pair),
-              hydra.Rewriting.deannotateTerm(value))));
+              hydra.Strip.deannotateTerm(value))));
         }),
         hydra.lib.maps.ToList.apply(specs)));
   }

@@ -4,8 +4,10 @@
 
 module Hydra.Ext.Lisp.Coder where
 
+import qualified Hydra.Analysis as Analysis
 import qualified Hydra.CoderUtils as CoderUtils
 import qualified Hydra.Core as Core
+import qualified Hydra.Environment as Environment
 import qualified Hydra.Ext.Lisp.Language as Language
 import qualified Hydra.Ext.Lisp.Syntax as Syntax
 import qualified Hydra.Formatting as Formatting
@@ -21,10 +23,11 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
-import qualified Hydra.Rewriting as Rewriting
-import qualified Hydra.Schemas as Schemas
+import qualified Hydra.Predicates as Predicates
 import qualified Hydra.Show.Core as Core_
 import qualified Hydra.Sorting as Sorting
+import qualified Hydra.Strip as Strip
+import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -61,7 +64,7 @@ dialectEqual d =
 encodeApplication :: Syntax.Dialect -> t0 -> t1 -> Core.Term -> Core.Term -> Either t2 Syntax.Expression
 encodeApplication dialect cx g rawFun rawArg =
 
-      let dFun = Rewriting.deannotateTerm rawFun
+      let dFun = Strip.deannotateTerm rawFun
           normal =
                   Eithers.bind (encodeTerm dialect cx g rawFun) (\fun -> Eithers.bind (encodeTerm dialect cx g rawArg) (\arg -> Right (lispApp fun [
                     arg])))
@@ -70,7 +73,7 @@ encodeApplication dialect cx g rawFun rawArg =
         Core.TermApplication v0 ->
           let midFun = Core.applicationFunction v0
               midArg = Core.applicationArgument v0
-              dMidFun = Rewriting.deannotateTerm midFun
+              dMidFun = Strip.deannotateTerm midFun
               isLazy2 =
                       Logic.or (isPrimitiveRef "hydra.lib.eithers.fromLeft" dMidFun) (Logic.or (isPrimitiveRef "hydra.lib.eithers.fromRight" dMidFun) (isPrimitiveRef "hydra.lib.maybes.fromMaybe" dMidFun))
           in (Logic.ifElse isLazy2 (Eithers.bind (enc midFun) (\ePrim -> Eithers.bind (enc midArg) (\eDef -> Eithers.bind (enc rawArg) (\eArg -> Right (lispApp (lispApp ePrim [
@@ -79,7 +82,7 @@ encodeApplication dialect cx g rawFun rawArg =
             Core.TermApplication v1 ->
               let innerFun = Core.applicationFunction v1
                   innerArg = Core.applicationArgument v1
-                  dInnerFun = Rewriting.deannotateTerm innerFun
+                  dInnerFun = Strip.deannotateTerm innerFun
               in (Logic.ifElse (isPrimitiveRef "hydra.lib.logic.ifElse" dInnerFun) (Eithers.bind (enc innerArg) (\eC -> Eithers.bind (enc midArg) (\eT -> Eithers.bind (enc rawArg) (\eE -> Right (Syntax.ExpressionIf (Syntax.IfExpression {
                 Syntax.ifExpressionCondition = eC,
                 Syntax.ifExpressionThen = eT,
@@ -180,16 +183,16 @@ encodeLetAsNative dialect cx g bindings body =
                 Logic.ifElse True (
                   let allNames = Sets.fromList (Lists.map (\b -> Core.bindingName b) bindings)
                       adjList =
-                              Lists.map (\b -> (Core.bindingName b, (Sets.toList (Sets.intersection allNames (Rewriting.freeVariablesInTerm (Core.bindingTerm b)))))) bindings
+                              Lists.map (\b -> (Core.bindingName b, (Sets.toList (Sets.intersection allNames (Variables.freeVariablesInTerm (Core.bindingTerm b)))))) bindings
                       sortResult = Sorting.topologicalSort adjList
                       nameToBinding = Maps.fromList (Lists.map (\b -> (Core.bindingName b, b)) bindings)
                   in (Eithers.either (\_ -> bindings) (\sorted -> Lists.map (\name -> Maybes.fromMaybe (Lists.head bindings) (Maps.lookup name nameToBinding)) sorted) sortResult)) bindings
         in (Eithers.bind (Eithers.mapList (\b ->
           let bname =
                   Formatting.convertCaseCamelOrUnderscoreToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName (Core.bindingName b)))
-              isSelfRef = Sets.member (Core.bindingName b) (Rewriting.freeVariablesInTerm (Core.bindingTerm b))
+              isSelfRef = Sets.member (Core.bindingName b) (Variables.freeVariablesInTerm (Core.bindingTerm b))
               isLambda =
-                      case (Rewriting.deannotateTerm (Core.bindingTerm b)) of
+                      case (Strip.deannotateTerm (Core.bindingTerm b)) of
                         Core.TermFunction v0 -> case v0 of
                           Core.FunctionLambda _ -> True
                           _ -> False
@@ -214,9 +217,9 @@ encodeLetAsNative dialect cx g bindings body =
             in (Right (bname, wrappedVal))))) sortedBindings) (\encodedBindings ->
           let allBindingNames = Sets.fromList (Lists.map (\b -> Core.bindingName b) bindings)
               hasCrossRefs =
-                      Lists.foldl (\acc -> \b -> Logic.or acc (Logic.not (Sets.null (Sets.intersection allBindingNames (Rewriting.freeVariablesInTerm (Core.bindingTerm b)))))) False bindings
+                      Lists.foldl (\acc -> \b -> Logic.or acc (Logic.not (Sets.null (Sets.intersection allBindingNames (Variables.freeVariablesInTerm (Core.bindingTerm b)))))) False bindings
               hasSelfRef =
-                      Lists.foldl (\acc -> \b -> Logic.or acc (Sets.member (Core.bindingName b) (Rewriting.freeVariablesInTerm (Core.bindingTerm b)))) False bindings
+                      Lists.foldl (\acc -> \b -> Logic.or acc (Sets.member (Core.bindingName b) (Variables.freeVariablesInTerm (Core.bindingTerm b)))) False bindings
               isRecursive = hasSelfRef
               letKind =
                       Logic.ifElse isRecursive Syntax.LetKindRecursive (Logic.ifElse (Lists.null (Lists.tail bindings)) Syntax.LetKindParallel Syntax.LetKindSequential)
@@ -324,7 +327,7 @@ encodeTerm dialect cx g term =
             field = Core.injectionField v0
             fname = Core.unName (Core.fieldName field)
             fterm = Core.fieldTerm field
-            dterm = Rewriting.deannotateTerm fterm
+            dterm = Strip.deannotateTerm fterm
             isUnit =
                     case dterm of
                       Core.TermUnit -> True
@@ -347,7 +350,7 @@ encodeTermDefinition dialect cx g tdef =
       let name = Module.termDefinitionName tdef
           term = Module.termDefinitionTerm tdef
           lname = qualifiedSnakeName name
-          dterm = Rewriting.deannotateTerm term
+          dterm = Strip.deannotateTerm term
       in case dterm of
         Core.TermFunction v0 -> case v0 of
           Core.FunctionLambda _ -> Eithers.bind (encodeTerm dialect cx g term) (\sterm -> Right (lispTopForm (Syntax.TopLevelFormVariable (Syntax.VariableDefinition {
@@ -366,7 +369,7 @@ encodeTermDefinition dialect cx g tdef =
 encodeType :: t0 -> t1 -> Core.Type -> Either t2 Syntax.TypeSpecifier
 encodeType cx g t =
 
-      let typ = Rewriting.deannotateType t
+      let typ = Strip.deannotateType t
       in case typ of
         Core.TypeAnnotated v0 -> encodeType cx g (Core.annotatedTypeBody v0)
         Core.TypeApplication v0 -> encodeType cx g (Core.applicationTypeFunction v0)
@@ -430,7 +433,7 @@ encodeTypeDefinition cx g tdef =
       let name = Module.typeDefinitionName tdef
           typ = Module.typeDefinitionType tdef
           lname = qualifiedSnakeName name
-          dtyp = Rewriting.deannotateType typ
+          dtyp = Strip.deannotateType typ
       in (encodeTypeBody lname typ dtyp)
 
 isCasesPrimitive :: Core.Name -> Bool
@@ -552,7 +555,7 @@ moduleExports forms =
 moduleImports :: Module.Namespace -> [Module.Definition] -> [Syntax.ImportDeclaration]
 moduleImports focusNs defs =
 
-      let depNss = Sets.toList (Sets.delete focusNs (Schemas.definitionDependencyNamespaces defs))
+      let depNss = Sets.toList (Sets.delete focusNs (Analysis.definitionDependencyNamespaces defs))
       in (Lists.map (\ns -> Syntax.ImportDeclaration {
         Syntax.importDeclarationModule = (Syntax.NamespaceName (Module.unNamespace ns)),
         Syntax.importDeclarationSpec = Syntax.ImportSpecAll}) depNss)
@@ -561,10 +564,10 @@ moduleToLisp :: Syntax.Dialect -> Module.Module -> [Module.Definition] -> t0 -> 
 moduleToLisp dialect mod defs0 cx g =
 
       let defs = CoderUtils.reorderDefs defs0
-          partitioned = Schemas.partitionDefinitions defs
+          partitioned = Environment.partitionDefinitions defs
           allTypeDefs = Pairs.first partitioned
           termDefs = Pairs.second partitioned
-          typeDefs = Lists.filter (\td -> Schemas.isNominalType (Module.typeDefinitionType td)) allTypeDefs
+          typeDefs = Lists.filter (\td -> Predicates.isNominalType (Module.typeDefinitionType td)) allTypeDefs
       in (Eithers.bind (Eithers.mapList (encodeTypeDefinition cx g) typeDefs) (\typeItems -> Eithers.bind (Eithers.mapList (encodeTermDefinition dialect cx g) termDefs) (\termItems ->
         let allItems = Lists.concat2 typeItems termItems
             nsName = Module.unNamespace (Module.moduleNamespace mod)

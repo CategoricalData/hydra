@@ -241,8 +241,9 @@ module_ =
             Core.typeSchemeConstraints = Nothing}))}))],
       Module.moduleTermDependencies = [
         Module.Namespace "hydra.encode.core",
+        (Module.Namespace "hydra.encode.context"),
+        (Module.Namespace "hydra.encode.errors"),
         (Module.Namespace "hydra.encode.graph"),
-        (Module.Namespace "hydra.encode.util"),
         (Module.Namespace "hydra.encode.variants")],
       Module.moduleTypeDependencies = [
         Module.Namespace "hydra.coders"],

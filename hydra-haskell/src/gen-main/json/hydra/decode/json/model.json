@@ -110,7 +110,7 @@
                                                                                                           "argument": {"variable": "hydra.decode.json.model.value"},
                                                                                                           "function": {
                                                                                                             "typeApplication": {
-                                                                                                              "body": {"variable": "hydra.extract.helpers.decodeList"},
+                                                                                                              "body": {"variable": "hydra.extract.core.decodeList"},
                                                                                                               "type": {"variable": "hydra.json.model.Value"}}}}}}}}},
                                                                                               "function": {
                                                                                                 "application": {
@@ -339,7 +339,7 @@
                                                                                                   "function": {
                                                                                                     "application": {
                                                                                                       "argument": {"variable": "cx"},
-                                                                                                      "function": {"variable": "hydra.extract.helpers.decodeUnit"}}}}},
+                                                                                                      "function": {"variable": "hydra.extract.core.decodeUnit"}}}}},
                                                                                               "function": {
                                                                                                 "application": {
                                                                                                   "argument": {
@@ -720,7 +720,7 @@
                                                                                                                 "typeApplication": {
                                                                                                                   "body": {
                                                                                                                     "typeApplication": {
-                                                                                                                      "body": {"variable": "hydra.extract.helpers.decodeMap"},
+                                                                                                                      "body": {"variable": "hydra.extract.core.decodeMap"},
                                                                                                                       "type": {"literal": {"string": {}}}}},
                                                                                                                   "type": {"variable": "hydra.json.model.Value"}}}}}}}}}}},
                                                                                               "function": {
@@ -1111,7 +1111,7 @@
   "description": ["Term decoders for hydra.json.model"],
   "namespace": "hydra.decode.json.model",
   "termDependencies": [
-    "hydra.extract.helpers",
+    "hydra.extract.core",
     "hydra.lexical",
     "hydra.rewriting",
     "hydra.decode.core"],

@@ -390,7 +390,7 @@ public interface Core {
     hydra.variants.TermVariant expected = (e).expectedVariant;
     return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
       "expected ",
-      hydra.show.Meta.termVariant(expected),
+      hydra.show.Variants.termVariant(expected),
       " term but found ",
       hydra.show.Core.term(actual)));
   }
@@ -400,7 +400,7 @@ public interface Core {
     hydra.variants.TypeVariant expected = (e).expectedVariant;
     return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
       "expected ",
-      hydra.show.Meta.typeVariant(expected),
+      hydra.show.Variants.typeVariant(expected),
       " type but found ",
       hydra.show.Core.type(actual)));
   }

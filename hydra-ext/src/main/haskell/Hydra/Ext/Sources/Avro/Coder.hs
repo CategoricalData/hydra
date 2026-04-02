@@ -61,13 +61,12 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -108,7 +107,7 @@ avroEnvironmentNs = Namespace "hydra.ext.avro.environment"
 
 module_ :: Module
 module_ = Module ns elements
-    [ExtractCore.ns, Rewriting.ns]
+    [ExtractCore.ns, Strip.ns]
     (avroEnvironmentNs:AvroSchema.ns:jsonModelNs:KernelTypes.kernelTypesNamespaces) $
     Just "Avro-to-Hydra adapter for converting Avro schemas and data to Hydra types and terms"
   where
@@ -237,7 +236,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
     -- simpleAdapter: create a non-lossy adapter with given type, encode, and decode functions
     "simpleAdapter">: lambda "env" $ lambda "typ" $ lambda "encode" $ lambda "decode" $
       right (pair
-        (Util.adapter (boolean False) (var "schema") (var "typ") (Util.coder (var "encode") (var "decode")))
+        (Coders.adapter (boolean False) (var "schema") (var "typ") (Coders.coder (var "encode") (var "decode")))
         (var "env")),
     -- doubleToInt: truncate a JSON number (bigfloat) to int32 (toward zero)
     "doubleToInt">: lambda "d" $ Literals.bigintToInt32 (Math.truncate (Literals.bigfloatToFloat64 (var "d"))),
@@ -250,19 +249,19 @@ avroHydraAdapter = define "avroHydraAdapter" $
           "ad">: Pairs.first (var "adEnv"),
           "env1">: Pairs.second (var "adEnv")] $
           right (pair
-            (Util.adapter (Util.adapterIsLossy (var "ad")) (var "schema")
-              (MetaTypes.list (Util.adapterTarget (var "ad")))
-              (Util.coder
+            (Coders.adapter (Coders.adapterIsLossy (var "ad")) (var "schema")
+              (MetaTypes.list (Coders.adapterTarget (var "ad")))
+              (Coders.coder
                 (lambda "cx1" $ lambda "v" $
                   cases JM._Value (var "v") Nothing [
                     JM._Value_array>>: lambda "vals" $
                       Eithers.map (lambda "ts" $ Core.termList (var "ts"))
-                        (Eithers.mapList (lambda "jv" $ Util.coderEncode (Util.adapterCoder (var "ad")) @@ var "cx1" @@ var "jv") (var "vals"))])
+                        (Eithers.mapList (lambda "jv" $ Coders.coderEncode (Coders.adapterCoder (var "ad")) @@ var "cx1" @@ var "jv") (var "vals"))])
                 (lambda "cx1" $ lambda "t" $
                   cases _Term (var "t") Nothing [
                     _Term_list>>: lambda "vals" $
                       Eithers.map (lambda "jvs" $ inject JM._Value JM._Value_array (var "jvs"))
-                        (Eithers.mapList (lambda "tv" $ Util.coderDecode (Util.adapterCoder (var "ad")) @@ var "cx1" @@ var "tv") (var "vals"))])))
+                        (Eithers.mapList (lambda "tv" $ Coders.coderDecode (Coders.adapterCoder (var "ad")) @@ var "cx1" @@ var "tv") (var "vals"))])))
             (var "env1"))),
 
       -- SchemaMap
@@ -275,11 +274,11 @@ avroHydraAdapter = define "avroHydraAdapter" $
             "v">: Pairs.second (var "entry")] $
             Eithers.map
               (lambda "v'" $ pair (MetaTerms.stringLift (var "k")) (var "v'"))
-              (Util.coderEncode (Util.adapterCoder (var "ad")) @@ var "cx1" @@ var "v")] $
+              (Coders.coderEncode (Coders.adapterCoder (var "ad")) @@ var "cx1" @@ var "v")] $
           right (pair
-            (Util.adapter (Util.adapterIsLossy (var "ad")) (var "schema")
-              (MetaTypes.map MetaTypes.string (Util.adapterTarget (var "ad")))
-              (Util.coder
+            (Coders.adapter (Coders.adapterIsLossy (var "ad")) (var "schema")
+              (MetaTypes.map MetaTypes.string (Coders.adapterTarget (var "ad")))
+              (Coders.coder
                 (lambda "cx1" $ lambda "v" $
                   cases JM._Value (var "v") Nothing [
                     JM._Value_object>>: lambda "m" $
@@ -288,7 +287,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
                 (lambda "cx1" $ lambda "m" $
                   Eithers.map (lambda "mp'" $ inject JM._Value JM._Value_object (var "mp'"))
                     (ExtractCore.map @@ var "cx" @@ (lambda "t" $ ExtractCore.string @@ var "cx" @@ Graph.emptyGraph @@ var "t")
-                      @@ (lambda "t" $ Util.coderDecode (Util.adapterCoder (var "ad")) @@ var "cx1" @@ var "t")
+                      @@ (lambda "t" $ Coders.coderDecode (Coders.adapterCoder (var "ad")) @@ var "cx1" @@ var "t")
                       @@ Graph.emptyGraph @@ var "m"))))
             (var "env1"))),
 
@@ -357,7 +356,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
                         (err @@ var "cx1" @@ Strings.cat (list [string "unrecognized field for ", showQname @@ var "qname", string ": ", var "k"]))
                         (lambda "fad" $ Eithers.map
                           (lambda "v'" $ Core.field (Core.name (var "k")) (var "v'"))
-                          (Util.coderEncode (Util.adapterCoder (Pairs.second (var "fad"))) @@ var "cx1" @@ var "v"))
+                          (Coders.coderEncode (Coders.adapterCoder (Pairs.second (var "fad"))) @@ var "cx1" @@ var "v"))
                         (Maps.lookup (var "k") (var "adaptersByFieldName")),
                     -- decodeField: decode a Hydra field back to a key-value pair
                     "decodeField">: lambda "cx1" $ lambda "fld" $ lets [
@@ -367,20 +366,20 @@ avroHydraAdapter = define "avroHydraAdapter" $
                         (err @@ var "cx1" @@ Strings.cat (list [string "unrecognized field for ", showQname @@ var "qname", string ": ", var "k"]))
                         (lambda "fad" $ Eithers.map
                           (lambda "v'" $ pair (var "k") (var "v'"))
-                          (Util.coderDecode (Util.adapterCoder (Pairs.second (var "fad"))) @@ var "cx1" @@ var "v"))
+                          (Coders.coderDecode (Coders.adapterCoder (Pairs.second (var "fad"))) @@ var "cx1" @@ var "v"))
                         (Maps.lookup (var "k") (var "adaptersByFieldName")),
                     -- lossy: any adapter is lossy?
-                    "lossy">: Lists.foldl (lambda "b" $ lambda "fad" $ Logic.or (var "b") (Util.adapterIsLossy (Pairs.second (var "fad"))))
+                    "lossy">: Lists.foldl (lambda "b" $ lambda "fad" $ Logic.or (var "b") (Coders.adapterIsLossy (Pairs.second (var "fad"))))
                       (boolean False) (Maps.elems (var "adaptersByFieldName")),
                     -- hfields: Hydra field types
                     "hfields">: Lists.map (lambda "fad" $
                       Core.fieldType (Core.name (project Avro._Field Avro._Field_name @@ Pairs.first (var "fad")))
-                        (Util.adapterTarget (Pairs.second (var "fad"))))
+                        (Coders.adapterTarget (Pairs.second (var "fad"))))
                       (Maps.elems (var "adaptersByFieldName")),
                     "target">: Core.typeRecord (var "hfields")] $
                     right (pair
-                      (Util.adapter (var "lossy") (var "schema") (var "target")
-                        (Util.coder
+                      (Coders.adapter (var "lossy") (var "schema") (var "target")
+                        (Coders.coder
                           (lambda "cx1" $ lambda "jv" $
                             cases JM._Value (var "jv") Nothing [
                               JM._Value_object>>: lambda "m" $
@@ -509,20 +508,20 @@ avroHydraAdapter = define "avroHydraAdapter" $
             "ad">: Pairs.first (var "adEnv"),
             "env1">: Pairs.second (var "adEnv")] $
             right (pair
-              (Util.adapter (Util.adapterIsLossy (var "ad")) (var "schema")
-                (MetaTypes.optional (Util.adapterTarget (var "ad")))
-                (Util.coder
+              (Coders.adapter (Coders.adapterIsLossy (var "ad")) (var "schema")
+                (MetaTypes.optional (Coders.adapterTarget (var "ad")))
+                (Coders.coder
                   (lambda "cx1" $ lambda "v" $
                     cases JM._Value (var "v") (Just (
                       Eithers.map (lambda "t" $ Core.termMaybe (just (var "t")))
-                        (Util.coderEncode (Util.adapterCoder (var "ad")) @@ var "cx1" @@ var "v"))) [
+                        (Coders.coderEncode (Coders.adapterCoder (var "ad")) @@ var "cx1" @@ var "v"))) [
                       JM._Value_null>>: constant (right (Core.termMaybe nothing))])
                   (lambda "cx1" $ lambda "t" $
                     cases _Term (var "t") Nothing [
                       _Term_maybe>>: lambda "ot" $
                         Maybes.maybe
                           (right (injectUnit JM._Value JM._Value_null))
-                          (lambda "term'" $ Util.coderDecode (Util.adapterCoder (var "ad")) @@ var "cx1" @@ var "term'")
+                          (lambda "term'" $ Coders.coderDecode (Coders.adapterCoder (var "ad")) @@ var "cx1" @@ var "term'")
                           (var "ot")])))
               (var "env1")))] $
         Logic.ifElse (Equality.gt (Lists.length (var "nonNulls")) (int32 1))
@@ -535,8 +534,8 @@ avroHydraAdapter = define "avroHydraAdapter" $
                 "ad">: Pairs.first (var "adEnv"),
                 "env1">: Pairs.second (var "adEnv")] $
                 right (pair
-                  (Util.adapter (Util.adapterIsLossy (var "ad")) (var "schema")
-                    (Util.adapterTarget (var "ad")) (Util.adapterCoder (var "ad")))
+                  (Coders.adapter (Coders.adapterIsLossy (var "ad")) (var "schema")
+                    (Coders.adapterTarget (var "ad")) (Coders.adapterCoder (var "ad")))
                   (var "env1"))))))
       ]
 
@@ -579,29 +578,29 @@ prepareField = define "prepareField" $
             "elTyp">: Core.typeVariable (var "fkName"),
             -- encodeValue: encode a JSON value to a TermVariable via the adapter
             "encodeValue">: lambda "cx1" $ lambda "v" $
-              Eithers.bind (Util.coderEncode (Util.adapterCoder (var "ad0")) @@ var "cx1" @@ var "v") (lambda "encoded" $
+              Eithers.bind (Coders.coderEncode (Coders.adapterCoder (var "ad0")) @@ var "cx1" @@ var "v") (lambda "encoded" $
               Eithers.bind (termToStringE @@ var "cx1" @@ var "encoded") (lambda "s" $
                 right (Core.termVariable (var "fkConstr" @@ var "s")))),
             -- decodeTerm: decode a TermVariable back via the adapter
             "decodeTerm">: lambda "cx1" $ lambda "t" $
               cases _Term (var "t") (Just (err @@ var "cx1" @@ string "expected variable")) [
                 _Term_variable>>: lambda "name_" $
-                  Eithers.bind (stringToTermE @@ var "cx1" @@ Util.adapterTarget (var "ad0") @@ (unwrap _Name @@ var "name_")) (lambda "term_" $
-                  Util.coderDecode (Util.adapterCoder (var "ad0")) @@ var "cx1" @@ var "term_")],
+                  Eithers.bind (stringToTermE @@ var "cx1" @@ Coders.adapterTarget (var "ad0") @@ (unwrap _Name @@ var "name_")) (lambda "term_" $
+                  Coders.coderDecode (Coders.adapterCoder (var "ad0")) @@ var "cx1" @@ var "term_")],
             -- forTypeAndCoder: build an adapter with a given type and coder
             "forTypeAndCoder">: lambda "env2" $ lambda "ad1" $ lambda "typ" $ lambda "cdr" $
               right (pair
-                (Util.adapter (Util.adapterIsLossy (var "ad1")) (project Avro._Field Avro._Field_type @@ var "f") (var "typ") (var "cdr"))
+                (Coders.adapter (Coders.adapterIsLossy (var "ad1")) (project Avro._Field Avro._Field_type @@ var "f") (var "typ") (var "cdr"))
                 (var "env2"))] $
             -- Match on the deannotated target type for foreign key handling
-            cases _Type (Rewriting.deannotateType @@ Util.adapterTarget (var "ad0"))
+            cases _Type (Strip.deannotateType @@ Coders.adapterTarget (var "ad0"))
               (Just (err @@ var "cx" @@ Strings.cat2 (string "unsupported type annotated as foreign key: ") (string "unknown"))) [
               _Type_maybe>>: lambda "innerTyp" $
                 cases _Type (var "innerTyp") (Just (err @@ var "cx" @@ string "expected literal type inside optional foreign key")) [
                   _Type_literal>>: lambda "_" $
                     var "forTypeAndCoder" @@ var "env1" @@ var "ad0"
                       @@ (MetaTypes.optional (var "elTyp"))
-                      @@ (Util.coder
+                      @@ (Coders.coder
                         (lambda "cx2" $ lambda "json" $
                           Eithers.map (lambda "v'" $ Core.termMaybe (just (var "v'"))) (var "encodeValue" @@ var "cx2" @@ var "json"))
                         (var "decodeTerm"))],
@@ -610,7 +609,7 @@ prepareField = define "prepareField" $
                   _Type_literal>>: lambda "_" $
                     var "forTypeAndCoder" @@ var "env1" @@ var "ad0"
                       @@ (MetaTypes.list (var "elTyp"))
-                      @@ (Util.coder
+                      @@ (Coders.coder
                         (lambda "cx2" $ lambda "json" $
                           cases JM._Value (var "json") (Just (err @@ var "cx2" @@ string "Expected JSON array")) [
                             JM._Value_array>>: lambda "vals" $
@@ -620,7 +619,7 @@ prepareField = define "prepareField" $
               _Type_literal>>: lambda "_" $
                 var "forTypeAndCoder" @@ var "env1" @@ var "ad0"
                   @@ var "elTyp"
-                  @@ (Util.coder (var "encodeValue") (var "decodeTerm"))]))
+                  @@ (Coders.coder (var "encodeValue") (var "decodeTerm"))]))
         (var "fk"))
       (lambda "adEnv" $ lets [
         "ad">: Pairs.first (var "adEnv"),
@@ -635,7 +634,7 @@ annotateAdapter = define "annotateAdapter" $
   lambda "ann" $ lambda "ad" $
     Maybes.maybe
       (var "ad")
-      (lambda "n" $ Util.adapterWithTarget (var "ad") (MetaTypes.annot (var "n") (Util.adapterTarget (var "ad"))))
+      (lambda "n" $ Coders.adapterWithTarget (var "ad") (MetaTypes.annot (var "n") (Coders.adapterTarget (var "ad"))))
       (var "ann")
 
 findAvroPrimaryKeyField :: TTermDefinition (Context -> AvroEnv.AvroQualifiedName -> [Avro.Field] -> Result (Maybe AvroEnv.AvroPrimaryKey))
@@ -860,7 +859,7 @@ stringToTermE = define "stringToTermE" $
     "readErr">: err @@ var "cx" @@ string "failed to read value",
     "readAndWrap">: lambda "reader" $ lambda "wrapper" $
       Maybes.maybe (var "readErr") (lambda "v" $ right (Core.termLiteral (var "wrapper" @@ var "v"))) (var "reader" @@ var "s")] $
-    cases _Type (Rewriting.deannotateType @@ var "typ")
+    cases _Type (Strip.deannotateType @@ var "typ")
       (Just (unexpectedE @@ var "cx" @@ string "literal type" @@ string "other")) [
       _Type_literal>>: lambda "lt" $
         cases _LiteralType (var "lt")
@@ -894,7 +893,7 @@ termToStringE :: TTermDefinition (Context -> Term -> Result String)
 termToStringE = define "termToStringE" $
   doc "Convert a literal term to its string representation" $
   lambda "cx" $ lambda "term" $
-    cases _Term (Rewriting.deannotateTerm @@ var "term")
+    cases _Term (Strip.deannotateTerm @@ var "term")
       (Just (unexpectedE @@ var "cx" @@ string "literal value" @@ string "other")) [
       _Term_literal>>: lambda "l" $
         cases _Literal (var "l")

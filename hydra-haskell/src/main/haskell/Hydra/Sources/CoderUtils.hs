@@ -73,8 +73,11 @@ import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Environment as Environment
+import qualified Hydra.Sources.Kernel.Terms.Scoping as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Sorting as Sorting
+import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
+import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
 
 
 ns :: Namespace
@@ -85,7 +88,7 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [Annotations.ns, Arity.ns, Checking.ns, Formatting.ns, Lexical.ns, Names.ns, Rewriting.ns, Schemas.ns, Sorting.ns]
+    [Annotations.ns, Arity.ns, Checking.ns, Environment.ns, Formatting.ns, Lexical.ns, Names.ns, Rewriting.ns, Scoping.ns, Sorting.ns, Strip.ns, Variables.ns]
     kernelTypesNamespaces $
     Just "Common utilities for language coders, providing shared patterns for term decomposition and analysis."
   where
@@ -154,7 +157,7 @@ gatherApplications = define "gatherApplications" $
   "term" ~>
   -- Use a local recursive helper with an accumulator
   "go" <~ ("args" ~> "t" ~>
-    cases _Term (Rewriting.deannotateTerm @@ var "t")
+    cases _Term (Strip.deannotateTerm @@ var "t")
       (Just $ pair (var "args") (var "t")) [
       _Term_application>>: "app" ~>
         "lhs" <~ Core.applicationFunction (var "app") $
@@ -169,7 +172,7 @@ gatherArgs :: TTermDefinition (Term -> [Term] -> (Term, [Term]))
 gatherArgs = define "gatherArgs" $
   doc "Gather term arguments, stripping type-level constructs" $
   "term" ~> "args" ~>
-  cases _Term (Rewriting.deannotateTerm @@ var "term")
+  cases _Term (Strip.deannotateTerm @@ var "term")
     (Just $ pair (var "term") (var "args")) [
     _Term_application>>: "app" ~>
       "lhs" <~ Core.applicationFunction (var "app") $
@@ -188,7 +191,7 @@ gatherArgsWithTypeApps :: TTermDefinition (Term -> [Term] -> [Type] -> (Term, [T
 gatherArgsWithTypeApps = define "gatherArgsWithTypeApps" $
   doc "Gather term and type arguments from a term" $
   "term" ~> "args" ~> "tyArgs" ~>
-  cases _Term (Rewriting.deannotateTerm @@ var "term")
+  cases _Term (Strip.deannotateTerm @@ var "term")
     (Just $ triple (var "term") (var "args") (var "tyArgs")) [
     _Term_application>>: "app" ~>
       "lhs" <~ Core.applicationFunction (var "app") $
@@ -316,7 +319,7 @@ isTrivialTerm :: TTermDefinition (Term -> Bool)
 isTrivialTerm = define "isTrivialTerm" $
   doc "Check if a term is trivially cheap (no thunking needed)" $
   "t" ~>
-  cases _Term (Rewriting.deannotateTerm @@ var "t")
+  cases _Term (Strip.deannotateTerm @@ var "t")
     (Just $ boolean False) [
     -- Literals are always trivial
     _Term_literal>>: constant (boolean True),
@@ -364,7 +367,7 @@ isSelfTailRecursive = define "isSelfTailRecursive" $
   "funcName" ~> "body" ~>
     -- isFreeVariableInTerm returns True when v is NOT free (not present).
     -- So Logic.not means: the name IS present as a free variable.
-    "callsSelf" <~ Logic.not (Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "body") $
+    "callsSelf" <~ Logic.not (Variables.isFreeVariableInTerm @@ var "funcName" @@ var "body") $
     Logic.ifElse (var "callsSelf")
       (isTailRecursiveInTailPosition @@ var "funcName" @@ var "body")
       false
@@ -376,19 +379,19 @@ isTailRecursiveInTailPosition :: TTermDefinition (Name -> Term -> Bool)
 isTailRecursiveInTailPosition = define "isTailRecursiveInTailPosition" $
   doc "Check that all self-references are in tail position" $
   "funcName" ~> "term" ~>
-    "stripped" <~ (Rewriting.deannotateAndDetypeTerm @@ var "term") $
+    "stripped" <~ (Strip.deannotateAndDetypeTerm @@ var "term") $
     cases _Term (var "stripped") (Just $
       -- Default: funcName must NOT appear free in this term (not a recognized tail position)
-      Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
+      Variables.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
       -- Application: check if it's a self-tail-call or a case statement application
       _Term_application>>: "app" ~>
         "gathered" <~ (gatherApplications @@ var "stripped") $
         "gatherArgs" <~ (Pairs.first $ var "gathered") $
         "gatherFun" <~ (Pairs.second $ var "gathered") $
-        "strippedFun" <~ (Rewriting.deannotateAndDetypeTerm @@ var "gatherFun") $
+        "strippedFun" <~ (Strip.deannotateAndDetypeTerm @@ var "gatherFun") $
         cases _Term (var "strippedFun") (Just $
           -- Unknown function form: funcName must not appear anywhere
-          Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
+          Variables.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
           -- Variable: check if self-call
           _Term_variable>>: "vname" ~>
             Logic.ifElse (Equality.equal (var "vname") (var "funcName"))
@@ -398,7 +401,7 @@ isTailRecursiveInTailPosition = define "isTailRecursiveInTailPosition" $
               ("argsNoFunc" <~ (Lists.foldl
                 ("ok" ~> "arg" ~>
                   Logic.and (var "ok")
-                    (Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "arg"))
+                    (Variables.isFreeVariableInTerm @@ var "funcName" @@ var "arg"))
                 true
                 (var "gatherArgs")) $
                "argsNoLambda" <~ (Lists.foldl
@@ -420,14 +423,14 @@ isTailRecursiveInTailPosition = define "isTailRecursiveInTailPosition" $
                 (var "gatherArgs")) $
                Logic.and (var "argsNoFunc") (var "argsNoLambda"))
               -- Not a self-call: funcName must not appear anywhere in the term
-              (Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term"),
+              (Variables.isFreeVariableInTerm @@ var "funcName" @@ var "term"),
           -- Function: check for case statement (union elimination)
           _Term_function>>: "f" ~>
             cases _Function (var "f") (Just $
-              Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
+              Variables.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
               _Function_elimination>>: "e" ~>
                 cases _Elimination (var "e") (Just $
-                  Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
+                  Variables.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
                   _Elimination_union>>: "cs" ~>
                     "cases_" <~ (Core.caseStatementCases $ var "cs") $
                     "dflt" <~ (Core.caseStatementDefault $ var "cs") $
@@ -446,14 +449,14 @@ isTailRecursiveInTailPosition = define "isTailRecursiveInTailPosition" $
                     "argsOk" <~ (Lists.foldl
                       ("ok" ~> "arg" ~>
                         Logic.and (var "ok")
-                          (Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "arg"))
+                          (Variables.isFreeVariableInTerm @@ var "funcName" @@ var "arg"))
                       true
                       (var "gatherArgs")) $
                     Logic.and (Logic.and (var "branchesOk") (var "dfltOk")) (var "argsOk")]]],
       -- Lambda: tail position is the body
       _Term_function>>: "f" ~>
         cases _Function (var "f") (Just $
-          Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
+          Variables.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
           _Function_lambda>>: "lam" ~>
             isTailRecursiveInTailPosition @@ var "funcName" @@ (Core.lambdaBody $ var "lam")],
       -- Let: tail position is the body; bindings must not contain funcName
@@ -461,7 +464,7 @@ isTailRecursiveInTailPosition = define "isTailRecursiveInTailPosition" $
         "bindingsOk" <~ (Lists.foldl
           ("ok" ~> "b" ~>
             Logic.and (var "ok")
-              (Rewriting.isFreeVariableInTerm @@ var "funcName" @@ Core.bindingTerm (var "b")))
+              (Variables.isFreeVariableInTerm @@ var "funcName" @@ Core.bindingTerm (var "b")))
           true
           (Core.letBindings $ var "lt")) $
         Logic.and (var "bindingsOk")
@@ -501,7 +504,7 @@ reorderDefs :: TTermDefinition ([Definition] -> [Definition])
 reorderDefs = define "reorderDefs" $
   doc "Reorder definitions: types first (with hydra.core.Name first among types), then topologically sorted terms" $
   "defs" ~>
-    "partitioned" <~ (Schemas.partitionDefinitions @@ var "defs") $
+    "partitioned" <~ (Environment.partitionDefinitions @@ var "defs") $
     "typeDefsRaw" <~ Pairs.first (var "partitioned") $
     -- Sort type defs: Name type first (it is referenced by almost everything else)
     "nameFirst" <~ Lists.filter
@@ -526,7 +529,7 @@ reorderDefs = define "reorderDefs" $
       @@
       ("d" ~> cases _Definition (var "d") (Just (list ([] :: [TTerm Name]))) [
         _Definition_term>>: "td" ~>
-          Sets.toList $ Rewriting.freeVariablesInTerm @@ (project _TermDefinition _TermDefinition_term @@ var "td")])
+          Sets.toList $ Variables.freeVariablesInTerm @@ (project _TermDefinition _TermDefinition_term @@ var "td")])
       @@ var "termDefsWrapped") $
     Lists.concat (list [var "typeDefs", var "sortedTermDefs"])
 
@@ -652,7 +655,7 @@ analyzeFunctionTermWith_gather :: TTermDefinition (
 analyzeFunctionTermWith_gather = define "analyzeFunctionTermWith_gather" $
   "cx" ~> "forBinding" ~> "getTC" ~> "setTC" ~>
   "argMode" ~> "gEnv" ~> "tparams" ~> "args" ~> "bindings" ~> "doms" ~> "tapps" ~> "t" ~>
-  cases _Term (Rewriting.deannotateTerm @@ var "t")
+  cases _Term (Strip.deannotateTerm @@ var "t")
     (Just $ analyzeFunctionTermWith_finish @@ var "cx" @@ var "getTC" @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t") [
     _Term_function>>: "f" ~>
       cases _Function (var "f")
@@ -662,7 +665,7 @@ analyzeFunctionTermWith_gather = define "analyzeFunctionTermWith_gather" $
             ("v" <~ Core.lambdaParameter (var "lam") $
              "dom" <~ Maybes.maybe (Core.typeVariable (Core.name (string "_"))) identity (Core.lambdaDomain (var "lam")) $
              "body" <~ Core.lambdaBody (var "lam") $
-             "newEnv" <~ (var "setTC" @@ (Rewriting.extendGraphForLambda @@ (var "getTC" @@ var "gEnv") @@ var "lam") @@ var "gEnv") $
+             "newEnv" <~ (var "setTC" @@ (Scoping.extendGraphForLambda @@ (var "getTC" @@ var "gEnv") @@ var "lam") @@ var "gEnv") $
              analyzeFunctionTermWith_gather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
                @@ var "argMode" @@ var "newEnv"
                @@ var "tparams"
@@ -675,7 +678,7 @@ analyzeFunctionTermWith_gather = define "analyzeFunctionTermWith_gather" $
     _Term_let>>: "lt" ~>
       "newBindings" <~ Core.letBindings (var "lt") $
       "body" <~ Core.letBody (var "lt") $
-      "newEnv" <~ (var "setTC" @@ (Rewriting.extendGraphForLet @@ var "forBinding" @@ (var "getTC" @@ var "gEnv") @@ var "lt") @@ var "gEnv") $
+      "newEnv" <~ (var "setTC" @@ (Scoping.extendGraphForLet @@ var "forBinding" @@ (var "getTC" @@ var "gEnv") @@ var "lt") @@ var "gEnv") $
       analyzeFunctionTermWith_gather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
         @@ boolean False @@ var "newEnv"
         @@ var "tparams"
@@ -698,7 +701,7 @@ analyzeFunctionTermWith_gather = define "analyzeFunctionTermWith_gather" $
     _Term_typeLambda>>: "tl" ~>
       "tvar" <~ Core.typeLambdaParameter (var "tl") $
       "tlBody" <~ Core.typeLambdaBody (var "tl") $
-      "newEnv" <~ (var "setTC" @@ (Rewriting.extendGraphForTypeLambda @@ (var "getTC" @@ var "gEnv") @@ var "tl") @@ var "gEnv") $
+      "newEnv" <~ (var "setTC" @@ (Scoping.extendGraphForTypeLambda @@ (var "getTC" @@ var "gEnv") @@ var "tl") @@ var "gEnv") $
       analyzeFunctionTermWith_gather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
         @@ var "argMode" @@ var "newEnv"
         @@ (Lists.cons (var "tvar") (var "tparams"))

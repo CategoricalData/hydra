@@ -5,7 +5,7 @@
 module Hydra.Decode.Json where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Extract.Helpers as Helpers
+import qualified Hydra.Extract.Core as Helpers
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lexical as Lexical

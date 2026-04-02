@@ -59,7 +59,7 @@ def substInClassConstraints(subst: hydra.typing.TypeSubst)(constraints: Map[hydr
       lazy val metadata: hydra.core.TypeVariableMetadata = hydra.lib.pairs.second[hydra.core.Name, hydra.core.TypeVariableMetadata](pair)
       hydra.lib.maybes.maybe[Map[hydra.core.Name, hydra.core.TypeVariableMetadata], hydra.core.Type](insertOrMerge(varName)(metadata)(acc))((targetType: hydra.core.Type) =>
         {
-        lazy val freeVars: Seq[hydra.core.Name] = hydra.lib.sets.toList[hydra.core.Name](hydra.rewriting.freeVariablesInType(targetType))
+        lazy val freeVars: Seq[hydra.core.Name] = hydra.lib.sets.toList[hydra.core.Name](hydra.variables.freeVariablesInType(targetType))
         hydra.lib.lists.foldl[Map[hydra.core.Name, hydra.core.TypeVariableMetadata], hydra.core.Name]((acc2: Map[hydra.core.Name,
            hydra.core.TypeVariableMetadata]) =>
           (freeVar: hydra.core.Name) => insertOrMerge(freeVar)(metadata)(acc2))(acc)(freeVars)

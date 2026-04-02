@@ -4,6 +4,7 @@
 
 module Hydra.Ext.Python.Utils where
 
+import qualified Hydra.Analysis as Analysis
 import qualified Hydra.Ext.Python.Environment as Environment
 import qualified Hydra.Ext.Python.Names as Names
 import qualified Hydra.Ext.Python.Serde as Serde
@@ -16,7 +17,6 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
-import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Serialization as Serialization
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -140,7 +140,7 @@ findNamespaces :: Module.Namespace -> [Module.Definition] -> Module.Namespaces S
 findNamespaces focusNs defs =
 
       let coreNs = Module.Namespace "hydra.core"
-          namespaces = Schemas.namespacesForDefinitions Names.encodeNamespace focusNs defs
+          namespaces = Analysis.namespacesForDefinitions Names.encodeNamespace focusNs defs
       in (Logic.ifElse (Equality.equal (Module.unNamespace (Pairs.first (Module.namespacesFocus namespaces))) (Module.unNamespace coreNs)) namespaces (Module.Namespaces {
         Module.namespacesFocus = (Module.namespacesFocus namespaces),
         Module.namespacesMapping = (Maps.insert coreNs (Names.encodeNamespace coreNs) (Module.namespacesMapping namespaces))}))

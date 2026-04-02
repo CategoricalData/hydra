@@ -234,7 +234,7 @@
          (bootstrap-types hydra_json_bootstrap_types_by_name)
          (test-types hydra_test_test_graph_test_types)
          ;; Convert types to TypeSchemes using f_type_to_type_scheme
-         (type-to-ts hydra_rewriting_f_type_to_type_scheme)
+         (type-to-ts hydra_scoping_f_type_to_type_scheme)
          (kernel-schemas (map (lambda (entry)
                                 (list (car entry) (type-to-ts (cdr entry))))
                               bootstrap-types))
@@ -809,7 +809,7 @@
   (run-simple-test path
     (hydra_testing_deannotate_term_test_case-output tc)
     (lambda ()
-      (hydra_rewriting_deannotate_term
+      (hydra_strip_deannotate_term
         (hydra_testing_deannotate_term_test_case-input tc)))))
 
 (define (run-deannotate-type-test path tc)

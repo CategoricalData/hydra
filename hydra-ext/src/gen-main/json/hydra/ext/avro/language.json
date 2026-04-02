@@ -209,7 +209,7 @@
                               "argument": {
                                 "application": {
                                   "argument": {"variable": "typ"},
-                                  "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                  "function": {"variable": "hydra.strip.deannotateType"}}},
                               "function": {
                                 "function": {
                                   "elimination": {
@@ -225,7 +225,7 @@
                                                     "argument": {
                                                       "application": {
                                                         "argument": {"variable": "inner"},
-                                                        "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                                        "function": {"variable": "hydra.strip.deannotateType"}}},
                                                     "function": {
                                                       "function": {
                                                         "elimination": {
@@ -296,7 +296,7 @@
             "variables": []}]}}],
   "description": ["Language constraints for Apache Avro"],
   "namespace": "hydra.ext.avro.language",
-  "termDependencies": ["hydra.lexical", "hydra.rewriting"],
+  "termDependencies": ["hydra.lexical", "hydra.strip"],
   "typeDependencies": [
     "hydra.paths",
     "hydra.ast",

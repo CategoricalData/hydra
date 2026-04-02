@@ -1,10 +1,10 @@
 (ns hydra.ext.scala.utils
-  (:require [hydra.core :refer :all] [hydra.ext.scala.language :refer :all] [hydra.ext.scala.syntax :refer :all] [hydra.formatting :refer :all] [hydra.lib.equality :refer :all] [hydra.lib.lists :refer :all] [hydra.lib.logic :refer :all] [hydra.lib.math :refer :all] [hydra.lib.maybes :refer :all] [hydra.lib.sets :refer :all] [hydra.lib.strings :refer :all] [hydra.module :refer :all] [hydra.names :refer :all] [hydra.rewriting :refer :all]
+  (:require [hydra.core :refer :all] [hydra.ext.scala.language :refer :all] [hydra.ext.scala.syntax :refer :all] [hydra.formatting :refer :all] [hydra.lib.equality :refer :all] [hydra.lib.lists :refer :all] [hydra.lib.logic :refer :all] [hydra.lib.math :refer :all] [hydra.lib.maybes :refer :all] [hydra.lib.sets :refer :all] [hydra.lib.strings :refer :all] [hydra.module :refer :all] [hydra.names :refer :all] [hydra.strip :refer :all]
 ))
 
 (declare hydra_ext_scala_utils_name_of_type hydra_ext_scala_utils_scala_reserved_words hydra_ext_scala_utils_scala_escape_name hydra_ext_scala_utils_scala_type_name hydra_ext_scala_utils_qualify_union_field_name hydra_ext_scala_utils_sapply hydra_ext_scala_utils_sname hydra_ext_scala_utils_type_to_string hydra_ext_scala_utils_sapply_types hydra_ext_scala_utils_sassign hydra_ext_scala_utils_slambda hydra_ext_scala_utils_sprim hydra_ext_scala_utils_stapply hydra_ext_scala_utils_stapply1 hydra_ext_scala_utils_stapply2 hydra_ext_scala_utils_stparam hydra_ext_scala_utils_stref hydra_ext_scala_utils_svar)
 
-(def hydra_ext_scala_utils_name_of_type (fn [cx] (fn [t_] ((fn [match_target] ((fn [match_value] (cond (= (first match_target) :variable) ((fn [name] (list :just name)) match_value) (= (first match_target) :forall) ((fn [ft] ((hydra_ext_scala_utils_name_of_type cx) ((fn [v] (:body v)) ft))) match_value) :else (list :nothing))) (second match_target))) (hydra_rewriting_deannotate_type t_)))))
+(def hydra_ext_scala_utils_name_of_type (fn [cx] (fn [t_] ((fn [match_target] ((fn [match_value] (cond (= (first match_target) :variable) ((fn [name] (list :just name)) match_value) (= (first match_target) :forall) ((fn [ft] ((hydra_ext_scala_utils_name_of_type cx) ((fn [v] (:body v)) ft))) match_value) :else (list :nothing))) (second match_target))) (hydra_strip_deannotate_type t_)))))
 
 (def hydra_ext_scala_utils_scala_reserved_words hydra_ext_scala_language_scala_reserved_words)
 

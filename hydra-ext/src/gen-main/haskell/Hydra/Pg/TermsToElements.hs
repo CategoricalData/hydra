@@ -5,6 +5,7 @@
 module Hydra.Pg.TermsToElements where
 
 import qualified Hydra.Annotations as Annotations
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
@@ -21,10 +22,9 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Pg.Mapping as Mapping
 import qualified Hydra.Pg.Model as Model
-import qualified Hydra.Rewriting as Rewriting
-import qualified Hydra.Schemas as Schemas
+import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Show.Core as Core__
-import qualified Hydra.Util as Util
+import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -77,7 +77,7 @@ decodePropertySpec cx g term =
 -- | Decode a value specification from a term
 decodeValueSpec :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Mapping.ValueSpec
 decodeValueSpec cx g term =
-    case (Rewriting.deannotateTerm term) of
+    case (Strip.deannotateTerm term) of
       Core.TermLiteral v0 -> case v0 of
         Core.LiteralString v1 -> Right (Mapping.ValueSpecPattern v1)
         _ -> readInjection cx g [
@@ -109,13 +109,13 @@ evalPath cx path term =
 evalStep :: Context.Context -> String -> Core.Term -> Either (Context.InContext Errors.Error) [Core.Term]
 evalStep cx step term =
     Logic.ifElse (Strings.null step) (Right [
-      term]) (case (Rewriting.deannotateTerm term) of
+      term]) (case (Strip.deannotateTerm term) of
       Core.TermList v0 -> Eithers.map (\xs -> Lists.concat xs) (Eithers.mapList (evalStep cx step) v0)
       Core.TermMaybe v0 -> Maybes.maybe (Right []) (\t -> evalStep cx step t) v0
       Core.TermRecord v0 -> Maybes.maybe (Left (Context.InContext {
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 "No such field " step) " in record"))),
         Context.inContextContext = cx})) (\t -> Right [
-        t]) (Maps.lookup (Core.Name step) (Schemas.fieldMap (Core.recordFields v0)))
+        t]) (Maps.lookup (Core.Name step) (Resolution.fieldMap (Core.recordFields v0)))
       Core.TermUnion v0 -> Logic.ifElse (Equality.equal (Core.unName (Core.fieldName (Core.injectionField v0))) step) (evalStep cx step (Core.fieldTerm (Core.injectionField v0))) (Right [])
       Core.TermWrap v0 -> evalStep cx step (Core.wrappedTermBody v0)
       _ -> Left (Context.InContext {
@@ -129,7 +129,7 @@ expectList cx g f term = Eithers.bind (Core_.list cx g term) (\elems -> Eithers.
 -- | Parse an edge id pattern from a value spec and schema
 parseEdgeIdPattern :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.ValueSpec -> Either t5 (Context.Context -> Core.Term -> Either (Context.InContext Errors.Error) [t4])
 parseEdgeIdPattern cx g schema spec =
-    Eithers.bind (parseValueSpec cx g spec) (\fun -> Right (\cx_ -> \term -> Eithers.bind (fun cx_ term) (\terms -> Eithers.mapList (Util.coderEncode (Mapping.schemaEdgeIds schema) cx_) terms)))
+    Eithers.bind (parseValueSpec cx g spec) (\fun -> Right (\cx_ -> \term -> Eithers.bind (fun cx_ term) (\terms -> Eithers.mapList (Coders.coderEncode (Mapping.schemaEdgeIds schema) cx_) terms)))
 
 -- | Parse an edge specification into a label and encoder function
 parseEdgeSpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.EdgeSpec -> Either t5 (Model.Label, (Context.Context -> Core.Term -> Either (Context.InContext Errors.Error) [Model.Element t4]))
@@ -177,7 +177,7 @@ parsePropertySpec cx g schema spec =
 
       let key = Mapping.propertySpecKey spec
           value = Mapping.propertySpecValue spec
-      in (Eithers.bind (parseValueSpec cx g value) (\fun -> Right (\cx_ -> \term -> Eithers.bind (fun cx_ term) (\results -> Eithers.bind (Eithers.mapList (Util.coderEncode (Mapping.schemaPropertyValues schema) cx_) results) (\values -> Right (Lists.map (\v -> (key, v)) values))))))
+      in (Eithers.bind (parseValueSpec cx g value) (\fun -> Right (\cx_ -> \term -> Eithers.bind (fun cx_ term) (\results -> Eithers.bind (Eithers.mapList (Coders.coderEncode (Mapping.schemaPropertyValues schema) cx_) results) (\values -> Right (Lists.map (\v -> (key, v)) values))))))
 
 -- | Parse a value specification into a function that processes terms
 parseValueSpec :: t0 -> t1 -> Mapping.ValueSpec -> Either t2 (Context.Context -> Core.Term -> Either (Context.InContext Errors.Error) [Core.Term])
@@ -190,7 +190,7 @@ parseValueSpec cx g spec =
 -- | Parse a vertex id pattern from a value spec and schema
 parseVertexIdPattern :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.ValueSpec -> Either t5 (Context.Context -> Core.Term -> Either (Context.InContext Errors.Error) [t4])
 parseVertexIdPattern cx g schema spec =
-    Eithers.bind (parseValueSpec cx g spec) (\fun -> Right (\cx_ -> \term -> Eithers.bind (fun cx_ term) (\terms -> Eithers.mapList (Util.coderEncode (Mapping.schemaVertexIds schema) cx_) terms)))
+    Eithers.bind (parseValueSpec cx g spec) (\fun -> Right (\cx_ -> \term -> Eithers.bind (fun cx_ term) (\terms -> Eithers.mapList (Coders.coderEncode (Mapping.schemaVertexIds schema) cx_) terms)))
 
 -- | Parse a vertex specification into a label and encoder function
 parseVertexSpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.VertexSpec -> Either t5 (Model.Label, (Context.Context -> Core.Term -> Either (Context.InContext Errors.Error) [Model.Element t4]))
@@ -243,35 +243,35 @@ requireUnique cx context fun term =
       Context.inContextContext = cx}))))
 
 -- | Create an adapter that maps terms to property graph elements using a mapping specification
-termToElementsAdapter :: Context.Context -> Graph.Graph -> Mapping.Schema t0 t1 t2 -> Core.Type -> Either (Context.InContext Errors.Error) (Util.Adapter Core.Type [Model.Label] Core.Term [Model.Element t2])
+termToElementsAdapter :: Context.Context -> Graph.Graph -> Mapping.Schema t0 t1 t2 -> Core.Type -> Either (Context.InContext Errors.Error) (Coders.Adapter Core.Type [Model.Label] Core.Term [Model.Element t2])
 termToElementsAdapter cx g schema typ =
 
       let key_elements = Core.Name "elements"
-      in (Maybes.maybe (Right (Util.Adapter {
-        Util.adapterIsLossy = False,
-        Util.adapterSource = typ,
-        Util.adapterTarget = [],
-        Util.adapterCoder = Util.Coder {
-          Util.coderEncode = (\_cx -> \_t -> Right []),
-          Util.coderDecode = (\cx_ -> \_els -> Left (Context.InContext {
+      in (Maybes.maybe (Right (Coders.Adapter {
+        Coders.adapterIsLossy = False,
+        Coders.adapterSource = typ,
+        Coders.adapterTarget = [],
+        Coders.adapterCoder = Coders.Coder {
+          Coders.coderEncode = (\_cx -> \_t -> Right []),
+          Coders.coderDecode = (\cx_ -> \_els -> Left (Context.InContext {
             Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "no corresponding element type")),
             Context.inContextContext = cx_}))}})) (\term -> Eithers.bind (expectList cx g decodeElementSpec term) (\specTerms -> Eithers.bind (Eithers.mapList (parseElementSpec cx g schema) specTerms) (\specs ->
         let labels = Lists.nub (Lists.map (\_p -> Pairs.first _p) specs)
             encoders = Lists.map (\_p -> Pairs.second _p) specs
-        in (Right (Util.Adapter {
-          Util.adapterIsLossy = False,
-          Util.adapterSource = typ,
-          Util.adapterTarget = labels,
-          Util.adapterCoder = Util.Coder {
-            Util.coderEncode = (\cx_ -> \t -> Eithers.map (\_xs -> Lists.concat _xs) (Eithers.mapList (\e -> e cx_ t) encoders)),
-            Util.coderDecode = (\cx_ -> \_els -> Left (Context.InContext {
+        in (Right (Coders.Adapter {
+          Coders.adapterIsLossy = False,
+          Coders.adapterSource = typ,
+          Coders.adapterTarget = labels,
+          Coders.adapterCoder = Coders.Coder {
+            Coders.coderEncode = (\cx_ -> \t -> Eithers.map (\_xs -> Lists.concat _xs) (Eithers.mapList (\e -> e cx_ t) encoders)),
+            Coders.coderDecode = (\cx_ -> \_els -> Left (Context.InContext {
               Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "element decoding is not yet supported")),
               Context.inContextContext = cx_}))}}))))) (Annotations.getTypeAnnotation key_elements typ))
 
 -- | Convert a term to its string representation
 termToString :: Core.Term -> String
 termToString term =
-    case (Rewriting.deannotateTerm term) of
+    case (Strip.deannotateTerm term) of
       Core.TermLiteral v0 -> case v0 of
         Core.LiteralString v1 -> v1
         Core.LiteralBoolean v1 -> Logic.ifElse v1 "true" "false"

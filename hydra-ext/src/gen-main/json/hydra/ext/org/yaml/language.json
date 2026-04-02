@@ -201,7 +201,7 @@
                               "argument": {
                                 "application": {
                                   "argument": {"variable": "typ"},
-                                  "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                  "function": {"variable": "hydra.strip.deannotateType"}}},
                               "function": {
                                 "function": {
                                   "elimination": {
@@ -285,7 +285,7 @@
             "variables": []}]}}],
   "description": ["Language constraints for YAML"],
   "namespace": "hydra.ext.org.yaml.language",
-  "termDependencies": ["hydra.rewriting"],
+  "termDependencies": ["hydra.strip"],
   "typeDependencies": [
     "hydra.paths",
     "hydra.ast",

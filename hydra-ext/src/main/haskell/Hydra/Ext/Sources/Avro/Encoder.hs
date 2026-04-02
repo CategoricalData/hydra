@@ -61,13 +61,12 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -109,7 +108,7 @@ ns = Namespace "hydra.ext.avro.encoder"
 
 module_ :: Module
 module_ = Module ns elements
-    [ExtractCore.ns, Rewriting.ns]
+    [ExtractCore.ns, Strip.ns]
     (avroEnvironmentNs:AvroSchema.ns:jsonModelNs:KernelTypes.kernelTypesNamespaces) $
     Just "Hydra-to-Avro encoder: converts Hydra types and terms to Avro schemas and JSON values"
   where
@@ -149,7 +148,7 @@ buildAvroField = define "buildAvroField" $
     record Avro._Field [
       Avro._Field_name>>: localName @@ var "name_",
       Avro._Field_doc>>: nothing,
-      Avro._Field_type>>: Util.adapterTarget (var "ad"),
+      Avro._Field_type>>: Coders.adapterTarget (var "ad"),
       Avro._Field_default>>: nothing,
       Avro._Field_order>>: nothing,
       Avro._Field_aliases>>: nothing,
@@ -179,7 +178,7 @@ encodeTypeInner = define "encodeTypeInner" $
     "bareType">: Pairs.second (var "annResult"),
     "simpleAdapter">: lambda "target" $ lambda "lossy" $ lambda "encode" $ lambda "decode" $
       right (pair
-        (Util.adapter (var "lossy") (var "typ") (var "target") (Util.coder (var "encode") (var "decode")))
+        (Coders.adapter (var "lossy") (var "typ") (var "target") (Coders.coder (var "encode") (var "decode")))
         (var "env"))] $
     cases _Type (var "bareType") (Just (err @@ var "cx" @@ string "unsupported Hydra type for Avro encoding")) [
       _Type_unit>>: constant $
@@ -196,25 +195,25 @@ encodeTypeInner = define "encodeTypeInner" $
           "innerAd">: Pairs.first (var "adEnv"),
           "env1">: Pairs.second (var "adEnv")] $
           right (pair
-            (Util.adapter (Util.adapterIsLossy (var "innerAd")) (var "typ")
+            (Coders.adapter (Coders.adapterIsLossy (var "innerAd")) (var "typ")
               (inject Avro._Schema Avro._Schema_array (record Avro._Array [
-                Avro._Array_items>>: Util.adapterTarget (var "innerAd")]))
-              (Util.coder
+                Avro._Array_items>>: Coders.adapterTarget (var "innerAd")]))
+              (Coders.coder
                 (lambda "cx1" $ lambda "t" $
                   cases _Term (var "t") Nothing [
                     _Term_list>>: lambda "elements" $
                       Eithers.map (lambda "jvs" $ inject JM._Value JM._Value_array (var "jvs"))
-                        (Eithers.mapList (lambda "el" $ Util.coderEncode (Util.adapterCoder (var "innerAd")) @@ var "cx1" @@ var "el") (var "elements"))])
+                        (Eithers.mapList (lambda "el" $ Coders.coderEncode (Coders.adapterCoder (var "innerAd")) @@ var "cx1" @@ var "el") (var "elements"))])
                 (lambda "cx1" $ lambda "j" $
                   cases JM._Value (var "j") Nothing [
                     JM._Value_array>>: lambda "elements" $
                       Eithers.map (lambda "ts" $ Core.termList (var "ts"))
-                        (Eithers.mapList (lambda "el" $ Util.coderDecode (Util.adapterCoder (var "innerAd")) @@ var "cx1" @@ var "el") (var "elements"))])))
+                        (Eithers.mapList (lambda "el" $ Coders.coderDecode (Coders.adapterCoder (var "innerAd")) @@ var "cx1" @@ var "el") (var "elements"))])))
             (var "env1"))),
       _Type_map>>: lambda "mt" $ lets [
         "keyType">: project _MapType _MapType_keys @@ var "mt",
         "valType">: project _MapType _MapType_values @@ var "mt"] $
-        cases _Type (Rewriting.deannotateType @@ var "keyType")
+        cases _Type (Strip.deannotateType @@ var "keyType")
           (Just (err @@ var "cx" @@ string "Avro maps require string keys")) [
           _Type_literal>>: lambda "lt" $
             cases _LiteralType (var "lt") (Just (err @@ var "cx" @@ string "Avro maps require string keys")) [
@@ -223,10 +222,10 @@ encodeTypeInner = define "encodeTypeInner" $
                   "valAd">: Pairs.first (var "adEnv"),
                   "env1">: Pairs.second (var "adEnv")] $
                   right (pair
-                    (Util.adapter (Util.adapterIsLossy (var "valAd")) (var "typ")
+                    (Coders.adapter (Coders.adapterIsLossy (var "valAd")) (var "typ")
                       (inject Avro._Schema Avro._Schema_map (record Avro._Map [
-                        Avro._Map_values>>: Util.adapterTarget (var "valAd")]))
-                      (Util.coder
+                        Avro._Map_values>>: Coders.adapterTarget (var "valAd")]))
+                      (Coders.coder
                         (lambda "cx1" $ lambda "t" $
                           cases _Term (var "t") Nothing [
                             _Term_map>>: lambda "entries" $ lets [
@@ -235,7 +234,7 @@ encodeTypeInner = define "encodeTypeInner" $
                                 "v">: Pairs.second (var "entry")] $
                                 Eithers.bind (ExtractCore.string @@ var "cx" @@ Graph.emptyGraph @@ var "k") (lambda "kStr" $
                                 Eithers.map (lambda "vJson" $ pair (var "kStr") (var "vJson"))
-                                  (Util.coderEncode (Util.adapterCoder (var "valAd")) @@ var "cx1" @@ var "v"))] $
+                                  (Coders.coderEncode (Coders.adapterCoder (var "valAd")) @@ var "cx1" @@ var "v"))] $
                               Eithers.map (lambda "pairs" $ inject JM._Value JM._Value_object (Maps.fromList (var "pairs")))
                                 (Eithers.mapList (var "encodeEntry") (Maps.toList (var "entries")))])
                         (lambda "cx1" $ lambda "j" $
@@ -245,7 +244,7 @@ encodeTypeInner = define "encodeTypeInner" $
                                 "k">: Pairs.first (var "entry"),
                                 "v">: Pairs.second (var "entry")] $
                                 Eithers.map (lambda "vTerm" $ pair (MetaTerms.stringLift (var "k")) (var "vTerm"))
-                                  (Util.coderDecode (Util.adapterCoder (var "valAd")) @@ var "cx1" @@ var "v")] $
+                                  (Coders.coderDecode (Coders.adapterCoder (var "valAd")) @@ var "cx1" @@ var "v")] $
                               Eithers.map (lambda "pairs" $ Core.termMap (Maps.fromList (var "pairs")))
                                 (Eithers.mapList (var "decodeEntry") (Maps.toList (var "m")))])))
                     (var "env1")))]],
@@ -268,22 +267,22 @@ encodeTypeInner = define "encodeTypeInner" $
           "innerAd">: Pairs.first (var "adEnv"),
           "env1">: Pairs.second (var "adEnv")] $
           right (pair
-            (Util.adapter (Util.adapterIsLossy (var "innerAd")) (var "typ")
+            (Coders.adapter (Coders.adapterIsLossy (var "innerAd")) (var "typ")
               (inject Avro._Schema Avro._Schema_union (wrap Avro._Union (list [
                 inject Avro._Schema Avro._Schema_primitive (injectUnit Avro._Primitive Avro._Primitive_null),
-                Util.adapterTarget (var "innerAd")])))
-              (Util.coder
+                Coders.adapterTarget (var "innerAd")])))
+              (Coders.coder
                 (lambda "cx1" $ lambda "t" $
                   cases _Term (var "t") Nothing [
                     _Term_maybe>>: lambda "ot" $
                       Maybes.maybe
                         (right (injectUnit JM._Value JM._Value_null))
-                        (lambda "inner" $ Util.coderEncode (Util.adapterCoder (var "innerAd")) @@ var "cx1" @@ var "inner")
+                        (lambda "inner" $ Coders.coderEncode (Coders.adapterCoder (var "innerAd")) @@ var "cx1" @@ var "inner")
                         (var "ot")])
                 (lambda "cx1" $ lambda "j" $
                   cases JM._Value (var "j") (Just (
                     Eithers.map (lambda "t" $ Core.termMaybe (just (var "t")))
-                      (Util.coderDecode (Util.adapterCoder (var "innerAd")) @@ var "cx1" @@ var "j"))) [
+                      (Coders.coderDecode (Coders.adapterCoder (var "innerAd")) @@ var "cx1" @@ var "j"))) [
                     JM._Value_null>>: constant (right (Core.termMaybe nothing))])))
             (var "env1"))),
       _Type_wrap>>: lambda "inner" $
@@ -296,7 +295,7 @@ encodeTypeInner = define "encodeTypeInner" $
             (Maps.lookup (var "name_") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_typeMap @@ var "env")))
           (lambda "existingAd" $
             right (pair
-              (Util.adapterWithTarget (var "existingAd") (inject Avro._Schema Avro._Schema_reference (localName @@ var "name_")))
+              (Coders.adapterWithTarget (var "existingAd") (inject Avro._Schema Avro._Schema_reference (localName @@ var "name_")))
               (var "env")))
           (Maps.lookup (var "name_") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_emitted @@ var "env"))
     ]
@@ -326,8 +325,8 @@ enumAdapter = define "enumAdapter" $
         Avro._Enum_symbols>>: var "symbols",
         Avro._Enum_default>>: nothing]),
       Avro._Named_annotations>>: var "avroAnnotations"]),
-    "adapter_">: Util.adapter (boolean False) (var "typ") (var "avroSchema")
-      (Util.coder
+    "adapter_">: Coders.adapter (boolean False) (var "typ") (var "avroSchema")
+      (Coders.coder
         (lambda "cx1" $ lambda "t" $
           cases _Term (var "t") (Just (err @@ var "cx1" @@ string "expected union term for enum")) [
             _Term_union>>: lambda "inj" $ lets [
@@ -367,7 +366,7 @@ floatAdapter = define "floatAdapter" $
   doc "Create an adapter for float types" $
   lambda "cx" $ lambda "typ" $ lambda "ft" $ lets [
     "simple">: lambda "target" $ lambda "lossy" $ lambda "encode" $ lambda "decode" $
-      right (Util.adapter (var "lossy") (var "typ") (var "target") (Util.coder (var "encode") (var "decode")))] $
+      right (Coders.adapter (var "lossy") (var "typ") (var "target") (Coders.coder (var "encode") (var "decode")))] $
     cases _FloatType (var "ft") (Just $
       var "simple"
         @@ inject Avro._Schema Avro._Schema_primitive (injectUnit Avro._Primitive Avro._Primitive_double)
@@ -460,7 +459,7 @@ integerAdapter = define "integerAdapter" $
   doc "Create an adapter for integer types" $
   lambda "cx" $ lambda "typ" $ lambda "it" $ lets [
     "simple">: lambda "target" $ lambda "lossy" $ lambda "encode" $ lambda "decode" $
-      right (Util.adapter (var "lossy") (var "typ") (var "target") (Util.coder (var "encode") (var "decode")))] $
+      right (Coders.adapter (var "lossy") (var "typ") (var "target") (Coders.coder (var "encode") (var "decode")))] $
     cases _IntegerType (var "it") (Just $
       var "simple"
         @@ inject Avro._Schema Avro._Schema_primitive (injectUnit Avro._Primitive Avro._Primitive_long)
@@ -514,7 +513,7 @@ literalAdapter = define "literalAdapter" $
   doc "Create an adapter for literal types" $
   lambda "cx" $ lambda "typ" $ lambda "lt" $ lets [
     "simple">: lambda "target" $ lambda "lossy" $ lambda "encode" $ lambda "decode" $
-      right (Util.adapter (var "lossy") (var "typ") (var "target") (Util.coder (var "encode") (var "decode")))] $
+      right (Coders.adapter (var "lossy") (var "typ") (var "target") (Coders.coder (var "encode") (var "decode")))] $
     cases _LiteralType (var "lt") Nothing [
       _LiteralType_boolean>>: constant $
         var "simple"
@@ -596,12 +595,12 @@ namedTypeAdapter = define "namedTypeAdapter" $
           Avro._Named_doc>>: nothing,
           Avro._Named_type>>: var "mkNamedType" @@ var "avroFields",
           Avro._Named_annotations>>: var "avroAnnotations"]),
-        "lossy">: Lists.foldl (lambda "b" $ lambda "fa" $ Logic.or (var "b") (Util.adapterIsLossy (Pairs.second (var "fa"))))
+        "lossy">: Lists.foldl (lambda "b" $ lambda "fa" $ Logic.or (var "b") (Coders.adapterIsLossy (Pairs.second (var "fa"))))
           (boolean False) (var "fieldAdapters"),
         "coderPair">: var "mkCoder" @@ var "cx" @@ var "typeName" @@ var "fieldAdapters",
         "encodeFn">: Pairs.first (var "coderPair"),
         "decodeFn">: Pairs.second (var "coderPair"),
-        "adapter_">: Util.adapter (var "lossy") (var "typ") (var "avroSchema") (Util.coder (var "encodeFn") (var "decodeFn")),
+        "adapter_">: Coders.adapter (var "lossy") (var "typ") (var "avroSchema") (Coders.coder (var "encodeFn") (var "decodeFn")),
         "env2">: record AvroEnv._EncodeEnvironment [
           AvroEnv._EncodeEnvironment_typeMap>>: project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_typeMap @@ var "env1",
           AvroEnv._EncodeEnvironment_emitted>>: Maps.insert (var "typeName") (var "adapter_")
@@ -625,7 +624,7 @@ recordTermCoder = define "recordTermCoder" $
             "ad">: Pairs.second (var "nameAd"),
             "fTerm">: Maybes.fromMaybe Core.termUnit (Maps.lookup (var "fname") (var "fieldMap"))] $
             Eithers.map (lambda "jv" $ pair (localName @@ var "fname") (var "jv"))
-              (Util.coderEncode (Util.adapterCoder (var "ad")) @@ var "cx1" @@ var "fTerm")] $
+              (Coders.coderEncode (Coders.adapterCoder (var "ad")) @@ var "cx1" @@ var "fTerm")] $
           Eithers.map (lambda "pairs" $ inject JM._Value JM._Value_object (Maps.fromList (var "pairs")))
             (Eithers.mapList (var "encodeField") (var "fieldAdapters"))],
     "decode">: lambda "cx1" $ lambda "json" $
@@ -636,7 +635,7 @@ recordTermCoder = define "recordTermCoder" $
             "ad">: Pairs.second (var "nameAd"),
             "jv">: Maybes.fromMaybe (injectUnit JM._Value JM._Value_null) (Maps.lookup (localName @@ var "fname") (var "m"))] $
             Eithers.map (lambda "t" $ Core.field (var "fname") (var "t"))
-              (Util.coderDecode (Util.adapterCoder (var "ad")) @@ var "cx1" @@ var "jv")] $
+              (Coders.coderDecode (Coders.adapterCoder (var "ad")) @@ var "cx1" @@ var "jv")] $
           Eithers.map (lambda "fields" $ Core.termRecord (Core.record (var "typeName") (var "fields")))
             (Eithers.mapList (var "decodeField") (var "fieldAdapters"))]] $
     pair (var "encode") (var "decode")
@@ -676,7 +675,7 @@ typeToName :: TTermDefinition (Type -> Name)
 typeToName = define "typeToName" $
   doc "Generate a default name for an anonymous type" $
   lambda "t" $
-    cases _Type (Rewriting.deannotateType @@ var "t") (Just (Core.name (string "Unknown"))) [
+    cases _Type (Strip.deannotateType @@ var "t") (Just (Core.name (string "Unknown"))) [
       _Type_record>>: constant $ Core.name (string "Record"),
       _Type_union>>: constant $ Core.name (string "Union")]
 
@@ -696,7 +695,7 @@ unionAsRecordAdapter = define "unionAsRecordAdapter" $
             Avro._Field_doc>>: nothing,
             Avro._Field_type>>: inject Avro._Schema Avro._Schema_union (wrap Avro._Union (list [
               inject Avro._Schema Avro._Schema_primitive (injectUnit Avro._Primitive Avro._Primitive_null),
-              Util.adapterTarget (var "ad")])),
+              Coders.adapterTarget (var "ad")])),
             Avro._Field_default>>: just (injectUnit JM._Value JM._Value_null),
             Avro._Field_order>>: nothing,
             Avro._Field_aliases>>: nothing,
@@ -712,8 +711,8 @@ unionAsRecordAdapter = define "unionAsRecordAdapter" $
         Avro._Named_type>>: inject Avro._NamedType Avro._NamedType_record (record Avro._Record [
           Avro._Record_fields>>: var "avroFields"]),
         Avro._Named_annotations>>: var "avroAnnotations"]),
-      "adapter_">: Util.adapter (boolean True) (var "typ") (var "avroSchema")
-        (Util.coder
+      "adapter_">: Coders.adapter (boolean True) (var "typ") (var "avroSchema")
+        (Coders.coder
           (lambda "cx1" $ lambda "t" $
             cases _Term (var "t") (Just (err @@ var "cx1" @@ string "expected union term")) [
               _Term_union>>: lambda "inj" $ lets [
@@ -724,7 +723,7 @@ unionAsRecordAdapter = define "unionAsRecordAdapter" $
                   "ad">: Pairs.second (var "nameAd")] $
                   Logic.ifElse (Core.equalName_ (var "fname") (var "activeName"))
                     (Eithers.map (lambda "jv" $ pair (localName @@ var "fname") (var "jv"))
-                      (Util.coderEncode (Util.adapterCoder (var "ad")) @@ var "cx1" @@ var "activeValue"))
+                      (Coders.coderEncode (Coders.adapterCoder (var "ad")) @@ var "cx1" @@ var "activeValue"))
                     (right (pair (localName @@ var "fname") (injectUnit JM._Value JM._Value_null)))] $
                 Eithers.map (lambda "pairs" $ inject JM._Value JM._Value_object (Maps.fromList (var "pairs")))
                   (Eithers.mapList (var "encodePair") (var "fieldAdapters"))])
@@ -745,7 +744,7 @@ unionAsRecordAdapter = define "unionAsRecordAdapter" $
                         (lambda "jv" $
                           cases JM._Value (var "jv") (Just (
                             Eithers.map (lambda "t" $ Core.termUnion (Core.injection (var "typeName") (Core.field (var "fname") (var "t"))))
-                              (Util.coderDecode (Util.adapterCoder (var "ad")) @@ var "cx1" @@ var "jv"))) [
+                              (Coders.coderDecode (Coders.adapterCoder (var "ad")) @@ var "cx1" @@ var "jv"))) [
                             JM._Value_null>>: constant (var "findActive" @@ var "rest_")])
                         (var "mjv"))] $
                 var "findActive" @@ var "fieldAdapters"])),

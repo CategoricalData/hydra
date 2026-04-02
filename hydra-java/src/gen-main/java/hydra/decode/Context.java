@@ -17,11 +17,11 @@ public interface Context {
 
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.context.Context> visit(hydra.core.Term.Record record) {
-          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Core.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
-            hydra.extract.Helpers.requireField(
+            hydra.extract.Core.requireField(
               "trace",
-              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<String>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<String>>>) (v2 -> hydra.extract.Helpers.decodeList(
+              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<String>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<String>>>) (v2 -> hydra.extract.Core.decodeList(
                 (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>>) (cx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>) (raw2 -> hydra.lib.eithers.Either.apply(
                   (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, String>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, String>left(new hydra.errors.DecodingError(err))),
                   (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
@@ -53,9 +53,9 @@ public interface Context {
               fieldMap,
               cx),
             (java.util.function.Function<hydra.util.ConsList<String>, hydra.util.Either<hydra.errors.DecodingError, hydra.context.Context>>) (field_trace -> hydra.lib.eithers.Bind.apply(
-              hydra.extract.Helpers.requireField(
+              hydra.extract.Core.requireField(
                 "messages",
-                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<String>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<String>>>) (v2 -> hydra.extract.Helpers.decodeList(
+                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<String>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<String>>>) (v2 -> hydra.extract.Core.decodeList(
                   (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>>) (cx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>) (raw2 -> hydra.lib.eithers.Either.apply(
                     (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, String>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, String>left(new hydra.errors.DecodingError(err))),
                     (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
@@ -87,9 +87,9 @@ public interface Context {
                 fieldMap,
                 cx),
               (java.util.function.Function<hydra.util.ConsList<String>, hydra.util.Either<hydra.errors.DecodingError, hydra.context.Context>>) (field_messages -> hydra.lib.eithers.Bind.apply(
-                hydra.extract.Helpers.requireField(
+                hydra.extract.Core.requireField(
                   "other",
-                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>>>) (v2 -> hydra.extract.Helpers.decodeMap(
+                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>>>) (v2 -> hydra.extract.Core.decodeMap(
                     (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Name>>>) (p0 -> p1 -> hydra.decode.Core.name(
                       p0,
                       p1)),
@@ -119,15 +119,15 @@ public interface Context {
 
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.context.InContext<T0>> visit(hydra.core.Term.Record record) {
-          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Core.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
-            hydra.extract.Helpers.requireField(
+            hydra.extract.Core.requireField(
               "object",
               e,
               fieldMap,
               cx),
             (java.util.function.Function<T0, hydra.util.Either<hydra.errors.DecodingError, hydra.context.InContext<T0>>>) (field_object -> hydra.lib.eithers.Bind.apply(
-              hydra.extract.Helpers.requireField(
+              hydra.extract.Core.requireField(
                 "context",
                 (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.context.Context>>>) (p0 -> p1 -> hydra.decode.Context.context(
                   p0,

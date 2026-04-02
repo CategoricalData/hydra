@@ -7,6 +7,7 @@ from collections.abc import Callable
 from functools import lru_cache
 from hydra.dsl.python import Just, Maybe, Nothing, frozenlist
 from typing import TypeVar, cast
+import hydra.analysis
 import hydra.core
 import hydra.ext.python.environment
 import hydra.ext.python.names
@@ -20,7 +21,6 @@ import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.strings
 import hydra.module
-import hydra.schemas
 import hydra.serialization
 
 T0 = TypeVar("T0")
@@ -240,7 +240,7 @@ def find_namespaces(focus_ns: hydra.module.Namespace, defs: frozenlist[hydra.mod
     core_ns = hydra.module.Namespace("hydra.core")
     @lru_cache(1)
     def namespaces() -> hydra.module.Namespaces[hydra.ext.python.syntax.DottedName]:
-        return hydra.schemas.namespaces_for_definitions((lambda x1: hydra.ext.python.names.encode_namespace(x1)), focus_ns, defs)
+        return hydra.analysis.namespaces_for_definitions((lambda x1: hydra.ext.python.names.encode_namespace(x1)), focus_ns, defs)
     return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.pairs.first(namespaces().focus).value, core_ns.value), (lambda : namespaces()), (lambda : hydra.module.Namespaces(namespaces().focus, hydra.lib.maps.insert(core_ns, hydra.ext.python.names.encode_namespace(core_ns), namespaces().mapping))))
 
 @lru_cache(1)

@@ -184,7 +184,7 @@
                                                           "term": {
                                                             "application": {
                                                               "argument": {"variable": "rawFun"},
-                                                              "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                                                              "function": {"variable": "hydra.strip.deannotateTerm"}}},
                                                           "type": [
                                                             {
                                                               "constraints": null,
@@ -398,7 +398,7 @@
                                                                                                     "term": {
                                                                                                       "application": {
                                                                                                         "argument": {"variable": "midFun"},
-                                                                                                        "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                                                                                                        "function": {"variable": "hydra.strip.deannotateTerm"}}},
                                                                                                     "type": [
                                                                                                       {
                                                                                                         "constraints": null,
@@ -502,7 +502,7 @@
                                                                                                                                               "term": {
                                                                                                                                                 "application": {
                                                                                                                                                   "argument": {"variable": "innerFun"},
-                                                                                                                                                  "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                                                                                                                                                  "function": {"variable": "hydra.strip.deannotateTerm"}}},
                                                                                                                                               "type": [
                                                                                                                                                 {
                                                                                                                                                   "constraints": null,
@@ -2530,7 +2530,7 @@
                                                                                                                                   "function": {
                                                                                                                                     "function": {
                                                                                                                                       "elimination": {"record": {"field": "term", "typeName": "hydra.core.Binding"}}}}}},
-                                                                                                                              "function": {"variable": "hydra.rewriting.freeVariablesInTerm"}}},
+                                                                                                                              "function": {"variable": "hydra.variables.freeVariablesInTerm"}}},
                                                                                                                           "function": {
                                                                                                                             "application": {
                                                                                                                               "argument": {"variable": "allNames"},
@@ -2800,7 +2800,7 @@
                                                                                                                                           "function": {
                                                                                                                                             "function": {
                                                                                                                                               "elimination": {"record": {"field": "term", "typeName": "hydra.core.Binding"}}}}}},
-                                                                                                                                      "function": {"variable": "hydra.rewriting.freeVariablesInTerm"}}},
+                                                                                                                                      "function": {"variable": "hydra.variables.freeVariablesInTerm"}}},
                                                                                                                                   "function": {
                                                                                                                                     "application": {
                                                                                                                                       "argument": {"variable": "allBindingNames"},
@@ -2864,7 +2864,7 @@
                                                                                                                                       "function": {
                                                                                                                                         "function": {
                                                                                                                                           "elimination": {"record": {"field": "term", "typeName": "hydra.core.Binding"}}}}}},
-                                                                                                                                  "function": {"variable": "hydra.rewriting.freeVariablesInTerm"}}},
+                                                                                                                                  "function": {"variable": "hydra.variables.freeVariablesInTerm"}}},
                                                                                                                               "function": {
                                                                                                                                 "application": {
                                                                                                                                   "argument": {
@@ -3115,7 +3115,7 @@
                                                                                                                   "function": {
                                                                                                                     "function": {
                                                                                                                       "elimination": {"record": {"field": "term", "typeName": "hydra.core.Binding"}}}}}},
-                                                                                                              "function": {"variable": "hydra.rewriting.freeVariablesInTerm"}}},
+                                                                                                              "function": {"variable": "hydra.variables.freeVariablesInTerm"}}},
                                                                                                           "function": {
                                                                                                             "application": {
                                                                                                               "argument": {
@@ -3148,7 +3148,7 @@
                                                                                                                       "function": {
                                                                                                                         "function": {
                                                                                                                           "elimination": {"record": {"field": "term", "typeName": "hydra.core.Binding"}}}}}},
-                                                                                                                  "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                                                                                                                  "function": {"variable": "hydra.strip.deannotateTerm"}}},
                                                                                                               "function": {
                                                                                                                 "function": {
                                                                                                                   "elimination": {
@@ -5280,7 +5280,7 @@
                                                                                           "term": {
                                                                                             "application": {
                                                                                               "argument": {"variable": "fterm"},
-                                                                                              "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                                                                                              "function": {"variable": "hydra.strip.deannotateTerm"}}},
                                                                                           "type": [
                                                                                             {
                                                                                               "constraints": null,
@@ -5704,7 +5704,7 @@
                                                                 "term": {
                                                                   "application": {
                                                                     "argument": {"variable": "term"},
-                                                                    "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                                                                    "function": {"variable": "hydra.strip.deannotateTerm"}}},
                                                                 "type": [
                                                                   {
                                                                     "constraints": null,
@@ -6023,7 +6023,7 @@
                                               "term": {
                                                 "application": {
                                                   "argument": {"variable": "t"},
-                                                  "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                                  "function": {"variable": "hydra.strip.deannotateType"}}},
                                               "type": [
                                                 {
                                                   "constraints": null,
@@ -7095,7 +7095,7 @@
                                                           "term": {
                                                             "application": {
                                                               "argument": {"variable": "typ"},
-                                                              "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                                              "function": {"variable": "hydra.strip.deannotateType"}}},
                                                           "type": [
                                                             {
                                                               "constraints": null,
@@ -8127,7 +8127,7 @@
                                     "argument": {
                                       "application": {
                                         "argument": {"variable": "defs"},
-                                        "function": {"variable": "hydra.schemas.definitionDependencyNamespaces"}}},
+                                        "function": {"variable": "hydra.analysis.definitionDependencyNamespaces"}}},
                                     "function": {
                                       "application": {
                                         "argument": {"variable": "focusNs"},
@@ -8241,7 +8241,7 @@
                                                               "term": {
                                                                 "application": {
                                                                   "argument": {"variable": "defs"},
-                                                                  "function": {"variable": "hydra.schemas.partitionDefinitions"}}},
+                                                                  "function": {"variable": "hydra.environment.partitionDefinitions"}}},
                                                               "type": [
                                                                 {
                                                                   "constraints": null,
@@ -8312,7 +8312,7 @@
                                                                                                   "function": {
                                                                                                     "elimination": {
                                                                                                       "record": {"field": "type", "typeName": "hydra.module.TypeDefinition"}}}}}},
-                                                                                            "function": {"variable": "hydra.schemas.isNominalType"}}},
+                                                                                            "function": {"variable": "hydra.predicates.isNominalType"}}},
                                                                                         "domain": [{"variable": "hydra.module.TypeDefinition"}],
                                                                                         "parameter": "td"}}},
                                                                                   "function": {
@@ -8740,7 +8740,7 @@
                           "term": {
                             "application": {
                               "argument": {"variable": "defs"},
-                              "function": {"variable": "hydra.schemas.partitionDefinitions"}}},
+                              "function": {"variable": "hydra.environment.partitionDefinitions"}}},
                           "type": [
                             {
                               "constraints": null,
@@ -8997,7 +8997,7 @@
                                                                                                         "function": {
                                                                                                           "elimination": {
                                                                                                             "record": {"field": "term", "typeName": "hydra.module.TermDefinition"}}}}}},
-                                                                                                  "function": {"variable": "hydra.rewriting.freeVariablesInTerm"}}},
+                                                                                                  "function": {"variable": "hydra.variables.freeVariablesInTerm"}}},
                                                                                               "function": {
                                                                                                 "typeApplication": {
                                                                                                   "body": {"function": {"primitive": "hydra.lib.sets.toList"}},
@@ -9125,8 +9125,11 @@
     "hydra.ext.lisp.language",
     "hydra.formatting",
     "hydra.names",
-    "hydra.rewriting",
-    "hydra.schemas",
+    "hydra.strip",
+    "hydra.variables",
+    "hydra.analysis",
+    "hydra.environment",
+    "hydra.predicates",
     "hydra.sorting",
     "hydra.lexical",
     "hydra.coderUtils"],

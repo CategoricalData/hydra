@@ -24,7 +24,7 @@ import qualified Hydra.Show.Errors as ShowError
 import qualified Hydra.Sources.All as Sources
 import qualified Hydra.Sources.Eval.Lib.All as EvalLib
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
-import qualified Hydra.CodeGeneration as CodeGeneration
+import qualified Hydra.Codegen as CodeGeneration
 import Hydra.Test.Transform (collectTestCases, transformToCompiledTests)
 import Hydra.Sources.Test.All (testModules)
 import qualified Hydra.Inference as Inference

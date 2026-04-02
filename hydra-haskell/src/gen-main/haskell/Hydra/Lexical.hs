@@ -19,8 +19,8 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -126,7 +126,7 @@ emptyGraph =
 fieldsOf :: Core.Type -> [Core.FieldType]
 fieldsOf t =
 
-      let stripped = Rewriting.deannotateType t
+      let stripped = Strip.deannotateType t
       in case stripped of
         Core.TypeForall v0 -> fieldsOf (Core.forallTypeBody v0)
         Core.TypeRecord v0 -> v0
@@ -173,7 +173,7 @@ matchEnum cx graph tname pairs =
 matchRecord :: Context.Context -> t0 -> (M.Map Core.Name Core.Term -> Either (Context.InContext Errors.Error) t1) -> Core.Term -> Either (Context.InContext Errors.Error) t1
 matchRecord cx graph decode term =
 
-      let stripped = Rewriting.deannotateAndDetypeTerm term
+      let stripped = Strip.deannotateAndDetypeTerm term
       in case stripped of
         Core.TermRecord v0 -> decode (Maps.fromList (Lists.map (\field -> (Core.fieldName field, (Core.fieldTerm field))) (Core.recordFields v0)))
         _ -> Left (Context.InContext {
@@ -183,7 +183,7 @@ matchRecord cx graph decode term =
 matchUnion :: Context.Context -> Graph.Graph -> Core.Name -> [(Core.Name, (Core.Term -> Either (Context.InContext Errors.Error) t0))] -> Core.Term -> Either (Context.InContext Errors.Error) t0
 matchUnion cx graph tname pairs term =
 
-      let stripped = Rewriting.deannotateAndDetypeTerm term
+      let stripped = Strip.deannotateAndDetypeTerm term
           mapping = Maps.fromList pairs
       in case stripped of
         Core.TermVariable v0 -> Eithers.bind (requireElement cx graph v0) (\el -> matchUnion cx graph tname pairs (Core.bindingTerm el))
@@ -250,7 +250,7 @@ resolveTerm graph name =
 
       let recurse =
               \term ->
-                let stripped = Rewriting.deannotateTerm term
+                let stripped = Strip.deannotateTerm term
                 in case stripped of
                   Core.TermVariable v0 -> resolveTerm graph v0
                   _ -> Just term
@@ -259,7 +259,7 @@ resolveTerm graph name =
 stripAndDereferenceTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 stripAndDereferenceTerm cx graph term =
 
-      let stripped = Rewriting.deannotateAndDetypeTerm term
+      let stripped = Strip.deannotateAndDetypeTerm term
       in case stripped of
         Core.TermVariable v0 -> Eithers.bind (requireTerm cx graph v0) (\t -> stripAndDereferenceTerm cx graph t)
         _ -> Right stripped
@@ -268,7 +268,7 @@ stripAndDereferenceTerm cx graph term =
 stripAndDereferenceTermEither :: Graph.Graph -> Core.Term -> Either String Core.Term
 stripAndDereferenceTermEither graph term =
 
-      let stripped = Rewriting.deannotateAndDetypeTerm term
+      let stripped = Strip.deannotateAndDetypeTerm term
       in case stripped of
         Core.TermVariable v0 -> Eithers.either (\left_ -> Left left_) (\binding -> stripAndDereferenceTermEither graph (Core.bindingTerm binding)) (dereferenceVariable graph v0)
         _ -> Right stripped

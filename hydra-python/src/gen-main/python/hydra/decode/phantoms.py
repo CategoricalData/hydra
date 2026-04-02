@@ -10,7 +10,7 @@ from typing import TypeVar, cast
 import hydra.core
 import hydra.decode.core
 import hydra.errors
-import hydra.extract.helpers
+import hydra.extract.core
 import hydra.lexical
 import hydra.lib.eithers
 import hydra.phantoms
@@ -34,8 +34,8 @@ def t_binding(a: T0, cx: hydra.graph.Graph, raw: hydra.core.Term):
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-                    return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("term", (lambda v12, v2: t_term(a, v12, v2)), field_map(), cx), (lambda field_term: Right(hydra.phantoms.TBinding(field_name, field_term))))))
+                    return hydra.extract.core.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.core.require_field("term", (lambda v12, v2: t_term(a, v12, v2)), field_map(), cx), (lambda field_term: Right(hydra.phantoms.TBinding(field_name, field_term))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -47,8 +47,8 @@ def t_term_definition(a: T0, cx: hydra.graph.Graph, raw: hydra.core.Term):
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-                    return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("term", (lambda v12, v2: t_term(a, v12, v2)), field_map(), cx), (lambda field_term: Right(hydra.phantoms.TTermDefinition(field_name, field_term))))))
+                    return hydra.extract.core.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.core.require_field("term", (lambda v12, v2: t_term(a, v12, v2)), field_map(), cx), (lambda field_term: Right(hydra.phantoms.TTermDefinition(field_name, field_term))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))

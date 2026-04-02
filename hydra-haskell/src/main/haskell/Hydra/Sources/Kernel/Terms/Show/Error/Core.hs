@@ -54,7 +54,7 @@ import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants as ShowVariants
 
 
 ns :: Namespace
@@ -62,7 +62,7 @@ ns = Namespace "hydra.show.error.core"
 
 module_ :: Module
 module_ = Module ns elements
-    [ShowCore.ns, ShowMeta.ns]
+    [ShowCore.ns, ShowVariants.ns]
     kernelTypesNamespaces $
     Just "String representations of hydra.error.core types"
   where
@@ -151,7 +151,7 @@ unexpectedTermVariantError = define "unexpectedTermVariantError" $
   "actual" <~ project _UnexpectedTermVariantError _UnexpectedTermVariantError_actualTerm @@ var "e" $
   Strings.cat $ list [
     string "expected ",
-    ShowMeta.termVariant @@ var "expected",
+    ShowVariants.termVariant @@ var "expected",
     string " term but found ",
     ShowCore.term @@ var "actual"]
 
@@ -163,7 +163,7 @@ unexpectedTypeVariantError = define "unexpectedTypeVariantError" $
   "actual" <~ project _UnexpectedTypeVariantError _UnexpectedTypeVariantError_actualType @@ var "e" $
   Strings.cat $ list [
     string "expected ",
-    ShowMeta.typeVariant @@ var "expected",
+    ShowVariants.typeVariant @@ var "expected",
     string " type but found ",
     ShowCore.type_ @@ var "actual"]
 

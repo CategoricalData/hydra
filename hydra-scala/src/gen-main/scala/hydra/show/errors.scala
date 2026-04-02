@@ -107,7 +107,7 @@ def unificationError(e: hydra.errors.UnificationError): scala.Predef.String =
 }
 
 def unsupportedTermVariantError(e: hydra.error.checking.UnsupportedTermVariantError): scala.Predef.String =
-  hydra.lib.strings.cat2("unsupported term variant: ")(hydra.show.meta.termVariant(e.termVariant))
+  hydra.lib.strings.cat2("unsupported term variant: ")(hydra.show.variants.termVariant(e.termVariant))
 
 def untypedLambdaError[T0](_x: T0): scala.Predef.String = "untyped lambda"
 

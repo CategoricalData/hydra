@@ -9,10 +9,14 @@ import Hydra.Sources.Libraries (standardLibraries)
 import Hydra.Json.Bootstrap (typesByName)
 import qualified Hydra.Sources.Kernel.Terms.Annotations as TermAnnotations
 import qualified Hydra.Sources.Kernel.Terms.Constants as TermConstants
+import qualified Hydra.Sources.Kernel.Terms.Dependencies as TermDependencies
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as TermExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical as TermLexical
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as TermRewriting
+import qualified Hydra.Sources.Kernel.Terms.Scoping as TermScoping
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as TermShowCore
+import qualified Hydra.Sources.Kernel.Terms.Strip as TermStrip
+import qualified Hydra.Sources.Kernel.Terms.Variables as TermVariables
 import qualified Hydra.Decode.Core as TermDecodeCore
 import qualified Hydra.Encode.Core as TermEncodeCore
 import qualified Data.List as L
@@ -37,12 +41,16 @@ testGraph testTypes = let
     allSchemas = M.union kernelSchemas testSchemas
     -- Kernel term bindings needed for reduceTerm to evaluate kernel functions
     kernelTermBindings = L.concat $ fmap moduleBindings
-      [ TermConstants.module_
-      , TermShowCore.module_
+      [ TermAnnotations.module_
+      , TermConstants.module_
+      , TermDependencies.module_
       , TermExtractCore.module_
       , TermLexical.module_
       , TermRewriting.module_
-      , TermAnnotations.module_
+      , TermScoping.module_
+      , TermShowCore.module_
+      , TermStrip.module_
+      , TermVariables.module_
       ]
     boundTerms = M.fromList $ fmap (\b -> (bindingName b, bindingTerm b)) kernelTermBindings
     boundTypes = M.fromList

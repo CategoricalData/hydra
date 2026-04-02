@@ -7,7 +7,7 @@ module Hydra.Decode.Phantoms where
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Helpers as Helpers
+import qualified Hydra.Extract.Core as Core__
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
@@ -23,8 +23,8 @@ tBinding :: t0 -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Phant
 tBinding a cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "term" (tTerm a) fieldMap cx) (\field_term -> Right (Phantoms.TBinding {
+        let fieldMap = Core__.toFieldMap v0
+        in (Eithers.bind (Core__.requireField "name" Core_.name fieldMap cx) (\field_name -> Eithers.bind (Core__.requireField "term" (tTerm a) fieldMap cx) (\field_term -> Right (Phantoms.TBinding {
           Phantoms.tBindingName = field_name,
           Phantoms.tBindingTerm = field_term}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -39,8 +39,8 @@ tTermDefinition :: t0 -> Graph.Graph -> Core.Term -> Either Errors.DecodingError
 tTermDefinition a cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "term" (tTerm a) fieldMap cx) (\field_term -> Right (Phantoms.TTermDefinition {
+        let fieldMap = Core__.toFieldMap v0
+        in (Eithers.bind (Core__.requireField "name" Core_.name fieldMap cx) (\field_name -> Eithers.bind (Core__.requireField "term" (tTerm a) fieldMap cx) (\field_term -> Right (Phantoms.TTermDefinition {
           Phantoms.tTermDefinitionName = field_name,
           Phantoms.tTermDefinitionTerm = field_term}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)

@@ -27,7 +27,7 @@ import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
 import hydra.module
-import hydra.rewriting
+import hydra.strip
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
@@ -119,7 +119,7 @@ def encode_term(subject: hydra.ext.org.w3.rdf.syntax.Resource, term: hydra.core.
             return Right(((hydra.ext.org.w3.rdf.syntax.Description(cast(hydra.ext.org.w3.rdf.syntax.Node_, hydra.ext.org.w3.rdf.syntax.NodeLiteral(hydra.ext.rdf.utils.encode_literal(lit))), hydra.ext.org.w3.rdf.syntax.Graph(hydra.lib.sets.empty())),), cx))
 
         case hydra.core.TermMap(value=m):
-            return hydra.lib.eithers.map((lambda _r: ((hydra.ext.org.w3.rdf.syntax.Description(hydra.ext.rdf.utils.resource_to_node(subject), hydra.ext.org.w3.rdf.syntax.Graph(hydra.lib.sets.from_list(hydra.lib.lists.concat(hydra.lib.pairs.first(_r))))),), hydra.lib.pairs.second(_r))), fold_accum_result((lambda _cx0, kv: hydra.lib.eithers.bind(hydra.extract.core.string(_cx0, g, hydra.rewriting.deannotate_term(hydra.lib.pairs.first(kv))), (lambda _ks: (pair2 := hydra.ext.rdf.utils.next_blank_node(_cx0), node2 := hydra.lib.pairs.first(pair2), cx2 := hydra.lib.pairs.second(pair2), hydra.lib.eithers.map((lambda _dr: (hydra.lib.lists.concat2(hydra.ext.rdf.utils.for_objects(subject, hydra.ext.rdf.utils.key_iri(_ks), hydra.ext.rdf.utils.subjects_of(hydra.lib.pairs.first(_dr))), hydra.ext.rdf.utils.triples_of(hydra.lib.pairs.first(_dr))), hydra.lib.pairs.second(_dr))), encode_term(node2, hydra.lib.pairs.second(kv), cx2, g)))[3]))), cx, hydra.lib.maps.to_list(m)))
+            return hydra.lib.eithers.map((lambda _r: ((hydra.ext.org.w3.rdf.syntax.Description(hydra.ext.rdf.utils.resource_to_node(subject), hydra.ext.org.w3.rdf.syntax.Graph(hydra.lib.sets.from_list(hydra.lib.lists.concat(hydra.lib.pairs.first(_r))))),), hydra.lib.pairs.second(_r))), fold_accum_result((lambda _cx0, kv: hydra.lib.eithers.bind(hydra.extract.core.string(_cx0, g, hydra.strip.deannotate_term(hydra.lib.pairs.first(kv))), (lambda _ks: (pair2 := hydra.ext.rdf.utils.next_blank_node(_cx0), node2 := hydra.lib.pairs.first(pair2), cx2 := hydra.lib.pairs.second(pair2), hydra.lib.eithers.map((lambda _dr: (hydra.lib.lists.concat2(hydra.ext.rdf.utils.for_objects(subject, hydra.ext.rdf.utils.key_iri(_ks), hydra.ext.rdf.utils.subjects_of(hydra.lib.pairs.first(_dr))), hydra.ext.rdf.utils.triples_of(hydra.lib.pairs.first(_dr))), hydra.lib.pairs.second(_dr))), encode_term(node2, hydra.lib.pairs.second(kv), cx2, g)))[3]))), cx, hydra.lib.maps.to_list(m)))
 
         case hydra.core.TermWrap(value=wt):
             return hydra.lib.eithers.map((lambda _dr: (descs := hydra.lib.pairs.first(_dr), cx1 := hydra.lib.pairs.second(_dr), (hydra.lib.lists.cons(with_type(wt.type_name, hydra.lib.lists.head(descs)), hydra.lib.lists.tail(descs)), cx1))[2]), encode_term(subject, wt.body, cx, g))
@@ -231,7 +231,7 @@ def encode_field_type(rname: hydra.core.Name, order: Maybe[int], ft: hydra.core.
         return hydra.ext.rdf.utils.property_iri(rname, fname)
     def for_type(mn: Maybe[int], mx: Maybe[int], t: hydra.core.Type) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.org.w3.shacl.model.Definition[hydra.ext.org.w3.shacl.model.PropertyShape]]:
         while True:
-            match hydra.rewriting.deannotate_type(t):
+            match hydra.strip.deannotate_type(t):
                 case hydra.core.TypeMaybe(value=ot):
                     mn = Just(0)
                     mx = mx
@@ -256,7 +256,7 @@ def encode_type(tname: hydra.core.Name, typ: hydra.core.Type, cx: hydra.context.
     @lru_cache(1)
     def any() -> Either[T0, hydra.ext.org.w3.shacl.model.CommonProperties]:
         return Right(common(()))
-    match hydra.rewriting.deannotate_type(typ):
+    match hydra.strip.deannotate_type(typ):
         case hydra.core.TypeEither():
             return any()
 

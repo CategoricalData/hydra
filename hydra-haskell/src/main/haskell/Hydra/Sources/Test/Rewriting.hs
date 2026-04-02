@@ -24,7 +24,10 @@ import qualified Data.Set                     as S
 
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Reduction as ReductionModule
+import qualified Hydra.Sources.Kernel.Terms.Dependencies as DependenciesModule
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as RewritingModule
+import qualified Hydra.Sources.Kernel.Terms.Strip as StripModule
+import qualified Hydra.Sources.Kernel.Terms.Variables as VariablesModule
 import qualified Hydra.Dsl.Meta.Lib.Maps as Maps
 import qualified Hydra.Dsl.Meta.Lib.Pairs as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets as Sets
@@ -202,7 +205,7 @@ rewriteTypeCase cname input output = universalCase cname
 -- | Universal sortBindingsCase: applies topologicalSortBindingMap and shows result
 sortBindingsCase :: String -> TTerm [(Name, Term)] -> TTerm [[(Name, Term)]] -> TTerm TestCaseWithMetadata
 sortBindingsCase cname bindings expected = universalCase cname
-  (showBindingGroups (RewritingModule.topologicalSortBindingMap # Maps.fromList bindings))
+  (showBindingGroups (DependenciesModule.topologicalSortBindingMap # Maps.fromList bindings))
   (showBindingGroups expected)
   where
     showBindingGroups :: TTerm [[(Name, Term)]] -> TTerm String
@@ -219,29 +222,29 @@ sortBindingsCase cname bindings expected = universalCase cname
 
 -- | Convenience helpers for specific kernel functions
 flattenCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-flattenCase cname = termCase cname RewritingModule.flattenLetTerms
+flattenCase cname = termCase cname DependenciesModule.flattenLetTerms
 
 liftLambdaCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-liftLambdaCase cname = termCase cname RewritingModule.liftLambdaAboveLet
+liftLambdaCase cname = termCase cname DependenciesModule.liftLambdaAboveLet
 
 simplifyCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-simplifyCase cname = termCase cname RewritingModule.simplifyTerm
+simplifyCase cname = termCase cname DependenciesModule.simplifyTerm
 
 deannotateTermCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-deannotateTermCase cname = termCase cname RewritingModule.deannotateTerm
+deannotateTermCase cname = termCase cname StripModule.deannotateTerm
 
 deannotateTypeCase :: String -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
-deannotateTypeCase cname = typeCase cname RewritingModule.deannotateType
+deannotateTypeCase cname = typeCase cname StripModule.deannotateType
 
 unshadowCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-unshadowCase cname = termCase cname RewritingModule.unshadowVariables
+unshadowCase cname = termCase cname VariablesModule.unshadowVariables
 
 normalizeTypeVarsCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-normalizeTypeVarsCase cname = termCase cname RewritingModule.normalizeTypeVariablesInTerm
+normalizeTypeVarsCase cname = termCase cname VariablesModule.normalizeTypeVariablesInTerm
 
 freeVarsCase :: String -> TTerm Term -> TTerm (S.Set Name) -> TTerm TestCaseWithMetadata
 freeVarsCase cname input expected = universalCase cname
-  (showNameSet (RewritingModule.freeVariablesInTerm # input))
+  (showNameSet (VariablesModule.freeVariablesInTerm # input))
   (showNameSet expected)
 
 -- | Test cases for rewriteAndFoldTermWithPath

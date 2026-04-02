@@ -665,7 +665,7 @@
                                                                 "term": {
                                                                   "application": {
                                                                     "argument": {"variable": "record"},
-                                                                    "function": {"variable": "hydra.extract.helpers.toFieldMap"}}},
+                                                                    "function": {"variable": "hydra.extract.core.toFieldMap"}}},
                                                                 "type": [
                                                                   {
                                                                     "constraints": null,
@@ -859,7 +859,7 @@
                                                                                                                                   "parameter": "cx"}}},
                                                                                                                             "function": {
                                                                                                                               "typeApplication": {
-                                                                                                                                "body": {"variable": "hydra.extract.helpers.decodeMaybe"},
+                                                                                                                                "body": {"variable": "hydra.extract.core.decodeMaybe"},
                                                                                                                                 "type": {"literal": {"string": {}}}}}}},
                                                                                                                         "function": {
                                                                                                                           "application": {
@@ -870,7 +870,7 @@
                                                                                                                                   "typeApplication": {
                                                                                                                                     "body": {
                                                                                                                                       "typeApplication": {
-                                                                                                                                        "body": {"variable": "hydra.extract.helpers.requireField"},
+                                                                                                                                        "body": {"variable": "hydra.extract.core.requireField"},
                                                                                                                                         "type": {"variable": "hydra.graph.Graph"}}},
                                                                                                                                     "type": {"variable": "hydra.core.Term"}}},
                                                                                                                                 "type": {"maybe": {"literal": {"string": {}}}}}}}}}}}}}},
@@ -901,7 +901,7 @@
                                                                                                                   "argument": {"variable": "hydra.decode.module.namespace"},
                                                                                                                   "function": {
                                                                                                                     "typeApplication": {
-                                                                                                                      "body": {"variable": "hydra.extract.helpers.decodeList"},
+                                                                                                                      "body": {"variable": "hydra.extract.core.decodeList"},
                                                                                                                       "type": {"variable": "hydra.module.Namespace"}}}}},
                                                                                                               "function": {
                                                                                                                 "application": {
@@ -912,7 +912,7 @@
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {
                                                                                                                             "typeApplication": {
-                                                                                                                              "body": {"variable": "hydra.extract.helpers.requireField"},
+                                                                                                                              "body": {"variable": "hydra.extract.core.requireField"},
                                                                                                                               "type": {"variable": "hydra.graph.Graph"}}},
                                                                                                                           "type": {"variable": "hydra.core.Term"}}},
                                                                                                                       "type": {"list": {"variable": "hydra.module.Namespace"}}}}}}}}}}}},
@@ -943,7 +943,7 @@
                                                                                                         "argument": {"variable": "hydra.decode.module.namespace"},
                                                                                                         "function": {
                                                                                                           "typeApplication": {
-                                                                                                            "body": {"variable": "hydra.extract.helpers.decodeList"},
+                                                                                                            "body": {"variable": "hydra.extract.core.decodeList"},
                                                                                                             "type": {"variable": "hydra.module.Namespace"}}}}},
                                                                                                     "function": {
                                                                                                       "application": {
@@ -954,7 +954,7 @@
                                                                                                               "typeApplication": {
                                                                                                                 "body": {
                                                                                                                   "typeApplication": {
-                                                                                                                    "body": {"variable": "hydra.extract.helpers.requireField"},
+                                                                                                                    "body": {"variable": "hydra.extract.core.requireField"},
                                                                                                                     "type": {"variable": "hydra.graph.Graph"}}},
                                                                                                                 "type": {"variable": "hydra.core.Term"}}},
                                                                                                             "type": {"list": {"variable": "hydra.module.Namespace"}}}}}}}}}}}},
@@ -985,7 +985,7 @@
                                                                                               "argument": {"variable": "hydra.decode.module.definition"},
                                                                                               "function": {
                                                                                                 "typeApplication": {
-                                                                                                  "body": {"variable": "hydra.extract.helpers.decodeList"},
+                                                                                                  "body": {"variable": "hydra.extract.core.decodeList"},
                                                                                                   "type": {"variable": "hydra.module.Definition"}}}}},
                                                                                           "function": {
                                                                                             "application": {
@@ -996,7 +996,7 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "typeApplication": {
-                                                                                                          "body": {"variable": "hydra.extract.helpers.requireField"},
+                                                                                                          "body": {"variable": "hydra.extract.core.requireField"},
                                                                                                           "type": {"variable": "hydra.graph.Graph"}}},
                                                                                                       "type": {"variable": "hydra.core.Term"}}},
                                                                                                   "type": {"list": {"variable": "hydra.module.Definition"}}}}}}}}}}}},
@@ -1032,7 +1032,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"variable": "hydra.extract.helpers.requireField"},
+                                                                                                "body": {"variable": "hydra.extract.core.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                                         "type": {"variable": "hydra.module.Namespace"}}}}}}}}}}},
@@ -1422,7 +1422,7 @@
                                                                           "term": {
                                                                             "application": {
                                                                               "argument": {"variable": "record"},
-                                                                              "function": {"variable": "hydra.extract.helpers.toFieldMap"}}},
+                                                                              "function": {"variable": "hydra.extract.core.toFieldMap"}}},
                                                                           "type": [
                                                                             {
                                                                               "constraints": null,
@@ -1487,7 +1487,7 @@
                                                                                                               "typeApplication": {
                                                                                                                 "body": {
                                                                                                                   "typeApplication": {
-                                                                                                                    "body": {"variable": "hydra.extract.helpers.decodeMap"},
+                                                                                                                    "body": {"variable": "hydra.extract.core.decodeMap"},
                                                                                                                     "type": {"variable": "hydra.module.Namespace"}}},
                                                                                                                 "type": {"variable": "t0"}}}}}}},
                                                                                                     "function": {
@@ -1499,7 +1499,7 @@
                                                                                                               "typeApplication": {
                                                                                                                 "body": {
                                                                                                                   "typeApplication": {
-                                                                                                                    "body": {"variable": "hydra.extract.helpers.requireField"},
+                                                                                                                    "body": {"variable": "hydra.extract.core.requireField"},
                                                                                                                     "type": {"variable": "hydra.graph.Graph"}}},
                                                                                                                 "type": {"variable": "hydra.core.Term"}}},
                                                                                                             "type": {
@@ -1548,7 +1548,7 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "typeApplication": {
-                                                                                                          "body": {"variable": "hydra.extract.helpers.decodePair"},
+                                                                                                          "body": {"variable": "hydra.extract.core.decodePair"},
                                                                                                           "type": {"variable": "hydra.module.Namespace"}}},
                                                                                                       "type": {"variable": "t0"}}}}}}},
                                                                                           "function": {
@@ -1560,7 +1560,7 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "typeApplication": {
-                                                                                                          "body": {"variable": "hydra.extract.helpers.requireField"},
+                                                                                                          "body": {"variable": "hydra.extract.core.requireField"},
                                                                                                           "type": {"variable": "hydra.graph.Graph"}}},
                                                                                                       "type": {"variable": "hydra.core.Term"}}},
                                                                                                   "type": {
@@ -1732,7 +1732,7 @@
                                                                 "term": {
                                                                   "application": {
                                                                     "argument": {"variable": "record"},
-                                                                    "function": {"variable": "hydra.extract.helpers.toFieldMap"}}},
+                                                                    "function": {"variable": "hydra.extract.core.toFieldMap"}}},
                                                                 "type": [
                                                                   {
                                                                     "constraints": null,
@@ -1909,7 +1909,7 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "typeApplication": {
-                                                                                                          "body": {"variable": "hydra.extract.helpers.requireField"},
+                                                                                                          "body": {"variable": "hydra.extract.core.requireField"},
                                                                                                           "type": {"variable": "hydra.graph.Graph"}}},
                                                                                                       "type": {"variable": "hydra.core.Term"}}},
                                                                                                   "type": {"literal": {"string": {}}}}}}}}}}}}},
@@ -1940,7 +1940,7 @@
                                                                                     "argument": {"variable": "hydra.decode.module.namespace"},
                                                                                     "function": {
                                                                                       "typeApplication": {
-                                                                                        "body": {"variable": "hydra.extract.helpers.decodeMaybe"},
+                                                                                        "body": {"variable": "hydra.extract.core.decodeMaybe"},
                                                                                         "type": {"variable": "hydra.module.Namespace"}}}}},
                                                                                 "function": {
                                                                                   "application": {
@@ -1951,7 +1951,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"variable": "hydra.extract.helpers.requireField"},
+                                                                                                "body": {"variable": "hydra.extract.core.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                                         "type": {"maybe": {"variable": "hydra.module.Namespace"}}}}}}}}}}}},
@@ -2077,7 +2077,7 @@
                                                                 "term": {
                                                                   "application": {
                                                                     "argument": {"variable": "record"},
-                                                                    "function": {"variable": "hydra.extract.helpers.toFieldMap"}}},
+                                                                    "function": {"variable": "hydra.extract.core.toFieldMap"}}},
                                                                 "type": [
                                                                   {
                                                                     "constraints": null,
@@ -2133,7 +2133,7 @@
                                                                                                         "argument": {"variable": "hydra.decode.core.typeScheme"},
                                                                                                         "function": {
                                                                                                           "typeApplication": {
-                                                                                                            "body": {"variable": "hydra.extract.helpers.decodeMaybe"},
+                                                                                                            "body": {"variable": "hydra.extract.core.decodeMaybe"},
                                                                                                             "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                                                                     "function": {
                                                                                                       "application": {
@@ -2144,7 +2144,7 @@
                                                                                                               "typeApplication": {
                                                                                                                 "body": {
                                                                                                                   "typeApplication": {
-                                                                                                                    "body": {"variable": "hydra.extract.helpers.requireField"},
+                                                                                                                    "body": {"variable": "hydra.extract.core.requireField"},
                                                                                                                     "type": {"variable": "hydra.graph.Graph"}}},
                                                                                                                 "type": {"variable": "hydra.core.Term"}}},
                                                                                                             "type": {"maybe": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}},
@@ -2180,7 +2180,7 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "typeApplication": {
-                                                                                                          "body": {"variable": "hydra.extract.helpers.requireField"},
+                                                                                                          "body": {"variable": "hydra.extract.core.requireField"},
                                                                                                           "type": {"variable": "hydra.graph.Graph"}}},
                                                                                                       "type": {"variable": "hydra.core.Term"}}},
                                                                                                   "type": {"variable": "hydra.core.Term"}}}}}}}}}}},
@@ -2216,7 +2216,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"variable": "hydra.extract.helpers.requireField"},
+                                                                                                "body": {"variable": "hydra.extract.core.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                                         "type": {"variable": "hydra.core.Name"}}}}}}}}}}},
@@ -2342,7 +2342,7 @@
                                                                 "term": {
                                                                   "application": {
                                                                     "argument": {"variable": "record"},
-                                                                    "function": {"variable": "hydra.extract.helpers.toFieldMap"}}},
+                                                                    "function": {"variable": "hydra.extract.core.toFieldMap"}}},
                                                                 "type": [
                                                                   {
                                                                     "constraints": null,
@@ -2397,7 +2397,7 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "typeApplication": {
-                                                                                                          "body": {"variable": "hydra.extract.helpers.requireField"},
+                                                                                                          "body": {"variable": "hydra.extract.core.requireField"},
                                                                                                           "type": {"variable": "hydra.graph.Graph"}}},
                                                                                                       "type": {"variable": "hydra.core.Term"}}},
                                                                                                   "type": {"variable": "hydra.core.Type"}}}}}}}}}}},
@@ -2433,7 +2433,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"variable": "hydra.extract.helpers.requireField"},
+                                                                                                "body": {"variable": "hydra.extract.core.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                                         "type": {"variable": "hydra.core.Name"}}}}}}}}}}},
@@ -2518,7 +2518,7 @@
   "description": ["Term decoders for hydra.module"],
   "namespace": "hydra.decode.module",
   "termDependencies": [
-    "hydra.extract.helpers",
+    "hydra.extract.core",
     "hydra.lexical",
     "hydra.rewriting",
     "hydra.decode.core",

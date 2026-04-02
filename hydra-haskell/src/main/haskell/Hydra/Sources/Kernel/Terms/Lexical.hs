@@ -54,8 +54,8 @@ import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
 
-import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
 
 
@@ -67,7 +67,7 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-   [Rewriting.ns, ShowCore.ns, ShowError.ns]
+   [Strip.ns, ShowCore.ns, ShowError.ns]
     kernelTypesNamespaces $
     Just ("A module for lexical operations over graphs.")
   where
@@ -212,7 +212,7 @@ fieldsOf :: TTermDefinition (Type -> [FieldType])
 fieldsOf = define "fieldsOf" $
   doc "Extract the fields of a record or union type" $
   "t" ~>
-  "stripped" <~ Rewriting.deannotateType @@ var "t" $
+  "stripped" <~ Strip.deannotateType @@ var "t" $
   cases _Type (var "stripped")
     (Just (list ([] :: [TTerm FieldType]))) [
     _Type_forall>>: "forallType" ~> fieldsOf @@ (Core.forallTypeBody (var "forallType")),
@@ -257,7 +257,7 @@ matchEnum = define "matchEnum" $
 matchRecord :: TTermDefinition (Context -> Graph -> (M.Map Name Term -> Either (InContext Error) b) -> Term -> Either (InContext Error) b)
 matchRecord = define "matchRecord" $
   "cx" ~> "graph" ~> "decode" ~> "term" ~>
-  "stripped" <~ Rewriting.deannotateAndDetypeTerm @@ var "term" $
+  "stripped" <~ Strip.deannotateAndDetypeTerm @@ var "term" $
   cases _Term (var "stripped")
     (Just (Ctx.failInContext (Error.errorOther $ Error.otherError ((string "expected a record, got ") ++ (ShowCore.term @@ var "term"))) (var "cx"))) [
     _Term_record>>: "record" ~> var "decode" @@
@@ -268,7 +268,7 @@ matchRecord = define "matchRecord" $
 matchUnion :: TTermDefinition (Context -> Graph -> Name -> [(Name, Term -> Either (InContext Error) b)] -> Term -> Either (InContext Error) b)
 matchUnion = define "matchUnion" $
   "cx" ~> "graph" ~> "tname" ~> "pairs" ~> "term" ~>
-  "stripped" <~ Rewriting.deannotateAndDetypeTerm @@ var "term" $
+  "stripped" <~ Strip.deannotateAndDetypeTerm @@ var "term" $
   "mapping" <~ Maps.fromList (var "pairs") $
   cases _Term (var "stripped")
     (Just (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [
@@ -347,7 +347,7 @@ resolveTerm = define "resolveTerm" $
   doc "TODO: distinguish between lambda-bound and let-bound variables" $
   "graph" ~> "name" ~>
   "recurse" <~ ("term" ~>
-    "stripped" <~ Rewriting.deannotateTerm @@ var "term" $
+    "stripped" <~ Strip.deannotateTerm @@ var "term" $
     cases _Term (var "stripped")
       (Just (just (var "term"))) [
       _Term_variable>>: "name'" ~> resolveTerm @@ var "graph" @@ var "name'"]) $
@@ -359,7 +359,7 @@ resolveTerm = define "resolveTerm" $
 stripAndDereferenceTerm :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
 stripAndDereferenceTerm = define "stripAndDereferenceTerm" $
   "cx" ~> "graph" ~> "term" ~>
-  "stripped" <~ Rewriting.deannotateAndDetypeTerm @@ var "term" $
+  "stripped" <~ Strip.deannotateAndDetypeTerm @@ var "term" $
   cases _Term (var "stripped")
     (Just (right (var "stripped"))) [
     _Term_variable>>: "v" ~>
@@ -370,7 +370,7 @@ stripAndDereferenceTermEither :: TTermDefinition (Graph -> Term -> Either String
 stripAndDereferenceTermEither = define "stripAndDereferenceTermEither" $
   doc "Strip annotations and dereference variables, returning Either an error or the resolved term" $
   "graph" ~> "term" ~>
-  "stripped" <~ Rewriting.deannotateAndDetypeTerm @@ var "term" $
+  "stripped" <~ Strip.deannotateAndDetypeTerm @@ var "term" $
   cases _Term (var "stripped")
     (Just (right (var "stripped"))) [
     _Term_variable>>: "v" ~>

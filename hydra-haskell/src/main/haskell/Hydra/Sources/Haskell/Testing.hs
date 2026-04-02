@@ -26,8 +26,10 @@ import qualified Hydra.Sources.Kernel.Terms.Constants      as Constants
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Lexical        as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
+import qualified Hydra.Sources.Kernel.Terms.Dependencies   as Dependencies
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
+import qualified Hydra.Sources.Kernel.Terms.Predicates     as Predicates
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors    as ShowError
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
 import           Prelude hiding ((++))
@@ -50,7 +52,7 @@ ns = Namespace "hydra.ext.haskell.testing"
 module_ :: Module
 module_ = Module ns elements
     [HaskellUtilsSource.ns, Formatting.ns, Names.ns,
-     Constants.ns, Rewriting.ns, Schemas.ns, ShowError.ns, Lexical.ns]
+     Constants.ns, Dependencies.ns, Predicates.ns, Rewriting.ns, ShowError.ns, Lexical.ns, Strip.ns]
     (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Haskell test code generation for HSpec-based generation tests"
   where
@@ -156,11 +158,11 @@ collectNames :: TTermDefinition (Graph -> S.Set Name -> Term -> S.Set Name)
 collectNames = define "collectNames" $
   doc "Collect variable names from encoded terms within a single term node" $
   lambda "graf" $ lambda "names" $ lambda "t" $
-    Logic.ifElse (Schemas.isEncodedTerm @@ (Rewriting.deannotateTerm @@ var "t"))
+    Logic.ifElse (Predicates.isEncodedTerm @@ (Strip.deannotateTerm @@ var "t"))
       (Eithers.either_
         (lambda "_" $ var "names")
         (lambda "decodedTerm" $
-          Sets.union (var "names") (Rewriting.termDependencyNames @@ true @@ true @@ true @@ var "decodedTerm"))
+          Sets.union (var "names") (Dependencies.termDependencyNames @@ true @@ true @@ true @@ var "decodedTerm"))
         (Eithers.bimap
           (lambda "_e" $ var "_e")
           (lambda "_a" $ var "_a")

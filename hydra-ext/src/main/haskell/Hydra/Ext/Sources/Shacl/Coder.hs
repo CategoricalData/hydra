@@ -61,13 +61,12 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -97,7 +96,7 @@ ns = Namespace "hydra.ext.shacl.coder"
 
 module_ :: Module
 module_ = Module ns elements
-    [Names.ns, Rewriting.ns, Annotations.ns, moduleNamespace DecodeCore.module_, ExtractCore.ns, Formatting.ns, Lexical.ns, RdfUtils.ns]
+    [Names.ns, Strip.ns, Annotations.ns, moduleNamespace DecodeCore.module_, ExtractCore.ns, Formatting.ns, Lexical.ns, RdfUtils.ns]
     (ShaclModel.ns:RdfSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "SHACL coder: converts Hydra types and terms to SHACL shapes and RDF descriptions"
   where
@@ -224,7 +223,7 @@ encodeFieldType = define "encodeFieldType" $
     "ftype">: Core.fieldTypeType (var "ft"),
     "iri">: propertyIri @@ var "rname" @@ var "fname",
     "forType">: lambda "mn" $ lambda "mx" $ lambda "t" $
-      cases _Type (Rewriting.deannotateType @@ var "t") (Just (var "forTypeDefault" @@ var "mn" @@ var "mx" @@ var "t")) [
+      cases _Type (Strip.deannotateType @@ var "t") (Just (var "forTypeDefault" @@ var "mn" @@ var "mx" @@ var "t")) [
         _Type_maybe>>: lambda "ot" $ var "forType" @@ (just (bigint 0)) @@ var "mx" @@ var "ot",
         _Type_set>>: lambda "st" $ var "forType" @@ var "mn" @@ nothing @@ var "st"],
     -- Default case: build property shape
@@ -307,7 +306,7 @@ encodeTerm = define "encodeTerm" $
           (foldAccumResult
             @@ ("__cx0" ~> lambda "kv" $
               Eithers.bind
-                (ExtractCore.string @@ var "__cx0" @@ var "g" @@ (Rewriting.deannotateTerm @@ (Pairs.first (var "kv"))))
+                (ExtractCore.string @@ var "__cx0" @@ var "g" @@ (Strip.deannotateTerm @@ (Pairs.first (var "kv"))))
                 ("__ks" ~> lets [
                   "pair2">: nextBlankNode @@ var "__cx0",
                   "node2">: Pairs.first (var "pair2"),
@@ -436,7 +435,7 @@ encodeType = define "encodeType" $
   doc "Encode a Hydra type as SHACL CommonProperties" $
   lambda "tname" $ lambda "typ" $ lambda "cx" $ lets [
     "any">: right (common @@ (list ([] :: [TTerm Shacl.CommonConstraint])))] $
-    cases _Type (Rewriting.deannotateType @@ var "typ") (Just (unexpectedE @@ var "cx" @@ string "type" @@ string "unsupported type variant")) [
+    cases _Type (Strip.deannotateType @@ var "typ") (Just (unexpectedE @@ var "cx" @@ string "type" @@ string "unsupported type variant")) [
       _Type_either>>: lambda "_" $ var "any",
       _Type_list>>: lambda "_" $ var "any",
       _Type_literal>>: lambda "lt" $ right (encodeLiteralType @@ var "lt"),

@@ -2,7 +2,7 @@ package hydra.json;
 
 import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
-import hydra.util.Coder;
+import hydra.coders.Coder;
 import hydra.context.Context;
 import hydra.context.InContext;
 import hydra.errors.Error_;
