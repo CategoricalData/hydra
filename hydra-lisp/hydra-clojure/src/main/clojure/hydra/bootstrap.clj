@@ -96,15 +96,30 @@
          :language @(rc 'hydra_ext_python_language_python_language)
          :flags [false true true false]
          :subdir "python"})
-    "clojure"
+    ("clojure" "scheme" "common-lisp" "emacs-lisp")
     (do (load-coder-modules!
           ["hydra.ext.lisp.syntax" "hydra.ext.lisp.language"
            "hydra.ext.lisp.serde" "hydra.ext.lisp.coder"])
         (let [module-to-lisp @(rc 'hydra_ext_lisp_coder_module_to_lisp)
               program-to-expr @(rc 'hydra_ext_lisp_serde_program_to_expr)
               lang @(rc 'hydra_ext_lisp_language_lisp_language)
+              dialect (case target
+                        "clojure"    (list :clojure nil)
+                        "scheme"     (list :scheme nil)
+                        "common-lisp" (list :common_lisp nil)
+                        "emacs-lisp" (list :emacs_lisp nil))
+              ext (case target
+                    "clojure"    ".clj"
+                    "scheme"     ".scm"
+                    "common-lisp" ".lisp"
+                    "emacs-lisp" ".el")
+              subdir (case target
+                       "clojure"    "clojure"
+                       "scheme"     "scheme"
+                       "common-lisp" "common-lisp"
+                       "emacs-lisp" "emacs-lisp")
               coder (fn [mod] (fn [defs] (fn [cx] (fn [g]
-                      (let [result (((((module-to-lisp (list :clojure nil)) mod) defs) cx) g)]
+                      (let [result (((((module-to-lisp dialect) mod) defs) cx) g)]
                         (if (= (first result) :left)
                           result
                           (let [program (second result)
@@ -114,16 +129,16 @@
                                 ns-val (let [ns (:namespace mod)]
                                          (if (string? ns) ns (:value ns)))
                                 file-path (str (@(rc 'hydra_code_generation_namespace_to_path)
-                                                 ns-val) ".clj")]
+                                                 ns-val) ext)]
                             (list :right {file-path code}))))))))]
           {:coder coder
            :language lang
            ;; do_infer=false to avoid hydra.adapt mutual recursion issue in Clojure
            :flags [false false false false]
-           :subdir "clojure"}))
+           :subdir subdir}))
     ;; Default: unsupported
     (do (println (str "Unsupported target for Clojure host: " target))
-        (println "Supported targets: haskell, java, python, clojure")
+        (println "Supported targets: haskell, java, python, clojure, scheme, common-lisp, emacs-lisp")
         (System/exit 1))))
 
 (defn -main [& args]
