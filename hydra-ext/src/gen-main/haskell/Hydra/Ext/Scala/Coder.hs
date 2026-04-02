@@ -530,12 +530,12 @@ encodeType cx g t =
     case (Strip.deannotateType t) of
       Core.TypeApplication v0 ->
         let collectTypeArgs =
-                \t -> \acc -> case (Strip.deannotateType t) of
+                \t2 -> \acc -> case (Strip.deannotateType t2) of
                   Core.TypeApplication v1 ->
                     let f2 = Core.applicationTypeFunction v1
                         a2 = Core.applicationTypeArgument v1
                     in (collectTypeArgs f2 (Lists.cons a2 acc))
-                  _ -> (t, acc)
+                  _ -> (t2, acc)
             collected = collectTypeArgs (Core.TypeApplication v0) []
             baseFun = Pairs.first collected
             allArgs = Pairs.second collected

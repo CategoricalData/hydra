@@ -49,8 +49,8 @@ deannotateTypeRecursive :: Core.Type -> Core.Type
 deannotateTypeRecursive typ =
 
       let strip =
-              \recurse -> \typ ->
-                let rewritten = recurse typ
+              \recurse -> \typ2 ->
+                let rewritten = recurse typ2
                 in case rewritten of
                   Core.TypeAnnotated v0 -> Core.annotatedTypeBody v0
                   _ -> rewritten
@@ -87,9 +87,9 @@ removeTermAnnotations :: Core.Term -> Core.Term
 removeTermAnnotations term =
 
       let remove =
-              \recurse -> \term ->
-                let rewritten = recurse term
-                in case term of
+              \recurse -> \term2 ->
+                let rewritten = recurse term2
+                in case term2 of
                   Core.TermAnnotated v0 -> Core.annotatedTermBody v0
                   _ -> rewritten
       in (Rewriting.rewriteTerm remove term)
@@ -99,8 +99,8 @@ removeTypeAnnotations :: Core.Type -> Core.Type
 removeTypeAnnotations typ =
 
       let remove =
-              \recurse -> \typ ->
-                let rewritten = recurse typ
+              \recurse -> \typ2 ->
+                let rewritten = recurse typ2
                 in case rewritten of
                   Core.TypeAnnotated v0 -> Core.annotatedTypeBody v0
                   _ -> rewritten
@@ -111,8 +111,8 @@ removeTypeAnnotationsFromTerm :: Core.Term -> Core.Term
 removeTypeAnnotationsFromTerm term =
 
       let strip =
-              \recurse -> \term ->
-                let rewritten = recurse term
+              \recurse -> \term2 ->
+                let rewritten = recurse term2
                     stripBinding =
                             \b -> Core.Binding {
                               Core.bindingName = (Core.bindingName b),
@@ -132,8 +132,8 @@ removeTypesFromTerm :: Core.Term -> Core.Term
 removeTypesFromTerm term =
 
       let strip =
-              \recurse -> \term ->
-                let rewritten = recurse term
+              \recurse -> \term2 ->
+                let rewritten = recurse term2
                     stripBinding =
                             \b -> Core.Binding {
                               Core.bindingName = (Core.bindingName b),

@@ -99,8 +99,8 @@ flattenLetTerms term =
                       in (flattenBodyLet (Lists.concat2 bindings innerBindings) innerBody)
                     _ -> (Lists.concat2 [] bindings, body)
           flatten =
-                  \recurse -> \term ->
-                    let rewritten = recurse term
+                  \recurse -> \term2 ->
+                    let rewritten = recurse term2
                     in case rewritten of
                       Core.TermLet v0 ->
                         let bindings = Core.letBindings v0
@@ -121,12 +121,12 @@ inlineType :: M.Map Core.Name Core.Type -> Core.Type -> Either String Core.Type
 inlineType schema typ =
 
       let f =
-              \recurse -> \typ ->
+              \recurse -> \typ2 ->
                 let afterRecurse =
                         \tr -> case tr of
                           Core.TypeVariable v0 -> Maybes.maybe (Left (Strings.cat2 "No such type in schema: " (Core.unName v0))) (inlineType schema) (Maps.lookup v0 schema)
                           _ -> Right tr
-                in (Eithers.bind (recurse typ) (\tr -> afterRecurse tr))
+                in (Eithers.bind (recurse typ2) (\tr -> afterRecurse tr))
       in (Rewriting.rewriteTypeM f typ)
 
 -- | Check whether a term is a lambda, possibly nested within let and/or annotation terms
@@ -152,7 +152,7 @@ liftLambdaAboveLet term0 =
                           Core.bindingType = (Core.bindingType b)}
                     rewriteBindings = \bs -> Lists.map rewriteBinding bs
                     digForLambdas =
-                            \original -> \cons -> \term -> case term of
+                            \original -> \cons -> \term2 -> case term2 of
                               Core.TermAnnotated v0 -> digForLambdas original (\t -> Core.TermAnnotated (Core.AnnotatedTerm {
                                 Core.annotatedTermBody = (cons t),
                                 Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v0)})) (Core.annotatedTermBody v0)
@@ -219,11 +219,11 @@ simplifyTerm :: Core.Term -> Core.Term
 simplifyTerm term =
 
       let simplify =
-              \recurse -> \term ->
+              \recurse -> \term2 ->
                 let forRhs =
                         \rhs -> \var -> \body -> case (Strip.deannotateTerm rhs) of
                           Core.TermVariable v0 -> simplifyTerm (Variables.substituteVariable var v0 body)
-                          _ -> term
+                          _ -> term2
                     forLhs =
                             \lhs -> \rhs ->
                               let forFun =
@@ -232,18 +232,18 @@ simplifyTerm term =
                                           let var = Core.lambdaParameter v0
                                               body = Core.lambdaBody v0
                                           in (Logic.ifElse (Sets.member var (Variables.freeVariablesInTerm body)) (forRhs rhs var body) (simplifyTerm body))
-                                        _ -> term
+                                        _ -> term2
                               in case (Strip.deannotateTerm lhs) of
                                 Core.TermFunction v0 -> forFun v0
-                                _ -> term
+                                _ -> term2
                     forTerm =
                             \stripped -> case stripped of
                               Core.TermApplication v0 ->
                                 let lhs = Core.applicationFunction v0
                                     rhs = Core.applicationArgument v0
                                 in (forLhs lhs rhs)
-                              _ -> term
-                    stripped = Strip.deannotateTerm term
+                              _ -> term2
+                    stripped = Strip.deannotateTerm term2
                 in (recurse (forTerm stripped))
       in (Rewriting.rewriteTerm simplify term)
 
