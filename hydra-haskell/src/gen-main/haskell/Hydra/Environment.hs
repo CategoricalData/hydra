@@ -24,9 +24,9 @@ import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Map as M
 
--- | Convert an element to a typed term
-elementAsTypeApplicationTerm :: Context.Context -> Core.Binding -> Either (Context.InContext Errors.Error) Core.TypeApplicationTerm
-elementAsTypeApplicationTerm cx el =
+-- | Convert a definition to a typed term
+definitionAsTypeApplicationTerm :: Context.Context -> Core.Binding -> Either (Context.InContext Errors.Error) Core.TypeApplicationTerm
+definitionAsTypeApplicationTerm cx el =
     Maybes.maybe (Left (Context.InContext {
       Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "missing element type")),
       Context.inContextContext = cx})) (\ts -> Right (Core.TypeApplicationTerm {
@@ -110,9 +110,9 @@ termAsBindings term =
       Core.TermLet v0 -> Core.letBindings v0
       _ -> []
 
--- | Encode a map of named types to a list of elements
-typesToElements :: M.Map Core.Name Core.Type -> [Core.Binding]
-typesToElements typeMap =
+-- | Encode a map of named types to a list of bindings
+typesToDefinitions :: M.Map Core.Name Core.Type -> [Core.Binding]
+typesToDefinitions typeMap =
 
       let toElement =
               \pair ->

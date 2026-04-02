@@ -174,7 +174,7 @@ moduleDependencyNamespaces = define "moduleDependencyNamespaces" $
   "allBindings" <~ Maybes.cat (Lists.map
     ("d" ~> cases _Definition (var "d") (Just nothing) [
       _Definition_type>>: "td" ~>
-        just (Annotations.typeElement @@ (Module.typeDefinitionName $ var "td") @@ (Module.typeDefinitionType $ var "td")),
+        just (Annotations.typeBinding @@ (Module.typeDefinitionName $ var "td") @@ (Module.typeDefinitionType $ var "td")),
       _Definition_term>>: "td" ~>
         just (Core.binding (Module.termDefinitionName $ var "td") (Module.termDefinitionTerm $ var "td")
           (Module.termDefinitionType $ var "td"))])

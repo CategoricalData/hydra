@@ -31,9 +31,9 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Get elements with their dependencies
-elementsWithDependencies :: Context.Context -> Graph.Graph -> [Core.Binding] -> Either (Context.InContext Errors.Error) [Core.Binding]
-elementsWithDependencies cx graph original =
+-- | Get definitions with their dependencies
+definitionsWithDependencies :: Context.Context -> Graph.Graph -> [Core.Binding] -> Either (Context.InContext Errors.Error) [Core.Binding]
+definitionsWithDependencies cx graph original =
 
       let depNames = \el -> Sets.toList (termDependencyNames True False False (Core.bindingTerm el))
           allDepNames = Lists.nub (Lists.concat2 (Lists.map Core.bindingName original) (Lists.concat (Lists.map depNames original)))

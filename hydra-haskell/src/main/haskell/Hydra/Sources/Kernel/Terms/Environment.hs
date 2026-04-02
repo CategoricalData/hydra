@@ -3,14 +3,14 @@ module Hydra.Sources.Kernel.Terms.Environment where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  elementAsTypeApplicationTerm,
+  definitionAsTypeApplicationTerm,
   graphAsLet,
   graphAsTerm,
   graphAsTypes,
   partitionDefinitions,
   schemaGraphToTypingEnvironment,
   termAsBindings,
-  typesToElements,
+  typesToDefinitions,
   withLambdaContext,
   withLetContext,
   withTypeLambdaContext)
@@ -84,21 +84,21 @@ module_ = Module ns elements
     Just ("Graph to type environment conversions")
   where
     elements = [
-      toDefinition elementAsTypeApplicationTerm,
+      toDefinition definitionAsTypeApplicationTerm,
       toDefinition graphAsLet,
       toDefinition graphAsTerm,
       toDefinition graphAsTypes,
       toDefinition partitionDefinitions,
       toDefinition schemaGraphToTypingEnvironment,
       toDefinition termAsBindings,
-      toDefinition typesToElements,
+      toDefinition typesToDefinitions,
       toDefinition withLambdaContext,
       toDefinition withLetContext,
       toDefinition withTypeLambdaContext]
 
-elementAsTypeApplicationTerm :: TTermDefinition (Context -> Binding -> Either (InContext Error) TypeApplicationTerm)
-elementAsTypeApplicationTerm = define "elementAsTypeApplicationTerm" $
-  doc "Convert an element to a typed term" $
+definitionAsTypeApplicationTerm :: TTermDefinition (Context -> Binding -> Either (InContext Error) TypeApplicationTerm)
+definitionAsTypeApplicationTerm = define "definitionAsTypeApplicationTerm" $
+  doc "Convert a definition to a typed term" $
   "cx" ~> "el" ~>
   Maybes.maybe (Ctx.failInContext (Error.errorOther $ Error.otherError (string "missing element type")) (var "cx"))
     ("ts" ~> right (Core.typeApplicationTerm (Core.bindingTerm (var "el")) (Core.typeSchemeType (var "ts"))))
@@ -192,9 +192,9 @@ termAsBindings = define "termAsBindings" $
     (Just (list ([] :: [TTerm Binding]))) [
     _Term_let>>: "lt" ~> Core.letBindings (var "lt")]
 
-typesToElements :: TTermDefinition (M.Map Name Type -> [Binding])
-typesToElements = define "typesToElements" $
-  doc "Encode a map of named types to a list of elements" $
+typesToDefinitions :: TTermDefinition (M.Map Name Type -> [Binding])
+typesToDefinitions = define "typesToDefinitions" $
+  doc "Encode a map of named types to a list of bindings" $
   "typeMap" ~>
   "toElement" <~ ("pair" ~>
     "name" <~ Pairs.first (var "pair") $

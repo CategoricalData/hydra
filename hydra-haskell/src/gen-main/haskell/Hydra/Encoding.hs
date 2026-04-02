@@ -5,9 +5,11 @@
 module Hydra.Encoding where
 
 import qualified Hydra.Annotations as Annotations
+import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
+import qualified Hydra.Encode.Core as Core__
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
@@ -239,7 +241,20 @@ encodeMapType mt =
 encodeModule :: Context.Context -> Graph.Graph -> Module.Module -> Either (Context.InContext Errors.Error) (Maybe Module.Module)
 encodeModule cx graph mod =
     Eithers.bind (filterTypeBindings cx graph (Maybes.cat (Lists.map (\d -> case d of
-      Module.DefinitionType v0 -> Just (Annotations.typeElement (Module.typeDefinitionName v0) (Module.typeDefinitionType v0))
+      Module.DefinitionType v0 -> Just ((\name -> \typ ->
+        let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
+            dataTerm =
+                    Annotations.normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
+                      Core.annotatedTermBody = (Core__.type_ typ),
+                      Core.annotatedTermAnnotation = (Maps.fromList [
+                        (Constants.key_type, schemaTerm)])}))
+        in Core.Binding {
+          Core.bindingName = name,
+          Core.bindingTerm = dataTerm,
+          Core.bindingType = (Just (Core.TypeScheme {
+            Core.typeSchemeVariables = [],
+            Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+            Core.typeSchemeConstraints = Nothing}))}) (Module.typeDefinitionName v0) (Module.typeDefinitionType v0))
       _ -> Nothing) (Module.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\ic -> Context.InContext {
       Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError (Context.inContextObject ic)))),
       Context.inContextContext = (Context.inContextContext ic)}) (\x -> x) (encodeBinding cx graph b)) typeBindings) (\encodedBindings -> Right (Just (Module.Module {

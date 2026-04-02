@@ -2,13 +2,13 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.dependencies.elementsWithDependencies",
+        "name": "hydra.dependencies.definitionsWithDependencies",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "@key": "description",
-                "@value": {"literal": {"string": "Get elements with their dependencies"}}}],
+                "@value": {"literal": {"string": "Get definitions with their dependencies"}}}],
             "body": {
               "function": {
                 "lambda": {
