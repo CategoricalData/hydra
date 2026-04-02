@@ -125,16 +125,16 @@ typeDependencies :: Context.Context -> Graph.Graph -> Bool -> (Core.Type -> Core
 typeDependencies cx graph withSchema transform name =
 
       let requireType =
-              \name ->
+              \name2 ->
                 let cx1 =
                         Context.Context {
-                          Context.contextTrace = (Lists.cons (Strings.cat2 "type dependencies of " (Core.unName name)) (Context.contextTrace cx)),
+                          Context.contextTrace = (Lists.cons (Strings.cat2 "type dependencies of " (Core.unName name2)) (Context.contextTrace cx)),
                           Context.contextMessages = (Context.contextMessages cx),
                           Context.contextOther = (Context.contextOther cx)}
-                in (Eithers.bind (Lexical.requireElement cx1 graph name) (\el -> Eithers.bimap (\_wc_e -> Context.InContext {
+                in (Eithers.bind (Lexical.requireElement cx1 graph name2) (\el -> Eithers.bimap (\_wc_e -> Context.InContext {
                   Context.inContextObject = _wc_e,
                   Context.inContextContext = cx1}) (\_wc_a -> _wc_a) (Eithers.bimap (\_e -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _e))) (\_a -> _a) (Core_.type_ graph (Core.bindingTerm el)))))
-          toPair = \name -> Eithers.map (\typ -> (name, (transform typ))) (requireType name)
+          toPair = \name2 -> Eithers.map (\typ -> (name2, (transform typ))) (requireType name2)
           deps =
                   \seeds -> \names -> Logic.ifElse (Sets.null seeds) (Right names) (Eithers.bind (Eithers.mapList toPair (Sets.toList seeds)) (\pairs ->
                     let newNames = Maps.union names (Maps.fromList pairs)

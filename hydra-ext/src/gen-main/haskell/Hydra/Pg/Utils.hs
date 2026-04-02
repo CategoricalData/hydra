@@ -54,20 +54,20 @@ examplePgSchema :: Mapping.Schema t0 () String
 examplePgSchema =
     Mapping.Schema {
       Mapping.schemaVertexIdTypes = Coders.Coder {
-        Coders.coderEncode = (\_ -> \_ -> Right ()),
-        Coders.coderDecode = (\_ -> \_ -> Right Core.TypeUnit)},
+        Coders.coderEncode = (\_ -> \_2 -> Right ()),
+        Coders.coderDecode = (\_ -> \_2 -> Right Core.TypeUnit)},
       Mapping.schemaVertexIds = Coders.Coder {
         Coders.coderEncode = (\cx -> \t -> expString cx t),
         Coders.coderDecode = (\_cx -> \s -> Right (Core.TermLiteral (Core.LiteralString s)))},
       Mapping.schemaEdgeIdTypes = Coders.Coder {
-        Coders.coderEncode = (\_ -> \_ -> Right ()),
-        Coders.coderDecode = (\_ -> \_ -> Right Core.TypeUnit)},
+        Coders.coderEncode = (\_ -> \_2 -> Right ()),
+        Coders.coderDecode = (\_ -> \_2 -> Right Core.TypeUnit)},
       Mapping.schemaEdgeIds = Coders.Coder {
         Coders.coderEncode = (\cx -> \t -> expString cx t),
         Coders.coderDecode = (\_cx -> \s -> Right (Core.TermLiteral (Core.LiteralString s)))},
       Mapping.schemaPropertyTypes = Coders.Coder {
-        Coders.coderEncode = (\_ -> \_ -> Right ()),
-        Coders.coderDecode = (\_ -> \_ -> Right Core.TypeUnit)},
+        Coders.coderEncode = (\_ -> \_2 -> Right ()),
+        Coders.coderDecode = (\_ -> \_2 -> Right Core.TypeUnit)},
       Mapping.schemaPropertyValues = Coders.Coder {
         Coders.coderEncode = (\cx -> \t -> expString cx t),
         Coders.coderDecode = (\_cx -> \s -> Right (Core.TermLiteral (Core.LiteralString s)))},
@@ -105,7 +105,7 @@ pgElementToJson schema el cx =
           propsJson]))) ((\pairs -> Logic.ifElse (Maps.null pairs) (Right Nothing) (Eithers.map (\p -> Just ("properties", (Model.ValueObject (Maps.fromList p)))) (Eithers.mapList (\pair ->
           let key = Pairs.first pair
               v = Pairs.second pair
-          in (Eithers.bind (Coders.coderDecode (Mapping.schemaPropertyValues schema) cx v) (\term -> Right (Model_.unPropertyKey key, (Model.ValueString (Core__.term term)))))) (Maps.toList pairs)))) (Model_.vertexProperties v0))))
+          in (Eithers.bind (Coders.coderDecode (Mapping.schemaPropertyValues schema) cx v) (\term2 -> Right (Model_.unPropertyKey key, (Model.ValueString (Core__.term term2)))))) (Maps.toList pairs)))) (Model_.vertexProperties v0))))
       Model_.ElementEdge v0 -> Eithers.bind (Coders.coderDecode (Mapping.schemaEdgeIds schema) cx (Model_.edgeId v0)) (\term -> Eithers.bind (Coders.coderDecode (Mapping.schemaVertexIds schema) cx (Model_.edgeOut v0)) (\termOut -> Eithers.bind (Coders.coderDecode (Mapping.schemaVertexIds schema) cx (Model_.edgeIn v0)) (\termIn ->
         let labelJson = Model.ValueString (Model_.unEdgeLabel (Model_.edgeLabel v0))
         in (Eithers.map (\propsJson -> Model.ValueObject (Maps.fromList (Maybes.cat [
@@ -116,7 +116,7 @@ pgElementToJson schema el cx =
           propsJson]))) ((\pairs -> Logic.ifElse (Maps.null pairs) (Right Nothing) (Eithers.map (\p -> Just ("properties", (Model.ValueObject (Maps.fromList p)))) (Eithers.mapList (\pair ->
           let key = Pairs.first pair
               v = Pairs.second pair
-          in (Eithers.bind (Coders.coderDecode (Mapping.schemaPropertyValues schema) cx v) (\term -> Right (Model_.unPropertyKey key, (Model.ValueString (Core__.term term)))))) (Maps.toList pairs)))) (Model_.edgeProperties v0))))))) el
+          in (Eithers.bind (Coders.coderDecode (Mapping.schemaPropertyValues schema) cx v) (\term2 -> Right (Model_.unPropertyKey key, (Model.ValueString (Core__.term term2)))))) (Maps.toList pairs)))) (Model_.edgeProperties v0))))))) el
 
 -- | Convert a list of property graph elements to JSON
 pgElementsToJson :: Mapping.Schema t0 t1 t2 -> [Model_.Element t2] -> Context.Context -> Either (Context.InContext Errors.Error) Model.Value

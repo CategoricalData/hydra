@@ -100,11 +100,11 @@ fTypeToTypeScheme typ =
                 Core.TypeAnnotated v0 -> stripAnnotations (Core.annotatedTypeBody v0)
                 _ -> t
           gatherForall =
-                  \vars -> \typ -> case (stripAnnotations typ) of
+                  \vars -> \typ2 -> case (stripAnnotations typ2) of
                     Core.TypeForall v0 -> gatherForall (Lists.cons (Core.forallTypeParameter v0) vars) (Core.forallTypeBody v0)
                     _ -> Core.TypeScheme {
                       Core.typeSchemeVariables = (Lists.reverse vars),
-                      Core.typeSchemeType = typ,
+                      Core.typeSchemeType = typ2,
                       Core.typeSchemeConstraints = Nothing}
       in (gatherForall [] typ)
 

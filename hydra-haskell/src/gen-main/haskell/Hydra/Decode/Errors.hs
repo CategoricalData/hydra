@@ -26,11 +26,11 @@ import qualified Data.Set as S
 decodingError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.DecodingError
 decodingError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
-      Core.TermWrap v0 -> Eithers.map (\b -> Errors.DecodingError b) ((\raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+      Core.TermWrap v0 -> Eithers.map (\b -> Errors.DecodingError b) ((\raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
         Core.TermLiteral v1 -> case v1 of
           Core.LiteralString v2 -> Right v2
           _ -> Left (Errors.DecodingError "expected string literal")
-        _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0))
+        _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (Lexical.stripAndDereferenceTermEither cx raw)
 
 error :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.Error
@@ -62,11 +62,11 @@ error cx raw =
 otherError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.OtherError
 otherError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
-      Core.TermWrap v0 -> Eithers.map (\b -> Errors.OtherError b) ((\raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+      Core.TermWrap v0 -> Eithers.map (\b -> Errors.OtherError b) ((\raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
         Core.TermLiteral v1 -> case v1 of
           Core.LiteralString v2 -> Right v2
           _ -> Left (Errors.DecodingError "expected string literal")
-        _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0))
+        _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (Lexical.stripAndDereferenceTermEither cx raw)
 
 unificationError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.UnificationError
@@ -74,11 +74,11 @@ unificationError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
-        in (Eithers.bind (Core___.requireField "leftType" Core_.type_ fieldMap cx) (\field_leftType -> Eithers.bind (Core___.requireField "rightType" Core_.type_ fieldMap cx) (\field_rightType -> Eithers.bind (Core___.requireField "message" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+        in (Eithers.bind (Core___.requireField "leftType" Core_.type_ fieldMap cx) (\field_leftType -> Eithers.bind (Core___.requireField "rightType" Core_.type_ fieldMap cx) (\field_rightType -> Eithers.bind (Core___.requireField "message" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_message -> Right (Errors.UnificationError {
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_message -> Right (Errors.UnificationError {
           Errors.unificationErrorLeftType = field_leftType,
           Errors.unificationErrorRightType = field_rightType,
           Errors.unificationErrorMessage = field_message})))))

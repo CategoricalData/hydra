@@ -92,7 +92,7 @@ public interface Reduction {
       term);
   }
 
-  static <T0> hydra.core.Term contractTerm_rewrite(java.util.function.Function<hydra.core.Term, hydra.core.Term> hydra_strip_deannotateTerm2, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, Boolean>> hydra_variables_isFreeVariableInTerm2, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Term, hydra.core.Term>>> hydra_variables_replaceFreeTermVariable2, java.util.function.Function<T0, hydra.core.Term> recurse, T0 t) {
+  static <T0> hydra.core.Term contractTerm_rewrite(java.util.function.Function<hydra.core.Term, hydra.core.Term> hydra_strip_deannotateTerm, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, Boolean>> hydra_variables_isFreeVariableInTerm, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Term, hydra.core.Term>>> hydra_variables_replaceFreeTermVariable, java.util.function.Function<T0, hydra.core.Term> recurse, T0 t) {
     hydra.core.Term rec = (recurse).apply(t);
     return (rec).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
@@ -104,7 +104,7 @@ public interface Reduction {
       public hydra.core.Term visit(hydra.core.Term.Application app) {
         hydra.core.Term lhs = (app).value.function;
         hydra.core.Term rhs = (app).value.argument;
-        return (hydra_strip_deannotateTerm2).apply(lhs).accept(new hydra.core.Term.PartialVisitor<>() {
+        return (hydra_strip_deannotateTerm).apply(lhs).accept(new hydra.core.Term.PartialVisitor<>() {
           @Override
           public hydra.core.Term otherwise(hydra.core.Term instance) {
             return rec;
@@ -123,9 +123,9 @@ public interface Reduction {
                 hydra.core.Term body = (l).value.body;
                 hydra.core.Name v = (l).value.parameter;
                 return hydra.lib.logic.IfElse.lazy(
-                  (hydra_variables_isFreeVariableInTerm2).apply(v).apply(body),
+                  (hydra_variables_isFreeVariableInTerm).apply(v).apply(body),
                   () -> body,
-                  () -> (hydra_variables_replaceFreeTermVariable2).apply(v).apply(rhs).apply(body));
+                  () -> (hydra_variables_replaceFreeTermVariable).apply(v).apply(rhs).apply(body));
               }
             });
           }

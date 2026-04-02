@@ -150,13 +150,13 @@ public interface Variables {
     });
   }
 
-  static <T0> hydra.util.PersistentSet<hydra.core.Name> freeVariablesInTerm_dfltVars(java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>> hydra_rewriting_subterms2, java.util.function.Function<hydra.core.Term, hydra.util.PersistentSet<hydra.core.Name>> hydra_variables_freeVariablesInTerm2, hydra.core.Term term, T0 ignored) {
+  static <T0> hydra.util.PersistentSet<hydra.core.Name> freeVariablesInTerm_dfltVars(java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>> hydra_rewriting_subterms, java.util.function.Function<hydra.core.Term, hydra.util.PersistentSet<hydra.core.Name>> hydra_variables_freeVariablesInTerm, hydra.core.Term term, T0 ignored) {
     return hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, java.util.function.Function<hydra.core.Term, hydra.util.PersistentSet<hydra.core.Name>>>) (s -> (java.util.function.Function<hydra.core.Term, hydra.util.PersistentSet<hydra.core.Name>>) (t -> hydra.lib.sets.Union.apply(
         s,
-        (hydra_variables_freeVariablesInTerm2).apply(t)))),
+        (hydra_variables_freeVariablesInTerm).apply(t)))),
       (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()),
-      (hydra_rewriting_subterms2).apply(term));
+      (hydra_rewriting_subterms).apply(term));
   }
 
   static hydra.util.PersistentSet<hydra.core.Name> freeVariablesInType(hydra.core.Type typ) {
