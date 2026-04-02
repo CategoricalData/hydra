@@ -128,8 +128,11 @@
                                          (program-to-expr program)))
                                 ns-val (let [ns (:namespace mod)]
                                          (if (string? ns) ns (:value ns)))
-                                file-path (str (@(rc 'hydra_code_generation_namespace_to_path)
-                                                 ns-val) ext)]
+                                case-conv (if (= target "clojure")
+                                           (list :camel nil)
+                                           (list :lower_snake nil))
+                                file-path (str ((@(rc 'hydra_names_namespace_to_file_path)
+                                                  case-conv) ns-val) ext)]
                             (list :right {file-path code}))))))))]
           {:coder coder
            :language lang
