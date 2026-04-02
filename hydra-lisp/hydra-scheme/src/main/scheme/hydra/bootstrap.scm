@@ -577,44 +577,56 @@
         (display (string-append "  Output: " out-main "\n"))
         (force-output (current-output-port))
 
-        (let ((file-count (generate-sources coder language flags out-main all-mods mods-to-generate)))
+        (let* ((main-start (get-internal-real-time))
+               (file-count (generate-sources coder language flags out-main all-mods mods-to-generate))
+               (main-elapsed (exact->inexact (/ (- (get-internal-real-time) main-start) internal-time-units-per-second))))
           (display (string-append "  Generated " (number->string file-count) " files.\n"))
+          (display (string-append "  Time: " (number->string (/ (round (* main-elapsed 10)) 10)) "s\n"))
           (force-output (current-output-port))
 
           ;; Tests
-          (when *include-tests*
-            (display "\nLoading test modules from JSON...\n")
-            (force-output (current-output-port))
-            (let* ((test-json-dir
-                     ;; Replace gen-main with gen-test in json-dir
-                     (let ((pos (let loop ((i 0))
-                                  (cond
-                                    ((>= i (- (string-length *json-dir*) 8)) #f)
-                                    ((equal? (substring *json-dir* i (+ i 8)) "gen-main") i)
-                                    (else (loop (+ i 1)))))))
-                       (if pos
-                           (string-append (substring *json-dir* 0 pos)
-                                          "gen-test"
-                                          (substring *json-dir* (+ pos 8)
-                                                     (string-length *json-dir*)))
-                           *json-dir*)))
-                   (test-ns (read-manifest-field *json-dir* "testModules"))
-                   (test-mods (load-modules-from-json test-json-dir test-ns))
-                   (all-universe (append all-mods test-mods))
-                   (out-test (string-append *output-base* "/scheme-to-" *target*
-                                            "/src/gen-test/" subdir)))
-              (display (string-append "  Loaded " (number->string (length test-mods))
-                                      " test modules.\n"))
-              (display (string-append "\nMapping test modules to " target-cap "...\n"))
+          (let ((test-count 0))
+            (when *include-tests*
+              (display "\nLoading test modules from JSON...\n")
               (force-output (current-output-port))
-              (let ((test-count (generate-sources coder language flags out-test all-universe test-mods)))
-                (display (string-append "  Generated " (number->string test-count)
-                                        " test files.\n")))))
+              (let* ((test-json-dir
+                       ;; Replace gen-main with gen-test in json-dir
+                       (let ((pos (let loop ((i 0))
+                                    (cond
+                                      ((>= i (- (string-length *json-dir*) 8)) #f)
+                                      ((equal? (substring *json-dir* i (+ i 8)) "gen-main") i)
+                                      (else (loop (+ i 1)))))))
+                         (if pos
+                             (string-append (substring *json-dir* 0 pos)
+                                            "gen-test"
+                                            (substring *json-dir* (+ pos 8)
+                                                       (string-length *json-dir*)))
+                             *json-dir*)))
+                     (test-ns (read-manifest-field *json-dir* "testModules"))
+                     (test-mods (load-modules-from-json test-json-dir test-ns))
+                     (all-universe (append all-mods test-mods))
+                     (out-test (string-append *output-base* "/scheme-to-" *target*
+                                              "/src/gen-test/" subdir)))
+                (display (string-append "  Loaded " (number->string (length test-mods))
+                                        " test modules.\n"))
+                (display (string-append "\nMapping test modules to " target-cap "...\n"))
+                (force-output (current-output-port))
+                (let* ((test-start (get-internal-real-time))
+                       (tc (generate-sources coder language flags out-test all-universe test-mods))
+                       (test-elapsed (exact->inexact (/ (- (get-internal-real-time) test-start) internal-time-units-per-second))))
+                  (set! test-count tc)
+                  (display (string-append "  Generated " (number->string test-count)
+                                          " test files.\n"))
+                  (display (string-append "  Time: " (number->string (/ (round (* test-elapsed 10)) 10)) "s\n"))
+                  (force-output (current-output-port)))))
 
-          (display "\n==========================================\n")
-          (display (string-append "Done: " (number->string file-count) " main files\n"))
-          (display (string-append "  Output: " *output-base* "/scheme-to-" *target* "\n"))
-          (display "==========================================\n")
-          (force-output (current-output-port)))))))
+            (display "\n==========================================\n")
+            (if (> test-count 0)
+                (display (string-append "Done: " (number->string file-count) " main + "
+                                        (number->string test-count) " test files\n"))
+                (display (string-append "Done: " (number->string file-count) " main files\n")))
+            (display (string-append "  Output: " *output-base* "/scheme-to-" *target* "\n"))
+            (display "==========================================\n")
+            (force-output (current-output-port))))))))
 
 (exit 0)
