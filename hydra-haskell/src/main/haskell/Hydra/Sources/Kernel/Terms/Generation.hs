@@ -126,7 +126,7 @@ moduleTypeBindings :: TTerm Module -> TTerm [Binding]
 moduleTypeBindings m = Maybes.cat $ Lists.map
   ("d" ~> cases _Definition (var "d") (Just nothing) [
     _Definition_type>>: "td" ~>
-      just (Annotations.typeElement @@ (Module.typeDefinitionName $ var "td") @@ (Module.typeDefinitionType $ var "td"))])
+      just (Annotations.typeBinding @@ (Module.typeDefinitionName $ var "td") @@ (Module.typeDefinitionType $ var "td"))])
   (Module.moduleDefinitions m)
 
 -- | Extract term definitions from a module as Bindings (for elementsToGraph compatibility).

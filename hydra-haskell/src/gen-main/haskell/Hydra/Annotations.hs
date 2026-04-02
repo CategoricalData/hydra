@@ -297,24 +297,6 @@ typeAnnotationInternal typ =
                 _ -> Nothing
       in (aggregateAnnotations getAnn (\at -> Core.annotatedTypeBody at) (\at -> Core.annotatedTypeAnnotation at) typ)
 
--- | Create a type element with proper annotations
-typeElement :: Core.Name -> Core.Type -> Core.Binding
-typeElement name typ =
-
-      let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
-          dataTerm =
-                  normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
-                    Core.annotatedTermBody = (Core__.type_ typ),
-                    Core.annotatedTermAnnotation = (Maps.fromList [
-                      (Constants.key_type, schemaTerm)])}))
-      in Core.Binding {
-        Core.bindingName = name,
-        Core.bindingTerm = dataTerm,
-        Core.bindingType = (Just (Core.TypeScheme {
-          Core.typeSchemeVariables = [],
-          Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-          Core.typeSchemeConstraints = Nothing}))}
-
 -- | Execute different branches based on flag (Either version)
 whenFlag :: Context.Context -> Core.Name -> Either (Context.InContext Errors.Error) t0 -> Either (Context.InContext Errors.Error) t0 -> Either (Context.InContext Errors.Error) t0
 whenFlag cx flag ethen eelse = Eithers.bind (hasFlag cx flag) (\b -> Logic.ifElse b ethen eelse)

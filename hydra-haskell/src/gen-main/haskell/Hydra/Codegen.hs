@@ -7,10 +7,12 @@ module Hydra.Codegen where
 import qualified Hydra.Adapt as Adapt
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Coders as Coders
+import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
 import qualified Hydra.Decode.Module as Module
+import qualified Hydra.Encode.Core as Core__
 import qualified Hydra.Encode.Module as Module_
 import qualified Hydra.Environment as Environment
 import qualified Hydra.Errors as Errors
@@ -32,7 +34,7 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module__
-import qualified Hydra.Show.Core as Core__
+import qualified Hydra.Show.Core as Core___
 import qualified Hydra.Show.Errors as Errors_
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -77,7 +79,7 @@ formatPrimitive :: Graph.Primitive -> String
 formatPrimitive prim =
 
       let name = Core.unName (Graph.primitiveName prim)
-          typeStr = Core__.typeScheme (Graph.primitiveType prim)
+          typeStr = Core___.typeScheme (Graph.primitiveType prim)
       in (Strings.cat2 (Strings.cat2 (Strings.cat2 "  " name) " : ") typeStr)
 
 -- | Format a term binding for the lexicon
@@ -85,13 +87,13 @@ formatTermBinding :: Core.Binding -> String
 formatTermBinding binding =
 
       let name = Core.unName (Core.bindingName binding)
-          typeStr = Maybes.maybe "?" (\scheme -> Core__.typeScheme scheme) (Core.bindingType binding)
+          typeStr = Maybes.maybe "?" (\scheme -> Core___.typeScheme scheme) (Core.bindingType binding)
       in (Strings.cat2 (Strings.cat2 (Strings.cat2 "  " name) " : ") typeStr)
 
 -- | Format a type binding for the lexicon
 formatTypeBinding :: Graph.Graph -> Core.Binding -> Either Errors.DecodingError String
 formatTypeBinding graph binding =
-    Eithers.bind (Core_.type_ graph (Core.bindingTerm binding)) (\typ -> Right (Strings.cat2 (Strings.cat2 (Strings.cat2 "  " (Core.unName (Core.bindingName binding))) " = ") (Core__.type_ typ)))
+    Eithers.bind (Core_.type_ graph (Core.bindingTerm binding)) (\typ -> Right (Strings.cat2 (Strings.cat2 (Strings.cat2 "  " (Core.unName (Core.bindingName binding))) " = ") (Core___.type_ typ)))
 
 -- | Generate encoder or decoder modules for a list of type modules
 generateCoderModules :: (t0 -> Graph.Graph -> t1 -> Either t2 (Maybe t3)) -> Graph.Graph -> [Module__.Module] -> [t1] -> t0 -> Either t2 [t3]
@@ -102,7 +104,20 @@ generateCoderModules codec bsGraph universeModules typeModules cx =
           dataModules = moduleTermDepsTransitive universe universeModules
           schemaElements =
                   Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
-                    Module__.DefinitionType v0 -> Just (Annotations.typeElement (Module__.typeDefinitionName v0) (Module__.typeDefinitionType v0))
+                    Module__.DefinitionType v0 -> Just ((\name -> \typ ->
+                      let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
+                          dataTerm =
+                                  Annotations.normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
+                                    Core.annotatedTermBody = (Core__.type_ typ),
+                                    Core.annotatedTermAnnotation = (Maps.fromList [
+                                      (Constants.key_type, schemaTerm)])}))
+                      in Core.Binding {
+                        Core.bindingName = name,
+                        Core.bindingTerm = dataTerm,
+                        Core.bindingType = (Just (Core.TypeScheme {
+                          Core.typeSchemeVariables = [],
+                          Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+                          Core.typeSchemeConstraints = Nothing}))}) (Module__.typeDefinitionName v0) (Module__.typeDefinitionType v0))
                     _ -> Nothing) (Module__.moduleDefinitions m))) (Lists.concat2 schemaModules universeModules))
           dataElements =
                   Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
@@ -144,7 +159,20 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
           constraints = Coders.languageConstraints lang
           typeModulesToGenerate =
                   Lists.filter (\mod -> Logic.not (Lists.null (Maybes.cat (Lists.map (\d -> case d of
-                    Module__.DefinitionType v0 -> Just (Annotations.typeElement (Module__.typeDefinitionName v0) (Module__.typeDefinitionType v0))
+                    Module__.DefinitionType v0 -> Just ((\name -> \typ ->
+                      let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
+                          dataTerm =
+                                  Annotations.normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
+                                    Core.annotatedTermBody = (Core__.type_ typ),
+                                    Core.annotatedTermAnnotation = (Maps.fromList [
+                                      (Constants.key_type, schemaTerm)])}))
+                      in Core.Binding {
+                        Core.bindingName = name,
+                        Core.bindingTerm = dataTerm,
+                        Core.bindingType = (Just (Core.TypeScheme {
+                          Core.typeSchemeVariables = [],
+                          Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+                          Core.typeSchemeConstraints = Nothing}))}) (Module__.typeDefinitionName v0) (Module__.typeDefinitionType v0))
                     _ -> Nothing) (Module__.moduleDefinitions mod))))) modsToGenerate
           termModulesToGenerate =
                   Lists.filter (\mod -> Logic.not (Lists.null (Maybes.cat (Lists.map (\d -> case d of
@@ -156,7 +184,20 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
           schemaMods = moduleTypeDepsTransitive namespaceMap modsToGenerate
           schemaElements =
                   Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
-                    Module__.DefinitionType v0 -> Just (Annotations.typeElement (Module__.typeDefinitionName v0) (Module__.typeDefinitionType v0))
+                    Module__.DefinitionType v0 -> Just ((\name -> \typ ->
+                      let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
+                          dataTerm =
+                                  Annotations.normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
+                                    Core.annotatedTermBody = (Core__.type_ typ),
+                                    Core.annotatedTermAnnotation = (Maps.fromList [
+                                      (Constants.key_type, schemaTerm)])}))
+                      in Core.Binding {
+                        Core.bindingName = name,
+                        Core.bindingTerm = dataTerm,
+                        Core.bindingType = (Just (Core.TypeScheme {
+                          Core.typeSchemeVariables = [],
+                          Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+                          Core.typeSchemeConstraints = Nothing}))}) (Module__.typeDefinitionName v0) (Module__.typeDefinitionType v0))
                     _ -> Nothing) (Module__.moduleDefinitions m))) (Lists.concat2 schemaMods typeModulesToGenerate))
           dataMods = moduleTermDepsTransitive namespaceMap modsToGenerate
           dataElements =
@@ -335,7 +376,20 @@ modulesToGraph bsGraph universeModules modules =
           dataModules = moduleTermDepsTransitive universe modules
           schemaElements =
                   Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
-                    Module__.DefinitionType v0 -> Just (Annotations.typeElement (Module__.typeDefinitionName v0) (Module__.typeDefinitionType v0))
+                    Module__.DefinitionType v0 -> Just ((\name -> \typ ->
+                      let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
+                          dataTerm =
+                                  Annotations.normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
+                                    Core.annotatedTermBody = (Core__.type_ typ),
+                                    Core.annotatedTermAnnotation = (Maps.fromList [
+                                      (Constants.key_type, schemaTerm)])}))
+                      in Core.Binding {
+                        Core.bindingName = name,
+                        Core.bindingTerm = dataTerm,
+                        Core.bindingType = (Just (Core.TypeScheme {
+                          Core.typeSchemeVariables = [],
+                          Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+                          Core.typeSchemeConstraints = Nothing}))}) (Module__.typeDefinitionName v0) (Module__.typeDefinitionType v0))
                     _ -> Nothing) (Module__.moduleDefinitions m))) (Lists.concat2 schemaModules modules))
           dataElements =
                   Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of

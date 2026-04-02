@@ -6,10 +6,12 @@ module Hydra.Analysis where
 
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Coders as Coders
+import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
 import qualified Hydra.Dependencies as Dependencies
+import qualified Hydra.Encode.Core as Core__
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
@@ -102,7 +104,20 @@ moduleDependencyNamespaces cx graph binds withPrims withNoms withSchema mod =
 
       let allBindings =
               Maybes.cat (Lists.map (\d -> case d of
-                Module.DefinitionType v0 -> Just (Annotations.typeElement (Module.typeDefinitionName v0) (Module.typeDefinitionType v0))
+                Module.DefinitionType v0 -> Just ((\name -> \typ ->
+                  let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
+                      dataTerm =
+                              Annotations.normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
+                                Core.annotatedTermBody = (Core__.type_ typ),
+                                Core.annotatedTermAnnotation = (Maps.fromList [
+                                  (Constants.key_type, schemaTerm)])}))
+                  in Core.Binding {
+                    Core.bindingName = name,
+                    Core.bindingTerm = dataTerm,
+                    Core.bindingType = (Just (Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+                      Core.typeSchemeConstraints = Nothing}))}) (Module.typeDefinitionName v0) (Module.typeDefinitionType v0))
                 Module.DefinitionTerm v0 -> Just (Core.Binding {
                   Core.bindingName = (Module.termDefinitionName v0),
                   Core.bindingTerm = (Module.termDefinitionTerm v0),

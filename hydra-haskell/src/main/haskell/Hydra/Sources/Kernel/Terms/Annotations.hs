@@ -12,7 +12,7 @@ import Hydra.Kernel hiding (
   normalizeTermAnnotations, normalizeTypeAnnotations, putAttr, putCount,
   resetCount, setAnnotation,
   setDescription, setTermAnnotation, setTermDescription, setType, setTypeAnnotation, setTypeClasses,
-  setTypeDescription, termAnnotationInternal, typeAnnotationInternal, typeElement, whenFlag)
+  setTypeDescription, termAnnotationInternal, typeAnnotationInternal, whenFlag)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
@@ -118,7 +118,6 @@ module_ = Module ns elements
      toDefinition setTypeDescription,
      toDefinition termAnnotationInternal,
      toDefinition typeAnnotationInternal,
-     toDefinition typeElement,
      toDefinition whenFlag]
 
 define :: String -> TTerm a -> TTermDefinition a
@@ -432,20 +431,20 @@ typeAnnotationInternal = define "typeAnnotationInternal" $
     @@ ("at" ~> Core.annotatedTypeAnnotation $ var "at")
     @@ var "typ"
 
--- TODO: deprecate
-typeElement :: TTermDefinition (Name -> Type -> Binding)
-typeElement = define "typeElement" $
-  doc "Create a type element with proper annotations" $
-  "name" ~> "typ" ~>
-  "schemaTerm" <~ Core.termVariable (Core.nameLift _Type) $
-  "dataTerm" <~ normalizeTermAnnotations @@ (Core.termAnnotated (Core.annotatedTerm
-    (encoderFor _Type @@ var "typ")
-    (Maps.fromList (list [pair (Constants.key_type) (var "schemaTerm")])))) $
-  Core.binding (var "name") (var "dataTerm") (just (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable $ Core.nameLift _Type) Phantoms.nothing))
-
 whenFlag :: TTermDefinition (Context -> Name -> Prelude.Either (InContext Error) a -> Prelude.Either (InContext Error) a -> Prelude.Either (InContext Error) a)
 whenFlag = define "whenFlag" $
   doc "Execute different branches based on flag (Either version)" $
   "cx" ~> "flag" ~> "ethen" ~> "eelse" ~>
   "b" <<~ hasFlag @@ var "cx" @@ var "flag" $
   Logic.ifElse (var "b") (var "ethen") (var "eelse")
+
+-- | Helper (not a registered definition) for creating a type binding from a name and type.
+-- This was previously the deprecated "typeElement" definition.
+typeBinding :: TTerm (Name -> Type -> Binding)
+typeBinding =
+  "name" ~> "typ" ~>
+  "schemaTerm" <~ Core.termVariable (Core.nameLift _Type) $
+  "dataTerm" <~ normalizeTermAnnotations @@ (Core.termAnnotated (Core.annotatedTerm
+    (encoderFor _Type @@ var "typ")
+    (Maps.fromList (list [pair (Constants.key_type) (var "schemaTerm")])))) $
+  Core.binding (var "name") (var "dataTerm") (just (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable $ Core.nameLift _Type) Phantoms.nothing))

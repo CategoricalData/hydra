@@ -2,13 +2,13 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.environment.elementAsTypeApplicationTerm",
+        "name": "hydra.environment.definitionAsTypeApplicationTerm",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "@key": "description",
-                "@value": {"literal": {"string": "Convert an element to a typed term"}}}],
+                "@value": {"literal": {"string": "Convert a definition to a typed term"}}}],
             "body": {
               "function": {
                 "lambda": {
@@ -1692,14 +1692,14 @@
             "variables": []}]}},
     {
       "term": {
-        "name": "hydra.environment.typesToElements",
+        "name": "hydra.environment.typesToDefinitions",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "@key": "description",
                 "@value": {
-                  "literal": {"string": "Encode a map of named types to a list of elements"}}}],
+                  "literal": {"string": "Encode a map of named types to a list of bindings"}}}],
             "body": {
               "function": {
                 "lambda": {
