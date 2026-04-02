@@ -109,10 +109,10 @@
                         "common-lisp" (list :common_lisp nil)
                         "emacs-lisp" (list :emacs_lisp nil))
               ext (case target
-                    "clojure"    ".clj"
-                    "scheme"     ".scm"
-                    "common-lisp" ".lisp"
-                    "emacs-lisp" ".el")
+                    "clojure"    "clj"
+                    "scheme"     "scm"
+                    "common-lisp" "lisp"
+                    "emacs-lisp" "el")
               subdir (case target
                        "clojure"    "clojure"
                        "scheme"     "scheme"
