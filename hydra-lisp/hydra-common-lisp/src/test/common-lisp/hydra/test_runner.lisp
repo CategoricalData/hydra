@@ -434,6 +434,37 @@
 (defun clear-annotation-cache ()
   (clrhash *annotation-cache*))
 
+(defun kernel-constant-bindings ()
+  "Kernel constant bindings needed by annotation and other tests (mirrors Scala addConstantBindings)."
+  (flet ((name-constant (s) (list :wrap (make-wrapped_term "hydra.core.Name" (list :literal (list :string s))))))
+    (list
+      (list "hydra.constants.key_classes" (name-constant "classes"))
+      (list "hydra.constants.key_description" (name-constant "description"))
+      (list "hydra.constants.key_type" (name-constant "type"))
+      (list "hydra.constants.key_debugId" (name-constant "debugId"))
+      (list "hydra.constants.key_firstClassType" (name-constant "firstClassType"))
+      (list "hydra.constants.key_deprecated" (name-constant "deprecated"))
+      (list "hydra.constants.key_exclude" (name-constant "exclude"))
+      (list "hydra.constants.key_maxLength" (name-constant "maxLength"))
+      (list "hydra.constants.key_minLength" (name-constant "minLength"))
+      (list "hydra.constants.key_preserveFieldName" (name-constant "preserveFieldName"))
+      (list "hydra.constants.key_freshTypeVariableCount" (name-constant "freshTypeVariableCount"))
+      (list "hydra.constants.ignoredVariable" (list :literal (list :string "_")))
+      (list "hydra.constants.maxTraceDepth" (list :literal (list :integer (list :int32 5000))))
+      (list "hydra.constants.debugInference" (list :literal (list :boolean t))))))
+
+(defun empty-graph-record-term ()
+  "Build hydra.lexical.emptyGraph as a proper Graph record term."
+  (list :record (make-record "hydra.graph.Graph"
+    (list (make-field "boundTerms" (list :map nil))
+          (make-field "boundTypes" (list :map nil))
+          (make-field "classConstraints" (list :map nil))
+          (make-field "lambdaVariables" (list :set nil))
+          (make-field "metadata" (list :map nil))
+          (make-field "primitives" (list :map nil))
+          (make-field "schemaTypes" (list :map nil))
+          (make-field "typeVariables" (list :set nil))))))
+
 (defun build-test-graph ()
   (let* ((std-prims (standard-library))
          (ann-prims-list
@@ -453,23 +484,96 @@
          (ann-prims-map (funcall hydra_lib_maps_from_list ann-prims-list))
          (all-prims (funcall (funcall hydra_lib_maps_union ann-prims-map) std-prims))
          (prim-entries (funcall hydra_lib_maps_to_list all-prims))
+         ;; Annotation term-level bindings (if annotation_bindings.lisp was loaded)
+         (ann-bindings (if (fboundp 'annotation-bindings) (annotation-bindings) nil))
+         ;; Kernel constant bindings
+         (const-bindings (kernel-constant-bindings))
+         ;; Test terms
+         (test-terms-list (if (boundp 'hydra_test_test_graph_test_terms)
+                              (funcall hydra_lib_maps_to_list hydra_test_test_graph_test_terms)
+                              nil))
+         ;; Bootstrap types (kernel type definitions)
+         (bootstrap-types (if (boundp 'hydra_json_bootstrap_types_by_name)
+                              hydra_json_bootstrap_types_by_name nil))
+         ;; Test types
+         (test-types (if (boundp 'hydra_test_test_graph_test_types)
+                         hydra_test_test_graph_test_types nil))
+         ;; f_type_to_type_scheme conversion
+         (type-to-ts (when (boundp 'hydra_rewriting_f_type_to_type_scheme)
+                       hydra_rewriting_f_type_to_type_scheme))
+         ;; Build kernel schemas from bootstrap types
+         (kernel-entries
+           (when (and bootstrap-types type-to-ts)
+             (mapcar (lambda (entry)
+                       (list (first entry) (funcall type-to-ts (cdr entry))))
+                     (funcall hydra_lib_maps_to_list bootstrap-types))))
+         ;; Build test schemas
+         (test-entries
+           (when (and test-types type-to-ts)
+             (mapcar (lambda (entry)
+                       (list (first entry) (funcall type-to-ts (second entry))))
+                     (funcall hydra_lib_maps_to_list test-types))))
+         ;; Merge all schema types
+         (all-type-entries (append (or kernel-entries nil) (or test-entries nil)))
+         (schema-types (funcall hydra_lib_maps_from_list all-type-entries))
+         ;; Build all types map (for encoded type terms)
+         (all-types-list
+           (append
+             (when bootstrap-types
+               (mapcar (lambda (entry) (list (first entry) (cdr entry)))
+                       (funcall hydra_lib_maps_to_list bootstrap-types)))
+             (when test-types
+               (funcall hydra_lib_maps_to_list test-types))))
+         ;; Encode types as terms (if encoder available)
+         (encode-type-fn (when (boundp 'hydra_encode_core_type) hydra_encode_core_type))
+         (encoded-type-bindings
+           (when encode-type-fn
+             (mapcar (lambda (entry)
+                       (list (first entry)
+                             (handler-case (funcall encode-type-fn (second entry))
+                               (error () (list :unit)))))
+                     all-types-list)))
+         ;; Combine all bound terms
          (bound-terms
            (funcall hydra_lib_maps_from_list
              (append
+               ;; Primitives as term bindings
                (mapcar (lambda (entry)
                          (list (first entry) (list :function (list :primitive (first entry)))))
                        prim-entries)
+               ;; Annotation term-level bindings
+               ann-bindings
+               ;; Kernel constants
+               const-bindings
+               ;; Fixed constants
                (list
                  (list "hydra.monads.emptyContext" (list :unit))
-                 (list "hydra.lexical.emptyGraph" (list :unit)))))))
+                 (list "hydra.lexical.emptyGraph" (empty-graph-record-term)))
+               ;; Test terms
+               test-terms-list
+               ;; Encoded type terms
+               (or encoded-type-bindings nil)))))
     (list (cons :bound_terms bound-terms)
           (cons :bound_types hydra_lib_maps_empty)
           (cons :class_constraints hydra_lib_maps_empty)
           (cons :lambda_variables hydra_lib_sets_empty)
           (cons :metadata hydra_lib_maps_empty)
           (cons :primitives all-prims)
-          (cons :schema_types hydra_lib_maps_empty)
+          (cons :schema_types schema-types)
           (cons :type_variables hydra_lib_sets_empty))))
+
+(defun ensure-test-graph-populated! ()
+  "Populate hydra_test_test_graph_test_graph and hydra_test_test_graph_test_context
+   with a properly built test graph. Must be called after annotation_bindings.lisp
+   and test_graph.lisp are loaded, but before any test data files."
+  (let ((graph (build-test-graph)))
+    (setf (symbol-value 'hydra_test_test_graph_test_graph) graph)
+    (setf (symbol-value 'hydra_test_test_graph_test_context)
+          (list (cons :functions nil) (cons :annotations nil) (cons :variable_types nil)))
+    (format t "Test graph populated: ~A bound terms, ~A schema types, ~A primitives~%"
+            (length (funcall hydra_lib_maps_to_list (cdr (assoc :bound_terms graph))))
+            (length (funcall hydra_lib_maps_to_list (cdr (assoc :schema_types graph))))
+            (length (funcall hydra_lib_maps_to_list (cdr (assoc :primitives graph)))))))
 
 (defvar *test-graph* nil)
 (defvar *annotation-cache-installed* nil)
@@ -478,51 +582,15 @@
     (install-annotation-cache)
     (setf *annotation-cache-installed* t))
   (unless *test-graph*
-    (let ((base (build-test-graph)))
-      ;; Enhance with schema types from bootstrap and test types
-      (handler-case
-        (let* (;; Bootstrap types (kernel type schemes)
-               (bootstrap-types (if (boundp 'hydra_json_bootstrap_types_by_name)
-                                    hydra_json_bootstrap_types_by_name
-                                    nil))
-               ;; Test types
-               (test-types (if (boundp 'hydra_test_test_graph_test_types)
-                               hydra_test_test_graph_test_types
-                               nil))
-               ;; f_type_to_type_scheme conversion
-               (type-to-ts (when (boundp 'hydra_rewriting_f_type_to_type_scheme)
-                             hydra_rewriting_f_type_to_type_scheme))
-               ;; Build kernel schemas: map each bootstrap type through type-to-ts
-               (kernel-entries
-                (when (and bootstrap-types type-to-ts)
-                  (mapcar (lambda (entry)
-                            (list (first entry) (funcall type-to-ts (second entry))))
-                          (funcall hydra_lib_maps_to_list bootstrap-types))))
-               ;; Build test schemas (test-types is a Hydra map, convert to list first)
-               (test-entries
-                (when (and test-types type-to-ts)
-                  (mapcar (lambda (entry)
-                            (list (first entry) (funcall type-to-ts (second entry))))
-                          (funcall hydra_lib_maps_to_list test-types))))
-               ;; Merge all schema types
-               (all-entries (append (or kernel-entries nil) (or test-entries nil)))
-               (schema-types (funcall hydra_lib_maps_from_list all-entries))
-               ;; Test terms (already a Hydra map)
-               (test-terms-map (if (boundp 'hydra_test_test_graph_test_terms)
-                                   hydra_test_test_graph_test_terms
-                                   hydra_lib_maps_empty))
-               ;; Update graph
-               (enhanced (copy-list base)))
-          (setf (cdr (assoc :schema_types enhanced)) schema-types)
-          (setf (cdr (assoc :bound_terms enhanced))
-                (funcall (funcall hydra_lib_maps_union test-terms-map)
-                         (cdr (assoc :bound_terms base))))
-          (let ((st-count (length (funcall hydra_lib_maps_to_list schema-types))))
-            (format t "DEBUG: schema types: ~A~%" st-count))
-          (setf *test-graph* enhanced))
-        (error (e)
-          (format t "WARNING: Could not enhance test graph: ~A~%" e)
-          (setf *test-graph* base)))))
+    ;; Use the pre-populated graph if available (set by ensure-test-graph-populated!),
+    ;; otherwise build one from scratch
+    (if (and (boundp 'hydra_test_test_graph_test_graph)
+             (let ((g hydra_test_test_graph_test_graph))
+               (and g (listp g) (assoc :primitives g)
+                    (let ((prims (cdr (assoc :primitives g))))
+                      (and prims (not (equal prims hydra_lib_maps_empty)))))))
+        (setf *test-graph* hydra_test_test_graph_test_graph)
+        (setf *test-graph* (build-test-graph))))
   *test-graph*)
 
 (defun empty-context ()
