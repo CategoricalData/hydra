@@ -11,9 +11,11 @@ import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
+import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Encode.Core as Core__
+import qualified Hydra.Environment as Environment
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Ext.Java.Environment as Environment
+import qualified Hydra.Ext.Java.Environment as Environment_
 import qualified Hydra.Ext.Java.Language as Language
 import qualified Hydra.Ext.Java.Names as Names
 import qualified Hydra.Ext.Java.Serde as Serde
@@ -35,13 +37,17 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names_
+import qualified Hydra.Predicates as Predicates
+import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Rewriting as Rewriting
-import qualified Hydra.Schemas as Schemas
+import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Show.Core as Core___
 import qualified Hydra.Sorting as Sorting
+import qualified Hydra.Strip as Strip
 import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
+import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -55,20 +61,20 @@ addComment decl field cx g =
       Syntax.classBodyDeclarationWithCommentsValue = decl,
       Syntax.classBodyDeclarationWithCommentsComments = c}) (CoderUtils.commentsFromFieldType cx g field)
 
-analyzeJavaFunction :: Environment.JavaEnvironment -> Core.Term -> Context.Context -> t0 -> Either t1 (Typing.FunctionStructure Environment.JavaEnvironment)
+analyzeJavaFunction :: Environment_.JavaEnvironment -> Core.Term -> Context.Context -> t0 -> Either t1 (Typing.FunctionStructure Environment_.JavaEnvironment)
 analyzeJavaFunction env term cx g = CoderUtils.analyzeFunctionTerm cx javaEnvGetGraph javaEnvSetGraph env term
 
 annotateBodyWithCod :: Core.Type -> Core.Term -> Core.Term
 annotateBodyWithCod typ term =
 
       let setAnn = \t -> Annotations.setTermAnnotation Constants.key_type (Just (Core__.type_ typ)) t
-      in case (Rewriting.deannotateTerm term) of
+      in case (Strip.deannotateTerm term) of
         Core.TermTypeApplication _ -> setAnn term
         Core.TermApplication v0 ->
           let lhs = Core.applicationFunction v0
               rhs = Core.applicationArgument v0
               annotatedRhs =
-                      case (Rewriting.deannotateTerm rhs) of
+                      case (Strip.deannotateTerm rhs) of
                         Core.TermTypeApplication _ -> annotateBodyWithCod (extractArgType lhs typ) rhs
                         _ -> rhs
           in (setAnn (Core.TermApplication (Core.Application {
@@ -87,11 +93,11 @@ annotateLambdaArgs cname tApps argTerms cx g =
             expectedTypes = peelExpectedTypes subst (Lists.length argTerms) schemeType
         in (Right (Lists.zipWith (\arg -> \mExpected -> propagateType mExpected arg) argTerms (Lists.concat2 expectedTypes (Lists.replicate (Lists.length argTerms) (Core.TypeVariable (Core.Name "unused")))))))))))
 
-applyCastIfSafe :: Environment.Aliases -> Core.Type -> Syntax.Expression -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
+applyCastIfSafe :: Environment_.Aliases -> Core.Type -> Syntax.Expression -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 applyCastIfSafe aliases castType expr cx g =
 
-      let trusted = Environment.aliasesTrustedTypeVars aliases
-          inScope = Environment.aliasesInScopeTypeParams aliases
+      let trusted = Environment_.aliasesTrustedTypeVars aliases
+          inScope = Environment_.aliasesInScopeTypeParams aliases
           castVars = collectTypeVars castType
           javaTypeVars =
                   Sets.fromList (Lists.filter (\v -> Logic.or (Sets.member v inScope) (isLambdaBoundVariable v)) (Sets.toList castVars))
@@ -152,7 +158,7 @@ applyOvergenSubstToTermAnnotations_go subst cx term =
 
 applySubstFull :: M.Map Core.Name Core.Type -> Core.Type -> Core.Type
 applySubstFull s t =
-    case (Rewriting.deannotateType t) of
+    case (Strip.deannotateType t) of
       Core.TypeVariable v0 -> Maps.findWithDefault t v0 s
       Core.TypeFunction v0 -> Core.TypeFunction (Core.FunctionType {
         Core.functionTypeDomain = (applySubstFull s (Core.functionTypeDomain v0)),
@@ -179,7 +185,7 @@ applySubstFull s t =
 
 applySubstSimple :: M.Map Core.Name Core.Type -> Core.Type -> Core.Type
 applySubstSimple subst t =
-    case (Rewriting.deannotateType t) of
+    case (Strip.deannotateType t) of
       Core.TypeVariable v0 -> Maps.findWithDefault t v0 subst
       _ -> t
 
@@ -221,7 +227,7 @@ arraysEqualsClause tmpName fname =
           thisArg,
           otherArg]})))
 
-augmentVariantClass :: Environment.Aliases -> [Syntax.TypeParameter] -> Core.Name -> Syntax.ClassDeclaration -> Syntax.ClassDeclaration
+augmentVariantClass :: Environment_.Aliases -> [Syntax.TypeParameter] -> Core.Name -> Syntax.ClassDeclaration -> Syntax.ClassDeclaration
 augmentVariantClass aliases tparams elName cd =
     case cd of
       Syntax.ClassDeclarationNormal v0 ->
@@ -248,11 +254,11 @@ augmentVariantClass aliases tparams elName cd =
 
 bindingIsFunctionType :: Core.Binding -> Bool
 bindingIsFunctionType b =
-    Maybes.maybe (case (Rewriting.deannotateTerm (Core.bindingTerm b)) of
+    Maybes.maybe (case (Strip.deannotateTerm (Core.bindingTerm b)) of
       Core.TermFunction _ -> True
-      _ -> False) (\ts -> case (Rewriting.deannotateType (Core.typeSchemeType ts)) of
+      _ -> False) (\ts -> case (Strip.deannotateType (Core.typeSchemeType ts)) of
       Core.TypeFunction _ -> True
-      Core.TypeForall v0 -> case (Rewriting.deannotateType (Core.forallTypeBody v0)) of
+      Core.TypeForall v0 -> case (Strip.deannotateType (Core.forallTypeBody v0)) of
         Core.TypeFunction _ -> True
         _ -> False
       _ -> False) (Core.bindingType b)
@@ -270,21 +276,21 @@ bindingNameToFilePath name =
                     Module.qualifiedNameLocal = sanitized})
       in (CoderUtils.nameToFilePath Util.CaseConventionCamel Util.CaseConventionPascal (Module.FileExtension "java") unq)
 
-bindingsToStatements :: Environment.JavaEnvironment -> [Core.Binding] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) ([Syntax.BlockStatement], Environment.JavaEnvironment)
+bindingsToStatements :: Environment_.JavaEnvironment -> [Core.Binding] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) ([Syntax.BlockStatement], Environment_.JavaEnvironment)
 bindingsToStatements env bindings cx g0 =
 
-      let aliases = Environment.javaEnvironmentAliases env
-          g = Environment.javaEnvironmentGraph env
-          flatBindings = dedupBindings (Environment.aliasesInScopeJavaVars aliases) (flattenBindings bindings)
+      let aliases = Environment_.javaEnvironmentAliases env
+          g = Environment_.javaEnvironmentGraph env
+          flatBindings = dedupBindings (Environment_.aliasesInScopeJavaVars aliases) (flattenBindings bindings)
           gExtended =
-                  Rewriting.extendGraphForLet CoderUtils.bindingMetadata g (Core.Let {
+                  Scoping.extendGraphForLet CoderUtils.bindingMetadata g (Core.Let {
                     Core.letBindings = flatBindings,
                     Core.letBody = (Core.TermVariable (Core.Name "dummy"))})
           bindingVars = Sets.fromList (Lists.map (\b -> Core.bindingName b) flatBindings)
           allDeps =
                   Maps.fromList (Lists.map (\b ->
                     let key = Core.bindingName b
-                        deps = Sets.intersection bindingVars (Rewriting.freeVariablesInTerm (Core.bindingTerm b))
+                        deps = Sets.intersection bindingVars (Variables.freeVariablesInTerm (Core.bindingTerm b))
                     in (key, deps)) flatBindings)
           sorted =
                   Sorting.topologicalSortComponents (Lists.map (\entry ->
@@ -302,24 +308,24 @@ bindingsToStatements env bindings cx g0 =
                     in (Logic.ifElse (Logic.and (Logic.not (Sets.member bname recursiveVars)) (Logic.and (needsThunking (Core.bindingTerm b)) (Logic.not (bindingIsFunctionType b)))) [
                       bname] [])) flatBindings))
           aliasesExtended =
-                  Environment.Aliases {
-                    Environment.aliasesCurrentNamespace = (Environment.aliasesCurrentNamespace aliases),
-                    Environment.aliasesPackages = (Environment.aliasesPackages aliases),
-                    Environment.aliasesBranchVars = (Environment.aliasesBranchVars aliases),
-                    Environment.aliasesRecursiveVars = (Sets.union (Environment.aliasesRecursiveVars aliases) recursiveVars),
-                    Environment.aliasesInScopeTypeParams = (Environment.aliasesInScopeTypeParams aliases),
-                    Environment.aliasesPolymorphicLocals = (Environment.aliasesPolymorphicLocals aliases),
-                    Environment.aliasesInScopeJavaVars = (Sets.union (Environment.aliasesInScopeJavaVars aliases) bindingVars),
-                    Environment.aliasesVarRenames = (Environment.aliasesVarRenames aliases),
-                    Environment.aliasesLambdaVars = (Environment.aliasesLambdaVars aliases),
-                    Environment.aliasesTypeVarSubst = (Environment.aliasesTypeVarSubst aliases),
-                    Environment.aliasesTrustedTypeVars = (Environment.aliasesTrustedTypeVars aliases),
-                    Environment.aliasesMethodCodomain = (Environment.aliasesMethodCodomain aliases),
-                    Environment.aliasesThunkedVars = (Sets.union (Environment.aliasesThunkedVars aliases) thunkedVars)}
+                  Environment_.Aliases {
+                    Environment_.aliasesCurrentNamespace = (Environment_.aliasesCurrentNamespace aliases),
+                    Environment_.aliasesPackages = (Environment_.aliasesPackages aliases),
+                    Environment_.aliasesBranchVars = (Environment_.aliasesBranchVars aliases),
+                    Environment_.aliasesRecursiveVars = (Sets.union (Environment_.aliasesRecursiveVars aliases) recursiveVars),
+                    Environment_.aliasesInScopeTypeParams = (Environment_.aliasesInScopeTypeParams aliases),
+                    Environment_.aliasesPolymorphicLocals = (Environment_.aliasesPolymorphicLocals aliases),
+                    Environment_.aliasesInScopeJavaVars = (Sets.union (Environment_.aliasesInScopeJavaVars aliases) bindingVars),
+                    Environment_.aliasesVarRenames = (Environment_.aliasesVarRenames aliases),
+                    Environment_.aliasesLambdaVars = (Environment_.aliasesLambdaVars aliases),
+                    Environment_.aliasesTypeVarSubst = (Environment_.aliasesTypeVarSubst aliases),
+                    Environment_.aliasesTrustedTypeVars = (Environment_.aliasesTrustedTypeVars aliases),
+                    Environment_.aliasesMethodCodomain = (Environment_.aliasesMethodCodomain aliases),
+                    Environment_.aliasesThunkedVars = (Sets.union (Environment_.aliasesThunkedVars aliases) thunkedVars)}
           envExtended =
-                  Environment.JavaEnvironment {
-                    Environment.javaEnvironmentAliases = aliasesExtended,
-                    Environment.javaEnvironmentGraph = gExtended}
+                  Environment_.JavaEnvironment {
+                    Environment_.javaEnvironmentAliases = aliasesExtended,
+                    Environment_.javaEnvironmentGraph = gExtended}
       in (Logic.ifElse (Lists.null bindings) (Right ([], envExtended)) (Eithers.bind (Eithers.mapList (\names -> Eithers.bind (Eithers.mapList (\n -> toDeclInit aliasesExtended gExtended recursiveVars flatBindings n cx g) names) (\inits -> Eithers.bind (Eithers.mapList (\n -> toDeclStatement envExtended aliasesExtended gExtended recursiveVars thunkedVars flatBindings n cx g) names) (\decls -> Right (Lists.concat2 (Maybes.cat inits) decls)))) sorted) (\groups -> Right (Lists.concat groups, envExtended))))
 
 boundTypeVariables :: Core.Type -> [Core.Name]
@@ -334,7 +340,7 @@ buildArgSubst schemeVarSet schemeDoms argTypes =
     Maps.fromList (Lists.bind (Lists.zip schemeDoms argTypes) (\p ->
       let sdom = Pairs.first p
           argType = Pairs.second p
-      in case (Rewriting.deannotateType sdom) of
+      in case (Strip.deannotateType sdom) of
         Core.TypeVariable v0 -> Logic.ifElse (Sets.member v0 schemeVarSet) [
           (v0, argType)] []
         _ -> []))
@@ -353,9 +359,9 @@ buildSubstFromAnnotations_go schemeVarSet g term =
             anns = Core.annotatedTermAnnotation v0
             bodySubst = buildSubstFromAnnotations_go schemeVarSet g body
             annSubst =
-                    Maybes.cases (Maps.lookup Constants.key_type anns) Maps.empty (\typeTerm -> Eithers.either (\_ -> Maps.empty) (\annType -> case (Rewriting.deannotateTerm body) of
+                    Maybes.cases (Maps.lookup Constants.key_type anns) Maps.empty (\typeTerm -> Eithers.either (\_ -> Maps.empty) (\annType -> case (Strip.deannotateTerm body) of
                       Core.TermFunction v1 -> case v1 of
-                        Core.FunctionLambda v2 -> Maybes.cases (Core.lambdaDomain v2) Maps.empty (\dom -> case (Rewriting.deannotateType annType) of
+                        Core.FunctionLambda v2 -> Maybes.cases (Core.lambdaDomain v2) Maps.empty (\dom -> case (Strip.deannotateType annType) of
                           Core.TypeFunction v3 -> buildTypeVarSubst schemeVarSet (Core.functionTypeDomain v3) dom
                           _ -> Maps.empty)
                         _ -> Maps.empty
@@ -388,12 +394,12 @@ buildSubstFromAnnotations_go schemeVarSet g term =
 
 buildTypeSubst :: S.Set Core.Name -> Core.Type -> Core.Type -> M.Map Core.Name Core.Type
 buildTypeSubst schemeVarSet schemeType actualType =
-    buildTypeSubst_go schemeVarSet (Rewriting.deannotateType schemeType) (Rewriting.deannotateType actualType)
+    buildTypeSubst_go schemeVarSet (Strip.deannotateType schemeType) (Strip.deannotateType actualType)
 
 buildTypeSubst_go :: S.Set Core.Name -> Core.Type -> Core.Type -> M.Map Core.Name Core.Type
 buildTypeSubst_go svs st at =
 
-      let goSub = \a -> \b -> buildTypeSubst_go svs (Rewriting.deannotateType a) (Rewriting.deannotateType b)
+      let goSub = \a -> \b -> buildTypeSubst_go svs (Strip.deannotateType a) (Strip.deannotateType b)
       in case st of
         Core.TypeVariable v0 -> Logic.ifElse (Sets.member v0 svs) (Maps.singleton v0 at) Maps.empty
         Core.TypeFunction v0 -> case at of
@@ -427,12 +433,12 @@ buildTypeSubst_go svs st at =
 
 buildTypeVarSubst :: S.Set Core.Name -> Core.Type -> Core.Type -> M.Map Core.Name Core.Name
 buildTypeVarSubst schemeVarSet freshTyp canonTyp =
-    buildTypeVarSubst_go schemeVarSet (Rewriting.deannotateType freshTyp) (Rewriting.deannotateType canonTyp)
+    buildTypeVarSubst_go schemeVarSet (Strip.deannotateType freshTyp) (Strip.deannotateType canonTyp)
 
 buildTypeVarSubst_go :: S.Set Core.Name -> Core.Type -> Core.Type -> M.Map Core.Name Core.Name
 buildTypeVarSubst_go svs ft ct =
 
-      let goSub = \a -> \b -> buildTypeVarSubst_go svs (Rewriting.deannotateType a) (Rewriting.deannotateType b)
+      let goSub = \a -> \b -> buildTypeVarSubst_go svs (Strip.deannotateType a) (Strip.deannotateType b)
       in case ft of
         Core.TypeVariable v0 -> case ct of
           Core.TypeVariable v1 -> Logic.ifElse (Logic.and (Logic.not (Equality.equal v0 v1)) (Sets.member v1 svs)) (Maps.singleton v0 v1) Maps.empty
@@ -463,34 +469,34 @@ buildTypeVarSubst_go svs ft ct =
           _ -> Maps.empty
         Core.TypeForall v0 -> case ct of
           Core.TypeForall v1 -> goSub (Core.forallTypeBody v0) (Core.forallTypeBody v1)
-          _ -> buildTypeVarSubst_go svs (Rewriting.deannotateType (Core.forallTypeBody v0)) ct
+          _ -> buildTypeVarSubst_go svs (Strip.deannotateType (Core.forallTypeBody v0)) ct
         _ -> case ct of
-          Core.TypeForall v0 -> buildTypeVarSubst_go svs ft (Rewriting.deannotateType (Core.forallTypeBody v0))
+          Core.TypeForall v0 -> buildTypeVarSubst_go svs ft (Strip.deannotateType (Core.forallTypeBody v0))
           _ -> Maps.empty
 
 classModsPublic :: [Syntax.ClassModifier]
 classModsPublic = [
   Syntax.ClassModifierPublic]
 
-classifyDataReference :: Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Environment.JavaSymbolClass
+classifyDataReference :: Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Environment_.JavaSymbolClass
 classifyDataReference name cx g =
-    Eithers.bind (Right (Lexical.dereferenceElement g name)) (\mel -> Maybes.cases mel (Right Environment.JavaSymbolClassLocalVariable) (\el -> Maybes.cases (Core.bindingType el) (Left (Context.InContext {
+    Eithers.bind (Right (Lexical.dereferenceElement g name)) (\mel -> Maybes.cases mel (Right Environment_.JavaSymbolClassLocalVariable) (\el -> Maybes.cases (Core.bindingType el) (Left (Context.InContext {
       Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "no type scheme for element " (Core.unName (Core.bindingName el))))),
       Context.inContextContext = cx})) (\ts -> Right (classifyDataTerm ts (Core.bindingTerm el)))))
 
-classifyDataTerm :: Core.TypeScheme -> Core.Term -> Environment.JavaSymbolClass
+classifyDataTerm :: Core.TypeScheme -> Core.Term -> Environment_.JavaSymbolClass
 classifyDataTerm ts term =
-    Logic.ifElse (Rewriting.isLambda term) (
+    Logic.ifElse (Dependencies.isLambda term) (
       let n = classifyDataTerm_countLambdaParams term
-      in (Logic.ifElse (Equality.gt n 1) (Environment.JavaSymbolClassHoistedLambda n) Environment.JavaSymbolClassUnaryFunction)) (
+      in (Logic.ifElse (Equality.gt n 1) (Environment_.JavaSymbolClassHoistedLambda n) Environment_.JavaSymbolClassUnaryFunction)) (
       let hasTypeParams = Logic.not (Lists.null (Core.typeSchemeVariables ts))
       in (Logic.ifElse hasTypeParams (
         let n2 = classifyDataTerm_countLambdaParams (classifyDataTerm_stripTypeLambdas term)
-        in (Logic.ifElse (Equality.gt n2 0) (Environment.JavaSymbolClassHoistedLambda n2) Environment.JavaSymbolClassNullaryFunction)) Environment.JavaSymbolClassNullaryFunction))
+        in (Logic.ifElse (Equality.gt n2 0) (Environment_.JavaSymbolClassHoistedLambda n2) Environment_.JavaSymbolClassNullaryFunction)) Environment_.JavaSymbolClassNullaryFunction))
 
 classifyDataTerm_countLambdaParams :: Core.Term -> Int
 classifyDataTerm_countLambdaParams t =
-    case (Rewriting.deannotateTerm t) of
+    case (Strip.deannotateTerm t) of
       Core.TermFunction v0 -> case v0 of
         Core.FunctionLambda v1 -> Math.add 1 (classifyDataTerm_countLambdaParams (Core.lambdaBody v1))
         _ -> 0
@@ -499,7 +505,7 @@ classifyDataTerm_countLambdaParams t =
 
 classifyDataTerm_stripTypeLambdas :: Core.Term -> Core.Term
 classifyDataTerm_stripTypeLambdas t =
-    case (Rewriting.deannotateTerm t) of
+    case (Strip.deannotateTerm t) of
       Core.TermTypeLambda v0 -> classifyDataTerm_stripTypeLambdas (Core.typeLambdaBody v0)
       _ -> t
 
@@ -522,13 +528,13 @@ cmpNotZeroExpr =
 
 collectForallParams :: Core.Type -> [Core.Name]
 collectForallParams t =
-    case (Rewriting.deannotateType t) of
+    case (Strip.deannotateType t) of
       Core.TypeForall v0 -> Lists.cons (Core.forallTypeParameter v0) (collectForallParams (Core.forallTypeBody v0))
       _ -> []
 
 collectLambdaDomains :: Core.Term -> ([Core.Type], Core.Term)
 collectLambdaDomains t =
-    case (Rewriting.deannotateTerm t) of
+    case (Strip.deannotateTerm t) of
       Core.TermFunction v0 -> case v0 of
         Core.FunctionLambda v1 -> Maybes.cases (Core.lambdaDomain v1) ([], t) (\dom ->
           let rest = collectLambdaDomains (Core.lambdaBody v1)
@@ -538,32 +544,32 @@ collectLambdaDomains t =
 
 collectTypeApps :: Core.Term -> [Core.Type] -> (Core.Term, [Core.Type])
 collectTypeApps t acc =
-    case (Rewriting.deannotateTerm t) of
+    case (Strip.deannotateTerm t) of
       Core.TermTypeApplication v0 -> collectTypeApps (Core.typeApplicationTermBody v0) (Lists.cons (Core.typeApplicationTermType v0) acc)
-      _ -> (Rewriting.deannotateTerm t, acc)
+      _ -> (Strip.deannotateTerm t, acc)
 
 collectTypeApps0 :: Core.Term -> [Core.Type] -> (Core.Term, [Core.Type])
 collectTypeApps0 t acc =
-    case (Rewriting.deannotateTerm t) of
+    case (Strip.deannotateTerm t) of
       Core.TermTypeApplication v0 -> collectTypeApps0 (Core.typeApplicationTermBody v0) (Lists.cons (Core.typeApplicationTermType v0) acc)
       _ -> (t, acc)
 
 collectTypeVars :: Core.Type -> S.Set Core.Name
-collectTypeVars typ = collectTypeVars_go (Rewriting.deannotateType typ)
+collectTypeVars typ = collectTypeVars_go (Strip.deannotateType typ)
 
 collectTypeVars_go :: Core.Type -> S.Set Core.Name
 collectTypeVars_go t =
     case t of
       Core.TypeVariable v0 -> Sets.singleton v0
-      Core.TypeFunction v0 -> Sets.union (collectTypeVars_go (Rewriting.deannotateType (Core.functionTypeDomain v0))) (collectTypeVars_go (Rewriting.deannotateType (Core.functionTypeCodomain v0)))
-      Core.TypeApplication v0 -> Sets.union (collectTypeVars_go (Rewriting.deannotateType (Core.applicationTypeFunction v0))) (collectTypeVars_go (Rewriting.deannotateType (Core.applicationTypeArgument v0)))
-      Core.TypeList v0 -> collectTypeVars_go (Rewriting.deannotateType v0)
-      Core.TypeSet v0 -> collectTypeVars_go (Rewriting.deannotateType v0)
-      Core.TypeMaybe v0 -> collectTypeVars_go (Rewriting.deannotateType v0)
-      Core.TypeMap v0 -> Sets.union (collectTypeVars_go (Rewriting.deannotateType (Core.mapTypeKeys v0))) (collectTypeVars_go (Rewriting.deannotateType (Core.mapTypeValues v0)))
-      Core.TypePair v0 -> Sets.union (collectTypeVars_go (Rewriting.deannotateType (Core.pairTypeFirst v0))) (collectTypeVars_go (Rewriting.deannotateType (Core.pairTypeSecond v0)))
-      Core.TypeEither v0 -> Sets.union (collectTypeVars_go (Rewriting.deannotateType (Core.eitherTypeLeft v0))) (collectTypeVars_go (Rewriting.deannotateType (Core.eitherTypeRight v0)))
-      Core.TypeForall v0 -> collectTypeVars_go (Rewriting.deannotateType (Core.forallTypeBody v0))
+      Core.TypeFunction v0 -> Sets.union (collectTypeVars_go (Strip.deannotateType (Core.functionTypeDomain v0))) (collectTypeVars_go (Strip.deannotateType (Core.functionTypeCodomain v0)))
+      Core.TypeApplication v0 -> Sets.union (collectTypeVars_go (Strip.deannotateType (Core.applicationTypeFunction v0))) (collectTypeVars_go (Strip.deannotateType (Core.applicationTypeArgument v0)))
+      Core.TypeList v0 -> collectTypeVars_go (Strip.deannotateType v0)
+      Core.TypeSet v0 -> collectTypeVars_go (Strip.deannotateType v0)
+      Core.TypeMaybe v0 -> collectTypeVars_go (Strip.deannotateType v0)
+      Core.TypeMap v0 -> Sets.union (collectTypeVars_go (Strip.deannotateType (Core.mapTypeKeys v0))) (collectTypeVars_go (Strip.deannotateType (Core.mapTypeValues v0)))
+      Core.TypePair v0 -> Sets.union (collectTypeVars_go (Strip.deannotateType (Core.pairTypeFirst v0))) (collectTypeVars_go (Strip.deannotateType (Core.pairTypeSecond v0)))
+      Core.TypeEither v0 -> Sets.union (collectTypeVars_go (Strip.deannotateType (Core.eitherTypeLeft v0))) (collectTypeVars_go (Strip.deannotateType (Core.eitherTypeRight v0)))
+      Core.TypeForall v0 -> collectTypeVars_go (Strip.deannotateType (Core.forallTypeBody v0))
       _ -> Sets.empty
 
 comparableCompareExpr :: String -> String -> Syntax.Expression
@@ -633,7 +639,7 @@ compareToZeroClause tmpName fname =
         Syntax.equalityExpression_BinaryLhs = lhs,
         Syntax.equalityExpression_BinaryRhs = rhs})))
 
-constantDecl :: String -> Environment.Aliases -> Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassBodyDeclarationWithComments
+constantDecl :: String -> Environment_.Aliases -> Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassBodyDeclarationWithComments
 constantDecl javaName aliases name cx g =
 
       let mods =
@@ -643,9 +649,9 @@ constantDecl javaName aliases name cx g =
                 Syntax.FieldModifierFinal]
           nameName = Utils.nameToJavaName aliases (Core.Name "hydra.core.Name")
           env =
-                  Environment.JavaEnvironment {
-                    Environment.javaEnvironmentAliases = aliases,
-                    Environment.javaEnvironmentGraph = g}
+                  Environment_.JavaEnvironment {
+                    Environment_.javaEnvironmentAliases = aliases,
+                    Environment_.javaEnvironmentGraph = g}
       in (Eithers.bind (encodeType aliases Sets.empty (Core.TypeVariable (Core.Name "hydra.core.Name")) cx g) (\jt -> Eithers.bind (encodeTerm env (Core.TermLiteral (Core.LiteralString (Core.unName name))) cx g) (\arg ->
         let init =
                 Syntax.VariableInitializerExpression (Utils.javaConstructorCall (Utils.javaConstructorName nameName Nothing) [
@@ -653,7 +659,7 @@ constantDecl javaName aliases name cx g =
             var = Utils.javaVariableDeclarator (Syntax.Identifier javaName) (Just init)
         in (Right (noComment (Utils.javaMemberField mods jt var))))))
 
-constantDeclForFieldType :: Environment.Aliases -> Core.FieldType -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassBodyDeclarationWithComments
+constantDeclForFieldType :: Environment_.Aliases -> Core.FieldType -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassBodyDeclarationWithComments
 constantDeclForFieldType aliases ftyp cx g =
 
       let name = Core.fieldTypeName ftyp
@@ -661,7 +667,7 @@ constantDeclForFieldType aliases ftyp cx g =
                   Formatting.nonAlnumToUnderscores (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionUpperSnake (Core.unName name))
       in (constantDecl javaName aliases name cx g)
 
-constantDeclForTypeName :: Environment.Aliases -> Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassBodyDeclarationWithComments
+constantDeclForTypeName :: Environment_.Aliases -> Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassBodyDeclarationWithComments
 constantDeclForTypeName aliases name cx g = constantDecl "TYPE_" aliases name cx g
 
 constructElementsInterface :: Module.Module -> [Syntax.InterfaceMemberDeclaration] -> (Core.Name, Syntax.CompilationUnit)
@@ -694,7 +700,7 @@ constructElementsInterface mod members =
 
 correctCastType :: Core.Term -> [Core.Type] -> Core.Type -> t0 -> t1 -> Either t2 Core.Type
 correctCastType innerBody typeArgs fallback cx g =
-    case (Rewriting.deannotateTerm innerBody) of
+    case (Strip.deannotateTerm innerBody) of
       Core.TermPair _ -> Logic.ifElse (Equality.equal (Lists.length typeArgs) 2) (Right (Core.TypePair (Core.PairType {
         Core.pairTypeFirst = (Lists.head typeArgs),
         Core.pairTypeSecond = (Lists.head (Lists.tail typeArgs))}))) (Right fallback)
@@ -735,20 +741,20 @@ correctTypeAppsWithArgs schemeVars fallbackTypeApps schemeType args cx g =
         let argTypes = Lists.bind mArgTypes (\m -> Maybes.cases m [] (\x -> Lists.pure x))
             irDoms = Lists.map (\d -> applySubstSimple irSubst d) schemeDoms
             domsMatch =
-                    Lists.null (Lists.filter (\p -> Logic.not (typesMatch (Rewriting.deannotateType (Pairs.first p)) (Rewriting.deannotateType (Pairs.second p)))) (Lists.zip irDoms argTypes))
+                    Lists.null (Lists.filter (\p -> Logic.not (typesMatch (Strip.deannotateType (Pairs.first p)) (Strip.deannotateType (Pairs.second p)))) (Lists.zip irDoms argTypes))
         in (Logic.ifElse domsMatch (Right fallbackTypeApps) (Right (resolveTypeApps schemeVars fallbackTypeApps (buildArgSubst schemeVarSet schemeDoms argTypes)))))))
 
 countFunctionParams :: Core.Type -> Int
 countFunctionParams t =
-    case (Rewriting.deannotateType t) of
+    case (Strip.deannotateType t) of
       Core.TypeFunction v0 -> Math.add 1 (countFunctionParams (Core.functionTypeCodomain v0))
       _ -> 0
 
-declarationForRecordType :: Bool -> Bool -> Environment.Aliases -> [Syntax.TypeParameter] -> Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassDeclaration
+declarationForRecordType :: Bool -> Bool -> Environment_.Aliases -> [Syntax.TypeParameter] -> Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassDeclaration
 declarationForRecordType isInner isSer aliases tparams elName fields cx g =
     declarationForRecordType_ isInner isSer aliases tparams elName Nothing fields cx g
 
-declarationForRecordType_ :: Bool -> Bool -> Environment.Aliases -> [Syntax.TypeParameter] -> Core.Name -> Maybe Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassDeclaration
+declarationForRecordType_ :: Bool -> Bool -> Environment_.Aliases -> [Syntax.TypeParameter] -> Core.Name -> Maybe Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassDeclaration
 declarationForRecordType_ isInner isSer aliases tparams elName parentName fields cx g =
     Eithers.bind (Eithers.mapList (\f -> recordMemberVar aliases f cx g) fields) (\memberVars -> Eithers.bind (Eithers.mapList (\p -> addComment (Pairs.first p) (Pairs.second p) cx g) (Lists.zip memberVars fields)) (\memberVars_ -> Eithers.bind (Logic.ifElse (Equality.gt (Lists.length fields) 1) (Eithers.mapList (\f -> recordWithMethod aliases elName fields f cx g) fields) (Right [])) (\withMethods -> Eithers.bind (recordConstructor aliases elName fields cx g) (\cons -> Eithers.bind (Logic.ifElse isInner (Right []) (Eithers.bind (constantDeclForTypeName aliases elName cx g) (\d -> Eithers.bind (Eithers.mapList (\f -> constantDeclForFieldType aliases f cx g) fields) (\dfields -> Right (Lists.cons d dfields))))) (\tn ->
       let comparableMethods =
@@ -763,16 +769,16 @@ declarationForRecordType_ isInner isSer aliases tparams elName parentName fields
           ifaces = Logic.ifElse isInner (serializableTypes isSer) (interfaceTypes isSer aliases tparams elName)
       in (Right (Utils.javaClassDeclaration aliases tparams elName classModsPublic Nothing ifaces bodyDecls)))))))
 
-declarationForUnionType :: Bool -> Environment.Aliases -> [Syntax.TypeParameter] -> Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassDeclaration
+declarationForUnionType :: Bool -> Environment_.Aliases -> [Syntax.TypeParameter] -> Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassDeclaration
 declarationForUnionType isSer aliases tparams elName fields cx g =
     Eithers.bind (Eithers.mapList (\ft ->
       let fname = Core.fieldTypeName ft
           ftype = Core.fieldTypeType ft
           rfields =
-                  Logic.ifElse (Schemas.isUnitType (Rewriting.deannotateType ftype)) [] [
+                  Logic.ifElse (Predicates.isUnitType (Strip.deannotateType ftype)) [] [
                     Core.FieldType {
                       Core.fieldTypeName = (Core.Name "value"),
-                      Core.fieldTypeType = (Rewriting.deannotateType ftype)}]
+                      Core.fieldTypeType = (Strip.deannotateType ftype)}]
           varName = Utils.variantClassName False elName fname
       in (Eithers.bind (declarationForRecordType_ True isSer aliases [] varName (Logic.ifElse isSer (Just elName) Nothing) rfields cx g) (\innerDecl -> Right (augmentVariantClass aliases tparams elName innerDecl)))) fields) (\variantClasses ->
       let variantDecls =
@@ -864,7 +870,7 @@ declarationForUnionType isSer aliases tparams elName fields cx g =
 
 decodeTypeFromTerm :: Core.Term -> Maybe Core.Type
 decodeTypeFromTerm term =
-    case (Rewriting.deannotateTerm term) of
+    case (Strip.deannotateTerm term) of
       Core.TermUnion v0 -> Logic.ifElse (Equality.equal (Core.injectionTypeName v0) (Core.Name "hydra.core.Type")) (
         let fname = Core.unName (Core.fieldName (Core.injectionField v0))
             fterm = Core.fieldTerm (Core.injectionField v0)
@@ -901,7 +907,7 @@ dedupBindings inScope bs =
             rest2 =
                     Lists.map (\b2 -> Core.Binding {
                       Core.bindingName = (Core.bindingName b2),
-                      Core.bindingTerm = (Rewriting.substituteVariables subst (Core.bindingTerm b2)),
+                      Core.bindingTerm = (Variables.substituteVariables subst (Core.bindingTerm b2)),
                       Core.bindingType = (Core.bindingType b2)}) rest
         in (Lists.cons (Core.Binding {
           Core.bindingName = newName,
@@ -919,7 +925,7 @@ detectAccumulatorUnification doms cod tparams =
           groupedDirect = groupPairsByFirst directPairs
           directInputVars = Sets.fromList (Lists.map (\p -> Pairs.first p) directPairs)
           codVar =
-                  case (Rewriting.deannotateType cod) of
+                  case (Strip.deannotateType cod) of
                     Core.TypeVariable v0 -> Just v0
                     _ -> Nothing
           directRefSubst = directRefSubstitution directInputVars codVar groupedDirect
@@ -943,13 +949,13 @@ directRefSubstitution_processGroup directInputVars codVar subst inVar outVars =
                   Lists.filter (\v -> Logic.and (Logic.not (Sets.member v directInputVars)) (Logic.not (Equality.equal (Just v) codVar))) nonSelfVars
       in (Logic.ifElse (Logic.and (Equality.gte selfRefCount 2) (Logic.not (Lists.null safeNonSelfVars))) (Lists.foldl (\s -> \v -> Maps.insert v inVar s) subst safeNonSelfVars) subst)
 
-domTypeArgs :: Environment.Aliases -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) [Syntax.TypeArgument]
+domTypeArgs :: Environment_.Aliases -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) [Syntax.TypeArgument]
 domTypeArgs aliases d cx g =
 
-      let args = extractTypeApplicationArgs (Rewriting.deannotateType d)
+      let args = extractTypeApplicationArgs (Strip.deannotateType d)
       in (Logic.ifElse (Logic.not (Lists.null args)) (Eithers.mapList (\t -> Eithers.bind (encodeType aliases Sets.empty t cx g) (\jt -> Eithers.bind (Utils.javaTypeToJavaReferenceType jt cx) (\rt -> Right (Syntax.TypeArgumentReference rt)))) args) (Right (javaTypeArgumentsForType d)))
 
-elementJavaIdentifier :: Bool -> Bool -> Environment.Aliases -> Core.Name -> Syntax.Identifier
+elementJavaIdentifier :: Bool -> Bool -> Environment_.Aliases -> Core.Name -> Syntax.Identifier
 elementJavaIdentifier isPrim isMethod aliases name =
 
       let qn = Names_.qualifyName name
@@ -958,7 +964,7 @@ elementJavaIdentifier isPrim isMethod aliases name =
           sep = Logic.ifElse isMethod "::" "."
       in (Logic.ifElse isPrim (Syntax.Identifier (Strings.cat2 (Strings.cat2 (elementJavaIdentifier_qualify aliases ns_ (Formatting.capitalize local)) ".") Names.applyMethodName)) (Maybes.cases ns_ (Syntax.Identifier (Utils.sanitizeJavaName local)) (\n -> Syntax.Identifier (Strings.cat2 (Strings.cat2 (elementJavaIdentifier_qualify aliases (namespaceParent n) (elementsClassName n)) sep) (Utils.sanitizeJavaName local)))))
 
-elementJavaIdentifier_qualify :: Environment.Aliases -> Maybe Module.Namespace -> String -> String
+elementJavaIdentifier_qualify :: Environment_.Aliases -> Maybe Module.Namespace -> String -> String
 elementJavaIdentifier_qualify aliases mns s =
     Syntax.unIdentifier (Utils.nameToJavaName aliases (Names_.unqualifyName (Module.QualifiedName {
       Module.qualifiedNameNamespace = mns,
@@ -977,11 +983,11 @@ elementsQualifiedName ns =
       Module.qualifiedNameNamespace = (namespaceParent ns),
       Module.qualifiedNameLocal = (elementsClassName ns)})
 
-encodeApplication :: Environment.JavaEnvironment -> Core.Application -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
+encodeApplication :: Environment_.JavaEnvironment -> Core.Application -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeApplication env app cx g0 =
 
-      let aliases = Environment.javaEnvironmentAliases env
-          g = Environment.javaEnvironmentGraph env
+      let aliases = Environment_.javaEnvironmentAliases env
+          g = Environment_.javaEnvironmentGraph env
           gathered = CoderUtils.gatherArgsWithTypeApps (Core.TermApplication app) [] []
           fun = Pairs.first gathered
           args = Pairs.first (Pairs.second gathered)
@@ -990,7 +996,7 @@ encodeApplication env app cx g0 =
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
         Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g (Annotations.termAnnotationInternal fun))) (\mfunTyp -> Eithers.bind (Maybes.cases mfunTyp (CoderUtils.typeOfTerm cx g fun) (\t -> Right t)) (\funTyp ->
         let arity = Arity.typeArity funTyp
-            deannotatedFun = Rewriting.deannotateTerm fun
+            deannotatedFun = Strip.deannotateTerm fun
             calleeName =
                     case deannotatedFun of
                       Core.TermFunction v0 -> case v0 of
@@ -1005,15 +1011,15 @@ encodeApplication env app cx g0 =
                   rargs = Lists.drop arity annotatedArgs
               in (Eithers.bind (functionCall env True v1 hargs [] cx g) (\initialCall -> Eithers.foldl (\acc -> \h -> Eithers.bind (encodeTerm env h cx g) (\jarg -> Right (applyJavaArg acc jarg))) initialCall rargs))
             _ -> encodeApplication_fallback env aliases g typeApps (Core.applicationFunction app) (Core.applicationArgument app) cx g
-          Core.TermVariable v0 -> Logic.ifElse (Logic.and (isRecursiveVariable aliases v0) (Logic.not (isLambdaBoundIn v0 (Environment.aliasesLambdaVars aliases)))) (encodeApplication_fallback env aliases g typeApps (Core.applicationFunction app) (Core.applicationArgument app) cx g) (Eithers.bind (classifyDataReference v0 cx g) (\symClass ->
+          Core.TermVariable v0 -> Logic.ifElse (Logic.and (isRecursiveVariable aliases v0) (Logic.not (isLambdaBoundIn v0 (Environment_.aliasesLambdaVars aliases)))) (encodeApplication_fallback env aliases g typeApps (Core.applicationFunction app) (Core.applicationArgument app) cx g) (Eithers.bind (classifyDataReference v0 cx g) (\symClass ->
             let methodArity =
                     case symClass of
-                      Environment.JavaSymbolClassHoistedLambda v1 -> v1
+                      Environment_.JavaSymbolClassHoistedLambda v1 -> v1
                       _ -> arity
                 hargs = Lists.take methodArity annotatedArgs
                 rargs = Lists.drop methodArity annotatedArgs
-                trusted = Environment.aliasesTrustedTypeVars aliases
-                inScope = Environment.aliasesInScopeTypeParams aliases
+                trusted = Environment_.aliasesTrustedTypeVars aliases
+                inScope = Environment_.aliasesInScopeTypeParams aliases
                 filteredTypeApps =
                         Logic.ifElse (Logic.or (Sets.null trusted) (Sets.null inScope)) [] (
                           let allVars = Sets.unions (Lists.map (\t -> collectTypeVars t) typeApps)
@@ -1021,15 +1027,15 @@ encodeApplication env app cx g0 =
             in (Eithers.bind (Logic.ifElse (Lists.null filteredTypeApps) (Right []) (correctTypeApps g v0 hargs filteredTypeApps cx g)) (\safeTypeApps -> Eithers.bind (filterPhantomTypeArgs v0 safeTypeApps cx g) (\finalTypeApps -> Eithers.bind (functionCall env False v0 hargs finalTypeApps cx g) (\initialCall -> Eithers.foldl (\acc -> \h -> Eithers.bind (encodeTerm env h cx g) (\jarg -> Right (applyJavaArg acc jarg))) initialCall rargs))))))
           _ -> encodeApplication_fallback env aliases g typeApps (Core.applicationFunction app) (Core.applicationArgument app) cx g)))))
 
-encodeApplication_fallback :: Environment.JavaEnvironment -> Environment.Aliases -> Graph.Graph -> [Core.Type] -> Core.Term -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
+encodeApplication_fallback :: Environment_.JavaEnvironment -> Environment_.Aliases -> Graph.Graph -> [Core.Type] -> Core.Term -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeApplication_fallback env aliases gr typeApps lhs rhs cx g =
     Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
       Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
-      Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g (Annotations.termAnnotationInternal lhs))) (\mt -> Eithers.bind (Maybes.cases mt (CoderUtils.typeOfTerm cx g lhs) (\typ -> Right typ)) (\t -> case (Rewriting.deannotateTypeParameters (Rewriting.deannotateType t)) of
+      Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g (Annotations.termAnnotationInternal lhs))) (\mt -> Eithers.bind (Maybes.cases mt (CoderUtils.typeOfTerm cx g lhs) (\typ -> Right typ)) (\t -> case (Strip.deannotateTypeParameters (Strip.deannotateType t)) of
       Core.TypeFunction v0 ->
         let dom = Core.functionTypeDomain v0
             cod = Core.functionTypeCodomain v0
-        in case (Rewriting.deannotateTerm lhs) of
+        in case (Strip.deannotateTerm lhs) of
           Core.TermFunction v1 -> case v1 of
             Core.FunctionElimination v2 -> Eithers.bind (encodeTerm env rhs cx g) (\jarg -> Eithers.bind (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType dom))) (Right dom) (Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
               Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
@@ -1043,11 +1049,11 @@ encodeDefinitions mod defs cx g =
 
       let aliases = Utils.importAliasesForModule mod
           env =
-                  Environment.JavaEnvironment {
-                    Environment.javaEnvironmentAliases = aliases,
-                    Environment.javaEnvironmentGraph = g}
+                  Environment_.JavaEnvironment {
+                    Environment_.javaEnvironmentAliases = aliases,
+                    Environment_.javaEnvironmentGraph = g}
           pkg = Utils.javaPackageDeclaration (Module.moduleNamespace mod)
-          partitioned = Schemas.partitionDefinitions defs
+          partitioned = Environment.partitionDefinitions defs
           typeDefs = Pairs.first partitioned
           termDefs = Pairs.second partitioned
           nonTypedefDefs =
@@ -1057,10 +1063,10 @@ encodeDefinitions mod defs cx g =
       in (Eithers.bind (Eithers.mapList (\td -> encodeTypeDefinition pkg aliases td cx g) nonTypedefDefs) (\typeUnits -> Eithers.bind (Logic.ifElse (Lists.null termDefs) (Right []) (Eithers.bind (Eithers.mapList (\td -> encodeTermDefinition env td cx g) termDefs) (\dataMembers -> Right [
         constructElementsInterface mod dataMembers]))) (\termUnits -> Right (Maps.fromList (Lists.concat2 typeUnits termUnits)))))
 
-encodeElimination :: Environment.JavaEnvironment -> Maybe Syntax.Expression -> Core.Type -> Core.Type -> Core.Elimination -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
+encodeElimination :: Environment_.JavaEnvironment -> Maybe Syntax.Expression -> Core.Type -> Core.Type -> Core.Elimination -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeElimination env marg dom cod elm cx g =
 
-      let aliases = Environment.javaEnvironmentAliases env
+      let aliases = Environment_.javaEnvironmentAliases env
       in case elm of
         Core.EliminationRecord v0 ->
           let fname = Core.projectionField v0
@@ -1112,18 +1118,18 @@ encodeElimination env marg dom cod elm cx g =
           Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected " (Strings.cat2 "elimination case" (Strings.cat2 " in " "encodeElimination"))))),
           Context.inContextContext = cx})
 
-encodeFunction :: Environment.JavaEnvironment -> Core.Type -> Core.Type -> Core.Function -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
+encodeFunction :: Environment_.JavaEnvironment -> Core.Type -> Core.Type -> Core.Function -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeFunction env dom cod fun cx g =
 
-      let aliases = Environment.javaEnvironmentAliases env
+      let aliases = Environment_.javaEnvironmentAliases env
       in case fun of
         Core.FunctionElimination v0 -> encodeElimination env Nothing dom cod v0 cx g
         Core.FunctionLambda v0 -> withLambda env v0 (\env2 ->
           let lambdaVar = Core.lambdaParameter v0
               body = Core.lambdaBody v0
-          in case (Rewriting.deannotateTerm body) of
+          in case (Strip.deannotateTerm body) of
             Core.TermFunction v1 -> case v1 of
-              Core.FunctionLambda v2 -> case (Rewriting.deannotateType cod) of
+              Core.FunctionLambda v2 -> case (Strip.deannotateType cod) of
                 Core.TypeFunction v3 ->
                   let dom2 = Core.functionTypeDomain v3
                       cod2 = Core.functionTypeCodomain v3
@@ -1267,10 +1273,10 @@ encodeLiteral_primCast :: Syntax.PrimitiveType -> Syntax.Expression -> Syntax.Ex
 encodeLiteral_primCast pt expr =
     Utils.javaCastExpressionToJavaExpression (Utils.javaCastPrimitive pt (Utils.javaExpressionToJavaUnaryExpression expr))
 
-encodeNullaryConstant :: Environment.JavaEnvironment -> Core.Type -> Core.Function -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
+encodeNullaryConstant :: Environment_.JavaEnvironment -> Core.Type -> Core.Function -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeNullaryConstant env typ fun cx g =
 
-      let aliases = Environment.javaEnvironmentAliases env
+      let aliases = Environment_.javaEnvironmentAliases env
       in case fun of
         Core.FunctionPrimitive v0 -> Eithers.bind (encodeNullaryConstant_typeArgsFromReturnType aliases typ cx g) (\targs -> Logic.ifElse (Lists.null targs) (
           let header = Syntax.MethodInvocation_HeaderSimple (Syntax.MethodName (elementJavaIdentifier True False aliases v0))
@@ -1286,9 +1292,9 @@ encodeNullaryConstant env typ fun cx g =
           Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected " (Strings.cat2 "nullary function" (Strings.cat2 " in " (Core___.function fun)))))),
           Context.inContextContext = cx})
 
-encodeNullaryConstant_typeArgsFromReturnType :: Environment.Aliases -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) [Syntax.TypeArgument]
+encodeNullaryConstant_typeArgsFromReturnType :: Environment_.Aliases -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) [Syntax.TypeArgument]
 encodeNullaryConstant_typeArgsFromReturnType aliases t cx g =
-    case (Rewriting.deannotateType t) of
+    case (Strip.deannotateType t) of
       Core.TypeSet v0 -> Eithers.bind (encodeType aliases Sets.empty v0 cx g) (\jst -> Eithers.bind (Utils.javaTypeToJavaReferenceType jst cx) (\rt -> Right [
         Syntax.TypeArgumentReference rt]))
       Core.TypeList v0 -> Eithers.bind (encodeType aliases Sets.empty v0 cx g) (\jlt -> Eithers.bind (Utils.javaTypeToJavaReferenceType jlt cx) (\rt -> Right [
@@ -1300,10 +1306,10 @@ encodeNullaryConstant_typeArgsFromReturnType aliases t cx g =
         (Syntax.TypeArgumentReference rv)]))))
       _ -> Right []
 
-encodeTerm :: Environment.JavaEnvironment -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
+encodeTerm :: Environment_.JavaEnvironment -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeTerm env term cx g = encodeTermInternal env [] [] term cx g
 
-encodeTermDefinition :: Environment.JavaEnvironment -> Module.TermDefinition -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.InterfaceMemberDeclaration
+encodeTermDefinition :: Environment_.JavaEnvironment -> Module.TermDefinition -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.InterfaceMemberDeclaration
 encodeTermDefinition env tdef cx g =
 
       let name = Module.termDefinitionName tdef
@@ -1313,7 +1319,7 @@ encodeTermDefinition env tdef cx g =
                     Core.typeSchemeVariables = [],
                     Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Unit")),
                     Core.typeSchemeConstraints = Nothing}) (\x -> x) (Module.termDefinitionType tdef)
-          term = Rewriting.unshadowVariables term0
+          term = Variables.unshadowVariables term0
       in (Eithers.bind (analyzeJavaFunction env term cx g) (\fs ->
         let schemeVars = Lists.filter (\v -> isSimpleName v) (Core.typeSchemeVariables ts)
             termVars = Typing.functionStructureTypeParams fs
@@ -1347,29 +1353,29 @@ encodeTermDefinition env tdef cx g =
                       Logic.ifElse (Maps.null overgenSubst) tparams (Lists.filter (\v -> Logic.not (Maps.member v overgenSubst)) tparams)
               constraints = Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints ts)
               jparams = Lists.map (\v -> Utils.javaTypeParameter (Formatting.capitalize (Core.unName v))) fixedTparams
-              aliases2base = Environment.javaEnvironmentAliases env2
+              aliases2base = Environment_.javaEnvironmentAliases env2
               trustedVars = Sets.unions (Lists.map (\d -> collectTypeVars d) (Lists.concat2 fixedDoms [
                     fixedCod]))
               fixedSchemeVarSet = Sets.fromList fixedTparams
               aliases2 =
-                      Environment.Aliases {
-                        Environment.aliasesCurrentNamespace = (Environment.aliasesCurrentNamespace aliases2base),
-                        Environment.aliasesPackages = (Environment.aliasesPackages aliases2base),
-                        Environment.aliasesBranchVars = (Environment.aliasesBranchVars aliases2base),
-                        Environment.aliasesRecursiveVars = (Environment.aliasesRecursiveVars aliases2base),
-                        Environment.aliasesInScopeTypeParams = fixedSchemeVarSet,
-                        Environment.aliasesPolymorphicLocals = (Environment.aliasesPolymorphicLocals aliases2base),
-                        Environment.aliasesInScopeJavaVars = (Environment.aliasesInScopeJavaVars aliases2base),
-                        Environment.aliasesVarRenames = (Environment.aliasesVarRenames aliases2base),
-                        Environment.aliasesLambdaVars = (Sets.union (Environment.aliasesLambdaVars aliases2base) (Sets.fromList params)),
-                        Environment.aliasesTypeVarSubst = (Maps.union overgenVarSubst typeVarSubst),
-                        Environment.aliasesTrustedTypeVars = (Sets.intersection trustedVars fixedSchemeVarSet),
-                        Environment.aliasesMethodCodomain = (Just fixedCod),
-                        Environment.aliasesThunkedVars = (Environment.aliasesThunkedVars aliases2base)}
+                      Environment_.Aliases {
+                        Environment_.aliasesCurrentNamespace = (Environment_.aliasesCurrentNamespace aliases2base),
+                        Environment_.aliasesPackages = (Environment_.aliasesPackages aliases2base),
+                        Environment_.aliasesBranchVars = (Environment_.aliasesBranchVars aliases2base),
+                        Environment_.aliasesRecursiveVars = (Environment_.aliasesRecursiveVars aliases2base),
+                        Environment_.aliasesInScopeTypeParams = fixedSchemeVarSet,
+                        Environment_.aliasesPolymorphicLocals = (Environment_.aliasesPolymorphicLocals aliases2base),
+                        Environment_.aliasesInScopeJavaVars = (Environment_.aliasesInScopeJavaVars aliases2base),
+                        Environment_.aliasesVarRenames = (Environment_.aliasesVarRenames aliases2base),
+                        Environment_.aliasesLambdaVars = (Sets.union (Environment_.aliasesLambdaVars aliases2base) (Sets.fromList params)),
+                        Environment_.aliasesTypeVarSubst = (Maps.union overgenVarSubst typeVarSubst),
+                        Environment_.aliasesTrustedTypeVars = (Sets.intersection trustedVars fixedSchemeVarSet),
+                        Environment_.aliasesMethodCodomain = (Just fixedCod),
+                        Environment_.aliasesThunkedVars = (Environment_.aliasesThunkedVars aliases2base)}
               env2WithTypeParams =
-                      Environment.JavaEnvironment {
-                        Environment.javaEnvironmentAliases = aliases2,
-                        Environment.javaEnvironmentGraph = (Environment.javaEnvironmentGraph env2)}
+                      Environment_.JavaEnvironment {
+                        Environment_.javaEnvironmentAliases = aliases2,
+                        Environment_.javaEnvironmentGraph = (Environment_.javaEnvironmentGraph env2)}
           in (Eithers.bind (bindingsToStatements env2WithTypeParams bindings cx g) (\bindResult ->
             let bindingStmts = Pairs.first bindResult
                 env3 = Pairs.second bindResult
@@ -1406,11 +1412,11 @@ encodeTermDefinition env tdef cx g =
                   in (Right (Lists.concat2 bindingStmts [
                     returnSt]))))) (\methodBody -> Right (Utils.interfaceMethodDeclaration mods jparams jname jformalParams result (Just methodBody)))))))))))))))
 
-encodeTermInternal :: Environment.JavaEnvironment -> [M.Map Core.Name Core.Term] -> [Syntax.Type] -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
+encodeTermInternal :: Environment_.JavaEnvironment -> [M.Map Core.Name Core.Term] -> [Syntax.Type] -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeTermInternal env anns tyapps term cx g0 =
 
-      let aliases = Environment.javaEnvironmentAliases env
-          g = Environment.javaEnvironmentGraph env
+      let aliases = Environment_.javaEnvironmentAliases env
+          g = Environment_.javaEnvironmentGraph env
           encode = \t -> encodeTerm env t cx g
       in case term of
         Core.TermAnnotated v0 -> encodeTermInternal env (Lists.cons (Core.annotatedTermAnnotation v0) anns) tyapps (Core.annotatedTermBody v0) cx g
@@ -1421,7 +1427,7 @@ encodeTermInternal env anns tyapps term cx g0 =
             Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
             Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g combinedAnns)) (\mEitherType ->
             let branchTypes =
-                    Maybes.bind mEitherType (\etyp -> case (Rewriting.deannotateType etyp) of
+                    Maybes.bind mEitherType (\etyp -> case (Strip.deannotateType etyp) of
                       Core.TypeEither v1 -> Just (Core.eitherTypeLeft v1, (Core.eitherTypeRight v1))
                       _ -> Nothing)
                 encodeWithType =
@@ -1437,7 +1443,7 @@ encodeTermInternal env anns tyapps term cx g0 =
           let combinedAnns = Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns
           in (Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
             Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
-            Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g combinedAnns)) (\mt -> Eithers.bind (Maybes.cases mt (Maybes.cases (tryInferFunctionType v0) (CoderUtils.typeOfTerm cx g term) (\inferredType -> Right inferredType)) (\t -> Right t)) (\typ -> case (Rewriting.deannotateType typ) of
+            Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g combinedAnns)) (\mt -> Eithers.bind (Maybes.cases mt (Maybes.cases (tryInferFunctionType v0) (CoderUtils.typeOfTerm cx g term) (\inferredType -> Right inferredType)) (\t -> Right t)) (\typ -> case (Strip.deannotateType typ) of
             Core.TypeFunction v1 -> encodeFunction env (Core.functionTypeDomain v1) (Core.functionTypeCodomain v1) v0 cx g
             _ -> encodeNullaryConstant env typ v0 cx g)))
         Core.TermLet v0 ->
@@ -1455,8 +1461,8 @@ encodeTermInternal env anns tyapps term cx g0 =
                             Syntax.lambdaExpressionParameters = (Syntax.LambdaParametersTuple []),
                             Syntax.lambdaExpressionBody = (Syntax.LambdaBodyBlock block)})
                   combinedAnns = Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns
-                  g2 = Environment.javaEnvironmentGraph env2
-                  aliases2 = Environment.javaEnvironmentAliases env2
+                  g2 = Environment_.javaEnvironmentGraph env2
+                  aliases2 = Environment_.javaEnvironmentAliases env2
               in (Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
                 Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
                 Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g combinedAnns)) (\mt -> Eithers.bind (Maybes.cases mt (CoderUtils.typeOfTerm cx g2 body) (\t -> Right t)) (\letType -> Eithers.bind (encodeType aliases2 Sets.empty letType cx g) (\jLetType -> Eithers.bind (Utils.javaTypeToJavaReferenceType jLetType cx) (\rt ->
@@ -1481,8 +1487,8 @@ encodeTermInternal env anns tyapps term cx g0 =
           jterm2] Nothing))))
         Core.TermRecord v0 ->
           let recName = Core.recordTypeName v0
-              mRecordType = Eithers.either (\_ -> Nothing) (\t -> Just t) (Schemas.requireType cx g recName)
-              strippedRecTyp = Maybes.map (\recTyp -> stripForalls (Rewriting.deannotateType recTyp)) mRecordType
+              mRecordType = Eithers.either (\_ -> Nothing) (\t -> Just t) (Resolution.requireType cx g recName)
+              strippedRecTyp = Maybes.map (\recTyp -> stripForalls (Strip.deannotateType recTyp)) mRecordType
               mFieldTypeMap =
                       Maybes.bind strippedRecTyp (\bodyTyp -> case bodyTyp of
                         Core.TypeRecord v1 -> Just (Maps.fromList (Lists.map (\ft -> (Core.fieldTypeName ft, (Core.fieldTypeType ft))) v1))
@@ -1493,8 +1499,8 @@ encodeTermInternal env anns tyapps term cx g0 =
             Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g combinedAnnsRec)) (\mAnnotType ->
             let mTypeSubst =
                     Maybes.bind mAnnotType (\annTyp -> Maybes.bind mRecordType (\recTyp ->
-                      let args = extractTypeApplicationArgs (Rewriting.deannotateType annTyp)
-                          params = collectForallParams (Rewriting.deannotateType recTyp)
+                      let args = extractTypeApplicationArgs (Strip.deannotateType annTyp)
+                          params = collectForallParams (Strip.deannotateType recTyp)
                       in (Logic.ifElse (Logic.or (Lists.null args) (Logic.not (Equality.equal (Lists.length args) (Lists.length params)))) Nothing (Just (Maps.fromList (Lists.zip params args))))))
                 encodeField =
                         \fld -> Maybes.cases mFieldTypeMap (encode (Core.fieldTerm fld)) (\ftmap ->
@@ -1510,7 +1516,7 @@ encodeTermInternal env anns tyapps term cx g0 =
                 in (Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
                   Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
                   Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g combinedAnns)) (\mtyp -> Maybes.cases mtyp (Right Nothing) (\annTyp ->
-                  let typeArgs = extractTypeApplicationArgs (Rewriting.deannotateType annTyp)
+                  let typeArgs = extractTypeApplicationArgs (Strip.deannotateType annTyp)
                   in (Logic.ifElse (Lists.null typeArgs) (Right Nothing) (Eithers.bind (Eithers.mapList (\t -> Eithers.bind (encodeType aliases Sets.empty t cx g) (\jt -> Utils.javaTypeToJavaReferenceType jt cx)) typeArgs) (\jTypeArgs -> Right (Just (Syntax.TypeArgumentsOrDiamondArguments (Lists.map (\rt -> Syntax.TypeArgumentReference rt) jTypeArgs))))))))))) (\mtargs -> Right (Utils.javaConstructorCall (Utils.javaConstructorName consId mtargs) fieldExprs Nothing)))))))
         Core.TermSet v0 -> Logic.ifElse (Sets.null v0) (Logic.ifElse (Lists.null tyapps) (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.util.PersistentSet") (Syntax.Identifier "empty") []))) (Eithers.bind (takeTypeArgs "set" 1 tyapps cx g) (\targs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.PersistentSet") (Syntax.Identifier "empty") targs []))))) (
           let slist = Sets.toList v0
@@ -1536,7 +1542,7 @@ encodeTermInternal env anns tyapps term cx g0 =
                         typeId,
                         ".",
                         (Utils.sanitizeJavaName (Formatting.capitalize (Core.unName injFieldName)))])
-          in (Eithers.bind (isFieldUnitType injTypeName injFieldName cx g) (\fieldIsUnit -> Eithers.bind (Logic.ifElse (Logic.or (Schemas.isUnitTerm (Rewriting.deannotateTerm injFieldTerm)) fieldIsUnit) (Right []) (Eithers.bind (encode injFieldTerm) (\ex -> Right [
+          in (Eithers.bind (isFieldUnitType injTypeName injFieldName cx g) (\fieldIsUnit -> Eithers.bind (Logic.ifElse (Logic.or (Predicates.isUnitTerm (Strip.deannotateTerm injFieldTerm)) fieldIsUnit) (Right []) (Eithers.bind (encode injFieldTerm) (\ex -> Right [
             ex]))) (\args -> Right (Utils.javaConstructorCall (Utils.javaConstructorName consId Nothing) args Nothing))))
         Core.TermVariable v0 -> encodeVariable env v0 cx g
         Core.TermUnit -> Right (Utils.javaLiteralToJavaExpression Syntax.LiteralNull)
@@ -1575,39 +1581,39 @@ encodeTermInternal env anns tyapps term cx g0 =
                   _ -> typeAppFallbackCast env aliases anns tyapps jatyp body correctedTyp cx g)))))))
         _ -> Right (encodeLiteral (Core.LiteralString "Unimplemented term variant"))
 
-encodeTermTCO :: Environment.JavaEnvironment -> Core.Name -> [Core.Name] -> M.Map Core.Name Core.Name -> Int -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) [Syntax.BlockStatement]
+encodeTermTCO :: Environment_.JavaEnvironment -> Core.Name -> [Core.Name] -> M.Map Core.Name Core.Name -> Int -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) [Syntax.BlockStatement]
 encodeTermTCO env0 funcName paramNames tcoVarRenames tcoDepth term cx g =
 
-      let aliases0 = Environment.javaEnvironmentAliases env0
+      let aliases0 = Environment_.javaEnvironmentAliases env0
           env =
-                  Environment.JavaEnvironment {
-                    Environment.javaEnvironmentAliases = Environment.Aliases {
-                      Environment.aliasesCurrentNamespace = (Environment.aliasesCurrentNamespace aliases0),
-                      Environment.aliasesPackages = (Environment.aliasesPackages aliases0),
-                      Environment.aliasesBranchVars = (Environment.aliasesBranchVars aliases0),
-                      Environment.aliasesRecursiveVars = (Environment.aliasesRecursiveVars aliases0),
-                      Environment.aliasesInScopeTypeParams = (Environment.aliasesInScopeTypeParams aliases0),
-                      Environment.aliasesPolymorphicLocals = (Environment.aliasesPolymorphicLocals aliases0),
-                      Environment.aliasesInScopeJavaVars = (Environment.aliasesInScopeJavaVars aliases0),
-                      Environment.aliasesVarRenames = (Maps.union tcoVarRenames (Environment.aliasesVarRenames aliases0)),
-                      Environment.aliasesLambdaVars = (Environment.aliasesLambdaVars aliases0),
-                      Environment.aliasesTypeVarSubst = (Environment.aliasesTypeVarSubst aliases0),
-                      Environment.aliasesTrustedTypeVars = (Environment.aliasesTrustedTypeVars aliases0),
-                      Environment.aliasesMethodCodomain = (Environment.aliasesMethodCodomain aliases0),
-                      Environment.aliasesThunkedVars = (Environment.aliasesThunkedVars aliases0)},
-                    Environment.javaEnvironmentGraph = (Environment.javaEnvironmentGraph env0)}
-          stripped = Rewriting.deannotateAndDetypeTerm term
+                  Environment_.JavaEnvironment {
+                    Environment_.javaEnvironmentAliases = Environment_.Aliases {
+                      Environment_.aliasesCurrentNamespace = (Environment_.aliasesCurrentNamespace aliases0),
+                      Environment_.aliasesPackages = (Environment_.aliasesPackages aliases0),
+                      Environment_.aliasesBranchVars = (Environment_.aliasesBranchVars aliases0),
+                      Environment_.aliasesRecursiveVars = (Environment_.aliasesRecursiveVars aliases0),
+                      Environment_.aliasesInScopeTypeParams = (Environment_.aliasesInScopeTypeParams aliases0),
+                      Environment_.aliasesPolymorphicLocals = (Environment_.aliasesPolymorphicLocals aliases0),
+                      Environment_.aliasesInScopeJavaVars = (Environment_.aliasesInScopeJavaVars aliases0),
+                      Environment_.aliasesVarRenames = (Maps.union tcoVarRenames (Environment_.aliasesVarRenames aliases0)),
+                      Environment_.aliasesLambdaVars = (Environment_.aliasesLambdaVars aliases0),
+                      Environment_.aliasesTypeVarSubst = (Environment_.aliasesTypeVarSubst aliases0),
+                      Environment_.aliasesTrustedTypeVars = (Environment_.aliasesTrustedTypeVars aliases0),
+                      Environment_.aliasesMethodCodomain = (Environment_.aliasesMethodCodomain aliases0),
+                      Environment_.aliasesThunkedVars = (Environment_.aliasesThunkedVars aliases0)},
+                    Environment_.javaEnvironmentGraph = (Environment_.javaEnvironmentGraph env0)}
+          stripped = Strip.deannotateAndDetypeTerm term
           gathered = CoderUtils.gatherApplications stripped
           gatherArgs = Pairs.first gathered
           gatherFun = Pairs.second gathered
-          strippedFun = Rewriting.deannotateAndDetypeTerm gatherFun
+          strippedFun = Strip.deannotateAndDetypeTerm gatherFun
           isSelfCall =
                   case strippedFun of
                     Core.TermVariable v0 -> Equality.equal v0 funcName
                     _ -> False
       in (Logic.ifElse (Logic.and isSelfCall (Equality.equal (Lists.length gatherArgs) (Lists.length paramNames))) (
         let changePairs =
-                Lists.filter (\pair -> Logic.not (case (Rewriting.deannotateAndDetypeTerm (Pairs.second pair)) of
+                Lists.filter (\pair -> Logic.not (case (Strip.deannotateAndDetypeTerm (Pairs.second pair)) of
                   Core.TermVariable v0 -> Equality.equal v0 (Pairs.first pair)
                   _ -> False)) (Lists.zip paramNames gatherArgs)
             changedParams = Lists.map Pairs.first changePairs
@@ -1634,15 +1640,15 @@ encodeTermTCO env0 funcName paramNames tcoVarRenames tcoDepth term cx g =
               body2 = Pairs.second gathered2
           in (Logic.ifElse (Equality.equal (Lists.length args2) 1) (
             let arg = Lists.head args2
-            in case (Rewriting.deannotateAndDetypeTerm body2) of
+            in case (Strip.deannotateAndDetypeTerm body2) of
               Core.TermFunction v0 -> case v0 of
                 Core.FunctionElimination v1 -> case v1 of
                   Core.EliminationUnion v2 ->
-                    let aliases = Environment.javaEnvironmentAliases env
+                    let aliases = Environment_.javaEnvironmentAliases env
                         tname = Core.caseStatementTypeName v2
                         dflt = Core.caseStatementDefault v2
                         cases_ = Core.caseStatementCases v2
-                    in (Eithers.bind (domTypeArgs aliases (Schemas.nominalApplication tname []) cx g) (\domArgs -> Eithers.bind (encodeTerm env arg cx g) (\jArgRaw ->
+                    in (Eithers.bind (domTypeArgs aliases (Resolution.nominalApplication tname []) cx g) (\domArgs -> Eithers.bind (encodeTerm env arg cx g) (\jArgRaw ->
                       let depthSuffix = Logic.ifElse (Equality.equal tcoDepth 0) "" (Literals.showInt32 tcoDepth)
                           matchVarId =
                                   Utils.javaIdentifier (Strings.cat [
@@ -1655,7 +1661,7 @@ encodeTermTCO env0 funcName paramNames tcoVarRenames tcoDepth term cx g =
                         let fieldName = Core.fieldName field
                             variantRefType =
                                     Utils.nameToJavaReferenceType aliases True domArgs tname (Just (Formatting.capitalize (Core.unName fieldName)))
-                        in case (Rewriting.deannotateTerm (Core.fieldTerm field)) of
+                        in case (Strip.deannotateTerm (Core.fieldTerm field)) of
                           Core.TermFunction v3 -> case v3 of
                             Core.FunctionLambda v4 -> withLambda env v4 (\env2 ->
                               let lambdaParam = Core.lambdaParameter v4
@@ -1705,12 +1711,12 @@ encodeTermTCO env0 funcName paramNames tcoVarRenames tcoDepth term cx g =
                 Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just expr))])) (Eithers.bind (encodeTerm env term cx g) (\expr -> Right [
             Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just expr))])))))
 
-encodeType :: Environment.Aliases -> S.Set Core.Name -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Type
+encodeType :: Environment_.Aliases -> S.Set Core.Name -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Type
 encodeType aliases boundVars t cx g =
 
-      let inScopeTypeParams = Environment.aliasesInScopeTypeParams aliases
-          typeVarSubst = Environment.aliasesTypeVarSubst aliases
-      in case (Rewriting.deannotateType t) of
+      let inScopeTypeParams = Environment_.aliasesInScopeTypeParams aliases
+          typeVarSubst = Environment_.aliasesTypeVarSubst aliases
+      in case (Strip.deannotateType t) of
         Core.TypeApplication v0 -> Eithers.bind (encodeType aliases boundVars (Core.applicationTypeFunction v0) cx g) (\jlhs -> Eithers.bind (Eithers.bind (encodeType aliases boundVars (Core.applicationTypeArgument v0) cx g) (\jt_ -> Utils.javaTypeToJavaReferenceType jt_ cx)) (\jrhs -> Utils.addJavaTypeParameter jrhs jlhs cx))
         Core.TypeFunction v0 -> Eithers.bind (Eithers.bind (encodeType aliases boundVars (Core.functionTypeDomain v0) cx g) (\jt_ -> Utils.javaTypeToJavaReferenceType jt_ cx)) (\jdom -> Eithers.bind (Eithers.bind (encodeType aliases boundVars (Core.functionTypeCodomain v0) cx g) (\jt_ -> Utils.javaTypeToJavaReferenceType jt_ cx)) (\jcod -> Right (Utils.javaRefType [
           jdom,
@@ -1749,7 +1755,7 @@ encodeType aliases boundVars t cx g =
           Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "can't encode unsupported type in Java: " (Core___.type_ t)))),
           Context.inContextContext = cx})
 
-encodeTypeDefinition :: Syntax.PackageDeclaration -> Environment.Aliases -> Module.TypeDefinition -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (Core.Name, Syntax.CompilationUnit)
+encodeTypeDefinition :: Syntax.PackageDeclaration -> Environment_.Aliases -> Module.TypeDefinition -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (Core.Name, Syntax.CompilationUnit)
 encodeTypeDefinition pkg aliases tdef cx g =
 
       let name = Module.typeDefinitionName tdef
@@ -1773,19 +1779,19 @@ encodeType_resolveIfTypedef :: t0 -> S.Set Core.Name -> S.Set Core.Name -> Core.
 encodeType_resolveIfTypedef aliases boundVars inScopeTypeParams name cx g =
     Logic.ifElse (Logic.or (Sets.member name boundVars) (Sets.member name inScopeTypeParams)) (Right Nothing) (Logic.ifElse (isLambdaBoundVariable name) (Right Nothing) (
       let schemaTypes = Graph.graphSchemaTypes g
-      in (Maybes.cases (Maps.lookup name schemaTypes) (Right Nothing) (\ts -> Logic.ifElse (Logic.not (Lists.null (Core.typeSchemeVariables ts))) (Right Nothing) (case (Rewriting.deannotateType (Core.typeSchemeType ts)) of
+      in (Maybes.cases (Maps.lookup name schemaTypes) (Right Nothing) (\ts -> Logic.ifElse (Logic.not (Lists.null (Core.typeSchemeVariables ts))) (Right Nothing) (case (Strip.deannotateType (Core.typeSchemeType ts)) of
         Core.TypeRecord _ -> Right Nothing
         Core.TypeUnion _ -> Right Nothing
         Core.TypeWrap _ -> Right Nothing
         _ -> Right (Just (Core.typeSchemeType ts)))))))
 
-encodeVariable :: Environment.JavaEnvironment -> Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
+encodeVariable :: Environment_.JavaEnvironment -> Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeVariable env name cx g =
 
-      let aliases = Environment.javaEnvironmentAliases env
+      let aliases = Environment_.javaEnvironmentAliases env
           resolvedName = Utils.lookupJavaVarName aliases name
           jid = Utils.javaIdentifier (Core.unName resolvedName)
-      in (Logic.ifElse (Sets.member name (Environment.aliasesBranchVars aliases)) (Right (Utils.javaFieldAccessToJavaExpression (Syntax.FieldAccess {
+      in (Logic.ifElse (Sets.member name (Environment_.aliasesBranchVars aliases)) (Right (Utils.javaFieldAccessToJavaExpression (Syntax.FieldAccess {
         Syntax.fieldAccessQualifier = (Syntax.FieldAccess_QualifierPrimary (Utils.javaExpressionToJavaPrimary (Utils.javaIdentifierToJavaExpression jid))),
         Syntax.fieldAccessIdentifier = (Utils.javaIdentifier Names.valueFieldName)}))) (Logic.ifElse (Logic.and (Equality.equal name (Core.Name (Strings.cat [
         Names.instanceName,
@@ -1794,25 +1800,25 @@ encodeVariable env name cx g =
         let instanceExpr = Utils.javaIdentifierToJavaExpression (Utils.javaIdentifier Names.instanceName)
         in (Right (Utils.javaFieldAccessToJavaExpression (Syntax.FieldAccess {
           Syntax.fieldAccessQualifier = (Syntax.FieldAccess_QualifierPrimary (Utils.javaExpressionToJavaPrimary instanceExpr)),
-          Syntax.fieldAccessIdentifier = (Utils.javaIdentifier Names.valueFieldName)})))) (Logic.ifElse (Logic.and (isRecursiveVariable aliases name) (Logic.not (isLambdaBoundIn name (Environment.aliasesLambdaVars aliases)))) (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocation (Just (Left (Syntax.ExpressionName {
+          Syntax.fieldAccessIdentifier = (Utils.javaIdentifier Names.valueFieldName)})))) (Logic.ifElse (Logic.and (isRecursiveVariable aliases name) (Logic.not (isLambdaBoundIn name (Environment_.aliasesLambdaVars aliases)))) (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocation (Just (Left (Syntax.ExpressionName {
         Syntax.expressionNameQualifier = Nothing,
-        Syntax.expressionNameIdentifier = jid}))) (Syntax.Identifier Names.getMethodName) []))) (Logic.ifElse (Logic.and (Sets.member name (Environment.aliasesThunkedVars aliases)) (Logic.not (isLambdaBoundIn name (Environment.aliasesLambdaVars aliases)))) (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocation (Just (Left (Syntax.ExpressionName {
+        Syntax.expressionNameIdentifier = jid}))) (Syntax.Identifier Names.getMethodName) []))) (Logic.ifElse (Logic.and (Sets.member name (Environment_.aliasesThunkedVars aliases)) (Logic.not (isLambdaBoundIn name (Environment_.aliasesLambdaVars aliases)))) (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocation (Just (Left (Syntax.ExpressionName {
         Syntax.expressionNameQualifier = Nothing,
-        Syntax.expressionNameIdentifier = jid}))) (Syntax.Identifier Names.getMethodName) []))) (Logic.ifElse (isLambdaBoundIn name (Environment.aliasesLambdaVars aliases)) (
-        let actualName = findMatchingLambdaVar name (Environment.aliasesLambdaVars aliases)
+        Syntax.expressionNameIdentifier = jid}))) (Syntax.Identifier Names.getMethodName) []))) (Logic.ifElse (isLambdaBoundIn name (Environment_.aliasesLambdaVars aliases)) (
+        let actualName = findMatchingLambdaVar name (Environment_.aliasesLambdaVars aliases)
             resolvedActual = Utils.lookupJavaVarName aliases actualName
-        in (Right (Utils.javaIdentifierToJavaExpression (Utils.variableToJavaIdentifier resolvedActual)))) (Logic.ifElse (Sets.member name (Environment.aliasesInScopeJavaVars aliases)) (Right (Utils.javaIdentifierToJavaExpression (elementJavaIdentifier False False aliases resolvedName))) (Eithers.bind (classifyDataReference name cx g) (\cls -> case cls of
-        Environment.JavaSymbolClassHoistedLambda v0 -> encodeVariable_hoistedLambdaCase aliases name v0 cx g
-        Environment.JavaSymbolClassLocalVariable -> Right (Utils.javaIdentifierToJavaExpression (elementJavaIdentifier False False aliases resolvedName))
-        Environment.JavaSymbolClassConstant -> Right (Utils.javaIdentifierToJavaExpression (elementJavaIdentifier False False aliases name))
-        Environment.JavaSymbolClassNullaryFunction -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocation Nothing (elementJavaIdentifier False False aliases name) []))
-        Environment.JavaSymbolClassUnaryFunction -> Right (Utils.javaIdentifierToJavaExpression (elementJavaIdentifier False True aliases name))))))))))
+        in (Right (Utils.javaIdentifierToJavaExpression (Utils.variableToJavaIdentifier resolvedActual)))) (Logic.ifElse (Sets.member name (Environment_.aliasesInScopeJavaVars aliases)) (Right (Utils.javaIdentifierToJavaExpression (elementJavaIdentifier False False aliases resolvedName))) (Eithers.bind (classifyDataReference name cx g) (\cls -> case cls of
+        Environment_.JavaSymbolClassHoistedLambda v0 -> encodeVariable_hoistedLambdaCase aliases name v0 cx g
+        Environment_.JavaSymbolClassLocalVariable -> Right (Utils.javaIdentifierToJavaExpression (elementJavaIdentifier False False aliases resolvedName))
+        Environment_.JavaSymbolClassConstant -> Right (Utils.javaIdentifierToJavaExpression (elementJavaIdentifier False False aliases name))
+        Environment_.JavaSymbolClassNullaryFunction -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocation Nothing (elementJavaIdentifier False False aliases name) []))
+        Environment_.JavaSymbolClassUnaryFunction -> Right (Utils.javaIdentifierToJavaExpression (elementJavaIdentifier False True aliases name))))))))))
 
 encodeVariable_buildCurried :: [Core.Name] -> Syntax.Expression -> Syntax.Expression
 encodeVariable_buildCurried params inner =
     Logic.ifElse (Lists.null params) inner (Utils.javaLambda (Lists.head params) (encodeVariable_buildCurried (Lists.tail params) inner))
 
-encodeVariable_hoistedLambdaCase :: Environment.Aliases -> Core.Name -> Int -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
+encodeVariable_hoistedLambdaCase :: Environment_.Aliases -> Core.Name -> Int -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeVariable_hoistedLambdaCase aliases name arity cx g =
 
       let paramNames = Lists.map (\i -> Core.Name (Strings.cat2 "p" (Literals.showInt32 i))) (Math.range 0 (Math.sub arity 1))
@@ -1862,15 +1868,15 @@ extractDirectReturn tparamSet t = extractDirectReturn_go tparamSet t
 
 extractDirectReturn_go :: S.Set Core.Name -> Core.Type -> [(Core.Name, Core.Name)]
 extractDirectReturn_go tparamSet t =
-    case (Rewriting.deannotateType t) of
+    case (Strip.deannotateType t) of
       Core.TypeFunction v0 ->
-        let dom = Rewriting.deannotateType (Core.functionTypeDomain v0)
+        let dom = Strip.deannotateType (Core.functionTypeDomain v0)
             cod = Core.functionTypeCodomain v0
         in case dom of
-          Core.TypeVariable v1 -> Logic.ifElse (Sets.member v1 tparamSet) (case (Rewriting.deannotateType cod) of
+          Core.TypeVariable v1 -> Logic.ifElse (Sets.member v1 tparamSet) (case (Strip.deannotateType cod) of
             Core.TypeFunction v2 ->
-              let midArg = Rewriting.deannotateType (Core.functionTypeDomain v2)
-                  retPart = Rewriting.deannotateType (Core.functionTypeCodomain v2)
+              let midArg = Strip.deannotateType (Core.functionTypeDomain v2)
+                  retPart = Strip.deannotateType (Core.functionTypeCodomain v2)
               in case midArg of
                 Core.TypeVariable v3 -> Logic.ifElse (Sets.member v3 tparamSet) [] (case retPart of
                   Core.TypeVariable v4 -> Logic.ifElse (Sets.member v4 tparamSet) [
@@ -1886,12 +1892,12 @@ extractDirectReturn_go tparamSet t =
 
 extractInOutPair :: Core.Type -> [(Core.Name, Core.Name)]
 extractInOutPair t =
-    case (Rewriting.deannotateType t) of
-      Core.TypeFunction v0 -> case (Rewriting.deannotateType (Core.functionTypeDomain v0)) of
+    case (Strip.deannotateType t) of
+      Core.TypeFunction v0 -> case (Strip.deannotateType (Core.functionTypeDomain v0)) of
         Core.TypeVariable v1 ->
           let retType = unwrapReturnType (Core.functionTypeCodomain v0)
-          in case (Rewriting.deannotateType retType) of
-            Core.TypePair v2 -> case (Rewriting.deannotateType (Core.pairTypeFirst v2)) of
+          in case (Strip.deannotateType retType) of
+            Core.TypePair v2 -> case (Strip.deannotateType (Core.pairTypeFirst v2)) of
               Core.TypeVariable v3 -> [
                 (v1, v3)]
               _ -> []
@@ -1908,7 +1914,7 @@ extractTypeApplicationArgs_go t =
       Core.TypeApplication v0 -> Lists.cons (Core.applicationTypeArgument v0) (extractTypeApplicationArgs_go (Core.applicationTypeFunction v0))
       _ -> []
 
-fieldTypeToFormalParam :: Environment.Aliases -> Core.FieldType -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.FormalParameter
+fieldTypeToFormalParam :: Environment_.Aliases -> Core.FieldType -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.FormalParameter
 fieldTypeToFormalParam aliases ft cx g =
     Eithers.bind (encodeType aliases Sets.empty (Core.fieldTypeType ft) cx g) (\jt -> Right (Utils.javaTypeToJavaFormalParameter jt (Core.fieldTypeName ft)))
 
@@ -1941,8 +1947,8 @@ findMatchingLambdaVar name lambdaVars =
 
 findPairFirst :: Core.Type -> Maybe Core.Name
 findPairFirst t =
-    case (Rewriting.deannotateType t) of
-      Core.TypePair v0 -> case (Rewriting.deannotateType (Core.pairTypeFirst v0)) of
+    case (Strip.deannotateType t) of
+      Core.TypePair v0 -> case (Strip.deannotateType (Core.pairTypeFirst v0)) of
         Core.TypeVariable v1 -> Just v1
         _ -> Nothing
       _ -> Nothing
@@ -1979,13 +1985,13 @@ first20Primes =
 
 flattenApps :: Core.Term -> [Core.Term] -> ([Core.Term], Core.Term)
 flattenApps t acc =
-    case (Rewriting.deannotateTerm t) of
+    case (Strip.deannotateTerm t) of
       Core.TermApplication v0 -> flattenApps (Core.applicationFunction v0) (Lists.cons (Core.applicationArgument v0) acc)
       _ -> (acc, t)
 
 flattenBindings :: [Core.Binding] -> [Core.Binding]
 flattenBindings bindings =
-    Lists.bind bindings (\b -> case (Rewriting.deannotateTerm (Core.bindingTerm b)) of
+    Lists.bind bindings (\b -> case (Strip.deannotateTerm (Core.bindingTerm b)) of
       Core.TermLet v0 -> Lists.concat2 (flattenBindings (Core.letBindings v0)) [
         Core.Binding {
           Core.bindingName = (Core.bindingName b),
@@ -2003,11 +2009,11 @@ freshJavaName_go base avoid i =
       let candidate = Core.Name (Strings.cat2 (Core.unName base) (Literals.showInt32 i))
       in (Logic.ifElse (Sets.member candidate avoid) (freshJavaName_go base avoid (Math.add i 1)) candidate)
 
-functionCall :: Environment.JavaEnvironment -> Bool -> Core.Name -> [Core.Term] -> [Core.Type] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
+functionCall :: Environment_.JavaEnvironment -> Bool -> Core.Name -> [Core.Term] -> [Core.Type] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 functionCall env isPrim name args typeApps cx g =
 
-      let aliases = Environment.javaEnvironmentAliases env
-          isLambdaBound = isLambdaBoundIn name (Environment.aliasesLambdaVars aliases)
+      let aliases = Environment_.javaEnvironmentAliases env
+          isLambdaBound = isLambdaBoundIn name (Environment_.aliasesLambdaVars aliases)
       in (Eithers.bind (Eithers.mapList (\arg -> encodeTerm env arg cx g) args) (\jargs0 ->
         let wrapResult = wrapLazyArguments name jargs0
             jargs = Pairs.first wrapResult
@@ -2113,34 +2119,34 @@ hashCodeMultPair i fname =
         Syntax.multiplicativeExpression_BinaryLhs = lhs,
         Syntax.multiplicativeExpression_BinaryRhs = rhs}))
 
-innerClassRef :: Environment.Aliases -> Core.Name -> String -> Syntax.Identifier
+innerClassRef :: Environment_.Aliases -> Core.Name -> String -> Syntax.Identifier
 innerClassRef aliases name local =
 
       let id = Syntax.unIdentifier (Utils.nameToJavaName aliases name)
       in (Syntax.Identifier (Strings.cat2 (Strings.cat2 id ".") local))
 
-insertBranchVar :: Core.Name -> Environment.JavaEnvironment -> Environment.JavaEnvironment
+insertBranchVar :: Core.Name -> Environment_.JavaEnvironment -> Environment_.JavaEnvironment
 insertBranchVar name env =
 
-      let aliases = Environment.javaEnvironmentAliases env
-      in Environment.JavaEnvironment {
-        Environment.javaEnvironmentAliases = Environment.Aliases {
-          Environment.aliasesCurrentNamespace = (Environment.aliasesCurrentNamespace aliases),
-          Environment.aliasesPackages = (Environment.aliasesPackages aliases),
-          Environment.aliasesBranchVars = (Sets.insert name (Environment.aliasesBranchVars aliases)),
-          Environment.aliasesRecursiveVars = (Environment.aliasesRecursiveVars aliases),
-          Environment.aliasesInScopeTypeParams = (Environment.aliasesInScopeTypeParams aliases),
-          Environment.aliasesPolymorphicLocals = (Environment.aliasesPolymorphicLocals aliases),
-          Environment.aliasesInScopeJavaVars = (Environment.aliasesInScopeJavaVars aliases),
-          Environment.aliasesVarRenames = (Environment.aliasesVarRenames aliases),
-          Environment.aliasesLambdaVars = (Environment.aliasesLambdaVars aliases),
-          Environment.aliasesTypeVarSubst = (Environment.aliasesTypeVarSubst aliases),
-          Environment.aliasesTrustedTypeVars = (Environment.aliasesTrustedTypeVars aliases),
-          Environment.aliasesMethodCodomain = Nothing,
-          Environment.aliasesThunkedVars = (Environment.aliasesThunkedVars aliases)},
-        Environment.javaEnvironmentGraph = (Environment.javaEnvironmentGraph env)}
+      let aliases = Environment_.javaEnvironmentAliases env
+      in Environment_.JavaEnvironment {
+        Environment_.javaEnvironmentAliases = Environment_.Aliases {
+          Environment_.aliasesCurrentNamespace = (Environment_.aliasesCurrentNamespace aliases),
+          Environment_.aliasesPackages = (Environment_.aliasesPackages aliases),
+          Environment_.aliasesBranchVars = (Sets.insert name (Environment_.aliasesBranchVars aliases)),
+          Environment_.aliasesRecursiveVars = (Environment_.aliasesRecursiveVars aliases),
+          Environment_.aliasesInScopeTypeParams = (Environment_.aliasesInScopeTypeParams aliases),
+          Environment_.aliasesPolymorphicLocals = (Environment_.aliasesPolymorphicLocals aliases),
+          Environment_.aliasesInScopeJavaVars = (Environment_.aliasesInScopeJavaVars aliases),
+          Environment_.aliasesVarRenames = (Environment_.aliasesVarRenames aliases),
+          Environment_.aliasesLambdaVars = (Environment_.aliasesLambdaVars aliases),
+          Environment_.aliasesTypeVarSubst = (Environment_.aliasesTypeVarSubst aliases),
+          Environment_.aliasesTrustedTypeVars = (Environment_.aliasesTrustedTypeVars aliases),
+          Environment_.aliasesMethodCodomain = Nothing,
+          Environment_.aliasesThunkedVars = (Environment_.aliasesThunkedVars aliases)},
+        Environment_.javaEnvironmentGraph = (Environment_.javaEnvironmentGraph env)}
 
-interfaceTypes :: Bool -> Environment.Aliases -> [Syntax.TypeParameter] -> Core.Name -> [Syntax.InterfaceType]
+interfaceTypes :: Bool -> Environment_.Aliases -> [Syntax.TypeParameter] -> Core.Name -> [Syntax.InterfaceType]
 interfaceTypes isSer aliases tparams elName =
 
       let javaSerializableType =
@@ -2164,7 +2170,7 @@ interfaceTypes isSer aliases tparams elName =
 
 isBigNumericType :: Core.Type -> Bool
 isBigNumericType typ =
-    case (Rewriting.deannotateType typ) of
+    case (Strip.deannotateType typ) of
       Core.TypeLiteral v0 -> case v0 of
         Core.LiteralTypeFloat v1 -> case v1 of
           Core.FloatTypeBigfloat -> True
@@ -2177,7 +2183,7 @@ isBigNumericType typ =
 
 isBinaryType :: Core.Type -> Bool
 isBinaryType typ =
-    case (Rewriting.deannotateType typ) of
+    case (Strip.deannotateType typ) of
       Core.TypeLiteral v0 -> case v0 of
         Core.LiteralTypeBinary -> True
         _ -> False
@@ -2187,8 +2193,8 @@ isFieldUnitType :: Core.Name -> Core.Name -> t0 -> Graph.Graph -> Either t1 Bool
 isFieldUnitType typeName fieldName cx g =
 
       let schemaTypes = Graph.graphSchemaTypes g
-      in (Maybes.cases (Maps.lookup typeName schemaTypes) (Right False) (\ts -> case (Rewriting.deannotateType (Core.typeSchemeType ts)) of
-        Core.TypeUnion v0 -> Right (Maybes.cases (Lists.find (\ft -> Equality.equal (Core.fieldTypeName ft) fieldName) v0) False (\ft -> Schemas.isUnitType (Rewriting.deannotateType (Core.fieldTypeType ft))))
+      in (Maybes.cases (Maps.lookup typeName schemaTypes) (Right False) (\ts -> case (Strip.deannotateType (Core.typeSchemeType ts)) of
+        Core.TypeUnion v0 -> Right (Maybes.cases (Lists.find (\ft -> Equality.equal (Core.fieldTypeName ft) fieldName) v0) False (\ft -> Predicates.isUnitType (Strip.deannotateType (Core.fieldTypeType ft))))
         _ -> Right False))
 
 isLambdaBoundIn :: Core.Name -> S.Set Core.Name -> Bool
@@ -2209,7 +2215,7 @@ isLocalVariable name = Maybes.isNothing (Module.qualifiedNameNamespace (Names_.q
 
 isNonComparableType :: Core.Type -> Bool
 isNonComparableType typ =
-    case (Rewriting.deannotateType typ) of
+    case (Strip.deannotateType typ) of
       Core.TypeEither _ -> True
       Core.TypeFunction _ -> True
       Core.TypeUnit -> True
@@ -2219,11 +2225,11 @@ isNonComparableType typ =
       Core.TypeForall v0 -> isNonComparableType (Core.forallTypeBody v0)
       _ -> False
 
-isRecursiveVariable :: Environment.Aliases -> Core.Name -> Bool
-isRecursiveVariable aliases name = Sets.member name (Environment.aliasesRecursiveVars aliases)
+isRecursiveVariable :: Environment_.Aliases -> Core.Name -> Bool
+isRecursiveVariable aliases name = Sets.member name (Environment_.aliasesRecursiveVars aliases)
 
 isSerializableJavaType :: Core.Type -> Bool
-isSerializableJavaType typ = Schemas.isNominalType typ
+isSerializableJavaType typ = Predicates.isNominalType typ
 
 isSimpleName :: Core.Name -> Bool
 isSimpleName name = Equality.equal (Lists.length (Strings.splitOn "." (Core.unName name))) 1
@@ -2239,13 +2245,13 @@ isUnresolvedInferenceVar name =
 isUnresolvedInferenceVar_isDigit :: Int -> Bool
 isUnresolvedInferenceVar_isDigit c = Logic.and (Equality.gte c 48) (Equality.lte c 57)
 
-java11Features :: Environment.JavaFeatures
-java11Features = Environment.JavaFeatures {
-  Environment.javaFeaturesSupportsDiamondOperator = True}
+java11Features :: Environment_.JavaFeatures
+java11Features = Environment_.JavaFeatures {
+  Environment_.javaFeaturesSupportsDiamondOperator = True}
 
-java8Features :: Environment.JavaFeatures
-java8Features = Environment.JavaFeatures {
-  Environment.javaFeaturesSupportsDiamondOperator = False}
+java8Features :: Environment_.JavaFeatures
+java8Features = Environment_.JavaFeatures {
+  Environment_.javaFeaturesSupportsDiamondOperator = False}
 
 javaComparableRefType :: Syntax.ReferenceType
 javaComparableRefType =
@@ -2255,16 +2261,16 @@ javaComparableRefType =
       Syntax.classTypeIdentifier = (Utils.javaTypeIdentifier "Comparable"),
       Syntax.classTypeArguments = []}))
 
-javaEnvGetGraph :: Environment.JavaEnvironment -> Graph.Graph
-javaEnvGetGraph env = Environment.javaEnvironmentGraph env
+javaEnvGetGraph :: Environment_.JavaEnvironment -> Graph.Graph
+javaEnvGetGraph env = Environment_.javaEnvironmentGraph env
 
-javaEnvSetGraph :: Graph.Graph -> Environment.JavaEnvironment -> Environment.JavaEnvironment
+javaEnvSetGraph :: Graph.Graph -> Environment_.JavaEnvironment -> Environment_.JavaEnvironment
 javaEnvSetGraph g env =
-    Environment.JavaEnvironment {
-      Environment.javaEnvironmentAliases = (Environment.javaEnvironmentAliases env),
-      Environment.javaEnvironmentGraph = g}
+    Environment_.JavaEnvironment {
+      Environment_.javaEnvironmentAliases = (Environment_.javaEnvironmentAliases env),
+      Environment_.javaEnvironmentGraph = g}
 
-javaFeatures :: Environment.JavaFeatures
+javaFeatures :: Environment_.JavaFeatures
 javaFeatures = java11Features
 
 javaIdentifierToString :: Syntax.Identifier -> String
@@ -2272,7 +2278,7 @@ javaIdentifierToString id = Syntax.unIdentifier id
 
 javaTypeArgumentsForNamedType :: Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) [Syntax.TypeArgument]
 javaTypeArgumentsForNamedType tname cx g =
-    Eithers.bind (Schemas.requireType cx g tname) (\typ -> Right (Lists.map (\tp_ -> Utils.typeParameterToTypeArgument tp_) (javaTypeParametersForType typ)))
+    Eithers.bind (Resolution.requireType cx g tname) (\typ -> Right (Lists.map (\tp_ -> Utils.typeParameterToTypeArgument tp_) (javaTypeParametersForType typ)))
 
 javaTypeArgumentsForType :: Core.Type -> [Syntax.TypeArgument]
 javaTypeArgumentsForType typ = Lists.reverse (Lists.map Utils.typeParameterToTypeArgument (javaTypeParametersForType typ))
@@ -2282,7 +2288,7 @@ javaTypeParametersForType typ =
 
       let toParam = \name -> Utils.javaTypeParameter (Formatting.capitalize (Core.unName name))
           boundVars = javaTypeParametersForType_bvars typ
-          freeVars = Lists.filter (\v -> isLambdaBoundVariable v) (Sets.toList (Rewriting.freeVariablesInType typ))
+          freeVars = Lists.filter (\v -> isLambdaBoundVariable v) (Sets.toList (Variables.freeVariablesInType typ))
           vars = Lists.nub (Lists.concat2 boundVars freeVars)
       in (Lists.map toParam vars)
 
@@ -2310,7 +2316,7 @@ namespaceParent ns =
 
 needsThunking :: Core.Term -> Bool
 needsThunking t =
-    case (Rewriting.deannotateTerm t) of
+    case (Strip.deannotateTerm t) of
       Core.TermLet _ -> True
       Core.TermTypeApplication _ -> True
       Core.TermTypeLambda _ -> True
@@ -2322,7 +2328,7 @@ noComment decl =
       Syntax.classBodyDeclarationWithCommentsValue = decl,
       Syntax.classBodyDeclarationWithCommentsComments = Nothing}
 
-otherwiseBranch :: Environment.JavaEnvironment -> Environment.Aliases -> Core.Type -> Core.Type -> Core.Name -> Syntax.Type -> [Syntax.TypeArgument] -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassBodyDeclarationWithComments
+otherwiseBranch :: Environment_.JavaEnvironment -> Environment_.Aliases -> Core.Type -> Core.Type -> Core.Name -> Syntax.Type -> [Syntax.TypeArgument] -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassBodyDeclarationWithComments
 otherwiseBranch env aliases dom cod tname jcod targs d cx g =
 
       let jdom = Syntax.TypeReference (Utils.nameToJavaReferenceType aliases True targs tname Nothing)
@@ -2349,7 +2355,7 @@ otherwiseBranch env aliases dom cod tname jcod targs d cx g =
 
 peelDomainTypes :: Int -> Core.Type -> ([Core.Type], Core.Type)
 peelDomainTypes n t =
-    Logic.ifElse (Equality.lte n 0) ([], t) (case (Rewriting.deannotateType t) of
+    Logic.ifElse (Equality.lte n 0) ([], t) (case (Strip.deannotateType t) of
       Core.TypeFunction v0 ->
         let rest = peelDomainTypes (Math.sub n 1) (Core.functionTypeCodomain v0)
         in (Lists.cons (Core.functionTypeDomain v0) (Pairs.first rest), (Pairs.second rest))
@@ -2357,7 +2363,7 @@ peelDomainTypes n t =
 
 peelDomainsAndCod :: Int -> Core.Type -> ([Core.Type], Core.Type)
 peelDomainsAndCod n t =
-    Logic.ifElse (Equality.lte n 0) ([], t) (case (Rewriting.deannotateType t) of
+    Logic.ifElse (Equality.lte n 0) ([], t) (case (Strip.deannotateType t) of
       Core.TypeFunction v0 ->
         let rest = peelDomainsAndCod (Math.sub n 1) (Core.functionTypeCodomain v0)
         in (Lists.cons (Core.functionTypeDomain v0) (Pairs.first rest), (Pairs.second rest))
@@ -2365,7 +2371,7 @@ peelDomainsAndCod n t =
 
 peelExpectedTypes :: M.Map Core.Name Core.Type -> Int -> Core.Type -> [Core.Type]
 peelExpectedTypes subst n t =
-    Logic.ifElse (Equality.equal n 0) [] (case (Rewriting.deannotateType t) of
+    Logic.ifElse (Equality.equal n 0) [] (case (Strip.deannotateType t) of
       Core.TypeFunction v0 -> Lists.cons (applySubstFull subst (Core.functionTypeDomain v0)) (peelExpectedTypes subst (Math.sub n 1) (Core.functionTypeCodomain v0))
       _ -> [])
 
@@ -2373,11 +2379,11 @@ propagateType :: Core.Type -> Core.Term -> Core.Term
 propagateType typ term =
 
       let setTypeAnn = \t -> Annotations.setTermAnnotation Constants.key_type (Just (Core__.type_ typ)) t
-      in case (Rewriting.deannotateTerm term) of
+      in case (Strip.deannotateTerm term) of
         Core.TermFunction v0 -> case v0 of
           Core.FunctionLambda _ ->
             let annotated = setTypeAnn term
-            in case (Rewriting.deannotateType typ) of
+            in case (Strip.deannotateType typ) of
               Core.TypeFunction v2 -> propagateType_propagateIntoLambda (Core.functionTypeCodomain v2) annotated
               _ -> annotated
           _ -> setTypeAnn term
@@ -2392,11 +2398,11 @@ propagateType typ term =
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
               annotatedFun =
-                      case (Rewriting.deannotateTerm fun) of
+                      case (Strip.deannotateTerm fun) of
                         Core.TermFunction v1 -> case v1 of
                           Core.FunctionElimination v2 -> case v2 of
                             Core.EliminationUnion v3 ->
-                              let dom = Schemas.nominalApplication (Core.caseStatementTypeName v3) []
+                              let dom = Resolution.nominalApplication (Core.caseStatementTypeName v3) []
                                   ft =
                                           Core.TypeFunction (Core.FunctionType {
                                             Core.functionTypeDomain = dom,
@@ -2452,16 +2458,16 @@ propagateTypesInAppChain fixedCod resultType t =
                       Core.functionTypeDomain = d,
                       Core.functionTypeCodomain = c})) bodyRetType (Lists.reverse lambdaDoms)
             annotatedFun = Annotations.setTermAnnotation Constants.key_type (Just (Core__.type_ funType)) fun
-        in (rebuildApps annotatedFun args funType)) (case (Rewriting.deannotateTerm t) of
+        in (rebuildApps annotatedFun args funType)) (case (Strip.deannotateTerm t) of
         Core.TermApplication v0 ->
           let lhs = Core.applicationFunction v0
               rhs = Core.applicationArgument v0
               annotatedLhs =
-                      case (Rewriting.deannotateTerm lhs) of
+                      case (Strip.deannotateTerm lhs) of
                         Core.TermFunction v1 -> case v1 of
                           Core.FunctionElimination v2 -> case v2 of
                             Core.EliminationUnion v3 ->
-                              let dom = Schemas.nominalApplication (Core.caseStatementTypeName v3) []
+                              let dom = Resolution.nominalApplication (Core.caseStatementTypeName v3) []
                                   ft =
                                           Core.TypeFunction (Core.FunctionType {
                                             Core.functionTypeDomain = dom,
@@ -2477,7 +2483,7 @@ propagateTypesInAppChain fixedCod resultType t =
 
 rebuildApps :: Core.Term -> [Core.Term] -> Core.Type -> Core.Term
 rebuildApps f args fType =
-    Logic.ifElse (Lists.null args) f (case (Rewriting.deannotateType fType) of
+    Logic.ifElse (Lists.null args) f (case (Strip.deannotateType fType) of
       Core.TypeFunction v0 ->
         let arg = Lists.head args
             rest = Lists.tail args
@@ -2492,7 +2498,7 @@ rebuildApps f args fType =
         Core.applicationFunction = acc,
         Core.applicationArgument = a})) f args)
 
-recordCompareToMethod :: Environment.Aliases -> t0 -> Core.Name -> [Core.FieldType] -> Syntax.ClassBodyDeclaration
+recordCompareToMethod :: Environment_.Aliases -> t0 -> Core.Name -> [Core.FieldType] -> Syntax.ClassBodyDeclaration
 recordCompareToMethod aliases tparams elName fields =
 
       let anns =
@@ -2506,13 +2512,13 @@ recordCompareToMethod aliases tparams elName fields =
       in (Utils.methodDeclaration mods [] anns Names.compareToMethodName [
         param] result (Just (compareToBody aliases Names.otherInstanceName fields)))
 
-recordConstructor :: Environment.Aliases -> Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassBodyDeclaration
+recordConstructor :: Environment_.Aliases -> Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassBodyDeclaration
 recordConstructor aliases elName fields cx g =
 
       let assignStmts = Lists.map (\f -> Syntax.BlockStatementStatement (Utils.toAssignStmt (Core.fieldTypeName f))) fields
       in (Eithers.bind (Eithers.mapList (\f -> fieldTypeToFormalParam aliases f cx g) fields) (\params -> Right (Utils.makeConstructor aliases elName False params assignStmts)))
 
-recordEqualsMethod :: Environment.Aliases -> Core.Name -> [Core.FieldType] -> Syntax.ClassBodyDeclaration
+recordEqualsMethod :: Environment_.Aliases -> Core.Name -> [Core.FieldType] -> Syntax.ClassBodyDeclaration
 recordEqualsMethod aliases elName fields =
 
       let anns = [
@@ -2549,7 +2555,7 @@ recordHashCodeMethod fields =
       in (Utils.methodDeclaration mods [] anns Names.hashCodeMethodName [] result (Just [
         returnSum]))
 
-recordMemberVar :: Environment.Aliases -> Core.FieldType -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassBodyDeclaration
+recordMemberVar :: Environment_.Aliases -> Core.FieldType -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassBodyDeclaration
 recordMemberVar aliases ft cx g =
 
       let mods =
@@ -2560,7 +2566,7 @@ recordMemberVar aliases ft cx g =
           ftype = Core.fieldTypeType ft
       in (Eithers.bind (encodeType aliases Sets.empty ftype cx g) (\jt -> Right (Utils.javaMemberField mods jt (Utils.fieldNameToJavaVariableDeclarator fname))))
 
-recordWithMethod :: Environment.Aliases -> Core.Name -> [Core.FieldType] -> Core.FieldType -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassBodyDeclaration
+recordWithMethod :: Environment_.Aliases -> Core.Name -> [Core.FieldType] -> Core.FieldType -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassBodyDeclaration
 recordWithMethod aliases elName fields field cx g =
 
       let mods = [
@@ -2657,16 +2663,16 @@ splitConstantInitializer_splitVar mods utype vd =
 
 stripForalls :: Core.Type -> Core.Type
 stripForalls t =
-    case (Rewriting.deannotateType t) of
+    case (Strip.deannotateType t) of
       Core.TypeForall v0 -> stripForalls (Core.forallTypeBody v0)
       _ -> t
 
 substituteTypeVarsWithTypes :: M.Map Core.Name Core.Type -> Core.Type -> Core.Type
-substituteTypeVarsWithTypes subst t = substituteTypeVarsWithTypes_go subst (Rewriting.deannotateType t)
+substituteTypeVarsWithTypes subst t = substituteTypeVarsWithTypes_go subst (Strip.deannotateType t)
 
 substituteTypeVarsWithTypes_go :: M.Map Core.Name Core.Type -> Core.Type -> Core.Type
 substituteTypeVarsWithTypes_go subst t =
-    case (Rewriting.deannotateType t) of
+    case (Strip.deannotateType t) of
       Core.TypeVariable v0 -> Maybes.cases (Maps.lookup v0 subst) t (\rep -> rep)
       Core.TypeFunction v0 -> Core.TypeFunction (Core.FunctionType {
         Core.functionTypeDomain = (substituteTypeVarsWithTypes_go subst (Core.functionTypeDomain v0)),
@@ -2754,15 +2760,15 @@ takeTypeArgs label n tyapps cx g =
         ", found too few"]))),
       Context.inContextContext = cx})) (Eithers.mapList (\jt -> Eithers.bind (Utils.javaTypeToJavaReferenceType jt cx) (\rt -> Right (Syntax.TypeArgumentReference rt))) (Lists.take n tyapps))
 
-toClassDecl :: Bool -> Bool -> Environment.Aliases -> [Syntax.TypeParameter] -> Core.Name -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassDeclaration
+toClassDecl :: Bool -> Bool -> Environment_.Aliases -> [Syntax.TypeParameter] -> Core.Name -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassDeclaration
 toClassDecl isInner isSer aliases tparams elName t cx g =
 
       let wrap =
               \t_ -> declarationForRecordType isInner isSer aliases tparams elName [
                 Core.FieldType {
                   Core.fieldTypeName = (Core.Name "value"),
-                  Core.fieldTypeType = (Rewriting.deannotateType t_)}] cx g
-      in case (Rewriting.deannotateType t) of
+                  Core.fieldTypeType = (Strip.deannotateType t_)}] cx g
+      in case (Strip.deannotateType t) of
         Core.TypeRecord v0 -> declarationForRecordType isInner isSer aliases tparams elName v0 cx g
         Core.TypeUnion v0 -> declarationForUnionType isSer aliases tparams elName v0 cx g
         Core.TypeForall v0 ->
@@ -2777,7 +2783,7 @@ toClassDecl isInner isSer aliases tparams elName t cx g =
             Core.fieldTypeType = v0}] cx g
         _ -> wrap t
 
-toDeclInit :: Environment.Aliases -> Graph.Graph -> S.Set Core.Name -> [Core.Binding] -> Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (Maybe Syntax.BlockStatement)
+toDeclInit :: Environment_.Aliases -> Graph.Graph -> S.Set Core.Name -> [Core.Binding] -> Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (Maybe Syntax.BlockStatement)
 toDeclInit aliasesExt gExt recursiveVars flatBindings name cx g =
     Logic.ifElse (Sets.member name recursiveVars) (
       let binding = Lists.head (Lists.filter (\b -> Equality.equal (Core.bindingName b) name) flatBindings)
@@ -2808,7 +2814,7 @@ toDeclInit aliasesExt gExt recursiveVars flatBindings name cx g =
                     rt] (Just pkg) "AtomicReference"
           in (Right (Just (Utils.variableDeclarationStatement aliasesExt artype id body))))))))) (Right Nothing)
 
-toDeclStatement :: Environment.JavaEnvironment -> Environment.Aliases -> Graph.Graph -> S.Set Core.Name -> S.Set Core.Name -> [Core.Binding] -> Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.BlockStatement
+toDeclStatement :: Environment_.JavaEnvironment -> Environment_.Aliases -> Graph.Graph -> S.Set Core.Name -> S.Set Core.Name -> [Core.Binding] -> Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.BlockStatement
 toDeclStatement envExt aliasesExt gExt recursiveVars thunkedVars flatBindings name cx g =
 
       let binding = Lists.head (Lists.filter (\b -> Equality.equal (Core.bindingName b) name) flatBindings)
@@ -2848,24 +2854,24 @@ tryInferFunctionType fun =
           Core.functionTypeCodomain = cod})) mCod))
       _ -> Nothing
 
-typeAppFallbackCast :: Environment.JavaEnvironment -> Environment.Aliases -> [M.Map Core.Name Core.Term] -> [Syntax.Type] -> Syntax.Type -> Core.Term -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
+typeAppFallbackCast :: Environment_.JavaEnvironment -> Environment_.Aliases -> [M.Map Core.Name Core.Term] -> [Syntax.Type] -> Syntax.Type -> Core.Term -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 typeAppFallbackCast env aliases anns tyapps jatyp body typ cx g =
 
       let annotatedBody = Annotations.setTermAnnotation Constants.key_type (Just (Core__.type_ typ)) body
       in (Eithers.bind (encodeTermInternal env anns (Lists.cons jatyp tyapps) annotatedBody cx g) (\jbody -> Eithers.bind (encodeType aliases Sets.empty typ cx g) (\jtype -> Eithers.bind (Utils.javaTypeToJavaReferenceType jtype cx) (\rt -> Right (Utils.javaCastExpressionToJavaExpression (Utils.javaCastExpression rt (Utils.javaExpressionToJavaUnaryExpression jbody)))))))
 
-typeAppNullaryOrHoisted :: Environment.JavaEnvironment -> Environment.Aliases -> [M.Map Core.Name Core.Term] -> [Syntax.Type] -> Syntax.Type -> Core.Term -> Core.Type -> Core.Name -> Environment.JavaSymbolClass -> [Core.Type] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
+typeAppNullaryOrHoisted :: Environment_.JavaEnvironment -> Environment_.Aliases -> [M.Map Core.Name Core.Term] -> [Syntax.Type] -> Syntax.Type -> Core.Term -> Core.Type -> Core.Name -> Environment_.JavaSymbolClass -> [Core.Type] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 typeAppNullaryOrHoisted env aliases anns tyapps jatyp body correctedTyp varName cls allTypeArgs cx g =
 
       let qn = Names_.qualifyName varName
           mns = Module.qualifiedNameNamespace qn
           localName = Module.qualifiedNameLocal qn
       in case cls of
-        Environment.JavaSymbolClassNullaryFunction -> Maybes.cases mns (typeAppFallbackCast env aliases anns tyapps jatyp body correctedTyp cx g) (\ns_ ->
+        Environment_.JavaSymbolClassNullaryFunction -> Maybes.cases mns (typeAppFallbackCast env aliases anns tyapps jatyp body correctedTyp cx g) (\ns_ ->
           let classId = Utils.nameToJavaName aliases (elementsQualifiedName ns_)
               methodId = Syntax.Identifier (Utils.sanitizeJavaName localName)
           in (Eithers.bind (filterPhantomTypeArgs varName allTypeArgs cx g) (\filteredTypeArgs -> Eithers.bind (Eithers.mapList (\t -> Eithers.bind (encodeType aliases Sets.empty t cx g) (\jt -> Eithers.bind (Utils.javaTypeToJavaReferenceType jt cx) (\rt -> Right (Syntax.TypeArgumentReference rt)))) filteredTypeArgs) (\jTypeArgs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs classId methodId jTypeArgs []))))))
-        Environment.JavaSymbolClassHoistedLambda v0 -> Maybes.cases mns (typeAppFallbackCast env aliases anns tyapps jatyp body correctedTyp cx g) (\ns_ ->
+        Environment_.JavaSymbolClassHoistedLambda v0 -> Maybes.cases mns (typeAppFallbackCast env aliases anns tyapps jatyp body correctedTyp cx g) (\ns_ ->
           let classId = Utils.nameToJavaName aliases (elementsQualifiedName ns_)
               methodId = Syntax.Identifier (Utils.sanitizeJavaName localName)
           in (Eithers.bind (filterPhantomTypeArgs varName allTypeArgs cx g) (\filteredTypeArgs -> Eithers.bind (Eithers.mapList (\t -> Eithers.bind (encodeType aliases Sets.empty t cx g) (\jt -> Eithers.bind (Utils.javaTypeToJavaReferenceType jt cx) (\rt -> Right (Syntax.TypeArgumentReference rt)))) filteredTypeArgs) (\jTypeArgs ->
@@ -2878,7 +2884,7 @@ typeAppNullaryOrHoisted env aliases anns tyapps jatyp body correctedTyp varName 
 
 typeArgsOrDiamond :: [Syntax.TypeArgument] -> Syntax.TypeArgumentsOrDiamond
 typeArgsOrDiamond args =
-    Logic.ifElse (Environment.javaFeaturesSupportsDiamondOperator javaFeatures) Syntax.TypeArgumentsOrDiamondDiamond (Syntax.TypeArgumentsOrDiamondArguments args)
+    Logic.ifElse (Environment_.javaFeaturesSupportsDiamondOperator javaFeatures) Syntax.TypeArgumentsOrDiamondDiamond (Syntax.TypeArgumentsOrDiamondArguments args)
 
 typesMatch :: Core.Type -> Core.Type -> Bool
 typesMatch a b =
@@ -2893,12 +2899,12 @@ typesMatch a b =
 
 unwrapReturnType :: Core.Type -> Core.Type
 unwrapReturnType t =
-    case (Rewriting.deannotateType t) of
+    case (Strip.deannotateType t) of
       Core.TypeFunction v0 -> unwrapReturnType (Core.functionTypeCodomain v0)
       Core.TypeApplication v0 -> unwrapReturnType (Core.applicationTypeArgument v0)
       _ -> t
 
-variantCompareToMethod :: Environment.Aliases -> t0 -> Core.Name -> Core.Name -> [Core.FieldType] -> Syntax.ClassBodyDeclaration
+variantCompareToMethod :: Environment_.Aliases -> t0 -> Core.Name -> Core.Name -> [Core.FieldType] -> Syntax.ClassBodyDeclaration
 variantCompareToMethod aliases tparams parentName variantName fields =
 
       let anns =
@@ -2934,7 +2940,7 @@ variantCompareToMethod aliases tparams parentName variantName fields =
       in (Utils.methodDeclaration mods [] anns Names.compareToMethodName [
         param] result (Just body))
 
-visitBranch :: Environment.JavaEnvironment -> Environment.Aliases -> Core.Type -> Core.Name -> Syntax.Type -> [Syntax.TypeArgument] -> Core.Field -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassBodyDeclarationWithComments
+visitBranch :: Environment_.JavaEnvironment -> Environment_.Aliases -> Core.Type -> Core.Name -> Syntax.Type -> [Syntax.TypeArgument] -> Core.Field -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassBodyDeclarationWithComments
 visitBranch env aliases dom tname jcod targs field cx g =
 
       let jdom =
@@ -2944,7 +2950,7 @@ visitBranch env aliases dom tname jcod targs field cx g =
           anns = [
                 Utils.overrideAnnotation]
           result = Syntax.ResultType (Syntax.UnannType jcod)
-      in case (Rewriting.deannotateTerm (Core.fieldTerm field)) of
+      in case (Strip.deannotateTerm (Core.fieldTerm field)) of
         Core.TermFunction v0 -> case v0 of
           Core.FunctionLambda v1 -> withLambda env v1 (\env2 ->
             let lambdaParam = Core.lambdaParameter v1
@@ -2971,33 +2977,33 @@ visitBranch env aliases dom tname jcod targs field cx g =
           Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "visitBranch: field term is not a lambda: " (Core___.term (Core.fieldTerm field))))),
           Context.inContextContext = cx})
 
-withLambda :: Environment.JavaEnvironment -> Core.Lambda -> (Environment.JavaEnvironment -> t0) -> t0
+withLambda :: Environment_.JavaEnvironment -> Core.Lambda -> (Environment_.JavaEnvironment -> t0) -> t0
 withLambda env lam k =
-    Schemas.withLambdaContext javaEnvGetGraph javaEnvSetGraph env lam (\env1 ->
-      let aliases = Environment.javaEnvironmentAliases env1
+    Environment.withLambdaContext javaEnvGetGraph javaEnvSetGraph env lam (\env1 ->
+      let aliases = Environment_.javaEnvironmentAliases env1
           aliases2 =
-                  Environment.Aliases {
-                    Environment.aliasesCurrentNamespace = (Environment.aliasesCurrentNamespace aliases),
-                    Environment.aliasesPackages = (Environment.aliasesPackages aliases),
-                    Environment.aliasesBranchVars = (Environment.aliasesBranchVars aliases),
-                    Environment.aliasesRecursiveVars = (Environment.aliasesRecursiveVars aliases),
-                    Environment.aliasesInScopeTypeParams = (Environment.aliasesInScopeTypeParams aliases),
-                    Environment.aliasesPolymorphicLocals = (Environment.aliasesPolymorphicLocals aliases),
-                    Environment.aliasesInScopeJavaVars = (Environment.aliasesInScopeJavaVars aliases),
-                    Environment.aliasesVarRenames = (Environment.aliasesVarRenames aliases),
-                    Environment.aliasesLambdaVars = (Sets.insert (Core.lambdaParameter lam) (Environment.aliasesLambdaVars aliases)),
-                    Environment.aliasesTypeVarSubst = (Environment.aliasesTypeVarSubst aliases),
-                    Environment.aliasesTrustedTypeVars = (Environment.aliasesTrustedTypeVars aliases),
-                    Environment.aliasesMethodCodomain = (Environment.aliasesMethodCodomain aliases),
-                    Environment.aliasesThunkedVars = (Environment.aliasesThunkedVars aliases)}
+                  Environment_.Aliases {
+                    Environment_.aliasesCurrentNamespace = (Environment_.aliasesCurrentNamespace aliases),
+                    Environment_.aliasesPackages = (Environment_.aliasesPackages aliases),
+                    Environment_.aliasesBranchVars = (Environment_.aliasesBranchVars aliases),
+                    Environment_.aliasesRecursiveVars = (Environment_.aliasesRecursiveVars aliases),
+                    Environment_.aliasesInScopeTypeParams = (Environment_.aliasesInScopeTypeParams aliases),
+                    Environment_.aliasesPolymorphicLocals = (Environment_.aliasesPolymorphicLocals aliases),
+                    Environment_.aliasesInScopeJavaVars = (Environment_.aliasesInScopeJavaVars aliases),
+                    Environment_.aliasesVarRenames = (Environment_.aliasesVarRenames aliases),
+                    Environment_.aliasesLambdaVars = (Sets.insert (Core.lambdaParameter lam) (Environment_.aliasesLambdaVars aliases)),
+                    Environment_.aliasesTypeVarSubst = (Environment_.aliasesTypeVarSubst aliases),
+                    Environment_.aliasesTrustedTypeVars = (Environment_.aliasesTrustedTypeVars aliases),
+                    Environment_.aliasesMethodCodomain = (Environment_.aliasesMethodCodomain aliases),
+                    Environment_.aliasesThunkedVars = (Environment_.aliasesThunkedVars aliases)}
           env2 =
-                  Environment.JavaEnvironment {
-                    Environment.javaEnvironmentAliases = aliases2,
-                    Environment.javaEnvironmentGraph = (Environment.javaEnvironmentGraph env1)}
+                  Environment_.JavaEnvironment {
+                    Environment_.javaEnvironmentAliases = aliases2,
+                    Environment_.javaEnvironmentGraph = (Environment_.javaEnvironmentGraph env1)}
       in (k env2))
 
-withTypeLambda :: Environment.JavaEnvironment -> Core.TypeLambda -> (Environment.JavaEnvironment -> t0) -> t0
-withTypeLambda = Schemas.withTypeLambdaContext javaEnvGetGraph javaEnvSetGraph
+withTypeLambda :: Environment_.JavaEnvironment -> Core.TypeLambda -> (Environment_.JavaEnvironment -> t0) -> t0
+withTypeLambda = Environment.withTypeLambdaContext javaEnvGetGraph javaEnvSetGraph
 
 wrapInSupplierLambda :: Syntax.Expression -> Syntax.Expression
 wrapInSupplierLambda expr =

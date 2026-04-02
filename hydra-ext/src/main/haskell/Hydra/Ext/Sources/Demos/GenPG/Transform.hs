@@ -62,12 +62,12 @@ import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -96,7 +96,7 @@ ns = Namespace "hydra.demos.genpg.transform"
 
 module_ :: Module
 module_ = Module ns elements
-    [Reduction.ns, Rewriting.ns, ExtractCore.ns]  -- term dependencies
+    [Reduction.ns, Rewriting.ns, Strip.ns, ExtractCore.ns]  -- term dependencies
     (kernelTypesNamespaces L.++ [PgModel.ns, TabularModel.ns, RelationalModel.ns]) $  -- type dependencies
     Just "Functions for transforming property graph mappings into property graph elements."
   where
@@ -158,7 +158,7 @@ evaluateProperties = define "evaluateProperties" $
           "spec" <~ Pairs.second (var "pair") $
           Eithers.bind
             (Reduction.reduceTerm @@ var "cx" @@ var "g" @@ boolean True @@ (Core.termApplication $ Core.application (var "spec") (var "record")))
-            ("value" ~> var "extractMaybe" @@ var "k" @@ (Rewriting.deannotateTerm @@ var "value")))
+            ("value" ~> var "extractMaybe" @@ var "k" @@ (Strip.deannotateTerm @@ var "value")))
         (Maps.toList $ var "specs"))
 
 -- | Evaluate an edge specification against a record term

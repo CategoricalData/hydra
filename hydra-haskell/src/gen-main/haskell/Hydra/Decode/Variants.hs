@@ -6,7 +6,7 @@ module Hydra.Decode.Variants where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Helpers as Helpers
+import qualified Hydra.Extract.Core as Core_
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
@@ -30,9 +30,9 @@ eliminationVariant cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "record", (\input -> Eithers.map (\t -> Variants.EliminationVariantRecord) (Helpers.decodeUnit cx input))),
-                      (Core.Name "union", (\input -> Eithers.map (\t -> Variants.EliminationVariantUnion) (Helpers.decodeUnit cx input))),
-                      (Core.Name "wrap", (\input -> Eithers.map (\t -> Variants.EliminationVariantWrap) (Helpers.decodeUnit cx input)))]
+                      (Core.Name "record", (\input -> Eithers.map (\t -> Variants.EliminationVariantRecord) (Core_.decodeUnit cx input))),
+                      (Core.Name "union", (\input -> Eithers.map (\t -> Variants.EliminationVariantUnion) (Core_.decodeUnit cx input))),
+                      (Core.Name "wrap", (\input -> Eithers.map (\t -> Variants.EliminationVariantWrap) (Core_.decodeUnit cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
@@ -48,9 +48,9 @@ functionVariant cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "elimination", (\input -> Eithers.map (\t -> Variants.FunctionVariantElimination) (Helpers.decodeUnit cx input))),
-                      (Core.Name "lambda", (\input -> Eithers.map (\t -> Variants.FunctionVariantLambda) (Helpers.decodeUnit cx input))),
-                      (Core.Name "primitive", (\input -> Eithers.map (\t -> Variants.FunctionVariantPrimitive) (Helpers.decodeUnit cx input)))]
+                      (Core.Name "elimination", (\input -> Eithers.map (\t -> Variants.FunctionVariantElimination) (Core_.decodeUnit cx input))),
+                      (Core.Name "lambda", (\input -> Eithers.map (\t -> Variants.FunctionVariantLambda) (Core_.decodeUnit cx input))),
+                      (Core.Name "primitive", (\input -> Eithers.map (\t -> Variants.FunctionVariantPrimitive) (Core_.decodeUnit cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
@@ -66,11 +66,11 @@ literalVariant cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "binary", (\input -> Eithers.map (\t -> Variants.LiteralVariantBinary) (Helpers.decodeUnit cx input))),
-                      (Core.Name "boolean", (\input -> Eithers.map (\t -> Variants.LiteralVariantBoolean) (Helpers.decodeUnit cx input))),
-                      (Core.Name "float", (\input -> Eithers.map (\t -> Variants.LiteralVariantFloat) (Helpers.decodeUnit cx input))),
-                      (Core.Name "integer", (\input -> Eithers.map (\t -> Variants.LiteralVariantInteger) (Helpers.decodeUnit cx input))),
-                      (Core.Name "string", (\input -> Eithers.map (\t -> Variants.LiteralVariantString) (Helpers.decodeUnit cx input)))]
+                      (Core.Name "binary", (\input -> Eithers.map (\t -> Variants.LiteralVariantBinary) (Core_.decodeUnit cx input))),
+                      (Core.Name "boolean", (\input -> Eithers.map (\t -> Variants.LiteralVariantBoolean) (Core_.decodeUnit cx input))),
+                      (Core.Name "float", (\input -> Eithers.map (\t -> Variants.LiteralVariantFloat) (Core_.decodeUnit cx input))),
+                      (Core.Name "integer", (\input -> Eithers.map (\t -> Variants.LiteralVariantInteger) (Core_.decodeUnit cx input))),
+                      (Core.Name "string", (\input -> Eithers.map (\t -> Variants.LiteralVariantString) (Core_.decodeUnit cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
@@ -86,24 +86,24 @@ termVariant cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "annotated", (\input -> Eithers.map (\t -> Variants.TermVariantAnnotated) (Helpers.decodeUnit cx input))),
-                      (Core.Name "application", (\input -> Eithers.map (\t -> Variants.TermVariantApplication) (Helpers.decodeUnit cx input))),
-                      (Core.Name "either", (\input -> Eithers.map (\t -> Variants.TermVariantEither) (Helpers.decodeUnit cx input))),
-                      (Core.Name "function", (\input -> Eithers.map (\t -> Variants.TermVariantFunction) (Helpers.decodeUnit cx input))),
-                      (Core.Name "let", (\input -> Eithers.map (\t -> Variants.TermVariantLet) (Helpers.decodeUnit cx input))),
-                      (Core.Name "list", (\input -> Eithers.map (\t -> Variants.TermVariantList) (Helpers.decodeUnit cx input))),
-                      (Core.Name "literal", (\input -> Eithers.map (\t -> Variants.TermVariantLiteral) (Helpers.decodeUnit cx input))),
-                      (Core.Name "map", (\input -> Eithers.map (\t -> Variants.TermVariantMap) (Helpers.decodeUnit cx input))),
-                      (Core.Name "maybe", (\input -> Eithers.map (\t -> Variants.TermVariantMaybe) (Helpers.decodeUnit cx input))),
-                      (Core.Name "pair", (\input -> Eithers.map (\t -> Variants.TermVariantPair) (Helpers.decodeUnit cx input))),
-                      (Core.Name "record", (\input -> Eithers.map (\t -> Variants.TermVariantRecord) (Helpers.decodeUnit cx input))),
-                      (Core.Name "set", (\input -> Eithers.map (\t -> Variants.TermVariantSet) (Helpers.decodeUnit cx input))),
-                      (Core.Name "typeApplication", (\input -> Eithers.map (\t -> Variants.TermVariantTypeApplication) (Helpers.decodeUnit cx input))),
-                      (Core.Name "typeLambda", (\input -> Eithers.map (\t -> Variants.TermVariantTypeLambda) (Helpers.decodeUnit cx input))),
-                      (Core.Name "union", (\input -> Eithers.map (\t -> Variants.TermVariantUnion) (Helpers.decodeUnit cx input))),
-                      (Core.Name "unit", (\input -> Eithers.map (\t -> Variants.TermVariantUnit) (Helpers.decodeUnit cx input))),
-                      (Core.Name "variable", (\input -> Eithers.map (\t -> Variants.TermVariantVariable) (Helpers.decodeUnit cx input))),
-                      (Core.Name "wrap", (\input -> Eithers.map (\t -> Variants.TermVariantWrap) (Helpers.decodeUnit cx input)))]
+                      (Core.Name "annotated", (\input -> Eithers.map (\t -> Variants.TermVariantAnnotated) (Core_.decodeUnit cx input))),
+                      (Core.Name "application", (\input -> Eithers.map (\t -> Variants.TermVariantApplication) (Core_.decodeUnit cx input))),
+                      (Core.Name "either", (\input -> Eithers.map (\t -> Variants.TermVariantEither) (Core_.decodeUnit cx input))),
+                      (Core.Name "function", (\input -> Eithers.map (\t -> Variants.TermVariantFunction) (Core_.decodeUnit cx input))),
+                      (Core.Name "let", (\input -> Eithers.map (\t -> Variants.TermVariantLet) (Core_.decodeUnit cx input))),
+                      (Core.Name "list", (\input -> Eithers.map (\t -> Variants.TermVariantList) (Core_.decodeUnit cx input))),
+                      (Core.Name "literal", (\input -> Eithers.map (\t -> Variants.TermVariantLiteral) (Core_.decodeUnit cx input))),
+                      (Core.Name "map", (\input -> Eithers.map (\t -> Variants.TermVariantMap) (Core_.decodeUnit cx input))),
+                      (Core.Name "maybe", (\input -> Eithers.map (\t -> Variants.TermVariantMaybe) (Core_.decodeUnit cx input))),
+                      (Core.Name "pair", (\input -> Eithers.map (\t -> Variants.TermVariantPair) (Core_.decodeUnit cx input))),
+                      (Core.Name "record", (\input -> Eithers.map (\t -> Variants.TermVariantRecord) (Core_.decodeUnit cx input))),
+                      (Core.Name "set", (\input -> Eithers.map (\t -> Variants.TermVariantSet) (Core_.decodeUnit cx input))),
+                      (Core.Name "typeApplication", (\input -> Eithers.map (\t -> Variants.TermVariantTypeApplication) (Core_.decodeUnit cx input))),
+                      (Core.Name "typeLambda", (\input -> Eithers.map (\t -> Variants.TermVariantTypeLambda) (Core_.decodeUnit cx input))),
+                      (Core.Name "union", (\input -> Eithers.map (\t -> Variants.TermVariantUnion) (Core_.decodeUnit cx input))),
+                      (Core.Name "unit", (\input -> Eithers.map (\t -> Variants.TermVariantUnit) (Core_.decodeUnit cx input))),
+                      (Core.Name "variable", (\input -> Eithers.map (\t -> Variants.TermVariantVariable) (Core_.decodeUnit cx input))),
+                      (Core.Name "wrap", (\input -> Eithers.map (\t -> Variants.TermVariantWrap) (Core_.decodeUnit cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
@@ -119,23 +119,23 @@ typeVariant cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "annotated", (\input -> Eithers.map (\t -> Variants.TypeVariantAnnotated) (Helpers.decodeUnit cx input))),
-                      (Core.Name "application", (\input -> Eithers.map (\t -> Variants.TypeVariantApplication) (Helpers.decodeUnit cx input))),
-                      (Core.Name "either", (\input -> Eithers.map (\t -> Variants.TypeVariantEither) (Helpers.decodeUnit cx input))),
-                      (Core.Name "forall", (\input -> Eithers.map (\t -> Variants.TypeVariantForall) (Helpers.decodeUnit cx input))),
-                      (Core.Name "function", (\input -> Eithers.map (\t -> Variants.TypeVariantFunction) (Helpers.decodeUnit cx input))),
-                      (Core.Name "list", (\input -> Eithers.map (\t -> Variants.TypeVariantList) (Helpers.decodeUnit cx input))),
-                      (Core.Name "literal", (\input -> Eithers.map (\t -> Variants.TypeVariantLiteral) (Helpers.decodeUnit cx input))),
-                      (Core.Name "map", (\input -> Eithers.map (\t -> Variants.TypeVariantMap) (Helpers.decodeUnit cx input))),
-                      (Core.Name "maybe", (\input -> Eithers.map (\t -> Variants.TypeVariantMaybe) (Helpers.decodeUnit cx input))),
-                      (Core.Name "pair", (\input -> Eithers.map (\t -> Variants.TypeVariantPair) (Helpers.decodeUnit cx input))),
-                      (Core.Name "record", (\input -> Eithers.map (\t -> Variants.TypeVariantRecord) (Helpers.decodeUnit cx input))),
-                      (Core.Name "set", (\input -> Eithers.map (\t -> Variants.TypeVariantSet) (Helpers.decodeUnit cx input))),
-                      (Core.Name "union", (\input -> Eithers.map (\t -> Variants.TypeVariantUnion) (Helpers.decodeUnit cx input))),
-                      (Core.Name "unit", (\input -> Eithers.map (\t -> Variants.TypeVariantUnit) (Helpers.decodeUnit cx input))),
-                      (Core.Name "variable", (\input -> Eithers.map (\t -> Variants.TypeVariantVariable) (Helpers.decodeUnit cx input))),
-                      (Core.Name "void", (\input -> Eithers.map (\t -> Variants.TypeVariantVoid) (Helpers.decodeUnit cx input))),
-                      (Core.Name "wrap", (\input -> Eithers.map (\t -> Variants.TypeVariantWrap) (Helpers.decodeUnit cx input)))]
+                      (Core.Name "annotated", (\input -> Eithers.map (\t -> Variants.TypeVariantAnnotated) (Core_.decodeUnit cx input))),
+                      (Core.Name "application", (\input -> Eithers.map (\t -> Variants.TypeVariantApplication) (Core_.decodeUnit cx input))),
+                      (Core.Name "either", (\input -> Eithers.map (\t -> Variants.TypeVariantEither) (Core_.decodeUnit cx input))),
+                      (Core.Name "forall", (\input -> Eithers.map (\t -> Variants.TypeVariantForall) (Core_.decodeUnit cx input))),
+                      (Core.Name "function", (\input -> Eithers.map (\t -> Variants.TypeVariantFunction) (Core_.decodeUnit cx input))),
+                      (Core.Name "list", (\input -> Eithers.map (\t -> Variants.TypeVariantList) (Core_.decodeUnit cx input))),
+                      (Core.Name "literal", (\input -> Eithers.map (\t -> Variants.TypeVariantLiteral) (Core_.decodeUnit cx input))),
+                      (Core.Name "map", (\input -> Eithers.map (\t -> Variants.TypeVariantMap) (Core_.decodeUnit cx input))),
+                      (Core.Name "maybe", (\input -> Eithers.map (\t -> Variants.TypeVariantMaybe) (Core_.decodeUnit cx input))),
+                      (Core.Name "pair", (\input -> Eithers.map (\t -> Variants.TypeVariantPair) (Core_.decodeUnit cx input))),
+                      (Core.Name "record", (\input -> Eithers.map (\t -> Variants.TypeVariantRecord) (Core_.decodeUnit cx input))),
+                      (Core.Name "set", (\input -> Eithers.map (\t -> Variants.TypeVariantSet) (Core_.decodeUnit cx input))),
+                      (Core.Name "union", (\input -> Eithers.map (\t -> Variants.TypeVariantUnion) (Core_.decodeUnit cx input))),
+                      (Core.Name "unit", (\input -> Eithers.map (\t -> Variants.TypeVariantUnit) (Core_.decodeUnit cx input))),
+                      (Core.Name "variable", (\input -> Eithers.map (\t -> Variants.TypeVariantVariable) (Core_.decodeUnit cx input))),
+                      (Core.Name "void", (\input -> Eithers.map (\t -> Variants.TypeVariantVoid) (Core_.decodeUnit cx input))),
+                      (Core.Name "wrap", (\input -> Eithers.map (\t -> Variants.TypeVariantWrap) (Core_.decodeUnit cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),

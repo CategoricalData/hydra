@@ -63,13 +63,12 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -99,7 +98,7 @@ ns = Namespace "hydra.pg.graphson.utils"
 
 module_ :: Module
 module_ = Module ns elements
-    [GraphsonConstruct.ns, Rewriting.ns]  -- term dependencies
+    [GraphsonConstruct.ns, Strip.ns]  -- term dependencies
     (kernelTypesNamespaces L.++ [GraphsonSyntax.ns, PgModel.ns, JsonModel.ns]) $  -- type dependencies
     Just "Utility functions for GraphSON encoding and property graph conversion."
   where
@@ -167,7 +166,7 @@ encodeTermValue = define "encodeTermValue" $
         @@ var "lit",
       _Term_unit>>: constant $
         right $ injectUnit G._Value G._Value_null]
-    @@ (Rewriting.deannotateTerm @@ var "term")
+    @@ (Strip.deannotateTerm @@ var "term")
 
 -- | Convert a list of PG elements to vertices with adjacent edges
 elementsToVerticesWithAdjacentEdges :: TTermDefinition ([PG.Element v] -> [PG.VertexWithAdjacentEdges v])

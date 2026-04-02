@@ -87,14 +87,18 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
     # and their dependencies). Loading all 92 term modules from JSON is too slow.
     # This matches the optimization in Haskell (TestUtils.hs) and Java (TestSuiteRunner.java).
     evaluator_term_namespaces = [
+        hydra.core.Name("hydra.annotations"),
         hydra.core.Name("hydra.constants"),
-        hydra.core.Name("hydra.show.core"),
+        hydra.core.Name("hydra.decode.core"),
+        hydra.core.Name("hydra.dependencies"),
+        hydra.core.Name("hydra.encode.core"),
         hydra.core.Name("hydra.extract.core"),
         hydra.core.Name("hydra.lexical"),
         hydra.core.Name("hydra.rewriting"),
-        hydra.core.Name("hydra.decode.core"),
-        hydra.core.Name("hydra.encode.core"),
-        hydra.core.Name("hydra.annotations"),
+        hydra.core.Name("hydra.scoping"),
+        hydra.core.Name("hydra.show.core"),
+        hydra.core.Name("hydra.strip"),
+        hydra.core.Name("hydra.variables"),
     ]
 
     term_mods = load_modules_from_json(False, json_dir, evaluator_term_namespaces)
@@ -131,7 +135,7 @@ def _load_bootstrap_type_schemes() -> FrozenDict:
     This mirrors Java's Generation.bootstrapTypeSchemes().
     """
     from hydra.json.bootstrap import types_by_name
-    from hydra.rewriting import f_type_to_type_scheme
+    from hydra.scoping import f_type_to_type_scheme
 
     result = {}
     for name, typ in types_by_name.items():
@@ -203,7 +207,7 @@ def build_test_graph() -> hydra.graph.Graph:
 
     # Get test type definitions and convert each to a TypeScheme
     # (extracting forall variables, just like f_type_to_type_scheme does)
-    from hydra.rewriting import f_type_to_type_scheme
+    from hydra.scoping import f_type_to_type_scheme
     test_types_dict = test_graph.test_types()
 
     # Merge bootstrap types with test-specific types

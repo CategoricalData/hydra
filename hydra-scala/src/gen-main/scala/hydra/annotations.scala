@@ -159,7 +159,7 @@ def nextCount(key: hydra.core.Name)(cx: hydra.context.Context): Tuple2[Int, hydr
 def normalizeTermAnnotations(term: hydra.core.Term): hydra.core.Term =
   {
   lazy val anns: Map[hydra.core.Name, hydra.core.Term] = hydra.annotations.termAnnotationInternal(term)
-  lazy val stripped: hydra.core.Term = hydra.rewriting.deannotateTerm(term)
+  lazy val stripped: hydra.core.Term = hydra.strip.deannotateTerm(term)
   hydra.lib.logic.ifElse[hydra.core.Term](hydra.lib.maps.`null`[hydra.core.Name, hydra.core.Term](anns))(stripped)(hydra.core.Term.annotated(hydra.core.AnnotatedTerm(stripped,
      anns)))
 }
@@ -167,7 +167,7 @@ def normalizeTermAnnotations(term: hydra.core.Term): hydra.core.Term =
 def normalizeTypeAnnotations(typ: hydra.core.Type): hydra.core.Type =
   {
   lazy val anns: Map[hydra.core.Name, hydra.core.Term] = hydra.annotations.typeAnnotationInternal(typ)
-  lazy val stripped: hydra.core.Type = hydra.rewriting.deannotateType(typ)
+  lazy val stripped: hydra.core.Type = hydra.strip.deannotateType(typ)
   hydra.lib.logic.ifElse[hydra.core.Type](hydra.lib.maps.`null`[hydra.core.Name, hydra.core.Term](anns))(stripped)(hydra.core.Type.annotated(hydra.core.AnnotatedType(stripped,
      anns)))
 }
@@ -189,7 +189,7 @@ def setDescription(d: Option[scala.Predef.String])(v1: Map[hydra.core.Name, hydr
 
 def setTermAnnotation(key: hydra.core.Name)(`val`: Option[hydra.core.Term])(term: hydra.core.Term): hydra.core.Term =
   {
-  lazy val `term_`: hydra.core.Term = hydra.rewriting.deannotateTerm(term)
+  lazy val `term_`: hydra.core.Term = hydra.strip.deannotateTerm(term)
   lazy val anns: Map[hydra.core.Name, hydra.core.Term] = hydra.annotations.setAnnotation(key)(`val`)(hydra.annotations.termAnnotationInternal(term))
   hydra.lib.logic.ifElse[hydra.core.Term](hydra.lib.maps.`null`[hydra.core.Name, hydra.core.Term](anns))(`term_`)(hydra.core.Term.annotated(hydra.core.AnnotatedTerm(`term_`,
      anns)))
@@ -204,7 +204,7 @@ def setType(mt: Option[hydra.core.Type])(v1: Map[hydra.core.Name, hydra.core.Ter
 
 def setTypeAnnotation(key: hydra.core.Name)(`val`: Option[hydra.core.Term])(typ: hydra.core.Type): hydra.core.Type =
   {
-  lazy val `typ_`: hydra.core.Type = hydra.rewriting.deannotateType(typ)
+  lazy val `typ_`: hydra.core.Type = hydra.strip.deannotateType(typ)
   lazy val anns: Map[hydra.core.Name, hydra.core.Term] = hydra.annotations.setAnnotation(key)(`val`)(hydra.annotations.typeAnnotationInternal(typ))
   hydra.lib.logic.ifElse[hydra.core.Type](hydra.lib.maps.`null`[hydra.core.Name, hydra.core.Term](anns))(`typ_`)(hydra.core.Type.annotated(hydra.core.AnnotatedType(`typ_`,
      anns)))

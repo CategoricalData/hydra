@@ -51,7 +51,7 @@ def dialectEqual(d: hydra.ext.lisp.syntax.Dialect): scala.Predef.String =
 def encodeApplication[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0)(g: T1)(rawFun: hydra.core.Term)(rawArg: hydra.core.Term): Either[T2,
    hydra.ext.lisp.syntax.Expression] =
   {
-  lazy val dFun: hydra.core.Term = hydra.rewriting.deannotateTerm(rawFun)
+  lazy val dFun: hydra.core.Term = hydra.strip.deannotateTerm(rawFun)
   lazy val normal: Either[T2, hydra.ext.lisp.syntax.Expression] = hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression,
      hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(rawFun))((fun: hydra.ext.lisp.syntax.Expression) =>
     hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(rawArg))((arg: hydra.ext.lisp.syntax.Expression) => Right(hydra.ext.lisp.coder.lispApp(fun)(Seq(arg)))))
@@ -62,7 +62,7 @@ def encodeApplication[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0
       {
         lazy val midArg: hydra.core.Term = (v_Term_application_app2.argument)
         {
-          lazy val dMidFun: hydra.core.Term = hydra.rewriting.deannotateTerm(midFun)
+          lazy val dMidFun: hydra.core.Term = hydra.strip.deannotateTerm(midFun)
           {
             lazy val isLazy2: Boolean = hydra.lib.logic.or(hydra.ext.lisp.coder.isPrimitiveRef("hydra.lib.eithers.fromLeft")(dMidFun))(hydra.lib.logic.or(hydra.ext.lisp.coder.isPrimitiveRef("hydra.lib.eithers.fromRight")(dMidFun))(hydra.ext.lisp.coder.isPrimitiveRef("hydra.lib.maybes.fromMaybe")(dMidFun)))
             hydra.lib.logic.ifElse[Either[T2, hydra.ext.lisp.syntax.Expression]](isLazy2)(hydra.lib.eithers.bind[T2,
@@ -75,7 +75,7 @@ def encodeApplication[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0
                 {
                   lazy val innerArg: hydra.core.Term = (v_Term_application_app3.argument)
                   {
-                    lazy val dInnerFun: hydra.core.Term = hydra.rewriting.deannotateTerm(innerFun)
+                    lazy val dInnerFun: hydra.core.Term = hydra.strip.deannotateTerm(innerFun)
                     hydra.lib.logic.ifElse[Either[T2, hydra.ext.lisp.syntax.Expression]](hydra.ext.lisp.coder.isPrimitiveRef("hydra.lib.logic.ifElse")(dInnerFun))(hydra.lib.eithers.bind[T2,
                        hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](enc(innerArg))((eC: hydra.ext.lisp.syntax.Expression) =>
                       hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](enc(midArg))((eT: hydra.ext.lisp.syntax.Expression) =>
@@ -195,7 +195,7 @@ def encodeLetAsNative[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0
          hydra.core.Name]((b: hydra.core.Binding) => (b.name))(bindings))
       lazy val adjList: Seq[Tuple2[hydra.core.Name, Seq[hydra.core.Name]]] = hydra.lib.lists.map[hydra.core.Binding,
          Tuple2[hydra.core.Name, Seq[hydra.core.Name]]]((b: hydra.core.Binding) =>
-        Tuple2(b.name, hydra.lib.sets.toList[hydra.core.Name](hydra.lib.sets.intersection[hydra.core.Name](allNames)(hydra.rewriting.freeVariablesInTerm(b.term)))))(bindings)
+        Tuple2(b.name, hydra.lib.sets.toList[hydra.core.Name](hydra.lib.sets.intersection[hydra.core.Name](allNames)(hydra.variables.freeVariablesInTerm(b.term)))))(bindings)
       lazy val sortResult: Either[Seq[Seq[hydra.core.Name]], Seq[hydra.core.Name]] = hydra.sorting.topologicalSort(adjList)
       lazy val nameToBinding: Map[hydra.core.Name, hydra.core.Binding] = hydra.lib.maps.fromList[hydra.core.Name,
          hydra.core.Binding](hydra.lib.lists.map[hydra.core.Binding, Tuple2[hydra.core.Name, hydra.core.Binding]]((b: hydra.core.Binding) => Tuple2(b.name,
@@ -210,9 +210,9 @@ def encodeLetAsNative[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0
       {
       lazy val bname: scala.Predef.String = hydra.formatting.convertCaseCamelOrUnderscoreToLowerSnake(hydra.formatting.sanitizeWithUnderscores(hydra.ext.lisp.language.lispReservedWords)(b.name))
       {
-        lazy val isSelfRef: Boolean = hydra.lib.sets.member[hydra.core.Name](b.name)(hydra.rewriting.freeVariablesInTerm(b.term))
+        lazy val isSelfRef: Boolean = hydra.lib.sets.member[hydra.core.Name](b.name)(hydra.variables.freeVariablesInTerm(b.term))
         {
-          lazy val isLambda: Boolean = hydra.rewriting.deannotateTerm(b.term) match
+          lazy val isLambda: Boolean = hydra.strip.deannotateTerm(b.term) match
             case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
               case hydra.core.Function.lambda(v_Function_lambda__) => true
               case _ => false
@@ -239,11 +239,11 @@ def encodeLetAsNative[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0
       {
         lazy val hasCrossRefs: Boolean = hydra.lib.lists.foldl[Boolean, hydra.core.Binding]((acc: Boolean) =>
           (b: hydra.core.Binding) =>
-          hydra.lib.logic.or(acc)(hydra.lib.logic.not(hydra.lib.sets.`null`[hydra.core.Name](hydra.lib.sets.intersection[hydra.core.Name](allBindingNames)(hydra.rewriting.freeVariablesInTerm(b.term))))))(false)(bindings)
+          hydra.lib.logic.or(acc)(hydra.lib.logic.not(hydra.lib.sets.`null`[hydra.core.Name](hydra.lib.sets.intersection[hydra.core.Name](allBindingNames)(hydra.variables.freeVariablesInTerm(b.term))))))(false)(bindings)
         {
           lazy val hasSelfRef: Boolean = hydra.lib.lists.foldl[Boolean, hydra.core.Binding]((acc: Boolean) =>
             (b: hydra.core.Binding) =>
-            hydra.lib.logic.or(acc)(hydra.lib.sets.member[hydra.core.Name](b.name)(hydra.rewriting.freeVariablesInTerm(b.term))))(false)(bindings)
+            hydra.lib.logic.or(acc)(hydra.lib.sets.member[hydra.core.Name](b.name)(hydra.variables.freeVariablesInTerm(b.term))))(false)(bindings)
           {
             lazy val isRecursive: Boolean = hasSelfRef
             {
@@ -373,7 +373,7 @@ def encodeTerm[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0)(g: T1
         {
           lazy val fterm: hydra.core.Term = (field.term)
           {
-            lazy val dterm: hydra.core.Term = hydra.rewriting.deannotateTerm(fterm)
+            lazy val dterm: hydra.core.Term = hydra.strip.deannotateTerm(fterm)
             {
               lazy val isUnit: Boolean = dterm match
                 case hydra.core.Term.unit => true
@@ -402,7 +402,7 @@ def encodeTermDefinition[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx:
   lazy val name: hydra.core.Name = (tdef.name)
   lazy val term: hydra.core.Term = (tdef.term)
   lazy val lname: scala.Predef.String = hydra.ext.lisp.coder.qualifiedSnakeName(name)
-  lazy val dterm: hydra.core.Term = hydra.rewriting.deannotateTerm(term)
+  lazy val dterm: hydra.core.Term = hydra.strip.deannotateTerm(term)
   dterm match
     case hydra.core.Term.function(v_Term_function_fun) => v_Term_function_fun match
       case hydra.core.Function.lambda(v_Function_lambda_lam) => hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression,
@@ -416,7 +416,7 @@ def encodeTermDefinition[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx:
 
 def encodeType[T0, T1, T2](cx: T0)(g: T1)(t: hydra.core.Type): Either[T2, hydra.ext.lisp.syntax.TypeSpecifier] =
   {
-  lazy val typ: hydra.core.Type = hydra.rewriting.deannotateType(t)
+  lazy val typ: hydra.core.Type = hydra.strip.deannotateType(t)
   typ match
     case hydra.core.Type.annotated(v_Type_annotated_at) => hydra.ext.lisp.coder.encodeType(cx)(g)(v_Type_annotated_at.body)
     case hydra.core.Type.application(v_Type_application_at) => hydra.ext.lisp.coder.encodeType(cx)(g)(v_Type_application_at.function)
@@ -472,7 +472,7 @@ def encodeTypeDefinition[T0, T1, T2](cx: T0)(g: T1)(tdef: hydra.module.TypeDefin
   lazy val name: hydra.core.Name = (tdef.name)
   lazy val typ: hydra.core.Type = (tdef.`type`)
   lazy val lname: scala.Predef.String = hydra.ext.lisp.coder.qualifiedSnakeName(name)
-  lazy val dtyp: hydra.core.Type = hydra.rewriting.deannotateType(typ)
+  lazy val dtyp: hydra.core.Type = hydra.strip.deannotateType(typ)
   hydra.ext.lisp.coder.encodeTypeBody(lname)(typ)(dtyp)
 }
 
@@ -558,7 +558,7 @@ def moduleExports(forms: Seq[hydra.ext.lisp.syntax.TopLevelFormWithComments]): S
 
 def moduleImports(focusNs: hydra.module.Namespace)(defs: Seq[hydra.module.Definition]): Seq[hydra.ext.lisp.syntax.ImportDeclaration] =
   {
-  lazy val depNss: Seq[hydra.module.Namespace] = hydra.lib.sets.toList[hydra.module.Namespace](hydra.lib.sets.delete[hydra.module.Namespace](focusNs)(hydra.schemas.definitionDependencyNamespaces(defs)))
+  lazy val depNss: Seq[hydra.module.Namespace] = hydra.lib.sets.toList[hydra.module.Namespace](hydra.lib.sets.delete[hydra.module.Namespace](focusNs)(hydra.analysis.definitionDependencyNamespaces(defs)))
   hydra.lib.lists.map[hydra.module.Namespace, hydra.ext.lisp.syntax.ImportDeclaration]((ns: hydra.module.Namespace) =>
     hydra.ext.lisp.syntax.ImportDeclaration(ns, hydra.ext.lisp.syntax.ImportSpec.all))(depNss)
 }
@@ -567,11 +567,11 @@ def moduleToLisp[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(mod: hydra.
    hydra.ext.lisp.syntax.Program] =
   {
   lazy val defs: Seq[hydra.module.Definition] = hydra.coderUtils.reorderDefs(defs0)
-  lazy val partitioned: Tuple2[Seq[hydra.module.TypeDefinition], Seq[hydra.module.TermDefinition]] = hydra.schemas.partitionDefinitions(defs)
+  lazy val partitioned: Tuple2[Seq[hydra.module.TypeDefinition], Seq[hydra.module.TermDefinition]] = hydra.environment.partitionDefinitions(defs)
   lazy val allTypeDefs: Seq[hydra.module.TypeDefinition] = hydra.lib.pairs.first[Seq[hydra.module.TypeDefinition],
      Seq[hydra.module.TermDefinition]](partitioned)
   lazy val termDefs: Seq[hydra.module.TermDefinition] = hydra.lib.pairs.second[Seq[hydra.module.TypeDefinition], Seq[hydra.module.TermDefinition]](partitioned)
-  lazy val typeDefs: Seq[hydra.module.TypeDefinition] = hydra.lib.lists.filter[hydra.module.TypeDefinition]((td: hydra.module.TypeDefinition) => hydra.schemas.isNominalType(td.`type`))(allTypeDefs)
+  lazy val typeDefs: Seq[hydra.module.TypeDefinition] = hydra.lib.lists.filter[hydra.module.TypeDefinition]((td: hydra.module.TypeDefinition) => hydra.predicates.isNominalType(td.`type`))(allTypeDefs)
   hydra.lib.eithers.bind[T2, Seq[hydra.ext.lisp.syntax.TopLevelFormWithComments], hydra.ext.lisp.syntax.Program](hydra.lib.eithers.mapList[hydra.module.TypeDefinition,
      hydra.ext.lisp.syntax.TopLevelFormWithComments, T2]((v1: hydra.module.TypeDefinition) => hydra.ext.lisp.coder.encodeTypeDefinition(cx)(g)(v1))(typeDefs))((typeItems: Seq[hydra.ext.lisp.syntax.TopLevelFormWithComments]) =>
     hydra.lib.eithers.bind[T2, Seq[hydra.ext.lisp.syntax.TopLevelFormWithComments], hydra.ext.lisp.syntax.Program](hydra.lib.eithers.mapList[hydra.module.TermDefinition,

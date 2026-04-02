@@ -8,7 +8,7 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Strip as Strip
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -84,7 +84,7 @@ protobufLanguage =
         \typ -> case typ of
           Core.TypeMap v0 ->
             let valuesType = Core.mapTypeValues v0
-                stripped = Rewriting.deannotateType valuesType
+                stripped = Strip.deannotateType valuesType
             in case stripped of
               Core.TypeMaybe _ -> False
               _ -> True

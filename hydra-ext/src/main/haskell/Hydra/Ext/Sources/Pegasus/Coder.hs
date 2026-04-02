@@ -61,13 +61,14 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
+import qualified Hydra.Sources.Kernel.Terms.Analysis      as Analysis
+import qualified Hydra.Sources.Kernel.Terms.Environment   as Environment
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -86,6 +87,7 @@ import qualified Hydra.Ext.Pegasus.Pdl as PDL
 import qualified Hydra.Ext.Sources.Pegasus.Pdl as PdlSyntax
 import qualified Hydra.Ext.Sources.Pegasus.Language as PegasusLanguageSource
 import qualified Hydra.Ext.Sources.Pegasus.Serde as PegasusSerdeSource
+import qualified Hydra.Sources.Kernel.Terms.Dependencies as Dependencies
 
 
 def :: String -> TTerm a -> TTermDefinition a
@@ -97,7 +99,7 @@ ns = Namespace "hydra.ext.pegasus.coder"
 
 module_ :: Module
 module_ = Module ns elements
-    [PegasusSerdeSource.ns, moduleNamespace PegasusLanguageSource.module_, Formatting.ns, Names.ns, Schemas.ns, Sorting.ns, Rewriting.ns, Annotations.ns, Serialization.ns, ShowCore.ns]
+    [PegasusSerdeSource.ns, moduleNamespace PegasusLanguageSource.module_, Formatting.ns, Names.ns, Analysis.ns, Environment.ns, Sorting.ns, Strip.ns, Annotations.ns, Serialization.ns, ShowCore.ns]
     (PdlSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Pegasus PDL code generator: converts Hydra modules to PDL schema files"
   where
@@ -149,7 +151,7 @@ constructModule :: TTermDefinition (Context -> Graph -> M.Map Namespace String -
 constructModule = def "constructModule" $
   doc "Construct PDL schema files from type definitions, with topological sorting and cycle detection" $
   "cx" ~> "g" ~> "aliases" ~> "mod" ~> "typeDefs" ~>
-    "groups" <~ (Schemas.topologicalSortTypeDefinitions @@ var "typeDefs") $
+    "groups" <~ (Dependencies.topologicalSortTypeDefinitions @@ var "typeDefs") $
     -- Check for cycles: if any group has more than one element, it's a cycle
     Maybes.cases (Lists.find (lambda "grp" $ Equality.gt (Lists.length (var "grp")) (int32 1)) (var "groups"))
       -- No cycle found: flatten and process
@@ -197,7 +199,7 @@ moduleToPegasusSchemas :: TTermDefinition (Context -> Graph -> Module -> [Defini
 moduleToPegasusSchemas = def "moduleToPegasusSchemas" $
   doc "Convert a Hydra module and its definitions to PDL schema files" $
   "cx" ~> "g" ~> "mod" ~> "defs" ~>
-    "partitioned" <~ (Schemas.partitionDefinitions @@ var "defs") $
+    "partitioned" <~ (Environment.partitionDefinitions @@ var "defs") $
     "typeDefs" <~ Pairs.first (var "partitioned") $
     "aliases" <<~ (importAliasesForModule @@ var "cx" @@ var "g" @@ var "mod") $
     constructModule @@ var "cx" @@ var "g" @@ var "aliases" @@ var "mod" @@ var "typeDefs"
@@ -297,7 +299,7 @@ encodeType_ = def "encodeType" $
           PDL._RecordSchema_includes>>: list ([] :: [TTerm PDL.NamedSchema])]))),
       _Type_union>>: lambda "rt" $
         Logic.ifElse (Lists.foldl (lambda "b" $ lambda "t" $
-            Logic.and (var "b") (Equality.equal (Rewriting.deannotateType @@ var "t") (MetaTypes.unit)))
+            Logic.and (var "b") (Equality.equal (Strip.deannotateType @@ var "t") (MetaTypes.unit)))
           true (Lists.map (lambda "f" $ Core.fieldTypeType (var "f")) (var "rt")))
           -- Enum case
           ("fs" <<~ (Eithers.mapList (encodeEnumField @@ var "cx" @@ var "g") (var "rt")) $
@@ -310,7 +312,7 @@ encodeType_ = def "encodeType" $
 encode :: TTermDefinition (Context -> Graph -> M.Map Namespace String -> Type -> Either (InContext Error) PDL.Schema)
 encode = def "encode" $
       "cx" ~> "g" ~> "aliases" ~> "t" ~>
-        cases _Type (Rewriting.deannotateType @@ var "t")
+        cases _Type (Strip.deannotateType @@ var "t")
           (Just $
             "res" <<~ (encodeType_ @@ var "cx" @@ var "g" @@ var "aliases" @@ var "t") $
             Eithers.either_
@@ -373,7 +375,7 @@ encodeEnumField = def "encodeEnumField" $
 encodePossiblyOptionalType :: TTermDefinition (Context -> Graph -> M.Map Namespace String -> Type -> Either (InContext Error) (PDL.Schema, Bool))
 encodePossiblyOptionalType = def "encodePossiblyOptionalType" $
   "cx" ~> "g" ~> "aliases" ~> "typ" ~>
-    cases _Type (Rewriting.deannotateType @@ var "typ") Nothing [
+    cases _Type (Strip.deannotateType @@ var "typ") Nothing [
       _Type_maybe>>: lambda "ot" $
         "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "ot") $
         right (pair (var "t") true),
@@ -424,7 +426,7 @@ importAliasesForModule :: TTermDefinition (Context -> Graph -> Module -> Either 
 importAliasesForModule = def "importAliasesForModule" $
   doc "Compute import aliases for a module's dependencies" $
   "cx" ~> "g" ~> "mod" ~>
-    "nss" <<~ (Schemas.moduleDependencyNamespaces @@ var "cx" @@ var "g" @@ false @@ true @@ true @@ false @@ var "mod") $
+    "nss" <<~ (Analysis.moduleDependencyNamespaces @@ var "cx" @@ var "g" @@ false @@ true @@ true @@ false @@ var "mod") $
     right (Maps.fromList (Lists.map
       (lambda "ns_" $ pair (var "ns_") (slashesToDots @@ (unwrap _Namespace @@ var "ns_")))
       (Sets.toList (var "nss"))))

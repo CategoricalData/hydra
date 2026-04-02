@@ -171,7 +171,7 @@
                                   "function": {
                                     "application": {
                                       "argument": {"variable": "hydra.core.Type"},
-                                      "function": {"variable": "hydra.util.Coder"}}}}}},
+                                      "function": {"variable": "hydra.coders.Coder"}}}}}},
                             {
                               "name": "vertexIds",
                               "type": {
@@ -180,7 +180,7 @@
                                   "function": {
                                     "application": {
                                       "argument": {"variable": "hydra.core.Term"},
-                                      "function": {"variable": "hydra.util.Coder"}}}}}},
+                                      "function": {"variable": "hydra.coders.Coder"}}}}}},
                             {
                               "name": "edgeIdTypes",
                               "type": {
@@ -189,7 +189,7 @@
                                   "function": {
                                     "application": {
                                       "argument": {"variable": "hydra.core.Type"},
-                                      "function": {"variable": "hydra.util.Coder"}}}}}},
+                                      "function": {"variable": "hydra.coders.Coder"}}}}}},
                             {
                               "name": "edgeIds",
                               "type": {
@@ -198,7 +198,7 @@
                                   "function": {
                                     "application": {
                                       "argument": {"variable": "hydra.core.Term"},
-                                      "function": {"variable": "hydra.util.Coder"}}}}}},
+                                      "function": {"variable": "hydra.coders.Coder"}}}}}},
                             {
                               "name": "propertyTypes",
                               "type": {
@@ -207,7 +207,7 @@
                                   "function": {
                                     "application": {
                                       "argument": {"variable": "hydra.core.Type"},
-                                      "function": {"variable": "hydra.util.Coder"}}}}}},
+                                      "function": {"variable": "hydra.coders.Coder"}}}}}},
                             {
                               "name": "propertyValues",
                               "type": {
@@ -216,7 +216,7 @@
                                   "function": {
                                     "application": {
                                       "argument": {"variable": "hydra.core.Term"},
-                                      "function": {"variable": "hydra.util.Coder"}}}}}},
+                                      "function": {"variable": "hydra.coders.Coder"}}}}}},
                             {
                               "name": "annotations",
                               "type": {"variable": "hydra.pg.mapping.AnnotationSchema"}},
@@ -308,5 +308,5 @@
   "description": [
     "A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra/wiki/Property-graphs"],
   "namespace": "hydra.pg.mapping",
-  "termDependencies": ["hydra.pg.model", "hydra.core", "hydra.util"],
+  "termDependencies": ["hydra.pg.model", "hydra.coders", "hydra.core"],
   "typeDependencies": ["hydra.core"]}

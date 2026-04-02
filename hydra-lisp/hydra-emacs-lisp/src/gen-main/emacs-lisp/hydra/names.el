@@ -1,5 +1,9 @@
 (require 'cl-lib)
 
+(require 'hydra.annotations)
+
+(require 'hydra.constants)
+
 (require 'hydra.core)
 
 (require 'hydra.formatting)
@@ -8,11 +12,17 @@
 
 (require 'hydra.lib.lists)
 
+(require 'hydra.lib.literals)
+
 (require 'hydra.lib.logic)
 
 (require 'hydra.lib.maps)
 
+(require 'hydra.lib.math)
+
 (require 'hydra.lib.maybes)
+
+(require 'hydra.lib.pairs)
 
 (require 'hydra.lib.sets)
 
@@ -25,6 +35,12 @@
 (defvar hydra_names_qualify_name (lambda (name) (let ((parts (hydra_lib_lists_reverse (funcall (hydra_lib_strings_split_on ".") (funcall (lambda (v) v) name))))) (if (funcall (hydra_lib_equality_equal 1) (hydra_lib_lists_length parts)) (make-hydra_module_qualified_name (list :nothing) (funcall (lambda (v) v) name)) (make-hydra_module_qualified_name (list :just (funcall (hydra_lib_strings_intercalate ".") (hydra_lib_lists_reverse (hydra_lib_lists_tail parts)))) (hydra_lib_lists_head parts))))))
 
 (defvar hydra_names_compact_name (lambda (namespaces) (lambda (name) (let* ((qual_name (hydra_names_qualify_name name)) (local (funcall (lambda (v) (hydra_module_qualified_name-local v)) qual_name)) (mns (funcall (lambda (v) (hydra_module_qualified_name-namespace v)) qual_name))) (funcall (funcall (hydra_lib_maybes_maybe (lambda () (funcall (lambda (v) v) name))) (lambda (ns_) (funcall (funcall (hydra_lib_maybes_maybe (lambda () local)) (lambda (pre) (hydra_lib_strings_cat (list pre ":" local)))) (funcall (hydra_lib_maps_lookup ns_) namespaces)))) mns)))))
+
+(defvar hydra_names_normal_type_variable (lambda (i) (funcall (hydra_lib_strings_cat2 "t") (hydra_lib_literals_show_int32 i))))
+
+(defvar hydra_names_fresh_name (lambda (cx) (let ((count (funcall (hydra_annotations_get_count hydra_constants_key_fresh_type_variable_count) cx))) (list (hydra_names_normal_type_variable count) (funcall (funcall (hydra_annotations_put_count hydra_constants_key_fresh_type_variable_count) (funcall (hydra_lib_math_add count) 1)) cx)))))
+
+(defvar hydra_names_fresh_names (lambda (n) (lambda (cx) (let ((go_ (lambda (acc) (lambda (_) (let ((names (hydra_lib_pairs_first acc))) (let ((cx0 (hydra_lib_pairs_second acc))) (let ((result (hydra_names_fresh_name cx0))) (let ((name (hydra_lib_pairs_first result))) (let ((cx1 (hydra_lib_pairs_second result))) (list (funcall (hydra_lib_lists_concat2 names) (hydra_lib_lists_pure name)) cx1)))))))))) (funcall (funcall (hydra_lib_lists_foldl go_) (list (list) cx)) (funcall (hydra_lib_lists_replicate n) nil))))))
 
 (defvar hydra_names_local_name_of (lambda (arg_) (funcall (lambda (v) (hydra_module_qualified_name-local v)) (hydra_names_qualify_name arg_))))
 

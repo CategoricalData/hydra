@@ -20,7 +20,7 @@ import hydra.lib.sets
 import hydra.lib.strings
 import hydra.module
 import hydra.names
-import hydra.rewriting
+import hydra.strip
 
 T0 = TypeVar("T0")
 
@@ -28,7 +28,7 @@ def name_of_type(cx: T0, t: hydra.core.Type) -> Maybe[hydra.core.Name]:
     r"""Extract the name from a type, if it is a named type."""
 
     while True:
-        match hydra.rewriting.deannotate_type(t):
+        match hydra.strip.deannotate_type(t):
             case hydra.core.TypeVariable(value=name):
                 return Just(name)
 

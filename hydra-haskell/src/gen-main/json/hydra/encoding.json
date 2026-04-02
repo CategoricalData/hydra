@@ -6824,7 +6824,7 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {"variable": "cx"},
-                                                  "function": {"variable": "hydra.schemas.isSerializableByName"}}}}}}},
+                                                  "function": {"variable": "hydra.predicates.isSerializableByName"}}}}}}},
                                       "function": {
                                         "typeApplication": {
                                           "body": {
@@ -6903,8 +6903,8 @@
     "hydra.decode.core",
     "hydra.formatting",
     "hydra.names",
-    "hydra.rewriting",
-    "hydra.schemas"],
+    "hydra.predicates",
+    "hydra.rewriting"],
   "typeDependencies": [
     "hydra.paths",
     "hydra.ast",

@@ -1,7 +1,7 @@
 package hydra;
 
 import hydra.Annotations;
-import hydra.CodeGeneration;
+import hydra.Codegen;
 import hydra.core.Binding;
 import hydra.core.Name;
 import hydra.core.Term;
@@ -40,7 +40,7 @@ import java.util.function.Function;
 
 /**
  * I/O wrapper for Hydra code generation in Java.
- * Provides file I/O around the pure Either-based functions in CodeGeneration.
+ * Provides file I/O around the pure Either-based functions in Codegen.
  */
 public class Generation {
 
@@ -241,7 +241,7 @@ public class Generation {
      */
     public static Module decodeModuleFromJson(Graph bsGraph, List<Module> universeModules,
             boolean stripTypeSchemes, Value jsonVal) {
-        Either<String, Module> result = CodeGeneration.decodeModuleFromJson(
+        Either<String, Module> result = Codegen.decodeModuleFromJson(
                 bsGraph, ConsList.fromList(universeModules), stripTypeSchemes, jsonVal);
         return result.accept(new Either.Visitor<String, Module, Module>() {
             @Override
@@ -286,7 +286,7 @@ public class Generation {
                     public Module visit(Either.Right<hydra.errors.DecodingError, Module> right) {
                         Module mod = right.value;
                         return stripTypeSchemes
-                            ? CodeGeneration.stripModuleTypeSchemes(mod)
+                            ? Codegen.stripModuleTypeSchemes(mod)
                             : mod;
                     }
                 });
@@ -303,8 +303,8 @@ public class Generation {
         Map<Name, hydra.core.Type> raw = hydra.json.Bootstrap.typesByName();
         Map<Name, hydra.core.Type> result = new HashMap<>();
         for (Map.Entry<Name, hydra.core.Type> entry : raw.entrySet()) {
-            hydra.core.TypeScheme ts = hydra.Rewriting.fTypeToTypeScheme(entry.getValue());
-            result.put(entry.getKey(), Rewriting.deannotateTypeRecursive(ts.type));
+            hydra.core.TypeScheme ts = hydra.Scoping.fTypeToTypeScheme(entry.getValue());
+            result.put(entry.getKey(), Strip.deannotateTypeRecursive(ts.type));
         }
         return result;
     }
@@ -317,7 +317,7 @@ public class Generation {
         Map<Name, hydra.core.Type> raw = hydra.json.Bootstrap.typesByName();
         Map<Name, hydra.core.TypeScheme> result = new HashMap<>();
         for (Map.Entry<Name, hydra.core.Type> entry : raw.entrySet()) {
-            result.put(entry.getKey(), hydra.Rewriting.fTypeToTypeScheme(entry.getValue()));
+            result.put(entry.getKey(), hydra.Scoping.fTypeToTypeScheme(entry.getValue()));
         }
         return result;
     }
@@ -331,7 +331,7 @@ public class Generation {
         List<Module> modules = new ArrayList<>();
         for (Namespace ns : namespaces) {
             String filePath = basePath + File.separator
-                    + CodeGeneration.namespaceToPath(ns) + ".json";
+                    + Codegen.namespaceToPath(ns) + ".json";
             Value jsonVal = parseJsonFile(filePath);
             Module mod = decodeModuleFromJson(bsGraph, schemaMap, stripTypeSchemes, jsonVal);
             System.out.println("  Loaded: " + ns.value);
@@ -395,7 +395,7 @@ public class Generation {
         hydra.context.Context cx = new hydra.context.Context(
                 ConsList.empty(), ConsList.empty(), PersistentMap.empty());
         Either<hydra.context.InContext<hydra.errors.Error_>, ConsList<Pair<String, String>>> result =
-                CodeGeneration.generateSourceFiles(coder, language,
+                Codegen.generateSourceFiles(coder, language,
                         doInfer, doExpand, doHoistCase, doHoistPoly,
                         bsGraph, ConsList.fromList(universe), ConsList.fromList(modulesToGenerate), cx);
         ConsList<Pair<String, String>> files;
@@ -507,7 +507,7 @@ public class Generation {
      * Convert a namespace to a file path.
      */
     public static String namespaceToPath(Namespace ns) {
-        return CodeGeneration.namespaceToPath(ns);
+        return Codegen.namespaceToPath(ns);
     }
 
     /**
@@ -524,7 +524,7 @@ public class Generation {
             d.accept(new Definition.Visitor<Void>() {
                 @Override public Void visit(Definition.Term td) {
                     TermDefinition t = td.value;
-                    Term newTerm = Rewriting.removeTypesFromTerm(t.term);
+                    Term newTerm = Strip.removeTypesFromTerm(t.term);
                     Maybe<TypeScheme> newType = Maybe.nothing();
                     stripped.add(new Definition.Term(new TermDefinition(t.name, newTerm, newType)));
                     return null;

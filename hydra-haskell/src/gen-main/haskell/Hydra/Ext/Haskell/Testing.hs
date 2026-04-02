@@ -9,6 +9,7 @@ import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
+import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Ext.Haskell.Syntax as Syntax
 import qualified Hydra.Ext.Haskell.Utils as Utils
 import qualified Hydra.Formatting as Formatting
@@ -27,9 +28,10 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
+import qualified Hydra.Predicates as Predicates
 import qualified Hydra.Rewriting as Rewriting
-import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Show.Errors as Errors
+import qualified Hydra.Strip as Strip
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -123,7 +125,7 @@ buildTestModule testModule testGroup testBody namespaces =
 -- | Collect variable names from encoded terms within a single term node
 collectNames :: Graph.Graph -> S.Set Core.Name -> Core.Term -> S.Set Core.Name
 collectNames graf names t =
-    Logic.ifElse (Schemas.isEncodedTerm (Rewriting.deannotateTerm t)) (Eithers.either (\_ -> names) (\decodedTerm -> Sets.union names (Rewriting.termDependencyNames True True True decodedTerm)) (Eithers.bimap (\_e -> _e) (\_a -> _a) (Core_.term graf t))) names
+    Logic.ifElse (Predicates.isEncodedTerm (Strip.deannotateTerm t)) (Eithers.either (\_ -> names) (\decodedTerm -> Sets.union names (Dependencies.termDependencyNames True True True decodedTerm)) (Eithers.bimap (\_e -> _e) (\_a -> _a) (Core_.term graf t))) names
 
 -- | Collect all test cases from a test group recursively
 collectTestCases :: Testing.TestGroup -> [Testing.TestCaseWithMetadata]

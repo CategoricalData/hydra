@@ -25,6 +25,7 @@ import qualified Hydra.Pg.Model as Model
 import qualified Hydra.Reduction as Reduction
 import qualified Hydra.Relational as Relational
 import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Strip as Strip
 import qualified Hydra.Tabular as Tabular
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -169,7 +170,7 @@ evaluateProperties cx g specs record =
             spec = Pairs.second pair
         in (Eithers.bind (Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
           Core.applicationFunction = spec,
-          Core.applicationArgument = record}))) (\value -> extractMaybe k (Rewriting.deannotateTerm value)))) (Maps.toList specs)))
+          Core.applicationArgument = record}))) (\value -> extractMaybe k (Strip.deannotateTerm value)))) (Maps.toList specs)))
 
 -- | Evaluate a vertex specification against a record term to produce an optional vertex
 evaluateVertex :: Context.Context -> Graph.Graph -> Model.Vertex Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) (Maybe (Model.Vertex Core.Term))

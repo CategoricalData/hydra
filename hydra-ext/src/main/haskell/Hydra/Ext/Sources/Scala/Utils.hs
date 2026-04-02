@@ -60,13 +60,12 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -126,7 +125,7 @@ nameOfType :: TTermDefinition (Graph -> Type -> Y.Maybe Name)
 nameOfType = def "nameOfType" $
   doc "Extract the name from a type, if it is a named type" $
   lambda "cx" $ lambda "t" $
-    (cases _Type (Rewriting.deannotateType @@ var "t")
+    (cases _Type (Strip.deannotateType @@ var "t")
       (Just nothing) [
       _Type_variable>>: ("name" ~> just (var "name")),
       _Type_forall>>: ("ft" ~> nameOfType @@ var "cx" @@ (project _ForallType _ForallType_body @@ var "ft"))])

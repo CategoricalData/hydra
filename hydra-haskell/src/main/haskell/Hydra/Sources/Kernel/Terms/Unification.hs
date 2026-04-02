@@ -54,6 +54,7 @@ import qualified Data.Maybe                  as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
 
 
@@ -62,7 +63,7 @@ ns = Namespace "hydra.unification"
 
 module_ :: Module
 module_ = Module ns elements
-    [Rewriting.ns, ShowCore.ns, Substitution.ns]
+    [Rewriting.ns, ShowCore.ns, Strip.ns, Substitution.ns]
     kernelTypesNamespaces $
     Just ("Utilities for type unification.")
   where
@@ -81,8 +82,8 @@ joinTypes = define "joinTypes" $
   doc ("Join two types, producing a list of type constraints."
     <> "The comment is used to provide context for the constraints.") $
   "cx" ~> "left" ~> "right" ~> "comment" ~>
-  "sleft" <~ Rewriting.deannotateType @@ var "left" $
-  "sright" <~ Rewriting.deannotateType @@ var "right" $
+  "sleft" <~ Strip.deannotateType @@ var "left" $
+  "sright" <~ Strip.deannotateType @@ var "right" $
   "joinOne" <~ ("l" ~> "r" ~> Typing.typeConstraint (var "l") (var "r") ((string "join types; ") ++ var "comment")) $
   "cannotUnify" <~ Ctx.failInContext
     (Error.unificationError (var "sleft") (var "sright")
@@ -158,8 +159,8 @@ unifyTypeConstraints = define "unifyTypeConstraints" $
     <> "  * Unify({(f(s1, ..., sn), f(t1, ..., tn))} ∪ E) = Unify({(s1, t1), ..., (sn, tn)} ∪ E))") $
   "cx" ~> "schemaTypes" ~> "constraints" ~>
   "withConstraint" <~ ("c" ~> "rest" ~>
-    "sleft" <~ Rewriting.deannotateType @@ (Typing.typeConstraintLeft (var "c")) $
-    "sright" <~ Rewriting.deannotateType @@ (Typing.typeConstraintRight (var "c")) $
+    "sleft" <~ Strip.deannotateType @@ (Typing.typeConstraintLeft (var "c")) $
+    "sright" <~ Strip.deannotateType @@ (Typing.typeConstraintRight (var "c")) $
     "comment" <~ Typing.typeConstraintComment (var "c") $
     "bind" <~ ("v" ~> "t" ~>
       "subst" <~ Substitution.singletonTypeSubst @@ var "v" @@ var "t" $

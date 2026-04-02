@@ -346,10 +346,10 @@
 (defvar hydra--annotation-cache (make-hash-table :test 'equal))
 
 (defun hydra--install-annotation-cache ()
-  "Wrap hydra_rewriting_deannotate_term to cache annotations before stripping."
-  (let ((original (or (and (fboundp 'hydra_rewriting_deannotate_term)
-                           (symbol-function 'hydra_rewriting_deannotate_term))
-                      hydra_rewriting_deannotate_term)))
+  "Wrap hydra_strip_deannotate_term to cache annotations before stripping."
+  (let ((original (or (and (fboundp 'hydra_strip_deannotate_term)
+                           (symbol-function 'hydra_strip_deannotate_term))
+                      hydra_strip_deannotate_term)))
     (let ((wrapper (lambda (t_)
                      (when (hydra--is-annotated-p t_)
                        (let ((body (funcall original t_))
@@ -358,8 +358,8 @@
                            (puthash body anns hydra--annotation-cache))))
                      (funcall original t_))))
       ;; Set both value and function cells
-      (setq hydra_rewriting_deannotate_term wrapper)
-      (fset 'hydra_rewriting_deannotate_term wrapper))))
+      (setq hydra_strip_deannotate_term wrapper)
+      (fset 'hydra_strip_deannotate_term wrapper))))
 
 (defun hydra--lookup-cached-annotations (term)
   (gethash term hydra--annotation-cache))
@@ -422,8 +422,8 @@
                                       hydra_json_bootstrap_types_by_name nil))
                  (test-types (if (boundp 'hydra_test_test_graph_test_types)
                                  hydra_test_test_graph_test_types nil))
-                 (type-to-ts (when (boundp 'hydra_rewriting_f_type_to_type_scheme)
-                               hydra_rewriting_f_type_to_type_scheme))
+                 (type-to-ts (when (boundp 'hydra_scoping_f_type_to_type_scheme)
+                               hydra_scoping_f_type_to_type_scheme))
                  (kernel-entries
                   (when (and bootstrap-types type-to-ts)
                     (mapcar (lambda (entry)
@@ -543,11 +543,11 @@
 
 (defun hydra-run-deannotate-term-test (path tc)
   (hydra-run-simple-test path (cdr (assq :output tc))
-    (lambda () (funcall hydra_rewriting_deannotate_term (cdr (assq :input tc))))))
+    (lambda () (funcall hydra_strip_deannotate_term (cdr (assq :input tc))))))
 
 (defun hydra-run-deannotate-type-test (path tc)
   (hydra-run-simple-test path (cdr (assq :output tc))
-    (lambda () (funcall hydra_rewriting_deannotate_type (cdr (assq :input tc))))))
+    (lambda () (funcall hydra_strip_deannotate_type (cdr (assq :input tc))))))
 
 (defun hydra-run-flatten-let-terms-test (path tc)
   (hydra-run-simple-test path (cdr (assq :output tc))

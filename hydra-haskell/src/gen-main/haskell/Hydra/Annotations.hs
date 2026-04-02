@@ -23,8 +23,8 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core____
+import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -182,7 +182,7 @@ normalizeTermAnnotations :: Core.Term -> Core.Term
 normalizeTermAnnotations term =
 
       let anns = termAnnotationInternal term
-          stripped = Rewriting.deannotateTerm term
+          stripped = Strip.deannotateTerm term
       in (Logic.ifElse (Maps.null anns) stripped (Core.TermAnnotated (Core.AnnotatedTerm {
         Core.annotatedTermBody = stripped,
         Core.annotatedTermAnnotation = anns})))
@@ -192,7 +192,7 @@ normalizeTypeAnnotations :: Core.Type -> Core.Type
 normalizeTypeAnnotations typ =
 
       let anns = typeAnnotationInternal typ
-          stripped = Rewriting.deannotateType typ
+          stripped = Strip.deannotateType typ
       in (Logic.ifElse (Maps.null anns) stripped (Core.TypeAnnotated (Core.AnnotatedType {
         Core.annotatedTypeBody = stripped,
         Core.annotatedTypeAnnotation = anns})))
@@ -226,7 +226,7 @@ setDescription d =
 setTermAnnotation :: Core.Name -> Maybe Core.Term -> Core.Term -> Core.Term
 setTermAnnotation key val term =
 
-      let term_ = Rewriting.deannotateTerm term
+      let term_ = Strip.deannotateTerm term
           anns = setAnnotation key val (termAnnotationInternal term)
       in (Logic.ifElse (Maps.null anns) term_ (Core.TermAnnotated (Core.AnnotatedTerm {
         Core.annotatedTermBody = term_,
@@ -245,7 +245,7 @@ setType mt = setAnnotation Constants.key_type (Maybes.map Core__.type_ mt)
 setTypeAnnotation :: Core.Name -> Maybe Core.Term -> Core.Type -> Core.Type
 setTypeAnnotation key val typ =
 
-      let typ_ = Rewriting.deannotateType typ
+      let typ_ = Strip.deannotateType typ
           anns = setAnnotation key val (typeAnnotationInternal typ)
       in (Logic.ifElse (Maps.null anns) typ_ (Core.TypeAnnotated (Core.AnnotatedType {
         Core.annotatedTypeBody = typ_,

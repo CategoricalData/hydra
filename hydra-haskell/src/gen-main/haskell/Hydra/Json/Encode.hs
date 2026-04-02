@@ -13,8 +13,8 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -58,7 +58,7 @@ encodeLiteral lit =
 toJson :: Core.Term -> Either String Model.Value
 toJson term =
 
-      let stripped = Rewriting.deannotateTerm term
+      let stripped = Strip.deannotateTerm term
       in case stripped of
         Core.TermLiteral v0 -> encodeLiteral v0
         Core.TermList v0 ->

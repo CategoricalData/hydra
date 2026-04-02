@@ -20,9 +20,9 @@
 
 (require 'hydra.show.error.core)
 
-(require 'hydra.show.meta)
-
 (require 'hydra.show.typing)
+
+(require 'hydra.show.variants)
 
 (defvar hydra_show_errors_incorrect_unification_error (lambda (e) (let ((subst (funcall (lambda (v) (hydra_error_checking_incorrect_unification_error-substitution v)) e))) (funcall (hydra_lib_strings_cat2 "incorrect unification: ") (hydra_show_typing_type_subst subst)))))
 
@@ -38,7 +38,7 @@
 
 (defvar hydra_show_errors_unequal_types_error (lambda (e) (let ((types (funcall (lambda (v) (hydra_error_checking_unequal_types_error-types v)) e))) (let ((desc (funcall (lambda (v) (hydra_error_checking_unequal_types_error-description v)) e))) (hydra_lib_strings_cat (list "unequal types " (funcall (hydra_formatting_show_list hydra_show_core_type) types) " in " desc))))))
 
-(defvar hydra_show_errors_unsupported_term_variant_error (lambda (e) (funcall (hydra_lib_strings_cat2 "unsupported term variant: ") (hydra_show_meta_term_variant (funcall (lambda (v) (hydra_error_checking_unsupported_term_variant_error-term_variant v)) e)))))
+(defvar hydra_show_errors_unsupported_term_variant_error (lambda (e) (funcall (hydra_lib_strings_cat2 "unsupported term variant: ") (hydra_show_variants_term_variant (funcall (lambda (v) (hydra_error_checking_unsupported_term_variant_error-term_variant v)) e)))))
 
 (defvar hydra_show_errors_untyped_lambda_error (lambda (_) "untyped lambda"))
 

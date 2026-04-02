@@ -25,11 +25,14 @@ import qualified Hydra.Dsl.Module                     as Module
 import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
+import qualified Hydra.Sources.Kernel.Terms.Dependencies   as Dependencies
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
 import qualified Hydra.Sources.CoderUtils                  as CoderUtils
 import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Predicates    as Predicates
+import qualified Hydra.Sources.Kernel.Terms.Resolution    as Resolution
+import qualified Hydra.Sources.Kernel.Terms.Environment   as Environment
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical        as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
@@ -63,7 +66,7 @@ module_ :: Module
 module_ = Module ns elements
     [moduleNamespace CppLanguageSource.module_,
       CppSerde.ns,
-      Formatting.ns, Names.ns, Rewriting.ns, Schemas.ns, Lexical.ns,
+      Formatting.ns, Names.ns, Dependencies.ns, Strip.ns, Environment.ns, Predicates.ns, Resolution.ns, Lexical.ns,
       ShowCore.ns, Annotations.ns, Sorting.ns, SerializationSource.ns,
       moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_]
     (CppSyntax.ns:KernelTypes.kernelTypesNamespaces) $
@@ -502,7 +505,7 @@ encodeLiteralType = def "encodeLiteralType" $
 encodeType :: TTermDefinition (Context -> Graph -> Type -> Either (InContext Error) Cpp.TypeExpression)
 encodeType = def "encodeType" $
   "cx" ~> "g" ~> lambda "typ" $
-    "t" <~ (Rewriting.deannotateType @@ var "typ") $
+    "t" <~ (Strip.deannotateType @@ var "typ") $
     cases _Type (var "t") (Just $
       Ctx.failInContext (Error.errorOther $ Error.otherError $ string "Unsupported type") (var "cx"))
     [_Type_application>>: lambda "at" $
@@ -591,7 +594,7 @@ encodeTypeAlias = def "encodeTypeAlias" $
 encodeTypeDefinition :: TTermDefinition (Context -> Graph -> Name -> Type -> Either (InContext Error) [Cpp.Declaration])
 encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "name" $ lambda "typ" $
-    "t" <~ (Rewriting.deannotateType @@ var "typ") $
+    "t" <~ (Strip.deannotateType @@ var "typ") $
     cases _Type (var "t") (Just $
       Ctx.failInContext (Error.errorOther $ Error.otherError $ string "unexpected type in definition: " ++ (ShowCore.type_ @@ var "typ")) (var "cx"))
     [_Type_forall>>: lambda "fa" $
@@ -666,7 +669,7 @@ encodeRecordType = def "encodeRecordType" $
 encodeUnionType :: TTermDefinition (Context -> Graph -> Name -> [FieldType] -> Maybe String -> Either (InContext Error) [Cpp.Declaration])
 encodeUnionType = def "encodeUnionType" $
   "cx" ~> "g" ~> lambda "name" $ lambda "rt" $ lambda "comment" $
-    Logic.ifElse (Schemas.isEnumRowType @@ var "rt")
+    Logic.ifElse (Predicates.isEnumRowType @@ var "rt")
       (encodeEnumType @@ var "cx" @@ var "g" @@ var "name" @@ var "rt" @@ var "comment")
       (encodeVariantType @@ var "cx" @@ var "g" @@ var "name" @@ var "rt" @@ var "comment")
 
@@ -892,7 +895,7 @@ createVariantClass = def "createVariantClass" $
   "cx" ~> "g" ~> lambda "tname" $ lambda "parentClass" $ lambda "ft" $
     "fname" <~ Core.fieldTypeName (var "ft") $
     "variantType" <~ Core.fieldTypeType (var "ft") $
-    "hasValue" <~ Logic.not (Schemas.isUnitType @@ var "variantType") $
+    "hasValue" <~ Logic.not (Predicates.isUnitType @@ var "variantType") $
     "valueField" <~ Logic.ifElse (var "hasValue")
       (Eithers.map (lambda "cppType" $
         list [inject Cpp._MemberSpecification Cpp._MemberSpecification_member $
@@ -902,7 +905,7 @@ createVariantClass = def "createVariantClass" $
               Cpp._VariableDeclaration_name>>: string "value",
               Cpp._VariableDeclaration_initializer>>: nothing,
               Cpp._VariableDeclaration_isAuto>>: boolean False]])
-        (encodeType @@ var "cx" @@ var "g" @@ (Rewriting.deannotateType @@ var "variantType")))
+        (encodeType @@ var "cx" @@ var "g" @@ (Strip.deannotateType @@ var "variantType")))
       (right (list ([] :: [TTerm Cpp.MemberSpecification]))) $
     "constructorParams" <~ Logic.ifElse (var "hasValue")
       (Eithers.map (lambda "paramType" $
@@ -911,7 +914,7 @@ createVariantClass = def "createVariantClass" $
           Cpp._Parameter_name>>: string "value",
           Cpp._Parameter_unnamed>>: boolean False,
           Cpp._Parameter_defaultValue>>: nothing]])
-        (encodeType @@ var "cx" @@ var "g" @@ (Rewriting.deannotateType @@ var "variantType")))
+        (encodeType @@ var "cx" @@ var "g" @@ (Strip.deannotateType @@ var "variantType")))
       (right (list ([] :: [TTerm Cpp.Parameter]))) $
     "vFields" <<~ (var "valueField") $
     "vParams" <<~ (var "constructorParams") $
@@ -1133,7 +1136,7 @@ findTypeDependencies = def "findTypeDependencies" $
           (just (Module.unNamespace (var "ns")))))
       (Sets.toList (Lists.foldl
         (lambda "acc" $ lambda "d" $
-          Sets.union (var "acc") (Rewriting.typeDependencyNames @@ boolean True @@ Module.typeDefinitionType (var "d")))
+          Sets.union (var "acc") (Dependencies.typeDependencyNames @@ boolean True @@ Module.typeDefinitionType (var "d")))
         (Sets.empty)
         (var "defs")))
 
@@ -1146,7 +1149,7 @@ gatherMetadata = def "gatherMetadata" $
 isStdContainerType :: TTermDefinition (Type -> Bool)
 isStdContainerType = def "isStdContainerType" $
   lambda "typ" $
-    "t" <~ (Rewriting.deannotateType @@ var "typ") $
+    "t" <~ (Strip.deannotateType @@ var "typ") $
     cases _Type (var "t") (Just $ boolean False)
     [_Type_application>>: lambda "at" $
        isStdContainerType @@ Core.applicationTypeFunction (var "at"),
@@ -1159,18 +1162,18 @@ isStdContainerType = def "isStdContainerType" $
 isStructType :: TTermDefinition (Type -> Bool)
 isStructType = def "isStructType" $
   lambda "rawType" $
-    "t" <~ (Schemas.fullyStripType @@ var "rawType") $
+    "t" <~ (Resolution.fullyStripType @@ var "rawType") $
     "isLiteral" <~ cases _Type (var "t") (Just $ boolean False)
       [_Type_literal>>: constant $ boolean True] $
     Logic.and
       (Logic.not (var "isLiteral"))
-      (Logic.not (Schemas.isEnumType @@ var "rawType"))
+      (Logic.not (Predicates.isEnumType @@ var "rawType"))
 
 -- | Check whether a type maps to a C++ template type (string or STL container)
 isTemplateType :: TTermDefinition (Type -> Bool)
 isTemplateType = def "isTemplateType" $
   lambda "typ" $
-    "t" <~ (Rewriting.deannotateType @@ var "typ") $
+    "t" <~ (Strip.deannotateType @@ var "typ") $
     Logic.or
       (cases _Type (var "t") (Just $ boolean False)
         [_Type_literal>>: lambda "lt" $
@@ -1208,6 +1211,6 @@ moduleToCpp :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Ei
 moduleToCpp = def "moduleToCpp" $
   lambda "mod" $ lambda "defs" $ "cx" ~> lambda "g" $
     "ns" <~ Module.moduleNamespace (var "mod") $
-    "typeDefs" <~ Pairs.first (Schemas.partitionDefinitions @@ var "defs") $
+    "typeDefs" <~ Pairs.first (Environment.partitionDefinitions @@ var "defs") $
     "typeFiles" <<~ (generateTypeFiles @@ var "ns" @@ var "typeDefs" @@ var "cx" @@ var "g") $
       right (Maps.fromList (var "typeFiles"))

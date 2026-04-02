@@ -5,12 +5,14 @@
 module Hydra.Ext.Haskell.Coder where
 
 import qualified Hydra.Adapt as Adapt
+import qualified Hydra.Analysis as Analysis
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Classes as Classes
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
+import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Encode.Core as Core_
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Ext.Haskell.Language as Language
@@ -33,11 +35,14 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
+import qualified Hydra.Predicates as Predicates
+import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Rewriting as Rewriting
-import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Show.Core as Core__
+import qualified Hydra.Strip as Strip
 import qualified Hydra.Util as Util
+import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -50,7 +55,7 @@ adaptTypeToHaskellAndEncode :: Module.Namespaces Syntax.ModuleName -> Core.Type 
 adaptTypeToHaskellAndEncode namespaces typ cx g =
 
       let enc = \t -> encodeType namespaces t cx g
-      in case (Rewriting.deannotateType typ) of
+      in case (Strip.deannotateType typ) of
         Core.TypeVariable _ -> enc typ
         _ -> Eithers.bind (Eithers.bimap (\_s -> Context.InContext {
           Context.inContextObject = (Errors.ErrorOther (Errors.OtherError _s)),
@@ -129,7 +134,7 @@ constructModule namespaces mod defs cx g =
                       (("Data.Int", (Just "I")), []),
                       (("Data.List", (Just "L")), []),
                       (("Data.Map", (Just "M")), []),
-                      (("Data.Set", (Just "S")), [])] (Logic.ifElse (Schemas.moduleContainsBinaryLiterals mod) [
+                      (("Data.Set", (Just "S")), [])] (Logic.ifElse (Analysis.moduleContainsBinaryLiterals mod) [
                       (("Hydra.Lib.Literals", (Just "Literals")), [])] [])))
       in (Eithers.bind (Eithers.mapList createDeclarations defs) (\declLists ->
         let decls = Lists.concat declLists
@@ -158,8 +163,8 @@ encodeCaseExpression depth namespaces stmt scrutinee cx g =
                                 Core.TermApplication (Core.Application {
                                   Core.applicationFunction = fun_,
                                   Core.applicationArgument = (Core.TermVariable (Core.Name v0))})
-                        rhsTerm = Rewriting.simplifyTerm raw
-                        v1 = Logic.ifElse (Rewriting.isFreeVariableInTerm (Core.Name v0) rhsTerm) Constants.ignoredVariable v0
+                        rhsTerm = Dependencies.simplifyTerm raw
+                        v1 = Logic.ifElse (Variables.isFreeVariableInTerm (Core.Name v0) rhsTerm) Constants.ignoredVariable v0
                         hname =
                                 Utils.unionFieldReference (Sets.union (Sets.fromList (Maps.keys (Graph.graphBoundTerms g))) (Sets.fromList (Maps.keys (Graph.graphSchemaTypes g)))) namespaces dn fn
                     in (Eithers.bind (Maybes.cases (Maps.lookup fn fieldMap) (Left (Context.InContext {
@@ -173,7 +178,7 @@ encodeCaseExpression depth namespaces stmt scrutinee cx g =
                           noArgs = []
                           singleArg = [
                                 Syntax.PatternName (Utils.rawName v1)]
-                      in case (Rewriting.deannotateType ft) of
+                      in case (Strip.deannotateType ft) of
                         Core.TypeUnit -> Right noArgs
                         _ -> Right singleArg)) (\args ->
                       let lhs = Utils.applicationPattern hname args
@@ -181,7 +186,7 @@ encodeCaseExpression depth namespaces stmt scrutinee cx g =
                         Syntax.alternativePattern = lhs,
                         Syntax.alternativeRhs = rhs,
                         Syntax.alternativeBinds = Nothing})))))
-      in (Eithers.bind (Schemas.requireUnionType cx g dn) (\rt ->
+      in (Eithers.bind (Resolution.requireUnionType cx g dn) (\rt ->
         let toFieldMapEntry = \f -> (Core.fieldTypeName f, f)
             fieldMap = Maps.fromList (Lists.map toFieldMapEntry rt)
         in (Eithers.bind (Eithers.mapList (toAlt fieldMap) fields) (\ecases -> Eithers.bind (Maybes.cases def (Right []) (\d -> Eithers.bind (Eithers.map (\x -> Syntax.CaseRhs x) (encodeTerm depth namespaces d cx g)) (\cs ->
@@ -258,11 +263,11 @@ encodeTerm depth namespaces term cx g =
                   \s ->
                     let lhs = Utils.hsvar "S.fromList"
                     in (Eithers.bind (encodeTerm depth namespaces (Core.TermList (Sets.toList s)) cx g) (\rhs -> Right (Utils.hsapp lhs rhs)))
-      in case (Rewriting.deannotateTerm term) of
+      in case (Strip.deannotateTerm term) of
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-              deannotatedFun = Rewriting.deannotateTerm fun
+              deannotatedFun = Strip.deannotateTerm fun
           in case deannotatedFun of
             Core.TermFunction v1 -> case v1 of
               Core.FunctionElimination v2 -> case v2 of
@@ -277,7 +282,7 @@ encodeTerm depth namespaces term cx g =
                   \lt ->
                     let bs = Core.letBindings lt
                         body = Core.letBody lt
-                    in case (Rewriting.deannotateTerm body) of
+                    in case (Strip.deannotateTerm body) of
                       Core.TermLet v1 ->
                         let innerResult = collectBindings v1
                         in (Lists.concat2 bs (Pairs.first innerResult), (Pairs.second innerResult))
@@ -331,7 +336,7 @@ encodeTerm depth namespaces term cx g =
               lhs =
                       Syntax.ExpressionVariable (Utils.unionFieldReference (Sets.union (Sets.fromList (Maps.keys (Graph.graphBoundTerms g))) (Sets.fromList (Maps.keys (Graph.graphSchemaTypes g)))) namespaces sname fn)
               dflt = Eithers.map (Utils.hsapp lhs) (encode ft)
-          in (Eithers.bind (Schemas.requireUnionField cx g sname fn) (\ftyp -> case (Rewriting.deannotateType ftyp) of
+          in (Eithers.bind (Resolution.requireUnionField cx g sname fn) (\ftyp -> case (Strip.deannotateType ftyp) of
             Core.TypeUnit -> Right lhs
             _ -> dflt))
         Core.TermUnit -> Right (Syntax.ExpressionTuple [])
@@ -352,7 +357,7 @@ encodeType namespaces typ cx g =
       let encode = \t -> encodeType namespaces t cx g
           ref = \name -> Right (Syntax.TypeVariable (Utils.elementReference namespaces name))
           unitTuple = Syntax.TypeTuple []
-      in case (Rewriting.deannotateType typ) of
+      in case (Strip.deannotateType typ) of
         Core.TypeApplication v0 ->
           let lhs = Core.applicationTypeFunction v0
               rhs = Core.applicationTypeArgument v0
@@ -469,7 +474,7 @@ findOrdVariables typ =
                 _ -> names
           isTypeVariable = \v -> Maybes.isNothing (Names.namespaceOf v)
           tryType =
-                  \names -> \t -> case (Rewriting.deannotateType t) of
+                  \names -> \t -> case (Strip.deannotateType t) of
                     Core.TypeVariable v0 -> Logic.ifElse (isTypeVariable v0) (Sets.insert v0 names) names
                     _ -> names
       in (Rewriting.foldOverType Coders.TraversalOrderPre fold Sets.empty typ)
@@ -562,7 +567,7 @@ toDataDeclaration namespaces def cx g =
                             _ -> vb
                         _ -> vb
           toDecl =
-                  \comments -> \hname_ -> \term_ -> \bindings -> case (Rewriting.deannotateTerm term_) of
+                  \comments -> \hname_ -> \term_ -> \bindings -> case (Strip.deannotateTerm term_) of
                     Core.TermLet v0 ->
                       let lbindings = Core.letBindings v0
                           env = Core.letBody v0
@@ -578,7 +583,7 @@ toDataDeclaration namespaces def cx g =
                       let vb = Utils.simpleValueBinding hname_ hterm bindings
                           schemeConstraints = Maybes.maybe Nothing (\ts -> Core.typeSchemeConstraints ts) typ
                           schemeClasses = typeSchemeConstraintsToClassMap schemeConstraints
-                      in (Eithers.bind (Annotations.getTypeClasses cx g (Rewriting.removeTypesFromTerm term)) (\explicitClasses ->
+                      in (Eithers.bind (Annotations.getTypeClasses cx g (Strip.removeTypesFromTerm term)) (\explicitClasses ->
                         let combinedClasses = Maps.union schemeClasses explicitClasses
                             schemeType = Maybes.maybe Core.TypeUnit (\ts -> Core.typeSchemeType ts) typ
                         in (Eithers.bind (encodeTypeWithClassAssertions namespaces combinedClasses schemeType cx g) (\htype ->
@@ -654,13 +659,13 @@ toTypeDeclarationsFrom namespaces elementName typ cx g =
                                   in (Logic.ifElse (Sets.member tname boundNames_) (deconflict (Strings.cat2 name "_")) name)
                     in (Eithers.bind (Annotations.getTypeDescription cx g ftype) (\comments ->
                       let nm = deconflict (Strings.cat2 (Formatting.capitalize lname_) (Formatting.capitalize (Core.unName fname)))
-                      in (Eithers.bind (Logic.ifElse (Equality.equal (Rewriting.deannotateType ftype) Core.TypeUnit) (Right []) (Eithers.bind (adaptTypeToHaskellAndEncode namespaces ftype cx g) (\htype -> Right [
+                      in (Eithers.bind (Logic.ifElse (Equality.equal (Strip.deannotateType ftype) Core.TypeUnit) (Right []) (Eithers.bind (adaptTypeToHaskellAndEncode namespaces ftype cx g) (\htype -> Right [
                         htype]))) (\typeList -> Right (Syntax.ConstructorWithComments {
                         Syntax.constructorWithCommentsBody = (Syntax.ConstructorOrdinary (Syntax.OrdinaryConstructor {
                           Syntax.ordinaryConstructorName = (Utils.simpleName nm),
                           Syntax.ordinaryConstructorFields = typeList})),
                         Syntax.constructorWithCommentsComments = comments})))))
-      in (Eithers.bind (Schemas.isSerializableByName cx g elementName) (\isSer ->
+      in (Eithers.bind (Predicates.isSerializableByName cx g elementName) (\isSer ->
         let deriv =
                 Syntax.Deriving (Logic.ifElse isSer (Lists.map Utils.rawName [
                   "Eq",
@@ -671,7 +676,7 @@ toTypeDeclarationsFrom namespaces elementName typ cx g =
             vars = Pairs.first unpackResult
             t_ = Pairs.second unpackResult
             hd = declHead hname (Lists.reverse vars)
-        in (Eithers.bind (case (Rewriting.deannotateType t_) of
+        in (Eithers.bind (case (Strip.deannotateType t_) of
           Core.TypeRecord v0 -> Eithers.bind (recordCons lname v0) (\cons -> Right (Syntax.DeclarationData (Syntax.DataDeclaration {
             Syntax.dataDeclarationKeyword = Syntax.DataOrNewtypeData,
             Syntax.dataDeclarationContext = [],
@@ -724,17 +729,17 @@ typeDecl namespaces name typ cx g =
           rewrite =
                   \recurse -> \term ->
                     let variantResult =
-                            case (Rewriting.deannotateTerm term) of
+                            case (Strip.deannotateTerm term) of
                               Core.TermUnion v0 -> Logic.ifElse (Equality.equal (Core.injectionTypeName v0) (Core.Name "hydra.core.Type")) (Just (Core.injectionField v0)) Nothing
                               _ -> Nothing
                         decodeString =
-                                \term2 -> case (Rewriting.deannotateTerm term2) of
+                                \term -> case (Strip.deannotateTerm term) of
                                   Core.TermLiteral v0 -> case v0 of
                                     Core.LiteralString v1 -> Just v1
                                     _ -> Nothing
                                   _ -> Nothing
                         decodeName =
-                                \term2 -> case (Rewriting.deannotateTerm term2) of
+                                \term -> case (Strip.deannotateTerm term) of
                                   Core.TermWrap v0 -> Logic.ifElse (Equality.equal (Core.wrappedTermTypeName v0) (Core.Name "hydra.core.Name")) (Maybes.map (\x -> Core.Name x) (decodeString (Core.wrappedTermBody v0))) Nothing
                                   _ -> Nothing
                         forType =

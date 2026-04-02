@@ -17,9 +17,10 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
+import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -110,6 +111,62 @@ cases cx name graph term0 =
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "case statement") " but found ") (Core_.term term)))),
         Context.inContextContext = cx}))
 
+-- | Decode an Either value using the provided left and right decoders
+decodeEither :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> (Graph.Graph -> Core.Term -> Either Errors.DecodingError t1) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Either t0 t1)
+decodeEither leftDecoder rightDecoder g term =
+    Eithers.bind (Eithers.bimap (\x -> Errors.DecodingError x) (\x -> x) (Lexical.stripAndDereferenceTermEither g term)) (\stripped -> case stripped of
+      Core.TermEither v0 -> Eithers.either (\lv -> Eithers.map (\x -> Left x) (leftDecoder g lv)) (\rv -> Eithers.map (\x -> Right x) (rightDecoder g rv)) v0
+      _ -> Left (Errors.DecodingError "expected either value"))
+
+-- | Decode a list of elements using the provided element decoder
+decodeList :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError [t0]
+decodeList elemDecoder g term =
+    Eithers.bind (Eithers.bimap (\x -> Errors.DecodingError x) (\x -> x) (Lexical.stripAndDereferenceTermEither g term)) (\stripped -> case stripped of
+      Core.TermList v0 -> Eithers.mapList (elemDecoder g) v0
+      _ -> Left (Errors.DecodingError "expected list"))
+
+-- | Decode a Map using the provided key and value decoders
+decodeMap :: Ord t0 => ((Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> (Graph.Graph -> Core.Term -> Either Errors.DecodingError t1) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (M.Map t0 t1))
+decodeMap keyDecoder valDecoder g term =
+    Eithers.bind (Eithers.bimap (\x -> Errors.DecodingError x) (\x -> x) (Lexical.stripAndDereferenceTermEither g term)) (\stripped -> case stripped of
+      Core.TermMap v0 -> Eithers.map Maps.fromList (Eithers.mapList (\kv -> Eithers.bind (keyDecoder g (Pairs.first kv)) (\k -> Eithers.map (\v -> (k, v)) (valDecoder g (Pairs.second kv)))) (Maps.toList v0))
+      _ -> Left (Errors.DecodingError "expected map"))
+
+-- | Decode a Maybe value using the provided element decoder
+decodeMaybe :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Maybe t0)
+decodeMaybe elemDecoder g term =
+    Eithers.bind (Eithers.bimap (\x -> Errors.DecodingError x) (\x -> x) (Lexical.stripAndDereferenceTermEither g term)) (\stripped -> case stripped of
+      Core.TermMaybe v0 -> Eithers.mapMaybe (elemDecoder g) v0
+      _ -> Left (Errors.DecodingError "expected optional value"))
+
+-- | Decode a Pair using the provided first and second decoders
+decodePair :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> (Graph.Graph -> Core.Term -> Either Errors.DecodingError t1) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (t0, t1)
+decodePair firstDecoder secondDecoder g term =
+    Eithers.bind (Eithers.bimap (\x -> Errors.DecodingError x) (\x -> x) (Lexical.stripAndDereferenceTermEither g term)) (\stripped -> case stripped of
+      Core.TermPair v0 -> Eithers.bind (firstDecoder g (Pairs.first v0)) (\f -> Eithers.map (\s -> (f, s)) (secondDecoder g (Pairs.second v0)))
+      _ -> Left (Errors.DecodingError "expected pair"))
+
+-- | Decode a Set using the provided element decoder
+decodeSet :: Ord t0 => ((Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (S.Set t0))
+decodeSet elemDecoder g term =
+    Eithers.bind (Eithers.bimap (\x -> Errors.DecodingError x) (\x -> x) (Lexical.stripAndDereferenceTermEither g term)) (\stripped -> case stripped of
+      Core.TermSet v0 -> Eithers.map Sets.fromList (Eithers.mapList (elemDecoder g) (Sets.toList v0))
+      _ -> Left (Errors.DecodingError "expected set"))
+
+-- | Decode a unit value
+decodeUnit :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ()
+decodeUnit g term =
+    Eithers.bind (Eithers.bimap (\x -> Errors.DecodingError x) (\x -> x) (Lexical.stripAndDereferenceTermEither g term)) (\stripped -> case stripped of
+      Core.TermUnit -> Right ()
+      _ -> Left (Errors.DecodingError "expected a unit value"))
+
+-- | Decode a wrapped value using the provided body decoder
+decodeWrapped :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError t0
+decodeWrapped bodyDecoder g term =
+    Eithers.bind (Eithers.bimap (\x -> Errors.DecodingError x) (\x -> x) (Lexical.stripAndDereferenceTermEither g term)) (\stripped -> case stripped of
+      Core.TermWrap v0 -> bodyDecoder g (Core.wrappedTermBody v0)
+      _ -> Left (Errors.DecodingError "expected wrapped value"))
+
 -- | Extract an either value from a term, applying functions to the left and right values
 eitherTerm :: Context.Context -> (Core.Term -> Either (Context.InContext Errors.Error) t0) -> (Core.Term -> Either (Context.InContext Errors.Error) t1) -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) (Either t0 t1)
 eitherTerm cx leftFun rightFun graph term0 =
@@ -123,7 +180,7 @@ eitherTerm cx leftFun rightFun graph term0 =
 eitherType :: Context.Context -> Core.Type -> Either (Context.InContext Errors.Error) Core.EitherType
 eitherType cx typ =
 
-      let stripped = Rewriting.deannotateType typ
+      let stripped = Strip.deannotateType typ
       in case stripped of
         Core.TypeEither v0 -> Right v0
         _ -> Left (Context.InContext {
@@ -184,7 +241,7 @@ floatValue cx graph t = Eithers.bind (literal cx graph t) (\l -> floatLiteral cx
 functionType :: Context.Context -> Core.Type -> Either (Context.InContext Errors.Error) Core.FunctionType
 functionType cx typ =
 
-      let stripped = Rewriting.deannotateType typ
+      let stripped = Strip.deannotateType typ
       in case stripped of
         Core.TypeFunction v0 -> Right v0
         _ -> Left (Context.InContext {
@@ -331,7 +388,7 @@ listOf cx f graph term = Eithers.bind (list cx graph term) (\els -> Eithers.mapL
 listType :: Context.Context -> Core.Type -> Either (Context.InContext Errors.Error) Core.Type
 listType cx typ =
 
-      let stripped = Rewriting.deannotateType typ
+      let stripped = Strip.deannotateType typ
       in case stripped of
         Core.TypeList v0 -> Right v0
         _ -> Left (Context.InContext {
@@ -366,7 +423,7 @@ map cx fk fv graph term0 =
 mapType :: Context.Context -> Core.Type -> Either (Context.InContext Errors.Error) Core.MapType
 mapType cx typ =
 
-      let stripped = Rewriting.deannotateType typ
+      let stripped = Strip.deannotateType typ
       in case stripped of
         Core.TypeMap v0 -> Right v0
         _ -> Left (Context.InContext {
@@ -386,7 +443,7 @@ maybeTerm cx f graph term0 =
 maybeType :: Context.Context -> Core.Type -> Either (Context.InContext Errors.Error) Core.Type
 maybeType cx typ =
 
-      let stripped = Rewriting.deannotateType typ
+      let stripped = Strip.deannotateType typ
       in case stripped of
         Core.TypeMaybe v0 -> Right v0
         _ -> Left (Context.InContext {
@@ -423,12 +480,20 @@ record cx expected graph term0 =
 recordType :: Context.Context -> t0 -> Core.Type -> Either (Context.InContext Errors.Error) [Core.FieldType]
 recordType cx ename typ =
 
-      let stripped = Rewriting.deannotateType typ
+      let stripped = Strip.deannotateType typ
       in case stripped of
         Core.TypeRecord v0 -> Right v0
         _ -> Left (Context.InContext {
           Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "record type") " but found ") (Core_.type_ typ)))),
           Context.inContextContext = cx})
+
+-- | Require a field from a record's field map and decode it
+requireField :: String -> (t0 -> t1 -> Either Errors.DecodingError t2) -> M.Map Core.Name t1 -> t0 -> Either Errors.DecodingError t2
+requireField fieldName decoder fieldMap g =
+    Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+      "missing field ",
+      fieldName,
+      " in record"]))) (\fieldTerm -> decoder g fieldTerm) (Maps.lookup (Core.Name fieldName) fieldMap)
 
 -- | Extract a set of terms from a term
 set :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) (S.Set Core.Term)
@@ -447,7 +512,7 @@ setOf cx f graph term = Eithers.bind (set cx graph term) (\els -> Eithers.mapSet
 setType :: Context.Context -> Core.Type -> Either (Context.InContext Errors.Error) Core.Type
 setType cx typ =
 
-      let stripped = Rewriting.deannotateType typ
+      let stripped = Strip.deannotateType typ
       in case stripped of
         Core.TypeSet v0 -> Right v0
         _ -> Left (Context.InContext {
@@ -475,6 +540,10 @@ termRecord cx graph term0 =
       _ -> Left (Context.InContext {
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "record") " but found ") (Core_.term term)))),
         Context.inContextContext = cx}))
+
+-- | Convert a Record's fields to a Map from Name to Term
+toFieldMap :: Core.Record -> M.Map Core.Name Core.Term
+toFieldMap record = Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields record))
 
 -- | Extract a 16-bit unsigned integer value from a term
 uint16 :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Int
@@ -532,7 +601,7 @@ uint8Value cx v =
 unionType :: Context.Context -> t0 -> Core.Type -> Either (Context.InContext Errors.Error) [Core.FieldType]
 unionType cx ename typ =
 
-      let stripped = Rewriting.deannotateType typ
+      let stripped = Strip.deannotateType typ
       in case stripped of
         Core.TypeUnion v0 -> Right v0
         _ -> Left (Context.InContext {
@@ -568,7 +637,7 @@ wrap cx expected graph term0 =
 wrappedType :: Context.Context -> t0 -> Core.Type -> Either (Context.InContext Errors.Error) Core.Type
 wrappedType cx ename typ =
 
-      let stripped = Rewriting.deannotateType typ
+      let stripped = Strip.deannotateType typ
       in case stripped of
         Core.TypeWrap v0 -> Right v0
         _ -> Left (Context.InContext {

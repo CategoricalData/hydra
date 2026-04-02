@@ -432,7 +432,7 @@
                                                         "argument": {
                                                           "application": {
                                                             "argument": {"variable": "typ"},
-                                                            "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                                            "function": {"variable": "hydra.strip.deannotateType"}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {"literal": {"boolean": false}},
@@ -653,7 +653,7 @@
                           "argument": {
                             "application": {
                               "argument": {"variable": "typ"},
-                              "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                              "function": {"variable": "hydra.strip.deannotateType"}}},
                           "function": {
                             "function": {
                               "elimination": {
@@ -727,10 +727,9 @@
   "termDependencies": [
     "hydra.formatting",
     "hydra.names",
-    "hydra.rewriting",
+    "hydra.strip",
     "hydra.annotations",
     "hydra.constants",
-    "hydra.schemas",
     "hydra.reflect",
     "hydra.ext.json.schema.serde",
     "hydra.coderUtils"],

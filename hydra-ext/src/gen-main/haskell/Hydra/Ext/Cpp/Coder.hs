@@ -7,6 +7,8 @@ module Hydra.Ext.Cpp.Coder where
 import qualified Hydra.CoderUtils as CoderUtils
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
+import qualified Hydra.Dependencies as Dependencies
+import qualified Hydra.Environment as Environment
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Ext.Cpp.Language as Language
 import qualified Hydra.Ext.Cpp.Serde as Serde
@@ -23,10 +25,11 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
-import qualified Hydra.Rewriting as Rewriting
-import qualified Hydra.Schemas as Schemas
+import qualified Hydra.Predicates as Predicates
+import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Strip as Strip
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -279,21 +282,21 @@ createVariantClass cx g tname parentClass ft =
 
       let fname = Core.fieldTypeName ft
           variantType = Core.fieldTypeType ft
-          hasValue = Logic.not (Schemas.isUnitType variantType)
+          hasValue = Logic.not (Predicates.isUnitType variantType)
           valueField =
                   Logic.ifElse hasValue (Eithers.map (\cppType -> [
                     Syntax.MemberSpecificationMember (Syntax.MemberDeclarationVariable (Syntax.VariableDeclaration {
                       Syntax.variableDeclarationType = (Just cppType),
                       Syntax.variableDeclarationName = "value",
                       Syntax.variableDeclarationInitializer = Nothing,
-                      Syntax.variableDeclarationIsAuto = False}))]) (encodeType cx g (Rewriting.deannotateType variantType))) (Right [])
+                      Syntax.variableDeclarationIsAuto = False}))]) (encodeType cx g (Strip.deannotateType variantType))) (Right [])
           constructorParams =
                   Logic.ifElse hasValue (Eithers.map (\paramType -> [
                     Syntax.Parameter {
                       Syntax.parameterType = paramType,
                       Syntax.parameterName = "value",
                       Syntax.parameterUnnamed = False,
-                      Syntax.parameterDefaultValue = Nothing}]) (encodeType cx g (Rewriting.deannotateType variantType))) (Right [])
+                      Syntax.parameterDefaultValue = Nothing}]) (encodeType cx g (Strip.deannotateType variantType))) (Right [])
       in (Eithers.bind valueField (\vFields -> Eithers.bind constructorParams (\vParams ->
         let initList =
                 Logic.ifElse hasValue [
@@ -448,7 +451,7 @@ encodeRecordType cx g name rt comment =
 encodeType :: Context.Context -> t0 -> Core.Type -> Either (Context.InContext Errors.Error) Syntax.TypeExpression
 encodeType cx g typ =
 
-      let t = Rewriting.deannotateType typ
+      let t = Strip.deannotateType typ
       in case t of
         Core.TypeApplication v0 -> encodeApplicationType cx g v0
         Core.TypeEither v0 -> Eithers.bind (encodeType cx g (Core.eitherTypeLeft v0)) (\lt -> Eithers.bind (encodeType cx g (Core.eitherTypeRight v0)) (\rt -> Right (toConstType (createTemplateType "std::variant" [
@@ -494,7 +497,7 @@ encodeTypeAlias cx g name typ comment =
 encodeTypeDefinition :: Context.Context -> t0 -> Core.Name -> Core.Type -> Either (Context.InContext Errors.Error) [Syntax.Declaration]
 encodeTypeDefinition cx g name typ =
 
-      let t = Rewriting.deannotateType typ
+      let t = Strip.deannotateType typ
       in case t of
         Core.TypeForall v0 -> encodeTypeDefinition cx g name (Core.forallTypeBody v0)
         Core.TypeRecord v0 -> encodeRecordType cx g name v0 Nothing
@@ -506,7 +509,7 @@ encodeTypeDefinition cx g name typ =
 
 encodeUnionType :: Context.Context -> t0 -> Core.Name -> [Core.FieldType] -> t1 -> Either (Context.InContext Errors.Error) [Syntax.Declaration]
 encodeUnionType cx g name rt comment =
-    Logic.ifElse (Schemas.isEnumRowType rt) (encodeEnumType cx g name rt comment) (encodeVariantType cx g name rt comment)
+    Logic.ifElse (Predicates.isEnumRowType rt) (encodeEnumType cx g name rt comment) (encodeVariantType cx g name rt comment)
 
 encodeVariantType :: Context.Context -> t0 -> Core.Name -> [Core.FieldType] -> t1 -> Either (Context.InContext Errors.Error) [Syntax.Declaration]
 encodeVariantType cx g name variants comment =
@@ -549,7 +552,7 @@ findIncludes withFwd ns defs =
 
 findTypeDependencies :: Module.Namespace -> [Module.TypeDefinition] -> [Core.Name]
 findTypeDependencies ns defs =
-    Lists.filter (\n -> Logic.not (Equality.equal (Maybes.map Module.unNamespace (Names.namespaceOf n)) (Just (Module.unNamespace ns)))) (Sets.toList (Lists.foldl (\acc -> \d -> Sets.union acc (Rewriting.typeDependencyNames True (Module.typeDefinitionType d))) Sets.empty defs))
+    Lists.filter (\n -> Logic.not (Equality.equal (Maybes.map Module.unNamespace (Names.namespaceOf n)) (Just (Module.unNamespace ns)))) (Sets.toList (Lists.foldl (\acc -> \d -> Sets.union acc (Dependencies.typeDependencyNames True (Module.typeDefinitionType d))) Sets.empty defs))
 
 fwdHeaderName :: Module.Namespace -> Core.Name
 fwdHeaderName ns =
@@ -582,7 +585,7 @@ generateTypeFiles ns defs cx g =
 isStdContainerType :: Core.Type -> Bool
 isStdContainerType typ =
 
-      let t = Rewriting.deannotateType typ
+      let t = Strip.deannotateType typ
       in case t of
         Core.TypeApplication v0 -> isStdContainerType (Core.applicationTypeFunction v0)
         Core.TypeList _ -> True
@@ -594,17 +597,17 @@ isStdContainerType typ =
 isStructType :: Core.Type -> Bool
 isStructType rawType =
 
-      let t = Schemas.fullyStripType rawType
+      let t = Resolution.fullyStripType rawType
           isLiteral =
                   case t of
                     Core.TypeLiteral _ -> True
                     _ -> False
-      in (Logic.and (Logic.not isLiteral) (Logic.not (Schemas.isEnumType rawType)))
+      in (Logic.and (Logic.not isLiteral) (Logic.not (Predicates.isEnumType rawType)))
 
 isTemplateType :: Core.Type -> Bool
 isTemplateType typ =
 
-      let t = Rewriting.deannotateType typ
+      let t = Strip.deannotateType typ
       in (Logic.or (case t of
         Core.TypeLiteral v0 -> case v0 of
           Core.LiteralTypeString -> True
@@ -621,7 +624,7 @@ moduleToCpp :: Module.Module -> [Module.Definition] -> Context.Context -> t0 -> 
 moduleToCpp mod defs cx g =
 
       let ns = Module.moduleNamespace mod
-          typeDefs = Pairs.first (Schemas.partitionDefinitions defs)
+          typeDefs = Pairs.first (Environment.partitionDefinitions defs)
       in (Eithers.bind (generateTypeFiles ns typeDefs cx g) (\typeFiles -> Right (Maps.fromList typeFiles)))
 
 namespaceDecl :: Module.Namespace -> [Syntax.Declaration] -> Syntax.Declaration

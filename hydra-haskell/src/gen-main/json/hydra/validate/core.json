@@ -3396,7 +3396,7 @@
                                                     "term": {
                                                       "application": {
                                                         "argument": {"variable": "typ"},
-                                                        "function": {"variable": "hydra.rewriting.freeVariablesInType"}}},
+                                                        "function": {"variable": "hydra.variables.freeVariablesInType"}}},
                                                     "type": [
                                                       {
                                                         "constraints": null,
@@ -3543,7 +3543,7 @@
                                                     "term": {
                                                       "application": {
                                                         "argument": {"variable": "ts"},
-                                                        "function": {"variable": "hydra.rewriting.freeVariablesInTypeScheme"}}},
+                                                        "function": {"variable": "hydra.variables.freeVariablesInTypeScheme"}}},
                                                     "type": [
                                                       {
                                                         "constraints": null,
@@ -4978,7 +4978,7 @@
             "variables": []}]}}],
   "description": ["Validation functions for core terms and types"],
   "namespace": "hydra.validate.core",
-  "termDependencies": ["hydra.rewriting"],
+  "termDependencies": ["hydra.rewriting", "hydra.variables"],
   "typeDependencies": [
     "hydra.paths",
     "hydra.ast",

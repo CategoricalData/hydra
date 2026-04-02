@@ -1164,7 +1164,7 @@
                                                             "name": "variable",
                                                             "term": {
                                                               "wrap": {
-                                                                "body": {"literal": {"string": "hydra.extract.helpers.decodeEither"}},
+                                                                "body": {"literal": {"string": "hydra.extract.core.decodeEither"}},
                                                                 "typeName": "hydra.core.Name"}}},
                                                           "typeName": "hydra.core.Term"}}},
                                                     {"name": "argument", "term": {"variable": "leftDecoder"}}],
@@ -1288,7 +1288,7 @@
                                           "name": "variable",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "hydra.extract.helpers.decodeList"}},
+                                              "body": {"literal": {"string": "hydra.extract.core.decodeList"}},
                                               "typeName": "hydra.core.Name"}}},
                                         "typeName": "hydra.core.Term"}}},
                                   {"name": "argument", "term": {"variable": "elemDecoder"}}],
@@ -10654,7 +10654,7 @@
                                                             "name": "variable",
                                                             "term": {
                                                               "wrap": {
-                                                                "body": {"literal": {"string": "hydra.extract.helpers.decodeMap"}},
+                                                                "body": {"literal": {"string": "hydra.extract.core.decodeMap"}},
                                                                 "typeName": "hydra.core.Name"}}},
                                                           "typeName": "hydra.core.Term"}}},
                                                     {"name": "argument", "term": {"variable": "keyDecoder"}}],
@@ -10714,7 +10714,7 @@
                                           "name": "variable",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "hydra.extract.helpers.decodeMaybe"}},
+                                              "body": {"literal": {"string": "hydra.extract.core.decodeMaybe"}},
                                               "typeName": "hydra.core.Name"}}},
                                         "typeName": "hydra.core.Term"}}},
                                   {"name": "argument", "term": {"variable": "elemDecoder"}}],
@@ -10930,7 +10930,7 @@
                                                                                                     "list": [
                                                                                                       {
                                                                                                         "wrap": {
-                                                                                                          "body": {"literal": {"string": "hydra.extract.helpers"}},
+                                                                                                          "body": {"literal": {"string": "hydra.extract.core"}},
                                                                                                           "typeName": "hydra.module.Namespace"}},
                                                                                                       {
                                                                                                         "wrap": {
@@ -11398,7 +11398,7 @@
                                                             "name": "variable",
                                                             "term": {
                                                               "wrap": {
-                                                                "body": {"literal": {"string": "hydra.extract.helpers.decodePair"}},
+                                                                "body": {"literal": {"string": "hydra.extract.core.decodePair"}},
                                                                 "typeName": "hydra.core.Name"}}},
                                                           "typeName": "hydra.core.Term"}}},
                                                     {"name": "argument", "term": {"variable": "firstDecoder"}}],
@@ -11515,7 +11515,7 @@
                                                                                                     "name": "variable",
                                                                                                     "term": {
                                                                                                       "wrap": {
-                                                                                                        "body": {"literal": {"string": "hydra.extract.helpers.requireField"}},
+                                                                                                        "body": {"literal": {"string": "hydra.extract.core.requireField"}},
                                                                                                         "typeName": "hydra.core.Name"}}},
                                                                                                   "typeName": "hydra.core.Term"}}},
                                                                                             {
@@ -12158,7 +12158,7 @@
                                                                                                                                                                                                                                                       "name": "variable",
                                                                                                                                                                                                                                                       "term": {
                                                                                                                                                                                                                                                         "wrap": {
-                                                                                                                                                                                                                                                          "body": {"literal": {"string": "hydra.extract.helpers.toFieldMap"}},
+                                                                                                                                                                                                                                                          "body": {"literal": {"string": "hydra.extract.core.toFieldMap"}},
                                                                                                                                                                                                                                                           "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                                                                                     "typeName": "hydra.core.Term"}}},
                                                                                                                                                                                                                                               {
@@ -12365,7 +12365,7 @@
                                           "name": "variable",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "hydra.extract.helpers.decodeSet"}},
+                                              "body": {"literal": {"string": "hydra.extract.core.decodeSet"}},
                                               "typeName": "hydra.core.Name"}}},
                                         "typeName": "hydra.core.Term"}}},
                                   {"name": "argument", "term": {"variable": "elemDecoder"}}],
@@ -13118,7 +13118,7 @@
                   "name": "variable",
                   "term": {
                     "wrap": {
-                      "body": {"literal": {"string": "hydra.extract.helpers.decodeUnit"}},
+                      "body": {"literal": {"string": "hydra.extract.core.decodeUnit"}},
                       "typeName": "hydra.core.Name"}}},
                 "typeName": "hydra.core.Term"}}}},
         "type": [
@@ -16744,7 +16744,7 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {"variable": "cx"},
-                                                  "function": {"variable": "hydra.schemas.isSerializableByName"}}}}}}},
+                                                  "function": {"variable": "hydra.predicates.isSerializableByName"}}}}}}},
                                       "function": {
                                         "typeApplication": {
                                           "body": {
@@ -16958,12 +16958,12 @@
   "namespace": "hydra.decoding",
   "termDependencies": [
     "hydra.annotations",
+    "hydra.extract.core",
     "hydra.formatting",
-    "hydra.extract.helpers",
     "hydra.lexical",
     "hydra.names",
+    "hydra.predicates",
     "hydra.rewriting",
-    "hydra.schemas",
     "hydra.show.core"],
   "typeDependencies": [
     "hydra.paths",

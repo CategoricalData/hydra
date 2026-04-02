@@ -24,6 +24,41 @@ public interface Names {
       mns);
   }
 
+  static hydra.util.Pair<hydra.core.Name, hydra.context.Context> freshName(hydra.context.Context cx) {
+    Integer count = hydra.Annotations.getCount(
+      hydra.Constants.key_freshTypeVariableCount(),
+      cx);
+    return (hydra.util.Pair<hydra.core.Name, hydra.context.Context>) ((hydra.util.Pair<hydra.core.Name, hydra.context.Context>) (new hydra.util.Pair<hydra.core.Name, hydra.context.Context>(hydra.Names.normalTypeVariable(count), hydra.Annotations.putCount(
+      hydra.Constants.key_freshTypeVariableCount(),
+      hydra.lib.math.Add.apply(
+        count,
+        1),
+      cx))));
+  }
+
+  static hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context> freshNames(Integer n, hydra.context.Context cx) {
+    return hydra.lib.lists.Foldl.apply(
+      (java.util.function.Function<hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context>, java.util.function.Function<java.lang.Void, hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context>>>) (v1 -> (java.util.function.Function<java.lang.Void, hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context>>) (v2 -> hydra.Names.freshNames_go(
+        hydra.Names::freshName,
+        v1,
+        v2))),
+      (hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context>((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()), cx))),
+      hydra.lib.lists.Replicate.apply(
+        n,
+        null));
+  }
+
+  static <T0> hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context> freshNames_go(java.util.function.Function<hydra.context.Context, hydra.util.Pair<hydra.core.Name, hydra.context.Context>> hydra_names_freshName2, hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context> acc, T0 ignored) {
+    hydra.util.Lazy<hydra.context.Context> cx0 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(acc));
+    hydra.util.Pair<hydra.core.Name, hydra.context.Context> result = (hydra_names_freshName2).apply(cx0.get());
+    hydra.util.Lazy<hydra.context.Context> cx1 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(result));
+    hydra.util.Lazy<hydra.core.Name> name = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(result));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> names = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(acc));
+    return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context>(hydra.lib.lists.Concat2.apply(
+      names.get(),
+      hydra.lib.lists.Pure.apply(name.get())), cx1.get())));
+  }
+
   static String localNameOf(hydra.core.Name arg_) {
     return hydra.Names.qualifyName(arg_).local;
   }
@@ -48,6 +83,12 @@ public interface Names {
           parts.get()),
         "."),
       (ext).value);
+  }
+
+  static hydra.core.Name normalTypeVariable(Integer i) {
+    return new hydra.core.Name(hydra.lib.strings.Cat2.apply(
+      "t",
+      hydra.lib.literals.ShowInt32.apply(i)));
   }
 
   static hydra.core.Name qname(hydra.module.Namespace ns, String name) {

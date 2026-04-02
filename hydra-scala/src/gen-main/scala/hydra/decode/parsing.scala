@@ -18,8 +18,8 @@ def parseError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.parsing.ParseError]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
-    lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, scala.Predef.String, hydra.parsing.ParseError](hydra.extract.helpers.requireField("message")((cx2: hydra.graph.Graph) =>
+    lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.core.toFieldMap(v_Term_record_record)
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, scala.Predef.String, hydra.parsing.ParseError](hydra.extract.core.requireField("message")((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
       hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
          scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
@@ -28,7 +28,7 @@ def parseError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors
         case hydra.core.Literal.string(v_Literal_string_s) => Right(v_Literal_string_s)
         case _ => Left("expected string literal")
       case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx2)(raw2)))(fieldMap)(cx))((field_message: scala.Predef.String) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, scala.Predef.String, hydra.parsing.ParseError](hydra.extract.helpers.requireField("remainder")((cx2: hydra.graph.Graph) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, scala.Predef.String, hydra.parsing.ParseError](hydra.extract.core.requireField("remainder")((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
       hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
          scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
@@ -67,9 +67,9 @@ def parseSuccess[T0](a: (hydra.graph.Graph => hydra.core.Term => Either[hydra.er
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.parsing.ParseSuccess[T0]]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
-    lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, T0, hydra.parsing.ParseSuccess[T0]](hydra.extract.helpers.requireField("value")(a)(fieldMap)(cx))((field_value: T0) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, scala.Predef.String, hydra.parsing.ParseSuccess[T0]](hydra.extract.helpers.requireField("remainder")((cx2: hydra.graph.Graph) =>
+    lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.core.toFieldMap(v_Term_record_record)
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, T0, hydra.parsing.ParseSuccess[T0]](hydra.extract.core.requireField("value")(a)(fieldMap)(cx))((field_value: T0) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, scala.Predef.String, hydra.parsing.ParseSuccess[T0]](hydra.extract.core.requireField("remainder")((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
       hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
          scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>

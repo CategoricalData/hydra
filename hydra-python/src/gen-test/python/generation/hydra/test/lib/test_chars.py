@@ -18,7 +18,7 @@ import hydra.error.checking
 import hydra.error.core
 import hydra.errors
 import hydra.extract.core
-import hydra.extract.helpers
+import hydra.extract.core
 import hydra.formatting
 import hydra.graph
 import hydra.json.model
@@ -44,7 +44,7 @@ import hydra.serialization
 import hydra.show.core
 import hydra.show.error.core
 import hydra.show.errors
-import hydra.show.meta
+import hydra.show.variants
 import hydra.show.typing
 import hydra.sorting
 import hydra.testing

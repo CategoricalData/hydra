@@ -938,7 +938,7 @@
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {"literal": {"boolean": true}},
-                                                                        "function": {"variable": "hydra.rewriting.termDependencyNames"}}}}}}}}},
+                                                                        "function": {"variable": "hydra.dependencies.termDependencyNames"}}}}}}}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {"variable": "names"},
@@ -973,8 +973,8 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "t"},
-                                                  "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
-                                              "function": {"variable": "hydra.schemas.isEncodedTerm"}}},
+                                                  "function": {"variable": "hydra.strip.deannotateTerm"}}},
+                                              "function": {"variable": "hydra.predicates.isEncodedTerm"}}},
                                           "function": {
                                             "typeApplication": {
                                               "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
@@ -2245,10 +2245,12 @@
     "hydra.formatting",
     "hydra.names",
     "hydra.constants",
+    "hydra.dependencies",
+    "hydra.predicates",
     "hydra.rewriting",
-    "hydra.schemas",
     "hydra.show.errors",
-    "hydra.lexical"],
+    "hydra.lexical",
+    "hydra.strip"],
   "typeDependencies": [
     "hydra.ext.haskell.syntax",
     "hydra.paths",

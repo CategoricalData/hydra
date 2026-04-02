@@ -7,7 +7,7 @@ module Hydra.Decode.Coders where
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Helpers as Helpers
+import qualified Hydra.Extract.Core as Core_
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
@@ -30,8 +30,8 @@ coderDirection cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "encode", (\input -> Eithers.map (\t -> Coders.CoderDirectionEncode) (Helpers.decodeUnit cx input))),
-                      (Core.Name "decode", (\input -> Eithers.map (\t -> Coders.CoderDirectionDecode) (Helpers.decodeUnit cx input)))]
+                      (Core.Name "encode", (\input -> Eithers.map (\t -> Coders.CoderDirectionEncode) (Core_.decodeUnit cx input))),
+                      (Core.Name "decode", (\input -> Eithers.map (\t -> Coders.CoderDirectionDecode) (Core_.decodeUnit cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
@@ -57,8 +57,8 @@ traversalOrder cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "pre", (\input -> Eithers.map (\t -> Coders.TraversalOrderPre) (Helpers.decodeUnit cx input))),
-                      (Core.Name "post", (\input -> Eithers.map (\t -> Coders.TraversalOrderPost) (Helpers.decodeUnit cx input)))]
+                      (Core.Name "pre", (\input -> Eithers.map (\t -> Coders.TraversalOrderPre) (Core_.decodeUnit cx input))),
+                      (Core.Name "post", (\input -> Eithers.map (\t -> Coders.TraversalOrderPost) (Core_.decodeUnit cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),

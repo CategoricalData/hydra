@@ -6,7 +6,7 @@ module Hydra.Decode.Util where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Helpers as Helpers
+import qualified Hydra.Extract.Core as Core_
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
@@ -30,10 +30,10 @@ caseConvention cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "camel", (\input -> Eithers.map (\t -> Util.CaseConventionCamel) (Helpers.decodeUnit cx input))),
-                      (Core.Name "pascal", (\input -> Eithers.map (\t -> Util.CaseConventionPascal) (Helpers.decodeUnit cx input))),
-                      (Core.Name "lowerSnake", (\input -> Eithers.map (\t -> Util.CaseConventionLowerSnake) (Helpers.decodeUnit cx input))),
-                      (Core.Name "upperSnake", (\input -> Eithers.map (\t -> Util.CaseConventionUpperSnake) (Helpers.decodeUnit cx input)))]
+                      (Core.Name "camel", (\input -> Eithers.map (\t -> Util.CaseConventionCamel) (Core_.decodeUnit cx input))),
+                      (Core.Name "pascal", (\input -> Eithers.map (\t -> Util.CaseConventionPascal) (Core_.decodeUnit cx input))),
+                      (Core.Name "lowerSnake", (\input -> Eithers.map (\t -> Util.CaseConventionLowerSnake) (Core_.decodeUnit cx input))),
+                      (Core.Name "upperSnake", (\input -> Eithers.map (\t -> Util.CaseConventionUpperSnake) (Core_.decodeUnit cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
@@ -49,9 +49,9 @@ comparison cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "lessThan", (\input -> Eithers.map (\t -> Util.ComparisonLessThan) (Helpers.decodeUnit cx input))),
-                      (Core.Name "equalTo", (\input -> Eithers.map (\t -> Util.ComparisonEqualTo) (Helpers.decodeUnit cx input))),
-                      (Core.Name "greaterThan", (\input -> Eithers.map (\t -> Util.ComparisonGreaterThan) (Helpers.decodeUnit cx input)))]
+                      (Core.Name "lessThan", (\input -> Eithers.map (\t -> Util.ComparisonLessThan) (Core_.decodeUnit cx input))),
+                      (Core.Name "equalTo", (\input -> Eithers.map (\t -> Util.ComparisonEqualTo) (Core_.decodeUnit cx input))),
+                      (Core.Name "greaterThan", (\input -> Eithers.map (\t -> Util.ComparisonGreaterThan) (Core_.decodeUnit cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
@@ -67,8 +67,8 @@ precision cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "arbitrary", (\input -> Eithers.map (\t -> Util.PrecisionArbitrary) (Helpers.decodeUnit cx input))),
-                      (Core.Name "bits", (\input -> Eithers.map (\t -> Util.PrecisionBits t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
+                      (Core.Name "arbitrary", (\input -> Eithers.map (\t -> Util.PrecisionArbitrary) (Core_.decodeUnit cx input))),
+                      (Core.Name "bits", (\input -> Eithers.map (\t -> Util.PrecisionBits t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
                         Core.TermLiteral v1 -> case v1 of
                           Core.LiteralInteger v2 -> case v2 of
                             Core.IntegerValueInt32 v3 -> Right v3

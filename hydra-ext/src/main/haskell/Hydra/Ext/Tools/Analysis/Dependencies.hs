@@ -50,7 +50,7 @@ import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Show.Core as ShowCore
-import qualified Hydra.Show.Meta as ShowMeta
+import qualified Hydra.Show.Variants as ShowVariants
 import qualified Hydra.Pg.Model as PG
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Writer as JsonWriter
@@ -156,7 +156,7 @@ termGraphToDependencyPropertyGraph withPrims withTypes g = PG.Graph vertexMap ed
                     (propertyKey_name, unName name),
                     (propertyKey_namespace, nameToNamespace name),
                     (propertyKey_termExpression, ShowCore.term term),
-                    (propertyKey_termVariant, ShowMeta.termVariant $ termVariant term)]
+                    (propertyKey_termVariant, ShowVariants.termVariant $ termVariant term)]
                   where
                     name = bindingName el
                     term = bindingTerm el
@@ -209,4 +209,4 @@ typeGraphToDependencyPropertyGraph g = do
         (propertyKey_name, unName name),
         (propertyKey_namespace, nameToNamespace name),
         (propertyKey_typeExpression, ShowCore.type_ typ),
-        (propertyKey_typeVariant, ShowMeta.typeVariant $ typeVariant typ)]
+        (propertyKey_typeVariant, ShowVariants.typeVariant $ typeVariant typ)]

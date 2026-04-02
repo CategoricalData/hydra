@@ -3,7 +3,8 @@ module Hydra.Sources.Kernel.Terms.Names where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  compactName, localNameOf, namespaceOf, namespaceToFilePath, qname, qualifyName,
+  compactName, freshName, freshNames, localNameOf, namespaceOf, namespaceToFilePath,
+  normalTypeVariable, qname, qualifyName,
   uniqueLabel, unqualifyName)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths    as Paths
@@ -53,6 +54,8 @@ import qualified Data.Map                    as M
 import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
+import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
+import qualified Hydra.Sources.Kernel.Terms.Constants  as Constants
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 
 
@@ -61,15 +64,18 @@ ns = Namespace "hydra.names"
 
 module_ :: Module
 module_ = Module ns elements
-    [Formatting.ns]
+    [Annotations.ns, Constants.ns, Formatting.ns]
     kernelTypesNamespaces $
     Just ("Functions for working with qualified names.")
   where
    elements = [
      toDefinition compactName,
+     toDefinition freshName,
+     toDefinition freshNames,
      toDefinition localNameOf,
      toDefinition namespaceOf,
      toDefinition namespaceToFilePath,
+     toDefinition normalTypeVariable,
      toDefinition qname,
      toDefinition qualifyName,
      toDefinition uniqueLabel,
@@ -149,3 +155,31 @@ unqualifyName = define "unqualifyName" $
       (lambda "n" $ (unwrap _Namespace @@ var "n") ++ string ".")
       (project _QualifiedName _QualifiedName_namespace @@ var "qname")]
     $ wrap _Name $ var "prefix" ++ (project _QualifiedName _QualifiedName_local @@ var "qname")
+
+freshName :: TTermDefinition (Context -> (Name, Context))
+freshName = define "freshName" $
+  doc "Generate a fresh type variable name, threading Context" $
+  "cx" ~>
+  "count" <~ Annotations.getCount @@ Constants.key_freshTypeVariableCount @@ var "cx" $
+  pair
+    (normalTypeVariable @@ var "count")
+    (Annotations.putCount @@ Constants.key_freshTypeVariableCount @@ Math.add (var "count") (int32 1) @@ var "cx")
+
+freshNames :: TTermDefinition (Int -> Context -> ([Name], Context))
+freshNames = define "freshNames" $
+  doc "Generate multiple fresh type variable names, threading Context" $
+  "n" ~> "cx" ~>
+  -- Fold over n units, accumulating names and threading context
+  "go" <~ ("acc" ~> "_" ~>
+    "names" <~ Pairs.first (var "acc") $
+    "cx0" <~ Pairs.second (var "acc") $
+    "result" <~ freshName @@ var "cx0" $
+    "name" <~ Pairs.first (var "result") $
+    "cx1" <~ Pairs.second (var "result") $
+    pair (Lists.concat2 (var "names") (Lists.pure (var "name"))) (var "cx1")) $
+  Lists.foldl (var "go") (pair (list ([] :: [TTerm Name])) (var "cx")) (Lists.replicate (var "n") unit)
+
+normalTypeVariable :: TTermDefinition (Int -> Name)
+normalTypeVariable = define "normalTypeVariable" $
+  doc "Type variable naming convention follows Haskell: t0, t1, etc." $
+  "i" ~> Core.name (Strings.cat2 (string "t") (Literals.showInt32 $ var "i"))

@@ -25,8 +25,9 @@ import qualified Hydra.Dsl.Module                     as Module
 import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
+import qualified Hydra.Sources.Kernel.Terms.Variables      as Variables
+import qualified Hydra.Sources.Kernel.Terms.Environment   as Environment
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as SerializationSource
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
 import qualified Hydra.Sources.Kernel.Terms.Lexical        as Lexical
@@ -53,7 +54,7 @@ ns = Namespace "hydra.ext.rust.coder"
 module_ :: Module
 module_ = Module ns elements
     [moduleNamespace RustSerdeSource.module_, moduleNamespace RustLanguageSource.module_,
-      Formatting.ns, Names.ns, Rewriting.ns, Schemas.ns, Lexical.ns, SerializationSource.ns]
+      Formatting.ns, Names.ns, Strip.ns, Variables.ns, Environment.ns, Lexical.ns, SerializationSource.ns]
     (RustSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Rust code generator: converts Hydra type and term modules to Rust source code"
   where
@@ -358,7 +359,7 @@ encodeLiteral = def "encodeLiteral" $
 encodeType :: TTermDefinition (Context -> Graph -> Type -> Either (InContext Error) R.Type)
 encodeType = def "encodeType" $
   "cx" ~> "g" ~> lambda "t" $
-    "typ" <~ (Rewriting.deannotateType @@ var "t") $
+    "typ" <~ (Strip.deannotateType @@ var "t") $
     cases _Type (var "typ") Nothing [
       _Type_annotated>>: lambda "at" $
         encodeType @@ var "cx" @@ var "g" @@ Core.annotatedTypeBody (var "at"),
@@ -515,7 +516,7 @@ encodeTerm = def "encodeTerm" $
        "field" <~ Core.injectionField (var "inj") $
        "fname" <~ (Formatting.capitalize @@ Core.unName (Core.fieldName (var "field"))) $
        "fterm" <~ Core.fieldTerm (var "field") $
-       "dterm" <~ (Rewriting.deannotateTerm @@ var "fterm") $
+       "dterm" <~ (Strip.deannotateTerm @@ var "fterm") $
        "isUnit" <~ (cases _Term (var "dterm") (Just $ boolean False) [
          _Term_unit>>: constant $ boolean True,
          _Term_record>>: lambda "rt" $ Lists.null (Core.recordFields (var "rt"))]) $
@@ -669,7 +670,7 @@ encodeEnumVariant = def "encodeEnumVariant" $
   "cx" ~> "g" ~> lambda "ft" $
     "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
     "ftyp" <~ Core.fieldTypeType (var "ft") $
-    "dtyp" <~ (Rewriting.deannotateType @@ var "ftyp") $
+    "dtyp" <~ (Strip.deannotateType @@ var "ftyp") $
     "isUnit" <~ (cases _Type (var "dtyp") (Just $ boolean False) [
       _Type_unit>>: constant $ boolean True,
       _Type_record>>: lambda "rt" $
@@ -709,13 +710,13 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
     -- Filter free type variables to unqualified names only (type parameters, not type references)
     "freeVars" <~ (Lists.filter
       (lambda "v" $ Lists.null (Lists.tail (Strings.splitOn (string ".") (Core.unName (var "v")))))
-      (Sets.toList (Rewriting.freeVariablesInType @@ var "typ"))) $
+      (Sets.toList (Variables.freeVariablesInType @@ var "typ"))) $
     "generics" <~ (Lists.map (lambda "v" $
       record R._GenericParam [
         R._GenericParam_name>>: Formatting.capitalize @@ Core.unName (var "v"),
         R._GenericParam_bounds>>: list ([] :: [TTerm R.TypeParamBound])])
       (var "freeVars")) $
-    "dtyp" <~ (Rewriting.deannotateType @@ var "typ") $
+    "dtyp" <~ (Strip.deannotateType @@ var "typ") $
     "item" <<~ (cases _Type (var "dtyp") (Just $
         -- Fallback: type alias
         "styp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
@@ -811,7 +812,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
 moduleToRust :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either (InContext Error) (M.Map FilePath String))
 moduleToRust = def "moduleToRust" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>
-    "partitioned" <~ (Schemas.partitionDefinitions @@ var "defs") $
+    "partitioned" <~ (Environment.partitionDefinitions @@ var "defs") $
     "typeDefs" <~ Pairs.first (var "partitioned") $
     "termDefs" <~ Pairs.second (var "partitioned") $
     "typeItems" <<~ (Eithers.mapList (encodeTypeDefinition @@ var "cx" @@ var "g") (var "typeDefs")) $

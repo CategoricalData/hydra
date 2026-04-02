@@ -7,6 +7,8 @@ module Hydra.Adapt where
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
+import qualified Hydra.Dependencies as Dependencies
+import qualified Hydra.Environment as Environment
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Hoisting as Hoisting
@@ -27,11 +29,13 @@ import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
 import qualified Hydra.Reduction as Reduction
 import qualified Hydra.Reflect as Reflect
+import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Rewriting as Rewriting
-import qualified Hydra.Schemas as Schemas
+import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Show.Core as Core_
 import qualified Hydra.Show.Errors as Errors_
-import qualified Hydra.Util as Util
+import qualified Hydra.Strip as Strip
+import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -43,33 +47,26 @@ import qualified Data.Set as S
 adaptDataGraph :: Coders.LanguageConstraints -> Bool -> [Core.Binding] -> Context.Context -> Graph.Graph -> Either String (Graph.Graph, [Core.Binding])
 adaptDataGraph constraints doExpand els0 cx graph0 =
 
-      let transformTerm =
-              \g -> \term ->
+      let transform =
+              \g -> \gterm ->
                 let tx = g
-                    t1 = Rewriting.unshadowVariables (pushTypeAppsInward term)
-                    t2 = Rewriting.unshadowVariables (Logic.ifElse doExpand (pushTypeAppsInward (Reduction.etaExpandTermNew tx t1)) t1)
-                in (Rewriting.liftLambdaAboveLet t2)
-          transformBinding =
-                  \g -> \el -> Core.Binding {
-                    Core.bindingName = (Core.bindingName el),
-                    Core.bindingTerm = (transformTerm g (Core.bindingTerm el)),
-                    Core.bindingType = (Core.bindingType el)}
+                    gterm1 = Variables.unshadowVariables (pushTypeAppsInward gterm)
+                    gterm2 =
+                            Variables.unshadowVariables (Logic.ifElse doExpand (pushTypeAppsInward (Reduction.etaExpandTermNew tx gterm1)) gterm1)
+                in (Dependencies.liftLambdaAboveLet gterm2)
           litmap = adaptLiteralTypesMap constraints
           prims0 = Graph.graphPrimitives graph0
           schemaTypes0 = Graph.graphSchemaTypes graph0
-          schemaBindings = Schemas.typesToElements (Maps.map (\ts -> Rewriting.typeSchemeToFType ts) schemaTypes0)
-      in (Eithers.bind (Logic.ifElse (Maps.null schemaTypes0) (Right Maps.empty) (Eithers.bind (Eithers.bimap (\ic -> Errors.unDecodingError (Context.inContextObject ic)) (\x -> x) (Schemas.graphAsTypes cx graph0 schemaBindings)) (\tmap0 -> Eithers.bind (adaptGraphSchema constraints litmap tmap0) (\tmap1 -> Right (Maps.map (\t -> Schemas.typeToTypeScheme t) tmap1))))) (\schemaResult ->
+          schemaBindings = Environment.typesToElements (Maps.map (\ts -> Scoping.typeSchemeToFType ts) schemaTypes0)
+      in (Eithers.bind (Logic.ifElse (Maps.null schemaTypes0) (Right Maps.empty) (Eithers.bind (Eithers.bimap (\ic -> Errors.unDecodingError (Context.inContextObject ic)) (\x -> x) (Environment.graphAsTypes cx graph0 schemaBindings)) (\tmap0 -> Eithers.bind (adaptGraphSchema constraints litmap tmap0) (\tmap1 -> Right (Maps.map (\t -> Resolution.typeToTypeScheme t) tmap1))))) (\schemaResult ->
         let adaptedSchemaTypes = schemaResult
-            adaptBinding =
-                    \el ->
-                      let transformed = transformBinding graph0 el
-                          wrapped =
-                                  Core.TermLet (Core.Let {
-                                    Core.letBindings = (Lists.pure transformed),
-                                    Core.letBody = Core.TermUnit})
-                      in (Eithers.bind (adaptTerm constraints litmap cx graph0 wrapped) (\adapted -> Rewriting.rewriteTermM (adaptLambdaDomains constraints litmap) adapted))
-        in (Eithers.bind (Eithers.mapList adaptBinding els0) (\adaptedTerms ->
-          let els1Raw = Lists.concat (Lists.map Schemas.termAsBindings adaptedTerms)
+            gterm0 =
+                    Core.TermLet (Core.Let {
+                      Core.letBindings = els0,
+                      Core.letBody = Core.TermUnit})
+            gterm1 = Logic.ifElse doExpand (transform graph0 gterm0) gterm0
+        in (Eithers.bind (adaptTerm constraints litmap cx graph0 gterm1) (\gterm2 -> Eithers.bind (Rewriting.rewriteTermM (adaptLambdaDomains constraints litmap) gterm2) (\gterm3 ->
+          let els1Raw = Environment.termAsBindings gterm3
               processBinding =
                       \el -> Eithers.bind (Rewriting.rewriteTermM (adaptNestedTypes constraints litmap) (Core.bindingTerm el)) (\newTerm -> Eithers.bind (Maybes.maybe (Right Nothing) (\ts -> Eithers.bind (adaptTypeScheme constraints litmap ts) (\ts1 -> Right (Just ts1))) (Core.bindingType el)) (\adaptedType -> Right (Core.Binding {
                         Core.bindingName = (Core.bindingName el),
@@ -88,7 +85,7 @@ adaptDataGraph constraints doExpand els0 cx graph0 =
                           Graph.graphPrimitives = (Graph.graphPrimitives adaptedGraphRaw),
                           Graph.graphSchemaTypes = adaptedSchemaTypes,
                           Graph.graphTypeVariables = (Graph.graphTypeVariables adaptedGraphRaw)}
-            in (Right (adaptedGraph, els1)))))))))
+            in (Right (adaptedGraph, els1))))))))))
 
 -- | Attempt to adapt a floating-point type using the given language constraints
 adaptFloatType :: Coders.LanguageConstraints -> Core.FloatType -> Maybe Core.FloatType
@@ -97,7 +94,7 @@ adaptFloatType constraints ft =
       let supported = Sets.member ft (Coders.languageConstraintsFloatTypes constraints)
           alt = adaptFloatType constraints
           forUnsupported =
-                  \ft2 -> case ft2 of
+                  \ft -> case ft of
                     Core.FloatTypeBigfloat -> alt Core.FloatTypeFloat64
                     Core.FloatTypeFloat32 -> alt Core.FloatTypeFloat64
                     Core.FloatTypeFloat64 -> alt Core.FloatTypeBigfloat
@@ -121,7 +118,7 @@ adaptIntegerType constraints it =
       let supported = Sets.member it (Coders.languageConstraintsIntegerTypes constraints)
           alt = adaptIntegerType constraints
           forUnsupported =
-                  \it2 -> case it2 of
+                  \it -> case it of
                     Core.IntegerTypeBigint -> Nothing
                     Core.IntegerTypeInt8 -> alt Core.IntegerTypeUint16
                     Core.IntegerTypeInt16 -> alt Core.IntegerTypeUint32
@@ -163,7 +160,7 @@ adaptLiteralType :: Coders.LanguageConstraints -> Core.LiteralType -> Maybe Core
 adaptLiteralType constraints lt =
 
       let forUnsupported =
-              \lt2 -> case lt2 of
+              \lt -> case lt of
                 Core.LiteralTypeBinary -> Just Core.LiteralTypeString
                 Core.LiteralTypeBoolean -> Maybes.map (\x -> Core.LiteralTypeInteger x) (adaptIntegerType constraints Core.IntegerTypeInt8)
                 Core.LiteralTypeFloat v0 -> Maybes.map (\x -> Core.LiteralTypeFloat x) (adaptFloatType constraints v0)
@@ -213,7 +210,7 @@ adaptTerm :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralTy
 adaptTerm constraints litmap cx graph term0 =
 
       let rewrite =
-              \recurse -> \term02 ->
+              \recurse -> \term0 ->
                 let forSupported =
                         \term -> case term of
                           Core.TermLiteral v0 ->
@@ -230,7 +227,7 @@ adaptTerm constraints litmap cx graph term0 =
                             \term ->
                               let supportedVariant = Sets.member (Reflect.termVariant term) (Coders.languageConstraintsTermVariants constraints)
                               in (Logic.ifElse supportedVariant (forSupported term) (forUnsupported term))
-                in (Eithers.bind (recurse term02) (\term1 -> case term1 of
+                in (Eithers.bind (recurse term0) (\term1 -> case term1 of
                   Core.TermTypeApplication v0 -> Eithers.bind (adaptType constraints litmap (Core.typeApplicationTermType v0)) (\atyp -> Right (Core.TermTypeApplication (Core.TypeApplicationTerm {
                     Core.typeApplicationTermBody = (Core.typeApplicationTermBody v0),
                     Core.typeApplicationTermType = atyp})))
@@ -288,11 +285,11 @@ adaptTypeScheme constraints litmap ts0 =
         Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts0)})))
 
 -- | Compose two coders into a single coder
-composeCoders :: Util.Coder t0 t1 -> Util.Coder t1 t2 -> Util.Coder t0 t2
+composeCoders :: Coders.Coder t0 t1 -> Coders.Coder t1 t2 -> Coders.Coder t0 t2
 composeCoders c1 c2 =
-    Util.Coder {
-      Util.coderEncode = (\cx -> \a -> Eithers.bind (Util.coderEncode c1 cx a) (\b1 -> Util.coderEncode c2 cx b1)),
-      Util.coderDecode = (\cx -> \c -> Eithers.bind (Util.coderDecode c2 cx c) (\b2 -> Util.coderDecode c1 cx b2))}
+    Coders.Coder {
+      Coders.coderEncode = (\cx -> \a -> Eithers.bind (Coders.coderEncode c1 cx a) (\b1 -> Coders.coderEncode c2 cx b1)),
+      Coders.coderDecode = (\cx -> \c -> Eithers.bind (Coders.coderDecode c2 cx c) (\b2 -> Coders.coderDecode c1 cx b2))}
 
 -- | Given a data graph along with language constraints, original ordered bindings, and a designated list of namespaces, adapt the graph to the language constraints, then return the processed graph along with term definitions grouped by namespace (in the order of the input namespaces). Inference is performed before adaptation if bindings lack type annotations. Hoisting must preserve type schemes; if any binding loses its type scheme after hoisting, the pipeline fails. Adaptation preserves type application/lambda wrappers and adapts embedded types. Post-adaptation inference is performed to ensure binding TypeSchemes are fully consistent. The doExpand flag controls eta expansion. The doHoistCaseStatements flag controls case statement hoisting (needed for Python). The doHoistPolymorphicLetBindings flag controls polymorphic let binding hoisting (needed for Java). The originalBindings parameter provides the original ordered bindings (from module elements).
 dataGraphToDefinitions :: Coders.LanguageConstraints -> Bool -> Bool -> Bool -> Bool -> [Core.Binding] -> Graph.Graph -> [Module.Namespace] -> Context.Context -> Either String (Graph.Graph, [[Module.TermDefinition]])
@@ -306,19 +303,19 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
                     let stripped =
                             Lists.map (\b -> Core.Binding {
                               Core.bindingName = (Core.bindingName b),
-                              Core.bindingTerm = (Rewriting.stripTypeLambdas (Core.bindingTerm b)),
+                              Core.bindingTerm = (Strip.stripTypeLambdas (Core.bindingTerm b)),
                               Core.bindingType = (Core.bindingType b)}) bindings
                         term0 =
                                 Core.TermLet (Core.Let {
                                   Core.letBindings = stripped,
                                   Core.letBody = Core.TermUnit})
-                        unshadowed0 = Schemas.termAsBindings (Rewriting.unshadowVariables term0)
+                        unshadowed0 = Environment.termAsBindings (Variables.unshadowVariables term0)
                         hoisted = Hoisting.hoistCaseStatementsInGraph unshadowed0
                         term1 =
                                 Core.TermLet (Core.Let {
                                   Core.letBindings = hoisted,
                                   Core.letBody = Core.TermUnit})
-                    in (Schemas.termAsBindings (Rewriting.unshadowVariables term1))
+                    in (Environment.termAsBindings (Variables.unshadowVariables term1))
           hoistPoly =
                   \bindings ->
                     let letBefore =
@@ -392,7 +389,7 @@ literalTypeSupported :: Coders.LanguageConstraints -> Core.LiteralType -> Bool
 literalTypeSupported constraints lt =
 
       let forType =
-              \lt2 -> case lt2 of
+              \lt -> case lt of
                 Core.LiteralTypeFloat v0 -> Sets.member v0 (Coders.languageConstraintsFloatTypes constraints)
                 Core.LiteralTypeInteger v0 -> Sets.member v0 (Coders.languageConstraintsIntegerTypes constraints)
                 _ -> True
@@ -463,7 +460,7 @@ prepareSame x = (x, ((\y -> y), Sets.empty))
 -- | Prepare a type, substituting unsupported literal types
 prepareType :: t0 -> Core.Type -> (Core.Type, ((Core.Term -> Core.Term), (S.Set String)))
 prepareType cx typ =
-    case (Rewriting.deannotateType typ) of
+    case (Strip.deannotateType typ) of
       Core.TypeLiteral v0 ->
         let result = prepareLiteralType v0
             rtyp = Pairs.first result
@@ -579,7 +576,7 @@ schemaGraphToDefinitions :: Coders.LanguageConstraints -> Graph.Graph -> [[Core.
 schemaGraphToDefinitions constraints graph nameLists cx =
 
       let litmap = adaptLiteralTypesMap constraints
-      in (Eithers.bind (Eithers.bimap (\ic -> Errors.unDecodingError (Context.inContextObject ic)) (\x -> x) (Schemas.graphAsTypes cx graph (Lexical.graphToBindings graph))) (\tmap0 -> Eithers.bind (adaptGraphSchema constraints litmap tmap0) (\tmap1 ->
+      in (Eithers.bind (Eithers.bimap (\ic -> Errors.unDecodingError (Context.inContextObject ic)) (\x -> x) (Environment.graphAsTypes cx graph (Lexical.graphToBindings graph))) (\tmap0 -> Eithers.bind (adaptGraphSchema constraints litmap tmap0) (\tmap1 ->
         let toDef =
                 \pair -> Module.TypeDefinition {
                   Module.typeDefinitionName = (Pairs.first pair),
@@ -587,20 +584,20 @@ schemaGraphToDefinitions constraints graph nameLists cx =
         in (Right (tmap1, (Lists.map (\names -> Lists.map toDef (Lists.map (\n -> (n, (Maybes.fromJust (Maps.lookup n tmap1)))) names)) nameLists))))))
 
 -- | Given a target language and a source type, produce an adapter which rewrites the type and its terms according to the language's constraints. The encode direction adapts terms; the decode direction is identity.
-simpleLanguageAdapter :: Coders.Language -> t0 -> Graph.Graph -> Core.Type -> Either String (Util.Adapter Core.Type Core.Type Core.Term Core.Term)
+simpleLanguageAdapter :: Coders.Language -> t0 -> Graph.Graph -> Core.Type -> Either String (Coders.Adapter Core.Type Core.Type Core.Term Core.Term)
 simpleLanguageAdapter lang cx g typ =
 
       let constraints = Coders.languageConstraints lang
           litmap = adaptLiteralTypesMap constraints
-      in (Eithers.bind (adaptType constraints litmap typ) (\adaptedType -> Right (Util.Adapter {
-        Util.adapterIsLossy = False,
-        Util.adapterSource = typ,
-        Util.adapterTarget = adaptedType,
-        Util.adapterCoder = Util.Coder {
-          Util.coderEncode = (\cx2 -> \term -> Eithers.bimap (\_s -> Context.InContext {
+      in (Eithers.bind (adaptType constraints litmap typ) (\adaptedType -> Right (Coders.Adapter {
+        Coders.adapterIsLossy = False,
+        Coders.adapterSource = typ,
+        Coders.adapterTarget = adaptedType,
+        Coders.adapterCoder = Coders.Coder {
+          Coders.coderEncode = (\cx -> \term -> Eithers.bimap (\_s -> Context.InContext {
             Context.inContextObject = (Errors.ErrorOther (Errors.OtherError _s)),
-            Context.inContextContext = cx2}) (\_x -> _x) (adaptTerm constraints litmap cx2 g term)),
-          Util.coderDecode = (\cx2 -> \term -> Right term)}})))
+            Context.inContextContext = cx}) (\_x -> _x) (adaptTerm constraints litmap cx g term)),
+          Coders.coderDecode = (\cx -> \term -> Right term)}})))
 
 -- | Find a list of alternatives for a given term, if any
 termAlternatives :: Context.Context -> Graph.Graph -> Core.Term -> Either String [Core.Term]
@@ -632,7 +629,7 @@ termAlternatives cx graph term =
                       in Core.Field {
                         Core.fieldName = fname,
                         Core.fieldTerm = (Core.TermMaybe (Logic.ifElse (Equality.equal ftname fname) (Just fterm) Nothing))}
-        in (Eithers.bind (Eithers.bimap (\ic -> Errors_.error (Context.inContextObject ic)) (\x -> x) (Schemas.requireUnionType cx graph tname)) (\rt -> Right [
+        in (Eithers.bind (Eithers.bimap (\ic -> Errors_.error (Context.inContextObject ic)) (\x -> x) (Resolution.requireUnionType cx graph tname)) (\rt -> Right [
           Core.TermRecord (Core.Record {
             Core.recordTypeName = tname,
             Core.recordFields = (Lists.map forFieldType rt)})]))

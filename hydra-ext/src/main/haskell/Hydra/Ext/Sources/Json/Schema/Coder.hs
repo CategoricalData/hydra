@@ -59,13 +59,12 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -104,7 +103,7 @@ ns = Namespace "hydra.ext.json.schema.coder"
 
 module_ :: Module
 module_ = Module ns elements
-    [Formatting.ns, Names.ns, Rewriting.ns, Annotations.ns, Constants.ns, Schemas.ns, Reflect.ns, JsonSchemaSerde.ns, moduleNamespace CoderUtils.module_]
+    [Formatting.ns, Names.ns, Strip.ns, Annotations.ns, Constants.ns, Reflect.ns, JsonSchemaSerde.ns, moduleNamespace CoderUtils.module_]
     (moduleNamespace JsonSchema.module_:jsonModelNs:KernelTypes.kernelTypesNamespaces) $
     Just "JSON Schema code generator: converts Hydra modules to JSON Schema documents"
   where
@@ -159,7 +158,7 @@ encodeNamedType = define "encodeNamedType" $
       (lambda "res" $ Lists.concat $ list [
         list [inject JS._Restriction JS._Restriction_title (Core.unName $ var "name")],
         var "res"])
-      (encodeType @@ var "cx" @@ var "g" @@ false @@ (Rewriting.deannotateType @@ var "typ"))
+      (encodeType @@ var "cx" @@ var "g" @@ false @@ (Strip.deannotateType @@ var "typ"))
 
 encodeType :: TTermDefinition (Context -> Graph -> Bool -> Type -> Result [JS.Restriction])
 encodeType = define "encodeType" $
@@ -172,7 +171,7 @@ isRequiredField = define "isRequiredField" $
   doc "Determine whether a field is required (i.e., not optional/Maybe)" $
   lambda "ft" $ lets [
     "typ">: project _FieldType _FieldType_type @@ var "ft"] $
-    cases _Type (Rewriting.deannotateType @@ var "typ") (Just true) [
+    cases _Type (Strip.deannotateType @@ var "typ") (Just true) [
       _Type_maybe>>: constant false]
 
 referenceRestriction :: TTermDefinition (Name -> JS.Restriction)

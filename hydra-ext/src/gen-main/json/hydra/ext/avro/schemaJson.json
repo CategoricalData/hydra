@@ -3131,7 +3131,7 @@
                                                   "parameter": "json"}}},
                                             "domain": [{"variable": "hydra.context.Context"}],
                                             "parameter": "cx2"}}}}],
-                                  "typeName": "hydra.util.Coder"}},
+                                  "typeName": "hydra.coders.Coder"}},
                               "type": {"variable": "hydra.ext.org.apache.avro.schema.Schema"}}},
                           "type": {"variable": "hydra.json.model.Value"}}},
                       "domain": [{"variable": "t0"}],
@@ -3148,7 +3148,7 @@
                     "function": {
                       "application": {
                         "argument": {"variable": "hydra.ext.org.apache.avro.schema.Schema"},
-                        "function": {"variable": "hydra.util.Coder"}}}}},
+                        "function": {"variable": "hydra.coders.Coder"}}}}},
                 "domain": {"variable": "t0"}}},
             "variables": ["t0"]}]}},
     {
@@ -3300,7 +3300,7 @@
                                                   "parameter": "s"}}},
                                             "domain": [{"variable": "hydra.context.Context"}],
                                             "parameter": "cx2"}}}}],
-                                  "typeName": "hydra.util.Coder"}},
+                                  "typeName": "hydra.coders.Coder"}},
                               "type": {"variable": "hydra.ext.org.apache.avro.schema.Schema"}}},
                           "type": {"literal": {"string": {}}}}},
                       "domain": [{"variable": "t0"}],
@@ -3317,7 +3317,7 @@
                     "function": {
                       "application": {
                         "argument": {"variable": "hydra.ext.org.apache.avro.schema.Schema"},
-                        "function": {"variable": "hydra.util.Coder"}}}}},
+                        "function": {"variable": "hydra.coders.Coder"}}}}},
                 "domain": {"variable": "t0"}}},
             "variables": ["t0"]}]}},
     {

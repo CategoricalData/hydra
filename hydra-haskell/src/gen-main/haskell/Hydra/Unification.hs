@@ -17,6 +17,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Strip as Strip
 import qualified Hydra.Substitution as Substitution
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -30,8 +31,8 @@ import qualified Data.Set as S
 joinTypes :: Context.Context -> Core.Type -> Core.Type -> String -> Either (Context.InContext Errors.UnificationError) [Typing.TypeConstraint]
 joinTypes cx left right comment =
 
-      let sleft = Rewriting.deannotateType left
-          sright = Rewriting.deannotateType right
+      let sleft = Strip.deannotateType left
+          sright = Strip.deannotateType right
           joinOne =
                   \l -> \r -> Typing.TypeConstraint {
                     Typing.typeConstraintLeft = l,
@@ -117,8 +118,8 @@ unifyTypeConstraints cx schemaTypes constraints =
 
       let withConstraint =
               \c -> \rest ->
-                let sleft = Rewriting.deannotateType (Typing.typeConstraintLeft c)
-                    sright = Rewriting.deannotateType (Typing.typeConstraintRight c)
+                let sleft = Strip.deannotateType (Typing.typeConstraintLeft c)
+                    sright = Strip.deannotateType (Typing.typeConstraintRight c)
                     comment = Typing.typeConstraintComment c
                     bind =
                             \v -> \t ->

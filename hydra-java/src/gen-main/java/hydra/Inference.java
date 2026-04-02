@@ -42,8 +42,8 @@ public interface Inference {
               bterm), (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing())),
             (java.util.function.Function<hydra.core.TypeScheme, hydra.core.Binding>) (ts -> {
               hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> bvars = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply((ts).variables));
-              hydra.util.PersistentSet<hydra.core.Name> unboundInTerm = hydra.Rewriting.freeTypeVariablesInTerm(bterm);
-              hydra.util.PersistentSet<hydra.core.Name> unboundInType = hydra.Rewriting.freeVariablesInType((ts).type);
+              hydra.util.PersistentSet<hydra.core.Name> unboundInTerm = hydra.Variables.freeTypeVariablesInTerm(bterm);
+              hydra.util.PersistentSet<hydra.core.Name> unboundInType = hydra.Variables.freeVariablesInType((ts).type);
               hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> unbound = new hydra.util.Lazy<>(() -> hydra.lib.sets.ToList.apply(hydra.lib.sets.Difference.apply(
                 hydra.lib.sets.Union.apply(
                   unboundInType,
@@ -96,7 +96,7 @@ public interface Inference {
         flowCx,
         cx,
         term2),
-      (java.util.function.Function<java.lang.Void, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (ignored -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(hydra.Rewriting.normalizeTypeVariablesInTerm(term2))));
+      (java.util.function.Function<java.lang.Void, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (ignored -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(hydra.Variables.normalizeTypeVariablesInTerm(term2))));
   }
 
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<T0, hydra.context.Context>> forInferredTerm(hydra.context.Context fcx, hydra.graph.Graph cx, hydra.core.Term term, String desc, java.util.function.Function<hydra.typing.InferenceResult, T0> f) {
@@ -116,12 +116,12 @@ public interface Inference {
         p1))),
       (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()),
       hydra.lib.lists.Map.apply(
-        hydra.Rewriting::freeVariablesInTypeSchemeSimple,
+        hydra.Variables::freeVariablesInTypeSchemeSimple,
         hydra.lib.maps.Elems.apply((cx).boundTypes)));
   }
 
   static hydra.util.Pair<hydra.core.Type, hydra.context.Context> freshVariableType(hydra.context.Context cx) {
-    hydra.util.Pair<hydra.core.Name, hydra.context.Context> result = hydra.Schemas.freshName(cx);
+    hydra.util.Pair<hydra.core.Name, hydra.context.Context> result = hydra.Names.freshName(cx);
     hydra.util.Lazy<hydra.context.Context> cx2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(result));
     hydra.util.Lazy<hydra.core.Name> name = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(result));
     return (hydra.util.Pair<hydra.core.Type, hydra.context.Context>) ((hydra.util.Pair<hydra.core.Type, hydra.context.Context>) (new hydra.util.Pair<hydra.core.Type, hydra.context.Context>(new hydra.core.Type.Variable(name.get()), cx2.get())));
@@ -143,7 +143,7 @@ public interface Inference {
           cx,
           v),
         (isTypeVarName).apply(v))),
-      hydra.Rewriting.freeVariablesInTypeOrdered(typ))));
+      hydra.Variables.freeVariablesInTypeOrdered(typ))));
     hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>> relevantConstraints = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.core.Name, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.TypeVariableMetadata>>>) (v -> hydra.lib.maybes.Map.apply(
         (java.util.function.Function<hydra.core.TypeVariableMetadata, hydra.util.Pair<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (meta -> (hydra.util.Pair<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((hydra.util.Pair<hydra.core.Name, hydra.core.TypeVariableMetadata>) (new hydra.util.Pair<hydra.core.Name, hydra.core.TypeVariableMetadata>(v, meta)))),
@@ -367,7 +367,7 @@ public interface Inference {
             hydra.core.Term b = (rhsResult).term;
             hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata> c1 = (rhsResult).classConstraints;
             hydra.context.Context fcx3 = (rhsResult).context;
-            hydra.util.Pair<hydra.core.Name, hydra.context.Context> vResult = hydra.Schemas.freshName(fcx3);
+            hydra.util.Pair<hydra.core.Name, hydra.context.Context> vResult = hydra.Names.freshName(fcx3);
             hydra.util.Lazy<hydra.context.Context> fcx4 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(vResult));
             hydra.typing.TypeSubst s1 = (rhsResult).subst;
             hydra.core.Type t1 = (rhsResult).type;
@@ -429,7 +429,7 @@ public interface Inference {
       cases));
     hydra.core.Name tname = (caseStmt).typeName;
     return hydra.lib.eithers.Bind.apply(
-      hydra.Schemas.requireSchemaType(
+      hydra.Resolution.requireSchemaType(
         fcx,
         (cx).schemaTypes,
         tname),
@@ -487,7 +487,7 @@ public interface Inference {
                     (java.util.function.Function<hydra.core.FieldType, hydra.util.Pair<hydra.core.Name, hydra.core.Type>>) (ft -> (hydra.util.Pair<hydra.core.Name, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Type>((ft).name, (ft).type)))),
                     sfields)));
                   hydra.util.Lazy<hydra.context.Context> fcx4 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(caseRp));
-                  hydra.util.Pair<hydra.core.Name, hydra.context.Context> codvResult = hydra.Schemas.freshName(fcx4.get());
+                  hydra.util.Pair<hydra.core.Name, hydra.context.Context> codvResult = hydra.Names.freshName(fcx4.get());
                   hydra.util.Lazy<hydra.core.Name> codv = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(codvResult));
                   hydra.core.Type cod = new hydra.core.Type.Variable(codv.get());
                   hydra.util.Lazy<hydra.util.ConsList<hydra.core.Type>> itypes = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(hydra.lib.pairs.Second.apply(caseResults.get())));
@@ -521,7 +521,7 @@ public interface Inference {
                             (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.core.Field>>) (n -> (java.util.function.Function<hydra.core.Term, hydra.core.Field>) (t -> new hydra.core.Field(n, t))),
                             fnames.get(),
                             iterms.get())))))),
-                        new hydra.core.Type.Function(new hydra.core.FunctionType(hydra.Schemas.nominalApplication(
+                        new hydra.core.Type.Function(new hydra.core.FunctionType(hydra.Resolution.nominalApplication(
                           tname,
                           hydra.lib.lists.Map.apply(
                             (java.util.function.Function<hydra.core.Name, hydra.core.Type>) (x -> new hydra.core.Type.Variable(x)),
@@ -546,7 +546,7 @@ public interface Inference {
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.typing.InferenceResult> inferTypeOfCollection(hydra.context.Context fcx, hydra.graph.Graph cx, java.util.function.Function<hydra.core.Type, hydra.core.Type> typCons, java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term> trmCons, String desc, hydra.util.PersistentSet<hydra.core.Name> classNames, hydra.util.ConsList<hydra.core.Term> els) {
-    hydra.util.Pair<hydra.core.Name, hydra.context.Context> varResult = hydra.Schemas.freshName(fcx);
+    hydra.util.Pair<hydra.core.Name, hydra.context.Context> varResult = hydra.Names.freshName(fcx);
     hydra.util.Lazy<hydra.core.Name> var = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(varResult));
     hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>> classConstraints = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.sets.Null.apply(classNames),
@@ -740,7 +740,7 @@ public interface Inference {
       (java.util.function.Function<hydra.typing.InferenceResult, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.typing.InferenceResult>>) (result -> {
         hydra.context.Context fcx2 = (result).context;
         return hydra.lib.eithers.Bind.apply(
-          hydra.Schemas.requireSchemaType(
+          hydra.Resolution.requireSchemaType(
             fcx2,
             (cx).schemaTypes,
             tname),
@@ -758,7 +758,7 @@ public interface Inference {
                 tname,
                 stype),
               (java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.typing.InferenceResult>>) (sfields -> hydra.lib.eithers.Bind.apply(
-                hydra.Schemas.findFieldType(
+                hydra.Resolution.findFieldType(
                   fcx3.get(),
                   fname,
                   sfields),
@@ -771,7 +771,7 @@ public interface Inference {
                       hydra.Inference.buildTypeApplicationTerm(
                         svars,
                         new hydra.core.Term.Union(new hydra.core.Injection(tname, new hydra.core.Field(fname, iterm)))),
-                      hydra.Schemas.nominalApplication(
+                      hydra.Resolution.nominalApplication(
                         tname,
                         hydra.lib.lists.Map.apply(
                           (java.util.function.Function<hydra.core.Name, hydra.core.Type>) (x -> new hydra.core.Type.Variable(x)),
@@ -787,7 +787,7 @@ public interface Inference {
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.typing.InferenceResult> inferTypeOfLambda(hydra.context.Context fcx, hydra.graph.Graph cx, hydra.core.Lambda lambda) {
     hydra.core.Term body = (lambda).body;
-    hydra.util.Pair<hydra.core.Name, hydra.context.Context> vdomResult = hydra.Schemas.freshName(fcx);
+    hydra.util.Pair<hydra.core.Name, hydra.context.Context> vdomResult = hydra.Names.freshName(fcx);
     hydra.util.Lazy<hydra.core.Name> vdom = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(vdomResult));
     hydra.core.Type dom = new hydra.core.Type.Variable(vdom.get());
     hydra.core.Name var = (lambda).parameter;
@@ -818,8 +818,8 @@ public interface Inference {
         hydra.core.Term rterm = new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(var, hydra.util.Maybe.just(rdom), iterm)));
         hydra.core.Type rtype = new hydra.core.Type.Function(new hydra.core.FunctionType(rdom, icod));
         hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> vars = new hydra.util.Lazy<>(() -> hydra.lib.sets.Unions.apply(hydra.util.ConsList.of(
-          hydra.Rewriting.freeVariablesInType(rdom),
-          hydra.Rewriting.freeVariablesInType(icod),
+          hydra.Variables.freeVariablesInType(rdom),
+          hydra.Variables.freeVariablesInType(icod),
           hydra.Inference.freeVariablesInContext(hydra.Substitution.substInContext(
             isubst,
             cx2.get())))));
@@ -840,7 +840,7 @@ public interface Inference {
         (java.util.function.Function<hydra.core.Name, Boolean>) (n -> hydra.lib.sets.Member.apply(
           n,
           nameSet.get())),
-        hydra.lib.sets.ToList.apply(hydra.Rewriting.freeVariablesInTerm(term))))));
+        hydra.lib.sets.ToList.apply(hydra.Variables.freeVariablesInTerm(term))))));
     });
     hydra.util.Lazy<hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.util.ConsList<hydra.core.Name>>>> adjList = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       toPair,
@@ -936,7 +936,7 @@ public interface Inference {
     hydra.util.Lazy<hydra.context.Context> fcx = new hydra.util.Lazy<>(() -> new hydra.context.Context(hydra.lib.lists.Cons.apply(
       "let-normalized",
       (fcx0).trace), (fcx0).messages, (fcx0).other));
-    hydra.util.Lazy<hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context>> bvarsResult = new hydra.util.Lazy<>(() -> hydra.Schemas.freshNames(
+    hydra.util.Lazy<hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context>> bvarsResult = new hydra.util.Lazy<>(() -> hydra.Names.freshNames(
       hydra.lib.lists.Length.apply(bins0),
       fcx.get()));
     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> bvars = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(bvarsResult.get()));
@@ -1112,9 +1112,9 @@ public interface Inference {
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.typing.InferenceResult> inferTypeOfMap(hydra.context.Context fcx, hydra.graph.Graph cx, hydra.util.PersistentMap<hydra.core.Term, hydra.core.Term> m) {
-    hydra.util.Pair<hydra.core.Name, hydra.context.Context> kvarResult = hydra.Schemas.freshName(fcx);
+    hydra.util.Pair<hydra.core.Name, hydra.context.Context> kvarResult = hydra.Names.freshName(fcx);
     hydra.util.Lazy<hydra.context.Context> fcx2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(kvarResult));
-    hydra.util.Pair<hydra.core.Name, hydra.context.Context> vvarResult = hydra.Schemas.freshName(fcx2.get());
+    hydra.util.Pair<hydra.core.Name, hydra.context.Context> vvarResult = hydra.Names.freshName(fcx2.get());
     hydra.util.Lazy<hydra.context.Context> fcx3 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(vvarResult));
     hydra.util.Lazy<hydra.core.Name> kvar = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(kvarResult));
     hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>> keyConstraints = new hydra.util.Lazy<>(() -> hydra.lib.maps.Singleton.apply(
@@ -1253,7 +1253,7 @@ public interface Inference {
         "No such primitive: ",
         (name).value))), fcx))),
       (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.typing.InferenceResult>>) (scheme -> {
-        hydra.util.Pair<hydra.core.TypeScheme, hydra.context.Context> tsResult = hydra.Schemas.instantiateTypeScheme(
+        hydra.util.Pair<hydra.core.TypeScheme, hydra.context.Context> tsResult = hydra.Resolution.instantiateTypeScheme(
           fcx,
           scheme);
         hydra.util.Lazy<hydra.core.TypeScheme> ts = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(tsResult));
@@ -1281,7 +1281,7 @@ public interface Inference {
     hydra.core.Name fname = (proj).field;
     hydra.core.Name tname = (proj).typeName;
     return hydra.lib.eithers.Bind.apply(
-      hydra.Schemas.requireSchemaType(
+      hydra.Resolution.requireSchemaType(
         fcx,
         (cx).schemaTypes,
         tname),
@@ -1296,7 +1296,7 @@ public interface Inference {
             tname,
             stype),
           (java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.typing.InferenceResult>>) (sfields -> hydra.lib.eithers.Bind.apply(
-            hydra.Schemas.findFieldType(
+            hydra.Resolution.findFieldType(
               fcx2.get(),
               fname,
               sfields),
@@ -1305,7 +1305,7 @@ public interface Inference {
               hydra.Inference.buildTypeApplicationTerm(
                 svars,
                 new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(tname, fname))))),
-              new hydra.core.Type.Function(new hydra.core.FunctionType(hydra.Schemas.nominalApplication(
+              new hydra.core.Type.Function(new hydra.core.FunctionType(hydra.Resolution.nominalApplication(
                 tname,
                 hydra.lib.lists.Map.apply(
                   (java.util.function.Function<hydra.core.Name, hydra.core.Type>) (x -> new hydra.core.Type.Variable(x)),
@@ -1321,7 +1321,7 @@ public interface Inference {
       fields));
     hydra.core.Name tname = (record).typeName;
     return hydra.lib.eithers.Bind.apply(
-      hydra.Schemas.requireSchemaType(
+      hydra.Resolution.requireSchemaType(
         fcx,
         (cx).schemaTypes,
         tname),
@@ -1362,7 +1362,7 @@ public interface Inference {
                       (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.core.Field>>) (n -> (java.util.function.Function<hydra.core.Term, hydra.core.Field>) (t -> new hydra.core.Field(n, t))),
                       fnames.get(),
                       iterms.get())))),
-                  hydra.Schemas.nominalApplication(
+                  hydra.Resolution.nominalApplication(
                     tname,
                     hydra.lib.lists.Map.apply(
                       (java.util.function.Function<hydra.core.Name, hydra.core.Type>) (x -> new hydra.core.Type.Variable(x)),
@@ -1559,7 +1559,7 @@ public interface Inference {
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.typing.InferenceResult> inferTypeOfUnwrap(hydra.context.Context fcx, hydra.graph.Graph cx, hydra.core.Name tname) {
     return hydra.lib.eithers.Bind.apply(
-      hydra.Schemas.requireSchemaType(
+      hydra.Resolution.requireSchemaType(
         fcx,
         (cx).schemaTypes,
         tname),
@@ -1578,7 +1578,7 @@ public interface Inference {
             hydra.Inference.buildTypeApplicationTerm(
               svars,
               new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Wrap(tname)))),
-            new hydra.core.Type.Function(new hydra.core.FunctionType(hydra.Schemas.nominalApplication(
+            new hydra.core.Type.Function(new hydra.core.FunctionType(hydra.Resolution.nominalApplication(
               tname,
               hydra.lib.lists.Map.apply(
                 (java.util.function.Function<hydra.core.Name, hydra.core.Type>) (x -> new hydra.core.Type.Variable(x)),
@@ -1593,7 +1593,7 @@ public interface Inference {
         "Variable not bound to type: ",
         (name).value))), fcx))),
       (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.typing.InferenceResult>>) (scheme -> {
-        hydra.util.Pair<hydra.core.TypeScheme, hydra.context.Context> tsResult = hydra.Schemas.instantiateTypeScheme(
+        hydra.util.Pair<hydra.core.TypeScheme, hydra.context.Context> tsResult = hydra.Resolution.instantiateTypeScheme(
           fcx,
           scheme);
         hydra.util.Lazy<hydra.core.TypeScheme> ts = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(tsResult));
@@ -1614,7 +1614,7 @@ public interface Inference {
     hydra.core.Term term = (wt).body;
     hydra.core.Name tname = (wt).typeName;
     return hydra.lib.eithers.Bind.apply(
-      hydra.Schemas.requireSchemaType(
+      hydra.Resolution.requireSchemaType(
         fcx,
         (cx).schemaTypes,
         tname),
@@ -1644,7 +1644,7 @@ public interface Inference {
                   hydra.Inference.buildTypeApplicationTerm(
                     svars,
                     new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(tname, iterm))),
-                  hydra.Schemas.nominalApplication(
+                  hydra.Resolution.nominalApplication(
                     tname,
                     hydra.lib.lists.Map.apply(
                       (java.util.function.Function<hydra.core.Name, hydra.core.Type>) (x -> new hydra.core.Type.Variable(x)),
@@ -1689,7 +1689,7 @@ public interface Inference {
                     hydra.lib.maybes.Maybe.applyLazy(
                       () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>right((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeVariableMetadata>apply()))),
                       (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>>) (ts -> {
-                        hydra.util.Pair<hydra.core.TypeScheme, hydra.context.Context> tsResult = hydra.Schemas.instantiateTypeScheme(
+                        hydra.util.Pair<hydra.core.TypeScheme, hydra.context.Context> tsResult = hydra.Resolution.instantiateTypeScheme(
                           fcx2,
                           ts);
                         hydra.util.Lazy<hydra.core.TypeScheme> instantiatedTs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(tsResult));

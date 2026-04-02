@@ -9,12 +9,12 @@ import Hydra.Kernel
 import Hydra.Module (_Module)
 import Hydra.Sources.All (kernelModules)
 import Hydra.Generation (modulesToGraph)
-import Hydra.CodeGeneration (namespaceToPath)
+import Hydra.Codegen (namespaceToPath)
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Decode as JsonDecode
 import qualified Hydra.Decode.Module as DecodeModule
 import qualified Hydra.Decode.Core as DecodeCore
-import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Strip as Strip
 
 import Control.Monad (forM, when)
 import System.Exit (exitFailure, exitSuccess)
@@ -169,7 +169,7 @@ stripTypeAnnotations m = m {
   moduleDefinitions = fmap stripDef (moduleDefinitions m) }
   where
     stripDef (DefinitionTerm td) = DefinitionTerm td {
-      termDefinitionTerm = Rewriting.removeTypesFromTerm (termDefinitionTerm td),
+      termDefinitionTerm = Strip.removeTypesFromTerm (termDefinitionTerm td),
       termDefinitionType = Just $ TypeScheme [] (TypeVariable $ Name "hydra.core.Unit") Nothing }
     stripDef d = d
 

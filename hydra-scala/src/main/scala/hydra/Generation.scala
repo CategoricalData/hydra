@@ -39,8 +39,8 @@ object Generation:
    */
   def bootstrapSchemaMap(): Map[String, Type] =
     hydra.json.bootstrap.typesByName.map { (name, typ) =>
-      val ts = hydra.rewriting.fTypeToTypeScheme(typ)
-      name -> hydra.rewriting.deannotateTypeRecursive(ts.`type`)
+      val ts = hydra.scoping.fTypeToTypeScheme(typ)
+      name -> hydra.strip.deannotateTypeRecursive(ts.`type`)
     }
 
   /**
@@ -103,7 +103,7 @@ object Generation:
     val bsGraph = bootstrapGraph()
     namespaces.flatMap { ns =>
       val filePath = jsonDir + File.separator +
-        hydra.codeGeneration.namespaceToPath(ns) + ".json"
+        hydra.codegen.namespaceToPath(ns) + ".json"
       val file = new File(filePath)
       if !file.exists() then
         throw new RuntimeException(s"Missing module file: $filePath")
@@ -144,7 +144,7 @@ object Generation:
       modsToGenerate: Seq[Module]): Int =
     val cx = hydra.context.Context(Seq.empty, Seq.empty, Map.empty)
     val bsGraph = bootstrapGraph()
-    hydra.codeGeneration.generateSourceFiles(
+    hydra.codegen.generateSourceFiles(
       coder)(language)(doInfer)(doExpand)(doHoistCaseStatements)(doHoistPolymorphicLetBindings)(
       bsGraph)(universe)(modsToGenerate)(cx) match
       case Left(ic) =>

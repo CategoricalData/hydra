@@ -332,9 +332,9 @@
 
 (deftest test-etaexpansion-negnon-negexpansion-of-eliminations-which-produce-functions-negapplied-case-statement
 
-  (is (= Λt0.λdir:hydra.coders.CoderDirection.λcoder:(hydra.util.Coder @ t0 @ t0).λcx:hydra.context.Context.λv1:t0.(case(hydra.coders.CoderDirection){encode=λ_:unit.(project(hydra.util.Coder){encode}⟨t0⟩⟨t0⟩ @ coder @ cx @ v1), decode=λ_:unit.(project(hydra.util.Coder){decode}⟨t0⟩⟨t0⟩ @ coder @ cx @ v1)} @ dir)
+  (is (= Λt0.λdir:hydra.coders.CoderDirection.λcoder:(hydra.coders.Coder @ t0 @ t0).λcx:hydra.context.Context.λv1:t0.(case(hydra.coders.CoderDirection){encode=λ_:unit.(project(hydra.coders.Coder){encode}⟨t0⟩⟨t0⟩ @ coder @ cx @ v1), decode=λ_:unit.(project(hydra.coders.Coder){decode}⟨t0⟩⟨t0⟩ @ coder @ cx @ v1)} @ dir)
 
-         Λt0.λdir:hydra.coders.CoderDirection.λcoder:(hydra.util.Coder @ t0 @ t0).λcx:hydra.context.Context.λv1:t0.(case(hydra.coders.CoderDirection){encode=λ_:unit.(project(hydra.util.Coder){encode}⟨t0⟩⟨t0⟩ @ coder @ cx @ v1), decode=λ_:unit.(project(hydra.util.Coder){decode}⟨t0⟩⟨t0⟩ @ coder @ cx @ v1)} @ dir))))
+         Λt0.λdir:hydra.coders.CoderDirection.λcoder:(hydra.coders.Coder @ t0 @ t0).λcx:hydra.context.Context.λv1:t0.(case(hydra.coders.CoderDirection){encode=λ_:unit.(project(hydra.coders.Coder){encode}⟨t0⟩⟨t0⟩ @ coder @ cx @ v1), decode=λ_:unit.(project(hydra.coders.Coder){decode}⟨t0⟩⟨t0⟩ @ coder @ cx @ v1)} @ dir))))
 
 (deftest test-etaexpansion-negnon-negexpansion-of-eliminations-which-produce-functions-negapplied-projection
 

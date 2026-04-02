@@ -4,11 +4,11 @@ module Main where
 import Hydra.Kernel
 import Hydra.Generation (modulesToGraph)
 import Hydra.Dsl.Bootstrap (bootstrapGraph)
-import Hydra.CodeGeneration (moduleTermDepsTransitive, moduleTypeDepsTransitive, generateSourceFiles)
+import Hydra.Codegen (moduleTermDepsTransitive, moduleTypeDepsTransitive, generateSourceFiles)
 import Hydra.Lexical (elementsToGraph, graphToBindings, buildGraph)
 import Hydra.Inference (inferGraphTypes)
 import Hydra.Adapt (dataGraphToDefinitions)
-import qualified Hydra.Schemas as Schemas
+import qualified Hydra.Environment as Environment
 import Hydra.Ext.Generation (mainModules, hydraExtModules)
 import Hydra.Ext.Sources.All
 import Hydra.Ext.Haskell.Language (haskellLanguage)
@@ -53,7 +53,7 @@ main = do
   let bsGraph = bootstrapGraph
   putStrLn $ "  Bootstrap graph primitives: " ++ show (M.size $ graphPrimitives bsGraph)
   let schemaGraph = elementsToGraph bsGraph M.empty schemaElements
-  let schemaTypes = case Schemas.schemaGraphToTypingEnvironment cx schemaGraph of
+  let schemaTypes = case Environment.schemaGraphToTypingEnvironment cx schemaGraph of
         Left _ -> M.empty
         Right r -> r
   putStrLn $ "  Schema types: " ++ show (M.size schemaTypes)

@@ -19,8 +19,8 @@
   []
   (into {}
     (map (fn [[name typ]]
-           (let [ts ((r 'hydra_rewriting_f_type_to_type_scheme) typ)]
-             [name ((r 'hydra_rewriting_deannotate_type_recursive) (:type ts))]))
+           (let [ts ((r 'hydra_scoping_f_type_to_type_scheme) typ)]
+             [name ((r 'hydra_strip_deannotate_type_recursive) (:type ts))]))
          (r 'hydra_json_bootstrap_types_by_name))))
 
 (defn bootstrap-graph

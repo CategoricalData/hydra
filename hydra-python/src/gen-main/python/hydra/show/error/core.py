@@ -10,7 +10,7 @@ import hydra.error.core
 import hydra.lib.literals
 import hydra.lib.strings
 import hydra.show.core
-import hydra.show.meta
+import hydra.show.variants
 
 T0 = TypeVar("T0")
 
@@ -328,11 +328,11 @@ def unexpected_term_variant_error(e: hydra.error.core.UnexpectedTermVariantError
 
     expected = e.expected_variant
     actual = e.actual_term
-    return hydra.lib.strings.cat(("expected ", hydra.show.meta.term_variant(expected), " term but found ", hydra.show.core.term(actual)))
+    return hydra.lib.strings.cat(("expected ", hydra.show.variants.term_variant(expected), " term but found ", hydra.show.core.term(actual)))
 
 def unexpected_type_variant_error(e: hydra.error.core.UnexpectedTypeVariantError) -> str:
     r"""Show an unexpected type variant error as a string."""
 
     expected = e.expected_variant
     actual = e.actual_type
-    return hydra.lib.strings.cat(("expected ", hydra.show.meta.type_variant(expected), " type but found ", hydra.show.core.type(actual)))
+    return hydra.lib.strings.cat(("expected ", hydra.show.variants.type_variant(expected), " type but found ", hydra.show.core.type(actual)))

@@ -15,8 +15,8 @@ import hydra.lib.sets
 import hydra.lib.strings
 import hydra.show.core
 import hydra.show.error.core
-import hydra.show.meta
 import hydra.show.typing
+import hydra.show.variants
 
 T0 = TypeVar("T0")
 
@@ -72,7 +72,7 @@ def unequal_types_error(e: hydra.error.checking.UnequalTypesError) -> str:
 def unsupported_term_variant_error(e: hydra.error.checking.UnsupportedTermVariantError) -> str:
     r"""Show an unsupported term variant error as a string."""
 
-    return hydra.lib.strings.cat2("unsupported term variant: ", hydra.show.meta.term_variant(e.term_variant))
+    return hydra.lib.strings.cat2("unsupported term variant: ", hydra.show.variants.term_variant(e.term_variant))
 
 def untyped_lambda_error(_: T0) -> str:
     r"""Show an untyped lambda error as a string."""

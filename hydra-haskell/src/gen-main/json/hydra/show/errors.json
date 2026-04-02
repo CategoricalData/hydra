@@ -882,7 +882,7 @@
                                     "record": {
                                       "field": "termVariant",
                                       "typeName": "hydra.error.checking.UnsupportedTermVariantError"}}}}}},
-                          "function": {"variable": "hydra.show.meta.termVariant"}}},
+                          "function": {"variable": "hydra.show.variants.termVariant"}}},
                       "function": {
                         "application": {
                           "argument": {"literal": {"string": "unsupported term variant: "}},
@@ -980,7 +980,7 @@
   "termDependencies": [
     "hydra.show.core",
     "hydra.show.error.core",
-    "hydra.show.meta",
+    "hydra.show.variants",
     "hydra.show.typing",
     "hydra.formatting"],
   "typeDependencies": [

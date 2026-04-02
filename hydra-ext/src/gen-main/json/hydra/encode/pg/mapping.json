@@ -1156,5 +1156,5 @@
             "variables": []}]}}],
   "description": ["Term encoders for hydra.pg.mapping"],
   "namespace": "hydra.encode.pg.mapping",
-  "termDependencies": ["hydra.encode.core", "hydra.encode.pg.model", "hydra.encode.util"],
+  "termDependencies": ["hydra.encode.core", "hydra.encode.pg.model", "hydra.encode.coders"],
   "typeDependencies": ["hydra.pg.mapping"]}

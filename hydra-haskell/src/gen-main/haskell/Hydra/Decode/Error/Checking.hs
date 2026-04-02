@@ -10,7 +10,7 @@ import qualified Hydra.Decode.Typing as Typing
 import qualified Hydra.Decode.Variants as Variants
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Helpers as Helpers
+import qualified Hydra.Extract.Core as Core__
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
@@ -53,8 +53,8 @@ incorrectUnificationError :: Graph.Graph -> Core.Term -> Either Errors.DecodingE
 incorrectUnificationError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "substitution" Typing.typeSubst fieldMap cx) (\field_substitution -> Right (Checking.IncorrectUnificationError {
+        let fieldMap = Core__.toFieldMap v0
+        in (Eithers.bind (Core__.requireField "substitution" Typing.typeSubst fieldMap cx) (\field_substitution -> Right (Checking.IncorrectUnificationError {
           Checking.incorrectUnificationErrorSubstitution = field_substitution})))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
 
@@ -62,8 +62,8 @@ notAForallTypeError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError C
 notAForallTypeError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "type" Core_.type_ fieldMap cx) (\field_type -> Eithers.bind (Helpers.requireField "typeArguments" (Helpers.decodeList Core_.type_) fieldMap cx) (\field_typeArguments -> Right (Checking.NotAForallTypeError {
+        let fieldMap = Core__.toFieldMap v0
+        in (Eithers.bind (Core__.requireField "type" Core_.type_ fieldMap cx) (\field_type -> Eithers.bind (Core__.requireField "typeArguments" (Core__.decodeList Core_.type_) fieldMap cx) (\field_typeArguments -> Right (Checking.NotAForallTypeError {
           Checking.notAForallTypeErrorType = field_type,
           Checking.notAForallTypeErrorTypeArguments = field_typeArguments}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -72,8 +72,8 @@ notAFunctionTypeError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError
 notAFunctionTypeError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "type" Core_.type_ fieldMap cx) (\field_type -> Right (Checking.NotAFunctionTypeError {
+        let fieldMap = Core__.toFieldMap v0
+        in (Eithers.bind (Core__.requireField "type" Core_.type_ fieldMap cx) (\field_type -> Right (Checking.NotAFunctionTypeError {
           Checking.notAFunctionTypeErrorType = field_type})))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
 
@@ -81,20 +81,20 @@ typeArityMismatchError :: Graph.Graph -> Core.Term -> Either Errors.DecodingErro
 typeArityMismatchError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "type" Core_.type_ fieldMap cx) (\field_type -> Eithers.bind (Helpers.requireField "expectedArity" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
+        let fieldMap = Core__.toFieldMap v0
+        in (Eithers.bind (Core__.requireField "type" Core_.type_ fieldMap cx) (\field_type -> Eithers.bind (Core__.requireField "expectedArity" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralInteger v2 -> case v2 of
               Core.IntegerValueInt32 v3 -> Right v3
               _ -> Left (Errors.DecodingError "expected int32 value")
             _ -> Left (Errors.DecodingError "expected int32 literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_expectedArity -> Eithers.bind (Helpers.requireField "actualArity" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_expectedArity -> Eithers.bind (Core__.requireField "actualArity" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralInteger v2 -> case v2 of
               Core.IntegerValueInt32 v3 -> Right v3
               _ -> Left (Errors.DecodingError "expected int32 value")
             _ -> Left (Errors.DecodingError "expected int32 literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_actualArity -> Eithers.bind (Helpers.requireField "typeArguments" (Helpers.decodeList Core_.type_) fieldMap cx) (\field_typeArguments -> Right (Checking.TypeArityMismatchError {
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_actualArity -> Eithers.bind (Core__.requireField "typeArguments" (Core__.decodeList Core_.type_) fieldMap cx) (\field_typeArguments -> Right (Checking.TypeArityMismatchError {
           Checking.typeArityMismatchErrorType = field_type,
           Checking.typeArityMismatchErrorExpectedArity = field_expectedArity,
           Checking.typeArityMismatchErrorActualArity = field_actualArity,
@@ -105,8 +105,8 @@ typeMismatchError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Che
 typeMismatchError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "expectedType" Core_.type_ fieldMap cx) (\field_expectedType -> Eithers.bind (Helpers.requireField "actualType" Core_.type_ fieldMap cx) (\field_actualType -> Right (Checking.TypeMismatchError {
+        let fieldMap = Core__.toFieldMap v0
+        in (Eithers.bind (Core__.requireField "expectedType" Core_.type_ fieldMap cx) (\field_expectedType -> Eithers.bind (Core__.requireField "actualType" Core_.type_ fieldMap cx) (\field_actualType -> Right (Checking.TypeMismatchError {
           Checking.typeMismatchErrorExpectedType = field_expectedType,
           Checking.typeMismatchErrorActualType = field_actualType}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -115,8 +115,8 @@ unboundTypeVariablesError :: Graph.Graph -> Core.Term -> Either Errors.DecodingE
 unboundTypeVariablesError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "variables" (Helpers.decodeSet Core_.name) fieldMap cx) (\field_variables -> Eithers.bind (Helpers.requireField "type" Core_.type_ fieldMap cx) (\field_type -> Right (Checking.UnboundTypeVariablesError {
+        let fieldMap = Core__.toFieldMap v0
+        in (Eithers.bind (Core__.requireField "variables" (Core__.decodeSet Core_.name) fieldMap cx) (\field_variables -> Eithers.bind (Core__.requireField "type" Core_.type_ fieldMap cx) (\field_type -> Right (Checking.UnboundTypeVariablesError {
           Checking.unboundTypeVariablesErrorVariables = field_variables,
           Checking.unboundTypeVariablesErrorType = field_type}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -125,12 +125,12 @@ unequalTypesError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Che
 unequalTypesError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "types" (Helpers.decodeList Core_.type_) fieldMap cx) (\field_types -> Eithers.bind (Helpers.requireField "description" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
+        let fieldMap = Core__.toFieldMap v0
+        in (Eithers.bind (Core__.requireField "types" (Core__.decodeList Core_.type_) fieldMap cx) (\field_types -> Eithers.bind (Core__.requireField "description" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_description -> Right (Checking.UnequalTypesError {
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_description -> Right (Checking.UnequalTypesError {
           Checking.unequalTypesErrorTypes = field_types,
           Checking.unequalTypesErrorDescription = field_description}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -139,8 +139,8 @@ unsupportedTermVariantError :: Graph.Graph -> Core.Term -> Either Errors.Decodin
 unsupportedTermVariantError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "termVariant" Variants.termVariant fieldMap cx) (\field_termVariant -> Right (Checking.UnsupportedTermVariantError {
+        let fieldMap = Core__.toFieldMap v0
+        in (Eithers.bind (Core__.requireField "termVariant" Variants.termVariant fieldMap cx) (\field_termVariant -> Right (Checking.UnsupportedTermVariantError {
           Checking.unsupportedTermVariantErrorTermVariant = field_termVariant})))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
 
@@ -148,7 +148,7 @@ untypedLambdaError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ch
 untypedLambdaError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Helpers.toFieldMap v0
+        let fieldMap = Core__.toFieldMap v0
         in (Right (Checking.UntypedLambdaError {
         }))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -157,7 +157,7 @@ untypedLetBindingError :: Graph.Graph -> Core.Term -> Either Errors.DecodingErro
 untypedLetBindingError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "binding" Core_.binding fieldMap cx) (\field_binding -> Right (Checking.UntypedLetBindingError {
+        let fieldMap = Core__.toFieldMap v0
+        in (Eithers.bind (Core__.requireField "binding" Core_.binding fieldMap cx) (\field_binding -> Right (Checking.UntypedLetBindingError {
           Checking.untypedLetBindingErrorBinding = field_binding})))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)

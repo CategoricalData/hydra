@@ -162,7 +162,7 @@ public interface Prepare {
   }
 
   static <T0> hydra.util.Pair<hydra.core.Type, hydra.util.Pair<java.util.function.Function<hydra.core.Term, hydra.core.Term>, hydra.util.PersistentSet<String>>> prepareType(T0 cx, hydra.core.Type typ) {
-    return hydra.Rewriting.deannotateType(typ).accept(new hydra.core.Type.PartialVisitor<>() {
+    return hydra.Strip.deannotateType(typ).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Pair<hydra.core.Type, hydra.util.Pair<java.util.function.Function<hydra.core.Term, hydra.core.Term>, hydra.util.PersistentSet<String>>> otherwise(hydra.core.Type instance) {
         return hydra.ext.scala.Prepare.same(typ);

@@ -66,12 +66,19 @@ import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
+import qualified Hydra.Sources.Kernel.Terms.Variables      as Variables
+import qualified Hydra.Sources.Kernel.Terms.Dependencies   as Dependencies
+import qualified Hydra.Sources.Kernel.Terms.Scoping        as Scoping
+import qualified Hydra.Sources.Kernel.Terms.Predicates    as Predicates
+import qualified Hydra.Sources.Kernel.Terms.Resolution    as Resolution
+import qualified Hydra.Sources.Kernel.Terms.Analysis      as Analysis
+import qualified Hydra.Sources.Kernel.Terms.Environment   as Environment
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -105,7 +112,7 @@ ns = Namespace "hydra.ext.python.coder"
 
 module_ :: Module
 module_ = Module ns elements
-    [PyUtils.ns, PyNames.ns, PySerde.ns, Serialization.ns, Schemas.ns, Rewriting.ns, ShowCore.ns, CoderUtils.ns, Reduction.ns, Sorting.ns, Names.ns, Inference.ns]
+    [PyUtils.ns, PyNames.ns, PySerde.ns, Serialization.ns, Analysis.ns, Environment.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns, ShowCore.ns, CoderUtils.ns, Reduction.ns, Sorting.ns, Names.ns, Inference.ns]
     (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Python code generator: converts Hydra modules to Python source code"
   where
@@ -283,10 +290,10 @@ collectTypeVariables :: TTermDefinition (S.Set Name -> Type -> S.Set Name)
 collectTypeVariables = def "collectTypeVariables" $
   doc "Collect type variables from a type" $
   "initial" ~> "typ" ~>
-    cases _Type (Rewriting.deannotateType @@ var "typ") (Just $
+    cases _Type (Strip.deannotateType @@ var "typ") (Just $
       -- Default: union initial with filtered free variables
       -- Filter free variables to only include unqualified names (type variables)
-      "freeVars" <~ (Rewriting.freeVariablesInType @@ var "typ") $
+      "freeVars" <~ (Variables.freeVariablesInType @@ var "typ") $
       "isTypeVar" <~ ("n" ~> isTypeVariableName @@ var "n") $
       "filteredList" <~ Lists.filter (var "isTypeVar") (Sets.toList $ var "freeVars") $
       Sets.union (var "initial") (Sets.fromList $ var "filteredList")) [
@@ -350,7 +357,7 @@ deduplicateCaseVariables = def "deduplicateCaseVariables" $
         "fname" <~ Core.fieldName (var "field") $
         "fterm" <~ Core.fieldTerm (var "field") $
         -- Check if term is a lambda (strip annotations and type wrappers)
-        cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "fterm") (Just $ pair (var "countByName") (Lists.cons (var "field") (var "done"))) [
+        cases _Term (Strip.deannotateAndDetypeTerm @@ var "fterm") (Just $ pair (var "countByName") (Lists.cons (var "field") (var "done"))) [
           _Term_function>>: "f" ~>
             cases _Function (var "f") (Just $ pair (var "countByName") (Lists.cons (var "field") (var "done"))) [
               _Function_lambda>>: "lam" ~>
@@ -385,7 +392,7 @@ digForWrap :: TTermDefinition (Bool -> PyHelpers.PythonModuleMetadata -> Type ->
 digForWrap = def "digForWrap" $
   doc "Recursively dig through forall types to find wrap types" $
   "isTermAnnot" ~> "meta" ~> "typ" ~>
-    cases _Type (Rewriting.deannotateType @@ var "typ") (Just $ var "meta") [
+    cases _Type (Strip.deannotateType @@ var "typ") (Just $ var "meta") [
       _Type_forall>>: "ft" ~>
         digForWrap @@ var "isTermAnnot" @@ var "meta" @@ Core.forallTypeBody (var "ft"),
       _Type_wrap>>: constant $
@@ -413,7 +420,7 @@ eliminateUnitVar = def "eliminateUnitVar" $
                    (Core.bindingType $ var "bnd")) $
     -- Main rewrite function as Y combinator style
     "rewrite" <~ ("recurse" ~> "term" ~>
-      cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "term") (Just $ var "term") [
+      cases _Term (Strip.deannotateAndDetypeTerm @@ var "term") (Just $ var "term") [
         -- Replace the variable with unit
         _Term_variable>>: "n" ~>
           Logic.ifElse (Equality.equal (var "n") (var "v"))
@@ -577,7 +584,7 @@ encodeApplicationInner = def "encodeApplicationInner" $
     -- Default case: encode function and apply
     "defaultCase" <~ ("pfun" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "fun") $
       right $ pair (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pfun") @@ var "hargs") (var "rargs")) $
-    cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "fun") (Just $ var "defaultCase") [
+    cases _Term (Strip.deannotateAndDetypeTerm @@ var "fun") (Just $ var "defaultCase") [
       _Term_function>>: "f" ~>
         cases _Function (var "f") (Just $ var "defaultCase") [
           _Function_elimination>>: "elm" ~>
@@ -646,7 +653,7 @@ encodeApplicationType = def "encodeApplicationType" $
     -- gatherParams collects all arguments from nested applications
     "gatherParams" <~ (
       "t" ~> "ps" ~>
-        cases _Type (Rewriting.deannotateType @@ var "t") Nothing [
+        cases _Type (Strip.deannotateType @@ var "t") Nothing [
           _Type_application>>: "appT" ~>
             var "gatherParams"
               @@ (project _ApplicationType _ApplicationType_function @@ var "appT")
@@ -709,8 +716,8 @@ encodeBindingAs = def "encodeBindingAs" $
             "tname" <~ (Core.caseStatementTypeName $ var "cs") $
             "dflt" <~ (Core.caseStatementDefault $ var "cs") $
             "cases_" <~ (Core.caseStatementCases $ var "cs") $
-            "rt" <<~ (Schemas.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
-            "isEnum" <~ (Schemas.isEnumRowType @@ var "rt") $
+            "rt" <<~ (Resolution.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
+            "isEnum" <~ (Predicates.isEnumRowType @@ var "rt") $
             "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
             "innerParam" <~ (PyDsl.param (PyDsl.name $ string "x") nothing) $
             "param" <~ (Phantoms.record Py._ParamNoDefault [
@@ -750,8 +757,8 @@ encodeBindingAs = def "encodeBindingAs" $
                 "tname" <~ (Core.caseStatementTypeName $ var "cs") $
                 "dflt" <~ (Core.caseStatementDefault $ var "cs") $
                 "cases_" <~ (Core.caseStatementCases $ var "cs") $
-                "rt" <<~ (Schemas.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
-                "isEnum" <~ (Schemas.isEnumRowType @@ var "rt") $
+                "rt" <<~ (Resolution.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
+                "isEnum" <~ (Predicates.isEnumRowType @@ var "rt") $
                 "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
                 "innerParam" <~ (PyDsl.param (PyDsl.name $ string "x") nothing) $
                 "param" <~ (Phantoms.record Py._ParamNoDefault [
@@ -789,8 +796,8 @@ encodeBindingAs = def "encodeBindingAs" $
             "dflt" <~ (Pairs.first $ var "rest1") $
             "rest2" <~ (Pairs.second $ var "rest1") $
             "cases_" <~ (Pairs.first $ var "rest2") $
-            "rt" <<~ (Schemas.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
-            "isEnum" <~ (Schemas.isEnumRowType @@ var "rt") $
+            "rt" <<~ (Resolution.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
+            "isEnum" <~ (Predicates.isEnumRowType @@ var "rt") $
             "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
             -- Separate captured variables (all but last) from the match parameter (last).
             -- The last lambda parameter is the case expression's own parameter.
@@ -896,7 +903,7 @@ encodeCaseBlock = def "encodeCaseBlock" $
     -- The field term should be a lambda; strip annotations and type wrappers to extract it.
     -- After case-statement hoisting, field terms may be variable references to hoisted functions
     -- instead of inline lambdas. The default case handles this by synthesizing a lambda wrapper.
-    "stripped" <~ (Rewriting.deannotateAndDetypeTerm @@ var "fterm") $
+    "stripped" <~ (Strip.deannotateAndDetypeTerm @@ var "fterm") $
     "effectiveLambda" <~ (cases _Term (var "stripped")
       -- Default: fterm is not a lambda (e.g. hoisted variable reference).
       -- Wrap it in a synthetic lambda: \v -> fterm(v)
@@ -922,12 +929,12 @@ encodeCaseBlock = def "encodeCaseBlock" $
     -- Determine if we should capture the value
     -- Don't capture if: unit variant, variable is free in body, or body is unit term
     "shouldCapture" <~ (Logic.not $ Logic.or (var "isUnitVariant")
-      (Logic.or (Rewriting.isFreeVariableInTerm @@ var "v" @@ var "rawBody")
-                (Schemas.isUnitTerm @@ var "rawBody"))) $
+      (Logic.or (Variables.isFreeVariableInTerm @@ var "v" @@ var "rawBody")
+                (Predicates.isUnitTerm @@ var "rawBody"))) $
     -- Extend the Graph with the lambda parameter
     -- to prevent the code generator from reducing it away
     "env2" <~ (pythonEnvironmentSetGraph
-      @@ (Rewriting.extendGraphForLambda @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "effectiveLambda")
+      @@ (Scoping.extendGraphForLambda @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "effectiveLambda")
       @@ var "env") $
     -- Deconflict the variant name in case it collides with a type name
     "pyVariantName" <~ (deconflictVariantName @@ true @@ var "env2" @@ var "tname" @@ var "fname" @@ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env2")) $
@@ -1057,7 +1064,7 @@ encodeForallType = def "encodeForallType" $
     -- gatherParams collects all forall-bound type variables
     "gatherParams" <~ (
       "t" ~> "ps" ~>
-        cases _Type (Rewriting.deannotateType @@ var "t") Nothing [
+        cases _Type (Strip.deannotateType @@ var "t") Nothing [
           _Type_forall>>: "forallT" ~>
             var "gatherParams"
               @@ (project _ForallType _ForallType_body @@ var "forallT")
@@ -1212,7 +1219,7 @@ encodeFunctionType = def "encodeFunctionType" $
       "rdoms" ~> "ftype" ~>
         "innerCod" <~ (project _FunctionType _FunctionType_codomain @@ var "ftype") $
         "dom" <~ (project _FunctionType _FunctionType_domain @@ var "ftype") $
-        cases _Type (Rewriting.deannotateType @@ var "innerCod") Nothing [
+        cases _Type (Strip.deannotateType @@ var "innerCod") Nothing [
           _Type_function>>: "ft2" ~>
             var "gatherParams" @@ (Lists.cons (var "dom") (var "rdoms")) @@ var "ft2",
           -- Default: return (reverse (dom:rdoms), innerCod)
@@ -1477,7 +1484,7 @@ encodeTermInline = def "encodeTermInline" $
                (encodeType @@ var "env" @@ var "typ"))
            (var "mtyp"))) $
     -- Main case dispatch on term variant (strip annotations and type wrappers)
-    cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "term") Nothing [
+    cases _Term (Strip.deannotateAndDetypeTerm @@ var "term") Nothing [
       -- TermApplication
       _Term_application>>: "app" ~>
         encodeApplication @@ var "cx" @@ var "env" @@ var "app",
@@ -1584,8 +1591,8 @@ encodeTermInline = def "encodeTermInline" $
       _Term_union>>: "inj" ~>
         "tname" <~ Core.injectionTypeName (var "inj") $
         "field" <~ Core.injectionField (var "inj") $
-        "rt" <<~ (Schemas.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
-        Logic.ifElse (Schemas.isEnumRowType @@ var "rt")
+        "rt" <<~ (Resolution.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
+        Logic.ifElse (Predicates.isEnumRowType @@ var "rt")
           -- Enum variant
           (right $ PyUtils.projectFromExpression
             @@ (PyUtils.pyNameToPyExpression @@ (PyNames.encodeNameQualified @@ var "env" @@ var "tname"))
@@ -1595,9 +1602,9 @@ encodeTermInline = def "encodeTermInline" $
             -- Check if this is a unit variant
             "isUnitVariant" <~ (Maybes.maybe
               false
-              ("ft" ~> Schemas.isUnitType @@ (Rewriting.deannotateType @@ Core.fieldTypeType (var "ft")))
+              ("ft" ~> Predicates.isUnitType @@ (Strip.deannotateType @@ Core.fieldTypeType (var "ft")))
               (Lists.find ("ft" ~> Core.equalName_ (Core.fieldTypeName (var "ft")) (var "fname")) (var "rt"))) $
-            "args" <<~ (Logic.ifElse (Logic.or (Schemas.isUnitTerm @@ Core.fieldTerm (var "field")) (var "isUnitVariant"))
+            "args" <<~ (Logic.ifElse (Logic.or (Predicates.isUnitTerm @@ Core.fieldTerm (var "field")) (var "isUnitVariant"))
               (right (list ([] :: [TTerm Py.Expression])))
               ("parg" <<~ (var "encode" @@ Core.fieldTerm (var "field")) $
                 right $ list [var "parg"])) $
@@ -1654,7 +1661,7 @@ encodeTermMultiline = def "encodeTermMultiline" $
     Logic.ifElse (Equality.equal (Lists.length $ var "args") (int32 1))
       -- Try to handle case statement specially
       ("arg" <~ (Lists.head $ var "args") $
-        cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "body") (Just $ var "dfltLogic") [
+        cases _Term (Strip.deannotateAndDetypeTerm @@ var "body") (Just $ var "dfltLogic") [
           _Term_function>>: "f" ~>
             cases _Function (var "f") (Just $ var "dfltLogic") [
               _Function_elimination>>: "e" ~>
@@ -1663,8 +1670,8 @@ encodeTermMultiline = def "encodeTermMultiline" $
                     "tname" <~ (Core.caseStatementTypeName $ var "cs") $
                     "dflt" <~ (Core.caseStatementDefault $ var "cs") $
                     "cases_" <~ (Core.caseStatementCases $ var "cs") $
-                    "rt" <<~ (Schemas.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
-                    "isEnum" <~ (Schemas.isEnumRowType @@ var "rt") $
+                    "rt" <<~ (Resolution.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
+                    "isEnum" <~ (Predicates.isEnumRowType @@ var "rt") $
                     "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
                     "pyArg" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "arg") $
                     "pyCases" <<~ (Eithers.mapList (encodeCaseBlock @@ var "cx" @@ var "env" @@ var "tname" @@ var "rt" @@ var "isEnum" @@ ("e" ~> "t" ~> encodeTermMultiline @@ var "cx" @@ var "e" @@ var "t")) (deduplicateCaseVariables @@ var "cases_")) $
@@ -1685,12 +1692,12 @@ encodeTermMultilineTCO :: TTermDefinition (Context -> PyHelpers.PythonEnvironmen
 encodeTermMultilineTCO = def "encodeTermMultilineTCO" $
   doc "Encode a term body for TCO: tail self-calls become param reassignment + continue" $
   "cx" ~> "env" ~> "funcName" ~> "paramNames" ~> "term" ~>
-    "stripped" <~ (Rewriting.deannotateAndDetypeTerm @@ var "term") $
+    "stripped" <~ (Strip.deannotateAndDetypeTerm @@ var "term") $
     -- Check if this term is a direct self-tail-call: funcName(args...)
     "gathered" <~ (CoderUtils.gatherApplications @@ var "stripped") $
     "gatherArgs" <~ (Pairs.first $ var "gathered") $
     "gatherFun" <~ (Pairs.second $ var "gathered") $
-    "strippedFun" <~ (Rewriting.deannotateAndDetypeTerm @@ var "gatherFun") $
+    "strippedFun" <~ (Strip.deannotateAndDetypeTerm @@ var "gatherFun") $
     -- Check for self-call pattern: Variable(funcName)
     "isSelfCall" <~ (cases _Term (var "strippedFun")
       (Just false) [
@@ -1715,7 +1722,7 @@ encodeTermMultilineTCO = def "encodeTermMultilineTCO" $
         Logic.ifElse (Equality.equal (Lists.length $ var "args2") (int32 1))
           -- Single argument: try to match as case statement
           ("arg" <~ (Lists.head $ var "args2") $
-            cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "body2") (Just $
+            cases _Term (Strip.deannotateAndDetypeTerm @@ var "body2") (Just $
               -- Default: not a case statement, encode as return
               "expr" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
               right $ list [PyUtils.returnSingle @@ var "expr"]) [
@@ -1732,8 +1739,8 @@ encodeTermMultilineTCO = def "encodeTermMultilineTCO" $
                         "tname" <~ (Core.caseStatementTypeName $ var "cs") $
                         "dflt" <~ (Core.caseStatementDefault $ var "cs") $
                         "cases_" <~ (Core.caseStatementCases $ var "cs") $
-                        "rt" <<~ (Schemas.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
-                        "isEnum" <~ (Schemas.isEnumRowType @@ var "rt") $
+                        "rt" <<~ (Resolution.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
+                        "isEnum" <~ (Predicates.isEnumRowType @@ var "rt") $
                         "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
                         "pyArg" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "arg") $
                         -- Use TCO body encoder for each case branch
@@ -1762,8 +1769,8 @@ encodeType = def "encodeType" $
   doc "Encode a Hydra type to a Python type expression" $
   "env" ~> "typ" ~>
     -- dflt produces a quoted string fallback for unsupported types
-    "dflt" <~ (right $ PyUtils.doubleQuotedString @@ (Strings.cat2 (string "type = ") (ShowCore.type_ @@ (Rewriting.deannotateType @@ var "typ")))) $
-    cases _Type (Rewriting.deannotateType @@ var "typ") Nothing [
+    "dflt" <~ (right $ PyUtils.doubleQuotedString @@ (Strings.cat2 (string "type = ") (ShowCore.type_ @@ (Strip.deannotateType @@ var "typ")))) $
+    cases _Type (Strip.deannotateType @@ var "typ") Nothing [
       _Type_application>>: "at" ~> encodeApplicationType @@ var "env" @@ var "at",
       _Type_function>>: "ft" ~> encodeFunctionType @@ var "env" @@ var "ft",
       _Type_forall>>: "lt" ~> encodeForallType @@ var "env" @@ var "lt",
@@ -1819,7 +1826,7 @@ encodeTypeAssignmentInner :: TTermDefinition (Context -> PyHelpers.PythonEnviron
 encodeTypeAssignmentInner = def "encodeTypeAssignmentInner" $
   doc "Encode the inner type definition, unwrapping forall types" $
   "cx" ~> "env" ~> "name" ~> "typ" ~> "comment" ~>
-    "stripped" <~ (Rewriting.deannotateType @@ var "typ") $
+    "stripped" <~ (Strip.deannotateType @@ var "typ") $
     -- Default: simple type alias
     "dflt" <~ ("typeExpr" <<~ (encodeType @@ var "env" @@ var "typ") $
        right $ encodeTypeDefSingle @@ var "env" @@ var "name" @@ var "comment" @@ var "typeExpr") $
@@ -1859,7 +1866,7 @@ encodeTypeQuoted = def "encodeTypeQuoted" $
   doc "Encode a type to a Python expression, quoting if the type has free variables" $
   "env" ~> "typ" ~>
     "pytype" <<~ encodeType @@ var "env" @@ var "typ" $
-    right $ Logic.ifElse (Sets.null (Rewriting.freeVariablesInType @@ var "typ"))
+    right $ Logic.ifElse (Sets.null (Variables.freeVariablesInType @@ var "typ"))
       (var "pytype")
       (PyUtils.doubleQuotedString @@ (Serialization.printExpr @@ (PySerde.encodeExpression @@ var "pytype")))
 
@@ -1878,8 +1885,8 @@ encodeUnionEliminationInline = def "encodeUnionEliminationInline" $
     "mdefault" <~ (Core.caseStatementDefault $ var "cs") $
     "cases_" <~ (Core.caseStatementCases $ var "cs") $
     -- Get the row type for isEnum and isUnit checks
-    "rt" <<~ (Schemas.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
-    "isEnum" <~ (Schemas.isEnumRowType @@ var "rt") $
+    "rt" <<~ (Resolution.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
+    "isEnum" <~ (Predicates.isEnumRowType @@ var "rt") $
     -- Project .value from the argument for non-enum types
     "valueExpr" <~ (PyUtils.projectFromExpression @@ var "pyArg" @@ (PyDsl.name $ string "value")) $
     -- Build the isinstance function reference
@@ -1949,7 +1956,7 @@ encodeUnionField = def "encodeUnionField" $
     "fname" <~ Core.fieldTypeName (var "fieldType") $
     "ftype" <~ Core.fieldTypeType (var "fieldType") $
     "fcomment" <<~ (Annotations.getTypeDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "ftype") $
-    "isUnit" <~ (Equality.equal (Rewriting.deannotateType @@ var "ftype") (Core.typeUnit)) $
+    "isUnit" <~ (Equality.equal (Strip.deannotateType @@ var "ftype") (Core.typeUnit)) $
     "varName" <~ (deconflictVariantName @@ false @@ var "env" @@ var "unionName" @@ var "fname" @@ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env")) $
     "tparamNames" <~ (findTypeParams @@ var "env" @@ var "ftype") $
     "tparamPyNames" <~ Lists.map PyNames.encodeTypeVariable (var "tparamNames") $
@@ -1991,7 +1998,7 @@ encodeUnionType :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Na
 encodeUnionType = def "encodeUnionType" $
   doc "Encode a union type as an enum (for unit-only fields) or variant classes" $
   "cx" ~> "env" ~> "name" ~> "rowType" ~> "comment" ~>
-    Logic.ifElse (Schemas.isEnumRowType @@ var "rowType")
+    Logic.ifElse (Predicates.isEnumRowType @@ var "rowType")
       -- Enum case: enum values are Name objects; TYPE_ assigned after class to avoid becoming a member
       ("vals" <<~ (Eithers.mapList (encodeEnumValueAssignment @@ var "cx" @@ var "env") (var "rowType")) $
        "body" <~ (PyUtils.indentedBlock @@ var "comment" @@ var "vals") $
@@ -2113,7 +2120,7 @@ encodeVariable = def "encodeVariable" $
             -- Not a lambda variable
             (Logic.ifElse (Sets.member (var "name") (var "inlineVars"))
               -- Inline variable: function reference
-              ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Rewriting.freeVariablesInType @@ var "typ"))
+              ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Variables.freeVariablesInType @@ var "typ"))
                   (makeSimpleLambda @@ (Arity.typeArity @@ var "typ") @@ var "asVariable")
                   (var "asVariable")) $
                 right $ var "asFunctionRef")
@@ -2122,7 +2129,7 @@ encodeVariable = def "encodeVariable" $
                 -- Not in metadata - check graph elements
                 (Maybes.maybe
                   -- Not in graph elements: inline let binding
-                  ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Rewriting.freeVariablesInType @@ var "typ"))
+                  ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Variables.freeVariablesInType @@ var "typ"))
                       (makeSimpleLambda @@ (Arity.typeArity @@ var "typ") @@ var "asVariable")
                       (var "asVariable")) $
                     right $ var "asFunctionRef")
@@ -2133,7 +2140,7 @@ encodeVariable = def "encodeVariable" $
                       (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
                                                (Logic.not (var "elTrivial")))
                         (right $ var "asFunctionCall")
-                        ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Rewriting.freeVariablesInType @@ var "typ"))
+                        ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Variables.freeVariablesInType @@ var "typ"))
                             (makeSimpleLambda @@ (Arity.typeArity @@ var "typ") @@ var "asVariable")
                             (var "asVariable")) $
                           right $ var "asFunctionRef"))
@@ -2142,7 +2149,7 @@ encodeVariable = def "encodeVariable" $
                                                            (CoderUtils.isComplexBinding @@ var "tc" @@ var "el"))
                                                 (Logic.not (var "elTrivial")))
                           (right $ var "asFunctionCall")
-                          ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Rewriting.freeVariablesInType @@ var "typ"))
+                          ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Variables.freeVariablesInType @@ var "typ"))
                               (makeSimpleLambda @@ (Arity.typeArity @@ var "typ") @@ var "asVariable")
                               (var "asVariable")) $
                             right $ var "asFunctionRef"))
@@ -2152,7 +2159,7 @@ encodeVariable = def "encodeVariable" $
                 (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
                                           (CoderUtils.isComplexVariable @@ var "tc" @@ var "name"))
                   (right $ var "asFunctionCall")
-                  ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Rewriting.freeVariablesInType @@ var "typ"))
+                  ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Variables.freeVariablesInType @@ var "typ"))
                       (makeSimpleLambda @@ (Arity.typeArity @@ var "typ") @@ var "asVariable")
                       (var "asVariable")) $
                     right $ var "asFunctionRef")))))
@@ -2211,11 +2218,11 @@ extendEnvWithLambdaParams = def "extendEnvWithLambdaParams" $
   doc "Extend environment with lambda parameters from a term" $
   "env" ~> "term" ~>
     "go" <~ ("e" ~> "t" ~>
-      cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "t") (Just $ var "e") [
+      cases _Term (Strip.deannotateAndDetypeTerm @@ var "t") (Just $ var "e") [
         _Term_function>>: "f" ~>
           cases _Function (var "f") (Just $ var "e") [
             _Function_lambda>>: "lam" ~>
-              "newTc" <~ (Rewriting.extendGraphForLambda @@
+              "newTc" <~ (Scoping.extendGraphForLambda @@
                 (pythonEnvironmentGetGraph @@ var "e") @@ var "lam") $
               "newEnv" <~ (pythonEnvironmentSetGraph @@ var "newTc" @@ var "e") $
               var "go" @@ var "newEnv" @@ (Core.lambdaBody $ var "lam")]]) $
@@ -2315,7 +2322,7 @@ extendMetaForType = def "extendMetaForType" $
       (var "metaWithTvars")
       (Rewriting.subtypes @@ var "typ")) $
     -- Finally process this type for imports
-    cases _Type (Rewriting.deannotateType @@ var "typ") (Just $ var "metaWithSubtypes") [
+    cases _Type (Strip.deannotateType @@ var "typ") (Just $ var "metaWithSubtypes") [
       -- Function type: may need Callable import
       _Type_function>>: "ft" ~>
         "cod" <~ Core.functionTypeCodomain (var "ft") $
@@ -2346,7 +2353,7 @@ extendMetaForType = def "extendMetaForType" $
                 setMetaUsesDecimal @@ var "metaWithSubtypes" @@ true]],
       -- Union type: need Enum or Node
       _Type_union>>: "rt" ~>
-        Logic.ifElse (Schemas.isEnumRowType @@ var "rt")
+        Logic.ifElse (Predicates.isEnumRowType @@ var "rt")
           (setMetaUsesEnum @@ var "metaWithSubtypes" @@ true)
           (Logic.ifElse (Logic.not (Lists.null (var "rt")))
             (setMetaUsesNode @@ var "metaWithSubtypes" @@ true)
@@ -2356,7 +2363,7 @@ extendMetaForType = def "extendMetaForType" $
         "body" <~ Core.forallTypeBody (var "ft") $
         -- Recursively check for wrap types (dig through nested foralls)
         "metaForWrap" <~ (digForWrap @@ var "isTermAnnot" @@ var "metaWithSubtypes" @@ var "body") $
-        cases _Type (Rewriting.deannotateType @@ var "body") (Just $ var "metaForWrap") [
+        cases _Type (Strip.deannotateType @@ var "body") (Just $ var "metaForWrap") [
           _Type_record>>: constant $
             setMetaUsesGeneric @@ var "metaForWrap" @@ true],
       -- Record type: need dataclass (if non-empty) and possibly Annotated
@@ -2387,10 +2394,10 @@ extendMetaForTypes = def "extendMetaForTypes" $
   doc "Extend metadata for a list of types" $
   "types" ~> "meta" ~>
     -- First compute names from all types
-    "names" <~ Sets.unions (Lists.map ("t" ~> Rewriting.typeDependencyNames @@ false @@ var "t") (var "types")) $
+    "names" <~ Sets.unions (Lists.map ("t" ~> Dependencies.typeDependencyNames @@ false @@ var "t") (var "types")) $
     -- Update namespaces with the collected names
     "currentNs" <~ (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "meta") $
-    "updatedNs" <~ (Schemas.addNamesToNamespaces @@ PyNames.encodeNamespace @@ var "names" @@ var "currentNs") $
+    "updatedNs" <~ (Analysis.addNamesToNamespaces @@ PyNames.encodeNamespace @@ var "names" @@ var "currentNs") $
     -- Create meta1 with updated namespaces
     "meta1" <~ (setMetaNamespaces @@ var "updatedNs" @@ var "meta") $
     -- Now fold extendMetaForType over all types with isTypeDef=True, isTermAnnot=False
@@ -2402,7 +2409,7 @@ extractCaseElimination :: TTermDefinition (Term -> Maybe CaseStatement)
 extractCaseElimination = def "extractCaseElimination" $
   doc "Extract CaseStatement from a case elimination term" $
   "term" ~>
-    cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "term") (Just nothing) [
+    cases _Term (Strip.deannotateAndDetypeTerm @@ var "term") (Just nothing) [
       _Term_function>>: "f" ~>
         cases _Function (var "f") (Just nothing) [
           _Function_elimination>>: "e" ~>
@@ -2417,7 +2424,7 @@ findTypeParams = def "findTypeParams" $
   "env" ~> "typ" ~>
     "boundVars" <~ (Pairs.second $ project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "env") $
     "isBound" <~ ("v" ~> Maybes.isJust (Maps.lookup (var "v") (var "boundVars"))) $
-    Lists.filter (var "isBound") (Sets.toList (Rewriting.freeVariablesInType @@ var "typ"))
+    Lists.filter (var "isBound") (Sets.toList (Variables.freeVariablesInType @@ var "typ"))
 
 -- | Calculate the arity of a function, with proper handling of primitives.
 functionArityWithPrimitives :: TTermDefinition (Graph -> Function -> Int)
@@ -2440,7 +2447,7 @@ gatherLambdas = def "gatherLambdas" $
   doc "Extract lambdas and their bodies from a term" $
   "term" ~>
   "go" <~ ("params" ~> "t" ~>
-    cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "t")
+    cases _Term (Strip.deannotateAndDetypeTerm @@ var "t")
       (Just $ pair (var "params") (var "t")) [
       _Term_function>>: "f" ~>
         cases _Function (var "f")
@@ -2568,7 +2575,7 @@ isCaseStatementApplication = def "isCaseStatementApplication" $
     Logic.ifElse (Logic.not $ Equality.equal (Lists.length $ var "args") (int32 1))
       nothing
       ("arg" <~ (Lists.head $ var "args") $
-        cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "body") (Just nothing) [
+        cases _Term (Strip.deannotateAndDetypeTerm @@ var "body") (Just nothing) [
           _Term_function>>: "f" ~>
             cases _Function (var "f") (Just nothing) [
               _Function_elimination>>: "e" ~>
@@ -2607,7 +2614,7 @@ isVariantUnitType = def "isVariantUnitType" $
     "mfield" <~ (Lists.find ("ft" ~> Equality.equal (Core.fieldTypeName $ var "ft") (var "fieldName")) (var "rowType")) $
     Maybes.fromMaybe false $
       Maybes.map
-        ("ft" ~> Schemas.isUnitType @@ (Rewriting.deannotateType @@ Core.fieldTypeType (var "ft")))
+        ("ft" ~> Predicates.isUnitType @@ (Strip.deannotateType @@ Core.fieldTypeType (var "ft")))
         (var "mfield")
 
 -- | Decorator for @lru_cache(1) to memoize zero-argument function results
@@ -3950,7 +3957,7 @@ termArityWithPrimitives :: TTermDefinition (Graph -> Term -> Int)
 termArityWithPrimitives = def "termArityWithPrimitives" $
   doc "Calculate term arity with proper primitive handling" $
   "graph" ~> "term" ~>
-    cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "term") (Just (Phantoms.int 0)) [
+    cases _Term (Strip.deannotateAndDetypeTerm @@ var "term") (Just (Phantoms.int 0)) [
       _Term_application>>: "app" ~>
         Math.max (Phantoms.int 0) (Math.sub
           (termArityWithPrimitives @@ var "graph" @@ (Core.applicationFunction $ var "app"))
@@ -4094,7 +4101,7 @@ withDefinitions = def "withDefinitions" $
 withLambda :: TTermDefinition (PyHelpers.PythonEnvironment -> Lambda -> (PyHelpers.PythonEnvironment -> a) -> a)
 withLambda = def "withLambda" $
   doc "Execute a computation with lambda context (adds lambda parameter to Graph)" $
-  Schemas.withLambdaContext @@
+  Environment.withLambdaContext @@
     pythonEnvironmentGetGraph @@
     pythonEnvironmentSetGraph
 
@@ -4102,7 +4109,7 @@ withLambda = def "withLambda" $
 withLet :: TTermDefinition (PyHelpers.PythonEnvironment -> Let -> (PyHelpers.PythonEnvironment -> a) -> a)
 withLet = def "withLet" $
   doc "Execute a computation with let context (adds let bindings to Graph)" $
-  Schemas.withLetContext @@
+  Environment.withLetContext @@
     pythonEnvironmentGetGraph @@
     pythonEnvironmentSetGraph @@
     pythonBindingMetadata
@@ -4116,7 +4123,7 @@ withLetInline = def "withLetInline" $
     "bindingNames" <~ (Lists.map ("b" ~> Core.bindingName (var "b")) (Core.letBindings $ var "lt")) $
     "inlineVars" <~ (Sets.fromList $ var "bindingNames") $
     "noMetadata" <~ ("tc" ~> "b" ~> (nothing :: TTerm (Maybe Term))) $
-    Schemas.withLetContext @@
+    Environment.withLetContext @@
       pythonEnvironmentGetGraph @@
       pythonEnvironmentSetGraph @@
       var "noMetadata" @@
@@ -4138,7 +4145,7 @@ withLetInline = def "withLetInline" $
 withTypeLambda :: TTermDefinition (PyHelpers.PythonEnvironment -> TypeLambda -> (PyHelpers.PythonEnvironment -> a) -> a)
 withTypeLambda = def "withTypeLambda" $
   doc "Execute a computation with type lambda context" $
-  Schemas.withTypeLambdaContext @@
+  Environment.withTypeLambdaContext @@
     pythonEnvironmentGetGraph @@
     pythonEnvironmentSetGraph
 

@@ -2,6 +2,77 @@
   "definitions": [
     {
       "type": {
+        "name": "hydra.coders.Adapter",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "A two-level bidirectional encoder which adapts types to types and terms to terms"}}}],
+            "body": {
+              "forall": {
+                "body": {
+                  "forall": {
+                    "body": {
+                      "forall": {
+                        "body": {
+                          "forall": {
+                            "body": {
+                              "record": [
+                                {
+                                  "name": "isLossy",
+                                  "type": {
+                                    "annotated": {
+                                      "annotation": [
+                                        {
+                                          "@key": "description",
+                                          "@value": {
+                                            "literal": {
+                                              "string": "Whether information may be lost in the course of this adaptation"}}}],
+                                      "body": {"literal": {"boolean": {}}}}}},
+                                {
+                                  "name": "source",
+                                  "type": {
+                                    "annotated": {
+                                      "annotation": [
+                                        {
+                                          "@key": "description",
+                                          "@value": {"literal": {"string": "The source type"}}}],
+                                      "body": {"variable": "t1"}}}},
+                                {
+                                  "name": "target",
+                                  "type": {
+                                    "annotated": {
+                                      "annotation": [
+                                        {
+                                          "@key": "description",
+                                          "@value": {"literal": {"string": "The target type"}}}],
+                                      "body": {"variable": "t2"}}}},
+                                {
+                                  "name": "coder",
+                                  "type": {
+                                    "annotated": {
+                                      "annotation": [
+                                        {
+                                          "@key": "description",
+                                          "@value": {
+                                            "literal": {
+                                              "string": "The coder for transforming instances of the source type to instances of the target type"}}}],
+                                      "body": {
+                                        "application": {
+                                          "argument": {"variable": "v2"},
+                                          "function": {
+                                            "application": {
+                                              "argument": {"variable": "v1"},
+                                              "function": {"variable": "hydra.coders.Coder"}}}}}}}}]},
+                            "parameter": "v2"}},
+                        "parameter": "v1"}},
+                    "parameter": "t2"}},
+                "parameter": "t1"}}}}}},
+    {
+      "type": {
         "name": "hydra.coders.AdapterContext",
         "type": {
           "annotated": {
@@ -56,7 +127,145 @@
                                       "function": {
                                         "application": {
                                           "argument": {"variable": "hydra.core.Type"},
-                                          "function": {"variable": "hydra.util.Adapter"}}}}}}}}}}}}}}]}}}}},
+                                          "function": {"variable": "hydra.coders.Adapter"}}}}}}}}}}}}}}]}}}}},
+    {
+      "type": {
+        "name": "hydra.coders.Bicoder",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "A two-level encoder and decoder, operating both at a type level and an instance (data) level"}}}],
+            "body": {
+              "forall": {
+                "body": {
+                  "forall": {
+                    "body": {
+                      "forall": {
+                        "body": {
+                          "forall": {
+                            "body": {
+                              "record": [
+                                {
+                                  "name": "encode",
+                                  "type": {
+                                    "annotated": {
+                                      "annotation": [
+                                        {
+                                          "@key": "description",
+                                          "@value": {"literal": {"string": "A function from source types to adapters"}}}],
+                                      "body": {
+                                        "function": {
+                                          "codomain": {
+                                            "application": {
+                                              "argument": {"variable": "v2"},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {"variable": "v1"},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"variable": "t2"},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {"variable": "t1"},
+                                                          "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
+                                          "domain": {"variable": "t1"}}}}}},
+                                {
+                                  "name": "decode",
+                                  "type": {
+                                    "annotated": {
+                                      "annotation": [
+                                        {
+                                          "@key": "description",
+                                          "@value": {"literal": {"string": "A function from target types to adapters"}}}],
+                                      "body": {
+                                        "function": {
+                                          "codomain": {
+                                            "application": {
+                                              "argument": {"variable": "v1"},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {"variable": "v2"},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"variable": "t1"},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {"variable": "t2"},
+                                                          "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
+                                          "domain": {"variable": "t2"}}}}}}]},
+                            "parameter": "v2"}},
+                        "parameter": "v1"}},
+                    "parameter": "t2"}},
+                "parameter": "t1"}}}}}},
+    {
+      "type": {
+        "name": "hydra.coders.Coder",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "An encoder and decoder; a bidirectional transformation between two types"}}}],
+            "body": {
+              "forall": {
+                "body": {
+                  "forall": {
+                    "body": {
+                      "record": [
+                        {
+                          "name": "encode",
+                          "type": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "description",
+                                  "@value": {
+                                    "literal": {
+                                      "string": "A function which encodes source values as target values in a given context"}}}],
+                              "body": {
+                                "function": {
+                                  "codomain": {
+                                    "function": {
+                                      "codomain": {
+                                        "either": {
+                                          "left": {
+                                            "application": {
+                                              "argument": {"variable": "hydra.errors.Error"},
+                                              "function": {"variable": "hydra.context.InContext"}}},
+                                          "right": {"variable": "v2"}}},
+                                      "domain": {"variable": "v1"}}},
+                                  "domain": {"variable": "hydra.context.Context"}}}}}},
+                        {
+                          "name": "decode",
+                          "type": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "description",
+                                  "@value": {
+                                    "literal": {
+                                      "string": "A function which decodes target values as source values in a given context"}}}],
+                              "body": {
+                                "function": {
+                                  "codomain": {
+                                    "function": {
+                                      "codomain": {
+                                        "either": {
+                                          "left": {
+                                            "application": {
+                                              "argument": {"variable": "hydra.errors.Error"},
+                                              "function": {"variable": "hydra.context.InContext"}}},
+                                          "right": {"variable": "v1"}}},
+                                      "domain": {"variable": "v2"}}},
+                                  "domain": {"variable": "hydra.context.Context"}}}}}}]},
+                    "parameter": "v2"}},
+                "parameter": "v1"}}}}}},
     {
       "type": {
         "name": "hydra.coders.CoderDirection",
@@ -231,7 +440,7 @@
                                 "function": {
                                   "application": {
                                     "argument": {"variable": "t"},
-                                    "function": {"variable": "hydra.util.Adapter"}}}}}}}}},
+                                    "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
                     "parameter": "v"}},
                 "parameter": "t"}}}}}},
     {
@@ -293,5 +502,5 @@
                 "domain": {"variable": "hydra.coders.AdapterContext"}}}}}}}],
   "description": ["Abstractions for paired transformations between languages"],
   "namespace": "hydra.coders",
-  "termDependencies": ["hydra.graph", "hydra.util", "hydra.variants"],
+  "termDependencies": ["hydra.context", "hydra.errors", "hydra.graph", "hydra.variants"],
   "typeDependencies": ["hydra.core"]}

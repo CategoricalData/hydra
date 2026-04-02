@@ -70,8 +70,13 @@ import qualified Hydra.Sources.Kernel.Terms.Reduction   as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect     as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Lexical      as Lexical
 
+import qualified Hydra.Sources.Kernel.Terms.Dependencies as Dependencies
 import qualified Hydra.Sources.Kernel.Terms.Rewriting   as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas     as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Environment  as Environment
+import qualified Hydra.Sources.Kernel.Terms.Resolution   as Resolution
+import qualified Hydra.Sources.Kernel.Terms.Scoping     as Scoping
+import qualified Hydra.Sources.Kernel.Terms.Strip       as Strip
+import qualified Hydra.Sources.Kernel.Terms.Variables   as Variables
 import qualified Hydra.Sources.Kernel.Terms.Show.Core   as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph  as ShowGraph
@@ -82,8 +87,8 @@ ns = Namespace "hydra.adapt"
 
 module_ :: Module
 module_ = Module ns elements
-    [Hoisting.ns, Inference.ns, Lexical.ns, Literals.ns, Names.ns, Reduction.ns, Reflect.ns, Rewriting.ns, Schemas.ns,
-      ShowCore.ns, ShowError.ns, ShowGraph.ns]
+    [Dependencies.ns, Hoisting.ns, Inference.ns, Lexical.ns, Literals.ns, Names.ns, Reduction.ns, Reflect.ns, Rewriting.ns,
+      Scoping.ns, Environment.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowGraph.ns, Strip.ns, Variables.ns]
     kernelTypesNamespaces $
     Just "Simple, one-way adapters for types and terms"
   where
@@ -159,11 +164,11 @@ adaptDataGraph = define "adaptDataGraph" $
   -- Applied per-binding to avoid O(n²) behavior when processing all bindings as one let.
   "transformTerm" <~ ("g" ~> "term" ~>
     "tx" <~ var "g" $
-    "t1" <~ Rewriting.unshadowVariables @@ (pushTypeAppsInward @@ var "term") $
-    "t2" <~ Rewriting.unshadowVariables @@ (Logic.ifElse (var "doExpand")
+    "t1" <~ Variables.unshadowVariables @@ (pushTypeAppsInward @@ var "term") $
+    "t2" <~ Variables.unshadowVariables @@ (Logic.ifElse (var "doExpand")
       (pushTypeAppsInward @@ (Reduction.etaExpandTermNew @@ var "tx" @@ var "t1"))
       (var "t1")) $
-    Rewriting.liftLambdaAboveLet @@ var "t2") $
+    Dependencies.liftLambdaAboveLet @@ var "t2") $
   -- Transform each binding's term individually, preserving name and type
   "transformBinding" <~ ("g" ~> "el" ~>
     Core.binding
@@ -174,12 +179,12 @@ adaptDataGraph = define "adaptDataGraph" $
   "prims0" <~ Graph.graphPrimitives (var "graph0") $
   "schemaTypes0" <~ Graph.graphSchemaTypes (var "graph0") $
   -- Adapt schema types
-  "schemaBindings" <~ Schemas.typesToElements @@ Maps.map ("ts" ~> Rewriting.typeSchemeToFType @@ var "ts") (var "schemaTypes0") $
+  "schemaBindings" <~ Environment.typesToElements @@ Maps.map ("ts" ~> Scoping.typeSchemeToFType @@ var "ts") (var "schemaTypes0") $
   "schemaResult" <<~ Logic.ifElse (Maps.null (var "schemaTypes0"))
     (right (Maps.empty :: TTerm (M.Map Name TypeScheme)))
-    ("tmap0" <<~ Eithers.bimap formatDecodingError ("x" ~> var "x") (Schemas.graphAsTypes @@ var "cx" @@ var "graph0" @@ var "schemaBindings") $
+    ("tmap0" <<~ Eithers.bimap formatDecodingError ("x" ~> var "x") (Environment.graphAsTypes @@ var "cx" @@ var "graph0" @@ var "schemaBindings") $
       "tmap1" <<~ adaptGraphSchema @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
-      right $ Maps.map ("t" ~> Schemas.typeToTypeScheme @@ var "t") (var "tmap1")) $
+      right $ Maps.map ("t" ~> Resolution.typeToTypeScheme @@ var "t") (var "tmap1")) $
   "adaptedSchemaTypes" <~ var "schemaResult" $
   -- Process each binding individually: transform, wrap in single-binding let,
   -- adapt, rewrite lambda domains, then extract. This avoids building one giant
@@ -190,7 +195,7 @@ adaptDataGraph = define "adaptDataGraph" $
     "adapted" <<~ adaptTerm @@ var "constraints" @@ var "litmap" @@ var "cx" @@ var "graph0" @@ var "wrapped" $
     Rewriting.rewriteTermM @@ (adaptLambdaDomains @@ var "constraints" @@ var "litmap") @@ var "adapted") $
   "adaptedTerms" <<~ Eithers.mapList (var "adaptBinding") (var "els0") $
-  "els1Raw" <~ Lists.concat (Lists.map Schemas.termAsBindings (var "adaptedTerms")) $
+  "els1Raw" <~ Lists.concat (Lists.map Environment.termAsBindings (var "adaptedTerms")) $
 
   -- Adapt nested let binding TypeSchemes within each top-level binding's term.
   -- These TypeSchemes may carry stale types from JSON modules (e.g. bigfloat→float64).
@@ -596,17 +601,17 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
     -- 0a: Strip type lambdas from bindings
     "stripped" <~ Lists.map ("b" ~>
         Core.binding (Core.bindingName $ var "b")
-          (Rewriting.stripTypeLambdas @@ (Core.bindingTerm $ var "b"))
+          (Strip.stripTypeLambdas @@ (Core.bindingTerm $ var "b"))
           (Core.bindingType $ var "b"))
         (var "bindings") $
     -- 0b: Unshadow variables
     "term0" <~ Core.termLet (Core.let_ (var "stripped") Core.termUnit) $
-    "unshadowed0" <~ Schemas.termAsBindings @@ (Rewriting.unshadowVariables @@ var "term0") $
+    "unshadowed0" <~ Environment.termAsBindings @@ (Variables.unshadowVariables @@ var "term0") $
     -- 1: Hoist case statements
     "hoisted" <~ Hoisting.hoistCaseStatementsInGraph @@ var "unshadowed0" $
     -- 2: Unshadow again after hoisting
     "term1" <~ Core.termLet (Core.let_ (var "hoisted") Core.termUnit) $
-    Schemas.termAsBindings @@ (Rewriting.unshadowVariables @@ var "term1")) $
+    Environment.termAsBindings @@ (Variables.unshadowVariables @@ var "term1")) $
 
   "hoistPoly" <~ ("bindings" ~>
     "letBefore" <~ Core.let_ (var "bindings") Core.termUnit $
@@ -729,7 +734,7 @@ schemaGraphToDefinitions = define "schemaGraphToDefinitions" $
     <> " then return a corresponding type definition for each element name.") $
   "constraints" ~> "graph" ~> "nameLists" ~> "cx" ~>
   "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
-  "tmap0" <<~ Eithers.bimap formatDecodingError ("x" ~> var "x") (Schemas.graphAsTypes @@ var "cx" @@ var "graph" @@ (Lexical.graphToBindings @@ var "graph")) $
+  "tmap0" <<~ Eithers.bimap formatDecodingError ("x" ~> var "x") (Environment.graphAsTypes @@ var "cx" @@ var "graph" @@ (Lexical.graphToBindings @@ var "graph")) $
   "tmap1" <<~ adaptGraphSchema @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
   "toDef" <~ ("pair" ~> Module.typeDefinition (Pairs.first $ var "pair") (Pairs.second $ var "pair")) $
   right $ pair
@@ -768,7 +773,7 @@ termAlternatives = define "termAlternatives" $
         Core.field (var "fname") $ Core.termMaybe $ Logic.ifElse (Equality.equal (var "ftname") (var "fname"))
           (just $ var "fterm")
           (nothing)) $
-      "rt" <<~ Eithers.bimap formatError ("x" ~> var "x") (Schemas.requireUnionType @@ var "cx" @@ var "graph" @@ var "tname") $
+      "rt" <<~ Eithers.bimap formatError ("x" ~> var "x") (Resolution.requireUnionType @@ var "cx" @@ var "graph" @@ var "tname") $
       right $ list [
         Core.termRecord $ Core.record (var "tname") (Lists.map (var "forFieldType") (var "rt"))],
     _Term_unit>>: constant $ right $ list [
@@ -818,13 +823,13 @@ composeCoders :: TTermDefinition (Coder a b -> Coder b c -> Coder a c)
 composeCoders = define "composeCoders" $
   doc "Compose two coders into a single coder" $
   "c1" ~> "c2" ~>
-  Util.coder
+  Coders.coder
     ("cx" ~> "a" ~>
-      "b1" <<~ Util.coderEncode (var "c1") @@ var "cx" @@ var "a" $
-      Util.coderEncode (var "c2") @@ var "cx" @@ var "b1")
+      "b1" <<~ Coders.coderEncode (var "c1") @@ var "cx" @@ var "a" $
+      Coders.coderEncode (var "c2") @@ var "cx" @@ var "b1")
     ("cx" ~> "c" ~>
-      "b2" <<~ Util.coderDecode (var "c2") @@ var "cx" @@ var "c" $
-      Util.coderDecode (var "c1") @@ var "cx" @@ var "b2")
+      "b2" <<~ Coders.coderDecode (var "c2") @@ var "cx" @@ var "c" $
+      Coders.coderDecode (var "c1") @@ var "cx" @@ var "b2")
 
 simpleLanguageAdapter :: TTermDefinition (Language -> Context -> Graph -> Type -> Prelude.Either String (Adapter Type Type Term Term))
 simpleLanguageAdapter = define "simpleLanguageAdapter" $
@@ -833,11 +838,11 @@ simpleLanguageAdapter = define "simpleLanguageAdapter" $
   "constraints" <~ Coders.languageConstraints (var "lang") $
   "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
   "adaptedType" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ var "typ" $
-  right $ Util.adapter
+  right $ Coders.adapter
     false
     (var "typ")
     (var "adaptedType")
-    (Util.coder
+    (Coders.coder
       ("cx" ~> "term" ~>
         Eithers.bimap ("_s" ~> Ctx.inContext (Error.errorOther $ Error.otherError $ var "_s") (var "cx")) ("_x" ~> var "_x")
           (adaptTerm @@ var "constraints" @@ var "litmap" @@ var "cx" @@ var "g" @@ var "term"))
@@ -935,7 +940,7 @@ prepareType :: TTermDefinition (Graph -> Type -> (Type, Term -> Term, S.Set Stri
 prepareType = define "prepareType" $
   doc "Prepare a type, substituting unsupported literal types" $
   lambda "cx" $ lambda "typ" $
-    (cases _Type (Rewriting.deannotateType @@ var "typ") (Just (prepareSame @@ var "typ")) [
+    (cases _Type (Strip.deannotateType @@ var "typ") (Just (prepareSame @@ var "typ")) [
       _Type_literal>>: ("at" ~> lets [
         "result">: prepareLiteralType @@ var "at",
         "rtyp">: Pairs.first (var "result"),

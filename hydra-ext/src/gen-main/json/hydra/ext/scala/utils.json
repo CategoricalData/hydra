@@ -23,7 +23,7 @@
                                 "argument": {
                                   "application": {
                                     "argument": {"variable": "t"},
-                                    "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                    "function": {"variable": "hydra.strip.deannotateType"}}},
                                 "function": {
                                   "function": {
                                     "elimination": {

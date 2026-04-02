@@ -7,7 +7,7 @@ module Hydra.Decode.Ast where
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Helpers as Helpers
+import qualified Hydra.Extract.Core as Core_
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
@@ -30,10 +30,10 @@ associativity cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "none", (\input -> Eithers.map (\t -> Ast.AssociativityNone) (Helpers.decodeUnit cx input))),
-                      (Core.Name "left", (\input -> Eithers.map (\t -> Ast.AssociativityLeft) (Helpers.decodeUnit cx input))),
-                      (Core.Name "right", (\input -> Eithers.map (\t -> Ast.AssociativityRight) (Helpers.decodeUnit cx input))),
-                      (Core.Name "both", (\input -> Eithers.map (\t -> Ast.AssociativityBoth) (Helpers.decodeUnit cx input)))]
+                      (Core.Name "none", (\input -> Eithers.map (\t -> Ast.AssociativityNone) (Core_.decodeUnit cx input))),
+                      (Core.Name "left", (\input -> Eithers.map (\t -> Ast.AssociativityLeft) (Core_.decodeUnit cx input))),
+                      (Core.Name "right", (\input -> Eithers.map (\t -> Ast.AssociativityRight) (Core_.decodeUnit cx input))),
+                      (Core.Name "both", (\input -> Eithers.map (\t -> Ast.AssociativityBoth) (Core_.decodeUnit cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
@@ -44,20 +44,20 @@ blockStyle :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.BlockS
 blockStyle cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "indent" (Helpers.decodeMaybe (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
+        let fieldMap = Core_.toFieldMap v0
+        in (Eithers.bind (Core_.requireField "indent" (Core_.decodeMaybe (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2))) fieldMap cx) (\field_indent -> Eithers.bind (Helpers.requireField "newlineBeforeContent" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw))) fieldMap cx) (\field_indent -> Eithers.bind (Core_.requireField "newlineBeforeContent" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralBoolean v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected boolean literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_newlineBeforeContent -> Eithers.bind (Helpers.requireField "newlineAfterContent" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_newlineBeforeContent -> Eithers.bind (Core_.requireField "newlineAfterContent" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralBoolean v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected boolean literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_newlineAfterContent -> Right (Ast.BlockStyle {
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_newlineAfterContent -> Right (Ast.BlockStyle {
           Ast.blockStyleIndent = field_indent,
           Ast.blockStyleNewlineBeforeContent = field_newlineBeforeContent,
           Ast.blockStyleNewlineAfterContent = field_newlineAfterContent})))))
@@ -67,8 +67,8 @@ bracketExpr :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.Brack
 bracketExpr cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "brackets" brackets fieldMap cx) (\field_brackets -> Eithers.bind (Helpers.requireField "enclosed" expr fieldMap cx) (\field_enclosed -> Eithers.bind (Helpers.requireField "style" blockStyle fieldMap cx) (\field_style -> Right (Ast.BracketExpr {
+        let fieldMap = Core_.toFieldMap v0
+        in (Eithers.bind (Core_.requireField "brackets" brackets fieldMap cx) (\field_brackets -> Eithers.bind (Core_.requireField "enclosed" expr fieldMap cx) (\field_enclosed -> Eithers.bind (Core_.requireField "style" blockStyle fieldMap cx) (\field_style -> Right (Ast.BracketExpr {
           Ast.bracketExprBrackets = field_brackets,
           Ast.bracketExprEnclosed = field_enclosed,
           Ast.bracketExprStyle = field_style})))))
@@ -78,8 +78,8 @@ brackets :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.Brackets
 brackets cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "open" symbol fieldMap cx) (\field_open -> Eithers.bind (Helpers.requireField "close" symbol fieldMap cx) (\field_close -> Right (Ast.Brackets {
+        let fieldMap = Core_.toFieldMap v0
+        in (Eithers.bind (Core_.requireField "open" symbol fieldMap cx) (\field_open -> Eithers.bind (Core_.requireField "close" symbol fieldMap cx) (\field_close -> Right (Ast.Brackets {
           Ast.bracketsOpen = field_open,
           Ast.bracketsClose = field_close}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -113,12 +113,12 @@ indentStyle cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "allLines", (\input -> Eithers.map (\t -> Ast.IndentStyleAllLines t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
+                      (Core.Name "allLines", (\input -> Eithers.map (\t -> Ast.IndentStyleAllLines t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
                         Core.TermLiteral v1 -> case v1 of
                           Core.LiteralString v2 -> Right v2
                           _ -> Left (Errors.DecodingError "expected string literal")
                         _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx input)))),
-                      (Core.Name "subsequentLines", (\input -> Eithers.map (\t -> Ast.IndentStyleSubsequentLines t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
+                      (Core.Name "subsequentLines", (\input -> Eithers.map (\t -> Ast.IndentStyleSubsequentLines t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
                         Core.TermLiteral v1 -> case v1 of
                           Core.LiteralString v2 -> Right v2
                           _ -> Left (Errors.DecodingError "expected string literal")
@@ -133,8 +133,8 @@ indentedExpression :: Graph.Graph -> Core.Term -> Either Errors.DecodingError As
 indentedExpression cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "style" indentStyle fieldMap cx) (\field_style -> Eithers.bind (Helpers.requireField "expr" expr fieldMap cx) (\field_expr -> Right (Ast.IndentedExpression {
+        let fieldMap = Core_.toFieldMap v0
+        in (Eithers.bind (Core_.requireField "style" indentStyle fieldMap cx) (\field_style -> Eithers.bind (Core_.requireField "expr" expr fieldMap cx) (\field_expr -> Right (Ast.IndentedExpression {
           Ast.indentedExpressionStyle = field_style,
           Ast.indentedExpressionExpr = field_expr}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -143,8 +143,8 @@ op :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.Op
 op cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "symbol" symbol fieldMap cx) (\field_symbol -> Eithers.bind (Helpers.requireField "padding" padding fieldMap cx) (\field_padding -> Eithers.bind (Helpers.requireField "precedence" precedence fieldMap cx) (\field_precedence -> Eithers.bind (Helpers.requireField "associativity" associativity fieldMap cx) (\field_associativity -> Right (Ast.Op {
+        let fieldMap = Core_.toFieldMap v0
+        in (Eithers.bind (Core_.requireField "symbol" symbol fieldMap cx) (\field_symbol -> Eithers.bind (Core_.requireField "padding" padding fieldMap cx) (\field_padding -> Eithers.bind (Core_.requireField "precedence" precedence fieldMap cx) (\field_precedence -> Eithers.bind (Core_.requireField "associativity" associativity fieldMap cx) (\field_associativity -> Right (Ast.Op {
           Ast.opSymbol = field_symbol,
           Ast.opPadding = field_padding,
           Ast.opPrecedence = field_precedence,
@@ -155,8 +155,8 @@ opExpr :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.OpExpr
 opExpr cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "op" op fieldMap cx) (\field_op -> Eithers.bind (Helpers.requireField "lhs" expr fieldMap cx) (\field_lhs -> Eithers.bind (Helpers.requireField "rhs" expr fieldMap cx) (\field_rhs -> Right (Ast.OpExpr {
+        let fieldMap = Core_.toFieldMap v0
+        in (Eithers.bind (Core_.requireField "op" op fieldMap cx) (\field_op -> Eithers.bind (Core_.requireField "lhs" expr fieldMap cx) (\field_lhs -> Eithers.bind (Core_.requireField "rhs" expr fieldMap cx) (\field_rhs -> Right (Ast.OpExpr {
           Ast.opExprOp = field_op,
           Ast.opExprLhs = field_lhs,
           Ast.opExprRhs = field_rhs})))))
@@ -166,8 +166,8 @@ padding :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.Padding
 padding cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "left" ws fieldMap cx) (\field_left -> Eithers.bind (Helpers.requireField "right" ws fieldMap cx) (\field_right -> Right (Ast.Padding {
+        let fieldMap = Core_.toFieldMap v0
+        in (Eithers.bind (Core_.requireField "left" ws fieldMap cx) (\field_left -> Eithers.bind (Core_.requireField "right" ws fieldMap cx) (\field_right -> Right (Ast.Padding {
           Ast.paddingLeft = field_left,
           Ast.paddingRight = field_right}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -175,21 +175,21 @@ padding cx raw =
 precedence :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.Precedence
 precedence cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
-      Core.TermWrap v0 -> Eithers.map (\b -> Ast.Precedence b) ((\raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
+      Core.TermWrap v0 -> Eithers.map (\b -> Ast.Precedence b) ((\raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
         Core.TermLiteral v1 -> case v1 of
           Core.LiteralInteger v2 -> case v2 of
             Core.IntegerValueInt32 v3 -> Right v3
             _ -> Left (Errors.DecodingError "expected int32 value")
           _ -> Left (Errors.DecodingError "expected int32 literal")
-        _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw2)) (Core.wrappedTermBody v0))
+        _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (Lexical.stripAndDereferenceTermEither cx raw)
 
 seqExpr :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.SeqExpr
 seqExpr cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "op" op fieldMap cx) (\field_op -> Eithers.bind (Helpers.requireField "elements" (Helpers.decodeList expr) fieldMap cx) (\field_elements -> Right (Ast.SeqExpr {
+        let fieldMap = Core_.toFieldMap v0
+        in (Eithers.bind (Core_.requireField "op" op fieldMap cx) (\field_op -> Eithers.bind (Core_.requireField "elements" (Core_.decodeList expr) fieldMap cx) (\field_elements -> Right (Ast.SeqExpr {
           Ast.seqExprOp = field_op,
           Ast.seqExprElements = field_elements}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -197,11 +197,11 @@ seqExpr cx raw =
 symbol :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.Symbol
 symbol cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
-      Core.TermWrap v0 -> Eithers.map (\b -> Ast.Symbol b) ((\raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
+      Core.TermWrap v0 -> Eithers.map (\b -> Ast.Symbol b) ((\raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
         Core.TermLiteral v1 -> case v1 of
           Core.LiteralString v2 -> Right v2
           _ -> Left (Errors.DecodingError "expected string literal")
-        _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw2)) (Core.wrappedTermBody v0))
+        _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (Lexical.stripAndDereferenceTermEither cx raw)
 
 ws :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.Ws
@@ -213,15 +213,15 @@ ws cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "none", (\input -> Eithers.map (\t -> Ast.WsNone) (Helpers.decodeUnit cx input))),
-                      (Core.Name "space", (\input -> Eithers.map (\t -> Ast.WsSpace) (Helpers.decodeUnit cx input))),
-                      (Core.Name "break", (\input -> Eithers.map (\t -> Ast.WsBreak) (Helpers.decodeUnit cx input))),
-                      (Core.Name "breakAndIndent", (\input -> Eithers.map (\t -> Ast.WsBreakAndIndent t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
+                      (Core.Name "none", (\input -> Eithers.map (\t -> Ast.WsNone) (Core_.decodeUnit cx input))),
+                      (Core.Name "space", (\input -> Eithers.map (\t -> Ast.WsSpace) (Core_.decodeUnit cx input))),
+                      (Core.Name "break", (\input -> Eithers.map (\t -> Ast.WsBreak) (Core_.decodeUnit cx input))),
+                      (Core.Name "breakAndIndent", (\input -> Eithers.map (\t -> Ast.WsBreakAndIndent t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
                         Core.TermLiteral v1 -> case v1 of
                           Core.LiteralString v2 -> Right v2
                           _ -> Left (Errors.DecodingError "expected string literal")
                         _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx input)))),
-                      (Core.Name "doubleBreak", (\input -> Eithers.map (\t -> Ast.WsDoubleBreak) (Helpers.decodeUnit cx input)))]
+                      (Core.Name "doubleBreak", (\input -> Eithers.map (\t -> Ast.WsDoubleBreak) (Core_.decodeUnit cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),

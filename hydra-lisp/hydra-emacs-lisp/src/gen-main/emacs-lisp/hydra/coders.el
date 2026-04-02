@@ -1,14 +1,22 @@
 (require 'cl-lib)
 
+(require 'hydra.context)
+
 (require 'hydra.core)
+
+(require 'hydra.errors)
 
 (require 'hydra.graph)
 
-(require 'hydra.util)
-
 (require 'hydra.variants)
 
+(cl-defstruct hydra_coders_adapter is_lossy source target coder)
+
 (cl-defstruct hydra_coders_adapter_context graph language adapters)
+
+(cl-defstruct hydra_coders_bicoder encode decode)
+
+(cl-defstruct hydra_coders_coder encode decode)
 
 (defvar hydra_coders_coder_direction-variants (list :encode :decode))
 

@@ -73,7 +73,7 @@ public interface Coder {
   }
 
   static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression> encodeApplication(hydra.ext.lisp.syntax.Dialect dialect, T0 cx, T1 g, hydra.core.Term rawFun, hydra.core.Term rawArg) {
-    hydra.core.Term dFun = hydra.Rewriting.deannotateTerm(rawFun);
+    hydra.core.Term dFun = hydra.Strip.deannotateTerm(rawFun);
     java.util.function.Function<hydra.core.Term, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>> enc = (java.util.function.Function<hydra.core.Term, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (v1 -> hydra.ext.lisp.Coder.<T0, T1, T2>encodeApplication_enc(
       cx,
       dialect,
@@ -97,7 +97,7 @@ public interface Coder {
       @Override
       public hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression> visit(hydra.core.Term.Application app2) {
         hydra.core.Term midFun = (app2).value.function;
-        hydra.core.Term dMidFun = hydra.Rewriting.deannotateTerm(midFun);
+        hydra.core.Term dMidFun = hydra.Strip.deannotateTerm(midFun);
         Boolean isLazy2 = hydra.lib.logic.Or.apply(
           hydra.ext.lisp.Coder.isPrimitiveRef(
             "hydra.lib.eithers.fromLeft",
@@ -132,7 +132,7 @@ public interface Coder {
             @Override
             public hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression> visit(hydra.core.Term.Application app3) {
               hydra.core.Term innerFun = (app3).value.function;
-              hydra.core.Term dInnerFun = hydra.Rewriting.deannotateTerm(innerFun);
+              hydra.core.Term dInnerFun = hydra.Strip.deannotateTerm(innerFun);
               hydra.core.Term innerArg = (app3).value.argument;
               return hydra.lib.logic.IfElse.lazy(
                 hydra.ext.lisp.Coder.isPrimitiveRef(
@@ -413,7 +413,7 @@ public interface Coder {
             hydra.util.Lazy<hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.util.ConsList<hydra.core.Name>>>> adjList = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
               (java.util.function.Function<hydra.core.Binding, hydra.util.Pair<hydra.core.Name, hydra.util.ConsList<hydra.core.Name>>>) (b -> (hydra.util.Pair<hydra.core.Name, hydra.util.ConsList<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Name, hydra.util.ConsList<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Name, hydra.util.ConsList<hydra.core.Name>>((b).name, hydra.lib.sets.ToList.apply(hydra.lib.sets.Intersection.apply(
                 allNames.get(),
-                hydra.Rewriting.freeVariablesInTerm((b).term))))))),
+                hydra.Variables.freeVariablesInTerm((b).term))))))),
               bindings));
             hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Binding>> nameToBinding = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
               (java.util.function.Function<hydra.core.Binding, hydra.util.Pair<hydra.core.Name, hydra.core.Binding>>) (b -> (hydra.util.Pair<hydra.core.Name, hydra.core.Binding>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Binding>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Binding>((b).name, b)))),
@@ -437,7 +437,7 @@ public interface Coder {
               String bname = hydra.Formatting.convertCaseCamelOrUnderscoreToLowerSnake(hydra.Formatting.sanitizeWithUnderscores(
                 hydra.ext.lisp.Language.lispReservedWords(),
                 (b).name.value));
-              Boolean isLambda = hydra.Rewriting.deannotateTerm((b).term).accept(new hydra.core.Term.PartialVisitor<>() {
+              Boolean isLambda = hydra.Strip.deannotateTerm((b).term).accept(new hydra.core.Term.PartialVisitor<>() {
                 @Override
                 public Boolean otherwise(hydra.core.Term instance) {
                   return false;
@@ -460,7 +460,7 @@ public interface Coder {
               });
               hydra.util.Lazy<Boolean> isSelfRef = new hydra.util.Lazy<>(() -> hydra.lib.sets.Member.apply(
                 (b).name,
-                hydra.Rewriting.freeVariablesInTerm((b).term)));
+                hydra.Variables.freeVariablesInTerm((b).term)));
               return hydra.lib.eithers.Bind.apply(
                 hydra.ext.lisp.Coder.<T0, T1, T2>encodeTerm(
                   dialect,
@@ -526,7 +526,7 @@ public interface Coder {
                 acc,
                 hydra.lib.logic.Not.apply(hydra.lib.sets.Null.apply(hydra.lib.sets.Intersection.apply(
                   allBindingNames.get(),
-                  hydra.Rewriting.freeVariablesInTerm((b).term))))))),
+                  hydra.Variables.freeVariablesInTerm((b).term))))))),
               false,
               bindings));
             hydra.util.Lazy<Boolean> hasSelfRef = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
@@ -534,7 +534,7 @@ public interface Coder {
                 acc,
                 hydra.lib.sets.Member.apply(
                   (b).name,
-                  hydra.Rewriting.freeVariablesInTerm((b).term))))),
+                  hydra.Variables.freeVariablesInTerm((b).term))))),
               false,
               bindings));
             Boolean isRecursive = hasSelfRef.get();
@@ -834,7 +834,7 @@ public interface Coder {
       public hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression> visit(hydra.core.Term.Union inj) {
         hydra.core.Field field = (inj).value.field;
         hydra.core.Term fterm = (field).term;
-        hydra.core.Term dterm = hydra.Rewriting.deannotateTerm(fterm);
+        hydra.core.Term dterm = hydra.Strip.deannotateTerm(fterm);
         String fname = (field).name.value;
         hydra.util.Lazy<Boolean> isUnit = new hydra.util.Lazy<>(() -> (dterm).accept(new hydra.core.Term.PartialVisitor<>() {
           @Override
@@ -916,7 +916,7 @@ public interface Coder {
 
   static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments> encodeTermDefinition(hydra.ext.lisp.syntax.Dialect dialect, T0 cx, T1 g, hydra.module.TermDefinition tdef) {
     hydra.core.Term term = (tdef).term;
-    hydra.core.Term dterm = hydra.Rewriting.deannotateTerm(term);
+    hydra.core.Term dterm = hydra.Strip.deannotateTerm(term);
     hydra.core.Name name = (tdef).name;
     String lname = hydra.ext.lisp.Coder.qualifiedSnakeName(name);
     return (dterm).accept(new hydra.core.Term.PartialVisitor<>() {
@@ -961,7 +961,7 @@ public interface Coder {
   }
 
   static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.lisp.syntax.TypeSpecifier> encodeType(T0 cx, T1 g, hydra.core.Type t) {
-    hydra.core.Type typ = hydra.Rewriting.deannotateType(t);
+    hydra.core.Type typ = hydra.Strip.deannotateType(t);
     return (typ).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Either<T2, hydra.ext.lisp.syntax.TypeSpecifier> otherwise(hydra.core.Type instance) {
@@ -1147,7 +1147,7 @@ public interface Coder {
 
   static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments> encodeTypeDefinition(T0 cx, T1 g, hydra.module.TypeDefinition tdef) {
     hydra.core.Type typ = (tdef).type;
-    hydra.core.Type dtyp = hydra.Rewriting.deannotateType(typ);
+    hydra.core.Type dtyp = hydra.Strip.deannotateType(typ);
     hydra.core.Name name = (tdef).name;
     String lname = hydra.ext.lisp.Coder.qualifiedSnakeName(name);
     return hydra.ext.lisp.Coder.<T2>encodeTypeBody(
@@ -1336,7 +1336,7 @@ public interface Coder {
   static hydra.util.ConsList<hydra.ext.lisp.syntax.ImportDeclaration> moduleImports(hydra.module.Namespace focusNs, hydra.util.ConsList<hydra.module.Definition> defs) {
     hydra.util.Lazy<hydra.util.ConsList<hydra.module.Namespace>> depNss = new hydra.util.Lazy<>(() -> hydra.lib.sets.ToList.apply(hydra.lib.sets.Delete.apply(
       focusNs,
-      hydra.Schemas.definitionDependencyNamespaces(defs))));
+      hydra.Analysis.definitionDependencyNamespaces(defs))));
     return hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.module.Namespace, hydra.ext.lisp.syntax.ImportDeclaration>) (ns -> new hydra.ext.lisp.syntax.ImportDeclaration(new hydra.ext.lisp.syntax.NamespaceName((ns).value), new hydra.ext.lisp.syntax.ImportSpec.All())),
       depNss.get());
@@ -1344,11 +1344,11 @@ public interface Coder {
 
   static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.lisp.syntax.Program> moduleToLisp(hydra.ext.lisp.syntax.Dialect dialect, hydra.module.Module mod, hydra.util.ConsList<hydra.module.Definition> defs0, T0 cx, T1 g) {
     hydra.util.ConsList<hydra.module.Definition> defs = hydra.CoderUtils.reorderDefs(defs0);
-    hydra.util.Pair<hydra.util.ConsList<hydra.module.TypeDefinition>, hydra.util.ConsList<hydra.module.TermDefinition>> partitioned = hydra.Schemas.partitionDefinitions(defs);
+    hydra.util.Pair<hydra.util.ConsList<hydra.module.TypeDefinition>, hydra.util.ConsList<hydra.module.TermDefinition>> partitioned = hydra.Environment.partitionDefinitions(defs);
     hydra.util.Lazy<hydra.util.ConsList<hydra.module.TypeDefinition>> allTypeDefs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(partitioned));
     hydra.util.Lazy<hydra.util.ConsList<hydra.module.TermDefinition>> termDefs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(partitioned));
     hydra.util.Lazy<hydra.util.ConsList<hydra.module.TypeDefinition>> typeDefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
-      (java.util.function.Function<hydra.module.TypeDefinition, Boolean>) (td -> hydra.Schemas.isNominalType((td).type)),
+      (java.util.function.Function<hydra.module.TypeDefinition, Boolean>) (td -> hydra.Predicates.isNominalType((td).type)),
       allTypeDefs.get()));
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.MapList.apply(

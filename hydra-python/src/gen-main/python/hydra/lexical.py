@@ -22,8 +22,8 @@ import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
-import hydra.rewriting
 import hydra.show.core
+import hydra.strip
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
@@ -112,7 +112,7 @@ def fields_of(t: hydra.core.Type) -> frozenlist[hydra.core.FieldType]:
     while True:
         @lru_cache(1)
         def stripped() -> hydra.core.Type:
-            return hydra.rewriting.deannotate_type(t)
+            return hydra.strip.deannotate_type(t)
         match stripped():
             case hydra.core.TypeForall(value=forall_type):
                 t = forall_type.body
@@ -157,7 +157,7 @@ def require_element(cx: hydra.context.Context, graph: hydra.graph.Graph, name: h
 def match_union(cx: hydra.context.Context, graph: hydra.graph.Graph, tname: hydra.core.Name, pairs: frozenlist[tuple[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.context.InContext[hydra.errors.Error], T0]]]], term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], T0]:
     @lru_cache(1)
     def stripped() -> hydra.core.Term:
-        return hydra.rewriting.deannotate_and_detype_term(term)
+        return hydra.strip.deannotate_and_detype_term(term)
     @lru_cache(1)
     def mapping() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.context.InContext[hydra.errors.Error], T0]]]:
         return hydra.lib.maps.from_list(pairs)
@@ -185,7 +185,7 @@ def match_enum(cx: hydra.context.Context, graph: hydra.graph.Graph, tname: hydra
 def match_record(cx: hydra.context.Context, graph: T0, decode: Callable[[FrozenDict[hydra.core.Name, hydra.core.Term]], Either[hydra.context.InContext[hydra.errors.Error], T1]], term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], T1]:
     @lru_cache(1)
     def stripped() -> hydra.core.Term:
-        return hydra.rewriting.deannotate_and_detype_term(term)
+        return hydra.strip.deannotate_and_detype_term(term)
     match stripped():
         case hydra.core.TermRecord(value=record):
             return decode(hydra.lib.maps.from_list(hydra.lib.lists.map((lambda field: (field.name, field.term)), record.fields)))
@@ -208,7 +208,7 @@ def resolve_term(graph: hydra.graph.Graph, name: hydra.core.Name) -> Maybe[hydra
     def recurse(term: hydra.core.Term) -> Maybe[hydra.core.Term]:
         @lru_cache(1)
         def stripped() -> hydra.core.Term:
-            return hydra.rewriting.deannotate_term(term)
+            return hydra.strip.deannotate_term(term)
         match stripped():
             case hydra.core.TermVariable(value=name_):
                 return resolve_term(graph, name_)
@@ -223,7 +223,7 @@ def require_term(cx: hydra.context.Context, graph: hydra.graph.Graph, name: hydr
 def strip_and_dereference_term(cx: hydra.context.Context, graph: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
     @lru_cache(1)
     def stripped() -> hydra.core.Term:
-        return hydra.rewriting.deannotate_and_detype_term(term)
+        return hydra.strip.deannotate_and_detype_term(term)
     match stripped():
         case hydra.core.TermVariable(value=v):
             return hydra.lib.eithers.bind(require_term(cx, graph, v), (lambda t: strip_and_dereference_term(cx, graph, t)))
@@ -236,7 +236,7 @@ def strip_and_dereference_term_either(graph: hydra.graph.Graph, term: hydra.core
 
     @lru_cache(1)
     def stripped() -> hydra.core.Term:
-        return hydra.rewriting.deannotate_and_detype_term(term)
+        return hydra.strip.deannotate_and_detype_term(term)
     match stripped():
         case hydra.core.TermVariable(value=v):
             return hydra.lib.eithers.either((lambda left_: Left(left_)), (lambda binding: strip_and_dereference_term_either(graph, binding.term)), dereference_variable(graph, v))

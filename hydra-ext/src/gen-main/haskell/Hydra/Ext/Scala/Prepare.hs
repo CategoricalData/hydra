@@ -8,6 +8,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
+import qualified Hydra.Strip as Strip
 import qualified Hydra.Rewriting as Rewriting
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -77,7 +78,7 @@ prepareIntegerType it =
 -- | Prepare a type for Scala code generation, substituting unsupported types
 prepareType :: t0 -> Core.Type -> (Core.Type, ((Core.Term -> Core.Term), (S.Set String)))
 prepareType cx typ =
-    case (Rewriting.deannotateType typ) of
+    case (Strip.deannotateType typ) of
       Core.TypeLiteral v0 ->
         let result = prepareLiteralType v0
             rtyp = Pairs.first result

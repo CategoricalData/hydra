@@ -1,5 +1,6 @@
 package hydra.util;
 
+import hydra.coders.Coder;
 import hydra.HydraTestBase;
 import org.junit.jupiter.api.Test;
 

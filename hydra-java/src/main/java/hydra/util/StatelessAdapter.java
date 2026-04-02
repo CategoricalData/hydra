@@ -1,5 +1,7 @@
 package hydra.util;
 
+import hydra.coders.Adapter;
+import hydra.coders.Coder;
 import java.util.function.Function;
 
 /**

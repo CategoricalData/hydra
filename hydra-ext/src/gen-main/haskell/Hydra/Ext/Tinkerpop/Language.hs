@@ -10,7 +10,7 @@ import qualified Hydra.Ext.Org.Apache.Tinkerpop.Features as Features
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Strip as Strip
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -62,9 +62,9 @@ tinkerpopLanguage name features extras =
                     (Maybes.pure Variants.TypeVariantWrap)])
           typePredicate =
                   \typ ->
-                    let dt = Rewriting.deannotateType typ
+                    let dt = Strip.deannotateType typ
                     in case dt of
-                      Core.TypeList v0 -> case (Rewriting.deannotateType v0) of
+                      Core.TypeList v0 -> case (Strip.deannotateType v0) of
                         Core.TypeLiteral v1 -> case v1 of
                           Core.LiteralTypeBoolean -> Features.dataTypeFeaturesSupportsBooleanArrayValues vpFeatures
                           Core.LiteralTypeFloat v2 -> case v2 of
@@ -82,7 +82,7 @@ tinkerpopLanguage name features extras =
                       Core.TypeLiteral _ -> True
                       Core.TypeMap v0 -> Features.extraFeaturesSupportsMapKey extras (Core.mapTypeKeys v0)
                       Core.TypeWrap _ -> True
-                      Core.TypeMaybe v0 -> case (Rewriting.deannotateType v0) of
+                      Core.TypeMaybe v0 -> case (Strip.deannotateType v0) of
                         Core.TypeLiteral _ -> True
                         _ -> False
                       _ -> True

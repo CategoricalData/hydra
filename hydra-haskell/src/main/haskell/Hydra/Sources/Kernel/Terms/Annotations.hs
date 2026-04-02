@@ -65,8 +65,8 @@ import qualified Data.Maybe                  as Y
 import qualified Hydra.Sources.Kernel.Terms.Constants    as Constants
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical      as Lexical
-import qualified Hydra.Sources.Kernel.Terms.Rewriting    as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Strip        as Strip
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors  as ShowError
 import qualified Hydra.Sources.Decode.Core            as DecodeCore
 import qualified Hydra.Sources.Encode.Core            as EncodeCore
@@ -79,7 +79,7 @@ ns = Namespace "hydra.annotations"
 module_ :: Module
 module_ = Module ns elements
     [Constants.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, ExtractCore.ns, Lexical.ns,
-      Rewriting.ns, ShowCore.ns, ShowError.ns]
+      Strip.ns, ShowCore.ns, ShowError.ns]
     kernelTypesNamespaces $
     Just "Utilities for reading and writing type and term annotations"
   where
@@ -304,7 +304,7 @@ normalizeTermAnnotations = define "normalizeTermAnnotations" $
   doc "Normalize term annotations" $
   "term" ~>
   "anns" <~ termAnnotationInternal @@ var "term" $
-  "stripped" <~ Rewriting.deannotateTerm @@ var "term" $
+  "stripped" <~ Strip.deannotateTerm @@ var "term" $
   Logic.ifElse (Maps.null (var "anns"))
     (var "stripped")
     (Core.termAnnotated (Core.annotatedTerm (var "stripped") (var "anns")))
@@ -314,7 +314,7 @@ normalizeTypeAnnotations = define "normalizeTypeAnnotations" $
   doc "Normalize type annotations" $
   "typ" ~>
   "anns" <~ typeAnnotationInternal @@ var "typ" $
-  "stripped" <~ Rewriting.deannotateType @@ var "typ" $
+  "stripped" <~ Strip.deannotateType @@ var "typ" $
   Logic.ifElse (Maps.null (var "anns"))
     (var "stripped")
     (Core.typeAnnotated (Core.annotatedType (var "stripped") (var "anns")))
@@ -352,7 +352,7 @@ setTermAnnotation :: TTermDefinition (Name -> Maybe Term -> Term -> Term)
 setTermAnnotation = define "setTermAnnotation" $
   doc "Set term annotation" $
   "key" ~> "val" ~> "term" ~>
-  "term'" <~ Rewriting.deannotateTerm @@ var "term" $
+  "term'" <~ Strip.deannotateTerm @@ var "term" $
   "anns" <~ setAnnotation @@ var "key" @@ var "val" @@ (termAnnotationInternal @@ var "term") $
   Logic.ifElse (Maps.null (var "anns"))
     (var "term'")
@@ -374,7 +374,7 @@ setTypeAnnotation :: TTermDefinition (Name -> Maybe Term -> Type -> Type)
 setTypeAnnotation = define "setTypeAnnotation" $
   doc "Set type annotation" $
   "key" ~> "val" ~> "typ" ~>
-  "typ'" <~ Rewriting.deannotateType @@ var "typ" $
+  "typ'" <~ Strip.deannotateType @@ var "typ" $
   "anns" <~ setAnnotation @@ var "key" @@ var "val" @@ (typeAnnotationInternal @@ var "typ") $
   Logic.ifElse (Maps.null (var "anns"))
     (var "typ'")

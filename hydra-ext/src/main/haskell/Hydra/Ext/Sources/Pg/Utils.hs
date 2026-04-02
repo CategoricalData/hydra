@@ -64,13 +64,11 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -102,7 +100,7 @@ ns = Namespace "hydra.pg.utils"
 
 module_ :: Module
 module_ = Module ns elements
-    [ExtractCore.ns, PgCoder.ns, Schemas.ns]
+    [ExtractCore.ns, PgCoder.ns]
     (PgModel.ns:PgMapping.ns:JsonModel.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Utility functions for property graph operations"
   where
@@ -142,12 +140,12 @@ examplePgSchema :: TTermDefinition (PGM.Schema Graph () String)
 examplePgSchema = define "examplePgSchema" $
   doc "Example property graph schema with string values" $
   record PGM._Schema [
-    PGM._Schema_vertexIdTypes>>: Util.coder (constant $ constant $ right unit) (constant $ constant $ right MetaTypes.unit),
-    PGM._Schema_vertexIds>>: Util.coder ("cx" ~> "t" ~> expString @@ var "cx" @@ var "t") ("_cx" ~> "s" ~> right (Core.termLiteral $ Core.literalString $ var "s")),
-    PGM._Schema_edgeIdTypes>>: Util.coder (constant $ constant $ right unit) (constant $ constant $ right MetaTypes.unit),
-    PGM._Schema_edgeIds>>: Util.coder ("cx" ~> "t" ~> expString @@ var "cx" @@ var "t") ("_cx" ~> "s" ~> right (Core.termLiteral $ Core.literalString $ var "s")),
-    PGM._Schema_propertyTypes>>: Util.coder (constant $ constant $ right unit) (constant $ constant $ right MetaTypes.unit),
-    PGM._Schema_propertyValues>>: Util.coder ("cx" ~> "t" ~> expString @@ var "cx" @@ var "t") ("_cx" ~> "s" ~> right (Core.termLiteral $ Core.literalString $ var "s")),
+    PGM._Schema_vertexIdTypes>>: Coders.coder (constant $ constant $ right unit) (constant $ constant $ right MetaTypes.unit),
+    PGM._Schema_vertexIds>>: Coders.coder ("cx" ~> "t" ~> expString @@ var "cx" @@ var "t") ("_cx" ~> "s" ~> right (Core.termLiteral $ Core.literalString $ var "s")),
+    PGM._Schema_edgeIdTypes>>: Coders.coder (constant $ constant $ right unit) (constant $ constant $ right MetaTypes.unit),
+    PGM._Schema_edgeIds>>: Coders.coder ("cx" ~> "t" ~> expString @@ var "cx" @@ var "t") ("_cx" ~> "s" ~> right (Core.termLiteral $ Core.literalString $ var "s")),
+    PGM._Schema_propertyTypes>>: Coders.coder (constant $ constant $ right unit) (constant $ constant $ right MetaTypes.unit),
+    PGM._Schema_propertyValues>>: Coders.coder ("cx" ~> "t" ~> expString @@ var "cx" @@ var "t") ("_cx" ~> "s" ~> right (Core.termLiteral $ Core.literalString $ var "s")),
     PGM._Schema_annotations>>: defaultTinkerpopAnnotations,
     PGM._Schema_defaultVertexId>>: string "defaultVertexId",
     PGM._Schema_defaultEdgeId>>: string "defaultEdgeId"]
@@ -184,7 +182,7 @@ typeApplicationTermToPropertyGraph = define "typeApplicationTermToPropertyGraph"
                   (project PG._ElementTree PG._ElementTree_self @@ var "t")
                   (Lists.concat (Lists.map (var "flattenTree") (project PG._ElementTree PG._ElementTree_dependencies @@ var "t")))]
               $ var "flattenTree" @@ var "tree")
-            (Util.coderEncode (Util.adapterCoder $ var "adapter") @@ var "cx'" @@ var "term")))
+            (Coders.coderEncode (Coders.adapterCoder $ var "adapter") @@ var "cx'" @@ var "term")))
 
 -- | Get all elements from a lazy graph
 lazyGraphToElements :: TTermDefinition (PG.LazyGraph v -> [PG.Element v])
@@ -202,7 +200,7 @@ pgElementToJson = define "pgElementToJson" $
   "schema" ~> "el" ~> "cx" ~>
     match PG._Element Nothing [
       PG._Element_vertex>>: "vertex" ~>
-        Eithers.bind (Util.coderDecode (project PGM._Schema PGM._Schema_vertexIds @@ var "schema") @@ var "cx" @@ (project PG._Vertex PG._Vertex_id @@ var "vertex"))
+        Eithers.bind (Coders.coderDecode (project PGM._Schema PGM._Schema_vertexIds @@ var "schema") @@ var "cx" @@ (project PG._Vertex PG._Vertex_id @@ var "vertex"))
           ("term" ~> lets [
             "labelJson">: Json.valueString (unwrap PG._VertexLabel @@ (project PG._Vertex PG._Vertex_label @@ var "vertex"))] $
             Eithers.map
@@ -213,9 +211,9 @@ pgElementToJson = define "pgElementToJson" $
                   var "propsJson"]))
               (propsToJson @@ var "schema" @@ var "cx" @@ (project PG._Vertex PG._Vertex_properties @@ var "vertex"))),
       PG._Element_edge>>: "edge" ~>
-        Eithers.bind (Util.coderDecode (project PGM._Schema PGM._Schema_edgeIds @@ var "schema") @@ var "cx" @@ (project PG._Edge PG._Edge_id @@ var "edge"))
-          ("term" ~> Eithers.bind (Util.coderDecode (project PGM._Schema PGM._Schema_vertexIds @@ var "schema") @@ var "cx" @@ (project PG._Edge PG._Edge_out @@ var "edge"))
-            ("termOut" ~> Eithers.bind (Util.coderDecode (project PGM._Schema PGM._Schema_vertexIds @@ var "schema") @@ var "cx" @@ (project PG._Edge PG._Edge_in @@ var "edge"))
+        Eithers.bind (Coders.coderDecode (project PGM._Schema PGM._Schema_edgeIds @@ var "schema") @@ var "cx" @@ (project PG._Edge PG._Edge_id @@ var "edge"))
+          ("term" ~> Eithers.bind (Coders.coderDecode (project PGM._Schema PGM._Schema_vertexIds @@ var "schema") @@ var "cx" @@ (project PG._Edge PG._Edge_out @@ var "edge"))
+            ("termOut" ~> Eithers.bind (Coders.coderDecode (project PGM._Schema PGM._Schema_vertexIds @@ var "schema") @@ var "cx" @@ (project PG._Edge PG._Edge_in @@ var "edge"))
               ("termIn" ~> lets [
                 "labelJson">: Json.valueString (unwrap PG._EdgeLabel @@ (project PG._Edge PG._Edge_label @@ var "edge"))] $
                 Eithers.map
@@ -247,6 +245,6 @@ propsToJson = "schema" ~> "cx" ~> "pairs" ~>
         ("pair" ~> lets [
           "key">: Pairs.first $ var "pair",
           "v">: Pairs.second $ var "pair"] $
-          Eithers.bind (Util.coderDecode (project PGM._Schema PGM._Schema_propertyValues @@ var "schema") @@ var "cx" @@ var "v")
+          Eithers.bind (Coders.coderDecode (project PGM._Schema PGM._Schema_propertyValues @@ var "schema") @@ var "cx" @@ var "v")
             ("term" ~> right (pair (unwrap PG._PropertyKey @@ var "key") (Json.valueString $ ShowCore.term @@ var "term"))))
         (Maps.toList $ var "pairs")))

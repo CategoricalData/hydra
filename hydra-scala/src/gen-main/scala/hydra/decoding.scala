@@ -84,7 +84,7 @@ def decodeEitherType(et: hydra.core.EitherType): hydra.core.Term =
   {
   lazy val leftDecoder: hydra.core.Term = hydra.decoding.decodeType(et.left)
   lazy val rightDecoder: hydra.core.Term = hydra.decoding.decodeType(et.right)
-  hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.extract.helpers.decodeEither"),
+  hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.extract.core.decodeEither"),
      leftDecoder)), rightDecoder))
 }
 
@@ -95,7 +95,7 @@ def decodeForallType(ft: hydra.core.ForallType): hydra.core.Term =
 def decodeListType(elemType: hydra.core.Type): hydra.core.Term =
   {
   lazy val elemDecoder: hydra.core.Term = hydra.decoding.decodeType(elemType)
-  hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.extract.helpers.decodeList"), elemDecoder))
+  hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.extract.core.decodeList"), elemDecoder))
 }
 
 def decodeLiteralType(lt: hydra.core.LiteralType): hydra.core.Term =
@@ -350,14 +350,14 @@ def decodeMapType(mt: hydra.core.MapType): hydra.core.Term =
   {
   lazy val keyDecoder: hydra.core.Term = hydra.decoding.decodeType(mt.keys)
   lazy val valDecoder: hydra.core.Term = hydra.decoding.decodeType(mt.values)
-  hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.extract.helpers.decodeMap"),
+  hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.extract.core.decodeMap"),
      keyDecoder)), valDecoder))
 }
 
 def decodeMaybeType(elemType: hydra.core.Type): hydra.core.Term =
   {
   lazy val elemDecoder: hydra.core.Term = hydra.decoding.decodeType(elemType)
-  hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.extract.helpers.decodeMaybe"), elemDecoder))
+  hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.extract.core.decodeMaybe"), elemDecoder))
 }
 
 def decodeModule(cx: hydra.context.Context)(graph: hydra.graph.Graph)(mod: hydra.module.Module): Either[hydra.context.InContext[hydra.errors.Error],
@@ -384,7 +384,7 @@ def decodeModule(cx: hydra.context.Context)(graph: hydra.graph.Graph)(mod: hydra
       Right(Some(hydra.module.Module(hydra.decoding.decodeNamespace(mod.namespace), hydra.lib.lists.map[hydra.core.Binding,
          hydra.module.Definition]((b: hydra.core.Binding) =>
         hydra.module.Definition.term(hydra.module.TermDefinition(b.name, (b.term), (b.`type`))))(decodedBindings),
-           hydra.lib.lists.concat2[hydra.module.Namespace](Seq("hydra.extract.helpers", "hydra.lexical",
+           hydra.lib.lists.concat2[hydra.module.Namespace](Seq("hydra.extract.core", "hydra.lexical",
            "hydra.rewriting"))(allDecodedDeps), Seq(mod.namespace, "hydra.util"), Some(hydra.lib.strings.cat(Seq("Term decoders for ",
            (mod.namespace)))))))
     }
@@ -398,7 +398,7 @@ def decodePairType(pt: hydra.core.PairType): hydra.core.Term =
   {
   lazy val firstDecoder: hydra.core.Term = hydra.decoding.decodeType(pt.first)
   lazy val secondDecoder: hydra.core.Term = hydra.decoding.decodeType(pt.second)
-  hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.extract.helpers.decodePair"),
+  hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.extract.core.decodePair"),
      firstDecoder)), secondDecoder))
 }
 
@@ -407,7 +407,7 @@ def decodeRecordType(rt: Seq[hydra.core.FieldType]): hydra.core.Term = hydra.dec
 def decodeRecordTypeImpl(tname: hydra.core.Name)(rt: Seq[hydra.core.FieldType]): hydra.core.Term =
   {
   def decodeFieldTerm(ft: hydra.core.FieldType): hydra.core.Term =
-    hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.extract.helpers.requireField"),
+    hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.extract.core.requireField"),
        hydra.core.Term.literal(hydra.core.Literal.string(ft.name)))), hydra.decoding.decodeType(ft.`type`))),
        hydra.core.Term.variable("fieldMap"))), hydra.core.Term.variable("cx")))
   def localVarName(ft: hydra.core.FieldType): hydra.core.Name = hydra.lib.strings.cat(Seq("field_", (ft.name)))
@@ -427,7 +427,7 @@ def decodeRecordTypeImpl(tname: hydra.core.Name)(rt: Seq[hydra.core.FieldType]):
      Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
      hydra.core.Term.literal(hydra.core.Literal.string("expected record"))))))), Seq(hydra.core.Field("record",
      hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("record", None, hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("fieldMap",
-     hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.extract.helpers.toFieldMap"),
+     hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.extract.core.toFieldMap"),
      hydra.core.Term.variable("record"))), None)), decodeBody))))))))))), hydra.core.Term.variable("stripped")))))))),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lexical.stripAndDereferenceTermEither"),
      hydra.core.Term.variable("cx"))), hydra.core.Term.variable("raw")))))))))))
@@ -438,7 +438,7 @@ def decodeRecordTypeNamed(ename: hydra.core.Name)(rt: Seq[hydra.core.FieldType])
 def decodeSetType(elemType: hydra.core.Type): hydra.core.Term =
   {
   lazy val elemDecoder: hydra.core.Term = hydra.decoding.decodeType(elemType)
-  hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.extract.helpers.decodeSet"), elemDecoder))
+  hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.extract.core.decodeSet"), elemDecoder))
 }
 
 def decodeType(typ: hydra.core.Type): hydra.core.Term =
@@ -523,7 +523,7 @@ def decodeUnionTypeNamed(ename: hydra.core.Name)(rt: Seq[hydra.core.FieldType]):
      hydra.core.Term.variable("cx"))), hydra.core.Term.variable("raw")))))))))))
 }
 
-lazy val decodeUnitType: hydra.core.Term = hydra.core.Term.variable("hydra.extract.helpers.decodeUnit")
+lazy val decodeUnitType: hydra.core.Term = hydra.core.Term.variable("hydra.extract.core.decodeUnit")
 
 def decodeWrappedType(wt: hydra.core.Type): hydra.core.Term = hydra.decoding.decodeWrappedTypeNamed("unknown")(wt)
 
@@ -656,7 +656,7 @@ def filterTypeBindings(cx: hydra.context.Context)(graph: hydra.graph.Graph)(bind
 
 def isDecodableBinding(cx: hydra.context.Context)(graph: hydra.graph.Graph)(b: hydra.core.Binding): Either[hydra.context.InContext[hydra.errors.Error],
    Option[hydra.core.Binding]] =
-  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Boolean, Option[hydra.core.Binding]](hydra.schemas.isSerializableByName(cx)(graph)(b.name))((serializable: Boolean) =>
+  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Boolean, Option[hydra.core.Binding]](hydra.predicates.isSerializableByName(cx)(graph)(b.name))((serializable: Boolean) =>
   Right(hydra.lib.logic.ifElse[Option[hydra.core.Binding]](serializable)(Some(b))(None)))
 
 def prependForallDecoders(baseType: hydra.core.Type)(typ: hydra.core.Type): hydra.core.Type =

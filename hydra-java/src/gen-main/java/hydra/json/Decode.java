@@ -261,7 +261,7 @@ public interface Decode {
   }
 
   static hydra.util.Either<String, hydra.core.Term> fromJson(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> types, hydra.core.Name tname, hydra.core.Type typ, hydra.json.model.Value value) {
-    hydra.core.Type stripped = hydra.Rewriting.deannotateType(typ);
+    hydra.core.Type stripped = hydra.Strip.deannotateType(typ);
     return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Either<String, hydra.core.Term> otherwise(hydra.core.Type instance) {

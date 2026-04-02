@@ -8,7 +8,7 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Strip as Strip
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -62,7 +62,7 @@ typeScriptLanguage =
           Variants.TypeVariantUnion]
     types =
         \x -> case x of
-          Core.TypeMap v0 -> case (Rewriting.deannotateType (Core.mapTypeValues v0)) of
+          Core.TypeMap v0 -> case (Strip.deannotateType (Core.mapTypeValues v0)) of
             Core.TypeMaybe _ -> False
             _ -> True
           _ -> True

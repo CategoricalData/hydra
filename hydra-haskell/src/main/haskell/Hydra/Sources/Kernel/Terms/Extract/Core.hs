@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 module Hydra.Sources.Kernel.Terms.Extract.Core where
 
 -- Standard imports for kernel terms modules (slightly modified for conflict avoidance)
@@ -57,8 +59,11 @@ import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Errors       as Error
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 
-import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
+import qualified Hydra.Dsl.Meta.DeepCore as DC
+import           Hydra.Dsl.Meta.DeepCore ((@@@))
+
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
 
 formatError :: TTerm (InContext Error -> String)
@@ -74,7 +79,7 @@ ns = Namespace "hydra.extract.core"
 
 module_ :: Module
 module_ = Module ns elements
-    [Lexical.ns, Rewriting.ns, ShowCore.ns, ShowError.ns]
+    [Lexical.ns, Strip.ns, ShowCore.ns, ShowError.ns]
     kernelTypesNamespaces $
     Just ("Extraction and validation for hydra.core types")
   where
@@ -89,6 +94,14 @@ module_ = Module ns elements
      toDefinition booleanLiteral,
      toDefinition caseField,
      toDefinition cases,
+     toDefinition decodeEither,
+     toDefinition decodeList,
+     toDefinition decodeMap,
+     toDefinition decodeMaybe,
+     toDefinition decodePair,
+     toDefinition decodeSet,
+     toDefinition decodeUnit,
+     toDefinition decodeWrapped,
      toDefinition field,
      toDefinition float32,
      toDefinition float32Value,
@@ -127,12 +140,14 @@ module_ = Module ns elements
      toDefinition pair,
      toDefinition record,
      toDefinition recordType,
+     toDefinition requireField,
      toDefinition set,
      toDefinition setOf,
      toDefinition setType,
      toDefinition string,
      toDefinition stringLiteral,
      toDefinition termRecord,
+     toDefinition toFieldMap,
      toDefinition uint16,
      toDefinition uint16Value,
      toDefinition uint32,
@@ -318,7 +333,7 @@ eitherType :: TTermDefinition (Context -> Type -> Prelude.Either (InContext Erro
 eitherType = define "eitherType" $
   doc "Extract the left and right types from an either type" $
   "cx" ~> "typ" ~>
-  "stripped" <~ Rewriting.deannotateType @@ var "typ" $
+  "stripped" <~ Strip.deannotateType @@ var "typ" $
   Phantoms.cases _Type (var "stripped")
     (Just (unexpected (var "cx") (Phantoms.string "either type") (ShowCore.type_ @@ var "typ"))) [
     _Type_either>>: "et" ~> right (var "et")]
@@ -327,7 +342,7 @@ functionType :: TTermDefinition (Context -> Type -> Prelude.Either (InContext Er
 functionType = define "functionType" $
   doc "Extract a function type from a type" $
   "cx" ~> "typ" ~>
-  "stripped" <~ Rewriting.deannotateType @@ var "typ" $
+  "stripped" <~ Strip.deannotateType @@ var "typ" $
   Phantoms.cases _Type (var "stripped")
     (Just (unexpected (var "cx") (Phantoms.string "function type") (ShowCore.type_ @@ var "typ"))) [
     _Type_function>>: "ft" ~> right (var "ft")]
@@ -491,7 +506,7 @@ listType :: TTermDefinition (Context -> Type -> Prelude.Either (InContext Error)
 listType = define "listType" $
   doc "Extract the element type from a list type" $
   "cx" ~> "typ" ~>
-  "stripped" <~ Rewriting.deannotateType @@ var "typ" $
+  "stripped" <~ Strip.deannotateType @@ var "typ" $
   Phantoms.cases _Type (var "stripped")
     (Just (unexpected (var "cx") (Phantoms.string "list type") (ShowCore.type_ @@ var "typ"))) [
     _Type_list>>: "t" ~> right (var "t")]
@@ -526,7 +541,7 @@ mapType :: TTermDefinition (Context -> Type -> Prelude.Either (InContext Error) 
 mapType = define "mapType" $
   doc "Extract the key and value types from a map type" $
   "cx" ~> "typ" ~>
-  "stripped" <~ Rewriting.deannotateType @@ var "typ" $
+  "stripped" <~ Strip.deannotateType @@ var "typ" $
   Phantoms.cases _Type (var "stripped")
     (Just (unexpected (var "cx") (Phantoms.string "map type") (ShowCore.type_ @@ var "typ"))) [
     _Type_map>>: "mt" ~> right (var "mt")]
@@ -561,7 +576,7 @@ maybeType :: TTermDefinition (Context -> Type -> Prelude.Either (InContext Error
 maybeType = define "maybeType" $
   doc "Extract the base type from an optional type" $
   "cx" ~> "typ" ~>
-  "stripped" <~ Rewriting.deannotateType @@ var "typ" $
+  "stripped" <~ Strip.deannotateType @@ var "typ" $
   Phantoms.cases _Type (var "stripped")
     (Just (unexpected (var "cx") (Phantoms.string "maybe type") (ShowCore.type_ @@ var "typ"))) [
     _Type_maybe>>: "t" ~> right (var "t")]
@@ -597,7 +612,7 @@ recordType :: TTermDefinition (Context -> Name -> Type -> Prelude.Either (InCont
 recordType = define "recordType" $
   doc "Extract the field types from a record type" $
   "cx" ~> "ename" ~> "typ" ~>
-  "stripped" <~ Rewriting.deannotateType @@ var "typ" $
+  "stripped" <~ Strip.deannotateType @@ var "typ" $
   Phantoms.cases _Type (var "stripped")
     (Just (unexpected (var "cx") (Phantoms.string "record type") (ShowCore.type_ @@ var "typ"))) [
     _Type_record>>: "fields" ~> right (var "fields")]
@@ -622,7 +637,7 @@ setType :: TTermDefinition (Context -> Type -> Prelude.Either (InContext Error) 
 setType = define "setType" $
   doc "Extract the element type from a set type" $
   "cx" ~> "typ" ~>
-  "stripped" <~ Rewriting.deannotateType @@ var "typ" $
+  "stripped" <~ Strip.deannotateType @@ var "typ" $
   Phantoms.cases _Type (var "stripped")
     (Just (unexpected (var "cx") (Phantoms.string "set type") (ShowCore.type_ @@ var "typ"))) [
     _Type_set>>: "t" ~> right (var "t")]
@@ -715,7 +730,7 @@ unionType :: TTermDefinition (Context -> Name -> Type -> Prelude.Either (InConte
 unionType = define "unionType" $
   doc "Extract the field types from a union type" $
   "cx" ~> "ename" ~> "typ" ~>
-  "stripped" <~ Rewriting.deannotateType @@ var "typ" $
+  "stripped" <~ Strip.deannotateType @@ var "typ" $
   Phantoms.cases _Type (var "stripped")
     (Just (unexpected (var "cx") (Phantoms.string "union type") (ShowCore.type_ @@ var "typ"))) [
     _Type_union>>: "fields" ~> right (var "fields")]
@@ -757,7 +772,146 @@ wrappedType :: TTermDefinition (Context -> Name -> Type -> Prelude.Either (InCon
 wrappedType = define "wrappedType" $
   doc "Extract the wrapped type from a wrapper type" $
   "cx" ~> "ename" ~> "typ" ~>
-  "stripped" <~ Rewriting.deannotateType @@ var "typ" $
+  "stripped" <~ Strip.deannotateType @@ var "typ" $
   Phantoms.cases _Type (var "stripped")
     (Just (unexpected (var "cx") (Phantoms.string "wrapped type") (ShowCore.type_ @@ var "typ"))) [
     _Type_wrap>>: "innerType" ~> right (var "innerType")]
+
+--------------------------------------------------------------------------------
+-- Helper functions (merged from hydra.extract.helpers)
+--------------------------------------------------------------------------------
+
+-- | Helper to convert Either String Term to Either DecodingError Term
+stripWithDecodingError :: TTerm Graph -> TTerm Term -> TTerm (Either DecodingError Term)
+stripWithDecodingError g term = Eithers.bimap
+  (unaryFunction Error.decodingError)
+  ("x" ~> var "x")
+  (Lexical.stripAndDereferenceTermEither @@ g @@ term)
+
+-- | Decode an Either value using the provided left and right decoders
+decodeEither :: TTermDefinition ((Graph -> Term -> Either DecodingError a) -> (Graph -> Term -> Either DecodingError b) -> Graph -> Term -> Either DecodingError (Either a b))
+decodeEither = define "decodeEither" $
+  doc "Decode an Either value using the provided left and right decoders" $
+  "leftDecoder" ~> "rightDecoder" ~> "g" ~> "term" ~>
+  Eithers.bind
+    (stripWithDecodingError (var "g") (var "term"))
+    ("stripped" ~> Phantoms.cases _Term (var "stripped")
+      (Just $ left $ Error.decodingError $ Phantoms.string "expected either value") [
+      _Term_either>>: "e" ~>
+        Eithers.either_
+          -- Left case: decode the left value, then wrap result in Left
+          ("lv" ~> Eithers.map ("x" ~> left (var "x")) (var "leftDecoder" @@ var "g" @@ var "lv"))
+          -- Right case: decode the right value, then wrap result in Right
+          ("rv" ~> Eithers.map ("x" ~> right (var "x")) (var "rightDecoder" @@ var "g" @@ var "rv"))
+          (var "e")])
+
+-- | Decode a list of elements using the provided element decoder
+decodeList :: TTermDefinition ((Graph -> Term -> Either DecodingError a) -> Graph -> Term -> Either DecodingError [a])
+decodeList = define "decodeList" $
+  doc "Decode a list of elements using the provided element decoder" $
+  "elemDecoder" ~> "g" ~> "term" ~>
+  Eithers.bind
+    (stripWithDecodingError (var "g") (var "term"))
+    ("stripped" ~> Phantoms.cases _Term (var "stripped")
+      (Just $ left $ Error.decodingError $ Phantoms.string "expected list") [
+      _Term_list>>: "els" ~> Eithers.mapList (var "elemDecoder" @@ var "g") $ var "els"])
+
+-- | Decode a Map using the provided key and value decoders
+decodeMap :: TTermDefinition ((Graph -> Term -> Either DecodingError k) -> (Graph -> Term -> Either DecodingError v) -> Graph -> Term -> Either DecodingError (M.Map k v))
+decodeMap = define "decodeMap" $
+  doc "Decode a Map using the provided key and value decoders" $
+  "keyDecoder" ~> "valDecoder" ~> "g" ~> "term" ~>
+  Eithers.bind
+    (stripWithDecodingError (var "g") (var "term"))
+    ("stripped" ~> Phantoms.cases _Term (var "stripped")
+      (Just $ left $ Error.decodingError $ Phantoms.string "expected map") [
+      _Term_map>>: "m" ~>
+        Eithers.map (unaryFunction Maps.fromList)
+          (Eithers.mapList
+            ("kv" ~>
+              Eithers.bind (var "keyDecoder" @@ var "g" @@ (Pairs.first $ var "kv"))
+                ("k" ~> Eithers.map ("v" ~> Phantoms.pair (var "k") (var "v"))
+                  (var "valDecoder" @@ var "g" @@ (Pairs.second $ var "kv"))))
+            (Maps.toList $ var "m"))])
+
+-- | Decode a Maybe value using the provided element decoder
+decodeMaybe :: TTermDefinition ((Graph -> Term -> Either DecodingError a) -> Graph -> Term -> Either DecodingError (Maybe a))
+decodeMaybe = define "decodeMaybe" $
+  doc "Decode a Maybe value using the provided element decoder" $
+  "elemDecoder" ~> "g" ~> "term" ~>
+  Eithers.bind
+    (stripWithDecodingError (var "g") (var "term"))
+    ("stripped" ~> Phantoms.cases _Term (var "stripped")
+      (Just $ left $ Error.decodingError $ Phantoms.string "expected optional value") [
+      _Term_maybe>>: "opt" ~> Eithers.mapMaybe (var "elemDecoder" @@ var "g") $ var "opt"])
+
+-- | Decode a Pair using the provided first and second decoders
+decodePair :: TTermDefinition ((Graph -> Term -> Either DecodingError a) -> (Graph -> Term -> Either DecodingError b) -> Graph -> Term -> Either DecodingError (a, b))
+decodePair = define "decodePair" $
+  doc "Decode a Pair using the provided first and second decoders" $
+  "firstDecoder" ~> "secondDecoder" ~> "g" ~> "term" ~>
+  Eithers.bind
+    (stripWithDecodingError (var "g") (var "term"))
+    ("stripped" ~> Phantoms.cases _Term (var "stripped")
+      (Just $ left $ Error.decodingError $ Phantoms.string "expected pair") [
+      _Term_pair>>: "p" ~>
+        Eithers.bind (var "firstDecoder" @@ var "g" @@ (Pairs.first $ var "p"))
+          ("f" ~> Eithers.map ("s" ~> Phantoms.pair (var "f") (var "s"))
+            (var "secondDecoder" @@ var "g" @@ (Pairs.second $ var "p")))])
+
+-- | Decode a Set using the provided element decoder
+decodeSet :: TTermDefinition ((Graph -> Term -> Either DecodingError a) -> Graph -> Term -> Either DecodingError (S.Set a))
+decodeSet = define "decodeSet" $
+  doc "Decode a Set using the provided element decoder" $
+  "elemDecoder" ~> "g" ~> "term" ~>
+  Eithers.bind
+    (stripWithDecodingError (var "g") (var "term"))
+    ("stripped" ~> Phantoms.cases _Term (var "stripped")
+      (Just $ left $ Error.decodingError $ Phantoms.string "expected set") [
+      _Term_set>>: "s" ~>
+        Eithers.map (unaryFunction Sets.fromList)
+          (Eithers.mapList (var "elemDecoder" @@ var "g") (Sets.toList $ var "s"))])
+
+-- | Decode a unit value
+decodeUnit :: TTermDefinition (Graph -> Term -> Either DecodingError ())
+decodeUnit = define "decodeUnit" $
+  doc "Decode a unit value" $
+  "g" ~> "term" ~>
+  Eithers.bind
+    (stripWithDecodingError (var "g") (var "term"))
+    ("stripped" ~> Phantoms.cases _Term (var "stripped")
+      (Just $ left $ Error.decodingError $ Phantoms.string "expected a unit value") [
+      _Term_unit>>: constant $ right Phantoms.unit])
+
+-- | Decode a wrapped value using the provided body decoder
+decodeWrapped :: TTermDefinition ((Graph -> Term -> Either DecodingError a) -> Graph -> Term -> Either DecodingError a)
+decodeWrapped = define "decodeWrapped" $
+  doc "Decode a wrapped value using the provided body decoder" $
+  "bodyDecoder" ~> "g" ~> "term" ~>
+  Eithers.bind
+    (stripWithDecodingError (var "g") (var "term"))
+    ("stripped" ~> Phantoms.cases _Term (var "stripped")
+      (Just $ left $ Error.decodingError $ Phantoms.string "expected wrapped value") [
+      _Term_wrap>>: "wt" ~>
+        var "bodyDecoder" @@ var "g" @@ (Core.wrappedTermBody (var "wt"))])
+
+-- | Require a field from a field map and decode it using the provided decoder
+-- Returns Left with a "missing field" error if the field is not present
+requireField :: TTermDefinition (String -> (Graph -> Term -> Either DecodingError a) -> M.Map Name Term -> Graph -> Either DecodingError a)
+requireField = define "requireField" $
+  doc "Require a field from a record's field map and decode it" $
+  "fieldName" ~> "decoder" ~> "fieldMap" ~> "g" ~>
+  Maybes.maybe
+    (left $ Error.decodingError $ Strings.cat $ Phantoms.list [Phantoms.string "missing field ", var "fieldName", Phantoms.string " in record"])
+    ("fieldTerm" ~> var "decoder" @@ var "g" @@ var "fieldTerm")
+    (Maps.lookup (Phantoms.wrap _Name $ var "fieldName") $ var "fieldMap")
+
+-- | Convert a Record to a Map from field Name to Term
+toFieldMap :: TTermDefinition (Record -> M.Map Name Term)
+toFieldMap = define "toFieldMap" $
+  doc "Convert a Record's fields to a Map from Name to Term" $
+  "record" ~>
+  Maps.fromList $
+    Lists.map
+      ("f" ~> Phantoms.pair (Core.fieldName $ var "f") (Core.fieldTerm $ var "f"))
+      (Core.recordFields $ var "record")

@@ -96,12 +96,17 @@ import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Formatting   as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Lexical      as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Reflect      as Reflect
+import qualified Hydra.Sources.Kernel.Terms.Dependencies  as Dependencies
 import qualified Hydra.Sources.Kernel.Terms.Rewriting    as Rewriting
+import qualified Hydra.Sources.Kernel.Terms.Scoping      as Scoping
 
-import qualified Hydra.Sources.Kernel.Terms.Schemas      as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Names        as Names
+import qualified Hydra.Sources.Kernel.Terms.Resolution   as Resolution
+import qualified Hydra.Sources.Kernel.Terms.Strip        as Strip
+import qualified Hydra.Sources.Kernel.Terms.Variables    as Variables
 import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors  as ShowError
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta    as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants    as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
 
 
@@ -110,8 +115,8 @@ ns = Namespace "hydra.checking"
 
 module_ :: Module
 module_ = Module ns elements
-    [Constants.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Reflect.ns, Rewriting.ns,
-      Schemas.ns, ShowCore.ns, ShowError.ns, ShowMeta.ns, Substitution.ns]
+    [Constants.ns, Dependencies.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Reflect.ns, Rewriting.ns,
+      Scoping.ns, Names.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowVariants.ns, Strip.ns, Substitution.ns, Variables.ns]
     kernelTypesNamespaces $
     Just "Type checking and type reconstruction (type-of) for the results of Hydra unification and inference"
   where
@@ -216,7 +221,7 @@ checkForUnboundTypeVariables = define "checkForUnboundTypeVariables" $
       Eithers.bind (Eithers.mapList (var "recurse") (Rewriting.subterms @@ var "term"))
         ("_" ~> right unit)) $
     "check" <~ ("typ" ~>
-      "freevars" <~ Rewriting.freeVariablesInType @@ var "typ" $
+      "freevars" <~ Variables.freeVariablesInType @@ var "typ" $
       "badvars" <~ Sets.difference (Sets.difference (var "freevars") (var "vars")) (var "svars") $
       Logic.ifElse (Sets.null $ var "badvars")
         (right unit)
@@ -254,7 +259,7 @@ checkNominalApplication :: TTermDefinition (Context -> Graph -> Name -> [Type] -
 checkNominalApplication = define "checkNominalApplication" $
   doc "Check that a nominal type is applied to the correct number of type arguments (Either version)" $
   "cx" ~> "tx" ~> "tname" ~> "typeArgs" ~>
-  "result" <<~ Schemas.requireSchemaType @@ var "cx" @@ (Graph.graphSchemaTypes $ var "tx") @@ var "tname" $
+  "result" <<~ Resolution.requireSchemaType @@ var "cx" @@ (Graph.graphSchemaTypes $ var "tx") @@ var "tname" $
   "schemaType" <~ Pairs.first (var "result") $
   "cx2" <~ Pairs.second (var "result") $
   "vars" <~ Core.typeSchemeVariables (var "schemaType") $
@@ -293,7 +298,7 @@ checkTypeSubst = define "checkTypeSubst" $
   "s" <~ Typing.unTypeSubst (var "subst") $
   "vars" <~ Sets.fromList (Maps.keys $ var "s") $
   "suspectVars" <~ Sets.intersection (var "vars") (Sets.fromList $ Maps.keys $ Graph.graphSchemaTypes $ var "tx") $
-  "isNominal" <~ ("ts" ~> cases _Type (Rewriting.deannotateType @@ (Core.typeSchemeType $ var "ts"))
+  "isNominal" <~ ("ts" ~> cases _Type (Strip.deannotateType @@ (Core.typeSchemeType $ var "ts"))
     (Just false) [
     _Type_record>>: constant true,
     _Type_union>>: constant true,
@@ -320,7 +325,7 @@ checkTypeVariables = define "checkTypeVariables" $
 toFContext :: TTermDefinition (Graph -> M.Map Name Type)
 toFContext = define "toFContext" $
   doc "Get the bound types from a graph as a type environment" $
-  "cx" ~> Maps.map (Rewriting.typeSchemeToFType) $ Graph.graphBoundTypes $ var "cx"
+  "cx" ~> Maps.map (Scoping.typeSchemeToFType) $ Graph.graphBoundTypes $ var "cx"
 
 typeListsEffectivelyEqual :: TTermDefinition (Graph -> [Type] -> [Type] -> Bool)
 typeListsEffectivelyEqual = define "typeListsEffectivelyEqual" $
@@ -345,7 +350,7 @@ normalizeTypeFreeVars = define "normalizeTypeFreeVars" $
           (var "acc")
           (Maps.insert (var "v") (Core.name $ Strings.cat2 (string "_tv") (Literals.showInt32 $ Maps.size $ var "acc")) (var "acc"))]) $
   "subst" <~ Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "collectVars" @@ Maps.empty @@ var "typ" $
-  Rewriting.substituteTypeVariables @@ var "subst" @@ var "typ"
+  Variables.substituteTypeVariables @@ var "subst" @@ var "typ"
 
 typesAllEffectivelyEqual :: TTermDefinition (Graph -> [Type] -> Bool)
 typesAllEffectivelyEqual = define "typesAllEffectivelyEqual" $
@@ -354,7 +359,7 @@ typesAllEffectivelyEqual = define "typesAllEffectivelyEqual" $
   "tx" ~> "tlist" ~>
   "types" <~ (Graph.graphSchemaTypes $ var "tx") $
   "containsFreeVar" <~ ("t" ~>
-    "allVars" <~ Rewriting.freeVariablesInTypeSimple @@ var "t" $
+    "allVars" <~ Variables.freeVariablesInTypeSimple @@ var "t" $
     "schemaNames" <~ Sets.fromList (Maps.keys $ var "types") $
     Logic.not $ Sets.null $ Sets.difference (var "allVars") (var "schemaNames")) $
   "anyContainsFreeVar" <~ Lists.foldl ("acc" ~> "t" ~> Logic.or (var "acc") (var "containsFreeVar" @@ var "t")) false (var "tlist") $
@@ -362,7 +367,7 @@ typesAllEffectivelyEqual = define "typesAllEffectivelyEqual" $
     true
     (Logic.ifElse (allEqual @@ (Lists.map ("t" ~> normalizeTypeFreeVars @@ var "t") (var "tlist")))
       true
-      (allEqual @@ (Lists.map ("t" ~> normalizeTypeFreeVars @@ (Rewriting.deannotateTypeRecursive @@ (Rewriting.replaceTypedefs @@ var "types" @@ var "t"))) (var "tlist"))))
+      (allEqual @@ (Lists.map ("t" ~> normalizeTypeFreeVars @@ (Strip.deannotateTypeRecursive @@ (Dependencies.replaceTypedefs @@ var "types" @@ var "t"))) (var "tlist"))))
 
 -- | Check if a type contains any type variable that's in scope (from graphTypeVariables)
 containsInScopeTypeVars :: TTermDefinition (Graph -> Type -> Bool)
@@ -370,7 +375,7 @@ containsInScopeTypeVars = define "containsInScopeTypeVars" $
   doc "Check if a type contains any type variable from the current scope" $
   "tx" ~> "t" ~>
   "vars" <~ Graph.graphTypeVariables (var "tx") $
-  "freeVars" <~ Rewriting.freeVariablesInTypeSimple @@ var "t" $
+  "freeVars" <~ Variables.freeVariablesInTypeSimple @@ var "t" $
   Logic.not $ Sets.null $ Sets.intersection (var "vars") (var "freeVars")
 
 typesEffectivelyEqual :: TTermDefinition (Graph -> Type -> Type -> Bool)
@@ -382,8 +387,8 @@ typesEffectivelyEqual = define "typesEffectivelyEqual" $
   Logic.or (containsInScopeTypeVars @@ var "tx" @@ var "t1") $
   Logic.or (containsInScopeTypeVars @@ var "tx" @@ var "t2") $
   typesAllEffectivelyEqual @@ var "tx" @@ list [
-    Schemas.fullyStripAndNormalizeType @@ var "t1",
-    Schemas.fullyStripAndNormalizeType @@ var "t2"]
+    Resolution.fullyStripAndNormalizeType @@ var "t1",
+    Resolution.fullyStripAndNormalizeType @@ var "t2"]
 
 -- ============================================================================
 -- Either/Context-threading versions of typeOf* functions
@@ -448,7 +453,7 @@ typeOfApplication = define "typeOfApplication" $
         (right $ pair (var "cod") (var "cx0"))
         (Ctx.failInContext (Error.errorChecking $ ErrorsChecking.checkingErrorTypeMismatch $ ErrorsChecking.typeMismatchError (var "dom") (var "targ")) (var "cx0")),
     _Type_variable>>: "v" ~>
-      "nameResult" <~ Schemas.freshName @@ var "cx0" $
+      "nameResult" <~ Names.freshName @@ var "cx0" $
       "freshN" <~ Pairs.first (var "nameResult") $
       "cx1" <~ Pairs.second (var "nameResult") $
       right $ pair (Core.typeVariable $ var "freshN") (var "cx1")]) $
@@ -507,7 +512,7 @@ typeOfCaseStatement = define "typeOfCaseStatement" $
   "cods" <~ Maybes.cat (Lists.cons (var "tdflt") $ Lists.map (unaryFunction Maybes.pure) (var "fcods")) $
   "cod" <<~ checkSameType @@ var "cx3" @@ var "tx" @@ (string "case branches") @@ var "cods" $
   right $ pair (Core.typeFunction $ Core.functionType
-    (Schemas.nominalApplication @@ var "tname" @@ var "typeArgs")
+    (Resolution.nominalApplication @@ var "tname" @@ var "typeArgs")
     (var "cod")) (var "cx3")
 
 typeOfEither :: TTermDefinition (Context -> Graph -> [Type] -> Prelude.Either Term Term -> Prelude.Either (InContext Error) (Type, Context))
@@ -538,14 +543,14 @@ typeOfInjection = define "typeOfInjection" $
   "field" <~ Core.injectionField (var "injection") $
   "fname" <~ Core.fieldName (var "field") $
   "fterm" <~ Core.fieldTerm (var "field") $
-  "schemaResult" <<~ Schemas.requireSchemaType @@ var "cx" @@ (Graph.graphSchemaTypes $ var "tx") @@ var "tname" $
+  "schemaResult" <<~ Resolution.requireSchemaType @@ var "cx" @@ (Graph.graphSchemaTypes $ var "tx") @@ var "tname" $
   "schemaType" <~ Pairs.first (var "schemaResult") $
   "cx2" <~ Pairs.second (var "schemaResult") $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
   "sbody" <~ Core.typeSchemeType (var "schemaType") $
   "sfields" <<~ ExtractCore.unionType @@ var "cx2" @@ var "tname" @@ var "sbody" $
-  "ftyp" <<~ Schemas.findFieldType @@ var "cx2" @@ var "fname" @@ var "sfields" $
-  right $ pair (Schemas.nominalApplication @@ var "tname" @@ var "typeArgs") (var "cx2")
+  "ftyp" <<~ Resolution.findFieldType @@ var "cx2" @@ var "fname" @@ var "sfields" $
+  right $ pair (Resolution.nominalApplication @@ var "tname" @@ var "typeArgs") (var "cx2")
 
 typeOfLambda :: TTermDefinition (Context -> Graph -> [Type] -> Lambda -> Prelude.Either (InContext Error) (Type, Context))
 typeOfLambda = define "typeOfLambda" $
@@ -557,7 +562,7 @@ typeOfLambda = define "typeOfLambda" $
   "tbodyResult" <<~ optCases (var "mdom")
     (Ctx.failInContext (Error.errorChecking $ ErrorsChecking.checkingErrorUntypedLambda ErrorsChecking.untypedLambdaError) (var "cx"))
     ("dom" ~>
-      "types2" <~ Maps.insert (var "v") (Rewriting.fTypeToTypeScheme @@ var "dom") (Graph.graphBoundTypes $ var "tx") $
+      "types2" <~ Maps.insert (var "v") (Scoping.fTypeToTypeScheme @@ var "dom") (Graph.graphBoundTypes $ var "tx") $
       "codResult" <<~ typeOf @@ var "cx" @@ (Graph.graphWithBoundTypes (var "tx") $ var "types2") @@ noTypeArgs @@ var "body" $
       "cod" <~ Pairs.first (var "codResult") $
       "cx2" <~ Pairs.second (var "codResult") $
@@ -577,7 +582,7 @@ typeOfLet = define "typeOfLet" $
   "bindingType" <~ ("b" ~>
     Maybes.maybe
       (Ctx.failInContext (Error.errorChecking $ ErrorsChecking.checkingErrorUntypedLetBinding $ ErrorsChecking.untypedLetBindingError (var "b")) (var "cx"))
-      ("ts" ~> right $ Rewriting.typeSchemeToFType @@ var "ts")
+      ("ts" ~> right $ Scoping.typeSchemeToFType @@ var "ts")
       (Core.bindingType $ var "b")) $
   -- Get binding types, threading errors through the fold
   "btypesResult" <~ Lists.foldl
@@ -593,7 +598,7 @@ typeOfLet = define "typeOfLet" $
   -- Extended type context
   "tx2" <~ (Graph.graphWithBoundTypes (var "tx")
     (Maps.union
-      (Maps.fromList $ Lists.zip (var "bnames") (Lists.map (Rewriting.fTypeToTypeScheme) $ var "btypes"))
+      (Maps.fromList $ Lists.zip (var "bnames") (Lists.map (Scoping.fTypeToTypeScheme) $ var "btypes"))
       (Graph.graphBoundTypes $ var "tx"))) $
   "tResult" <<~ typeOf @@ var "cx" @@ var "tx2" @@ noTypeArgs @@ var "body" $
   "t" <~ Pairs.first (var "tResult") $
@@ -729,10 +734,10 @@ typeOfPrimitive = define "typeOfPrimitive" $
   Maybes.maybe
     (Ctx.failInContext (Error.errorUndefinedTermVariable $ ErrorsCore.undefinedTermVariableError (Paths.subtermPath $ list ([] :: [TTerm SubtermStep])) (var "name")) (var "cx"))
     ("tsRaw" ~>
-      "instResult" <~ Schemas.instantiateTypeScheme @@ var "cx" @@ var "tsRaw" $
+      "instResult" <~ Resolution.instantiateTypeScheme @@ var "cx" @@ var "tsRaw" $
       "ts" <~ Pairs.first (var "instResult") $
       "cx2" <~ Pairs.second (var "instResult") $
-      "t" <~ Rewriting.typeSchemeToFType @@ var "ts" $
+      "t" <~ Scoping.typeSchemeToFType @@ var "ts" $
       "applied" <<~ applyTypeArgumentsToType @@ var "cx2" @@ var "tx" @@ var "typeArgs" @@ var "t" $
       right $ pair (var "applied") (var "cx2"))
     (var "rawTs")
@@ -743,17 +748,17 @@ typeOfProjection = define "typeOfProjection" $
   "cx" ~> "tx" ~> "typeArgs" ~> "p" ~>
   "tname" <~ Core.projectionTypeName (var "p") $
   "fname" <~ Core.projectionField (var "p") $
-  "schemaResult" <<~ Schemas.requireSchemaType @@ var "cx" @@ (Graph.graphSchemaTypes $ var "tx") @@ var "tname" $
+  "schemaResult" <<~ Resolution.requireSchemaType @@ var "cx" @@ (Graph.graphSchemaTypes $ var "tx") @@ var "tname" $
   "schemaType" <~ Pairs.first (var "schemaResult") $
   "cx2" <~ Pairs.second (var "schemaResult") $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
   "sbody" <~ Core.typeSchemeType (var "schemaType") $
   "sfields" <<~ ExtractCore.recordType @@ var "cx2" @@ var "tname" @@ var "sbody" $
-  "ftyp" <<~ Schemas.findFieldType @@ var "cx2" @@ var "fname" @@ var "sfields" $
+  "ftyp" <<~ Resolution.findFieldType @@ var "cx2" @@ var "fname" @@ var "sfields" $
   "subst" <~ Typing.typeSubst (Maps.fromList $ Lists.zip (var "svars") (var "typeArgs")) $
   "sftyp" <~ Substitution.substInType @@ var "subst" @@ var "ftyp" $
   right $ pair (Core.typeFunction $ Core.functionType
-    (Schemas.nominalApplication @@ var "tname" @@ var "typeArgs")
+    (Resolution.nominalApplication @@ var "tname" @@ var "typeArgs")
     (var "sftyp")) (var "cx2")
 
 typeOfRecord :: TTermDefinition (Context -> Graph -> [Type] -> Record -> Prelude.Either (InContext Error) (Type, Context))
@@ -776,7 +781,7 @@ typeOfRecord = define "typeOfRecord" $
     (Lists.map (unaryFunction Core.fieldTerm) (var "fields")) $
   "foldR" <<~ var "foldResult" $
   "cx2" <~ Pairs.second (var "foldR") $
-  right $ pair (Schemas.nominalApplication @@ var "tname" @@ var "typeArgs") (var "cx2")
+  right $ pair (Resolution.nominalApplication @@ var "tname" @@ var "typeArgs") (var "cx2")
 
 typeOfSet :: TTermDefinition (Context -> Graph -> [Type] -> S.Set Term -> Prelude.Either (InContext Error) (Type, Context))
 typeOfSet = define "typeOfSet" $
@@ -838,7 +843,7 @@ typeOfUnwrap :: TTermDefinition (Context -> Graph -> [Type] -> Name -> Prelude.E
 typeOfUnwrap = define "typeOfUnwrap" $
   doc "Reconstruct the type of an unwrap operation (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "tname" ~>
-  "schemaResult" <<~ Schemas.requireSchemaType @@ var "cx" @@ (Graph.graphSchemaTypes $ var "tx") @@ var "tname" $
+  "schemaResult" <<~ Resolution.requireSchemaType @@ var "cx" @@ (Graph.graphSchemaTypes $ var "tx") @@ var "tname" $
   "schemaType" <~ Pairs.first (var "schemaResult") $
   "cx2" <~ Pairs.second (var "schemaResult") $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
@@ -847,7 +852,7 @@ typeOfUnwrap = define "typeOfUnwrap" $
   "subst" <~ Typing.typeSubst (Maps.fromList $ Lists.zip (var "svars") (var "typeArgs")) $
   "swrapped" <~ Substitution.substInType @@ var "subst" @@ var "wrapped" $
   right $ pair (MetaTypes.function
-    (Schemas.nominalApplication @@ var "tname" @@ var "typeArgs")
+    (Resolution.nominalApplication @@ var "tname" @@ var "typeArgs")
     (var "swrapped")) (var "cx2")
 
 typeOfVariable :: TTermDefinition (Context -> Graph -> [Type] -> Name -> Prelude.Either (InContext Error) (Type, Context))
@@ -859,8 +864,8 @@ typeOfVariable = define "typeOfVariable" $
     (Ctx.failInContext (Error.errorUntypedTermVariable $ ErrorsCore.untypedTermVariableError (Paths.subtermPath $ list ([] :: [TTerm SubtermStep])) (var "name")) (var "cx"))
     ("ts" ~>
       "tResult" <~ Logic.ifElse (Lists.null $ var "typeArgs")
-        (Schemas.instantiateType @@ var "cx" @@ (Rewriting.typeSchemeToFType @@ var "ts"))
-        (pair (Rewriting.typeSchemeToFType @@ var "ts") (var "cx")) $
+        (Resolution.instantiateType @@ var "cx" @@ (Scoping.typeSchemeToFType @@ var "ts"))
+        (pair (Scoping.typeSchemeToFType @@ var "ts") (var "cx")) $
       "t" <~ Pairs.first (var "tResult") $
       "cx2" <~ Pairs.second (var "tResult") $
       "applied" <<~ applyTypeArgumentsToType @@ var "cx2" @@ var "tx" @@ var "typeArgs" @@ var "t" $
@@ -876,4 +881,4 @@ typeOfWrappedTerm = define "typeOfWrappedTerm" $
   -- Type the body for checking purposes
   "result" <<~ typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "body" $
   "cx2" <~ Pairs.second (var "result") $
-  right $ pair (Schemas.nominalApplication @@ var "tname" @@ var "typeArgs") (var "cx2")
+  right $ pair (Resolution.nominalApplication @@ var "tname" @@ var "typeArgs") (var "cx2")

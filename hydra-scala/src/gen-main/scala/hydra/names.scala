@@ -10,11 +10,17 @@ import hydra.lib.equality
 
 import hydra.lib.lists
 
+import hydra.lib.literals
+
 import hydra.lib.logic
 
 import hydra.lib.maps
 
+import hydra.lib.math
+
 import hydra.lib.maybes
+
+import hydra.lib.pairs
 
 import hydra.lib.sets
 
@@ -30,6 +36,26 @@ def compactName(namespaces: Map[hydra.module.Namespace, scala.Predef.String])(na
        ":", local)))(hydra.lib.maps.lookup[hydra.module.Namespace, scala.Predef.String](ns)(namespaces)))(mns)
 }
 
+def freshName(cx: hydra.context.Context): Tuple2[hydra.core.Name, hydra.context.Context] =
+  {
+  lazy val count: Int = hydra.annotations.getCount(hydra.constants.key_freshTypeVariableCount)(cx)
+  Tuple2(hydra.names.normalTypeVariable(count), hydra.annotations.putCount(hydra.constants.key_freshTypeVariableCount)(hydra.lib.math.add(count)(1))(cx))
+}
+
+def freshNames(n: Int)(cx: hydra.context.Context): Tuple2[Seq[hydra.core.Name], hydra.context.Context] =
+  {
+  def go[T0](acc: Tuple2[Seq[hydra.core.Name], hydra.context.Context])(_x: T0): Tuple2[Seq[hydra.core.Name], hydra.context.Context] =
+    {
+    lazy val names: Seq[hydra.core.Name] = hydra.lib.pairs.first[Seq[hydra.core.Name], hydra.context.Context](acc)
+    lazy val cx0: hydra.context.Context = hydra.lib.pairs.second[Seq[hydra.core.Name], hydra.context.Context](acc)
+    lazy val result: Tuple2[hydra.core.Name, hydra.context.Context] = hydra.names.freshName(cx0)
+    lazy val name: hydra.core.Name = hydra.lib.pairs.first[hydra.core.Name, hydra.context.Context](result)
+    lazy val cx1: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Name, hydra.context.Context](result)
+    Tuple2(hydra.lib.lists.concat2[hydra.core.Name](names)(hydra.lib.lists.pure[hydra.core.Name](name)), cx1)
+  }
+  hydra.lib.lists.foldl[Tuple2[Seq[hydra.core.Name], hydra.context.Context], Unit](go)(Tuple2(Seq(), cx))(hydra.lib.lists.replicate[Unit](n)(()))
+}
+
 def localNameOf(`arg_`: hydra.core.Name): scala.Predef.String = (hydra.names.qualifyName(`arg_`).local)
 
 def namespaceOf(`arg_`: hydra.core.Name): Option[hydra.module.Namespace] = (hydra.names.qualifyName(`arg_`).namespace)
@@ -40,6 +66,8 @@ def namespaceToFilePath(caseConv: hydra.util.CaseConvention)(ext: hydra.module.F
     hydra.formatting.convertCase(hydra.util.CaseConvention.camel)(caseConv)(v1))(hydra.lib.strings.splitOn(".")(ns))
   hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.intercalate("/")(parts))("."))(ext)
 }
+
+def normalTypeVariable(i: Int): hydra.core.Name = hydra.lib.strings.cat2("t")(hydra.lib.literals.showInt32(i))
 
 def qname(ns: hydra.module.Namespace)(name: scala.Predef.String): hydra.core.Name = hydra.lib.strings.cat(Seq(ns, ".", name))
 

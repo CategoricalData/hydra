@@ -9,7 +9,7 @@ from hydra.dsl.python import Either, FrozenDict, Left, Right, frozenlist
 from typing import TypeVar, cast
 import hydra.core
 import hydra.errors
-import hydra.extract.helpers
+import hydra.extract.core
 import hydra.lexical
 import hydra.lib.eithers
 import hydra.lib.maps
@@ -73,8 +73,8 @@ def adjacent_edge(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-                    return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("label", (lambda x1, x2: edge_label(x1, x2)), field_map(), cx), (lambda field_label: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("id", v, field_map(), cx), (lambda field_id: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("vertex", v, field_map(), cx), (lambda field_vertex: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("properties", (lambda v12, v2: hydra.extract.helpers.decode_map((lambda x1, x2: property_key(x1, x2)), v, v12, v2)), field_map(), cx), (lambda field_properties: Right(hydra.pg.model.AdjacentEdge(field_label, field_id, field_vertex, field_properties))))))))))
+                    return hydra.extract.core.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("label", (lambda x1, x2: edge_label(x1, x2)), field_map(), cx), (lambda field_label: hydra.lib.eithers.bind(hydra.extract.core.require_field("id", v, field_map(), cx), (lambda field_id: hydra.lib.eithers.bind(hydra.extract.core.require_field("vertex", v, field_map(), cx), (lambda field_vertex: hydra.lib.eithers.bind(hydra.extract.core.require_field("properties", (lambda v12, v2: hydra.extract.core.decode_map((lambda x1, x2: property_key(x1, x2)), v, v12, v2)), field_map(), cx), (lambda field_properties: Right(hydra.pg.model.AdjacentEdge(field_label, field_id, field_vertex, field_properties))))))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -89,7 +89,7 @@ def direction(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 fterm = field.term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.errors.DecodingError, hydra.pg.model.Direction]]]:
-                    return hydra.lib.maps.from_list(((hydra.core.Name("out"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.pg.model.Direction.OUT), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("in"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.pg.model.Direction.IN), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("both"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.pg.model.Direction.BOTH), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("undirected"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.pg.model.Direction.UNDIRECTED), hydra.extract.helpers.decode_unit(cx, input))))))
+                    return hydra.lib.maps.from_list(((hydra.core.Name("out"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.pg.model.Direction.OUT), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("in"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.pg.model.Direction.IN), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("both"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.pg.model.Direction.BOTH), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("undirected"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.pg.model.Direction.UNDIRECTED), hydra.extract.core.decode_unit(cx, input))))))
                 return hydra.lib.maybes.maybe((lambda : Left(hydra.errors.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union"))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
 
             case _:
@@ -102,8 +102,8 @@ def edge(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.D
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-                    return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("label", (lambda x1, x2: edge_label(x1, x2)), field_map(), cx), (lambda field_label: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("id", v, field_map(), cx), (lambda field_id: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("out", v, field_map(), cx), (lambda field_out: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("in", v, field_map(), cx), (lambda field_in: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("properties", (lambda v12, v2: hydra.extract.helpers.decode_map((lambda x1, x2: property_key(x1, x2)), v, v12, v2)), field_map(), cx), (lambda field_properties: Right(hydra.pg.model.Edge(field_label, field_id, field_out, field_in, field_properties))))))))))))
+                    return hydra.extract.core.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("label", (lambda x1, x2: edge_label(x1, x2)), field_map(), cx), (lambda field_label: hydra.lib.eithers.bind(hydra.extract.core.require_field("id", v, field_map(), cx), (lambda field_id: hydra.lib.eithers.bind(hydra.extract.core.require_field("out", v, field_map(), cx), (lambda field_out: hydra.lib.eithers.bind(hydra.extract.core.require_field("in", v, field_map(), cx), (lambda field_in: hydra.lib.eithers.bind(hydra.extract.core.require_field("properties", (lambda v12, v2: hydra.extract.core.decode_map((lambda x1, x2: property_key(x1, x2)), v, v12, v2)), field_map(), cx), (lambda field_properties: Right(hydra.pg.model.Edge(field_label, field_id, field_out, field_in, field_properties))))))))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -115,7 +115,7 @@ def property_type(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-                    return hydra.extract.helpers.to_field_map(record)
+                    return hydra.extract.core.to_field_map(record)
                 def _hoist_field_map_body_1(v12):
                     match v12:
                         case hydra.core.LiteralBoolean(value=b):
@@ -130,7 +130,7 @@ def property_type(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra
 
                         case _:
                             return Left(hydra.errors.DecodingError("expected literal"))
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("key", (lambda x1, x2: property_key(x1, x2)), field_map(), cx), (lambda field_key: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("value", t, field_map(), cx), (lambda field_value: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("required", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_field_map_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_required: Right(hydra.pg.model.PropertyType(field_key, field_value, field_required))))))))
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("key", (lambda x1, x2: property_key(x1, x2)), field_map(), cx), (lambda field_key: hydra.lib.eithers.bind(hydra.extract.core.require_field("value", t, field_map(), cx), (lambda field_value: hydra.lib.eithers.bind(hydra.extract.core.require_field("required", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_field_map_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_required: Right(hydra.pg.model.PropertyType(field_key, field_value, field_required))))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -166,8 +166,8 @@ def edge_type(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.err
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-                    return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("label", (lambda x1, x2: edge_label(x1, x2)), field_map(), cx), (lambda field_label: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("id", t, field_map(), cx), (lambda field_id: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("out", (lambda x1, x2: vertex_label(x1, x2)), field_map(), cx), (lambda field_out: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("in", (lambda x1, x2: vertex_label(x1, x2)), field_map(), cx), (lambda field_in: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("properties", (lambda v12, v2: hydra.extract.helpers.decode_list((lambda v13, v22: property_type(t, v13, v22)), v12, v2)), field_map(), cx), (lambda field_properties: Right(hydra.pg.model.EdgeType(field_label, field_id, field_out, field_in, field_properties))))))))))))
+                    return hydra.extract.core.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("label", (lambda x1, x2: edge_label(x1, x2)), field_map(), cx), (lambda field_label: hydra.lib.eithers.bind(hydra.extract.core.require_field("id", t, field_map(), cx), (lambda field_id: hydra.lib.eithers.bind(hydra.extract.core.require_field("out", (lambda x1, x2: vertex_label(x1, x2)), field_map(), cx), (lambda field_out: hydra.lib.eithers.bind(hydra.extract.core.require_field("in", (lambda x1, x2: vertex_label(x1, x2)), field_map(), cx), (lambda field_in: hydra.lib.eithers.bind(hydra.extract.core.require_field("properties", (lambda v12, v2: hydra.extract.core.decode_list((lambda v13, v22: property_type(t, v13, v22)), v12, v2)), field_map(), cx), (lambda field_properties: Right(hydra.pg.model.EdgeType(field_label, field_id, field_out, field_in, field_properties))))))))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -179,8 +179,8 @@ def vertex(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-                    return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("label", (lambda x1, x2: vertex_label(x1, x2)), field_map(), cx), (lambda field_label: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("id", v, field_map(), cx), (lambda field_id: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("properties", (lambda v12, v2: hydra.extract.helpers.decode_map((lambda x1, x2: property_key(x1, x2)), v, v12, v2)), field_map(), cx), (lambda field_properties: Right(hydra.pg.model.Vertex(field_label, field_id, field_properties))))))))
+                    return hydra.extract.core.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("label", (lambda x1, x2: vertex_label(x1, x2)), field_map(), cx), (lambda field_label: hydra.lib.eithers.bind(hydra.extract.core.require_field("id", v, field_map(), cx), (lambda field_id: hydra.lib.eithers.bind(hydra.extract.core.require_field("properties", (lambda v12, v2: hydra.extract.core.decode_map((lambda x1, x2: property_key(x1, x2)), v, v12, v2)), field_map(), cx), (lambda field_properties: Right(hydra.pg.model.Vertex(field_label, field_id, field_properties))))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -211,7 +211,7 @@ def element_kind(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 fterm = field.term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.errors.DecodingError, hydra.pg.model.ElementKind]]]:
-                    return hydra.lib.maps.from_list(((hydra.core.Name("vertex"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.pg.model.ElementKind.VERTEX), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("edge"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.pg.model.ElementKind.EDGE), hydra.extract.helpers.decode_unit(cx, input))))))
+                    return hydra.lib.maps.from_list(((hydra.core.Name("vertex"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.pg.model.ElementKind.VERTEX), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("edge"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.pg.model.ElementKind.EDGE), hydra.extract.core.decode_unit(cx, input))))))
                 return hydra.lib.maybes.maybe((lambda : Left(hydra.errors.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union"))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
 
             case _:
@@ -224,8 +224,8 @@ def element_tree(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-                    return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("self", (lambda v12, v2: element(v, v12, v2)), field_map(), cx), (lambda field_self: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("dependencies", (lambda v12, v2: hydra.extract.helpers.decode_list((lambda v13, v22: element_tree(v, v13, v22)), v12, v2)), field_map(), cx), (lambda field_dependencies: Right(hydra.pg.model.ElementTree(field_self, field_dependencies))))))
+                    return hydra.extract.core.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("self", (lambda v12, v2: element(v, v12, v2)), field_map(), cx), (lambda field_self: hydra.lib.eithers.bind(hydra.extract.core.require_field("dependencies", (lambda v12, v2: hydra.extract.core.decode_list((lambda v13, v22: element_tree(v, v13, v22)), v12, v2)), field_map(), cx), (lambda field_dependencies: Right(hydra.pg.model.ElementTree(field_self, field_dependencies))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -237,8 +237,8 @@ def vertex_type(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.e
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-                    return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("label", (lambda x1, x2: vertex_label(x1, x2)), field_map(), cx), (lambda field_label: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("id", t, field_map(), cx), (lambda field_id: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("properties", (lambda v12, v2: hydra.extract.helpers.decode_list((lambda v13, v22: property_type(t, v13, v22)), v12, v2)), field_map(), cx), (lambda field_properties: Right(hydra.pg.model.VertexType(field_label, field_id, field_properties))))))))
+                    return hydra.extract.core.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("label", (lambda x1, x2: vertex_label(x1, x2)), field_map(), cx), (lambda field_label: hydra.lib.eithers.bind(hydra.extract.core.require_field("id", t, field_map(), cx), (lambda field_id: hydra.lib.eithers.bind(hydra.extract.core.require_field("properties", (lambda v12, v2: hydra.extract.core.decode_list((lambda v13, v22: property_type(t, v13, v22)), v12, v2)), field_map(), cx), (lambda field_properties: Right(hydra.pg.model.VertexType(field_label, field_id, field_properties))))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -266,8 +266,8 @@ def element_type_tree(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[h
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-                    return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("self", (lambda v12, v2: element_type(t, v12, v2)), field_map(), cx), (lambda field_self: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("dependencies", (lambda v12, v2: hydra.extract.helpers.decode_list((lambda v13, v22: element_type_tree(t, v13, v22)), v12, v2)), field_map(), cx), (lambda field_dependencies: Right(hydra.pg.model.ElementTypeTree(field_self, field_dependencies))))))
+                    return hydra.extract.core.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("self", (lambda v12, v2: element_type(t, v12, v2)), field_map(), cx), (lambda field_self: hydra.lib.eithers.bind(hydra.extract.core.require_field("dependencies", (lambda v12, v2: hydra.extract.core.decode_list((lambda v13, v22: element_type_tree(t, v13, v22)), v12, v2)), field_map(), cx), (lambda field_dependencies: Right(hydra.pg.model.ElementTypeTree(field_self, field_dependencies))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -279,8 +279,8 @@ def graph(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-                    return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("vertices", (lambda v12, v2: hydra.extract.helpers.decode_map(v, (lambda v13, v22: vertex(v, v13, v22)), v12, v2)), field_map(), cx), (lambda field_vertices: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("edges", (lambda v12, v2: hydra.extract.helpers.decode_map(v, (lambda v13, v22: edge(v, v13, v22)), v12, v2)), field_map(), cx), (lambda field_edges: Right(hydra.pg.model.Graph(field_vertices, field_edges))))))
+                    return hydra.extract.core.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("vertices", (lambda v12, v2: hydra.extract.core.decode_map(v, (lambda v13, v22: vertex(v, v13, v22)), v12, v2)), field_map(), cx), (lambda field_vertices: hydra.lib.eithers.bind(hydra.extract.core.require_field("edges", (lambda v12, v2: hydra.extract.core.decode_map(v, (lambda v13, v22: edge(v, v13, v22)), v12, v2)), field_map(), cx), (lambda field_edges: Right(hydra.pg.model.Graph(field_vertices, field_edges))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -292,8 +292,8 @@ def graph_schema(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-                    return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("vertices", (lambda v12, v2: hydra.extract.helpers.decode_map((lambda x1, x2: vertex_label(x1, x2)), (lambda v13, v22: vertex_type(t, v13, v22)), v12, v2)), field_map(), cx), (lambda field_vertices: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("edges", (lambda v12, v2: hydra.extract.helpers.decode_map((lambda x1, x2: edge_label(x1, x2)), (lambda v13, v22: edge_type(t, v13, v22)), v12, v2)), field_map(), cx), (lambda field_edges: Right(hydra.pg.model.GraphSchema(field_vertices, field_edges))))))
+                    return hydra.extract.core.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("vertices", (lambda v12, v2: hydra.extract.core.decode_map((lambda x1, x2: vertex_label(x1, x2)), (lambda v13, v22: vertex_type(t, v13, v22)), v12, v2)), field_map(), cx), (lambda field_vertices: hydra.lib.eithers.bind(hydra.extract.core.require_field("edges", (lambda v12, v2: hydra.extract.core.decode_map((lambda x1, x2: edge_label(x1, x2)), (lambda v13, v22: edge_type(t, v13, v22)), v12, v2)), field_map(), cx), (lambda field_edges: Right(hydra.pg.model.GraphSchema(field_vertices, field_edges))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -321,8 +321,8 @@ def lazy_graph(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.er
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-                    return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("vertices", (lambda v12, v2: hydra.extract.helpers.decode_list((lambda v13, v22: vertex(v, v13, v22)), v12, v2)), field_map(), cx), (lambda field_vertices: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("edges", (lambda v12, v2: hydra.extract.helpers.decode_list((lambda v13, v22: edge(v, v13, v22)), v12, v2)), field_map(), cx), (lambda field_edges: Right(hydra.pg.model.LazyGraph(field_vertices, field_edges))))))
+                    return hydra.extract.core.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("vertices", (lambda v12, v2: hydra.extract.core.decode_list((lambda v13, v22: vertex(v, v13, v22)), v12, v2)), field_map(), cx), (lambda field_vertices: hydra.lib.eithers.bind(hydra.extract.core.require_field("edges", (lambda v12, v2: hydra.extract.core.decode_list((lambda v13, v22: edge(v, v13, v22)), v12, v2)), field_map(), cx), (lambda field_edges: Right(hydra.pg.model.LazyGraph(field_vertices, field_edges))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -334,8 +334,8 @@ def property(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.erro
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-                    return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("key", (lambda x1, x2: property_key(x1, x2)), field_map(), cx), (lambda field_key: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("value", v, field_map(), cx), (lambda field_value: Right(hydra.pg.model.Property(field_key, field_value))))))
+                    return hydra.extract.core.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("key", (lambda x1, x2: property_key(x1, x2)), field_map(), cx), (lambda field_key: hydra.lib.eithers.bind(hydra.extract.core.require_field("value", v, field_map(), cx), (lambda field_value: Right(hydra.pg.model.Property(field_key, field_value))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -347,8 +347,8 @@ def vertex_with_adjacent_edges(v: Callable[[hydra.graph.Graph, hydra.core.Term],
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-                    return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("vertex", (lambda v12, v2: vertex(v, v12, v2)), field_map(), cx), (lambda field_vertex: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("ins", (lambda v12, v2: hydra.extract.helpers.decode_list((lambda v13, v22: adjacent_edge(v, v13, v22)), v12, v2)), field_map(), cx), (lambda field_ins: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("outs", (lambda v12, v2: hydra.extract.helpers.decode_list((lambda v13, v22: adjacent_edge(v, v13, v22)), v12, v2)), field_map(), cx), (lambda field_outs: Right(hydra.pg.model.VertexWithAdjacentEdges(field_vertex, field_ins, field_outs))))))))
+                    return hydra.extract.core.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("vertex", (lambda v12, v2: vertex(v, v12, v2)), field_map(), cx), (lambda field_vertex: hydra.lib.eithers.bind(hydra.extract.core.require_field("ins", (lambda v12, v2: hydra.extract.core.decode_list((lambda v13, v22: adjacent_edge(v, v13, v22)), v12, v2)), field_map(), cx), (lambda field_ins: hydra.lib.eithers.bind(hydra.extract.core.require_field("outs", (lambda v12, v2: hydra.extract.core.decode_list((lambda v13, v22: adjacent_edge(v, v13, v22)), v12, v2)), field_map(), cx), (lambda field_outs: Right(hydra.pg.model.VertexWithAdjacentEdges(field_vertex, field_ins, field_outs))))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))

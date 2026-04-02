@@ -11,7 +11,7 @@ import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Types                      as MetaTypes
 import qualified Hydra.Dsl.Terms                           as Terms
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
 import           Prelude hiding ((++))
 import qualified Data.Set                                  as S
@@ -25,7 +25,7 @@ ns = Namespace "hydra.ext.scala.prepare"
 
 module_ :: Module
 module_ = Module ns elements
-    [Rewriting.ns]
+    [Strip.ns]
     KernelTypes.kernelTypesNamespaces $
     Just "Type preparation functions for Scala code generation"
   where
@@ -115,7 +115,7 @@ prepareType :: TTermDefinition (Graph -> Type -> (Type, Term -> Term, S.Set Stri
 prepareType = def "prepareType" $
   doc "Prepare a type for Scala code generation, substituting unsupported types" $
   lambda "cx" $ lambda "typ" $
-    (cases _Type (Rewriting.deannotateType @@ var "typ") (Just (same @@ var "typ")) [
+    (cases _Type (Strip.deannotateType @@ var "typ") (Just (same @@ var "typ")) [
       _Type_literal>>: ("at" ~> lets [
         "result">: prepareLiteralType @@ var "at",
         "rtyp">: Pairs.first (var "result"),

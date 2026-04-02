@@ -21,7 +21,11 @@ import qualified Hydra.Sources.Kernel.Terms.Annotations as TermAnnotations
 import qualified Hydra.Sources.Kernel.Terms.Constants as TermConstants
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as TermExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical as TermLexical
+import qualified Hydra.Sources.Kernel.Terms.Dependencies as TermDependencies
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as TermRewriting
+import qualified Hydra.Sources.Kernel.Terms.Scoping as TermScoping
+import qualified Hydra.Sources.Kernel.Terms.Strip as TermStrip
+import qualified Hydra.Sources.Kernel.Terms.Variables as TermVariables
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as TermShowCore
 import qualified Hydra.Sources.Decode.Core as TermDecodeCore
 import qualified Hydra.Sources.Encode.Core as TermEncodeCore
@@ -54,14 +58,18 @@ testGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes testSchemaGraph) (
     -- Include only essential kernel term definitions for interpreter tests.
     -- The evaluator needs hydra.annotations (and its dependencies).
     kernelTermBindings = L.concat $ fmap moduleBindings
-      [ TermConstants.module_
-      , TermShowCore.module_
+      [ TermAnnotations.module_
+      , TermConstants.module_
+      , TermDecodeCore.module_
+      , TermDependencies.module_
+      , TermEncodeCore.module_
       , TermExtractCore.module_
       , TermLexical.module_
       , TermRewriting.module_
-      , TermDecodeCore.module_
-      , TermEncodeCore.module_
-      , TermAnnotations.module_
+      , TermScoping.module_
+      , TermShowCore.module_
+      , TermStrip.module_
+      , TermVariables.module_
       ]
     dataBindings = (\(name, term) -> Binding name term Nothing) <$> M.toList testTerms
 
@@ -120,14 +128,18 @@ evalTestGraph :: Graph
 evalTestGraph = elementsToGraph evalCoreGraph (decodeSchemaTypes testSchemaGraph) (kernelTermBindings ++ dataBindings)
   where
     kernelTermBindings = L.concat $ fmap moduleBindings
-      [ TermConstants.module_
-      , TermShowCore.module_
+      [ TermAnnotations.module_
+      , TermConstants.module_
+      , TermDecodeCore.module_
+      , TermDependencies.module_
+      , TermEncodeCore.module_
       , TermExtractCore.module_
       , TermLexical.module_
       , TermRewriting.module_
-      , TermDecodeCore.module_
-      , TermEncodeCore.module_
-      , TermAnnotations.module_
+      , TermScoping.module_
+      , TermShowCore.module_
+      , TermStrip.module_
+      , TermVariables.module_
       ]
     dataBindings = (\(name, term) -> Binding name term Nothing) <$> M.toList testTerms
 

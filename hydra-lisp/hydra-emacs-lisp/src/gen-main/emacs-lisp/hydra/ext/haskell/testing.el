@@ -10,6 +10,8 @@
 
 (require 'hydra.decode.core)
 
+(require 'hydra.dependencies)
+
 (require 'hydra.ext.haskell.syntax)
 
 (require 'hydra.ext.haskell.utils)
@@ -44,11 +46,13 @@
 
 (require 'hydra.names)
 
+(require 'hydra.predicates)
+
 (require 'hydra.rewriting)
 
-(require 'hydra.schemas)
-
 (require 'hydra.show.errors)
+
+(require 'hydra.strip)
 
 (require 'hydra.testing)
 
@@ -58,7 +62,7 @@
 
 (defvar hydra_ext_haskell_testing_collect_test_cases (lambda (tg) (funcall (hydra_lib_lists_concat2 (funcall (lambda (v) (hydra_testing_test_group-cases v)) tg)) (hydra_lib_lists_concat (funcall (hydra_lib_lists_map hydra_ext_haskell_testing_collect_test_cases) (funcall (lambda (v) (hydra_testing_test_group-subgroups v)) tg))))))
 
-(defvar hydra_ext_haskell_testing_collect_names (lambda (graf) (lambda (names) (lambda (t_) (if (hydra_schemas_is_encoded_term (hydra_rewriting_deannotate_term t_)) (funcall (funcall (hydra_lib_eithers_either (lambda (_) names)) (lambda (decoded_term) (funcall (hydra_lib_sets_union names) (funcall (funcall (funcall (hydra_rewriting_term_dependency_names t) t) t) decoded_term)))) (funcall (funcall (hydra_lib_eithers_bimap (lambda (_e) _e)) (lambda (_a) _a)) (funcall (hydra_decode_core_term graf) t_))) names)))))
+(defvar hydra_ext_haskell_testing_collect_names (lambda (graf) (lambda (names) (lambda (t_) (if (hydra_predicates_is_encoded_term (hydra_strip_deannotate_term t_)) (funcall (funcall (hydra_lib_eithers_either (lambda (_) names)) (lambda (decoded_term) (funcall (hydra_lib_sets_union names) (funcall (funcall (funcall (hydra_dependencies_term_dependency_names t) t) t) decoded_term)))) (funcall (funcall (hydra_lib_eithers_bimap (lambda (_e) _e)) (lambda (_a) _a)) (funcall (hydra_decode_core_term graf) t_))) names)))))
 
 (defvar hydra_ext_haskell_testing_extract_encoded_term_variable_names (lambda (graf) (lambda (term) (funcall (funcall (funcall (hydra_rewriting_fold_over_term (list :pre nil)) (hydra_ext_haskell_testing_collect_names graf)) hydra_lib_sets_empty) term))))
 

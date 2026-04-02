@@ -59,13 +59,14 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
+import qualified Hydra.Sources.Kernel.Terms.Predicates    as Predicates
+import qualified Hydra.Sources.Kernel.Terms.Environment   as Environment
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -94,7 +95,7 @@ ns = Namespace "hydra.ext.graphql.coder"
 
 module_ :: Module
 module_ = Module ns elements
-    [Formatting.ns, Names.ns, Rewriting.ns, Schemas.ns, Annotations.ns, Serialization.ns,
+    [Formatting.ns, Names.ns, Strip.ns, Environment.ns, Predicates.ns, Annotations.ns, Serialization.ns,
       moduleNamespace GraphqlLanguage.module_,
       GraphqlSerde.ns]
     (moduleNamespace GraphqlSyntax.module_:KernelTypes.kernelTypesNamespaces) $
@@ -124,7 +125,7 @@ moduleToGraphql :: TTermDefinition (Module -> [Definition] -> Context -> Graph -
 moduleToGraphql = define "moduleToGraphql" $
   lambda "mod" $ lambda "defs" $
     "cx" ~> "g" ~> lets [
-    "partitioned">: Schemas.partitionDefinitions @@ var "defs",
+    "partitioned">: Environment.partitionDefinitions @@ var "defs",
     "typeDefs">: Pairs.first (var "partitioned"),
     "prefixes">: findPrefixes @@ Module.moduleNamespace (var "mod") @@ var "typeDefs",
     "filePath">: Names.namespaceToFilePath @@ Util.caseConventionCamel @@ (wrap _FileExtension (string "graphql")) @@ Module.moduleNamespace (var "mod")] $
@@ -228,7 +229,7 @@ encodeLiteralType = define "encodeLiteralType" $
 encodeNamedType :: TTermDefinition (Context -> Graph -> M.Map Namespace String -> Name -> Type -> Either (InContext Error) G.TypeDefinition)
 encodeNamedType = define "encodeNamedType" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "name" $ lambda "typ" $
-    cases _Type (Rewriting.deannotateType @@ var "typ")
+    cases _Type (Strip.deannotateType @@ var "typ")
       (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected record or union type, found: ") (ShowCore.type_ @@ var "typ")) (var "cx")) [
       _Type_record>>: lambda "rt" $
         "gfields" <<~ (Eithers.mapList (lambda "f" $ encodeFieldType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "f") (var "rt")) $
@@ -240,7 +241,7 @@ encodeNamedType = define "encodeNamedType" $
           G._ObjectTypeDefinition_Directives>>: nothing,
           G._ObjectTypeDefinition_FieldsDefinition>>: just (wrap G._FieldsDefinition (var "gfields"))]),
       _Type_union>>: lambda "rt" $
-        Logic.ifElse (Schemas.isEnumRowType @@ var "rt")
+        Logic.ifElse (Predicates.isEnumRowType @@ var "rt")
           -- Pure enum: all variants are unit-typed
           ("values" <<~ (Eithers.mapList (lambda "f" $ encodeEnumFieldType @@ var "cx" @@ var "g" @@ var "f") (var "rt")) $
            "desc" <<~ (descriptionFromType @@ var "cx" @@ var "g" @@ var "typ") $
@@ -309,10 +310,10 @@ wrapAsRecord name cx g prefixes innerTyp =
 encodeType :: TTermDefinition (Context -> Graph -> M.Map Namespace String -> Type -> Either (InContext Error) G.Type)
 encodeType = define "encodeType" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "typ" $
-    cases _Type (Rewriting.deannotateType @@ var "typ")
+    cases _Type (Strip.deannotateType @@ var "typ")
       (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected GraphQL-compatible type, found: ") (ShowCore.type_ @@ var "typ")) (var "cx")) [
       _Type_maybe>>: lambda "et" $
-        cases _Type (Rewriting.deannotateType @@ var "et")
+        cases _Type (Strip.deannotateType @@ var "et")
           (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected GraphQL-compatible type, found: ") (ShowCore.type_ @@ var "et")) (var "cx")) [
           _Type_list>>: lambda "et2" $
             Eithers.map (lambda "gt" $ inject G._Type G._Type_list (wrap G._ListType (var "gt")))
@@ -403,7 +404,7 @@ encodeUnionFieldType :: TTermDefinition (Context -> Graph -> M.Map Namespace Str
 encodeUnionFieldType = define "encodeUnionFieldType" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "ft" $ lets [
     "innerType">: Core.fieldTypeType $ var "ft",
-    "isUnit">: Schemas.isUnitType @@ (Rewriting.deannotateType @@ var "innerType"),
+    "isUnit">: Predicates.isUnitType @@ (Strip.deannotateType @@ var "innerType"),
     -- Unit variants use nullable Boolean; data-carrying variants use Maybe<innerType>
     "effectiveType">: Logic.ifElse (var "isUnit")
       (MetaTypes.optional (inject _Type _Type_literal (inject _LiteralType _LiteralType_boolean unit)))

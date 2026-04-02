@@ -392,7 +392,7 @@ allTests = define "allTests" $
       noChangeDisabled "applied case statement"
         (tylams ["t0"] $
           lambdaTyped "dir" (T.var "hydra.coders.CoderDirection") $
-            lambdaTyped "coder" (T.applys (T.var "hydra.util.Coder") (T.var <$> ["t0", "t0"])) $
+            lambdaTyped "coder" (T.applys (T.var "hydra.coders.Coder") (T.var <$> ["t0", "t0"])) $
               lambdaTyped "cx" (T.var "hydra.context.Context") $
                 lambdaTyped "v1" (T.var "t0") $
                   match (Core.nameLift _CoderDirection)

@@ -1,6 +1,6 @@
 -- Note: this is an automatically generated file. Do not edit.
 
--- | Utilities for type and term rewriting and analysis.
+-- | Core rewrite and fold combinators for terms and types
 
 module Hydra.Rewriting where
 
@@ -8,19 +8,14 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Literals as Literals
-import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Names as Names
 import qualified Hydra.Paths as Paths
-import qualified Hydra.Sorting as Sorting
+import qualified Hydra.Scoping as Scoping
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -39,235 +34,6 @@ applyInsideTypeLambdasAndAnnotations f term0 =
         Core.typeLambdaParameter = (Core.typeLambdaParameter v0),
         Core.typeLambdaBody = (applyInsideTypeLambdasAndAnnotations f (Core.typeLambdaBody v0))})
       _ -> f term0
-
--- | Strip type annotations from the top levels of a term
-deannotateAndDetypeTerm :: Core.Term -> Core.Term
-deannotateAndDetypeTerm t =
-    case t of
-      Core.TermAnnotated v0 -> deannotateAndDetypeTerm (Core.annotatedTermBody v0)
-      Core.TermTypeApplication v0 -> deannotateAndDetypeTerm (Core.typeApplicationTermBody v0)
-      Core.TermTypeLambda v0 -> deannotateAndDetypeTerm (Core.typeLambdaBody v0)
-      _ -> t
-
--- | Strip all annotations (including System F type annotations) from the top levels of a term
-deannotateTerm :: Core.Term -> Core.Term
-deannotateTerm t =
-    case t of
-      Core.TermAnnotated v0 -> deannotateTerm (Core.annotatedTermBody v0)
-      _ -> t
-
--- | Strip all annotations from a term
-deannotateType :: Core.Type -> Core.Type
-deannotateType t =
-    case t of
-      Core.TypeAnnotated v0 -> deannotateType (Core.annotatedTypeBody v0)
-      _ -> t
-
--- | Strip any top-level type lambdas from a type, extracting the (possibly nested) type body
-deannotateTypeParameters :: Core.Type -> Core.Type
-deannotateTypeParameters t =
-    case (deannotateType t) of
-      Core.TypeForall v0 -> deannotateTypeParameters (Core.forallTypeBody v0)
-      _ -> t
-
--- | Recursively strip all annotations from a type
-deannotateTypeRecursive :: Core.Type -> Core.Type
-deannotateTypeRecursive typ =
-
-      let strip =
-              \recurse -> \typ2 ->
-                let rewritten = recurse typ2
-                in case rewritten of
-                  Core.TypeAnnotated v0 -> Core.annotatedTypeBody v0
-                  _ -> rewritten
-      in (rewriteType strip typ)
-
--- | Recursively strip all annotations from a type scheme
-deannotateTypeSchemeRecursive :: Core.TypeScheme -> Core.TypeScheme
-deannotateTypeSchemeRecursive ts =
-
-      let vars = Core.typeSchemeVariables ts
-          typ = Core.typeSchemeType ts
-          constraints = Core.typeSchemeConstraints ts
-      in Core.TypeScheme {
-        Core.typeSchemeVariables = vars,
-        Core.typeSchemeType = (deannotateTypeRecursive typ),
-        Core.typeSchemeConstraints = constraints}
-
--- | Strip System F type annotations from the top levels of a term, but leave application-specific annotations intact
-detypeTerm :: Core.Term -> Core.Term
-detypeTerm t =
-    case t of
-      Core.TermAnnotated v0 ->
-        let subj = Core.annotatedTermBody v0
-            ann = Core.annotatedTermAnnotation v0
-        in (Core.TermAnnotated (Core.AnnotatedTerm {
-          Core.annotatedTermBody = (detypeTerm subj),
-          Core.annotatedTermAnnotation = ann}))
-      Core.TermTypeApplication v0 -> deannotateAndDetypeTerm (Core.typeApplicationTermBody v0)
-      Core.TermTypeLambda v0 -> deannotateAndDetypeTerm (Core.typeLambdaBody v0)
-      _ -> t
-
--- | Extend a graph by descending into a lambda body
-extendGraphForLambda :: Graph.Graph -> Core.Lambda -> Graph.Graph
-extendGraphForLambda g lam =
-
-      let var = Core.lambdaParameter lam
-      in Graph.Graph {
-        Graph.graphBoundTerms = (Graph.graphBoundTerms g),
-        Graph.graphBoundTypes = (Maybes.maybe (Graph.graphBoundTypes g) (\dom -> Maps.insert var (fTypeToTypeScheme dom) (Graph.graphBoundTypes g)) (Core.lambdaDomain lam)),
-        Graph.graphClassConstraints = (Graph.graphClassConstraints g),
-        Graph.graphLambdaVariables = (Sets.insert var (Graph.graphLambdaVariables g)),
-        Graph.graphMetadata = (Maps.delete var (Graph.graphMetadata g)),
-        Graph.graphPrimitives = (Graph.graphPrimitives g),
-        Graph.graphSchemaTypes = (Graph.graphSchemaTypes g),
-        Graph.graphTypeVariables = (Graph.graphTypeVariables g)}
-
--- | Extend a graph by descending into a let body
-extendGraphForLet :: (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> Graph.Graph -> Core.Let -> Graph.Graph
-extendGraphForLet forBinding g letrec =
-
-      let bindings = Core.letBindings letrec
-          g2 = extendGraphWithBindings bindings g
-      in Graph.Graph {
-        Graph.graphBoundTerms = (Maps.union (Maps.fromList (Lists.map (\b -> (Core.bindingName b, (Core.bindingTerm b))) bindings)) (Graph.graphBoundTerms g)),
-        Graph.graphBoundTypes = (Maps.union (Maps.fromList (Maybes.cat (Lists.map (\b -> Maybes.map (\ts -> (Core.bindingName b, ts)) (Core.bindingType b)) bindings))) (Graph.graphBoundTypes g)),
-        Graph.graphClassConstraints = (Graph.graphClassConstraints g),
-        Graph.graphLambdaVariables = (Lists.foldl (\s -> \b -> Sets.delete (Core.bindingName b) s) (Graph.graphLambdaVariables g) bindings),
-        Graph.graphMetadata = (Graph.graphMetadata (Lists.foldl (\gAcc -> \b ->
-          let m = Graph.graphMetadata gAcc
-              newMeta = Maybes.maybe (Maps.delete (Core.bindingName b) m) (\t -> Maps.insert (Core.bindingName b) t m) (forBinding gAcc b)
-          in Graph.Graph {
-            Graph.graphBoundTerms = (Graph.graphBoundTerms gAcc),
-            Graph.graphBoundTypes = (Graph.graphBoundTypes gAcc),
-            Graph.graphClassConstraints = (Graph.graphClassConstraints gAcc),
-            Graph.graphLambdaVariables = (Graph.graphLambdaVariables gAcc),
-            Graph.graphMetadata = newMeta,
-            Graph.graphPrimitives = (Graph.graphPrimitives gAcc),
-            Graph.graphSchemaTypes = (Graph.graphSchemaTypes gAcc),
-            Graph.graphTypeVariables = (Graph.graphTypeVariables gAcc)}) g2 bindings)),
-        Graph.graphPrimitives = (Graph.graphPrimitives g),
-        Graph.graphSchemaTypes = (Graph.graphSchemaTypes g),
-        Graph.graphTypeVariables = (Graph.graphTypeVariables g)}
-
--- | Extend a graph by descending into a type lambda body
-extendGraphForTypeLambda :: Graph.Graph -> Core.TypeLambda -> Graph.Graph
-extendGraphForTypeLambda g tlam =
-
-      let name = Core.typeLambdaParameter tlam
-      in Graph.Graph {
-        Graph.graphBoundTerms = (Graph.graphBoundTerms g),
-        Graph.graphBoundTypes = (Graph.graphBoundTypes g),
-        Graph.graphClassConstraints = (Graph.graphClassConstraints g),
-        Graph.graphLambdaVariables = (Graph.graphLambdaVariables g),
-        Graph.graphMetadata = (Graph.graphMetadata g),
-        Graph.graphPrimitives = (Graph.graphPrimitives g),
-        Graph.graphSchemaTypes = (Graph.graphSchemaTypes g),
-        Graph.graphTypeVariables = (Sets.insert name (Graph.graphTypeVariables g))}
-
--- | Add bindings to an existing graph
-extendGraphWithBindings :: [Core.Binding] -> Graph.Graph -> Graph.Graph
-extendGraphWithBindings bindings g =
-
-      let newTerms = Maps.fromList (Lists.map (\b -> (Core.bindingName b, (Core.bindingTerm b))) bindings)
-          newTypes =
-                  Maps.fromList (Maybes.cat (Lists.map (\b -> Maybes.map (\ts -> (Core.bindingName b, ts)) (Core.bindingType b)) bindings))
-      in Graph.Graph {
-        Graph.graphBoundTerms = (Maps.union newTerms (Graph.graphBoundTerms g)),
-        Graph.graphBoundTypes = (Maps.union newTypes (Graph.graphBoundTypes g)),
-        Graph.graphClassConstraints = (Graph.graphClassConstraints g),
-        Graph.graphLambdaVariables = (Graph.graphLambdaVariables g),
-        Graph.graphMetadata = (Graph.graphMetadata g),
-        Graph.graphPrimitives = (Graph.graphPrimitives g),
-        Graph.graphSchemaTypes = (Graph.graphSchemaTypes g),
-        Graph.graphTypeVariables = (Graph.graphTypeVariables g)}
-
--- | Convert a forall type to a type scheme
-fTypeToTypeScheme :: Core.Type -> Core.TypeScheme
-fTypeToTypeScheme typ =
-
-      let gatherForall =
-              \vars -> \typ2 -> case (deannotateType typ2) of
-                Core.TypeForall v0 -> gatherForall (Lists.cons (Core.forallTypeParameter v0) vars) (Core.forallTypeBody v0)
-                _ -> Core.TypeScheme {
-                  Core.typeSchemeVariables = (Lists.reverse vars),
-                  Core.typeSchemeType = typ2,
-                  Core.typeSchemeConstraints = Nothing}
-      in (gatherForall [] typ)
-
--- | Flatten nested let expressions
-flattenLetTerms :: Core.Term -> Core.Term
-flattenLetTerms term =
-
-      let rewriteBinding =
-              \binding ->
-                let key0 = Core.bindingName binding
-                    val0 = Core.bindingTerm binding
-                    t = Core.bindingType binding
-                in case val0 of
-                  Core.TermAnnotated v0 ->
-                    let val1 = Core.annotatedTermBody v0
-                        ann = Core.annotatedTermAnnotation v0
-                        recursive =
-                                rewriteBinding (Core.Binding {
-                                  Core.bindingName = key0,
-                                  Core.bindingTerm = val1,
-                                  Core.bindingType = t})
-                        innerBinding = Pairs.first recursive
-                        deps = Pairs.second recursive
-                        val2 = Core.bindingTerm innerBinding
-                    in (Core.Binding {
-                      Core.bindingName = key0,
-                      Core.bindingTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
-                        Core.annotatedTermBody = val2,
-                        Core.annotatedTermAnnotation = ann})),
-                      Core.bindingType = t}, deps)
-                  Core.TermLet v0 ->
-                    let bindings1 = Core.letBindings v0
-                        body1 = Core.letBody v0
-                        prefix = Strings.cat2 (Core.unName key0) "_"
-                        qualify = \n -> Core.Name (Strings.cat2 prefix (Core.unName n))
-                        toSubstPair = \b -> (Core.bindingName b, (qualify (Core.bindingName b)))
-                        subst = Maps.fromList (Lists.map toSubstPair bindings1)
-                        replaceVars = substituteVariables subst
-                        newBody = replaceVars body1
-                        newBinding =
-                                \b -> Core.Binding {
-                                  Core.bindingName = (qualify (Core.bindingName b)),
-                                  Core.bindingTerm = (replaceVars (Core.bindingTerm b)),
-                                  Core.bindingType = (Core.bindingType b)}
-                    in (Core.Binding {
-                      Core.bindingName = key0,
-                      Core.bindingTerm = newBody,
-                      Core.bindingType = t}, (Lists.map newBinding bindings1))
-                  _ -> (Core.Binding {
-                    Core.bindingName = key0,
-                    Core.bindingTerm = val0,
-                    Core.bindingType = t}, [])
-          flattenBodyLet =
-                  \bindings -> \body -> case body of
-                    Core.TermLet v0 ->
-                      let innerBindings = Core.letBindings v0
-                          innerBody = Core.letBody v0
-                      in (flattenBodyLet (Lists.concat2 bindings innerBindings) innerBody)
-                    _ -> (Lists.concat2 [] bindings, body)
-          flatten =
-                  \recurse -> \term2 ->
-                    let rewritten = recurse term2
-                    in case rewritten of
-                      Core.TermLet v0 ->
-                        let bindings = Core.letBindings v0
-                            body = Core.letBody v0
-                            forResult = \hr -> Lists.concat2 (Pairs.second hr) (Lists.pure (Pairs.first hr))
-                            flattenedBindings = Lists.concat (Lists.map (\arg_ -> forResult (rewriteBinding arg_)) bindings)
-                            merged = flattenBodyLet flattenedBindings body
-                            newBindings = Pairs.first merged
-                            newBody = Pairs.second merged
-                        in (Core.TermLet (Core.Let {
-                          Core.letBindings = newBindings,
-                          Core.letBody = newBody}))
-                      _ -> rewritten
-      in (rewriteTerm flatten term)
 
 -- | Fold over a term, traversing its subterms in the specified order
 foldOverTerm :: Coders.TraversalOrder -> (t0 -> Core.Term -> t0) -> t0 -> Core.Term -> t0
@@ -297,156 +63,6 @@ foldTermWithGraphAndPath f cx0 val0 term0 =
           result = rewriteAndFoldTermWithGraphAndPath wrapper cx0 val0 term0
       in (Pairs.first result)
 
--- | Get the set of free type variables in a term (including schema names, where they appear in type annotations). In this context, only the type schemes of let bindings can bind type variables; type lambdas do not.
-freeTypeVariablesInTerm :: Core.Term -> S.Set Core.Name
-freeTypeVariablesInTerm term0 =
-
-      let allOf = \sets -> Lists.foldl Sets.union Sets.empty sets
-          tryType = \tvars -> \typ -> Sets.difference (freeVariablesInType typ) tvars
-          getAll =
-                  \vars -> \term ->
-                    let recurse = getAll vars
-                        dflt = allOf (Lists.map recurse (subterms term))
-                    in case term of
-                      Core.TermFunction v0 -> case v0 of
-                        Core.FunctionElimination _ -> dflt
-                        Core.FunctionLambda v1 ->
-                          let domt = Maybes.maybe Sets.empty (tryType vars) (Core.lambdaDomain v1)
-                          in (Sets.union domt (recurse (Core.lambdaBody v1)))
-                        _ -> dflt
-                      Core.TermLet v0 ->
-                        let forBinding =
-                                \b ->
-                                  let newVars = Maybes.maybe vars (\ts -> Sets.union vars (Sets.fromList (Core.typeSchemeVariables ts))) (Core.bindingType b)
-                                  in (Sets.union (getAll newVars (Core.bindingTerm b)) (Maybes.maybe Sets.empty (\ts -> tryType newVars (Core.typeSchemeType ts)) (Core.bindingType b)))
-                        in (Sets.union (allOf (Lists.map forBinding (Core.letBindings v0))) (recurse (Core.letBody v0)))
-                      Core.TermTypeApplication v0 -> Sets.union (tryType vars (Core.typeApplicationTermType v0)) (recurse (Core.typeApplicationTermBody v0))
-                      Core.TermTypeLambda v0 -> Sets.union (tryType vars (Core.TypeVariable (Core.typeLambdaParameter v0))) (recurse (Core.typeLambdaBody v0))
-                      _ -> dflt
-      in (getAll Sets.empty term0)
-
--- | Find the free variables (i.e. variables not bound by a lambda or let) in a term
-freeVariablesInTerm :: Core.Term -> S.Set Core.Name
-freeVariablesInTerm term =
-
-      let dfltVars = \_ -> Lists.foldl (\s -> \t -> Sets.union s (freeVariablesInTerm t)) Sets.empty (subterms term)
-      in case term of
-        Core.TermFunction v0 -> case v0 of
-          Core.FunctionLambda v1 -> Sets.delete (Core.lambdaParameter v1) (freeVariablesInTerm (Core.lambdaBody v1))
-          _ -> dfltVars ()
-        Core.TermLet v0 -> Sets.difference (dfltVars ()) (Sets.fromList (Lists.map Core.bindingName (Core.letBindings v0)))
-        Core.TermVariable v0 -> Sets.singleton v0
-        _ -> dfltVars ()
-
--- | Find the free variables (i.e. variables not bound by a lambda or let) in a type
-freeVariablesInType :: Core.Type -> S.Set Core.Name
-freeVariablesInType typ =
-
-      let dfltVars = Lists.foldl (\s -> \t -> Sets.union s (freeVariablesInType t)) Sets.empty (subtypes typ)
-      in case typ of
-        Core.TypeForall v0 -> Sets.delete (Core.forallTypeParameter v0) (freeVariablesInType (Core.forallTypeBody v0))
-        Core.TypeVariable v0 -> Sets.singleton v0
-        _ -> dfltVars
-
--- | Find the free variables in a type in deterministic left-to-right order
-freeVariablesInTypeOrdered :: Core.Type -> [Core.Name]
-freeVariablesInTypeOrdered typ =
-
-      let collectVars =
-              \boundVars -> \t -> case t of
-                Core.TypeVariable v0 -> Logic.ifElse (Sets.member v0 boundVars) [] [
-                  v0]
-                Core.TypeForall v0 -> collectVars (Sets.insert (Core.forallTypeParameter v0) boundVars) (Core.forallTypeBody v0)
-                _ -> Lists.concat (Lists.map (collectVars boundVars) (subtypes t))
-      in (Lists.nub (collectVars Sets.empty typ))
-
--- | Find free variables in a type scheme
-freeVariablesInTypeScheme :: Core.TypeScheme -> S.Set Core.Name
-freeVariablesInTypeScheme ts =
-
-      let vars = Core.typeSchemeVariables ts
-          t = Core.typeSchemeType ts
-      in (Sets.difference (freeVariablesInType t) (Sets.fromList vars))
-
--- | Find free variables in a type scheme (simple version)
-freeVariablesInTypeSchemeSimple :: Core.TypeScheme -> S.Set Core.Name
-freeVariablesInTypeSchemeSimple ts =
-
-      let vars = Core.typeSchemeVariables ts
-          t = Core.typeSchemeType ts
-      in (Sets.difference (freeVariablesInTypeSimple t) (Sets.fromList vars))
-
--- | Same as freeVariablesInType, but ignores the binding action of lambda types
-freeVariablesInTypeSimple :: Core.Type -> S.Set Core.Name
-freeVariablesInTypeSimple typ =
-
-      let helper =
-              \types -> \typ2 -> case typ2 of
-                Core.TypeVariable v0 -> Sets.insert v0 types
-                _ -> types
-      in (foldOverType Coders.TraversalOrderPre helper Sets.empty typ)
-
--- | Inline all type variables in a type using the provided schema (Either version). Note: this function is only appropriate for nonrecursive type definitions
-inlineType :: M.Map Core.Name Core.Type -> Core.Type -> Either String Core.Type
-inlineType schema typ =
-
-      let f =
-              \recurse -> \typ2 ->
-                let afterRecurse =
-                        \tr -> case tr of
-                          Core.TypeVariable v0 -> Maybes.maybe (Left (Strings.cat2 "No such type in schema: " (Core.unName v0))) (inlineType schema) (Maps.lookup v0 schema)
-                          _ -> Right tr
-                in (Eithers.bind (recurse typ2) (\tr -> afterRecurse tr))
-      in (rewriteTypeM f typ)
-
--- | Check whether a variable is free (not bound) in a term
-isFreeVariableInTerm :: Core.Name -> Core.Term -> Bool
-isFreeVariableInTerm v term = Logic.not (Sets.member v (freeVariablesInTerm term))
-
--- | Check whether a term is a lambda, possibly nested within let and/or annotation terms
-isLambda :: Core.Term -> Bool
-isLambda term =
-    case (deannotateTerm term) of
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionLambda _ -> True
-        _ -> False
-      Core.TermLet v0 -> isLambda (Core.letBody v0)
-      _ -> False
-
--- | Rewrite terms like `let foo = bar in λx.baz` to `λx.let foo = bar in baz`, lifting lambda-bound variables above let-bound variables, recursively. This is helpful for targets such as Python.
-liftLambdaAboveLet :: Core.Term -> Core.Term
-liftLambdaAboveLet term0 =
-
-      let rewrite =
-              \recurse -> \term ->
-                let rewriteBinding =
-                        \b -> Core.Binding {
-                          Core.bindingName = (Core.bindingName b),
-                          Core.bindingTerm = (rewrite recurse (Core.bindingTerm b)),
-                          Core.bindingType = (Core.bindingType b)}
-                    rewriteBindings = \bs -> Lists.map rewriteBinding bs
-                    digForLambdas =
-                            \original -> \cons -> \term2 -> case term2 of
-                              Core.TermAnnotated v0 -> digForLambdas original (\t -> Core.TermAnnotated (Core.AnnotatedTerm {
-                                Core.annotatedTermBody = (cons t),
-                                Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v0)})) (Core.annotatedTermBody v0)
-                              Core.TermFunction v0 -> case v0 of
-                                Core.FunctionLambda v1 -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                  Core.lambdaParameter = (Core.lambdaParameter v1),
-                                  Core.lambdaDomain = (Core.lambdaDomain v1),
-                                  Core.lambdaBody = (digForLambdas (cons (Core.lambdaBody v1)) (\t -> cons t) (Core.lambdaBody v1))}))
-                                _ -> recurse original
-                              Core.TermLet v0 -> digForLambdas original (\t -> cons (Core.TermLet (Core.Let {
-                                Core.letBindings = (rewriteBindings (Core.letBindings v0)),
-                                Core.letBody = t}))) (Core.letBody v0)
-                              _ -> recurse original
-                in case term of
-                  Core.TermLet v0 -> digForLambdas term (\t -> Core.TermLet (Core.Let {
-                    Core.letBindings = (rewriteBindings (Core.letBindings v0)),
-                    Core.letBody = t})) (Core.letBody v0)
-                  _ -> recurse term
-      in (rewriteTerm rewrite term0)
-
 -- | Apply a transformation to the first type beneath a chain of annotations
 mapBeneathTypeAnnotations :: (Core.Type -> Core.Type) -> Core.Type -> Core.Type
 mapBeneathTypeAnnotations f t =
@@ -456,244 +72,12 @@ mapBeneathTypeAnnotations f t =
         Core.annotatedTypeAnnotation = (Core.annotatedTypeAnnotation v0)})
       _ -> f t
 
--- | Recursively replace the type variables of let bindings with the systematic type variables t0, t1, t2, ...
-normalizeTypeVariablesInTerm :: Core.Term -> Core.Term
-normalizeTypeVariablesInTerm term =
-
-      let replaceName = \subst -> \v -> Maybes.fromMaybe v (Maps.lookup v subst)
-          substType =
-                  \subst -> \typ ->
-                    let rewrite =
-                            \recurse -> \typ2 -> case typ2 of
-                              Core.TypeVariable v0 -> Core.TypeVariable (replaceName subst v0)
-                              _ -> recurse typ2
-                    in (rewriteType rewrite typ)
-          rewriteWithSubst =
-                  \state -> \term0 ->
-                    let sb = Pairs.first state
-                        next = Pairs.second state
-                        subst = Pairs.first sb
-                        boundVars = Pairs.second sb
-                        rewrite =
-                                \recurse -> \term2 -> case term2 of
-                                  Core.TermFunction v0 -> case v0 of
-                                    Core.FunctionElimination _ -> recurse term2
-                                    Core.FunctionLambda v1 ->
-                                      let domain = Core.lambdaDomain v1
-                                      in (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                        Core.lambdaParameter = (Core.lambdaParameter v1),
-                                        Core.lambdaDomain = (Maybes.map (substType subst) domain),
-                                        Core.lambdaBody = (rewriteWithSubst ((subst, boundVars), next) (Core.lambdaBody v1))})))
-                                    _ -> recurse term2
-                                  Core.TermLet v0 ->
-                                    let bindings0 = Core.letBindings v0
-                                        body0 = Core.letBody v0
-                                        step =
-                                                \acc -> \bs -> Logic.ifElse (Lists.null bs) (Lists.reverse acc) (
-                                                  let b = Lists.head bs
-                                                      tl = Lists.tail bs
-                                                      noType =
-
-                                                                let newVal = rewriteWithSubst ((subst, boundVars), next) (Core.bindingTerm b)
-                                                                    b1 =
-                                                                            Core.Binding {
-                                                                              Core.bindingName = (Core.bindingName b),
-                                                                              Core.bindingTerm = newVal,
-                                                                              Core.bindingType = Nothing}
-                                                                in (step (Lists.cons b1 acc) tl)
-                                                      withType =
-                                                              \ts ->
-                                                                let vars = Core.typeSchemeVariables ts
-                                                                    typ = Core.typeSchemeType ts
-                                                                    k = Lists.length vars
-                                                                    gen =
-                                                                            \i -> \rem -> \acc2 ->
-                                                                              let ti = Core.Name (Strings.cat2 "t" (Literals.showInt32 (Math.add next i)))
-                                                                              in (Logic.ifElse (Equality.equal rem 0) (Lists.reverse acc2) (gen (Math.add i 1) (Math.sub rem 1) (Lists.cons ti acc2)))
-                                                                    newVars = gen 0 k []
-                                                                    newSubst = Maps.union (Maps.fromList (Lists.zip vars newVars)) subst
-                                                                    newBound = Sets.union boundVars (Sets.fromList newVars)
-                                                                    newVal = rewriteWithSubst ((newSubst, newBound), (Math.add next k)) (Core.bindingTerm b)
-                                                                    renameConstraintKeys =
-                                                                            \constraintMap -> Maps.fromList (Lists.map (\p ->
-                                                                              let oldName = Pairs.first p
-                                                                                  meta = Pairs.second p
-                                                                                  newName = Maybes.fromMaybe oldName (Maps.lookup oldName newSubst)
-                                                                              in (newName, meta)) (Maps.toList constraintMap))
-                                                                    oldConstraints = Core.typeSchemeConstraints ts
-                                                                    newConstraints = Maybes.map renameConstraintKeys oldConstraints
-                                                                    b1 =
-                                                                            Core.Binding {
-                                                                              Core.bindingName = (Core.bindingName b),
-                                                                              Core.bindingTerm = newVal,
-                                                                              Core.bindingType = (Just (Core.TypeScheme {
-                                                                                Core.typeSchemeVariables = newVars,
-                                                                                Core.typeSchemeType = (substType newSubst typ),
-                                                                                Core.typeSchemeConstraints = newConstraints}))}
-                                                                in (step (Lists.cons b1 acc) tl)
-                                                  in (Maybes.maybe noType (\ts -> withType ts) (Core.bindingType b)))
-                                        bindings1 = step [] bindings0
-                                    in (Core.TermLet (Core.Let {
-                                      Core.letBindings = bindings1,
-                                      Core.letBody = (rewriteWithSubst ((subst, boundVars), next) body0)}))
-                                  Core.TermTypeApplication v0 -> Core.TermTypeApplication (Core.TypeApplicationTerm {
-                                    Core.typeApplicationTermBody = (rewriteWithSubst ((subst, boundVars), next) (Core.typeApplicationTermBody v0)),
-                                    Core.typeApplicationTermType = (substType subst (Core.typeApplicationTermType v0))})
-                                  Core.TermTypeLambda v0 -> Core.TermTypeLambda (Core.TypeLambda {
-                                    Core.typeLambdaParameter = (replaceName subst (Core.typeLambdaParameter v0)),
-                                    Core.typeLambdaBody = (rewriteWithSubst ((subst, boundVars), next) (Core.typeLambdaBody v0))})
-                                  _ -> recurse term2
-                    in (rewriteTerm rewrite term0)
-      in (rewriteWithSubst ((Maps.empty, Sets.empty), 0) term)
-
--- | Given a let expression, remove any unused bindings. The resulting expression is still a let, even if has no remaining bindings
-pruneLet :: Core.Let -> Core.Let
-pruneLet l =
-
-      let bindingMap = Maps.fromList (Lists.map (\b -> (Core.bindingName b, (Core.bindingTerm b))) (Core.letBindings l))
-          rootName = Core.Name "[[[root]]]"
-          adj =
-                  \n -> Sets.intersection (Sets.fromList (Maps.keys bindingMap)) (freeVariablesInTerm (Logic.ifElse (Equality.equal n rootName) (Core.letBody l) (Maybes.fromJust (Maps.lookup n bindingMap))))
-          reachable = Sorting.findReachableNodes adj rootName
-          prunedBindings = Lists.filter (\b -> Sets.member (Core.bindingName b) reachable) (Core.letBindings l)
-      in Core.Let {
-        Core.letBindings = prunedBindings,
-        Core.letBody = (Core.letBody l)}
-
--- | Recursively remove term annotations, including within subterms
-removeTermAnnotations :: Core.Term -> Core.Term
-removeTermAnnotations term =
-
-      let remove =
-              \recurse -> \term2 ->
-                let rewritten = recurse term2
-                in case term2 of
-                  Core.TermAnnotated v0 -> Core.annotatedTermBody v0
-                  _ -> rewritten
-      in (rewriteTerm remove term)
-
--- | Recursively remove type annotations, including within subtypes
-removeTypeAnnotations :: Core.Type -> Core.Type
-removeTypeAnnotations typ =
-
-      let remove =
-              \recurse -> \typ2 ->
-                let rewritten = recurse typ2
-                in case rewritten of
-                  Core.TypeAnnotated v0 -> Core.annotatedTypeBody v0
-                  _ -> rewritten
-      in (rewriteType remove typ)
-
--- | Strip type annotations (TypeLambda, TypeApplication, binding type schemes) from terms while preserving lambda domain types and other annotations
-removeTypeAnnotationsFromTerm :: Core.Term -> Core.Term
-removeTypeAnnotationsFromTerm term =
-
-      let strip =
-              \recurse -> \term2 ->
-                let rewritten = recurse term2
-                    stripBinding =
-                            \b -> Core.Binding {
-                              Core.bindingName = (Core.bindingName b),
-                              Core.bindingTerm = (Core.bindingTerm b),
-                              Core.bindingType = Nothing}
-                in case rewritten of
-                  Core.TermLet v0 -> Core.TermLet (Core.Let {
-                    Core.letBindings = (Lists.map stripBinding (Core.letBindings v0)),
-                    Core.letBody = (Core.letBody v0)})
-                  Core.TermTypeApplication v0 -> Core.typeApplicationTermBody v0
-                  Core.TermTypeLambda v0 -> Core.typeLambdaBody v0
-                  _ -> rewritten
-      in (rewriteTerm strip term)
-
--- | Strip type annotations from terms while preserving other annotations
-removeTypesFromTerm :: Core.Term -> Core.Term
-removeTypesFromTerm term =
-
-      let strip =
-              \recurse -> \term2 ->
-                let rewritten = recurse term2
-                    stripBinding =
-                            \b -> Core.Binding {
-                              Core.bindingName = (Core.bindingName b),
-                              Core.bindingTerm = (Core.bindingTerm b),
-                              Core.bindingType = Nothing}
-                in case rewritten of
-                  Core.TermFunction v0 -> case v0 of
-                    Core.FunctionElimination v1 -> Core.TermFunction (Core.FunctionElimination v1)
-                    Core.FunctionLambda v1 -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.lambdaParameter v1),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.lambdaBody v1)}))
-                    _ -> Core.TermFunction v0
-                  Core.TermLet v0 -> Core.TermLet (Core.Let {
-                    Core.letBindings = (Lists.map stripBinding (Core.letBindings v0)),
-                    Core.letBody = (Core.letBody v0)})
-                  Core.TermTypeApplication v0 -> Core.typeApplicationTermBody v0
-                  Core.TermTypeLambda v0 -> Core.typeLambdaBody v0
-                  _ -> rewritten
-      in (rewriteTerm strip term)
-
--- | Replace a free variable in a term
-replaceFreeTermVariable :: Core.Name -> Core.Term -> Core.Term -> Core.Term
-replaceFreeTermVariable vold tnew term =
-
-      let rewrite =
-              \recurse -> \t -> case t of
-                Core.TermFunction v0 -> case v0 of
-                  Core.FunctionLambda v1 ->
-                    let v = Core.lambdaParameter v1
-                    in (Logic.ifElse (Equality.equal v vold) t (recurse t))
-                  _ -> recurse t
-                Core.TermVariable v0 -> Logic.ifElse (Equality.equal v0 vold) tnew (Core.TermVariable v0)
-                _ -> recurse t
-      in (rewriteTerm rewrite term)
-
--- | Replace free occurrences of a name in a type
-replaceFreeTypeVariable :: Core.Name -> Core.Type -> Core.Type -> Core.Type
-replaceFreeTypeVariable v rep typ =
-
-      let mapExpr =
-              \recurse -> \t -> case t of
-                Core.TypeForall v0 -> Logic.ifElse (Equality.equal v (Core.forallTypeParameter v0)) t (Core.TypeForall (Core.ForallType {
-                  Core.forallTypeParameter = (Core.forallTypeParameter v0),
-                  Core.forallTypeBody = (recurse (Core.forallTypeBody v0))}))
-                Core.TypeVariable v0 -> Logic.ifElse (Equality.equal v v0) rep t
-                _ -> recurse t
-      in (rewriteType mapExpr typ)
-
--- | Replace all occurrences of simple typedefs (type aliases) with the aliased types, recursively
-replaceTypedefs :: M.Map Core.Name Core.TypeScheme -> Core.Type -> Core.Type
-replaceTypedefs types typ0 =
-
-      let rewrite =
-              \recurse -> \typ -> case typ of
-                Core.TypeAnnotated v0 -> Core.TypeAnnotated (Core.AnnotatedType {
-                  Core.annotatedTypeBody = (rewrite recurse (Core.annotatedTypeBody v0)),
-                  Core.annotatedTypeAnnotation = (Core.annotatedTypeAnnotation v0)})
-                Core.TypeRecord _ -> typ
-                Core.TypeUnion _ -> typ
-                Core.TypeVariable v0 ->
-                  let forMono =
-                          \t -> case t of
-                            Core.TypeRecord _ -> typ
-                            Core.TypeUnion _ -> typ
-                            Core.TypeWrap _ -> typ
-                            _ -> rewrite recurse t
-                      forTypeScheme =
-                              \ts ->
-                                let t = Core.typeSchemeType ts
-                                in (Logic.ifElse (Lists.null (Core.typeSchemeVariables ts)) (forMono t) typ)
-                  in (Maybes.maybe typ (\ts -> forTypeScheme ts) (Maps.lookup v0 types))
-                Core.TypeWrap _ -> typ
-                _ -> recurse typ
-      in (rewriteType rewrite typ0)
-
 -- | Rewrite a term, and at the same time, fold a function over it, accumulating a value
 rewriteAndFoldTerm :: ((t0 -> Core.Term -> (t0, Core.Term)) -> t0 -> Core.Term -> (t0, Core.Term)) -> t0 -> Core.Term -> (t0, Core.Term)
 rewriteAndFoldTerm f term0 =
 
       let fsub =
-              \recurse -> \val0 -> \term02 ->
+              \recurse -> \val0 -> \term0 ->
                 let forSingle =
                         \rec -> \cons -> \val -> \term ->
                           let r = rec val term
@@ -750,8 +134,8 @@ rewriteAndFoldTerm f term0 =
                                   Core.lambdaDomain = (Core.lambdaDomain v0),
                                   Core.lambdaBody = (Pairs.second rl)})))
                               _ -> (val, fun)
-                    dflt = (val0, term02)
-                in case term02 of
+                    dflt = (val0, term0)
+                in case term0 of
                   Core.TermAnnotated v0 -> forSingle recurse (\t -> Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = t,
                     Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v0)})) val0 (Core.annotatedTermBody v0)
@@ -766,7 +150,7 @@ rewriteAndFoldTerm f term0 =
                     in (Pairs.first rl, (Core.TermEither (Left (Pairs.second rl))))) (\r ->
                     let rr = recurse val0 r
                     in (Pairs.first rr, (Core.TermEither (Right (Pairs.second rr))))) v0
-                  Core.TermFunction v0 -> forSingle forFunction (\f3 -> Core.TermFunction f3) val0 v0
+                  Core.TermFunction v0 -> forSingle forFunction (\f -> Core.TermFunction f) val0 v0
                   Core.TermLet v0 ->
                     let renv = recurse val0 (Core.letBody v0)
                     in (forMany forBinding (\bins -> Core.TermLet (Core.Let {
@@ -812,10 +196,10 @@ rewriteAndFoldTermWithGraph f cx0 val0 term0 =
                     cx1 =
                             case term of
                               Core.TermFunction v0 -> case v0 of
-                                Core.FunctionLambda v1 -> extendGraphForLambda cx v1
+                                Core.FunctionLambda v1 -> Scoping.extendGraphForLambda cx v1
                                 _ -> cx
-                              Core.TermLet v0 -> extendGraphForLet (\_ -> \_2 -> Nothing) cx v0
-                              Core.TermTypeLambda v0 -> extendGraphForTypeLambda cx v0
+                              Core.TermLet v0 -> Scoping.extendGraphForLet (\_ -> \_ -> Nothing) cx v0
+                              Core.TermTypeLambda v0 -> Scoping.extendGraphForTypeLambda cx v0
                               _ -> cx
                     recurseForUser =
                             \newVal -> \subterm ->
@@ -837,10 +221,10 @@ rewriteAndFoldTermWithGraphAndPath f cx0 val0 term0 =
                     cx1 =
                             case term of
                               Core.TermFunction v0 -> case v0 of
-                                Core.FunctionLambda v1 -> extendGraphForLambda cx v1
+                                Core.FunctionLambda v1 -> Scoping.extendGraphForLambda cx v1
                                 _ -> cx
-                              Core.TermLet v0 -> extendGraphForLet (\_ -> \_2 -> Nothing) cx v0
-                              Core.TermTypeLambda v0 -> extendGraphForTypeLambda cx v0
+                              Core.TermLet v0 -> Scoping.extendGraphForLet (\_ -> \_ -> Nothing) cx v0
+                              Core.TermTypeLambda v0 -> Scoping.extendGraphForTypeLambda cx v0
                               _ -> cx
                     recurseForUser =
                             \valIn -> \termIn ->
@@ -856,7 +240,7 @@ rewriteAndFoldTermWithPath :: (([Paths.SubtermStep] -> t0 -> Core.Term -> (t0, C
 rewriteAndFoldTermWithPath f term0 =
 
       let fsub =
-              \recurse -> \path -> \val0 -> \term02 ->
+              \recurse -> \path -> \val0 -> \term0 ->
                 let forSingleWithAccessor =
                         \rec -> \cons -> \accessor -> \val -> \term ->
                           let r = rec (Lists.concat2 path [
@@ -904,7 +288,7 @@ rewriteAndFoldTermWithPath f term0 =
                                                     Paths.SubtermStepUnionCasesDefault]) val def) (Core.caseStatementDefault v0)
                                               val1 = Maybes.maybe val Pairs.first rmd
                                               rcases =
-                                                      forManyWithAccessors recurse (\x -> x) val1 (Lists.map (\f2 -> (Paths.SubtermStepUnionCasesBranch (Core.fieldName f2), (Core.fieldTerm f2))) (Core.caseStatementCases v0))
+                                                      forManyWithAccessors recurse (\x -> x) val1 (Lists.map (\f -> (Paths.SubtermStepUnionCasesBranch (Core.fieldName f), (Core.fieldTerm f))) (Core.caseStatementCases v0))
                                           in (Pairs.first rcases, (Core.EliminationUnion (Core.CaseStatement {
                                             Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
                                             Core.caseStatementDefault = (Maybes.map Pairs.second rmd),
@@ -926,8 +310,8 @@ rewriteAndFoldTermWithPath f term0 =
                                   Core.lambdaDomain = (Core.lambdaDomain v0),
                                   Core.lambdaBody = (Pairs.second rl)})))
                               _ -> (val, fun)
-                    dflt = (val0, term02)
-                in case term02 of
+                    dflt = (val0, term0)
+                in case term0 of
                   Core.TermAnnotated v0 -> forSingleWithAccessor recurse (\t -> Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = t,
                     Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v0)})) Paths.SubtermStepAnnotatedBody val0 (Core.annotatedTermBody v0)
@@ -986,7 +370,7 @@ rewriteAndFoldTermWithPath f term0 =
                     in (Pairs.first rs, (Core.TermPair (Pairs.second rf, (Pairs.second rs))))
                   Core.TermRecord v0 ->
                     let rfields =
-                            forManyWithAccessors recurse (\x -> x) val0 (Lists.map (\f2 -> (Paths.SubtermStepRecordField (Core.fieldName f2), (Core.fieldTerm f2))) (Core.recordFields v0))
+                            forManyWithAccessors recurse (\x -> x) val0 (Lists.map (\f -> (Paths.SubtermStepRecordField (Core.fieldName f), (Core.fieldTerm f))) (Core.recordFields v0))
                     in (Pairs.first rfields, (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.recordTypeName v0),
                       Core.recordFields = (Lists.map (\ft -> Core.Field {
@@ -1024,9 +408,9 @@ rewriteTerm f term0 =
       let fsub =
               \recurse -> \term ->
                 let forField =
-                        \f2 -> Core.Field {
-                          Core.fieldName = (Core.fieldName f2),
-                          Core.fieldTerm = (recurse (Core.fieldTerm f2))}
+                        \f -> Core.Field {
+                          Core.fieldName = (Core.fieldName f),
+                          Core.fieldTerm = (recurse (Core.fieldTerm f))}
                     forElimination =
                             \elm -> case elm of
                               Core.EliminationRecord v0 -> Core.EliminationRecord v0
@@ -1132,7 +516,7 @@ rewriteTermM f term0 =
                                   Core.caseStatementCases = rcases}))) (Eithers.mapList forField cases)))
                               Core.EliminationWrap v1 -> Right (Core.FunctionElimination (Core.EliminationWrap v1))
                         forFun =
-                                \fun2 -> case fun2 of
+                                \fun -> case fun of
                                   Core.FunctionElimination v1 -> forElm v1
                                   Core.FunctionLambda v1 ->
                                     let v = Core.lambdaParameter v1
@@ -1366,21 +750,21 @@ rewriteTermWithGraph f cx0 term0 =
 
       let f2 =
               \recurse -> \cx -> \term ->
-                let recurse1 = \term2 -> recurse cx term2
+                let recurse1 = \term -> recurse cx term
                 in case term of
                   Core.TermFunction v0 -> case v0 of
                     Core.FunctionLambda v1 ->
-                      let cx1 = extendGraphForLambda cx v1
-                          recurse2 = \term2 -> recurse cx1 term2
+                      let cx1 = Scoping.extendGraphForLambda cx v1
+                          recurse2 = \term -> recurse cx1 term
                       in (f recurse2 cx1 term)
                     _ -> f recurse1 cx term
                   Core.TermLet v0 ->
-                    let cx1 = extendGraphForLet (\_ -> \_2 -> Nothing) cx v0
-                        recurse2 = \term2 -> recurse cx1 term2
+                    let cx1 = Scoping.extendGraphForLet (\_ -> \_ -> Nothing) cx v0
+                        recurse2 = \term -> recurse cx1 term
                     in (f recurse2 cx1 term)
                   Core.TermTypeLambda v0 ->
-                    let cx1 = extendGraphForTypeLambda cx v0
-                        recurse2 = \term2 -> recurse cx1 term2
+                    let cx1 = Scoping.extendGraphForTypeLambda cx v0
+                        recurse2 = \term -> recurse cx1 term
                     in (f recurse2 cx1 term)
                   _ -> f recurse1 cx term
           rewrite = \cx -> \term -> f2 rewrite cx term
@@ -1462,15 +846,15 @@ rewriteTypeM f typ0 =
                 Core.TypeMaybe v0 -> Eithers.bind (recurse v0) (\rt -> Right (Core.TypeMaybe rt))
                 Core.TypeRecord v0 ->
                   let forField =
-                          \f2 -> Eithers.bind (recurse (Core.fieldTypeType f2)) (\t -> Right (Core.FieldType {
-                            Core.fieldTypeName = (Core.fieldTypeName f2),
+                          \f -> Eithers.bind (recurse (Core.fieldTypeType f)) (\t -> Right (Core.FieldType {
+                            Core.fieldTypeName = (Core.fieldTypeName f),
                             Core.fieldTypeType = t}))
                   in (Eithers.bind (Eithers.mapList forField v0) (\rfields -> Right (Core.TypeRecord rfields)))
                 Core.TypeSet v0 -> Eithers.bind (recurse v0) (\rt -> Right (Core.TypeSet rt))
                 Core.TypeUnion v0 ->
                   let forField =
-                          \f2 -> Eithers.bind (recurse (Core.fieldTypeType f2)) (\t -> Right (Core.FieldType {
-                            Core.fieldTypeName = (Core.fieldTypeName f2),
+                          \f -> Eithers.bind (recurse (Core.fieldTypeType f)) (\t -> Right (Core.FieldType {
+                            Core.fieldTypeName = (Core.fieldTypeName f),
                             Core.fieldTypeType = t}))
                   in (Eithers.bind (Eithers.mapList forField v0) (\rfields -> Right (Core.TypeUnion rfields)))
                 Core.TypeUnit -> Right Core.TypeUnit
@@ -1479,129 +863,6 @@ rewriteTypeM f typ0 =
                 Core.TypeWrap v0 -> Eithers.bind (recurse v0) (\t -> Right (Core.TypeWrap t))
           recurse = f (fsub recurse)
       in (recurse typ0)
-
--- | Simplify terms by applying beta reduction where possible
-simplifyTerm :: Core.Term -> Core.Term
-simplifyTerm term =
-
-      let simplify =
-              \recurse -> \term2 ->
-                let forRhs =
-                        \rhs -> \var -> \body -> case (deannotateTerm rhs) of
-                          Core.TermVariable v0 -> simplifyTerm (substituteVariable var v0 body)
-                          _ -> term2
-                    forLhs =
-                            \lhs -> \rhs ->
-                              let forFun =
-                                      \fun -> case fun of
-                                        Core.FunctionLambda v0 ->
-                                          let var = Core.lambdaParameter v0
-                                              body = Core.lambdaBody v0
-                                          in (Logic.ifElse (Sets.member var (freeVariablesInTerm body)) (forRhs rhs var body) (simplifyTerm body))
-                                        _ -> term2
-                              in case (deannotateTerm lhs) of
-                                Core.TermFunction v0 -> forFun v0
-                                _ -> term2
-                    forTerm =
-                            \stripped -> case stripped of
-                              Core.TermApplication v0 ->
-                                let lhs = Core.applicationFunction v0
-                                    rhs = Core.applicationArgument v0
-                                in (forLhs lhs rhs)
-                              _ -> term2
-                    stripped = deannotateTerm term2
-                in (recurse (forTerm stripped))
-      in (rewriteTerm simplify term)
-
--- | Strip outer type lambda wrappers from a term, preserving type application wrappers and annotations
-stripTypeLambdas :: Core.Term -> Core.Term
-stripTypeLambdas t =
-    case t of
-      Core.TermAnnotated v0 ->
-        let subj = Core.annotatedTermBody v0
-            ann = Core.annotatedTermAnnotation v0
-        in (Core.TermAnnotated (Core.AnnotatedTerm {
-          Core.annotatedTermBody = (stripTypeLambdas subj),
-          Core.annotatedTermAnnotation = ann}))
-      Core.TermTypeLambda v0 -> stripTypeLambdas (Core.typeLambdaBody v0)
-      _ -> t
-
--- | Substitute type variables in a type
-substituteTypeVariables :: M.Map Core.Name Core.Name -> Core.Type -> Core.Type
-substituteTypeVariables subst typ =
-
-      let replace =
-              \recurse -> \typ2 -> case typ2 of
-                Core.TypeVariable v0 -> Core.TypeVariable (Maybes.fromMaybe v0 (Maps.lookup v0 subst))
-                _ -> recurse typ2
-      in (rewriteType replace typ)
-
--- | Substitute type variables throughout a term, including in type annotations, type applications, lambda domains, and type schemes
-substituteTypeVariablesInTerm :: M.Map Core.Name Core.Name -> Core.Term -> Core.Term
-substituteTypeVariablesInTerm subst term =
-
-      let st = substituteTypeVariables subst
-          stOpt = \mt -> Maybes.map st mt
-          stScheme =
-                  \ts -> Core.TypeScheme {
-                    Core.typeSchemeVariables = (Core.typeSchemeVariables ts),
-                    Core.typeSchemeType = (st (Core.typeSchemeType ts)),
-                    Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts)}
-          stSchemeOpt = \mts -> Maybes.map stScheme mts
-          replace =
-                  \recurse -> \t -> case t of
-                    Core.TermFunction v0 -> case v0 of
-                      Core.FunctionLambda v1 -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                        Core.lambdaParameter = (Core.lambdaParameter v1),
-                        Core.lambdaDomain = (stOpt (Core.lambdaDomain v1)),
-                        Core.lambdaBody = (recurse (Core.lambdaBody v1))}))
-                      _ -> recurse t
-                    Core.TermLet v0 ->
-                      let mapBinding =
-                              \b -> Core.Binding {
-                                Core.bindingName = (Core.bindingName b),
-                                Core.bindingTerm = (recurse (Core.bindingTerm b)),
-                                Core.bindingType = (stSchemeOpt (Core.bindingType b))}
-                      in (Core.TermLet (Core.Let {
-                        Core.letBindings = (Lists.map mapBinding (Core.letBindings v0)),
-                        Core.letBody = (recurse (Core.letBody v0))}))
-                    Core.TermTypeApplication v0 -> Core.TermTypeApplication (Core.TypeApplicationTerm {
-                      Core.typeApplicationTermBody = (recurse (Core.typeApplicationTermBody v0)),
-                      Core.typeApplicationTermType = (st (Core.typeApplicationTermType v0))})
-                    Core.TermTypeLambda v0 -> Core.TermTypeLambda (Core.TypeLambda {
-                      Core.typeLambdaParameter = (Maybes.fromMaybe (Core.typeLambdaParameter v0) (Maps.lookup (Core.typeLambdaParameter v0) subst)),
-                      Core.typeLambdaBody = (recurse (Core.typeLambdaBody v0))})
-                    Core.TermAnnotated v0 -> Core.TermAnnotated (Core.AnnotatedTerm {
-                      Core.annotatedTermBody = (recurse (Core.annotatedTermBody v0)),
-                      Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v0)})
-                    _ -> recurse t
-      in (rewriteTerm replace term)
-
--- | Substitute one variable for another in a term
-substituteVariable :: Core.Name -> Core.Name -> Core.Term -> Core.Term
-substituteVariable from to term =
-
-      let replace =
-              \recurse -> \term2 -> case term2 of
-                Core.TermVariable v0 -> Core.TermVariable (Logic.ifElse (Equality.equal v0 from) to v0)
-                Core.TermFunction v0 -> case v0 of
-                  Core.FunctionLambda v1 -> Logic.ifElse (Equality.equal (Core.lambdaParameter v1) from) term2 (recurse term2)
-                  _ -> recurse term2
-                _ -> recurse term2
-      in (rewriteTerm replace term)
-
--- | Substitute multiple variables in a term
-substituteVariables :: M.Map Core.Name Core.Name -> Core.Term -> Core.Term
-substituteVariables subst term =
-
-      let replace =
-              \recurse -> \term2 -> case term2 of
-                Core.TermVariable v0 -> Core.TermVariable (Maybes.fromMaybe v0 (Maps.lookup v0 subst))
-                Core.TermFunction v0 -> case v0 of
-                  Core.FunctionLambda v1 -> Maybes.maybe (recurse term2) (\_ -> term2) (Maps.lookup (Core.lambdaParameter v1) subst)
-                  _ -> recurse term2
-                _ -> recurse term2
-      in (rewriteTerm replace term)
 
 -- | Find the children of a given term
 subterms :: Core.Term -> [Core.Term]
@@ -1724,130 +985,3 @@ subtypes x =
       Core.TypeVoid -> []
       Core.TypeWrap v0 -> [
         v0]
-
--- | Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that
-termDependencyNames :: Bool -> Bool -> Bool -> Core.Term -> S.Set Core.Name
-termDependencyNames binds withPrims withNoms term0 =
-
-      let addNames =
-              \names -> \term ->
-                let nominal = \name -> Logic.ifElse withNoms (Sets.insert name names) names
-                    prim = \name -> Logic.ifElse withPrims (Sets.insert name names) names
-                    var = \name -> Logic.ifElse binds (Sets.insert name names) names
-                in case term of
-                  Core.TermFunction v0 -> case v0 of
-                    Core.FunctionPrimitive v1 -> prim v1
-                    Core.FunctionElimination v1 -> case v1 of
-                      Core.EliminationRecord v2 -> nominal (Core.projectionTypeName v2)
-                      Core.EliminationUnion v2 -> nominal (Core.caseStatementTypeName v2)
-                      Core.EliminationWrap v2 -> nominal v2
-                    _ -> names
-                  Core.TermRecord v0 -> nominal (Core.recordTypeName v0)
-                  Core.TermUnion v0 -> nominal (Core.injectionTypeName v0)
-                  Core.TermVariable v0 -> var v0
-                  Core.TermWrap v0 -> nominal (Core.wrappedTermTypeName v0)
-                  _ -> names
-      in (foldOverTerm Coders.TraversalOrderPre addNames Sets.empty term0)
-
--- | Generate short names from a list of fully qualified names
-toShortNames :: [Core.Name] -> M.Map Core.Name Core.Name
-toShortNames original =
-
-      let addName =
-              \acc -> \name ->
-                let local = Names.localNameOf name
-                    group = Maybes.fromMaybe Sets.empty (Maps.lookup local acc)
-                in (Maps.insert local (Sets.insert name group) acc)
-          groupNamesByLocal = \names -> Lists.foldl addName Maps.empty names
-          groups = groupNamesByLocal original
-          renameGroup =
-                  \localNames ->
-                    let local = Pairs.first localNames
-                        names = Pairs.second localNames
-                        rangeFrom = \start -> Lists.cons start (rangeFrom (Math.add start 1))
-                        rename =
-                                \name -> \i -> (name, (Core.Name (Logic.ifElse (Equality.gt i 1) (Strings.cat2 local (Literals.showInt32 i)) local)))
-                    in (Lists.zipWith rename (Sets.toList names) (rangeFrom 1))
-      in (Maps.fromList (Lists.concat (Lists.map renameGroup (Maps.toList groups))))
-
--- | Topological sort of connected components, in terms of dependencies between variable/term binding pairs
-topologicalSortBindingMap :: M.Map Core.Name Core.Term -> [[(Core.Name, Core.Term)]]
-topologicalSortBindingMap bindingMap =
-
-      let bindings = Maps.toList bindingMap
-          keys = Sets.fromList (Lists.map Pairs.first bindings)
-          hasTypeAnnotation =
-                  \term -> case term of
-                    Core.TermAnnotated v0 -> hasTypeAnnotation (Core.annotatedTermBody v0)
-                    _ -> False
-          depsOf =
-                  \nameAndTerm ->
-                    let name = Pairs.first nameAndTerm
-                        term = Pairs.second nameAndTerm
-                    in (name, (Logic.ifElse (hasTypeAnnotation term) [] (Sets.toList (Sets.intersection keys (freeVariablesInTerm term)))))
-          toPair =
-                  \name -> (name, (Maybes.fromMaybe (Core.TermLiteral (Core.LiteralString "Impossible!")) (Maps.lookup name bindingMap)))
-      in (Lists.map (Lists.map toPair) (Sorting.topologicalSortComponents (Lists.map depsOf bindings)))
-
--- | Topological sort of elements based on their dependencies
-topologicalSortBindings :: [Core.Binding] -> Either [[Core.Name]] [Core.Name]
-topologicalSortBindings els =
-
-      let adjlist = \e -> (Core.bindingName e, (Sets.toList (termDependencyNames False True True (Core.bindingTerm e))))
-      in (Sorting.topologicalSort (Lists.map adjlist els))
-
-typeDependencyNames :: Bool -> Core.Type -> S.Set Core.Name
-typeDependencyNames withSchema typ =
-    Logic.ifElse withSchema (Sets.union (freeVariablesInType typ) (typeNamesInType typ)) (freeVariablesInType typ)
-
-typeNamesInType :: Ord t0 => (Core.Type -> S.Set t0)
-typeNamesInType typ0 =
-
-      let addNames = \names -> \typ -> names
-      in (foldOverType Coders.TraversalOrderPre addNames Sets.empty typ0)
-
--- | Convert a type scheme to a forall type
-typeSchemeToFType :: Core.TypeScheme -> Core.Type
-typeSchemeToFType ts =
-
-      let vars = Core.typeSchemeVariables ts
-          body = Core.typeSchemeType ts
-      in (Lists.foldl (\t -> \v -> Core.TypeForall (Core.ForallType {
-        Core.forallTypeParameter = v,
-        Core.forallTypeBody = t})) body (Lists.reverse vars))
-
--- | Rename all shadowed variables (both lambda parameters and let-bound variables that shadow lambda parameters) in a term.
-unshadowVariables :: Core.Term -> Core.Term
-unshadowVariables term0 =
-
-      let freshName =
-              \base -> \i -> \m ->
-                let candidate = Core.Name (Strings.cat2 (Core.unName base) (Literals.showInt32 i))
-                in (Logic.ifElse (Maps.member candidate m) (freshName base (Math.add i 1) m) candidate)
-          f =
-                  \recurse -> \m -> \term -> case term of
-                    Core.TermFunction v0 -> case v0 of
-                      Core.FunctionLambda v1 ->
-                        let v = Core.lambdaParameter v1
-                            domain = Core.lambdaDomain v1
-                            body = Core.lambdaBody v1
-                        in (Logic.ifElse (Maps.member v m) (
-                          let v2 = freshName v 2 m
-                              m2 = Maps.insert v v2 (Maps.insert v2 v2 m)
-                          in (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                            Core.lambdaParameter = v2,
-                            Core.lambdaDomain = domain,
-                            Core.lambdaBody = (f recurse m2 body)})))) (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                          Core.lambdaParameter = v,
-                          Core.lambdaDomain = domain,
-                          Core.lambdaBody = (f recurse (Maps.insert v v m) body)}))))
-                      _ -> recurse m term
-                    Core.TermLet v0 ->
-                      let m2 =
-                              Lists.foldl (\acc -> \b ->
-                                let bname = Core.bindingName b
-                                in (Logic.ifElse (Maps.member bname acc) acc (Maps.insert bname bname acc))) m (Core.letBindings v0)
-                      in (recurse m2 term)
-                    Core.TermVariable v0 -> Core.TermVariable (Maybes.maybe v0 (\renamed -> renamed) (Maps.lookup v0 m))
-                    _ -> recurse m term
-      in (rewriteTermWithContext f Maps.empty term0)

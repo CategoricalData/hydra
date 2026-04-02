@@ -12,9 +12,9 @@ def tBinding[T0, T1](a: T0)(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.phantoms.TBinding[T1]]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
-    lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.phantoms.TBinding[T1]](hydra.extract.helpers.requireField("name")(hydra.decode.core.name)(fieldMap)(cx))((field_name: hydra.core.Name) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.phantoms.TTerm[T1], hydra.phantoms.TBinding[T1]](hydra.extract.helpers.requireField("term")((v1: hydra.graph.Graph) =>
+    lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.core.toFieldMap(v_Term_record_record)
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.phantoms.TBinding[T1]](hydra.extract.core.requireField("name")(hydra.decode.core.name)(fieldMap)(cx))((field_name: hydra.core.Name) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.phantoms.TTerm[T1], hydra.phantoms.TBinding[T1]](hydra.extract.core.requireField("term")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) => hydra.decode.phantoms.tTerm(a)(v1)(v2))(fieldMap)(cx))((field_term: hydra.phantoms.TTerm[T1]) => Right(hydra.phantoms.TBinding(field_name,
          field_term))))
   }
@@ -31,9 +31,9 @@ def tTermDefinition[T0, T1](a: T0)(cx: hydra.graph.Graph)(raw: hydra.core.Term):
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.phantoms.TTermDefinition[T1]]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
-    lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.phantoms.TTermDefinition[T1]](hydra.extract.helpers.requireField("name")(hydra.decode.core.name)(fieldMap)(cx))((field_name: hydra.core.Name) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.phantoms.TTerm[T1], hydra.phantoms.TTermDefinition[T1]](hydra.extract.helpers.requireField("term")((v1: hydra.graph.Graph) =>
+    lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.core.toFieldMap(v_Term_record_record)
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.phantoms.TTermDefinition[T1]](hydra.extract.core.requireField("name")(hydra.decode.core.name)(fieldMap)(cx))((field_name: hydra.core.Name) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.phantoms.TTerm[T1], hydra.phantoms.TTermDefinition[T1]](hydra.extract.core.requireField("term")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) => hydra.decode.phantoms.tTerm(a)(v1)(v2))(fieldMap)(cx))((field_term: hydra.phantoms.TTerm[T1]) =>
       Right(hydra.phantoms.TTermDefinition(field_name, field_term))))
   }

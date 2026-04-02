@@ -22,7 +22,7 @@
                           "term": {
                             "application": {
                               "argument": {"variable": "term"},
-                              "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                              "function": {"variable": "hydra.strip.deannotateTerm"}}},
                           "type": [
                             {
                               "constraints": null,
@@ -1816,7 +1816,7 @@
   "description": [
     "JSON encoding for Hydra terms. Converts Terms to JSON Values using Either for error handling."],
   "namespace": "hydra.json.encode",
-  "termDependencies": ["hydra.rewriting", "hydra.literals", "hydra.extract.core"],
+  "termDependencies": ["hydra.strip", "hydra.literals", "hydra.extract.core"],
   "typeDependencies": [
     "hydra.paths",
     "hydra.ast",

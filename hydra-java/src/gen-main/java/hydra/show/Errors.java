@@ -227,7 +227,7 @@ public interface Errors {
   static String unsupportedTermVariantError(hydra.error.checking.UnsupportedTermVariantError e) {
     return hydra.lib.strings.Cat2.apply(
       "unsupported term variant: ",
-      hydra.show.Meta.termVariant((e).termVariant));
+      hydra.show.Variants.termVariant((e).termVariant));
   }
 
   static <T0> String untypedLambdaError(T0 ignored) {

@@ -805,7 +805,7 @@
                                                                                           "argument": {
                                                                                             "application": {
                                                                                               "argument": {"variable": "targetType"},
-                                                                                              "function": {"variable": "hydra.rewriting.freeVariablesInType"}}},
+                                                                                              "function": {"variable": "hydra.variables.freeVariablesInType"}}},
                                                                                           "function": {
                                                                                             "typeApplication": {
                                                                                               "body": {"function": {"primitive": "hydra.lib.sets.toList"}},
@@ -2554,7 +2554,7 @@
             "variables": []}]}}],
   "description": ["Variable substitution in type and term expressions."],
   "namespace": "hydra.substitution",
-  "termDependencies": ["hydra.rewriting"],
+  "termDependencies": ["hydra.rewriting", "hydra.variables"],
   "typeDependencies": [
     "hydra.paths",
     "hydra.ast",

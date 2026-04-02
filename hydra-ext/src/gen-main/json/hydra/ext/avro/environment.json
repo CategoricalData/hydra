@@ -139,7 +139,7 @@
                                       "function": {
                                         "application": {
                                           "argument": {"variable": "hydra.ext.org.apache.avro.schema.Schema"},
-                                          "function": {"variable": "hydra.util.Adapter"}}}}}}}}}}}}}},
+                                          "function": {"variable": "hydra.coders.Adapter"}}}}}}}}}}}}}},
                 {
                   "name": "namespace",
                   "type": {
@@ -211,12 +211,12 @@
                                       "function": {
                                         "application": {
                                           "argument": {"variable": "hydra.core.Type"},
-                                          "function": {"variable": "hydra.util.Adapter"}}}}}}}}}}}}}}]}}}}}],
+                                          "function": {"variable": "hydra.coders.Adapter"}}}}}}}}}}}}}}]}}}}}],
   "description": ["Type definitions for the Avro code generation environment"],
   "namespace": "hydra.ext.avro.environment",
   "termDependencies": [],
   "typeDependencies": [
     "hydra.core",
-    "hydra.util",
+    "hydra.coders",
     "hydra.ext.org.apache.avro.schema",
     "hydra.json.model"]}

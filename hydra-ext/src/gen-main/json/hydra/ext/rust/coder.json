@@ -1219,7 +1219,7 @@
                                       "term": {
                                         "application": {
                                           "argument": {"variable": "t"},
-                                          "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                          "function": {"variable": "hydra.strip.deannotateType"}}},
                                       "type": [
                                         {
                                           "constraints": null,
@@ -3631,7 +3631,7 @@
                                                                             "term": {
                                                                               "application": {
                                                                                 "argument": {"variable": "fterm"},
-                                                                                "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                                                                                "function": {"variable": "hydra.strip.deannotateTerm"}}},
                                                                             "type": [
                                                                               {
                                                                                 "constraints": null,
@@ -5275,7 +5275,7 @@
                                               "term": {
                                                 "application": {
                                                   "argument": {"variable": "ftyp"},
-                                                  "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                                  "function": {"variable": "hydra.strip.deannotateType"}}},
                                               "type": [
                                                 {
                                                   "constraints": null,
@@ -5639,7 +5639,7 @@
                                                           "argument": {
                                                             "application": {
                                                               "argument": {"variable": "typ"},
-                                                              "function": {"variable": "hydra.rewriting.freeVariablesInType"}}},
+                                                              "function": {"variable": "hydra.variables.freeVariablesInType"}}},
                                                           "function": {
                                                             "typeApplication": {
                                                               "body": {"function": {"primitive": "hydra.lib.sets.toList"}},
@@ -5736,7 +5736,7 @@
                                                           "term": {
                                                             "application": {
                                                               "argument": {"variable": "typ"},
-                                                              "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                                              "function": {"variable": "hydra.strip.deannotateType"}}},
                                                           "type": [
                                                             {
                                                               "constraints": null,
@@ -6482,7 +6482,7 @@
                                             "term": {
                                               "application": {
                                                 "argument": {"variable": "defs"},
-                                                "function": {"variable": "hydra.schemas.partitionDefinitions"}}},
+                                                "function": {"variable": "hydra.environment.partitionDefinitions"}}},
                                             "type": [
                                               {
                                                 "constraints": null,
@@ -6792,8 +6792,9 @@
     "hydra.ext.rust.language",
     "hydra.formatting",
     "hydra.names",
-    "hydra.rewriting",
-    "hydra.schemas",
+    "hydra.strip",
+    "hydra.variables",
+    "hydra.environment",
     "hydra.lexical",
     "hydra.serialization"],
   "typeDependencies": [

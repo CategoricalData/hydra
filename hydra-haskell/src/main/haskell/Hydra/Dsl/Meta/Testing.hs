@@ -111,10 +111,10 @@ reduceTermRef :: TTerm (Context -> Graph -> Bool -> Term -> Either (InContext Er
 reduceTermRef = TTerm $ TermVariable $ Name "hydra.reduction.reduceTerm"
 
 removeTypesFromTermRef :: TTerm (Term -> Term)
-removeTypesFromTermRef = TTerm $ TermVariable $ Name "hydra.rewriting.removeTypesFromTerm"
+removeTypesFromTermRef = TTerm $ TermVariable $ Name "hydra.strip.removeTypesFromTerm"
 
 typeSchemeToFTypeRef :: TTerm (TypeScheme -> Type)
-typeSchemeToFTypeRef = TTerm $ TermVariable $ Name "hydra.rewriting.typeSchemeToFType"
+typeSchemeToFTypeRef = TTerm $ TermVariable $ Name "hydra.scoping.typeSchemeToFType"
 
 -- | Create a universal test case for an expression with a show function
 evalPair :: String -> TTerm (t -> String) -> TTerm t -> TTerm t -> TTerm TestCaseWithMetadata

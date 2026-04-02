@@ -90,9 +90,9 @@ def buildTestModule(testModule: hydra.module.Module)(testGroup: hydra.testing.Te
 }
 
 def collectNames(graf: hydra.graph.Graph)(names: scala.collection.immutable.Set[hydra.core.Name])(t: hydra.core.Term): scala.collection.immutable.Set[hydra.core.Name] =
-  hydra.lib.logic.ifElse[scala.collection.immutable.Set[hydra.core.Name]](hydra.schemas.isEncodedTerm(hydra.rewriting.deannotateTerm(t)))(hydra.lib.eithers.either[hydra.errors.DecodingError,
+  hydra.lib.logic.ifElse[scala.collection.immutable.Set[hydra.core.Name]](hydra.predicates.isEncodedTerm(hydra.strip.deannotateTerm(t)))(hydra.lib.eithers.either[hydra.errors.DecodingError,
      hydra.core.Term, scala.collection.immutable.Set[hydra.core.Name]]((_x: hydra.errors.DecodingError) => names)((decodedTerm: hydra.core.Term) =>
-  hydra.lib.sets.union[hydra.core.Name](names)(hydra.rewriting.termDependencyNames(true)(true)(true)(decodedTerm)))(hydra.lib.eithers.bimap[hydra.errors.DecodingError,
+  hydra.lib.sets.union[hydra.core.Name](names)(hydra.dependencies.termDependencyNames(true)(true)(true)(decodedTerm)))(hydra.lib.eithers.bimap[hydra.errors.DecodingError,
      hydra.core.Term, hydra.errors.DecodingError, hydra.core.Term]((_e: hydra.errors.DecodingError) => _e)((_a: hydra.core.Term) => _a)(hydra.decode.core.term(graf)(t))))(names)
 
 def collectTestCases(tg: hydra.testing.TestGroup): Seq[hydra.testing.TestCaseWithMetadata] =
