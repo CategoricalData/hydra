@@ -182,9 +182,12 @@
                                             (funcall pte program))))
                                   (ns-val (let ((ns (cdr (assoc :namespace mod))))
                                             (if (stringp ns) ns (cdr (assoc :value ns)))))
+                                  (case-conv (if (string= target "clojure")
+                                                 (list :camel nil)
+                                                 (list :lower_snake nil)))
                                   (fp (funcall (funcall (funcall
                                         (symbol-value 'hydra_names_namespace_to_file_path)
-                                        (list :lower_snake nil))
+                                        case-conv)
                                         (subseq ext 1))  ; ".lisp" -> "lisp"
                                         ns-val)))
                              (list :right (list (cons fp code))))))))))
