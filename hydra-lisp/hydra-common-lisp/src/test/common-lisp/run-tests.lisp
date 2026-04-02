@@ -101,8 +101,14 @@
 ;; Base test types/terms (dependencies first)
 (load-test-file "test_types.lisp")
 (load-test-file "test_terms.lisp")
-(load "src/test/common-lisp/hydra/annotation_bindings.lisp")
+(load (hydra-path "src/test/common-lisp/hydra/annotation_bindings.lisp"))
 (load-test-file "test_graph.lisp")
+
+;; Populate the test graph with primitives, annotation bindings, kernel constants,
+;; schema types, and encoded type terms. This must happen before test data files
+;; are loaded, because universal tests evaluate at load time using the test graph.
+(format t "Populating test graph...~%")
+(ensure-test-graph-populated!)
 
 ;; Library tests
 (dolist (f '("lib/chars.lisp"

@@ -21,6 +21,7 @@
           (hydra json writer)
           (hydra json encode)
           (hydra json decode)
+          (hydra encode core)
           (hydra test test_graph)
           (hydra lib libraries)
           (hydra lib equality)
@@ -259,35 +260,215 @@
                           (t-app (t-var "peel") (t-var "term"))))))))))
       )
 
+    ;; Build kernel type definitions needed by inference/checking tests.
+    ;; Mirrors Scala TestSuiteRunner.buildKernelTypes().
+    (define (build-kernel-types)
+      (let* ((context-name "hydra.context.Context")
+             (in-context-name "hydra.context.InContext")
+             (error-name "hydra.errors.Error")
+             (other-error-name "hydra.errors.OtherError")
+             (type-name "hydra.core.Type")
+             (in-context-error
+               (list 'application
+                 (make-hydra_core_application_type
+                   (list 'variable in-context-name)
+                   (list 'variable error-name))))
+             (either-in-context-error
+               (lambda (v)
+                 (list 'either
+                   (make-hydra_core_either_type in-context-error v)))))
+
+        (list
+          (list "hydra.coders.CoderDirection"
+                (list 'union
+                  (list (make-hydra_core_field_type "encode" (list 'unit '()))
+                        (make-hydra_core_field_type "decode" (list 'unit '())))))
+
+          (list "hydra.util.Coder"
+                (list 'forall
+                  (make-hydra_core_forall_type "v1"
+                    (list 'forall
+                      (make-hydra_core_forall_type "v2"
+                        (list 'record
+                          (list (make-hydra_core_field_type "encode"
+                                  (list 'function
+                                    (make-hydra_core_function_type
+                                      (list 'variable context-name)
+                                      (list 'function
+                                        (make-hydra_core_function_type
+                                          (list 'variable "v1")
+                                          (either-in-context-error (list 'variable "v2")))))))
+                                (make-hydra_core_field_type "decode"
+                                  (list 'function
+                                    (make-hydra_core_function_type
+                                      (list 'variable context-name)
+                                      (list 'function
+                                        (make-hydra_core_function_type
+                                          (list 'variable "v2")
+                                          (either-in-context-error (list 'variable "v1"))))))))))))))
+
+          (list context-name
+                (list 'record
+                  (list (make-hydra_core_field_type "trace"
+                          (list 'list (list 'literal (list 'string '()))))
+                        (make-hydra_core_field_type "messages"
+                          (list 'list (list 'literal (list 'string '()))))
+                        (make-hydra_core_field_type "other"
+                          (list 'map
+                            (make-hydra_core_map_type
+                              (list 'variable "hydra.core.Name")
+                              (list 'variable "hydra.core.Term")))))))
+
+          (list in-context-name
+                (list 'forall
+                  (make-hydra_core_forall_type "e"
+                    (list 'record
+                      (list (make-hydra_core_field_type "object" (list 'variable "e"))
+                            (make-hydra_core_field_type "context" (list 'variable context-name)))))))
+
+          (list other-error-name
+                (list 'wrap (list 'literal (list 'string '()))))
+
+          (list error-name
+                (list 'union
+                  (list (make-hydra_core_field_type "other" (list 'variable other-error-name)))))
+
+          (list type-name
+                (list 'union
+                  (list (make-hydra_core_field_type "annotated" (list 'variable "annotatedType"))
+                        (make-hydra_core_field_type "application" (list 'variable "applicationElim"))
+                        (make-hydra_core_field_type "either" (list 'variable "eitherType"))
+                        (make-hydra_core_field_type "forall" (list 'variable "forallType"))
+                        (make-hydra_core_field_type "function" (list 'variable "functionType"))
+                        (make-hydra_core_field_type "list" (list 'variable type-name))
+                        (make-hydra_core_field_type "literal" (list 'variable "literalType"))
+                        (make-hydra_core_field_type "map" (list 'variable "mapType"))
+                        (make-hydra_core_field_type "maybe" (list 'variable type-name))
+                        (make-hydra_core_field_type "pair" (list 'variable "pairType"))
+                        (make-hydra_core_field_type "record" (list 'variable "rowType"))
+                        (make-hydra_core_field_type "set" (list 'variable type-name))
+                        (make-hydra_core_field_type "union" (list 'variable "rowType"))
+                        (make-hydra_core_field_type "unit" (list 'unit '()))
+                        (make-hydra_core_field_type "variable" (list 'variable "name"))
+                        (make-hydra_core_field_type "wrap" (list 'variable "wrappedType")))))
+
+          (list "hydra.core.Name"
+                (list 'wrap (list 'literal (list 'string '()))))
+
+          (list "hydra.core.ForallType"
+                (list 'record
+                  (list (make-hydra_core_field_type "parameter" (list 'variable "hydra.core.Name"))
+                        (make-hydra_core_field_type "body" (list 'variable type-name)))))
+
+          (list "hydra.util.Comparison"
+                (list 'union
+                  (list (make-hydra_core_field_type "lessThan" (list 'unit '()))
+                        (make-hydra_core_field_type "equalTo" (list 'unit '()))
+                        (make-hydra_core_field_type "greaterThan" (list 'unit '())))))
+
+          (list "hydra.util.CaseConvention"
+                (list 'union
+                  (list (make-hydra_core_field_type "camel" (list 'unit '()))
+                        (make-hydra_core_field_type "pascal" (list 'unit '()))
+                        (make-hydra_core_field_type "lowerSnake" (list 'unit '()))
+                        (make-hydra_core_field_type "upperSnake" (list 'unit '())))))
+
+          (list "hydra.util.Precision"
+                (list 'union
+                  (list (make-hydra_core_field_type "arbitrary" (list 'unit '()))
+                        (make-hydra_core_field_type "bits"
+                          (list 'literal (list 'integer (list 'int32 '()))))))))))
+
     (define (build-test-graph)
       (let* ((std-prims (standard-library))
              (all-prims std-prims)
-             ;; Build schema types from bootstrap + test types
+             ;; Build schema types from bootstrap + test types + kernel types
              (bootstrap-types hydra_json_bootstrap_types_by_name)
              (test-types hydra_test_test_graph_test_types)
+             (kernel-types (build-kernel-types))
              ;; Convert types to TypeSchemes using f_type_to_type_scheme
              (type-to-ts hydra_rewriting_f_type_to_type_scheme)
-             (kernel-schemas (map (lambda (entry)
-                                    (list (car entry) (type-to-ts (cdr entry))))
-                                  bootstrap-types))
+             (kernel-type-schemas (map (lambda (entry)
+                                         (list (car entry) (type-to-ts (cadr entry))))
+                                       kernel-types))
+             (bootstrap-schemas (map (lambda (entry)
+                                       (list (car entry) (type-to-ts (cdr entry))))
+                                     bootstrap-types))
              (test-schemas (map (lambda (entry)
                                   (list (car entry) (type-to-ts (cadr entry))))
                                 (hydra_lib_maps_to_list test-types)))
-             (schema-types (hydra_lib_maps_from_list (append kernel-schemas test-schemas)))
+             (schema-types (hydra_lib_maps_from_list
+                             (append kernel-type-schemas bootstrap-schemas test-schemas)))
+             ;; Collect all types for encoding as terms
+             (all-types-alist (append kernel-types
+                                      (map (lambda (entry) (list (car entry) (cdr entry)))
+                                           bootstrap-types)
+                                      (map (lambda (entry) (list (car entry) (cdr entry)))
+                                           (hydra_lib_maps_to_list test-types))))
+             ;; Encoded type terms: each type name -> encode_core_type(type)
+             (encoded-type-terms (map (lambda (entry)
+                                        (list (car entry)
+                                              (hydra_encode_core_type (cadr entry))))
+                                      all-types-alist))
              ;; Test terms
              (test-terms-alist (hydra_lib_maps_to_list hydra_test_test_graph_test_terms))
              (test-terms (map (lambda (entry) (list (car entry) (cdr entry))) test-terms-alist))
+             ;; Excluded primitive names (hand-written annotation bindings override these)
+             (excluded-names (list "hydra.annotations.setTermAnnotation"
+                                   "hydra.annotations.setTermDescription"
+                                   "hydra.rewriting.deannotateTerm"))
              (bound-terms
                (append
-                 ;; Primitive bridges
-                 (map (lambda (pair)
-                        (list (car pair) (list 'function (list 'primitive (car pair)))))
-                      all-prims)
-                 ;; Annotation term-level bindings (override primitive bridges for annotation names)
+                 ;; Primitive bridges (excluding overridden ones)
+                 (let loop ((prims all-prims) (acc '()))
+                   (if (null? prims) (reverse acc)
+                       (let ((name (car (car prims))))
+                         (if (member name excluded-names)
+                             (loop (cdr prims) acc)
+                             (loop (cdr prims)
+                                   (cons (list name (list 'function (list 'primitive name)))
+                                         acc))))))
+                 ;; Annotation term-level bindings
                  (annotation-bindings)
-                 ;; Other constants
+                 ;; Other constants (matching Scala addConstantBindings + constants)
                  (list (list "hydra.monads.emptyContext" (list 'unit '()))
-                       (list "hydra.lexical.emptyGraph" (list 'unit '())))
+                       (list "hydra.lexical.emptyGraph"
+                             (list 'record
+                               (make-hydra_core_record "hydra.graph.Graph"
+                                 (list (make-hydra_core_field "boundTerms" (list 'map '()))
+                                       (make-hydra_core_field "boundTypes" (list 'map '()))
+                                       (make-hydra_core_field "classConstraints" (list 'map '()))
+                                       (make-hydra_core_field "lambdaVariables" (list 'set '()))
+                                       (make-hydra_core_field "metadata" (list 'map '()))
+                                       (make-hydra_core_field "primitives" (list 'map '()))
+                                       (make-hydra_core_field "schemaTypes" (list 'map '()))
+                                       (make-hydra_core_field "typeVariables" (list 'set '()))))))
+                       (list "hydra.constants.ignoredVariable"
+                             (list 'literal (list 'string "_")))
+                       (list "hydra.constants.maxTraceDepth"
+                             (list 'literal (list 'integer (list 'int32 5000))))
+                       (list "hydra.constants.debugInference"
+                             (list 'literal (list 'boolean #t)))
+                       (list "hydra.constants.key_deprecated"
+                             (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
+                                           (list 'literal (list 'string "deprecated")))))
+                       (list "hydra.constants.key_exclude"
+                             (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
+                                           (list 'literal (list 'string "exclude")))))
+                       (list "hydra.constants.key_maxLength"
+                             (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
+                                           (list 'literal (list 'string "maxLength")))))
+                       (list "hydra.constants.key_minLength"
+                             (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
+                                           (list 'literal (list 'string "minLength")))))
+                       (list "hydra.constants.key_preserveFieldName"
+                             (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
+                                           (list 'literal (list 'string "preserveFieldName")))))
+                       (list "hydra.constants.key_freshTypeVariableCount"
+                             (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
+                                           (list 'literal (list 'string "freshTypeVariableCount"))))))
+                 ;; Encoded type terms
+                 encoded-type-terms
                  ;; Test terms
                  test-terms)))
         (make-hydra_graph_graph
