@@ -131,8 +131,8 @@
                                 case-conv (if (= target "clojure")
                                            (list :camel nil)
                                            (list :lower_snake nil))
-                                file-path (str ((@(rc 'hydra_names_namespace_to_file_path)
-                                                  case-conv) ns-val) ext)]
+                                file-path (((@(rc 'hydra_names_namespace_to_file_path)
+                                              case-conv) ext) ns-val)]
                             (list :right {file-path code}))))))))]
           {:coder coder
            :language lang
