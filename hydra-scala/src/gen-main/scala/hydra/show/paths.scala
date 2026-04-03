@@ -44,7 +44,7 @@ def subtermStep(step: hydra.paths.SubtermStep): Option[scala.Predef.String] =
     case hydra.paths.SubtermStep.wrappedTerm => None
 }
 
-def termToSubtermGraph(namespaces: Map[hydra.module.Namespace, scala.Predef.String])(term: hydra.core.Term): hydra.paths.SubtermGraph =
+def termToSubtermGraph(namespaces: Map[hydra.packaging.Namespace, scala.Predef.String])(term: hydra.core.Term): hydra.paths.SubtermGraph =
   {
   lazy val dontCareStep: hydra.paths.SubtermStep = hydra.paths.SubtermStep.annotatedBody
   def helper(ids: Map[hydra.core.Name, hydra.paths.SubtermNode])(mroot: Option[hydra.paths.SubtermNode])(path: Seq[hydra.paths.SubtermStep])(state: Tuple2[Tuple2[Seq[hydra.paths.SubtermNode],

@@ -6,7 +6,7 @@
 
 (require 'hydra.graph)
 
-(require 'hydra.module)
+(require 'hydra.packaging)
 
 (defvar hydra_ext_java_environment_java_symbol_class-variants (list :constant :nullary_function :hoisted_lambda :unary_function :local_variable))
 

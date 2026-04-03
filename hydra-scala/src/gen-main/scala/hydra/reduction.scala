@@ -92,41 +92,7 @@ def contractTerm(term: hydra.core.Term): hydra.core.Term =
 
 lazy val countPrimitiveInvocations: Boolean = true
 
-def etaExpandTerm(graph: hydra.graph.Graph)(term: hydra.core.Term): hydra.core.Term =
-  {
-  def expand(args: Seq[hydra.core.Term])(arity: Int)(t: hydra.core.Term): hydra.core.Term =
-    {
-    lazy val apps: hydra.core.Term = hydra.lib.lists.foldl[hydra.core.Term, hydra.core.Term]((lhs: hydra.core.Term) =>
-      (arg: hydra.core.Term) =>
-      hydra.core.Term.application(hydra.core.Application(lhs, arg)))(t)(args)
-    lazy val is: Seq[Int] = hydra.lib.logic.ifElse[Seq[Int]](hydra.lib.equality.lte[Int](arity)(hydra.lib.lists.length[hydra.core.Term](args)))(Seq())(hydra.lib.math.range(1)(hydra.lib.math.sub(arity)(hydra.lib.lists.length[hydra.core.Term](args))))
-    def pad(indices: Seq[Int])(t2: hydra.core.Term): hydra.core.Term =
-      hydra.lib.logic.ifElse[hydra.core.Term](hydra.lib.lists.`null`[Int](indices))(t2)(hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda(hydra.lib.strings.cat2("v")(hydra.lib.literals.showInt32(hydra.lib.lists.head[Int](indices))),
-         None, pad(hydra.lib.lists.tail[Int](indices))(hydra.core.Term.application(hydra.core.Application(t2,
-         hydra.core.Term.variable(hydra.lib.strings.cat2("v")(hydra.lib.literals.showInt32(hydra.lib.lists.head[Int](indices)))))))))))
-    pad(is)(apps)
-  }
-  def rewrite(args: Seq[hydra.core.Term])(recurse: (hydra.core.Term => hydra.core.Term))(t: hydra.core.Term): hydra.core.Term =
-    {
-    def afterRecursion(term2: hydra.core.Term): hydra.core.Term = expand(args)(hydra.reduction.etaExpansionArity(graph)(term2))(term2)
-    lazy val t2: hydra.core.Term = hydra.strip.detypeTerm(t)
-    t2 match
-      case hydra.core.Term.application(v_Term_application_app) => {
-        lazy val lhs: hydra.core.Term = (v_Term_application_app.function)
-        {
-          lazy val rhs: hydra.core.Term = (v_Term_application_app.argument)
-          {
-            lazy val erhs: hydra.core.Term = rewrite(Seq())(recurse)(rhs)
-            rewrite(hydra.lib.lists.cons[hydra.core.Term](erhs)(args))(recurse)(lhs)
-          }
-        }
-      }
-      case _ => afterRecursion(recurse(t2))
-  }
-  hydra.reduction.contractTerm(hydra.rewriting.rewriteTerm((v1: (hydra.core.Term => hydra.core.Term)) => (v2: hydra.core.Term) => rewrite(Seq())(v1)(v2))(term))
-}
-
-def etaExpandTermNew(tx0: hydra.graph.Graph)(term0: hydra.core.Term): hydra.core.Term =
+def etaExpandTerm(tx0: hydra.graph.Graph)(term0: hydra.core.Term): hydra.core.Term =
   {
   lazy val primTypes: Map[hydra.core.Name, hydra.core.TypeScheme] = hydra.lib.maps.fromList[hydra.core.Name,
      hydra.core.TypeScheme](hydra.lib.lists.map[hydra.graph.Primitive, Tuple2[hydra.core.Name, hydra.core.TypeScheme]]((_gpt_p: hydra.graph.Primitive) => Tuple2(_gpt_p.name,
@@ -516,7 +482,7 @@ def etaExpansionArity(graph: hydra.graph.Graph)(term: hydra.core.Term): Int =
   case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => hydra.reduction.etaExpansionArity(graph)(v_Term_typeLambda_ta.body)
   case hydra.core.Term.typeApplication(v_Term_typeApplication_tt) => hydra.reduction.etaExpansionArity(graph)(v_Term_typeApplication_tt.body)
   case hydra.core.Term.variable(v_Term_variable_name) => hydra.lib.maybes.maybe[Int, hydra.core.TypeScheme](0)((ts: hydra.core.TypeScheme) => hydra.arity.typeArity(ts.`type`))(hydra.lib.maybes.bind[hydra.core.Binding,
-     hydra.core.TypeScheme](hydra.lexical.lookupElement(graph)(v_Term_variable_name))((b: hydra.core.Binding) => (b.`type`)))
+     hydra.core.TypeScheme](hydra.lexical.lookupBinding(graph)(v_Term_variable_name))((b: hydra.core.Binding) => (b.`type`)))
   case _ => 0
 
 def etaReduceTerm(term: hydra.core.Term): hydra.core.Term =
@@ -646,7 +612,7 @@ def reduceTerm(cx: hydra.context.Context)(graph: hydra.graph.Graph)(eager: Boole
           hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]](hydra.lib.equality.gt[Int](arity)(hydra.lib.lists.length[hydra.core.Term](args)))(Right(applyToArguments(original)(args)))(forPrimitive(prim)(arity)(args))
         })
       case hydra.core.Term.variable(v_Term_variable_v) => {
-        lazy val mBinding: Option[hydra.core.Binding] = hydra.lexical.dereferenceElement(graph)(v_Term_variable_v)
+        lazy val mBinding: Option[hydra.core.Binding] = hydra.lexical.lookupBinding(graph)(v_Term_variable_v)
         hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term], hydra.core.Binding](Right(applyToArguments(original)(args)))((binding: hydra.core.Binding) => applyIfNullary(eager2)(binding.term)(args))(mBinding)
       }
       case hydra.core.Term.let(v_Term_let_lt) => {

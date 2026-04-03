@@ -2,7 +2,7 @@ package hydra.test.testGraph
 
 import hydra.core.*
 
-import hydra.module.*
+import hydra.packaging.*
 
 import hydra.lib.maps
 
@@ -10,9 +10,9 @@ lazy val testContext: hydra.context.Context = hydra.lexical.emptyContext
 
 lazy val testGraph: hydra.graph.Graph = hydra.TestSuiteRunner.buildTestGraph()
 
-lazy val testNamespace: hydra.module.Namespace = "testGraph"
+lazy val testNamespace: hydra.packaging.Namespace = "testGraph"
 
-lazy val testSchemaNamespace: hydra.module.Namespace = "testSchemaGraph"
+lazy val testSchemaNamespace: hydra.packaging.Namespace = "testSchemaGraph"
 
 lazy val testTerms: Map[hydra.core.Name, hydra.core.Term] = hydra.lib.maps.fromList[hydra.core.Name, hydra.core.Term](Seq(Tuple2("testDataArthur", hydra.test.testTerms.testDataArthur)))
 

@@ -914,7 +914,7 @@ public interface Coder {
     });
   }
 
-  static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments> encodeTermDefinition(hydra.ext.lisp.syntax.Dialect dialect, T0 cx, T1 g, hydra.module.TermDefinition tdef) {
+  static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments> encodeTermDefinition(hydra.ext.lisp.syntax.Dialect dialect, T0 cx, T1 g, hydra.packaging.TermDefinition tdef) {
     hydra.core.Term term = (tdef).term;
     hydra.core.Term dterm = hydra.Strip.deannotateTerm(term);
     hydra.core.Name name = (tdef).name;
@@ -1145,8 +1145,8 @@ public interface Coder {
     });
   }
 
-  static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments> encodeTypeDefinition(T0 cx, T1 g, hydra.module.TypeDefinition tdef) {
-    hydra.core.Type typ = (tdef).type;
+  static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments> encodeTypeDefinition(T0 cx, T1 g, hydra.packaging.TypeDefinition tdef) {
+    hydra.core.Type typ = (tdef).type.type;
     hydra.core.Type dtyp = hydra.Strip.deannotateType(typ);
     hydra.core.Name name = (tdef).name;
     String lname = hydra.ext.lisp.Coder.qualifiedSnakeName(name);
@@ -1333,33 +1333,33 @@ public interface Coder {
       () -> hydra.util.ConsList.of(new hydra.ext.lisp.syntax.ExportDeclaration(symbols.get())));
   }
 
-  static hydra.util.ConsList<hydra.ext.lisp.syntax.ImportDeclaration> moduleImports(hydra.module.Namespace focusNs, hydra.util.ConsList<hydra.module.Definition> defs) {
-    hydra.util.Lazy<hydra.util.ConsList<hydra.module.Namespace>> depNss = new hydra.util.Lazy<>(() -> hydra.lib.sets.ToList.apply(hydra.lib.sets.Delete.apply(
+  static hydra.util.ConsList<hydra.ext.lisp.syntax.ImportDeclaration> moduleImports(hydra.packaging.Namespace focusNs, hydra.util.ConsList<hydra.packaging.Definition> defs) {
+    hydra.util.Lazy<hydra.util.ConsList<hydra.packaging.Namespace>> depNss = new hydra.util.Lazy<>(() -> hydra.lib.sets.ToList.apply(hydra.lib.sets.Delete.apply(
       focusNs,
       hydra.Analysis.definitionDependencyNamespaces(defs))));
     return hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.module.Namespace, hydra.ext.lisp.syntax.ImportDeclaration>) (ns -> new hydra.ext.lisp.syntax.ImportDeclaration(new hydra.ext.lisp.syntax.NamespaceName((ns).value), new hydra.ext.lisp.syntax.ImportSpec.All())),
+      (java.util.function.Function<hydra.packaging.Namespace, hydra.ext.lisp.syntax.ImportDeclaration>) (ns -> new hydra.ext.lisp.syntax.ImportDeclaration(new hydra.ext.lisp.syntax.NamespaceName((ns).value), new hydra.ext.lisp.syntax.ImportSpec.All())),
       depNss.get());
   }
 
-  static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.lisp.syntax.Program> moduleToLisp(hydra.ext.lisp.syntax.Dialect dialect, hydra.module.Module mod, hydra.util.ConsList<hydra.module.Definition> defs0, T0 cx, T1 g) {
-    hydra.util.ConsList<hydra.module.Definition> defs = hydra.CoderUtils.reorderDefs(defs0);
-    hydra.util.Pair<hydra.util.ConsList<hydra.module.TypeDefinition>, hydra.util.ConsList<hydra.module.TermDefinition>> partitioned = hydra.Environment.partitionDefinitions(defs);
-    hydra.util.Lazy<hydra.util.ConsList<hydra.module.TypeDefinition>> allTypeDefs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(partitioned));
-    hydra.util.Lazy<hydra.util.ConsList<hydra.module.TermDefinition>> termDefs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(partitioned));
-    hydra.util.Lazy<hydra.util.ConsList<hydra.module.TypeDefinition>> typeDefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
-      (java.util.function.Function<hydra.module.TypeDefinition, Boolean>) (td -> hydra.Predicates.isNominalType((td).type)),
+  static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.lisp.syntax.Program> moduleToLisp(hydra.ext.lisp.syntax.Dialect dialect, hydra.packaging.Module mod, hydra.util.ConsList<hydra.packaging.Definition> defs0, T0 cx, T1 g) {
+    hydra.util.ConsList<hydra.packaging.Definition> defs = hydra.Environment.reorderDefs(defs0);
+    hydra.util.Pair<hydra.util.ConsList<hydra.packaging.TypeDefinition>, hydra.util.ConsList<hydra.packaging.TermDefinition>> partitioned = hydra.Environment.partitionDefinitions(defs);
+    hydra.util.Lazy<hydra.util.ConsList<hydra.packaging.TypeDefinition>> allTypeDefs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(partitioned));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.packaging.TermDefinition>> termDefs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(partitioned));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.packaging.TypeDefinition>> typeDefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
+      (java.util.function.Function<hydra.packaging.TypeDefinition, Boolean>) (td -> hydra.Predicates.isNominalType((td).type.type)),
       allTypeDefs.get()));
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.MapList.apply(
-        (java.util.function.Function<hydra.module.TypeDefinition, hydra.util.Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments>>) (v1 -> hydra.ext.lisp.Coder.<T0, T1, T2>encodeTypeDefinition(
+        (java.util.function.Function<hydra.packaging.TypeDefinition, hydra.util.Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments>>) (v1 -> hydra.ext.lisp.Coder.<T0, T1, T2>encodeTypeDefinition(
           cx,
           g,
           v1)),
         typeDefs.get()),
       (java.util.function.Function<hydra.util.ConsList<hydra.ext.lisp.syntax.TopLevelFormWithComments>, hydra.util.Either<T2, hydra.ext.lisp.syntax.Program>>) (typeItems -> hydra.lib.eithers.Bind.apply(
         hydra.lib.eithers.MapList.apply(
-          (java.util.function.Function<hydra.module.TermDefinition, hydra.util.Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments>>) (v1 -> hydra.ext.lisp.Coder.<T0, T1, T2>encodeTermDefinition(
+          (java.util.function.Function<hydra.packaging.TermDefinition, hydra.util.Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments>>) (v1 -> hydra.ext.lisp.Coder.<T0, T1, T2>encodeTermDefinition(
             dialect,
             cx,
             g,
@@ -1370,7 +1370,7 @@ public interface Coder {
             typeItems,
             termItems));
           hydra.util.ConsList<hydra.ext.lisp.syntax.ExportDeclaration> exports = hydra.ext.lisp.Coder.moduleExports(allItems.get());
-          hydra.module.Namespace focusNs = (mod).namespace;
+          hydra.packaging.Namespace focusNs = (mod).namespace;
           hydra.util.ConsList<hydra.ext.lisp.syntax.ImportDeclaration> imports = hydra.ext.lisp.Coder.moduleImports(
             focusNs,
             defs);

@@ -2,22 +2,22 @@ package hydra.error.packaging
 
 import hydra.core.*
 
-import hydra.module.*
+import hydra.packaging.*
 
 import hydra.core
 
-import hydra.module
+import hydra.packaging
 
-case class ConflictingModuleNamespaceError(first: hydra.module.Namespace, second: hydra.module.Namespace)
+case class ConflictingModuleNamespaceError(first: hydra.packaging.Namespace, second: hydra.packaging.Namespace)
 
-case class ConflictingVariantNameError(namespace: hydra.module.Namespace, typeName: hydra.core.Name, variantName: hydra.core.Name,
-   conflictingName: hydra.core.Name)
+case class ConflictingVariantNameError(namespace: hydra.packaging.Namespace, typeName: hydra.core.Name,
+   variantName: hydra.core.Name, conflictingName: hydra.core.Name)
 
-case class DefinitionNotInModuleNamespaceError(namespace: hydra.module.Namespace, name: hydra.core.Name)
+case class DefinitionNotInModuleNamespaceError(namespace: hydra.packaging.Namespace, name: hydra.core.Name)
 
-case class DuplicateDefinitionNameError(namespace: hydra.module.Namespace, name: hydra.core.Name)
+case class DuplicateDefinitionNameError(namespace: hydra.packaging.Namespace, name: hydra.core.Name)
 
-case class DuplicateModuleNamespaceError(namespace: hydra.module.Namespace)
+case class DuplicateModuleNamespaceError(namespace: hydra.packaging.Namespace)
 
 enum InvalidModuleError :
    case conflictingVariantName(value: hydra.error.packaging.ConflictingVariantNameError) extends InvalidModuleError

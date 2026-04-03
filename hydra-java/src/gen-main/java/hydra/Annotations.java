@@ -29,6 +29,20 @@ public interface Annotations {
       (getValue).apply(t));
   }
 
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<String>> commentsFromBinding(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Binding b) {
+    return hydra.Annotations.getTermDescription(
+      cx,
+      g,
+      (b).term);
+  }
+
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<String>> commentsFromFieldType(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.FieldType ft) {
+    return hydra.Annotations.getTypeDescription(
+      cx,
+      g,
+      (ft).type);
+  }
+
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.lang.Void> debugIf(hydra.context.Context cx, String debugId, String message) {
     return hydra.lib.eithers.Bind.apply(
       hydra.Annotations.getDebugId(cx),
@@ -454,12 +468,6 @@ public interface Annotations {
       (java.util.function.Function<hydra.core.AnnotatedType, hydra.core.Type>) (at -> (at).body),
       (java.util.function.Function<hydra.core.AnnotatedType, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>>) (at -> (at).annotation),
       typ);
-  }
-
-  static hydra.core.Binding typeElement(hydra.core.Name name, hydra.core.Type typ) {
-    hydra.core.Term schemaTerm = new hydra.core.Term.Variable(new hydra.core.Name("hydra.core.Type"));
-    hydra.util.Lazy<hydra.core.Term> dataTerm = new hydra.util.Lazy<>(() -> hydra.Annotations.normalizeTermAnnotations(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(hydra.encode.Core.type(typ), hydra.lib.maps.FromList.apply(hydra.util.ConsList.of((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Term>(hydra.Constants.key_type(), schemaTerm)))))))));
-    return new hydra.core.Binding(name, dataTerm.get(), hydra.util.Maybe.just(new hydra.core.TypeScheme((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), (hydra.util.Maybe<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))));
   }
 
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T0> whenFlag(hydra.context.Context cx, hydra.core.Name flag, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T0> ethen, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T0> eelse) {

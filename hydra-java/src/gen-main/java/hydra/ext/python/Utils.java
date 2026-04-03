@@ -160,21 +160,21 @@ public interface Utils {
       s);
   }
 
-  static hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> findNamespaces(hydra.module.Namespace focusNs, hydra.util.ConsList<hydra.module.Definition> defs) {
-    hydra.module.Namespace coreNs = new hydra.module.Namespace("hydra.core");
-    hydra.util.Lazy<hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>> namespaces = new hydra.util.Lazy<>(() -> hydra.Analysis.namespacesForDefinitions(
+  static hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName> findNamespaces(hydra.packaging.Namespace focusNs, hydra.util.ConsList<hydra.packaging.Definition> defs) {
+    hydra.packaging.Namespace coreNs = new hydra.packaging.Namespace("hydra.core");
+    hydra.util.Lazy<hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName>> namespaces = new hydra.util.Lazy<>(() -> hydra.Analysis.namespacesForDefinitions(
       hydra.ext.python.Names::encodeNamespace,
       focusNs,
       defs));
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Equal.apply(
-        hydra.lib.pairs.First.apply(((java.util.function.Function<hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>, hydra.util.Pair<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>>) (projected -> projected.focus)).apply(namespaces.get())).value,
+        hydra.lib.pairs.First.apply(((java.util.function.Function<hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName>, hydra.util.Pair<hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName>>) (projected -> projected.focus)).apply(namespaces.get())).value,
         (coreNs).value),
       () -> namespaces.get(),
-      () -> (hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>) (new hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>(((java.util.function.Function<hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>, hydra.util.Pair<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>>) (projected -> projected.focus)).apply(namespaces.get()), hydra.lib.maps.Insert.apply(
+      () -> (hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName>) (new hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName>(((java.util.function.Function<hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName>, hydra.util.Pair<hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName>>) (projected -> projected.focus)).apply(namespaces.get()), hydra.lib.maps.Insert.apply(
         coreNs,
         hydra.ext.python.Names.encodeNamespace(coreNs),
-        ((java.util.function.Function<hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>, hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>>) (projected -> projected.mapping)).apply(namespaces.get())))));
+        ((java.util.function.Function<hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName>, hydra.util.PersistentMap<hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName>>) (projected -> projected.mapping)).apply(namespaces.get())))));
   }
 
   static hydra.ext.python.syntax.Expression functionCall(hydra.ext.python.syntax.Primary func, hydra.util.ConsList<hydra.ext.python.syntax.Expression> args) {

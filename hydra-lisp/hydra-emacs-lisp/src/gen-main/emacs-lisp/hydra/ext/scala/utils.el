@@ -22,9 +22,9 @@
 
 (require 'hydra.lib.strings)
 
-(require 'hydra.module)
-
 (require 'hydra.names)
+
+(require 'hydra.packaging)
 
 (require 'hydra.strip)
 
@@ -50,7 +50,7 @@
 
 (defvar hydra_ext_scala_utils_slambda (lambda (v) (lambda (body) (lambda (sdom) (list :function_data (list :function (make-hydra_ext_scala_syntax_data_function (list (make-hydra_ext_scala_syntax_data_param (list) (list :value v) sdom (list :nothing))) body)))))))
 
-(defvar hydra_ext_scala_utils_sprim (lambda (name) (let* ((qname (hydra_names_qualify_name name)) (local (hydra_ext_scala_utils_scala_escape_name (funcall (lambda (v) (hydra_module_qualified_name-local v)) qname))) (prefix (funcall (lambda (v) v) (hydra_lib_maybes_from_just (funcall (lambda (v) (hydra_module_qualified_name-namespace v)) qname))))) (hydra_ext_scala_utils_sname (funcall (hydra_lib_strings_cat2 (funcall (hydra_lib_strings_cat2 prefix) ".")) local)))))
+(defvar hydra_ext_scala_utils_sprim (lambda (name) (let* ((qname (hydra_names_qualify_name name)) (local (hydra_ext_scala_utils_scala_escape_name (funcall (lambda (v) (hydra_packaging_qualified_name-local v)) qname))) (prefix (funcall (lambda (v) v) (hydra_lib_maybes_from_just (funcall (lambda (v) (hydra_packaging_qualified_name-namespace v)) qname))))) (hydra_ext_scala_utils_sname (funcall (hydra_lib_strings_cat2 (funcall (hydra_lib_strings_cat2 prefix) ".")) local)))))
 
 (defvar hydra_ext_scala_utils_stapply (lambda (t_) (lambda (args) (list :apply (make-hydra_ext_scala_syntax_type_apply t_ args)))))
 

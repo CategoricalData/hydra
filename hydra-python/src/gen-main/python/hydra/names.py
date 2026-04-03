@@ -21,24 +21,24 @@ import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
-import hydra.module
+import hydra.packaging
 import hydra.util
 
 T0 = TypeVar("T0")
 
-def qualify_name(name: hydra.core.Name) -> hydra.module.QualifiedName:
+def qualify_name(name: hydra.core.Name) -> hydra.packaging.QualifiedName:
     r"""Split a dot-separated name into a namespace and local name."""
 
     @lru_cache(1)
     def parts() -> frozenlist[str]:
         return hydra.lib.lists.reverse(hydra.lib.strings.split_on(".", name.value))
-    return hydra.lib.logic.if_else(hydra.lib.equality.equal(1, hydra.lib.lists.length(parts())), (lambda : hydra.module.QualifiedName(Nothing(), name.value)), (lambda : hydra.module.QualifiedName(Just(hydra.module.Namespace(hydra.lib.strings.intercalate(".", hydra.lib.lists.reverse(hydra.lib.lists.tail(parts()))))), hydra.lib.lists.head(parts()))))
+    return hydra.lib.logic.if_else(hydra.lib.equality.equal(1, hydra.lib.lists.length(parts())), (lambda : hydra.packaging.QualifiedName(Nothing(), name.value)), (lambda : hydra.packaging.QualifiedName(Just(hydra.packaging.Namespace(hydra.lib.strings.intercalate(".", hydra.lib.lists.reverse(hydra.lib.lists.tail(parts()))))), hydra.lib.lists.head(parts()))))
 
-def compact_name(namespaces: FrozenDict[hydra.module.Namespace, str], name: hydra.core.Name) -> str:
+def compact_name(namespaces: FrozenDict[hydra.packaging.Namespace, str], name: hydra.core.Name) -> str:
     r"""Given a mapping of namespaces to prefixes, convert a name to a compact string representation."""
 
     @lru_cache(1)
-    def qual_name() -> hydra.module.QualifiedName:
+    def qual_name() -> hydra.packaging.QualifiedName:
         return qualify_name(name)
     mns = qual_name().namespace
     local = qual_name().local
@@ -84,12 +84,30 @@ def local_name_of(arg_: hydra.core.Name) -> str:
 
     return qualify_name(arg_).local
 
-def namespace_of(arg_: hydra.core.Name) -> Maybe[hydra.module.Namespace]:
+def name_to_file_path(ns_conv: hydra.util.CaseConvention, local_conv: hydra.util.CaseConvention, ext: hydra.packaging.FileExtension, name: hydra.core.Name) -> str:
+    r"""Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator."""
+
+    @lru_cache(1)
+    def qual_name() -> hydra.packaging.QualifiedName:
+        return qualify_name(name)
+    ns = qual_name().namespace
+    local = qual_name().local
+    def ns_to_file_path(ns2: hydra.packaging.Namespace) -> str:
+        return hydra.lib.strings.intercalate("/", hydra.lib.lists.map((lambda part: hydra.formatting.convert_case(hydra.util.CaseConvention.CAMEL, ns_conv, part)), hydra.lib.strings.split_on(".", ns2.value)))
+    @lru_cache(1)
+    def prefix() -> str:
+        return hydra.lib.maybes.maybe((lambda : ""), (lambda n: hydra.lib.strings.cat2(ns_to_file_path(n), "/")), ns)
+    @lru_cache(1)
+    def suffix() -> str:
+        return hydra.formatting.convert_case(hydra.util.CaseConvention.PASCAL, local_conv, local)
+    return hydra.lib.strings.cat((prefix(), suffix(), ".", ext.value))
+
+def namespace_of(arg_: hydra.core.Name) -> Maybe[hydra.packaging.Namespace]:
     r"""Extract the namespace of a name, if any."""
 
     return qualify_name(arg_).namespace
 
-def namespace_to_file_path(case_conv: hydra.util.CaseConvention, ext: hydra.module.FileExtension, ns: hydra.module.Namespace) -> str:
+def namespace_to_file_path(case_conv: hydra.util.CaseConvention, ext: hydra.packaging.FileExtension, ns: hydra.packaging.Namespace) -> str:
     r"""Convert a namespace to a file path with the given case convention and file extension."""
 
     @lru_cache(1)
@@ -97,7 +115,7 @@ def namespace_to_file_path(case_conv: hydra.util.CaseConvention, ext: hydra.modu
         return hydra.lib.lists.map((lambda v1: hydra.formatting.convert_case(hydra.util.CaseConvention.CAMEL, case_conv, v1)), hydra.lib.strings.split_on(".", ns.value))
     return hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.intercalate("/", parts()), "."), ext.value)
 
-def qname(ns: hydra.module.Namespace, name: str) -> hydra.core.Name:
+def qname(ns: hydra.packaging.Namespace, name: str) -> hydra.core.Name:
     r"""Construct a qualified (dot-separated) name."""
 
     return hydra.core.Name(hydra.lib.strings.cat((ns.value, ".", name)))
@@ -107,7 +125,7 @@ def unique_label(visited: frozenset[str], l: str) -> str:
 
     return hydra.lib.logic.if_else(hydra.lib.sets.member(l, visited), (lambda : unique_label(visited, hydra.lib.strings.cat2(l, "'"))), (lambda : l))
 
-def unqualify_name(qname: hydra.module.QualifiedName) -> hydra.core.Name:
+def unqualify_name(qname: hydra.packaging.QualifiedName) -> hydra.core.Name:
     r"""Convert a qualified name to a dot-separated name."""
 
     @lru_cache(1)

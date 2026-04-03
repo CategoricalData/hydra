@@ -6,8 +6,8 @@ package hydra.ext.java;
  * Java test code generation codec for JUnit-based generation tests
  */
 public interface Testing {
-  static String buildJavaTestModule(hydra.module.Module testModule, hydra.testing.TestGroup testGroup, String testBody) {
-    hydra.module.Namespace ns_ = (testModule).namespace;
+  static String buildJavaTestModule(hydra.packaging.Module testModule, hydra.testing.TestGroup testGroup, String testBody) {
+    hydra.packaging.Namespace ns_ = (testModule).namespace;
     hydra.util.ConsList<String> parts = hydra.lib.strings.SplitOn.apply(
       ".",
       (ns_).value);
@@ -130,7 +130,7 @@ public interface Testing {
     });
   }
 
-  static <T0, T1> hydra.util.Either<T1, hydra.util.Pair<String, String>> generateJavaTestFile(hydra.module.Module testModule, hydra.testing.TestGroup testGroup, T0 _g) {
+  static <T0, T1> hydra.util.Either<T1, hydra.util.Pair<String, String>> generateJavaTestFile(hydra.packaging.Module testModule, hydra.testing.TestGroup testGroup, T0 _g) {
     return hydra.ext.java.Testing.<T1>generateTestFileWithJavaCodec(
       testModule,
       testGroup);
@@ -187,10 +187,10 @@ public interface Testing {
             subgroups)))));
   }
 
-  static <T0> hydra.util.Either<T0, hydra.util.Pair<String, String>> generateTestFileWithJavaCodec(hydra.module.Module testModule, hydra.testing.TestGroup testGroup) {
+  static <T0> hydra.util.Either<T0, hydra.util.Pair<String, String>> generateTestFileWithJavaCodec(hydra.packaging.Module testModule, hydra.testing.TestGroup testGroup) {
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<String, hydra.util.Pair<String, String>>) (testBody -> {
-        hydra.module.Namespace ns_ = (testModule).namespace;
+        hydra.packaging.Namespace ns_ = (testModule).namespace;
         hydra.util.ConsList<String> parts = hydra.lib.strings.SplitOn.apply(
           ".",
           (ns_).value);
@@ -220,7 +220,7 @@ public interface Testing {
         testGroup));
   }
 
-  static String namespaceToJavaClassName(hydra.module.Namespace ns_) {
+  static String namespaceToJavaClassName(hydra.packaging.Namespace ns_) {
     return hydra.lib.strings.Intercalate.apply(
       ".",
       hydra.lib.lists.Map.apply(

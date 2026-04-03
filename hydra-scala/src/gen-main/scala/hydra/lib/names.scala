@@ -2,9 +2,9 @@ package hydra.lib.names
 
 import hydra.core.*
 
-import hydra.module.*
+import hydra.packaging.*
 
-lazy val chars: hydra.module.Namespace = "hydra.lib.chars"
+lazy val chars: hydra.packaging.Namespace = "hydra.lib.chars"
 
 lazy val charsIsAlphaNum: hydra.core.Name = "hydra.lib.chars.isAlphaNum"
 
@@ -18,7 +18,7 @@ lazy val charsToLower: hydra.core.Name = "hydra.lib.chars.toLower"
 
 lazy val charsToUpper: hydra.core.Name = "hydra.lib.chars.toUpper"
 
-lazy val eithers: hydra.module.Namespace = "hydra.lib.eithers"
+lazy val eithers: hydra.packaging.Namespace = "hydra.lib.eithers"
 
 lazy val eithersBimap: hydra.core.Name = "hydra.lib.eithers.bimap"
 
@@ -50,7 +50,7 @@ lazy val eithersPartitionEithers: hydra.core.Name = "hydra.lib.eithers.partition
 
 lazy val eithersRights: hydra.core.Name = "hydra.lib.eithers.rights"
 
-lazy val equality: hydra.module.Namespace = "hydra.lib.equality"
+lazy val equality: hydra.packaging.Namespace = "hydra.lib.equality"
 
 lazy val equalityCompare: hydra.core.Name = "hydra.lib.equality.compare"
 
@@ -70,7 +70,7 @@ lazy val equalityMax: hydra.core.Name = "hydra.lib.equality.max"
 
 lazy val equalityMin: hydra.core.Name = "hydra.lib.equality.min"
 
-lazy val lists: hydra.module.Namespace = "hydra.lib.lists"
+lazy val lists: hydra.packaging.Namespace = "hydra.lib.lists"
 
 lazy val listsApply: hydra.core.Name = "hydra.lib.lists.apply"
 
@@ -146,7 +146,7 @@ lazy val listsZip: hydra.core.Name = "hydra.lib.lists.zip"
 
 lazy val listsZipWith: hydra.core.Name = "hydra.lib.lists.zipWith"
 
-lazy val literals: hydra.module.Namespace = "hydra.lib.literals"
+lazy val literals: hydra.packaging.Namespace = "hydra.lib.literals"
 
 lazy val literalsBigfloatToBigint: hydra.core.Name = "hydra.lib.literals.bigfloatToBigint"
 
@@ -254,7 +254,7 @@ lazy val literalsUint64ToBigint: hydra.core.Name = "hydra.lib.literals.uint64ToB
 
 lazy val literalsUint8ToBigint: hydra.core.Name = "hydra.lib.literals.uint8ToBigint"
 
-lazy val logic: hydra.module.Namespace = "hydra.lib.logic"
+lazy val logic: hydra.packaging.Namespace = "hydra.lib.logic"
 
 lazy val logicAnd: hydra.core.Name = "hydra.lib.logic.and"
 
@@ -264,7 +264,7 @@ lazy val logicNot: hydra.core.Name = "hydra.lib.logic.not"
 
 lazy val logicOr: hydra.core.Name = "hydra.lib.logic.or"
 
-lazy val maps: hydra.module.Namespace = "hydra.lib.maps"
+lazy val maps: hydra.packaging.Namespace = "hydra.lib.maps"
 
 lazy val mapsAlter: hydra.core.Name = "hydra.lib.maps.alter"
 
@@ -306,7 +306,7 @@ lazy val mapsToList: hydra.core.Name = "hydra.lib.maps.toList"
 
 lazy val mapsUnion: hydra.core.Name = "hydra.lib.maps.union"
 
-lazy val math: hydra.module.Namespace = "hydra.lib.math"
+lazy val math: hydra.packaging.Namespace = "hydra.lib.math"
 
 lazy val mathAbs: hydra.core.Name = "hydra.lib.math.abs"
 
@@ -394,7 +394,7 @@ lazy val mathTanh: hydra.core.Name = "hydra.lib.math.tanh"
 
 lazy val mathTruncate: hydra.core.Name = "hydra.lib.math.truncate"
 
-lazy val maybes: hydra.module.Namespace = "hydra.lib.maybes"
+lazy val maybes: hydra.packaging.Namespace = "hydra.lib.maybes"
 
 lazy val maybesApply: hydra.core.Name = "hydra.lib.maybes.apply"
 
@@ -424,7 +424,7 @@ lazy val maybesPure: hydra.core.Name = "hydra.lib.maybes.pure"
 
 lazy val maybesToList: hydra.core.Name = "hydra.lib.maybes.toList"
 
-lazy val pairs: hydra.module.Namespace = "hydra.lib.pairs"
+lazy val pairs: hydra.packaging.Namespace = "hydra.lib.pairs"
 
 lazy val pairsBimap: hydra.core.Name = "hydra.lib.pairs.bimap"
 
@@ -432,7 +432,7 @@ lazy val pairsFirst: hydra.core.Name = "hydra.lib.pairs.first"
 
 lazy val pairsSecond: hydra.core.Name = "hydra.lib.pairs.second"
 
-lazy val regex: hydra.module.Namespace = "hydra.lib.regex"
+lazy val regex: hydra.packaging.Namespace = "hydra.lib.regex"
 
 lazy val regexFind: hydra.core.Name = "hydra.lib.regex.find"
 
@@ -446,7 +446,7 @@ lazy val regexReplaceAll: hydra.core.Name = "hydra.lib.regex.replaceAll"
 
 lazy val regexSplit: hydra.core.Name = "hydra.lib.regex.split"
 
-lazy val sets: hydra.module.Namespace = "hydra.lib.sets"
+lazy val sets: hydra.packaging.Namespace = "hydra.lib.sets"
 
 lazy val setsDelete: hydra.core.Name = "hydra.lib.sets.delete"
 
@@ -476,7 +476,7 @@ lazy val setsUnion: hydra.core.Name = "hydra.lib.sets.union"
 
 lazy val setsUnions: hydra.core.Name = "hydra.lib.sets.unions"
 
-lazy val strings: hydra.module.Namespace = "hydra.lib.strings"
+lazy val strings: hydra.packaging.Namespace = "hydra.lib.strings"
 
 lazy val stringsCat: hydra.core.Name = "hydra.lib.strings.cat"
 
@@ -504,7 +504,7 @@ lazy val stringsToUpper: hydra.core.Name = "hydra.lib.strings.toUpper"
 
 lazy val stringsUnlines: hydra.core.Name = "hydra.lib.strings.unlines"
 
-lazy val typeclass: hydra.module.Namespace = "hydra.typeclass"
+lazy val typeclass: hydra.packaging.Namespace = "hydra.typeclass"
 
 lazy val typeclassEq: hydra.core.Name = "hydra.typeclass.Eq"
 
