@@ -374,7 +374,7 @@ object TestSuiteRunner {
     val kernelTypes: Map[hydra.core.Name, hydra.core.Type] = buildKernelTypes()
     val allTypes: Map[hydra.core.Name, hydra.core.Type] = kernelTypes ++ testTypes
     val schemaTypes: Map[hydra.core.Name, TypeScheme] = allTypes.map { case (k, v) =>
-      k -> hydra.schemas.typeToTypeScheme(v)
+      k -> hydra.resolution.typeToTypeScheme(v)
     }
 
     // Bound terms
