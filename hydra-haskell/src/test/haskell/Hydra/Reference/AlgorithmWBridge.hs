@@ -13,6 +13,8 @@ import qualified Hydra.Dsl.Types as Types
 import Hydra.Sources.Libraries
 import Hydra.Coders
 import Hydra.Rewriting
+import Hydra.Strip
+import Hydra.Variables
 
 import qualified Data.List as L
 import qualified Data.Map as M

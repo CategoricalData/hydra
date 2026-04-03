@@ -6,6 +6,14 @@ package hydra.test;
  * A module defining the graph used in the test suite.
  */
 public interface TestGraph {
+  static hydra.context.Context testContext() {
+    return hydra.TestEnv.testContext();
+  }
+
+  static hydra.graph.Graph testGraph() {
+    return hydra.TestEnv.testGraph();
+  }
+
   static hydra.module.Namespace testNamespace() {
     return new hydra.module.Namespace("testGraph");
   }

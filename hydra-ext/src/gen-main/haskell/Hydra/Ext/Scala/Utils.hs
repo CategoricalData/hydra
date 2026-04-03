@@ -17,18 +17,14 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
-import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Extract the name from a type, if it is a named type
 nameOfType :: t0 -> Core.Type -> Maybe Core.Name
 nameOfType cx t =
-    case (Rewriting.deannotateType t) of
+    case (Strip.deannotateType t) of
       Core.TypeVariable v0 -> Just v0
       Core.TypeForall v0 -> nameOfType cx (Core.forallTypeBody v0)
       _ -> Nothing

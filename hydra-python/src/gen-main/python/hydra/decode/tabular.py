@@ -11,7 +11,7 @@ import hydra.core
 import hydra.decode.core
 import hydra.decode.relational
 import hydra.errors
-import hydra.extract.helpers
+import hydra.extract.core
 import hydra.lexical
 import hydra.lib.eithers
 import hydra.tabular
@@ -24,8 +24,8 @@ def column_type(cx: hydra.graph.Graph, raw: hydra.core.Term):
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-                    return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.relational.column_name(x1, x2)), field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("type", (lambda x1, x2: hydra.decode.core.type(x1, x2)), field_map(), cx), (lambda field_type: Right(hydra.tabular.ColumnType(field_name, field_type))))))
+                    return hydra.extract.core.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("name", (lambda x1, x2: hydra.decode.relational.column_name(x1, x2)), field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.core.require_field("type", (lambda x1, x2: hydra.decode.core.type(x1, x2)), field_map(), cx), (lambda field_type: Right(hydra.tabular.ColumnType(field_name, field_type))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -35,7 +35,7 @@ def data_row(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.erro
     def _hoist_hydra_decode_tabular_data_row_1(cx, v, v1):
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
-                return hydra.lib.eithers.map((lambda b: hydra.tabular.DataRow(b)), hydra.extract.helpers.decode_list((lambda v12, v2: hydra.extract.helpers.decode_maybe(v, v12, v2)), cx, wrapped_term.body))
+                return hydra.lib.eithers.map((lambda b: hydra.tabular.DataRow(b)), hydra.extract.core.decode_list((lambda v12, v2: hydra.extract.core.decode_maybe(v, v12, v2)), cx, wrapped_term.body))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected wrapped type"))
@@ -59,7 +59,7 @@ def header_row(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_tabular_header_row_3(cx, v1):
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
-                return hydra.lib.eithers.map((lambda b: hydra.tabular.HeaderRow(b)), hydra.extract.helpers.decode_list((lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_hydra_decode_tabular_header_row_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), cx, wrapped_term.body))
+                return hydra.lib.eithers.map((lambda b: hydra.tabular.HeaderRow(b)), hydra.extract.core.decode_list((lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_hydra_decode_tabular_header_row_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), cx, wrapped_term.body))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected wrapped type"))
@@ -71,8 +71,8 @@ def table(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-                    return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("header", (lambda v12, v2: hydra.extract.helpers.decode_maybe((lambda x1, x2: header_row(x1, x2)), v12, v2)), field_map(), cx), (lambda field_header: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("data", (lambda v12, v2: hydra.extract.helpers.decode_list((lambda v13, v22: data_row(v, v13, v22)), v12, v2)), field_map(), cx), (lambda field_data: Right(hydra.tabular.Table(field_header, field_data))))))
+                    return hydra.extract.core.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("header", (lambda v12, v2: hydra.extract.core.decode_maybe((lambda x1, x2: header_row(x1, x2)), v12, v2)), field_map(), cx), (lambda field_header: hydra.lib.eithers.bind(hydra.extract.core.require_field("data", (lambda v12, v2: hydra.extract.core.decode_list((lambda v13, v22: data_row(v, v13, v22)), v12, v2)), field_map(), cx), (lambda field_data: Right(hydra.tabular.Table(field_header, field_data))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
@@ -84,8 +84,8 @@ def table_type(cx: hydra.graph.Graph, raw: hydra.core.Term):
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-                    return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.relational.relation_name(x1, x2)), field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("columns", (lambda v12, v2: hydra.extract.helpers.decode_list((lambda x1, x2: column_type(x1, x2)), v12, v2)), field_map(), cx), (lambda field_columns: Right(hydra.tabular.TableType(field_name, field_columns))))))
+                    return hydra.extract.core.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("name", (lambda x1, x2: hydra.decode.relational.relation_name(x1, x2)), field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.core.require_field("columns", (lambda v12, v2: hydra.extract.core.decode_list((lambda x1, x2: column_type(x1, x2)), v12, v2)), field_map(), cx), (lambda field_columns: Right(hydra.tabular.TableType(field_name, field_columns))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))

@@ -125,7 +125,7 @@ public interface Lexical {
   }
 
   static hydra.util.ConsList<hydra.core.FieldType> fieldsOf(hydra.core.Type t) {
-    hydra.core.Type stripped = hydra.Rewriting.deannotateType(t);
+    hydra.core.Type stripped = hydra.Strip.deannotateType(t);
     return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.ConsList<hydra.core.FieldType> otherwise(hydra.core.Type instance) {
@@ -210,7 +210,7 @@ public interface Lexical {
   }
 
   static <T0, T1> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T1> matchRecord(hydra.context.Context cx, T0 graph, java.util.function.Function<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T1>> decode, hydra.core.Term term) {
-    hydra.core.Term stripped = hydra.Rewriting.deannotateAndDetypeTerm(term);
+    hydra.core.Term stripped = hydra.Strip.deannotateAndDetypeTerm(term);
     return (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T1> otherwise(hydra.core.Term instance) {
@@ -229,7 +229,7 @@ public interface Lexical {
   }
 
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T0> matchUnion(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Name tname, hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T0>>>> pairs, hydra.core.Term term) {
-    hydra.core.Term stripped = hydra.Rewriting.deannotateAndDetypeTerm(term);
+    hydra.core.Term stripped = hydra.Strip.deannotateAndDetypeTerm(term);
     return (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T0> otherwise(hydra.core.Term instance) {
@@ -381,7 +381,7 @@ public interface Lexical {
 
   static hydra.util.Maybe<hydra.core.Term> resolveTerm(hydra.graph.Graph graph, hydra.core.Name name) {
     java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.Term>> recurse = (java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.Term>>) (term -> {
-      hydra.core.Term stripped = hydra.Rewriting.deannotateTerm(term);
+      hydra.core.Term stripped = hydra.Strip.deannotateTerm(term);
       return (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Maybe<hydra.core.Term> otherwise(hydra.core.Term instance) {
@@ -405,7 +405,7 @@ public interface Lexical {
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> stripAndDereferenceTerm(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term term) {
-    hydra.core.Term stripped = hydra.Rewriting.deannotateAndDetypeTerm(term);
+    hydra.core.Term stripped = hydra.Strip.deannotateAndDetypeTerm(term);
     return (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> otherwise(hydra.core.Term instance) {
@@ -428,7 +428,7 @@ public interface Lexical {
   }
 
   static hydra.util.Either<String, hydra.core.Term> stripAndDereferenceTermEither(hydra.graph.Graph graph, hydra.core.Term term) {
-    hydra.core.Term stripped = hydra.Rewriting.deannotateAndDetypeTerm(term);
+    hydra.core.Term stripped = hydra.Strip.deannotateAndDetypeTerm(term);
     return (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Either<String, hydra.core.Term> otherwise(hydra.core.Term instance) {

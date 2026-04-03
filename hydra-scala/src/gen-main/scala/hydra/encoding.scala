@@ -361,7 +361,7 @@ def filterTypeBindings(cx: hydra.context.Context)(graph: hydra.graph.Graph)(bind
 
 def isEncodableBinding(cx: hydra.context.Context)(graph: hydra.graph.Graph)(b: hydra.core.Binding): Either[hydra.context.InContext[hydra.errors.Error],
    Option[hydra.core.Binding]] =
-  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Boolean, Option[hydra.core.Binding]](hydra.schemas.isSerializableByName(cx)(graph)(b.name))((serializable: Boolean) =>
+  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Boolean, Option[hydra.core.Binding]](hydra.predicates.isSerializableByName(cx)(graph)(b.name))((serializable: Boolean) =>
   Right(hydra.lib.logic.ifElse[Option[hydra.core.Binding]](serializable)(Some(b))(None)))
 
 def isUnitType(v1: hydra.core.Type): Boolean =

@@ -44,7 +44,7 @@
                                                                 "term": {
                                                                   "application": {
                                                                     "argument": {"variable": "record"},
-                                                                    "function": {"variable": "hydra.extract.helpers.toFieldMap"}}},
+                                                                    "function": {"variable": "hydra.extract.core.toFieldMap"}}},
                                                                 "type": [
                                                                   {
                                                                     "constraints": null,
@@ -221,7 +221,7 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "typeApplication": {
-                                                                                                          "body": {"variable": "hydra.extract.helpers.requireField"},
+                                                                                                          "body": {"variable": "hydra.extract.core.requireField"},
                                                                                                           "type": {"variable": "hydra.graph.Graph"}}},
                                                                                                       "type": {"variable": "hydra.core.Term"}}},
                                                                                                   "type": {"literal": {"string": {}}}}}}}}}}}}},
@@ -379,7 +379,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"variable": "hydra.extract.helpers.requireField"},
+                                                                                                "body": {"variable": "hydra.extract.core.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                                         "type": {"literal": {"string": {}}}}}}}}}}}}},
@@ -966,7 +966,7 @@
                                                                           "term": {
                                                                             "application": {
                                                                               "argument": {"variable": "record"},
-                                                                              "function": {"variable": "hydra.extract.helpers.toFieldMap"}}},
+                                                                              "function": {"variable": "hydra.extract.core.toFieldMap"}}},
                                                                           "type": [
                                                                             {
                                                                               "constraints": null,
@@ -1149,7 +1149,7 @@
                                                                                                               "typeApplication": {
                                                                                                                 "body": {
                                                                                                                   "typeApplication": {
-                                                                                                                    "body": {"variable": "hydra.extract.helpers.requireField"},
+                                                                                                                    "body": {"variable": "hydra.extract.core.requireField"},
                                                                                                                     "type": {"variable": "hydra.graph.Graph"}}},
                                                                                                                 "type": {"variable": "hydra.core.Term"}}},
                                                                                                             "type": {"literal": {"string": {}}}}}}}}}}}}},
@@ -1188,7 +1188,7 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "typeApplication": {
-                                                                                                          "body": {"variable": "hydra.extract.helpers.requireField"},
+                                                                                                          "body": {"variable": "hydra.extract.core.requireField"},
                                                                                                           "type": {"variable": "hydra.graph.Graph"}}},
                                                                                                       "type": {"variable": "hydra.core.Term"}}},
                                                                                                   "type": {"variable": "t0"}}}}}}}}}}},
@@ -1313,7 +1313,7 @@
   "description": ["Term decoders for hydra.parsing"],
   "namespace": "hydra.decode.parsing",
   "termDependencies": [
-    "hydra.extract.helpers",
+    "hydra.extract.core",
     "hydra.lexical",
     "hydra.rewriting",
     "hydra.decode.core"],

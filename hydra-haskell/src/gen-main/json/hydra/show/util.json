@@ -63,6 +63,62 @@
               "function": {
                 "codomain": {"literal": {"string": {}}},
                 "domain": {"variable": "hydra.util.CaseConvention"}}},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.show.util.comparison",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {"literal": {"string": "Show a comparison result as a string"}}}],
+            "body": {
+              "function": {
+                "lambda": {
+                  "body": {
+                    "application": {
+                      "argument": {"variable": "c"},
+                      "function": {
+                        "function": {
+                          "elimination": {
+                            "union": {
+                              "cases": [
+                                {
+                                  "name": "lessThan",
+                                  "term": {
+                                    "function": {
+                                      "lambda": {
+                                        "body": {"literal": {"string": "lessThan"}},
+                                        "domain": [{"unit": {}}],
+                                        "parameter": "_"}}}},
+                                {
+                                  "name": "equalTo",
+                                  "term": {
+                                    "function": {
+                                      "lambda": {
+                                        "body": {"literal": {"string": "equalTo"}},
+                                        "domain": [{"unit": {}}],
+                                        "parameter": "_"}}}},
+                                {
+                                  "name": "greaterThan",
+                                  "term": {
+                                    "function": {
+                                      "lambda": {
+                                        "body": {"literal": {"string": "greaterThan"}},
+                                        "domain": [{"unit": {}}],
+                                        "parameter": "_"}}}}],
+                              "default": null,
+                              "typeName": "hydra.util.Comparison"}}}}}},
+                  "domain": [{"variable": "hydra.util.Comparison"}],
+                  "parameter": "c"}}}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {"literal": {"string": {}}},
+                "domain": {"variable": "hydra.util.Comparison"}}},
             "variables": []}]}}],
   "description": ["String representations of hydra.util types"],
   "namespace": "hydra.show.util",
@@ -76,6 +132,7 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
+    "hydra.error.module",
     "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",

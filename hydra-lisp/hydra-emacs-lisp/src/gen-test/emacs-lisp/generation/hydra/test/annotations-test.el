@@ -7,152 +7,152 @@
 
 (ert-deftest test-annotations-negarbitrary-annotations-negset-single-annotation--num1 ()
 
-  (should (equal (list :annotated (make-hydra_core_annotated_term (list :literal (list :string "foo")) (list (cons "k1" (list :literal (list :integer (list :int32 42))))))) (funcall (funcall (funcall hydra_annotations_set_term_annotation "k1") (list :just (list :literal (list :integer (list :int32 42))))) (list :literal (list :string "foo"))))))
+  (should (equal inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="foo"}}, annotation={wrap(hydra.core.Name){"k1"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=42:int32}}}}}} inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="foo"}}, annotation={wrap(hydra.core.Name){"k1"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=42:int32}}}}}})))
 
 (ert-deftest test-annotations-negarbitrary-annotations-negset-single-annotation--num2 ()
 
-  (should (equal (list :annotated (make-hydra_core_annotated_term (list :literal (list :string "bar")) (list (cons "myKey" (list :literal (list :integer (list :int32 -17))))))) (funcall (funcall (funcall hydra_annotations_set_term_annotation "myKey") (list :just (list :literal (list :integer (list :int32 -17))))) (list :literal (list :string "bar"))))))
+  (should (equal inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="bar"}}, annotation={wrap(hydra.core.Name){"myKey"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=-17:int32}}}}}} inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="bar"}}, annotation={wrap(hydra.core.Name){"myKey"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=-17:int32}}}}}})))
 
 (ert-deftest test-annotations-negarbitrary-annotations-negset-single-annotation--num3 ()
 
-  (should (equal (list :annotated (make-hydra_core_annotated_term (list :literal (list :integer (list :int32 0))) (list (cons "x" (list :literal (list :string "hello")))))) (funcall (funcall (funcall hydra_annotations_set_term_annotation "x") (list :just (list :literal (list :string "hello")))) (list :literal (list :integer (list :int32 0)))))))
+  (should (equal inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=0:int32}}}, annotation={wrap(hydra.core.Name){"x"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="hello"}}}}} inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=0:int32}}}, annotation={wrap(hydra.core.Name){"x"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="hello"}}}}})))
 
 (ert-deftest test-annotations-negarbitrary-annotations-negget-existing-annotation--num1 ()
 
-  (should (equal (list :just (list :literal (list :string "value"))) (funcall (funcall hydra_annotations_get_term_annotation "k1") (funcall (funcall (funcall hydra_annotations_set_term_annotation "k1") (list :just (list :literal (list :string "value")))) (list :literal (list :integer (list :int32 42))))))))
+  (should (equal just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="value"}}) just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="value"}}))))
 
 (ert-deftest test-annotations-negarbitrary-annotations-negget-existing-annotation--num2 ()
 
-  (should (equal (list :just (list :literal (list :string ""))) (funcall (funcall hydra_annotations_get_term_annotation "foo") (funcall (funcall (funcall hydra_annotations_set_term_annotation "foo") (list :just (list :literal (list :string "")))) (list :literal (list :integer (list :int32 99))))))))
+  (should (equal just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){string=""}}) just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){string=""}}))))
 
 (ert-deftest test-annotations-negarbitrary-annotations-negget-existing-annotation--num3 ()
 
-  (should (equal (list :just (list :literal (list :integer (list :int32 123)))) (funcall (funcall hydra_annotations_get_term_annotation "key") (funcall (funcall (funcall hydra_annotations_set_term_annotation "key") (list :just (list :literal (list :integer (list :int32 123))))) (list :literal (list :string "test")))))))
+  (should (equal just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=123:int32}}}) just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=123:int32}}}))))
 
 (ert-deftest test-annotations-negarbitrary-annotations-negget-missing-annotation--num1 ()
 
-  (should (equal (list :nothing) (funcall (funcall hydra_annotations_get_term_annotation "k1") (list :literal (list :integer (list :int16 42)))))))
+  (should (equal nothing nothing)))
 
 (ert-deftest test-annotations-negarbitrary-annotations-negget-missing-annotation--num2 ()
 
-  (should (equal (list :nothing) (funcall (funcall hydra_annotations_get_term_annotation "nonexistent") (list :literal (list :string "hello"))))))
+  (should (equal nothing nothing)))
 
 (ert-deftest test-annotations-negarbitrary-annotations-negget-missing-annotation--num3 ()
 
-  (should (equal (list :nothing) (funcall (funcall hydra_annotations_get_term_annotation "k1") (funcall (funcall (funcall hydra_annotations_set_term_annotation "k2") (list :just (list :literal (list :integer (list :int32 1))))) (list :literal (list :integer (list :int32 42))))))))
+  (should (equal nothing nothing)))
 
 (ert-deftest test-annotations-negarbitrary-annotations-negset-multiple-annotations--num1 ()
 
-  (should (equal (list :annotated (make-hydra_core_annotated_term (list :literal (list :boolean t)) (list (cons "k1" (list :literal (list :string "first"))) (cons "k2" (list :literal (list :integer (list :int32 200))))))) (funcall (funcall (funcall hydra_annotations_set_term_annotation "k2") (list :just (list :literal (list :integer (list :int32 200))))) (funcall (funcall (funcall hydra_annotations_set_term_annotation "k1") (list :just (list :literal (list :string "first")))) (list :literal (list :boolean t)))))))
+  (should (equal inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){boolean=true}}, annotation={wrap(hydra.core.Name){"k1"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="first"}}, wrap(hydra.core.Name){"k2"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=200:int32}}}}}} inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){boolean=true}}, annotation={wrap(hydra.core.Name){"k1"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="first"}}, wrap(hydra.core.Name){"k2"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=200:int32}}}}}})))
 
 (ert-deftest test-annotations-negarbitrary-annotations-negset-multiple-annotations--num2 ()
 
-  (should (equal (list :annotated (make-hydra_core_annotated_term (list :literal (list :string "test")) (list (cons "a" (list :literal (list :integer (list :int32 -5)))) (cons "b" (list :literal (list :integer (list :int32 0))))))) (funcall (funcall (funcall hydra_annotations_set_term_annotation "b") (list :just (list :literal (list :integer (list :int32 0))))) (funcall (funcall (funcall hydra_annotations_set_term_annotation "a") (list :just (list :literal (list :integer (list :int32 -5))))) (list :literal (list :string "test")))))))
+  (should (equal inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="test"}}, annotation={wrap(hydra.core.Name){"a"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=-5:int32}}}, wrap(hydra.core.Name){"b"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=0:int32}}}}}} inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="test"}}, annotation={wrap(hydra.core.Name){"a"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=-5:int32}}}, wrap(hydra.core.Name){"b"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=0:int32}}}}}})))
 
 (ert-deftest test-annotations-negarbitrary-annotations-negouter-annotation-overrides-inner--num1 ()
 
-  (should (equal (list :annotated (make-hydra_core_annotated_term (list :literal (list :string "bar")) (list (cons "k1" (list :literal (list :string "outer")))))) (funcall (funcall (funcall hydra_annotations_set_term_annotation "k1") (list :just (list :literal (list :string "outer")))) (funcall (funcall (funcall hydra_annotations_set_term_annotation "k1") (list :just (list :literal (list :string "inner")))) (list :literal (list :string "bar")))))))
+  (should (equal inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="bar"}}, annotation={wrap(hydra.core.Name){"k1"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="outer"}}}}} inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="bar"}}, annotation={wrap(hydra.core.Name){"k1"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="outer"}}}}})))
 
 (ert-deftest test-annotations-negarbitrary-annotations-negouter-annotation-overrides-inner--num2 ()
 
-  (should (equal (list :annotated (make-hydra_core_annotated_term (list :literal (list :integer (list :int32 42))) (list (cons "x" (list :literal (list :string "new")))))) (funcall (funcall (funcall hydra_annotations_set_term_annotation "x") (list :just (list :literal (list :string "new")))) (funcall (funcall (funcall hydra_annotations_set_term_annotation "x") (list :just (list :literal (list :string "old")))) (list :literal (list :integer (list :int32 42))))))))
+  (should (equal inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=42:int32}}}, annotation={wrap(hydra.core.Name){"x"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="new"}}}}} inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=42:int32}}}, annotation={wrap(hydra.core.Name){"x"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="new"}}}}})))
 
 (ert-deftest test-annotations-negarbitrary-annotations-negouter-annotation-overrides-inner--num3 ()
 
-  (should (equal (list :annotated (make-hydra_core_annotated_term (list :literal (list :boolean nil)) (list (cons "key" (list :literal (list :integer (list :int32 999))))))) (funcall (funcall (funcall hydra_annotations_set_term_annotation "key") (list :just (list :literal (list :integer (list :int32 999))))) (funcall (funcall (funcall hydra_annotations_set_term_annotation "key") (list :just (list :literal (list :integer (list :int32 1))))) (list :literal (list :boolean nil)))))))
+  (should (equal inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){boolean=false}}, annotation={wrap(hydra.core.Name){"key"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=999:int32}}}}}} inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){boolean=false}}, annotation={wrap(hydra.core.Name){"key"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=999:int32}}}}}})))
 
 (ert-deftest test-annotations-negarbitrary-annotations-negunset-single-annotation--num1 ()
 
-  (should (equal (list :literal (list :integer (list :int64 137))) (funcall (funcall (funcall hydra_annotations_set_term_annotation "k1") (list :nothing)) (funcall (funcall (funcall hydra_annotations_set_term_annotation "k1") (list :just (list :literal (list :string "foo")))) (list :literal (list :integer (list :int64 137))))))))
+  (should (equal inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int64=137:int64}}} inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int64=137:int64}}})))
 
 (ert-deftest test-annotations-negarbitrary-annotations-negunset-single-annotation--num2 ()
 
-  (should (equal (list :literal (list :string "test")) (funcall (funcall (funcall hydra_annotations_set_term_annotation "x") (list :nothing)) (funcall (funcall (funcall hydra_annotations_set_term_annotation "x") (list :just (list :literal (list :integer (list :int32 42))))) (list :literal (list :string "test")))))))
+  (should (equal inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="test"}} inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="test"}})))
 
 (ert-deftest test-annotations-negarbitrary-annotations-negunset-one-of-multiple-annotations--num1 ()
 
-  (should (equal (list :annotated (make-hydra_core_annotated_term (list :literal (list :integer (list :int64 137))) (list (cons "k2" (list :literal (list :integer (list :int32 200))))))) (funcall (funcall (funcall hydra_annotations_set_term_annotation "k1") (list :nothing)) (funcall (funcall (funcall hydra_annotations_set_term_annotation "k2") (list :just (list :literal (list :integer (list :int32 200))))) (funcall (funcall (funcall hydra_annotations_set_term_annotation "k1") (list :just (list :literal (list :string "first")))) (list :literal (list :integer (list :int64 137)))))))))
+  (should (equal inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int64=137:int64}}}, annotation={wrap(hydra.core.Name){"k2"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=200:int32}}}}}} inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int64=137:int64}}}, annotation={wrap(hydra.core.Name){"k2"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=200:int32}}}}}})))
 
 (ert-deftest test-annotations-negarbitrary-annotations-negunset-one-of-multiple-annotations--num2 ()
 
-  (should (equal (list :annotated (make-hydra_core_annotated_term (list :literal (list :string "x")) (list (cons "a" (list :literal (list :integer (list :int32 1))))))) (funcall (funcall (funcall hydra_annotations_set_term_annotation "b") (list :nothing)) (funcall (funcall (funcall hydra_annotations_set_term_annotation "b") (list :just (list :literal (list :integer (list :int32 2))))) (funcall (funcall (funcall hydra_annotations_set_term_annotation "a") (list :just (list :literal (list :integer (list :int32 1))))) (list :literal (list :string "x"))))))))
+  (should (equal inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="x"}}, annotation={wrap(hydra.core.Name){"a"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=1:int32}}}}}} inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="x"}}, annotation={wrap(hydra.core.Name){"a"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=1:int32}}}}}})))
 
 ;; descriptions
 
 (ert-deftest test-annotations-negdescriptions-negset-description--num1 ()
 
-  (should (equal (list :annotated (make-hydra_core_annotated_term (list :literal (list :string "foo")) (list (cons "description" (list :literal (list :string "my description")))))) (funcall (funcall hydra_annotations_set_term_description (list :just "my description")) (list :literal (list :string "foo"))))))
+  (should (equal inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="foo"}}, annotation={wrap(hydra.core.Name){"description"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="my description"}}}}} inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="foo"}}, annotation={wrap(hydra.core.Name){"description"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="my description"}}}}})))
 
 (ert-deftest test-annotations-negdescriptions-negset-description--num2 ()
 
-  (should (equal (list :annotated (make-hydra_core_annotated_term (list :literal (list :integer (list :int32 42))) (list (cons "description" (list :literal (list :string "")))))) (funcall (funcall hydra_annotations_set_term_description (list :just "")) (list :literal (list :integer (list :int32 42)))))))
+  (should (equal inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=42:int32}}}, annotation={wrap(hydra.core.Name){"description"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string=""}}}}} inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=42:int32}}}, annotation={wrap(hydra.core.Name){"description"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string=""}}}}})))
 
 (ert-deftest test-annotations-negdescriptions-negset-description--num3 ()
 
-  (should (equal (list :annotated (make-hydra_core_annotated_term (list :literal (list :boolean t)) (list (cons "description" (list :literal (list :string "A longer description with spaces")))))) (funcall (funcall hydra_annotations_set_term_description (list :just "A longer description with spaces")) (list :literal (list :boolean t))))))
+  (should (equal inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){boolean=true}}, annotation={wrap(hydra.core.Name){"description"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="A longer description with spaces"}}}}} inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){boolean=true}}, annotation={wrap(hydra.core.Name){"description"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="A longer description with spaces"}}}}})))
 
 (ert-deftest test-annotations-negdescriptions-negget-existing-description--num1 ()
 
-  (should (equal (list :right (list :just "hello")) (funcall (funcall (funcall hydra_annotations_get_term_description hydra_lexical_empty_context) hydra_lexical_empty_graph) (funcall (funcall hydra_annotations_set_term_description (list :just "hello")) (list :literal (list :integer (list :int32 42))))))))
+  (should (equal right(just("hello")) right(just("hello")))))
 
 (ert-deftest test-annotations-negdescriptions-negget-existing-description--num2 ()
 
-  (should (equal (list :right (list :just "")) (funcall (funcall (funcall hydra_annotations_get_term_description hydra_lexical_empty_context) hydra_lexical_empty_graph) (funcall (funcall hydra_annotations_set_term_description (list :just "")) (list :literal (list :string "test")))))))
+  (should (equal right(just("")) right(just("")))))
 
 (ert-deftest test-annotations-negdescriptions-negget-existing-description--num3 ()
 
-  (should (equal (list :right (list :just "desc")) (funcall (funcall (funcall hydra_annotations_get_term_description hydra_lexical_empty_context) hydra_lexical_empty_graph) (funcall (funcall hydra_annotations_set_term_description (list :just "desc")) (list :literal (list :boolean nil)))))))
+  (should (equal right(just("desc")) right(just("desc")))))
 
 (ert-deftest test-annotations-negdescriptions-negget-missing-description--num1 ()
 
-  (should (equal (list :right (list :nothing)) (funcall (funcall (funcall hydra_annotations_get_term_description hydra_lexical_empty_context) hydra_lexical_empty_graph) (list :literal (list :integer (list :int16 42)))))))
+  (should (equal right(nothing) right(nothing))))
 
 (ert-deftest test-annotations-negdescriptions-negget-missing-description--num2 ()
 
-  (should (equal (list :right (list :nothing)) (funcall (funcall (funcall hydra_annotations_get_term_description hydra_lexical_empty_context) hydra_lexical_empty_graph) (list :literal (list :string "no description here"))))))
+  (should (equal right(nothing) right(nothing))))
 
 (ert-deftest test-annotations-negdescriptions-negget-missing-description--num3 ()
 
-  (should (equal (list :right (list :nothing)) (funcall (funcall (funcall hydra_annotations_get_term_description hydra_lexical_empty_context) hydra_lexical_empty_graph) (list :literal (list :integer (list :int32 0)))))))
+  (should (equal right(nothing) right(nothing))))
 
 (ert-deftest test-annotations-negdescriptions-negouter-description-overrides-inner--num1 ()
 
-  (should (equal (list :annotated (make-hydra_core_annotated_term (list :literal (list :string "bar")) (list (cons "description" (list :literal (list :string "outer")))))) (funcall (funcall hydra_annotations_set_term_description (list :just "outer")) (funcall (funcall hydra_annotations_set_term_description (list :just "inner")) (list :literal (list :string "bar")))))))
+  (should (equal inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="bar"}}, annotation={wrap(hydra.core.Name){"description"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="outer"}}}}} inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="bar"}}, annotation={wrap(hydra.core.Name){"description"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="outer"}}}}})))
 
 (ert-deftest test-annotations-negdescriptions-negouter-description-overrides-inner--num2 ()
 
-  (should (equal (list :annotated (make-hydra_core_annotated_term (list :literal (list :integer (list :int32 99))) (list (cons "description" (list :literal (list :string "new")))))) (funcall (funcall hydra_annotations_set_term_description (list :just "new")) (funcall (funcall hydra_annotations_set_term_description (list :just "old")) (list :literal (list :integer (list :int32 99))))))))
+  (should (equal inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=99:int32}}}, annotation={wrap(hydra.core.Name){"description"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="new"}}}}} inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=99:int32}}}, annotation={wrap(hydra.core.Name){"description"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="new"}}}}})))
 
 (ert-deftest test-annotations-negdescriptions-negunset-description--num1 ()
 
-  (should (equal (list :literal (list :integer (list :int64 137))) (funcall (funcall hydra_annotations_set_term_description (list :nothing)) (funcall (funcall hydra_annotations_set_term_description (list :just "desc")) (list :literal (list :integer (list :int64 137))))))))
+  (should (equal inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int64=137:int64}}} inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int64=137:int64}}})))
 
 (ert-deftest test-annotations-negdescriptions-negunset-description--num2 ()
 
-  (should (equal (list :literal (list :string "test")) (funcall (funcall hydra_annotations_set_term_description (list :nothing)) (funcall (funcall hydra_annotations_set_term_description (list :just "to be removed")) (list :literal (list :string "test")))))))
+  (should (equal inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="test"}} inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="test"}})))
 
 ;; layered annotations
 
 (ert-deftest test-annotations-neglayered-annotations-negget-annotation-from-unannotated-term ()
 
-  (should (equal (list :nothing) (funcall (funcall hydra_annotations_get_term_annotation "one") (list :literal (list :integer (list :int32 42)))))))
+  (should (equal nothing nothing)))
 
 (ert-deftest test-annotations-neglayered-annotations-negget-annotation-from-singly-annotated-term ()
 
-  (should (equal (list :just (list :literal (list :integer (list :int32 1)))) (funcall (funcall hydra_annotations_get_term_annotation "one") (list :annotated (make-hydra_core_annotated_term (list :literal (list :integer (list :int32 42))) (list (cons "one" (list :literal (list :integer (list :int32 1)))))))))))
+  (should (equal just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=1:int32}}}) just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=1:int32}}}))))
 
 (ert-deftest test-annotations-neglayered-annotations-negget-inner-annotation-from-doubly-annotated-term ()
 
-  (should (equal (list :just (list :literal (list :integer (list :int32 1)))) (funcall (funcall hydra_annotations_get_term_annotation "one") (list :annotated (make-hydra_core_annotated_term (list :annotated (make-hydra_core_annotated_term (list :literal (list :integer (list :int32 42))) (list (cons "one" (list :literal (list :integer (list :int32 1))))))) (list (cons "two" (list :literal (list :integer (list :int32 2)))))))))))
+  (should (equal just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=1:int32}}}) just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=1:int32}}}))))
 
 (ert-deftest test-annotations-neglayered-annotations-negget-outer-annotation-from-doubly-annotated-term ()
 
-  (should (equal (list :just (list :literal (list :integer (list :int32 2)))) (funcall (funcall hydra_annotations_get_term_annotation "two") (list :annotated (make-hydra_core_annotated_term (list :annotated (make-hydra_core_annotated_term (list :literal (list :integer (list :int32 42))) (list (cons "one" (list :literal (list :integer (list :int32 1))))))) (list (cons "two" (list :literal (list :integer (list :int32 2)))))))))))
+  (should (equal just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=2:int32}}}) just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=2:int32}}}))))
 
 (ert-deftest test-annotations-neglayered-annotations-negget-non-negoverridden-annotation-from-triply-annotated-term ()
 
-  (should (equal (list :just (list :literal (list :integer (list :int32 2)))) (funcall (funcall hydra_annotations_get_term_annotation "two") (list :annotated (make-hydra_core_annotated_term (list :annotated (make-hydra_core_annotated_term (list :annotated (make-hydra_core_annotated_term (list :literal (list :integer (list :int32 42))) (list (cons "one" (list :literal (list :integer (list :int32 1))))))) (list (cons "two" (list :literal (list :integer (list :int32 2))))))) (list (cons "one" (list :literal (list :integer (list :int32 99)))))))))))
+  (should (equal just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=2:int32}}}) just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=2:int32}}}))))
 
 (ert-deftest test-annotations-neglayered-annotations-negouter-annotation-overrides-inner-in-layered-term ()
 
-  (should (equal (list :just (list :literal (list :integer (list :int32 99)))) (funcall (funcall hydra_annotations_get_term_annotation "one") (list :annotated (make-hydra_core_annotated_term (list :annotated (make-hydra_core_annotated_term (list :annotated (make-hydra_core_annotated_term (list :literal (list :integer (list :int32 42))) (list (cons "one" (list :literal (list :integer (list :int32 1))))))) (list (cons "two" (list :literal (list :integer (list :int32 2))))))) (list (cons "one" (list :literal (list :integer (list :int32 99)))))))))))
+  (should (equal just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=99:int32}}}) just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=99:int32}}}))))

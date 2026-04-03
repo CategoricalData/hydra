@@ -59,7 +59,7 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 ns :: Namespace
 ns = Namespace "hydra.eval.lib.maybes"
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
@@ -69,26 +69,26 @@ module_ = Module ns elements
     Just ("Evaluation-level implementations of Maybe functions for the Hydra interpreter.")
   where
     elements = [
-      toTermDefinition apply_,
-      toTermDefinition bind_,
-      toTermDefinition cases_,
-      toTermDefinition cat_,
-      toTermDefinition compose_,
-      toTermDefinition fromJust_,
-      toTermDefinition fromMaybe_,
-      toTermDefinition isJust_,
-      toTermDefinition isNothing_,
-      toTermDefinition map_,
-      toTermDefinition mapMaybe_,
-      toTermDefinition maybe_,
-      toTermDefinition pure_,
-      toTermDefinition toList_]
+      toDefinition apply_,
+      toDefinition bind_,
+      toDefinition cases_,
+      toDefinition cat_,
+      toDefinition compose_,
+      toDefinition fromJust_,
+      toDefinition fromMaybe_,
+      toDefinition isJust_,
+      toDefinition isNothing_,
+      toDefinition map_,
+      toDefinition mapMaybe_,
+      toDefinition maybe_,
+      toDefinition pure_,
+      toDefinition toList_]
 
 -- | Interpreter-friendly applicative apply for Maybe terms.
 -- apply (Just f) (Just x) = Just (f x); otherwise Nothing
 -- We manually construct the result because the nested lambda would be flattened in Python.
 -- The logic is: apply (Just f) (Just x) = Just (f x)
-apply_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+apply_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 apply_ = define "apply" $
   doc "Interpreter-friendly applicative apply for Maybe terms." $
   "cx" ~> "g" ~> "funOptTerm" ~> "argOptTerm" ~>
@@ -106,7 +106,7 @@ apply_ = define "apply" $
 
 -- | Interpreter-friendly monadic bind for Maybe terms.
 -- bind (Just x) f = f x; bind Nothing f = Nothing
-bind_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+bind_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 bind_ = define "bind" $
   doc "Interpreter-friendly monadic bind for Maybe terms." $
   "cx" ~> "g" ~> "optTerm" ~> "funTerm" ~>
@@ -120,7 +120,7 @@ bind_ = define "bind" $
 
 -- | Interpreter-friendly cat (catMaybes) for list of Maybe terms.
 -- Filters out Nothings and unwraps Justs.
-cat_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+cat_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
 cat_ = define "cat" $
   doc "Interpreter-friendly cat for list of Maybe terms." $
   "cx" ~> "g" ~>
@@ -142,7 +142,7 @@ cat_ = define "cat" $
 -- | Interpreter-friendly case analysis for Maybe terms (cases variant).
 -- Takes optTerm, defaultTerm, funTerm - returns defaultTerm if Nothing,
 -- or applies funTerm to the value if Just.
-cases_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
+cases_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
 cases_ = define "cases" $
   doc "Interpreter-friendly case analysis for Maybe terms (cases argument order)." $
   "cx" ~> "g" ~> "optTerm" ~> "defaultTerm" ~> "funTerm" ~>
@@ -156,7 +156,7 @@ cases_ = define "cases" $
 
 -- | Interpreter-friendly fromJust for Maybe terms.
 -- Extracts the value from Just, or errors on Nothing.
-fromJust_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+fromJust_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
 fromJust_ = define "fromJust" $
   doc "Interpreter-friendly fromJust for Maybe terms." $
   "cx" ~> "g" ~>
@@ -171,7 +171,7 @@ fromJust_ = define "fromJust" $
 
 -- | Interpreter-friendly fromMaybe for Maybe terms.
 -- Returns the contained value or a default.
-fromMaybe_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+fromMaybe_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 fromMaybe_ = define "fromMaybe" $
   doc "Interpreter-friendly fromMaybe for Maybe terms." $
   "cx" ~> "g" ~>
@@ -185,7 +185,7 @@ fromMaybe_ = define "fromMaybe" $
         (var "m")]
 
 -- | Interpreter-friendly isJust for Maybe terms.
-isJust_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+isJust_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
 isJust_ = define "isJust" $
   doc "Interpreter-friendly isJust for Maybe terms." $
   "cx" ~> "g" ~>
@@ -199,7 +199,7 @@ isJust_ = define "isJust" $
         (var "m")]
 
 -- | Interpreter-friendly isNothing for Maybe terms.
-isNothing_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+isNothing_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
 isNothing_ = define "isNothing" $
   doc "Interpreter-friendly isNothing for Maybe terms." $
   "cx" ~> "g" ~>
@@ -214,7 +214,7 @@ isNothing_ = define "isNothing" $
 
 -- | Interpreter-friendly Kleisli composition for Maybe.
 -- compose f g x = bind (f x) g
-compose_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
+compose_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
 compose_ = define "compose" $
   doc "Interpreter-friendly Kleisli composition for Maybe." $
   "cx" ~> "g" ~> "funF" ~> "funG" ~> "xTerm" ~>
@@ -228,7 +228,7 @@ compose_ = define "compose" $
 
 -- | Interpreter-friendly map for Maybe terms.
 -- Returns Nothing if Nothing, or Just (fun val) if Just val.
-map_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+map_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 map_ = define "map" $
   doc "Interpreter-friendly map for Maybe terms." $
   "cx" ~> "g" ~> "funTerm" ~> "optTerm" ~>
@@ -241,7 +241,7 @@ map_ = define "map" $
 
 -- | Interpreter-friendly mapMaybe for List terms.
 -- Applies funTerm to each element, keeping only Just results.
-mapMaybe_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+mapMaybe_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 mapMaybe_ = define "mapMaybe" $
   doc "Interpreter-friendly mapMaybe for List terms." $
   "cx" ~> "g" ~> "funTerm" ~> "listTerm" ~>
@@ -256,7 +256,7 @@ mapMaybe_ = define "mapMaybe" $
 -- | Interpreter-friendly case analysis for Maybe terms.
 -- Takes defaultTerm, funTerm, optTerm - returns defaultTerm if Nothing,
 -- or applies funTerm to the value if Just.
-maybe_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
+maybe_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
 maybe_ = define "maybe" $
   doc "Interpreter-friendly case analysis for Maybe terms." $
   "cx" ~> "g" ~> "defaultTerm" ~> "funTerm" ~> "optTerm" ~>
@@ -270,7 +270,7 @@ maybe_ = define "maybe" $
 
 -- | Interpreter-friendly pure for Maybe terms.
 -- Wraps a value in Just.
-pure_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+pure_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
 pure_ = define "pure" $
   doc "Interpreter-friendly pure for Maybe terms." $
   "cx" ~> "g" ~>
@@ -279,7 +279,7 @@ pure_ = define "pure" $
 
 -- | Interpreter-friendly toList for Maybe terms.
 -- Just x -> [x], Nothing -> []
-toList_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+toList_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
 toList_ = define "toList" $
   doc "Interpreter-friendly toList for Maybe terms." $
   "cx" ~> "g" ~>

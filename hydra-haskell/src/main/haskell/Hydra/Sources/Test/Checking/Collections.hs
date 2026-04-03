@@ -22,34 +22,34 @@ ns = Namespace "hydra.test.checking.collections"
 
 module_ :: Module
 module_ = Module ns elements
-    [TestGraph.ns]
+    [TestGraph.ns, Namespace "hydra.rewriting"]
     kernelTypesNamespaces
     (Just "Collection type checking test cases: lists, sets, maps")
   where
     elements = [
-      Phantoms.toTermDefinition allTests,
-      Phantoms.toTermDefinition listsTests,
-      Phantoms.toTermDefinition listsOfLiteralsTests,
-      Phantoms.toTermDefinition emptyListsTests,
-      Phantoms.toTermDefinition polymorphicListsTests,
-      Phantoms.toTermDefinition nestedListsTests,
-      Phantoms.toTermDefinition listsInComplexContextsTests,
-      Phantoms.toTermDefinition mapsTests,
-      Phantoms.toTermDefinition monomorphicMapsTests,
-      Phantoms.toTermDefinition polymorphicMapsTests,
-      Phantoms.toTermDefinition mapsInComplexContextsTests,
-      Phantoms.toTermDefinition mapsWithComplexTypesTests,
-      Phantoms.toTermDefinition setsTests,
-      Phantoms.toTermDefinition monomorphicSetsTests,
-      Phantoms.toTermDefinition polymorphicSetsTests,
-      Phantoms.toTermDefinition setsInComplexContextsTests,
-      Phantoms.toTermDefinition nestedSetsTests,
-      Phantoms.toTermDefinition setsWithComplexTypesTests]
+      Phantoms.toDefinition allTests,
+      Phantoms.toDefinition listsTests,
+      Phantoms.toDefinition listsOfLiteralsTests,
+      Phantoms.toDefinition emptyListsTests,
+      Phantoms.toDefinition polymorphicListsTests,
+      Phantoms.toDefinition nestedListsTests,
+      Phantoms.toDefinition listsInComplexContextsTests,
+      Phantoms.toDefinition mapsTests,
+      Phantoms.toDefinition monomorphicMapsTests,
+      Phantoms.toDefinition polymorphicMapsTests,
+      Phantoms.toDefinition mapsInComplexContextsTests,
+      Phantoms.toDefinition mapsWithComplexTypesTests,
+      Phantoms.toDefinition setsTests,
+      Phantoms.toDefinition monomorphicSetsTests,
+      Phantoms.toDefinition polymorphicSetsTests,
+      Phantoms.toDefinition setsInComplexContextsTests,
+      Phantoms.toDefinition nestedSetsTests,
+      Phantoms.toDefinition setsWithComplexTypesTests]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
   supergroup "Collections" [
   listsTests,
@@ -58,29 +58,9 @@ allTests = define "allTests" $
 
 ------ Helper functions ------
 
--- Helper function to create a type checking test case
-checkTest :: String -> [Tag] -> TTerm Term -> TTerm Term -> TTerm Type -> TTerm TestCaseWithMetadata
-checkTest name tags input outputTerm outputType = testCaseWithMetadata (Phantoms.string name)
-  (testCaseTypeChecking $ typeCheckingTestCase input outputTerm outputType) Phantoms.nothing (Phantoms.list $ tag . unTag <$> tags)
-
--- Helper for tests where the term doesn't change during type checking
-noChange :: String -> TTerm Term -> TTerm Type -> TTerm TestCaseWithMetadata
-noChange name term typ = checkTest name [] term term typ
-
--- Create a TestCase inject for type checking
-testCaseTypeChecking :: TTerm TypeCheckingTestCase -> TTerm TestCase
-testCaseTypeChecking = Phantoms.inject _TestCase _TestCase_typeChecking
-
--- Create a TypeCheckingTestCase record
-typeCheckingTestCase :: TTerm Term -> TTerm Term -> TTerm Type -> TTerm TypeCheckingTestCase
-typeCheckingTestCase input outputTerm outputType = Phantoms.record _TypeCheckingTestCase [
-  Phantoms.field _TypeCheckingTestCase_input input,
-  Phantoms.field _TypeCheckingTestCase_outputTerm outputTerm,
-  Phantoms.field _TypeCheckingTestCase_outputType outputType]
-
 ------ Lists ------
 
-listsTests :: TBinding TestGroup
+listsTests :: TTermDefinition TestGroup
 listsTests = define "listsTests" $
   supergroup "Lists" [
   listsOfLiteralsTests,
@@ -89,7 +69,7 @@ listsTests = define "listsTests" $
   nestedListsTests,
   listsInComplexContextsTests]
 
-listsOfLiteralsTests :: TBinding TestGroup
+listsOfLiteralsTests :: TTermDefinition TestGroup
 listsOfLiteralsTests = define "listsOfLiteralsTests" $
   subgroup "Lists of literals" [
   noChange "int list"
@@ -105,7 +85,7 @@ listsOfLiteralsTests = define "listsOfLiteralsTests" $
     (list [float32 1.0, float32 2.5, float32 3.14])
     (T.list T.float32)]
 
-emptyListsTests :: TBinding TestGroup
+emptyListsTests :: TTermDefinition TestGroup
 emptyListsTests = define "emptyListsTests" $
   subgroup "Empty lists" [
   checkTest "empty list" []
@@ -122,7 +102,7 @@ emptyListsTests = define "emptyListsTests" $
     (tylam "t0" $ tyapps (pair (tyapp (list []) (T.var "t0")) (string "context")) [T.list $ T.var "t0", T.string])
     (T.forAll "t0" $ T.pair (T.list $ T.var "t0") T.string)]
 
-polymorphicListsTests :: TBinding TestGroup
+polymorphicListsTests :: TTermDefinition TestGroup
 polymorphicListsTests = define "polymorphicListsTests" $
   subgroup "Polymorphic lists" [
   checkTest "list from lambda" []
@@ -138,7 +118,7 @@ polymorphicListsTests = define "polymorphicListsTests" $
     (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ lambdaTyped "y" (T.var "t0") $ list [var "x", var "y"])
     (T.forAll "t0" $ T.function (T.var "t0") (T.function (T.var "t0") (T.list $ T.var "t0")))]
 
-nestedListsTests :: TBinding TestGroup
+nestedListsTests :: TTermDefinition TestGroup
 nestedListsTests = define "nestedListsTests" $
   subgroup "Nested lists" [
   noChange "list of lists"
@@ -153,7 +133,7 @@ nestedListsTests = define "nestedListsTests" $
     (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ list [list [var "x"]])
     (T.forAll "t0" $ T.function (T.var "t0") (T.list $ T.list $ T.var "t0"))]
 
-listsInComplexContextsTests :: TBinding TestGroup
+listsInComplexContextsTests :: TTermDefinition TestGroup
 listsInComplexContextsTests = define "listsInComplexContextsTests" $
   subgroup "Lists in complex contexts" [
   checkTest "multiple lists in tuple" []
@@ -165,7 +145,7 @@ listsInComplexContextsTests = define "listsInComplexContextsTests" $
 
 ------ Maps ------
 
-mapsTests :: TBinding TestGroup
+mapsTests :: TTermDefinition TestGroup
 mapsTests = define "mapsTests" $
   supergroup "Maps" [
   monomorphicMapsTests,
@@ -173,7 +153,7 @@ mapsTests = define "mapsTests" $
   mapsInComplexContextsTests,
   mapsWithComplexTypesTests]
 
-monomorphicMapsTests :: TBinding TestGroup
+monomorphicMapsTests :: TTermDefinition TestGroup
 monomorphicMapsTests = define "monomorphicMapsTests" $
   subgroup "Monomorphic maps" [
   checkTest "empty map" []
@@ -192,7 +172,7 @@ monomorphicMapsTests = define "monomorphicMapsTests" $
     (mapTerm [(bigint 42, boolean True)])
     (T.map T.bigint T.boolean)]
 
-polymorphicMapsTests :: TBinding TestGroup
+polymorphicMapsTests :: TTermDefinition TestGroup
 polymorphicMapsTests = define "polymorphicMapsTests" $
   subgroup "Polymorphic maps" [
   checkTest "map from lambda keys" []
@@ -212,7 +192,7 @@ polymorphicMapsTests = define "polymorphicMapsTests" $
     (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ mapTerm [(var "x", var "x")])
     (T.forAll "t0" $ T.function (T.var "t0") (T.map (T.var "t0") (T.var "t0")))]
 
-mapsInComplexContextsTests :: TBinding TestGroup
+mapsInComplexContextsTests :: TTermDefinition TestGroup
 mapsInComplexContextsTests = define "mapsInComplexContextsTests" $
   subgroup "Maps in complex contexts" [
   checkTest "map in tuple" []
@@ -233,7 +213,7 @@ mapsInComplexContextsTests = define "mapsInComplexContextsTests" $
       var "lookup")
     (T.map T.string T.int32)]
 
-mapsWithComplexTypesTests :: TBinding TestGroup
+mapsWithComplexTypesTests :: TTermDefinition TestGroup
 mapsWithComplexTypesTests = define "mapsWithComplexTypesTests" $
   subgroup "Maps with complex types" [
   noChange "map of records"
@@ -254,7 +234,7 @@ mapsWithComplexTypesTests = define "mapsWithComplexTypesTests" $
 
 ------ Sets ------
 
-setsTests :: TBinding TestGroup
+setsTests :: TTermDefinition TestGroup
 setsTests = define "setsTests" $
   supergroup "Sets" [
   monomorphicSetsTests,
@@ -263,7 +243,7 @@ setsTests = define "setsTests" $
   nestedSetsTests,
   setsWithComplexTypesTests]
 
-monomorphicSetsTests :: TBinding TestGroup
+monomorphicSetsTests :: TTermDefinition TestGroup
 monomorphicSetsTests = define "monomorphicSetsTests" $
   subgroup "Monomorphic sets" [
   checkTest "empty set" []
@@ -280,7 +260,7 @@ monomorphicSetsTests = define "monomorphicSetsTests" $
     (Terms.set [boolean True])
     (T.set T.boolean)]
 
-polymorphicSetsTests :: TBinding TestGroup
+polymorphicSetsTests :: TTermDefinition TestGroup
 polymorphicSetsTests = define "polymorphicSetsTests" $
   subgroup "Polymorphic sets" [
   checkTest "set from lambda" []
@@ -296,7 +276,7 @@ polymorphicSetsTests = define "polymorphicSetsTests" $
     (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ lambdaTyped "y" (T.var "t0") $ Terms.set [var "x", var "y"])
     (T.forAll "t0" $ T.function (T.var "t0") (T.function (T.var "t0") (T.set $ T.var "t0")))]
 
-setsInComplexContextsTests :: TBinding TestGroup
+setsInComplexContextsTests :: TTermDefinition TestGroup
 setsInComplexContextsTests = define "setsInComplexContextsTests" $
   subgroup "Sets in complex contexts" [
   checkTest "set in tuple" []
@@ -311,7 +291,7 @@ setsInComplexContextsTests = define "setsInComplexContextsTests" $
       var "numbers")
     (T.set T.int32)]
 
-nestedSetsTests :: TBinding TestGroup
+nestedSetsTests :: TTermDefinition TestGroup
 nestedSetsTests = define "nestedSetsTests" $
   subgroup "Nested sets" [
   noChange "set of lists"
@@ -331,7 +311,7 @@ nestedSetsTests = define "nestedSetsTests" $
     (Terms.set [Terms.set [string "nested"]])
     (T.set $ T.set T.string)]
 
-setsWithComplexTypesTests :: TBinding TestGroup
+setsWithComplexTypesTests :: TTermDefinition TestGroup
 setsWithComplexTypesTests = define "setsWithComplexTypesTests" $
   subgroup "Sets with complex types" [
   noChange "set of records"

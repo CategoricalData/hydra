@@ -23,7 +23,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
-import Hydra.Rewriting (removeTermAnnotations)
+import Hydra.Strip (removeTermAnnotations)
 import Data.String(IsString(..))
 import Data.Either (Either)
 

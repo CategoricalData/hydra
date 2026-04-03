@@ -10,7 +10,7 @@
 
 (require 'hydra.show.core)
 
-(require 'hydra.show.meta)
+(require 'hydra.show.variants)
 
 (defvar hydra_show_error_core_constant_condition_error (lambda (e) (hydra_lib_strings_cat (list "constant condition: ifElse with literal " (hydra_lib_literals_show_boolean (funcall (lambda (v) (hydra_error_core_constant_condition_error-value v)) e))))))
 
@@ -90,8 +90,8 @@
 
 (defvar hydra_show_error_core_undefined_field_error (lambda (e) (let ((fname (funcall (lambda (v) (hydra_error_core_undefined_field_error-field_name v)) e))) (let ((tname (funcall (lambda (v) (hydra_error_core_undefined_field_error-type_name v)) e))) (hydra_lib_strings_cat (list "no such field \"" (funcall (lambda (v) v) fname) "\" in type \"" (funcall (lambda (v) v) tname) "\""))))))
 
-(defvar hydra_show_error_core_unexpected_term_variant_error (lambda (e) (let ((expected (funcall (lambda (v) (hydra_error_core_unexpected_term_variant_error-expected_variant v)) e))) (let ((actual (funcall (lambda (v) (hydra_error_core_unexpected_term_variant_error-actual_term v)) e))) (hydra_lib_strings_cat (list "expected " (hydra_show_meta_term_variant expected) " term but found " (hydra_show_core_term actual)))))))
+(defvar hydra_show_error_core_unexpected_term_variant_error (lambda (e) (let ((expected (funcall (lambda (v) (hydra_error_core_unexpected_term_variant_error-expected_variant v)) e))) (let ((actual (funcall (lambda (v) (hydra_error_core_unexpected_term_variant_error-actual_term v)) e))) (hydra_lib_strings_cat (list "expected " (hydra_show_variants_term_variant expected) " term but found " (hydra_show_core_term actual)))))))
 
-(defvar hydra_show_error_core_unexpected_type_variant_error (lambda (e) (let ((expected (funcall (lambda (v) (hydra_error_core_unexpected_type_variant_error-expected_variant v)) e))) (let ((actual (funcall (lambda (v) (hydra_error_core_unexpected_type_variant_error-actual_type v)) e))) (hydra_lib_strings_cat (list "expected " (hydra_show_meta_type_variant expected) " type but found " (hydra_show_core_type actual)))))))
+(defvar hydra_show_error_core_unexpected_type_variant_error (lambda (e) (let ((expected (funcall (lambda (v) (hydra_error_core_unexpected_type_variant_error-expected_variant v)) e))) (let ((actual (funcall (lambda (v) (hydra_error_core_unexpected_type_variant_error-actual_type v)) e))) (hydra_lib_strings_cat (list "expected " (hydra_show_variants_type_variant expected) " type but found " (hydra_show_core_type actual)))))))
 
 (provide 'hydra.show.error.core)

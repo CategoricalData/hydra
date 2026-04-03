@@ -5,7 +5,7 @@ package hydra.testing;
 import java.io.Serializable;
 
 /**
- * One of a number of test case variants, together with metadata including a test name, an optional description, and optional tags
+ * A test case together with metadata
  */
 public class TestCaseWithMetadata implements Serializable, Comparable<TestCaseWithMetadata> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.TestCaseWithMetadata");
@@ -19,7 +19,7 @@ public class TestCaseWithMetadata implements Serializable, Comparable<TestCaseWi
   public static final hydra.core.Name TAGS = new hydra.core.Name("tags");
 
   /**
-   * The name of the test case
+   * A short name for the test case
    */
   public final String name;
 
@@ -29,12 +29,12 @@ public class TestCaseWithMetadata implements Serializable, Comparable<TestCaseWi
   public final hydra.testing.TestCase case_;
 
   /**
-   * An optional description of the test
+   * An optional longer description of the test case
    */
   public final hydra.util.Maybe<String> description;
 
   /**
-   * Zero or more tags for categorizing the test
+   * Zero or more tags for the test case
    */
   public final hydra.util.ConsList<hydra.testing.Tag> tags;
 

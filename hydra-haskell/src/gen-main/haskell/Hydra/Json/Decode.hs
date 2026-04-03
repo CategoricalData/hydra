@@ -15,14 +15,10 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Decode a JSON value to a float term. Float64/Bigfloat from numbers; Float32 from string.
 decodeFloat :: Core.FloatType -> Model.Value -> Either String Core.Term
@@ -138,7 +134,7 @@ expectString value =
 fromJson :: M.Map Core.Name Core.Type -> Core.Name -> Core.Type -> Model.Value -> Either String Core.Term
 fromJson types tname typ value =
 
-      let stripped = Rewriting.deannotateType typ
+      let stripped = Strip.deannotateType typ
       in case stripped of
         Core.TypeLiteral v0 -> decodeLiteral v0 value
         Core.TypeList v0 ->
@@ -204,7 +200,7 @@ fromJson types tname typ value =
           in (Eithers.either (\err -> Left err) (\obj -> processUnion obj) objResult)
         Core.TypeUnit ->
           let objResult = expectObject value
-          in (Eithers.map (\_ -> Core.TermUnit) objResult)
+          in (Eithers.map (\_2 -> Core.TermUnit) objResult)
         Core.TypeWrap v0 ->
           let decoded = fromJson types tname v0 value
           in (Eithers.map (\v -> Core.TermWrap (Core.WrappedTerm {

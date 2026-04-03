@@ -9,11 +9,6 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Math as Math
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Find the arity (expected number of arguments) of a function
 functionArity :: Core.Function -> Int
@@ -25,13 +20,13 @@ functionArity x =
 
 -- | Find the arity (expected number of arguments) of a primitive constant or function
 primitiveArity :: Graph.Primitive -> Int
-primitiveArity arg_ = (\arg_ -> typeArity (Core.typeSchemeType arg_)) (Graph.primitiveType arg_)
+primitiveArity arg_ = (\arg_2 -> typeArity (Core.typeSchemeType arg_2)) (Graph.primitiveType arg_)
 
 -- | Find the arity (expected number of arguments) of a term
 termArity :: Core.Term -> Int
 termArity x =
     case x of
-      Core.TermApplication v0 -> (\arg_ -> (\xapp -> Math.sub xapp 1) (termArity arg_)) (Core.applicationFunction v0)
+      Core.TermApplication v0 -> (\arg_2 -> (\xapp -> Math.sub xapp 1) (termArity arg_2)) (Core.applicationFunction v0)
       Core.TermFunction v0 -> functionArity v0
       _ -> 0
 

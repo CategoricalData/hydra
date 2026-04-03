@@ -1,28 +1,28 @@
 ;; Note: this is an automatically generated file. Do not edit.
 ;; hydra.lib.equality primitives
 
-(ns generation.hydra.test.lib.equality-test
+(ns test-ns
   (:require [clojure.test :refer :all]))
 
 ;; compare
 
 (deftest test-equality-negcompare-negless-than
 
-  (is (= (list :less_than nil)
+  (is (= inject(hydra.util.Comparison){lessThan=unit}
 
-         ((hydra_lib_equality_compare 3) 5))))
+         inject(hydra.util.Comparison){lessThan=unit})))
 
 (deftest test-equality-negcompare-negequal
 
-  (is (= (list :equal_to nil)
+  (is (= inject(hydra.util.Comparison){equalTo=unit}
 
-         ((hydra_lib_equality_compare 5) 5))))
+         inject(hydra.util.Comparison){equalTo=unit})))
 
 (deftest test-equality-negcompare-neggreater-than
 
-  (is (= (list :greater_than nil)
+  (is (= inject(hydra.util.Comparison){greaterThan=unit}
 
-         ((hydra_lib_equality_compare 5) 3))))
+         inject(hydra.util.Comparison){greaterThan=unit})))
 
 ;; equal
 
@@ -30,13 +30,13 @@
 
   (is (= true
 
-         ((hydra_lib_equality_equal 5) 5))))
+         true)))
 
 (deftest test-equality-negequal-negunequal-integers
 
   (is (= false
 
-         ((hydra_lib_equality_equal 5) 3))))
+         false)))
 
 ;; gt
 
@@ -44,19 +44,19 @@
 
   (is (= true
 
-         ((hydra_lib_equality_gt 5) 3))))
+         true)))
 
 (deftest test-equality-neggt-negequal
 
   (is (= false
 
-         ((hydra_lib_equality_gt 5) 5))))
+         false)))
 
 (deftest test-equality-neggt-negless
 
   (is (= false
 
-         ((hydra_lib_equality_gt 3) 5))))
+         false)))
 
 ;; gte
 
@@ -64,27 +64,27 @@
 
   (is (= true
 
-         ((hydra_lib_equality_gte 5) 3))))
+         true)))
 
 (deftest test-equality-neggte-negequal
 
   (is (= true
 
-         ((hydra_lib_equality_gte 5) 5))))
+         true)))
 
 (deftest test-equality-neggte-negless
 
   (is (= false
 
-         ((hydra_lib_equality_gte 3) 5))))
+         false)))
 
 ;; identity
 
 (deftest test-equality-negidentity-neginteger
 
-  (is (= 42
+  (is (= 42:int32
 
-         (hydra_lib_equality_identity 42))))
+         42:int32)))
 
 ;; lt
 
@@ -92,19 +92,19 @@
 
   (is (= true
 
-         ((hydra_lib_equality_lt 3) 5))))
+         true)))
 
 (deftest test-equality-neglt-negequal
 
   (is (= false
 
-         ((hydra_lib_equality_lt 5) 5))))
+         false)))
 
 (deftest test-equality-neglt-neggreater
 
   (is (= false
 
-         ((hydra_lib_equality_lt 5) 3))))
+         false)))
 
 ;; lte
 
@@ -112,91 +112,91 @@
 
   (is (= true
 
-         ((hydra_lib_equality_lte 3) 5))))
+         true)))
 
 (deftest test-equality-neglte-negequal
 
   (is (= true
 
-         ((hydra_lib_equality_lte 5) 5))))
+         true)))
 
 (deftest test-equality-neglte-neggreater
 
   (is (= false
 
-         ((hydra_lib_equality_lte 5) 3))))
+         false)))
 
 ;; max
 
 (deftest test-equality-negmax-negfirst-greater
 
-  (is (= 5
+  (is (= 5:int32
 
-         ((hydra_lib_equality_max 5) 3))))
+         5:int32)))
 
 (deftest test-equality-negmax-negsecond-greater
 
-  (is (= 5
+  (is (= 5:int32
 
-         ((hydra_lib_equality_max 3) 5))))
+         5:int32)))
 
 (deftest test-equality-negmax-negequal
 
-  (is (= 5
+  (is (= 5:int32
 
-         ((hydra_lib_equality_max 5) 5))))
+         5:int32)))
 
 ;; min
 
 (deftest test-equality-negmin-negfirst-less
 
-  (is (= 3
+  (is (= 3:int32
 
-         ((hydra_lib_equality_min 3) 5))))
+         3:int32)))
 
 (deftest test-equality-negmin-negsecond-less
 
-  (is (= 3
+  (is (= 3:int32
 
-         ((hydra_lib_equality_min 5) 3))))
+         3:int32)))
 
 (deftest test-equality-negmin-negequal
 
-  (is (= 5
+  (is (= 5:int32
 
-         ((hydra_lib_equality_min 5) 5))))
+         5:int32)))
 
 ;; compare strings
 
 (deftest test-equality-negcompare-strings-negless-than-lexicographic
 
-  (is (= (list :less_than nil)
+  (is (= inject(hydra.util.Comparison){lessThan=unit}
 
-         ((hydra_lib_equality_compare "apple") "banana"))))
+         inject(hydra.util.Comparison){lessThan=unit})))
 
 (deftest test-equality-negcompare-strings-negequal
 
-  (is (= (list :equal_to nil)
+  (is (= inject(hydra.util.Comparison){equalTo=unit}
 
-         ((hydra_lib_equality_compare "hello") "hello"))))
+         inject(hydra.util.Comparison){equalTo=unit})))
 
 (deftest test-equality-negcompare-strings-neggreater-than-lexicographic
 
-  (is (= (list :greater_than nil)
+  (is (= inject(hydra.util.Comparison){greaterThan=unit}
 
-         ((hydra_lib_equality_compare "zebra") "apple"))))
+         inject(hydra.util.Comparison){greaterThan=unit})))
 
 (deftest test-equality-negcompare-strings-negempty-vs-non-negempty
 
-  (is (= (list :less_than nil)
+  (is (= inject(hydra.util.Comparison){lessThan=unit}
 
-         ((hydra_lib_equality_compare "") "a"))))
+         inject(hydra.util.Comparison){lessThan=unit})))
 
 (deftest test-equality-negcompare-strings-negprefix-vs-longer
 
-  (is (= (list :less_than nil)
+  (is (= inject(hydra.util.Comparison){lessThan=unit}
 
-         ((hydra_lib_equality_compare "ab") "abc"))))
+         inject(hydra.util.Comparison){lessThan=unit})))
 
 ;; lt strings
 
@@ -204,19 +204,19 @@
 
   (is (= true
 
-         ((hydra_lib_equality_lt "apple") "banana"))))
+         true)))
 
 (deftest test-equality-neglt-strings-negequal
 
   (is (= false
 
-         ((hydra_lib_equality_lt "hello") "hello"))))
+         false)))
 
 (deftest test-equality-neglt-strings-neggreater
 
   (is (= false
 
-         ((hydra_lib_equality_lt "zebra") "apple"))))
+         false)))
 
 ;; gt strings
 
@@ -224,19 +224,19 @@
 
   (is (= true
 
-         ((hydra_lib_equality_gt "zebra") "apple"))))
+         true)))
 
 (deftest test-equality-neggt-strings-negequal
 
   (is (= false
 
-         ((hydra_lib_equality_gt "hello") "hello"))))
+         false)))
 
 (deftest test-equality-neggt-strings-negless
 
   (is (= false
 
-         ((hydra_lib_equality_gt "apple") "banana"))))
+         false)))
 
 ;; max strings
 
@@ -244,19 +244,19 @@
 
   (is (= "zebra"
 
-         ((hydra_lib_equality_max "zebra") "apple"))))
+         "zebra")))
 
 (deftest test-equality-negmax-strings-negsecond-greater
 
   (is (= "zebra"
 
-         ((hydra_lib_equality_max "apple") "zebra"))))
+         "zebra")))
 
 (deftest test-equality-negmax-strings-negequal
 
   (is (= "hello"
 
-         ((hydra_lib_equality_max "hello") "hello"))))
+         "hello")))
 
 ;; min strings
 
@@ -264,45 +264,45 @@
 
   (is (= "apple"
 
-         ((hydra_lib_equality_min "apple") "zebra"))))
+         "apple")))
 
 (deftest test-equality-negmin-strings-negsecond-less
 
   (is (= "apple"
 
-         ((hydra_lib_equality_min "zebra") "apple"))))
+         "apple")))
 
 (deftest test-equality-negmin-strings-negequal
 
   (is (= "hello"
 
-         ((hydra_lib_equality_min "hello") "hello"))))
+         "hello")))
 
 ;; compare floats
 
 (deftest test-equality-negcompare-floats-negless-than
 
-  (is (= (list :less_than nil)
+  (is (= inject(hydra.util.Comparison){lessThan=unit}
 
-         ((hydra_lib_equality_compare 1.5) 2.5))))
+         inject(hydra.util.Comparison){lessThan=unit})))
 
 (deftest test-equality-negcompare-floats-negequal
 
-  (is (= (list :equal_to nil)
+  (is (= inject(hydra.util.Comparison){equalTo=unit}
 
-         ((hydra_lib_equality_compare 3.14) 3.14))))
+         inject(hydra.util.Comparison){equalTo=unit})))
 
 (deftest test-equality-negcompare-floats-neggreater-than
 
-  (is (= (list :greater_than nil)
+  (is (= inject(hydra.util.Comparison){greaterThan=unit}
 
-         ((hydra_lib_equality_compare 5.0) 3.0))))
+         inject(hydra.util.Comparison){greaterThan=unit})))
 
 (deftest test-equality-negcompare-floats-negnegative-vs-positive
 
-  (is (= (list :less_than nil)
+  (is (= inject(hydra.util.Comparison){lessThan=unit}
 
-         ((hydra_lib_equality_compare -1.0) 1.0))))
+         inject(hydra.util.Comparison){lessThan=unit})))
 
 ;; lt floats
 
@@ -310,19 +310,19 @@
 
   (is (= true
 
-         ((hydra_lib_equality_lt 1.5) 2.5))))
+         true)))
 
 (deftest test-equality-neglt-floats-negequal
 
   (is (= false
 
-         ((hydra_lib_equality_lt 3.14) 3.14))))
+         false)))
 
 (deftest test-equality-neglt-floats-neggreater
 
   (is (= false
 
-         ((hydra_lib_equality_lt 5.0) 3.0))))
+         false)))
 
 ;; gt floats
 
@@ -330,16 +330,16 @@
 
   (is (= true
 
-         ((hydra_lib_equality_gt 5.0) 3.0))))
+         true)))
 
 (deftest test-equality-neggt-floats-negequal
 
   (is (= false
 
-         ((hydra_lib_equality_gt 3.14) 3.14))))
+         false)))
 
 (deftest test-equality-neggt-floats-negless
 
   (is (= false
 
-         ((hydra_lib_equality_gt 1.5) 2.5))))
+         false)))

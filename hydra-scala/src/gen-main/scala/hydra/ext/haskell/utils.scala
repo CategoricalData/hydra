@@ -60,7 +60,7 @@ def hsvar(s: scala.Predef.String): hydra.ext.haskell.syntax.Expression = hydra.e
 def namespacesForModule(mod: hydra.module.Module)(cx: hydra.context.Context)(g: hydra.graph.Graph): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]] =
   hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], scala.collection.immutable.Set[hydra.module.Namespace],
-     hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]](hydra.schemas.moduleDependencyNamespaces(cx)(g)(true)(true)(true)(true)(mod))((nss: scala.collection.immutable.Set[hydra.module.Namespace]) =>
+     hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]](hydra.analysis.moduleDependencyNamespaces(cx)(g)(true)(true)(true)(true)(mod))((nss: scala.collection.immutable.Set[hydra.module.Namespace]) =>
   {
   lazy val ns: hydra.module.Namespace = (mod.namespace)
   {
@@ -187,7 +187,7 @@ def unionFieldReference(boundNames: scala.collection.immutable.Set[hydra.core.Na
 }
 
 def unpackForallType(t: hydra.core.Type): Tuple2[Seq[hydra.core.Name], hydra.core.Type] =
-  hydra.rewriting.deannotateType(t) match
+  hydra.strip.deannotateType(t) match
   case hydra.core.Type.forall(v_Type_forall_fat) => {
     lazy val v: hydra.core.Name = (v_Type_forall_fat.parameter)
     lazy val tbody: hydra.core.Type = (v_Type_forall_fat.body)

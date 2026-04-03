@@ -8,11 +8,6 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Ext.Org.Apache.Tinkerpop.Features as Features
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 dataTypeFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.DataTypeFeatures
 dataTypeFeatures supportsBooleanArrayValues supportsBooleanValues supportsByteArrayValues supportsByteValues supportsDoubleArrayValues supportsDoubleValues supportsFloatArrayValues supportsFloatValues supportsIntegerArrayValues supportsIntegerValues supportsLongArrayValues supportsLongValues supportsMapValues supportsMixedListValues supportsSerializableValues supportsStringArrayValues supportsStringValues supportsUniformListValues =

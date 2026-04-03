@@ -319,7 +319,7 @@ public class MergingTest extends PropertyGraphTestBase {
      * Apply a Coder's encode function using an empty context, returning Either<String, B>.
      */
     private static <A, B> Either<String, B> applyCoderEncode(
-            hydra.util.Coder<A, B> coder, A value) {
+            hydra.coders.Coder<A, B> coder, A value) {
         hydra.context.Context cx = new hydra.context.Context(
             hydra.util.ConsList.empty(),
             hydra.util.ConsList.empty(),

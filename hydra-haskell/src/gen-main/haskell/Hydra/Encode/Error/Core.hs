@@ -10,11 +10,6 @@ import qualified Hydra.Encode.Paths as Paths
 import qualified Hydra.Encode.Variants as Variants
 import qualified Hydra.Error.Core as Core__
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 constantConditionError :: Core__.ConstantConditionError -> Core.Term
 constantConditionError x =
@@ -26,7 +21,7 @@ constantConditionError x =
           Core.fieldTerm = (Paths.subtermPath (Core__.constantConditionErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralBoolean x)) (Core__.constantConditionErrorValue x))}]})
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralBoolean x2)) (Core__.constantConditionErrorValue x))}]})
 
 duplicateBindingError :: Core__.DuplicateBindingError -> Core.Term
 duplicateBindingError x =

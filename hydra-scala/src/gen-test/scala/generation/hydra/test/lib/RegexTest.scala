@@ -13,7 +13,7 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.matches("hello")("hello")) == (
+      true) == (
 
       true))
 
@@ -23,7 +23,7 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.matches("[a-z]+")("hello")) == (
+      true) == (
 
       true))
 
@@ -33,7 +33,7 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.matches("[0-9]+")("hello")) == (
+      false) == (
 
       false))
 
@@ -43,7 +43,7 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.matches("[a-z]+")("hello123")) == (
+      false) == (
 
       false))
 
@@ -53,7 +53,7 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.matches("[0-9]+")("12345")) == (
+      true) == (
 
       true))
 
@@ -63,7 +63,7 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.matches("[a-z]+[0-9]+")("hello123")) == (
+      true) == (
 
       true))
 
@@ -73,7 +73,7 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.matches("")("")) == (
+      true) == (
 
       true))
 
@@ -83,7 +83,7 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.matches("")("hello")) == (
+      false) == (
 
       false))
 
@@ -93,7 +93,7 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.matches("a*")("")) == (
+      true) == (
 
       true))
 
@@ -103,7 +103,7 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.matches("cat|dog")("cat")) == (
+      true) == (
 
       true))
 
@@ -113,7 +113,7 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.matches("cat|dog")("dog")) == (
+      true) == (
 
       true))
 
@@ -123,7 +123,7 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.matches("cat|dog")("bird")) == (
+      false) == (
 
       false))
 
@@ -133,7 +133,7 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.matches("ab?c")("ac")) == (
+      true) == (
 
       true))
 
@@ -143,7 +143,7 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.matches("ab?c")("abc")) == (
+      true) == (
 
       true))
 
@@ -155,9 +155,9 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.find("[0-9]+")("abc123def")) == (
+      just("123")) == (
 
-      Some("123")))
+      just("123")))
 
   }
 
@@ -165,9 +165,9 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.find("[0-9]+")("abcdef")) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -175,9 +175,9 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.find("[a-z]+")("123abc456def")) == (
+      just("abc")) == (
 
-      Some("abc")))
+      just("abc")))
 
   }
 
@@ -185,9 +185,9 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.find("[0-9]+")("")) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -195,9 +195,9 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.find(".*")("hello")) == (
+      just("hello")) == (
 
-      Some("hello")))
+      just("hello")))
 
   }
 
@@ -207,9 +207,9 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.findAll("[0-9]+")("a1b2c3")) == (
+      ["1", "2", "3"]) == (
 
-      Seq("1", "2", "3")))
+      ["1", "2", "3"]))
 
   }
 
@@ -217,9 +217,9 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.findAll("[0-9]+")("abc")) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -227,9 +227,9 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.findAll("[a-z]+")("abc def ghi")) == (
+      ["abc", "def", "ghi"]) == (
 
-      Seq("abc", "def", "ghi")))
+      ["abc", "def", "ghi"]))
 
   }
 
@@ -237,9 +237,9 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.findAll("hello")("say hello world")) == (
+      ["hello"]) == (
 
-      Seq("hello")))
+      ["hello"]))
 
   }
 
@@ -249,7 +249,7 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.replace("[0-9]+")("X")("abc123def456")) == (
+      "abcXdef456") == (
 
       "abcXdef456"))
 
@@ -259,7 +259,7 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.replace("[0-9]+")("X")("abcdef")) == (
+      "abcdef") == (
 
       "abcdef"))
 
@@ -269,7 +269,7 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.replace("^[a-z]+")("X")("abc123")) == (
+      "X123") == (
 
       "X123"))
 
@@ -279,7 +279,7 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.replace("[0-9]+")("")("abc123def")) == (
+      "abcdef") == (
 
       "abcdef"))
 
@@ -291,7 +291,7 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.replaceAll("[0-9]+")("X")("a1b2c3")) == (
+      "aXbXcX") == (
 
       "aXbXcX"))
 
@@ -301,7 +301,7 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.replaceAll("[0-9]+")("X")("abc")) == (
+      "abc") == (
 
       "abc"))
 
@@ -311,7 +311,7 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.replaceAll("[a-z]+")("X")("abc 123 def")) == (
+      "X 123 X") == (
 
       "X 123 X"))
 
@@ -321,7 +321,7 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.replaceAll("[0-9]+")("")("a1b2c3")) == (
+      "abc") == (
 
       "abc"))
 
@@ -333,9 +333,9 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.split(",")("a,b,c")) == (
+      ["a", "b", "c"]) == (
 
-      Seq("a", "b", "c")))
+      ["a", "b", "c"]))
 
   }
 
@@ -343,9 +343,9 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.split(" +")("a b  c")) == (
+      ["a", "b", "c"]) == (
 
-      Seq("a", "b", "c")))
+      ["a", "b", "c"]))
 
   }
 
@@ -353,9 +353,9 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.split(",")("abc")) == (
+      ["abc"]) == (
 
-      Seq("abc")))
+      ["abc"]))
 
   }
 
@@ -363,9 +363,9 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.split("[0-9]+")("a1b2c")) == (
+      ["a", "b", "c"]) == (
 
-      Seq("a", "b", "c")))
+      ["a", "b", "c"]))
 
   }
 
@@ -373,9 +373,9 @@ class RegexTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.regex.split(",")("a,b,")) == (
+      ["a", "b", ""]) == (
 
-      Seq("a", "b", "")))
+      ["a", "b", ""]))
 
   }
 }

@@ -22,21 +22,21 @@ ns = Namespace "hydra.test.checking.advanced"
 
 module_ :: Module
 module_ = Module ns elements
-    [TestGraph.ns]
+    [TestGraph.ns, Namespace "hydra.rewriting"]
     kernelTypesNamespaces
     (Just "Advanced type checking test cases: annotated terms and flows")
   where
     elements = [
-      Phantoms.toTermDefinition allTests,
-      Phantoms.toTermDefinition annotatedTermsTests,
-      Phantoms.toTermDefinition topLevelAnnotationsTests,
-      Phantoms.toTermDefinition nestedAnnotationsTests,
-      Phantoms.toTermDefinition annotationsInComplexContextsTests]
+      Phantoms.toDefinition allTests,
+      Phantoms.toDefinition annotatedTermsTests,
+      Phantoms.toDefinition topLevelAnnotationsTests,
+      Phantoms.toDefinition nestedAnnotationsTests,
+      Phantoms.toDefinition annotationsInComplexContextsTests]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
   Phantoms.doc "Advanced type checking test cases" $
   supergroup "Advanced" [
@@ -44,36 +44,16 @@ allTests = define "allTests" $
 
 ------ Helper functions ------
 
--- Helper function to create a type checking test case
-checkTest :: String -> [Tag] -> TTerm Term -> TTerm Term -> TTerm Type -> TTerm TestCaseWithMetadata
-checkTest name tags input outputTerm outputType = testCaseWithMetadata (Phantoms.string name)
-  (testCaseTypeChecking $ typeCheckingTestCase input outputTerm outputType) Phantoms.nothing (Phantoms.list $ tag . unTag <$> tags)
-
--- Helper for tests where the term doesn't change during type checking
-noChange :: String -> TTerm Term -> TTerm Type -> TTerm TestCaseWithMetadata
-noChange name term typ = checkTest name [] term term typ
-
--- Create a TestCase inject for type checking
-testCaseTypeChecking :: TTerm TypeCheckingTestCase -> TTerm TestCase
-testCaseTypeChecking = Phantoms.inject _TestCase _TestCase_typeChecking
-
--- Create a TypeCheckingTestCase record
-typeCheckingTestCase :: TTerm Term -> TTerm Term -> TTerm Type -> TTerm TypeCheckingTestCase
-typeCheckingTestCase input outputTerm outputType = Phantoms.record _TypeCheckingTestCase [
-  Phantoms.field _TypeCheckingTestCase_input input,
-  Phantoms.field _TypeCheckingTestCase_outputTerm outputTerm,
-  Phantoms.field _TypeCheckingTestCase_outputType outputType]
-
 ------ Annotated terms ------
 
-annotatedTermsTests :: TBinding TestGroup
+annotatedTermsTests :: TTermDefinition TestGroup
 annotatedTermsTests = define "annotatedTermsTests" $
   supergroup "Annotated terms" [
     topLevelAnnotationsTests,
     nestedAnnotationsTests,
     annotationsInComplexContextsTests]
 
-topLevelAnnotationsTests :: TBinding TestGroup
+topLevelAnnotationsTests :: TTermDefinition TestGroup
 topLevelAnnotationsTests = define "topLevelAnnotationsTests" $
   subgroup "Top-level annotations" [
     noChange "annotated literal"
@@ -93,7 +73,7 @@ topLevelAnnotationsTests = define "topLevelAnnotationsTests" $
       (annotated (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ var "x") mapTermEmpty)
       (T.forAlls ["t0"] $ T.function (T.var "t0") (T.var "t0"))]
 
-nestedAnnotationsTests :: TBinding TestGroup
+nestedAnnotationsTests :: TTermDefinition TestGroup
 nestedAnnotationsTests = define "nestedAnnotationsTests" $
   subgroup "Nested annotations" [
     noChange "annotation within annotation"
@@ -109,7 +89,7 @@ nestedAnnotationsTests = define "nestedAnnotationsTests" $
       (annotated (lambdaTyped "x" T.int32 $ var "x") mapTermEmpty @@ annotated (int32 42) mapTermEmpty)
       T.int32]
 
-annotationsInComplexContextsTests :: TBinding TestGroup
+annotationsInComplexContextsTests :: TTermDefinition TestGroup
 annotationsInComplexContextsTests = define "annotationsInComplexContextsTests" $
   subgroup "Annotations in complex contexts" [
     checkTest "annotated let binding" []

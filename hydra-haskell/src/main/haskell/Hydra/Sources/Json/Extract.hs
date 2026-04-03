@@ -61,12 +61,11 @@ import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants      as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -94,56 +93,56 @@ module_ = Module ns elements
     Just "Utilities for extracting values from JSON objects"
   where
     elements = [
-      toTermDefinition expectArray,
-      toTermDefinition expectNumber,
-      toTermDefinition expectObject,
-      toTermDefinition expectString,
-      toTermDefinition opt,
-      toTermDefinition optArray,
-      toTermDefinition optString,
-      toTermDefinition require,
-      toTermDefinition requireArray,
-      toTermDefinition requireNumber,
-      toTermDefinition requireString,
-      toTermDefinition showValue]
+      toDefinition expectArray,
+      toDefinition expectNumber,
+      toDefinition expectObject,
+      toDefinition expectString,
+      toDefinition opt,
+      toDefinition optArray,
+      toDefinition optString,
+      toDefinition require,
+      toDefinition requireArray,
+      toDefinition requireNumber,
+      toDefinition requireString,
+      toDefinition showValue]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-expectArray :: TBinding (Value -> Either String [Value])
+expectArray :: TTermDefinition (Value -> Either String [Value])
 expectArray = define "expectArray" $
   doc "Extract an array from a JSON value, failing if the value is not an array" $
   lambda "value" $ cases _Value (var "value")
     (Just $ left $ Strings.cat2 (Strings.cat2 (string "expected ") (string "JSON array")) (Strings.cat2 (string " but found ") (showValue @@ var "value"))) [
     _Value_array>>: lambda "els" $ right $ var "els"]
 
-expectNumber :: TBinding (Value -> Either String Double)
+expectNumber :: TTermDefinition (Value -> Either String Double)
 expectNumber = define "expectNumber" $
   doc "Extract a number from a JSON value, failing if the value is not a number" $
   lambda "value" $ cases _Value (var "value")
     (Just $ left $ Strings.cat2 (Strings.cat2 (string "expected ") (string "JSON number")) (Strings.cat2 (string " but found ") (showValue @@ var "value"))) [
     _Value_number>>: lambda "d" $ right $ var "d"]
 
-expectObject :: TBinding (Value -> Either String (M.Map String Value))
+expectObject :: TTermDefinition (Value -> Either String (M.Map String Value))
 expectObject = define "expectObject" $
   doc "Extract an object from a JSON value, failing if the value is not an object" $
   lambda "value" $ cases _Value (var "value")
     (Just $ left $ Strings.cat2 (Strings.cat2 (string "expected ") (string "JSON object")) (Strings.cat2 (string " but found ") (showValue @@ var "value"))) [
     _Value_object>>: lambda "m" $ right $ var "m"]
 
-expectString :: TBinding (Value -> Either String String)
+expectString :: TTermDefinition (Value -> Either String String)
 expectString = define "expectString" $
   doc "Extract a string from a JSON value, failing if the value is not a string" $
   lambda "value" $ cases _Value (var "value")
     (Just $ left $ Strings.cat2 (Strings.cat2 (string "expected ") (string "JSON string")) (Strings.cat2 (string " but found ") (showValue @@ var "value"))) [
     _Value_string>>: lambda "s" $ right $ var "s"]
 
-opt :: TBinding (String -> M.Map String Value -> Maybe Value)
+opt :: TTermDefinition (String -> M.Map String Value -> Maybe Value)
 opt = define "opt" $
   doc "Look up an optional field in a JSON object" $
   lambdas ["fname", "m"] $ Maps.lookup (var "fname") (var "m")
 
-optArray :: TBinding (String -> M.Map String Value -> Either String (Maybe [Value]))
+optArray :: TTermDefinition (String -> M.Map String Value -> Either String (Maybe [Value]))
 optArray = define "optArray" $
   doc "Look up an optional array field in a JSON object" $
   lambdas ["fname", "m"] $ Maybes.maybe
@@ -151,7 +150,7 @@ optArray = define "optArray" $
     (lambda "a" $ Eithers.map (lambda "x" (just $ var "x")) $ expectArray @@ var "a")
     (opt @@ var "fname" @@ var "m")
 
-optString :: TBinding (String -> M.Map String Value -> Either String (Maybe String))
+optString :: TTermDefinition (String -> M.Map String Value -> Either String (Maybe String))
 optString = define "optString" $
   doc "Look up an optional string field in a JSON object" $
   lambdas ["fname", "m"] $ Maybes.maybe
@@ -159,7 +158,7 @@ optString = define "optString" $
     (lambda "s" $ Eithers.map (lambda "x" (just $ var "x")) $ expectString @@ var "s")
     (opt @@ var "fname" @@ var "m")
 
-require :: TBinding (String -> M.Map String Value -> Either String Value)
+require :: TTermDefinition (String -> M.Map String Value -> Either String Value)
 require = define "require" $
   doc "Look up a required field in a JSON object, failing if not found" $
   lambdas ["fname", "m"] $ Maybes.maybe
@@ -170,21 +169,21 @@ require = define "require" $
     (lambda "value" $ right $ var "value")
     (Maps.lookup (var "fname") (var "m"))
 
-requireArray :: TBinding (String -> M.Map String Value -> Either String [Value])
+requireArray :: TTermDefinition (String -> M.Map String Value -> Either String [Value])
 requireArray = define "requireArray" $
   doc "Look up a required array field in a JSON object" $
   lambdas ["fname", "m"] $ Eithers.bind
     (require @@ var "fname" @@ var "m")
     (asTerm expectArray)
 
-requireNumber :: TBinding (String -> M.Map String Value -> Either String Double)
+requireNumber :: TTermDefinition (String -> M.Map String Value -> Either String Double)
 requireNumber = define "requireNumber" $
   doc "Look up a required number field in a JSON object" $
   lambdas ["fname", "m"] $ Eithers.bind
     (require @@ var "fname" @@ var "m")
     (asTerm expectNumber)
 
-requireString :: TBinding (String -> M.Map String Value -> Either String String)
+requireString :: TTermDefinition (String -> M.Map String Value -> Either String String)
 requireString = define "requireString" $
   doc "Look up a required string field in a JSON object" $
   lambdas ["fname", "m"] $ Eithers.bind
@@ -192,7 +191,7 @@ requireString = define "requireString" $
     (asTerm expectString)
 
 -- TODO: implement this function, and deduplicate with hydra.json.coder.showValue
-showValue :: TBinding (Value -> String)
+showValue :: TTermDefinition (Value -> String)
 showValue = define "showValue" $
   doc "Show a JSON value as a string (placeholder implementation)" $
   lambda "value" $ string "TODO: implement showValue"

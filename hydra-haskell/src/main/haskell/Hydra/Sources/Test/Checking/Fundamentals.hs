@@ -25,59 +25,59 @@ ns = Namespace "hydra.test.checking.fundamentals"
 
 module_ :: Module
 module_ = Module ns elements
-    [TestGraph.ns]
+    [TestGraph.ns, Namespace "hydra.rewriting"]
     kernelTypesNamespaces
     (Just "Fundamental type checking test cases: literals, variables, lambdas, applications, let terms, and primitives")
   where
     elements = [
-      Phantoms.toTermDefinition allTests,
-      Phantoms.toTermDefinition applicationsTests,
-      Phantoms.toTermDefinition simpleFunctionApplicationsTests,
-      Phantoms.toTermDefinition partialApplicationsTests,
-      Phantoms.toTermDefinition higherOrderApplicationsTests,
-      Phantoms.toTermDefinition polymorphicApplicationsTests,
-      Phantoms.toTermDefinition applicationsInComplexContextsTests,
-      Phantoms.toTermDefinition applicationsWithComplexArgumentsTests,
-      Phantoms.toTermDefinition lambdasTests,
-      Phantoms.toTermDefinition simpleLambdasTests,
-      Phantoms.toTermDefinition multiParameterLambdasTests,
-      Phantoms.toTermDefinition lambdasWithOperationsTests,
-      Phantoms.toTermDefinition nestedLambdasTests,
-      Phantoms.toTermDefinition lambdasInComplexContextsTests,
-      Phantoms.toTermDefinition higherOrderLambdasTests,
-      Phantoms.toTermDefinition letTermsTests,
-      Phantoms.toTermDefinition simpleLetBindingsTests,
-      Phantoms.toTermDefinition letTermsWithShadowingTests,
-      Phantoms.toTermDefinition recursiveBindingsTests,
-      Phantoms.toTermDefinition mutualRecursionTests,
-      Phantoms.toTermDefinition nestedLetTermsTests,
-      Phantoms.toTermDefinition letWithComplexExpressionsTests,
-      Phantoms.toTermDefinition literalsTests,
-      Phantoms.toTermDefinition booleanLiteralsTests,
-      Phantoms.toTermDefinition stringLiteralsTests,
-      Phantoms.toTermDefinition integerLiteralsTests,
-      Phantoms.toTermDefinition floatLiteralsTests,
---      toTermDefinition binaryLiteralsTests,  -- TODO: restore when binary literal code generation is supported
-      Phantoms.toTermDefinition literalsInComplexContextsTests,
-      Phantoms.toTermDefinition primitivesTests,
-      Phantoms.toTermDefinition nullaryPrimitivesTests,
-      Phantoms.toTermDefinition unaryPrimitivesTests,
-      Phantoms.toTermDefinition binaryPrimitivesTests,
-      Phantoms.toTermDefinition ternaryPrimitivesTests,
-      Phantoms.toTermDefinition monomorphicVsPolymorphicTests,
-      Phantoms.toTermDefinition higherOrderPrimitivesTests,
-      Phantoms.toTermDefinition primitivesInComplexContextsTests,
-      Phantoms.toTermDefinition variablesTests,
-      Phantoms.toTermDefinition simpleVariableLookupTests,
-      Phantoms.toTermDefinition variableScopingTests,
-      Phantoms.toTermDefinition polymorphicVariablesTests,
-      Phantoms.toTermDefinition variablesInComplexContextsTests,
-      Phantoms.toTermDefinition recursiveVariablesTests]
+      Phantoms.toDefinition allTests,
+      Phantoms.toDefinition applicationsTests,
+      Phantoms.toDefinition simpleFunctionApplicationsTests,
+      Phantoms.toDefinition partialApplicationsTests,
+      Phantoms.toDefinition higherOrderApplicationsTests,
+      Phantoms.toDefinition polymorphicApplicationsTests,
+      Phantoms.toDefinition applicationsInComplexContextsTests,
+      Phantoms.toDefinition applicationsWithComplexArgumentsTests,
+      Phantoms.toDefinition lambdasTests,
+      Phantoms.toDefinition simpleLambdasTests,
+      Phantoms.toDefinition multiParameterLambdasTests,
+      Phantoms.toDefinition lambdasWithOperationsTests,
+      Phantoms.toDefinition nestedLambdasTests,
+      Phantoms.toDefinition lambdasInComplexContextsTests,
+      Phantoms.toDefinition higherOrderLambdasTests,
+      Phantoms.toDefinition letTermsTests,
+      Phantoms.toDefinition simpleLetBindingsTests,
+      Phantoms.toDefinition letTermsWithShadowingTests,
+      Phantoms.toDefinition recursiveBindingsTests,
+      Phantoms.toDefinition mutualRecursionTests,
+      Phantoms.toDefinition nestedLetTermsTests,
+      Phantoms.toDefinition letWithComplexExpressionsTests,
+      Phantoms.toDefinition literalsTests,
+      Phantoms.toDefinition booleanLiteralsTests,
+      Phantoms.toDefinition stringLiteralsTests,
+      Phantoms.toDefinition integerLiteralsTests,
+      Phantoms.toDefinition floatLiteralsTests,
+--      toDefinition binaryLiteralsTests,  -- TODO: restore when binary literal code generation is supported
+      Phantoms.toDefinition literalsInComplexContextsTests,
+      Phantoms.toDefinition primitivesTests,
+      Phantoms.toDefinition nullaryPrimitivesTests,
+      Phantoms.toDefinition unaryPrimitivesTests,
+      Phantoms.toDefinition binaryPrimitivesTests,
+      Phantoms.toDefinition ternaryPrimitivesTests,
+      Phantoms.toDefinition monomorphicVsPolymorphicTests,
+      Phantoms.toDefinition higherOrderPrimitivesTests,
+      Phantoms.toDefinition primitivesInComplexContextsTests,
+      Phantoms.toDefinition variablesTests,
+      Phantoms.toDefinition simpleVariableLookupTests,
+      Phantoms.toDefinition variableScopingTests,
+      Phantoms.toDefinition polymorphicVariablesTests,
+      Phantoms.toDefinition variablesInComplexContextsTests,
+      Phantoms.toDefinition recursiveVariablesTests]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
   supergroup "Fundamentals" [
   literalsTests,
@@ -89,29 +89,9 @@ allTests = define "allTests" $
 
 ------ Helper functions ------
 
--- Helper function to create a type checking test case
-checkTest :: String -> [Tag] -> TTerm Term -> TTerm Term -> TTerm Type -> TTerm TestCaseWithMetadata
-checkTest name tags input outputTerm outputType = testCaseWithMetadata (Phantoms.string name)
-  (testCaseTypeChecking $ typeCheckingTestCase input outputTerm outputType) Phantoms.nothing (Phantoms.list $ tag . unTag <$> tags)
-
--- Helper for tests where the term doesn't change during type checking
-noChange :: String -> TTerm Term -> TTerm Type -> TTerm TestCaseWithMetadata
-noChange name term typ = checkTest name [] term term typ
-
--- Create a TestCase inject for type checking
-testCaseTypeChecking :: TTerm TypeCheckingTestCase -> TTerm TestCase
-testCaseTypeChecking = Phantoms.inject _TestCase _TestCase_typeChecking
-
--- Create a TypeCheckingTestCase record
-typeCheckingTestCase :: TTerm Term -> TTerm Term -> TTerm Type -> TTerm TypeCheckingTestCase
-typeCheckingTestCase input outputTerm outputType = Phantoms.record _TypeCheckingTestCase [
-  Phantoms.field _TypeCheckingTestCase_input input,
-  Phantoms.field _TypeCheckingTestCase_outputTerm outputTerm,
-  Phantoms.field _TypeCheckingTestCase_outputType outputType]
-
 ------ Applications ------
 
-applicationsTests :: TBinding TestGroup
+applicationsTests :: TTermDefinition TestGroup
 applicationsTests = define "applicationsTests" $
   supergroup "Applications" [
   simpleFunctionApplicationsTests,
@@ -121,7 +101,7 @@ applicationsTests = define "applicationsTests" $
   applicationsInComplexContextsTests,
   applicationsWithComplexArgumentsTests]
 
-simpleFunctionApplicationsTests :: TBinding TestGroup
+simpleFunctionApplicationsTests :: TTermDefinition TestGroup
 simpleFunctionApplicationsTests = define "simpleFunctionApplicationsTests" $
   subgroup "Simple function applications" [
   checkTest "identity application" []
@@ -135,7 +115,7 @@ simpleFunctionApplicationsTests = define "simpleFunctionApplicationsTests" $
     (primitive _strings_cat2 @@ string "hello" @@ string "world")
     T.string]
 
-partialApplicationsTests :: TBinding TestGroup
+partialApplicationsTests :: TTermDefinition TestGroup
 partialApplicationsTests = define "partialApplicationsTests" $
   subgroup "Partial applications" [
   noChange "partially applied add"
@@ -145,7 +125,7 @@ partialApplicationsTests = define "partialApplicationsTests" $
     (primitive _strings_cat2 @@ string "prefix")
     (T.function T.string T.string)]
 
-higherOrderApplicationsTests :: TBinding TestGroup
+higherOrderApplicationsTests :: TTermDefinition TestGroup
 higherOrderApplicationsTests = define "higherOrderApplicationsTests" $
   subgroup "Higher-order applications" [
   checkTest "apply function to function" []
@@ -174,7 +154,7 @@ higherOrderApplicationsTests = define "higherOrderApplicationsTests" $
       tyapps (var "compose") [T.int32, T.int32, T.int32] @@ var "add1" @@ var "mul2" @@ int32 3)
     T.int32]
 
-polymorphicApplicationsTests :: TBinding TestGroup
+polymorphicApplicationsTests :: TTermDefinition TestGroup
 polymorphicApplicationsTests = define "polymorphicApplicationsTests" $
   subgroup "Polymorphic applications" [
   checkTest "polymorphic identity" []
@@ -202,7 +182,7 @@ polymorphicApplicationsTests = define "polymorphicApplicationsTests" $
       tyapps (var "flip") [T.string, T.string, T.string] @@ primitive _strings_cat2 @@ string "world" @@ string "hello")
     T.string]
 
-applicationsInComplexContextsTests :: TBinding TestGroup
+applicationsInComplexContextsTests :: TTermDefinition TestGroup
 applicationsInComplexContextsTests = define "applicationsInComplexContextsTests" $
   subgroup "Applications in complex contexts" [
   checkTest "application in tuple" []
@@ -228,7 +208,7 @@ applicationsInComplexContextsTests = define "applicationsInComplexContextsTests"
     (primitive _math_add @@ (primitive _math_mul @@ int32 3 @@ int32 4) @@ (primitive _math_add @@ int32 1 @@ int32 2))
     T.int32]
 
-applicationsWithComplexArgumentsTests :: TBinding TestGroup
+applicationsWithComplexArgumentsTests :: TTermDefinition TestGroup
 applicationsWithComplexArgumentsTests = define "applicationsWithComplexArgumentsTests" $
   subgroup "Applications with complex arguments" [
   checkTest "application with record argument" []
@@ -256,7 +236,7 @@ applicationsWithComplexArgumentsTests = define "applicationsWithComplexArguments
 
 ------ Lambdas ------
 
-lambdasTests :: TBinding TestGroup
+lambdasTests :: TTermDefinition TestGroup
 lambdasTests = define "lambdasTests" $
   supergroup "Lambdas" [
   simpleLambdasTests,
@@ -266,7 +246,7 @@ lambdasTests = define "lambdasTests" $
   lambdasInComplexContextsTests,
   higherOrderLambdasTests]
 
-simpleLambdasTests :: TBinding TestGroup
+simpleLambdasTests :: TTermDefinition TestGroup
 simpleLambdasTests = define "simpleLambdasTests" $
   subgroup "Simple lambdas" [
   checkTest "identity function" []
@@ -278,7 +258,7 @@ simpleLambdasTests = define "simpleLambdasTests" $
     (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ int32 42)
     (T.forAlls ["t0"] $ T.function (T.var "t0") T.int32)]
 
-multiParameterLambdasTests :: TBinding TestGroup
+multiParameterLambdasTests :: TTermDefinition TestGroup
 multiParameterLambdasTests = define "multiParameterLambdasTests" $
   subgroup "Multi-parameter lambdas" [
   checkTest "two parameters" []
@@ -298,7 +278,7 @@ multiParameterLambdasTests = define "multiParameterLambdasTests" $
       (T.var "t0") (T.function (T.var "t1")
       (T.pair (T.var "t0") (T.pair (T.var "t0") (T.var "t1")))))]
 
-lambdasWithOperationsTests :: TBinding TestGroup
+lambdasWithOperationsTests :: TTermDefinition TestGroup
 lambdasWithOperationsTests = define "lambdasWithOperationsTests" $
   subgroup "Lambdas with operations" [
   checkTest "lambda with primitive" []
@@ -314,7 +294,7 @@ lambdasWithOperationsTests = define "lambdasWithOperationsTests" $
     (tylams ["t0", "t1"] $ lambdaTyped "x" (T.var "t0") $ lambdaTyped "y" (T.var "t1") $ tyapps (pair (var "x") (var "y")) [T.var "t0", T.var "t1"])
     (T.forAlls ["t0", "t1"] $ T.function (T.var "t0") (T.function (T.var "t1") (T.pair (T.var "t0") (T.var "t1"))))]
 
-nestedLambdasTests :: TBinding TestGroup
+nestedLambdasTests :: TTermDefinition TestGroup
 nestedLambdasTests = define "nestedLambdasTests" $
   subgroup "Nested lambdas" [
   checkTest "lambda returning lambda" []
@@ -330,7 +310,7 @@ nestedLambdasTests = define "nestedLambdasTests" $
     (tylam "t0" $ lambdaTyped "outer" (T.var "t0") $ letsTyped [("inner", tylam "t1" $ lambdaTyped "x" (T.var "t1") $ var "x", T.poly ["t1"] $ T.function (T.var "t1") (T.var "t1"))] $ tyapp (var "inner") (T.var "t0") @@ var "outer")
     (T.forAlls ["t0"] $ T.function (T.var "t0") (T.var "t0"))]
 
-lambdasInComplexContextsTests :: TBinding TestGroup
+lambdasInComplexContextsTests :: TTermDefinition TestGroup
 lambdasInComplexContextsTests = define "lambdasInComplexContextsTests" $
   subgroup "Lambdas in complex contexts" [
   checkTest "lambda in tuple" []
@@ -354,7 +334,7 @@ lambdasInComplexContextsTests = define "lambdasInComplexContextsTests" $
       "age">: int32 30])
     (T.function T.string (Core.typeVariable TestTypes.testTypePersonName))]
 
-higherOrderLambdasTests :: TBinding TestGroup
+higherOrderLambdasTests :: TTermDefinition TestGroup
 higherOrderLambdasTests = define "higherOrderLambdasTests" $
   subgroup "Higher-order lambdas" [
   checkTest "function composition" []
@@ -376,7 +356,7 @@ higherOrderLambdasTests = define "higherOrderLambdasTests" $
 
 ------ Let terms ------
 
-letTermsTests :: TBinding TestGroup
+letTermsTests :: TTermDefinition TestGroup
 letTermsTests = define "letTermsTests" $
   supergroup "Let terms" [
   simpleLetBindingsTests,
@@ -386,7 +366,7 @@ letTermsTests = define "letTermsTests" $
   nestedLetTermsTests,
   letWithComplexExpressionsTests]
 
-simpleLetBindingsTests :: TBinding TestGroup
+simpleLetBindingsTests :: TTermDefinition TestGroup
 simpleLetBindingsTests = define "simpleLetBindingsTests" $
   subgroup "Simple let bindings" [
   checkTest "single binding" []
@@ -404,7 +384,7 @@ simpleLetBindingsTests = define "simpleLetBindingsTests" $
       tyapps (pair (var "x") (var "y")) [T.int32, T.string])
     (T.pair T.int32 T.string)]
 
-letTermsWithShadowingTests :: TBinding TestGroup
+letTermsWithShadowingTests :: TTermDefinition TestGroup
 letTermsWithShadowingTests = define "letTermsWithShadowingTests" $
   subgroup "Let terms with shadowing" [
   checkTest "lambda parameter shadowing let binding" []
@@ -453,7 +433,7 @@ letTermsWithShadowingTests = define "letTermsWithShadowingTests" $
       T.function (T.var "t0") $
         T.pair (T.var "t0") T.int32)]
 
-recursiveBindingsTests :: TBinding TestGroup
+recursiveBindingsTests :: TTermDefinition TestGroup
 recursiveBindingsTests = define "recursiveBindingsTests" $
   subgroup "Recursive bindings" [
   checkTest "simple arithmetic recursion" []
@@ -464,7 +444,7 @@ recursiveBindingsTests = define "recursiveBindingsTests" $
       var "double" @@ int32 5)
     T.int32]
 
-mutualRecursionTests :: TBinding TestGroup
+mutualRecursionTests :: TTermDefinition TestGroup
 mutualRecursionTests = define "mutualRecursionTests" $
   subgroup "Mutual recursion" [
   checkTest "mutually recursive data" []
@@ -496,7 +476,7 @@ mutualRecursionTests = define "mutualRecursionTests" $
       var "f" @@ int32 5)
     T.int32]
 
-nestedLetTermsTests :: TBinding TestGroup
+nestedLetTermsTests :: TTermDefinition TestGroup
 nestedLetTermsTests = define "nestedLetTermsTests" $
   subgroup "Nested let terms" [
   checkTest "monomorphic nesting" []
@@ -530,7 +510,7 @@ nestedLetTermsTests = define "nestedLetTermsTests" $
     (tylam "t0" $ lambdaTyped "z" (T.var "t0") $ letsTyped [("y", var "z", T.mono (T.var "t0"))] $ var "y")
     (T.forAlls ["t0"] $ T.function (T.var "t0") (T.var "t0"))]
 
-letWithComplexExpressionsTests :: TBinding TestGroup
+letWithComplexExpressionsTests :: TTermDefinition TestGroup
 letWithComplexExpressionsTests = define "letWithComplexExpressionsTests" $
   subgroup "Let with complex expressions" [
   checkTest "let in record" []
@@ -586,7 +566,7 @@ letWithComplexExpressionsTests = define "letWithComplexExpressionsTests" $
 
 ------ Literals ------
 
-literalsTests :: TBinding TestGroup
+literalsTests :: TTermDefinition TestGroup
 literalsTests = define "literalsTests" $
   supergroup "Literals" [
   booleanLiteralsTests,
@@ -596,20 +576,20 @@ literalsTests = define "literalsTests" $
 --  binaryLiteralsTests, -- TODO: restore this group
   literalsInComplexContextsTests]
 
-booleanLiteralsTests :: TBinding TestGroup
+booleanLiteralsTests :: TTermDefinition TestGroup
 booleanLiteralsTests = define "booleanLiteralsTests" $
   subgroup "Boolean literals" [
   noChange "true" (boolean True) T.boolean,
   noChange "false" (boolean False) T.boolean]
 
-stringLiteralsTests :: TBinding TestGroup
+stringLiteralsTests :: TTermDefinition TestGroup
 stringLiteralsTests = define "stringLiteralsTests" $
   subgroup "String literals" [
   noChange "simple string" (string "hello") T.string,
   noChange "empty string" (string "") T.string,
   noChange "unicode string" (string "café") T.string]
 
-integerLiteralsTests :: TBinding TestGroup
+integerLiteralsTests :: TTermDefinition TestGroup
 integerLiteralsTests = define "integerLiteralsTests" $
   subgroup "Integer literals" [
   noChange "bigint" (bigint 42) T.bigint,
@@ -622,19 +602,19 @@ integerLiteralsTests = define "integerLiteralsTests" $
   noChange "uint32" (uint32 4294967295) T.uint32,
   noChange "uint64" (uint64 18446744073709551615) T.uint64]
 
-floatLiteralsTests :: TBinding TestGroup
+floatLiteralsTests :: TTermDefinition TestGroup
 floatLiteralsTests = define "floatLiteralsTests" $
   subgroup "Float literals" [
   noChange "bigfloat" (bigfloat 3.14159) T.bigfloat,
   noChange "float32" (float32 2.71828) T.float32,
   noChange "float64" (float64 1.41421) T.float64]
 
-binaryLiteralsTests :: TBinding TestGroup
+binaryLiteralsTests :: TTermDefinition TestGroup
 binaryLiteralsTests = define "binaryLiteralsTests" $
   subgroup "Binary literals" [
   noChange "binary" (binary (BC.pack "Hello World")) T.binary]
 
-literalsInComplexContextsTests :: TBinding TestGroup
+literalsInComplexContextsTests :: TTermDefinition TestGroup
 literalsInComplexContextsTests = define "literalsInComplexContextsTests" $
   subgroup "Literals in complex contexts" [
   checkTest "literals in tuple" []
@@ -647,7 +627,7 @@ literalsInComplexContextsTests = define "literalsInComplexContextsTests" $
 
 ------ Primitives ------
 
-primitivesTests :: TBinding TestGroup
+primitivesTests :: TTermDefinition TestGroup
 primitivesTests = define "primitivesTests" $
   supergroup "Primitives" [
   nullaryPrimitivesTests,
@@ -658,7 +638,7 @@ primitivesTests = define "primitivesTests" $
   higherOrderPrimitivesTests,
   primitivesInComplexContextsTests]
 
-nullaryPrimitivesTests :: TBinding TestGroup
+nullaryPrimitivesTests :: TTermDefinition TestGroup
 nullaryPrimitivesTests = define "nullaryPrimitivesTests" $
   subgroup "Nullary primitives" [
   checkTest "empty map" []
@@ -670,7 +650,7 @@ nullaryPrimitivesTests = define "nullaryPrimitivesTests" $
     (tylam "t0" $ tyapp (primitive _sets_empty) (T.var "t0"))
     (T.forAll "t0" $ T.set $ T.var "t0")]
 
-unaryPrimitivesTests :: TBinding TestGroup
+unaryPrimitivesTests :: TTermDefinition TestGroup
 unaryPrimitivesTests = define "unaryPrimitivesTests" $
   subgroup "Unary primitives" [
   checkTest "lists head" []
@@ -684,7 +664,7 @@ unaryPrimitivesTests = define "unaryPrimitivesTests" $
     (primitive _logic_not)
     (T.function T.boolean T.boolean)]
 
-binaryPrimitivesTests :: TBinding TestGroup
+binaryPrimitivesTests :: TTermDefinition TestGroup
 binaryPrimitivesTests = define "binaryPrimitivesTests" $
   subgroup "Binary primitives" [
   noChange "math add"
@@ -701,7 +681,7 @@ binaryPrimitivesTests = define "binaryPrimitivesTests" $
       (T.var "t0")
       (T.function (T.var "t1") (T.function (T.map (T.var "t0") (T.var "t1")) (T.map (T.var "t0") (T.var "t1")))))]
 
-ternaryPrimitivesTests :: TBinding TestGroup
+ternaryPrimitivesTests :: TTermDefinition TestGroup
 ternaryPrimitivesTests = define "ternaryPrimitivesTests" $
   subgroup "Ternary primitives" [
   checkTest "logic ifElse" []
@@ -715,7 +695,7 @@ ternaryPrimitivesTests = define "ternaryPrimitivesTests" $
       (T.function (T.var "t0") (T.function (T.var "t1") (T.var "t0")))
       (T.function (T.var "t0") (T.function (T.list $ T.var "t1") (T.var "t0"))))]
 
-monomorphicVsPolymorphicTests :: TBinding TestGroup
+monomorphicVsPolymorphicTests :: TTermDefinition TestGroup
 monomorphicVsPolymorphicTests = define "monomorphicVsPolymorphicTests" $
   subgroup "Monomorphic vs polymorphic" [
   noChange "monomorphic math"
@@ -732,7 +712,7 @@ monomorphicVsPolymorphicTests = define "monomorphicVsPolymorphicTests" $
       (T.function (T.var "t0") (T.var "t1"))
       (T.function (T.list $ T.var "t0") (T.list $ T.var "t1")))]
 
-higherOrderPrimitivesTests :: TBinding TestGroup
+higherOrderPrimitivesTests :: TTermDefinition TestGroup
 higherOrderPrimitivesTests = define "higherOrderPrimitivesTests" $
   subgroup "Higher-order primitives" [
   checkTest "lists map function" []
@@ -749,7 +729,7 @@ higherOrderPrimitivesTests = define "higherOrderPrimitivesTests" $
     (T.forAlls ["t0", "t1"] $
       T.function (T.var "t0") (T.function (T.function (T.var "t1") (T.var "t0")) (T.function (T.optional $ T.var "t1") (T.var "t0"))))]
 
-primitivesInComplexContextsTests :: TBinding TestGroup
+primitivesInComplexContextsTests :: TTermDefinition TestGroup
 primitivesInComplexContextsTests = define "primitivesInComplexContextsTests" $
   subgroup "Primitives in complex contexts" [
   checkTest "primitive composition" []
@@ -771,7 +751,7 @@ primitivesInComplexContextsTests = define "primitivesInComplexContextsTests" $
 
 ------ Variables ------
 
-variablesTests :: TBinding TestGroup
+variablesTests :: TTermDefinition TestGroup
 variablesTests = define "variablesTests" $
   supergroup "Variables" [
   simpleVariableLookupTests,
@@ -780,7 +760,7 @@ variablesTests = define "variablesTests" $
   variablesInComplexContextsTests,
   recursiveVariablesTests]
 
-simpleVariableLookupTests :: TBinding TestGroup
+simpleVariableLookupTests :: TTermDefinition TestGroup
 simpleVariableLookupTests = define "simpleVariableLookupTests" $
   subgroup "Simple variable lookup" [
   checkTest "int variable" []
@@ -800,7 +780,7 @@ simpleVariableLookupTests = define "simpleVariableLookupTests" $
       tyapps (pair (var "x") (var "y")) [T.string, T.int32])
     (T.pair T.string T.int32)]
 
-variableScopingTests :: TBinding TestGroup
+variableScopingTests :: TTermDefinition TestGroup
 variableScopingTests = define "variableScopingTests" $
   subgroup "Variable scoping" [
   checkTest "lambda parameter" []
@@ -832,7 +812,7 @@ variableScopingTests = define "variableScopingTests" $
       tyapps (pair (var "x") (tyapps (pair (var "y") (var "z")) [T.var "t0", T.var "t1"])) [T.var "t0", T.pair (T.var "t0") (T.var "t1")])
     (T.forAlls ["t0", "t1"] $ T.function (T.var "t0") (T.function (T.var "t1") (T.pair (T.var "t0") (T.pair (T.var "t0") (T.var "t1")))))]
 
-polymorphicVariablesTests :: TBinding TestGroup
+polymorphicVariablesTests :: TTermDefinition TestGroup
 polymorphicVariablesTests = define "polymorphicVariablesTests" $
   subgroup "Polymorphic variables" [
   checkTest "polymorphic function" []
@@ -858,7 +838,7 @@ polymorphicVariablesTests = define "polymorphicVariablesTests" $
     (T.forAlls ["t0", "t1"] $
       T.function (T.function (T.var "t0") (T.var "t1")) (T.function (T.var "t0") (T.var "t1")))]
 
-variablesInComplexContextsTests :: TBinding TestGroup
+variablesInComplexContextsTests :: TTermDefinition TestGroup
 variablesInComplexContextsTests = define "variablesInComplexContextsTests" $
   subgroup "Variables in complex contexts" [
   checkTest "variable in record" []
@@ -888,7 +868,7 @@ variablesInComplexContextsTests = define "variablesInComplexContextsTests" $
     (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ Core.termMaybe $ just $ var "x")
     (T.forAll "t0" $ T.function (T.var "t0") (T.optional $ T.var "t0"))]
 
-recursiveVariablesTests :: TBinding TestGroup
+recursiveVariablesTests :: TTermDefinition TestGroup
 recursiveVariablesTests = define "recursiveVariablesTests" $
   subgroup "Recursive variables" [
   checkTest "simple recursion" []

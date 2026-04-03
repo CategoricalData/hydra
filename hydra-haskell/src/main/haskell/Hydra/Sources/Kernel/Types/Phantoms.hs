@@ -21,7 +21,8 @@ module_ = Module ns (map toTypeDef elements) [Core.ns] [Core.ns] $
   where
     elements = [
       tBinding,
-      tTerm]
+      tTerm,
+      tTermDefinition]
 
 tBinding :: Binding
 tBinding = define "TBinding" $
@@ -38,3 +39,14 @@ tTerm :: Binding
 tTerm = define "TTerm" $
   doc "An association of a term with a phantom type" $
   T.forAll "a" $ T.wrap Core.term
+
+tTermDefinition :: Binding
+tTermDefinition = define "TTermDefinition" $
+  doc "An association of a term definition with a phantom type" $
+  T.forAll "a" $ T.record [
+    "name">:
+      doc "The name of the term"
+      Core.name,
+    "term">:
+      doc "The term with its phantom type" $
+      tTerm @@ "a"]

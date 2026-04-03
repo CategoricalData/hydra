@@ -24,6 +24,9 @@ instance AsTerm (TTerm a) a where
 instance AsTerm (TBinding a) a where
   asTerm (TBinding name _) = TTerm (TermVariable name)
 
+instance AsTerm (TTermDefinition a) a where
+  asTerm (TTermDefinition name _) = TTerm (TermVariable name)
+
 instance AsTerm String String where
   asTerm s = TTerm $ TermLiteral $ LiteralString s
 

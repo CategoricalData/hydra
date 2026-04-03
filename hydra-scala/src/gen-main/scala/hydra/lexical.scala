@@ -99,7 +99,7 @@ lazy val emptyGraph: hydra.graph.Graph = hydra.graph.Graph(hydra.lib.maps.empty[
 
 def fieldsOf(t: hydra.core.Type): Seq[hydra.core.FieldType] =
   {
-  lazy val stripped: hydra.core.Type = hydra.rewriting.deannotateType(t)
+  lazy val stripped: hydra.core.Type = hydra.strip.deannotateType(t)
   stripped match
     case hydra.core.Type.forall(v_Type_forall_forallType) => hydra.lexical.fieldsOf(v_Type_forall_forallType.body)
     case hydra.core.Type.record(v_Type_record_rt) => v_Type_record_rt
@@ -143,7 +143,7 @@ def matchEnum[T0](cx: hydra.context.Context)(graph: hydra.graph.Graph)(tname: hy
 def matchRecord[T0, T1](cx: hydra.context.Context)(graph: T0)(decode: (Map[hydra.core.Name, hydra.core.Term] => Either[hydra.context.InContext[hydra.errors.Error],
    T1]))(term: hydra.core.Term): Either[hydra.context.InContext[hydra.errors.Error], T1] =
   {
-  lazy val stripped: hydra.core.Term = hydra.rewriting.deannotateAndDetypeTerm(term)
+  lazy val stripped: hydra.core.Term = hydra.strip.deannotateAndDetypeTerm(term)
   stripped match
     case hydra.core.Term.record(v_Term_record_record) => decode(hydra.lib.maps.fromList[hydra.core.Name,
        hydra.core.Term](hydra.lib.lists.map[hydra.core.Field, Tuple2[hydra.core.Name, hydra.core.Term]]((field: hydra.core.Field) => Tuple2(field.name,
@@ -155,7 +155,7 @@ def matchUnion[T0](cx: hydra.context.Context)(graph: hydra.graph.Graph)(tname: h
    (hydra.core.Term => Either[hydra.context.InContext[hydra.errors.Error], T0])]])(term: hydra.core.Term): Either[hydra.context.InContext[hydra.errors.Error],
    T0] =
   {
-  lazy val stripped: hydra.core.Term = hydra.rewriting.deannotateAndDetypeTerm(term)
+  lazy val stripped: hydra.core.Term = hydra.strip.deannotateAndDetypeTerm(term)
   lazy val mapping: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.context.InContext[hydra.errors.Error],
      T0])] = hydra.lib.maps.fromList[hydra.core.Name, (hydra.core.Term) => Either[hydra.context.InContext[hydra.errors.Error],
      T0]](pairs)
@@ -221,7 +221,7 @@ def resolveTerm(graph: hydra.graph.Graph)(name: hydra.core.Name): Option[hydra.c
   {
   def recurse(term: hydra.core.Term): Option[hydra.core.Term] =
     {
-    lazy val stripped: hydra.core.Term = hydra.rewriting.deannotateTerm(term)
+    lazy val stripped: hydra.core.Term = hydra.strip.deannotateTerm(term)
     stripped match
       case hydra.core.Term.variable(v_Term_variable_name_) => hydra.lexical.resolveTerm(graph)(`v_Term_variable_name_`)
       case _ => Some(term)
@@ -232,7 +232,7 @@ def resolveTerm(graph: hydra.graph.Graph)(name: hydra.core.Name): Option[hydra.c
 def stripAndDereferenceTerm(cx: hydra.context.Context)(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.core.Term] =
   {
-  lazy val stripped: hydra.core.Term = hydra.rewriting.deannotateAndDetypeTerm(term)
+  lazy val stripped: hydra.core.Term = hydra.strip.deannotateAndDetypeTerm(term)
   stripped match
     case hydra.core.Term.variable(v_Term_variable_v) => hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error],
        hydra.core.Term, hydra.core.Term](hydra.lexical.requireTerm(cx)(graph)(v_Term_variable_v))((t: hydra.core.Term) => hydra.lexical.stripAndDereferenceTerm(cx)(graph)(t))
@@ -241,7 +241,7 @@ def stripAndDereferenceTerm(cx: hydra.context.Context)(graph: hydra.graph.Graph)
 
 def stripAndDereferenceTermEither(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[scala.Predef.String, hydra.core.Term] =
   {
-  lazy val stripped: hydra.core.Term = hydra.rewriting.deannotateAndDetypeTerm(term)
+  lazy val stripped: hydra.core.Term = hydra.strip.deannotateAndDetypeTerm(term)
   stripped match
     case hydra.core.Term.variable(v_Term_variable_v) => hydra.lib.eithers.either[scala.Predef.String,
        hydra.core.Binding, Either[scala.Predef.String, hydra.core.Term]]((`left_`: scala.Predef.String) => Left(`left_`))((binding: hydra.core.Binding) =>

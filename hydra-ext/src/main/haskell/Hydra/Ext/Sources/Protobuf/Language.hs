@@ -59,13 +59,12 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -80,17 +79,17 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-definition_ :: String -> TTerm a -> TBinding a
+definition_ :: String -> TTerm a -> TTermDefinition a
 definition_ = definitionInModule module_
 
 module_ :: Module
 module_ = Module (Namespace "hydra.ext.protobuf.language")
-  [toTermDefinition protobufLanguage, toTermDefinition protobufReservedWords]
-  [Lexical.ns, Rewriting.ns]
+  [toDefinition protobufLanguage, toDefinition protobufReservedWords]
+  [Lexical.ns, Strip.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints for Protobuf v3"
 
-protobufLanguage :: TBinding Language
+protobufLanguage :: TTermDefinition Language
 protobufLanguage = definition_ "protobufLanguage" $
   doc "Language constraints for Protocol Buffers v3" $ lets [
   "eliminationVariants">: Sets.empty,
@@ -140,7 +139,7 @@ protobufLanguage = definition_ "protobufLanguage" $
     (Just true) [
     _Type_map>>: "mt" ~> lets [
       "valuesType">: Core.mapTypeValues $ var "mt",
-      "stripped">: Rewriting.deannotateType @@ var "valuesType"] $
+      "stripped">: Strip.deannotateType @@ var "valuesType"] $
       cases _Type (var "stripped")
         (Just true) [
         _Type_maybe>>: constant false]]] $
@@ -156,7 +155,7 @@ protobufLanguage = definition_ "protobufLanguage" $
       (var "typeVariants")
       (var "typePredicate"))
 
-protobufReservedWords :: TBinding (S.Set String)
+protobufReservedWords :: TTermDefinition (S.Set String)
 protobufReservedWords = definition_ "protobufReservedWords" $
   doc "A set of reserved words in Protobuf" $ lets [
   "fieldNames">:

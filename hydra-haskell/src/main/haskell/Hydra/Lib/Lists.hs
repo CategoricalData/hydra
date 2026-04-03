@@ -98,6 +98,32 @@ length = L.length
 map :: (a -> b) -> [a] -> [b]
 map = fmap
 
+-- | Get the element at a specified index in a list, returning Nothing if out of bounds.
+maybeAt :: Int -> [a] -> Maybe a
+maybeAt i l
+  | i < 0 || i >= L.length l = Nothing
+  | otherwise = Just (l !! i)
+
+-- | Get the first element of a list, returning Nothing if the list is empty.
+maybeHead :: [a] -> Maybe a
+maybeHead [] = Nothing
+maybeHead (x:_) = Just x
+
+-- | Return all elements except the last one, returning Nothing if the list is empty.
+maybeInit :: [a] -> Maybe [a]
+maybeInit [] = Nothing
+maybeInit xs = Just (L.init xs)
+
+-- | Get the last element of a list, returning Nothing if the list is empty.
+maybeLast :: [a] -> Maybe a
+maybeLast [] = Nothing
+maybeLast xs = Just (L.last xs)
+
+-- | Get all elements of a list except the first, returning Nothing if the list is empty.
+maybeTail :: [a] -> Maybe [a]
+maybeTail [] = Nothing
+maybeTail (_:xs) = Just xs
+
 -- | Remove duplicate elements from a list.
 nub :: Eq a => [a] -> [a]
 nub = L.nub
@@ -123,10 +149,9 @@ reverse :: [a] -> [a]
 reverse = L.reverse
 
 -- | Get the first element of a list, returning Nothing if the list is empty.
--- TODO: consider renaming. See https://github.com/CategoricalData/hydra/issues/201
+-- Deprecated: use maybeHead instead.
 safeHead :: [a] -> Maybe a
-safeHead [] = Nothing
-safeHead (x:_) = Just x
+safeHead = maybeHead
 
 -- | Create a single-element list.
 singleton :: a -> [a]

@@ -70,13 +70,13 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
+import qualified Hydra.Sources.Kernel.Terms.Resolution    as Resolution
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -98,7 +98,7 @@ import qualified Hydra.Ext.Sources.Pg.Mapping as PgMapping
 import qualified Hydra.Ext.Sources.Pg.TermsToElements as TermsToElements
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 ns :: Namespace
@@ -106,41 +106,41 @@ ns = Namespace "hydra.pg.coder"
 
 module_ :: Module
 module_ = Module ns elements
-    [Annotations.ns, ExtractCore.ns, Schemas.ns, TermsToElements.ns]
+    [Annotations.ns, ExtractCore.ns, Resolution.ns, TermsToElements.ns]
     (PgModel.ns:PgMapping.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Property graph element coders for mapping Hydra terms to property graph elements"
   where
     elements = [
-      toTermDefinition check,
-      toTermDefinition checkRecordName,
-      toTermDefinition constructEdgeCoder,
-      toTermDefinition constructVertexCoder,
-      toTermDefinition edgeCoder,
-      toTermDefinition edgeIdAdapter,
-      toTermDefinition elementCoder,
-      toTermDefinition elementTreeEdge,
-      toTermDefinition elementTreeVertex,
-      toTermDefinition elementTypeTreeEdge,
-      toTermDefinition elementTypeTreeVertex,
-      toTermDefinition encodeProperties,
-      toTermDefinition encodeProperty,
-      toTermDefinition extractString,
-      toTermDefinition findAdjacenEdgeAdapters,
-      toTermDefinition findIdProjectionSpec,
-      toTermDefinition findIncidentVertexAdapter,
-      toTermDefinition findLabelString,
-      toTermDefinition findProjectionSpec,
-      toTermDefinition findPropertySpecs,
-      toTermDefinition findSingleFieldWithAnnotationKey,
-      toTermDefinition hasVertexAdapters,
-      toTermDefinition projectionAdapter,
-      toTermDefinition propertyAdapter,
-      toTermDefinition propertyTypes,
-      toTermDefinition selectEdgeId,
-      toTermDefinition selectVertexId,
-      toTermDefinition traverseToSingleTerm,
-      toTermDefinition vertexCoder,
-      toTermDefinition vertexIdAdapter]
+      toDefinition check,
+      toDefinition checkRecordName,
+      toDefinition constructEdgeCoder,
+      toDefinition constructVertexCoder,
+      toDefinition edgeCoder,
+      toDefinition edgeIdAdapter,
+      toDefinition elementCoder,
+      toDefinition elementTreeEdge,
+      toDefinition elementTreeVertex,
+      toDefinition elementTypeTreeEdge,
+      toDefinition elementTypeTreeVertex,
+      toDefinition encodeProperties,
+      toDefinition encodeProperty,
+      toDefinition extractString,
+      toDefinition findAdjacenEdgeAdapters,
+      toDefinition findIdProjectionSpec,
+      toDefinition findIncidentVertexAdapter,
+      toDefinition findLabelString,
+      toDefinition findProjectionSpec,
+      toDefinition findPropertySpecs,
+      toDefinition findSingleFieldWithAnnotationKey,
+      toDefinition hasVertexAdapters,
+      toDefinition projectionAdapter,
+      toDefinition propertyAdapter,
+      toDefinition propertyTypes,
+      toDefinition selectEdgeId,
+      toDefinition selectVertexId,
+      toDefinition traverseToSingleTerm,
+      toDefinition vertexCoder,
+      toDefinition vertexIdAdapter]
 
 -- Helper for error results
 err :: TTerm Context -> TTerm String -> TTerm (Either (InContext Error) a)
@@ -150,7 +150,7 @@ unexpectedE :: TTerm Context -> TTerm String -> TTerm String -> TTerm (Either (I
 unexpectedE cx expected found = err cx (string "Expected " ++ expected ++ string ", found: " ++ found)
 
 -- | Check a condition, returning an error if false
-check :: TBinding (Context -> Bool -> Either (InContext Error) () -> Either (InContext Error) ())
+check :: TTermDefinition (Context -> Bool -> Either (InContext Error) () -> Either (InContext Error) ())
 check = define "check" $
   doc "Check a condition, returning an error if false" $
   "_cx" ~> "b" ~> "e" ~>
@@ -158,7 +158,7 @@ check = define "check" $
 
 -- | Check that a record name matches the expected name.
 --   Skips the check when the expected name is a placeholder (used when the type has no intrinsic name).
-checkRecordName :: TBinding (Context -> Name -> Name -> Either (InContext Error) ())
+checkRecordName :: TTermDefinition (Context -> Name -> Name -> Either (InContext Error) ())
 checkRecordName = define "checkRecordName" $
   doc "Check that a record name matches the expected name" $
   "cx" ~> "expected" ~> "actual" ~>
@@ -169,7 +169,7 @@ checkRecordName = define "checkRecordName" $
       @@ (err (var "cx") (string "Expected record of type " ++ (Core.unName $ var "expected") ++ string ", found record of type " ++ (Core.unName $ var "actual")))
 
 -- | Construct an edge coder from components
-constructEdgeCoder :: TBinding (Context -> Graph -> PG.VertexLabel -> PGM.Schema Graph t v -> Type -> t -> t -> PG.Direction -> Name -> [FieldType]
+constructEdgeCoder :: TTermDefinition (Context -> Graph -> PG.VertexLabel -> PGM.Schema Graph t v -> Type -> t -> t -> PG.Direction -> Name -> [FieldType]
   -> [Adapter FieldType (PG.PropertyType t) Field (PG.Property v)]
   -> Y.Maybe (FieldType, PGM.ValueSpec, Y.Maybe String)
   -> Y.Maybe (FieldType, PGM.ValueSpec, Y.Maybe String)
@@ -221,7 +221,7 @@ constructEdgeCoder = define "constructEdgeCoder" $
                                 @@ var "outLabel" @@ var "inLabel" @@ var "idAdapter" @@ var "outIdAdapter" @@ var "inIdAdapter" @@ var "propAdapters" @@ var "vertexAdapters")))))))))
 
 -- | Construct a vertex coder from components
-constructVertexCoder :: TBinding (Context -> Graph -> PGM.Schema Graph t v -> Type -> t -> t -> Name -> [FieldType]
+constructVertexCoder :: TTermDefinition (Context -> Graph -> PGM.Schema Graph t v -> Type -> t -> t -> Name -> [FieldType]
   -> [Adapter FieldType (PG.PropertyType t) Field (PG.Property v)]
   -> Either (InContext Error) (Adapter Type (PG.ElementTypeTree t) Term (PG.ElementTree v)))
 constructVertexCoder = define "constructVertexCoder" $
@@ -241,7 +241,7 @@ constructVertexCoder = define "constructVertexCoder" $
                     @@ var "idAdapter" @@ var "propAdapters" @@ (Lists.concat2 (var "outEdgeAdapters") (var "inEdgeAdapters")))))))
 
 -- | Create an edge coder given all components
-edgeCoder :: TBinding (Graph -> PG.Direction -> PGM.Schema Graph t v -> Type -> t -> Name
+edgeCoder :: TTermDefinition (Graph -> PG.Direction -> PGM.Schema Graph t v -> Type -> t -> Name
   -> PG.EdgeLabel -> PG.VertexLabel -> PG.VertexLabel
   -> Y.Maybe (Name, Adapter Type t Term v) -> Y.Maybe (Name, Adapter Type t Term v) -> Y.Maybe (Name, Adapter Type t Term v)
   -> [Adapter FieldType (PG.PropertyType t) Field (PG.Property v)]
@@ -257,18 +257,18 @@ edgeCoder = define "edgeCoder" $
       PG._EdgeType_out>>: var "outLabel",
       PG._EdgeType_in>>: var "inLabel",
       PG._EdgeType_properties>>: propertyTypes @@ var "propAdapters"]] $
-    Util.adapter true (var "source")
+    Coders.adapter true (var "source")
       (elementTypeTreeEdge @@ var "et" @@ TTerm (Terms.list []))
-      (Util.coder
+      (Coders.coder
         ("cx" ~> "term" ~>
-          lets ["deannot">: Rewriting.deannotateTerm @@ var "term",
+          lets ["deannot">: Strip.deannotateTerm @@ var "term",
                 "unwrapped">: cases _Term (var "deannot") (Just $ var "deannot") [
                   _Term_maybe>>: "mt" ~> Maybes.fromMaybe (var "deannot") (var "mt")],
                 "rec">: cases _Term (var "unwrapped") Nothing [
                   _Term_record>>: lambda "r" $ var "r"]] $
           Eithers.bind (checkRecordName @@ var "cx" @@ var "tname" @@ (Core.recordTypeName $ var "rec"))
             ("_chk" ~> lets [
-              "fieldsm">: Schemas.fieldMap @@ (Core.recordFields $ var "rec")] $
+              "fieldsm">: Resolution.fieldMap @@ (Core.recordFields $ var "rec")] $
               Eithers.bind (Maybes.maybe
                 (right $ project PGM._Schema PGM._Schema_defaultEdgeId @@ var "schema")
                 (selectEdgeId @@ var "cx" @@ var "fieldsm")
@@ -294,7 +294,7 @@ edgeCoder = define "edgeCoder" $
                                 Maybes.maybe
                                   (right nothing)
                                   ("fterm" ~> Eithers.map (lambda "x" $ just (var "x"))
-                                    (Util.coderEncode (Util.adapterCoder $ var "ad") @@ var "cx" @@ var "fterm"))
+                                    (Coders.coderEncode (Coders.adapterCoder $ var "ad") @@ var "cx" @@ var "fterm"))
                                   (Maps.lookup (var "fname") (var "fieldsm")))
                               (var "vertexAdapters")))
                             ("deps" ~>
@@ -309,7 +309,7 @@ edgeCoder = define "edgeCoder" $
         ("cx" ~> "_" ~> left (Ctx.inContext (Error.errorOther $ Error.otherError $ string "edge decoding is not yet supported") (var "cx"))))
 
 -- | Create an edge id adapter
-edgeIdAdapter :: TBinding (Context -> Graph -> PGM.Schema Graph t v -> t -> Name -> Name -> [FieldType]
+edgeIdAdapter :: TTermDefinition (Context -> Graph -> PGM.Schema Graph t v -> t -> Name -> Name -> [FieldType]
   -> Either (InContext Error) (Y.Maybe (Name, Adapter Type t Term v)))
 edgeIdAdapter = define "edgeIdAdapter" $
   doc "Create an edge id adapter" $
@@ -321,14 +321,14 @@ edgeIdAdapter = define "edgeIdAdapter" $
         (var "mIdSpec"))
 
 -- | Construct an element adapter for a given type
-elementCoder :: TBinding (Y.Maybe (PG.Direction, PG.VertexLabel) -> PGM.Schema Graph t v -> Type -> t -> t -> Context -> Graph
+elementCoder :: TTermDefinition (Y.Maybe (PG.Direction, PG.VertexLabel) -> PGM.Schema Graph t v -> Type -> t -> t -> Context -> Graph
   -> Either (InContext Error) (Adapter Type (PG.ElementTypeTree t) Term (PG.ElementTree v)))
 elementCoder = define "elementCoder" $
   doc "Construct an element adapter for a given type, interpreting it either as a vertex specification or an edge specification" $
   "mparent" ~> "schema" ~> "source" ~> "vidType" ~> "eidType" ~> "cx" ~> "g" ~> lets [
     "dir">: Maybes.maybe (inject PG._Direction PG._Direction_both unit) (lambda "p" $ Pairs.first (var "p")) (var "mparent"),
     "parentLabel">: Maybes.maybe (wrap PG._VertexLabel $ string "NOLABEL") (lambda "p" $ Pairs.second (var "p")) (var "mparent")] $
-    cases _Type (Rewriting.deannotateType @@ var "source")
+    cases _Type (Strip.deannotateType @@ var "source")
       (Just $ unexpectedE (var "cx") (string "record type") (string "other type")) [
       _Type_maybe>>: "ot" ~>
         elementCoder @@ var "mparent" @@ var "schema" @@ var "ot" @@ var "vidType" @@ var "eidType" @@ var "cx" @@ var "g",
@@ -355,7 +355,7 @@ elementCoder = define "elementCoder" $
                     @@ var "kind"))))]
 
 -- | Create an element tree for an edge
-elementTreeEdge :: TBinding (PG.Edge v -> [PG.ElementTree v] -> PG.ElementTree v)
+elementTreeEdge :: TTermDefinition (PG.Edge v -> [PG.ElementTree v] -> PG.ElementTree v)
 elementTreeEdge = define "elementTreeEdge" $
   doc "Create an element tree for an edge" $
   "edge" ~> "deps" ~>
@@ -364,7 +364,7 @@ elementTreeEdge = define "elementTreeEdge" $
       PG._ElementTree_dependencies>>: var "deps"]
 
 -- | Create an element tree for a vertex
-elementTreeVertex :: TBinding (PG.Vertex v -> [PG.ElementTree v] -> PG.ElementTree v)
+elementTreeVertex :: TTermDefinition (PG.Vertex v -> [PG.ElementTree v] -> PG.ElementTree v)
 elementTreeVertex = define "elementTreeVertex" $
   doc "Create an element tree for a vertex" $
   "vertex" ~> "deps" ~>
@@ -373,7 +373,7 @@ elementTreeVertex = define "elementTreeVertex" $
       PG._ElementTree_dependencies>>: var "deps"]
 
 -- | Create an element type tree for an edge type
-elementTypeTreeEdge :: TBinding (PG.EdgeType t -> [PG.ElementTypeTree t] -> PG.ElementTypeTree t)
+elementTypeTreeEdge :: TTermDefinition (PG.EdgeType t -> [PG.ElementTypeTree t] -> PG.ElementTypeTree t)
 elementTypeTreeEdge = define "elementTypeTreeEdge" $
   doc "Create an element type tree for an edge type" $
   "etype" ~> "deps" ~>
@@ -382,7 +382,7 @@ elementTypeTreeEdge = define "elementTypeTreeEdge" $
       PG._ElementTypeTree_dependencies>>: var "deps"]
 
 -- | Create an element type tree for a vertex type
-elementTypeTreeVertex :: TBinding (PG.VertexType t -> [PG.ElementTypeTree t] -> PG.ElementTypeTree t)
+elementTypeTreeVertex :: TTermDefinition (PG.VertexType t -> [PG.ElementTypeTree t] -> PG.ElementTypeTree t)
 elementTypeTreeVertex = define "elementTypeTreeVertex" $
   doc "Create an element type tree for a vertex type" $
   "vtype" ~> "deps" ~>
@@ -391,7 +391,7 @@ elementTypeTreeVertex = define "elementTypeTreeVertex" $
       PG._ElementTypeTree_dependencies>>: var "deps"]
 
 -- | Encode all properties from a field map using property adapters
-encodeProperties :: TBinding (Context -> M.Map Name Term -> [Adapter FieldType (PG.PropertyType t) Field (PG.Property v)]
+encodeProperties :: TTermDefinition (Context -> M.Map Name Term -> [Adapter FieldType (PG.PropertyType t) Field (PG.Property v)]
   -> Either (InContext Error) (M.Map PG.PropertyKey v))
 encodeProperties = define "encodeProperties" $
   doc "Encode all properties from a field map using property adapters" $
@@ -403,17 +403,17 @@ encodeProperties = define "encodeProperties" $
       (Eithers.map (lambda "xs" $ Maybes.cat (var "xs")) (Eithers.mapList (encodeProperty @@ var "cx" @@ var "fields") (var "adapters")))
 
 -- | Encode a single property from a field map using a property adapter
-encodeProperty :: TBinding (Context -> M.Map Name Term -> Adapter FieldType (PG.PropertyType t) Field (PG.Property v)
+encodeProperty :: TTermDefinition (Context -> M.Map Name Term -> Adapter FieldType (PG.PropertyType t) Field (PG.Property v)
   -> Either (InContext Error) (Y.Maybe (PG.Property v)))
 encodeProperty = define "encodeProperty" $
   doc "Encode a single property from a field map using a property adapter" $
   "cx" ~> "fields" ~> "adapter" ~> lets [
-    "fname">: Core.fieldTypeName $ (Util.adapterSource $ var "adapter"),
-    "ftyp">: Rewriting.deannotateType @@ (Core.fieldTypeType $ Util.adapterSource $ var "adapter"),
+    "fname">: Core.fieldTypeName $ (Coders.adapterSource $ var "adapter"),
+    "ftyp">: Strip.deannotateType @@ (Core.fieldTypeType $ Coders.adapterSource $ var "adapter"),
     "isMaybe">: cases _Type (var "ftyp") (Just false) [
       _Type_maybe>>: constant true],
     "encodeValue">: "v" ~> Eithers.map (lambda "x" $ just (var "x"))
-      (Util.coderEncode (Util.adapterCoder $ var "adapter") @@ var "cx" @@ (Core.field (var "fname") (var "v")))] $
+      (Coders.coderEncode (Coders.adapterCoder $ var "adapter") @@ var "cx" @@ (Core.field (var "fname") (var "v")))] $
     Maybes.maybe
       -- Field not found in record
       (Logic.ifElse (var "isMaybe")
@@ -423,7 +423,7 @@ encodeProperty = define "encodeProperty" $
       ("value" ~>
         Logic.ifElse (var "isMaybe")
           -- Optional field: unwrap TermMaybe
-          (cases _Term (Rewriting.deannotateTerm @@ var "value") (Just $ var "encodeValue" @@ var "value") [
+          (cases _Term (Strip.deannotateTerm @@ var "value") (Just $ var "encodeValue" @@ var "value") [
             _Term_maybe>>: "ov" ~>
               Maybes.maybe (right nothing) (var "encodeValue") (var "ov")])
           -- Required field: encode directly
@@ -431,14 +431,14 @@ encodeProperty = define "encodeProperty" $
       (Maps.lookup (var "fname") (var "fields"))
 
 -- | Bridge an ExtractCore function into Result
-extractString :: TBinding (Context -> Graph -> Term -> Either (InContext Error) String)
+extractString :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) String)
 extractString = define "extractString" $
   doc "Extract a string from a term" $
   "cx" ~> "g" ~> "t" ~>
     ExtractCore.string @@ var "cx" @@ var "g" @@ var "t"
 
 -- | Find adjacent edge adapters for a given direction
-findAdjacenEdgeAdapters :: TBinding (Context -> Graph -> PGM.Schema Graph t v -> t -> t -> PG.VertexLabel -> PG.Direction -> [FieldType]
+findAdjacenEdgeAdapters :: TTermDefinition (Context -> Graph -> PGM.Schema Graph t v -> t -> t -> PG.VertexLabel -> PG.Direction -> [FieldType]
   -> Either (InContext Error) [(PG.Direction, FieldType, PG.EdgeLabel, Adapter Type (PG.ElementTypeTree t) Term (PG.ElementTree v))])
 findAdjacenEdgeAdapters = define "findAdjacenEdgeAdapters" $
   doc "Find adjacent edge adapters for a given direction" $
@@ -458,7 +458,7 @@ findAdjacenEdgeAdapters = define "findAdjacenEdgeAdapters" $
       (var "fields"))
 
 -- | Find an id projection spec for a field
-findIdProjectionSpec :: TBinding (Context -> Bool -> Name -> Name -> [FieldType]
+findIdProjectionSpec :: TTermDefinition (Context -> Bool -> Name -> Name -> [FieldType]
   -> Either (InContext Error) (Y.Maybe (FieldType, PGM.ValueSpec, Y.Maybe String)))
 findIdProjectionSpec = define "findIdProjectionSpec" $
   doc "Find an id projection spec for a field" $
@@ -478,7 +478,7 @@ findIdProjectionSpec = define "findIdProjectionSpec" $
         (var "mid"))
 
 -- | Find an incident vertex adapter for a projection spec
-findIncidentVertexAdapter :: TBinding (Context -> Graph -> PGM.Schema Graph t v -> t -> t -> (FieldType, PGM.ValueSpec, Y.Maybe String)
+findIncidentVertexAdapter :: TTermDefinition (Context -> Graph -> PGM.Schema Graph t v -> t -> t -> (FieldType, PGM.ValueSpec, Y.Maybe String)
   -> Either (InContext Error) (Name, Adapter Type (PG.ElementTypeTree t) Term (PG.ElementTree v)))
 findIncidentVertexAdapter = define "findIncidentVertexAdapter" $
   doc "Find an incident vertex adapter for a projection spec" $
@@ -488,7 +488,7 @@ findIncidentVertexAdapter = define "findIncidentVertexAdapter" $
       ("adapter" ~> right (pair (Core.fieldTypeName $ var "field") (var "adapter")))
 
 -- | Find a label string from annotations or the type name
-findLabelString :: TBinding (Context -> Graph -> Type -> Name -> Name -> Either (InContext Error) String)
+findLabelString :: TTermDefinition (Context -> Graph -> Type -> Name -> Name -> Either (InContext Error) String)
 findLabelString = define "findLabelString" $
   doc "Find a label string from annotations or the type name" $
   "cx" ~> "g" ~> "source" ~> "tname" ~> "labelKey" ~>
@@ -498,7 +498,7 @@ findLabelString = define "findLabelString" $
       (Annotations.getTypeAnnotation @@ var "labelKey" @@ var "source")
 
 -- | Find a projection spec for a field
-findProjectionSpec :: TBinding (Context -> Graph -> Name -> Name -> Name -> [FieldType]
+findProjectionSpec :: TTermDefinition (Context -> Graph -> Name -> Name -> Name -> [FieldType]
   -> Either (InContext Error) (Y.Maybe (FieldType, PGM.ValueSpec, Y.Maybe String)))
 findProjectionSpec = define "findProjectionSpec" $
   doc "Find a projection spec for a field" $
@@ -515,7 +515,7 @@ findProjectionSpec = define "findProjectionSpec" $
         (var "mfield"))
 
 -- | Find property specs for element fields
-findPropertySpecs :: TBinding (Context -> Graph -> PGM.Schema Graph t v -> PG.ElementKind -> [FieldType]
+findPropertySpecs :: TTermDefinition (Context -> Graph -> PGM.Schema Graph t v -> PG.ElementKind -> [FieldType]
   -> Either (InContext Error) [(FieldType, PGM.ValueSpec, Y.Maybe String)])
 findPropertySpecs = define "findPropertySpecs" $
   doc "Find property specs for element fields" $
@@ -556,7 +556,7 @@ findPropertySpecs = define "findPropertySpecs" $
         (var "fields"))
 
 -- | Find a single field with a given annotation key
-findSingleFieldWithAnnotationKey :: TBinding (Context -> Name -> Name -> [FieldType]
+findSingleFieldWithAnnotationKey :: TTermDefinition (Context -> Name -> Name -> [FieldType]
   -> Either (InContext Error) (Y.Maybe FieldType))
 findSingleFieldWithAnnotationKey = define "findSingleFieldWithAnnotationKey" $
   doc "Find a single field with a given annotation key" $
@@ -569,7 +569,7 @@ findSingleFieldWithAnnotationKey = define "findSingleFieldWithAnnotationKey" $
       (right (Lists.safeHead $ var "matches"))
 
 -- | Determine whether the spec has vertex adapters based on direction and out/in specs
-hasVertexAdapters :: TBinding (PG.Direction -> Y.Maybe a -> Y.Maybe b -> Bool)
+hasVertexAdapters :: TTermDefinition (PG.Direction -> Y.Maybe a -> Y.Maybe b -> Bool)
 hasVertexAdapters = define "hasVertexAdapters" $
   doc "Determine whether the spec has vertex adapters based on direction and out/in specs" $
   "dir" ~> "mOutSpec" ~> "mInSpec" ~>
@@ -580,7 +580,7 @@ hasVertexAdapters = define "hasVertexAdapters" $
     @@ var "dir"
 
 -- | Create a projection adapter from a projection spec
-projectionAdapter :: TBinding (Context -> Graph -> t -> Coder Term v -> (FieldType, PGM.ValueSpec, Y.Maybe String) -> String
+projectionAdapter :: TTermDefinition (Context -> Graph -> t -> Coder Term v -> (FieldType, PGM.ValueSpec, Y.Maybe String) -> String
   -> Either (InContext Error) (Name, Adapter Type t Term v))
 projectionAdapter = define "projectionAdapter" $
   doc "Create a projection adapter from a projection spec" $
@@ -590,15 +590,15 @@ projectionAdapter = define "projectionAdapter" $
     Eithers.bind (TermsToElements.parseValueSpec @@ var "cx" @@ var "g" @@ var "values")
       ("traversal" ~> right (pair
         (Core.fieldTypeName $ var "field")
-        (Util.adapter true (Core.fieldTypeType $ var "field") (var "idtype")
-          (Util.coder
+        (Coders.adapter true (Core.fieldTypeType $ var "field") (var "idtype")
+          (Coders.coder
             ("cx'" ~> "typ" ~>
               Eithers.bind (traverseToSingleTerm @@ var "cx'" @@ (var "key" ++ string "-projection") @@ (var "traversal" @@ var "cx'") @@ var "typ")
-                ("t" ~> Util.coderEncode (var "coder") @@ var "cx'" @@ var "t"))
+                ("t" ~> Coders.coderEncode (var "coder") @@ var "cx'" @@ var "t"))
             ("cx'" ~> "_" ~> left (Ctx.inContext (Error.errorOther $ Error.otherError $ string "edge '" ++ var "key" ++ string "' decoding is not yet supported") (var "cx'")))))))
 
 -- | Create a property adapter from a property spec
-propertyAdapter :: TBinding (Context -> Graph -> PGM.Schema Graph t v -> (FieldType, PGM.ValueSpec, Y.Maybe String)
+propertyAdapter :: TTermDefinition (Context -> Graph -> PGM.Schema Graph t v -> (FieldType, PGM.ValueSpec, Y.Maybe String)
   -> Either (InContext Error) (Adapter FieldType (PG.PropertyType t) Field (PG.Property v)))
 propertyAdapter = define "propertyAdapter" $
   doc "Create a property adapter from a property spec" $
@@ -607,37 +607,37 @@ propertyAdapter = define "propertyAdapter" $
     "values">: Pairs.first $ Pairs.second $ var "spec",
     "alias">: Pairs.second $ Pairs.second $ var "spec",
     "key">: wrap PG._PropertyKey $ (Maybes.fromMaybe (Core.unName $ (Core.fieldTypeName $ var "tfield")) (var "alias"))] $
-    Eithers.bind (Util.coderEncode (project PGM._Schema PGM._Schema_propertyTypes @@ var "schema") @@ var "cx" @@ (Core.fieldTypeType $ var "tfield"))
+    Eithers.bind (Coders.coderEncode (project PGM._Schema PGM._Schema_propertyTypes @@ var "schema") @@ var "cx" @@ (Core.fieldTypeType $ var "tfield"))
       ("pt" ~> Eithers.bind (TermsToElements.parseValueSpec @@ var "cx" @@ var "g" @@ var "values")
         ("traversal" ~> right
-          (Util.adapter true (var "tfield")
+          (Coders.adapter true (var "tfield")
             (record PG._PropertyType [
               PG._PropertyType_key>>: var "key",
               PG._PropertyType_value>>: var "pt",
               PG._PropertyType_required>>: true])
-            (Util.coder
+            (Coders.coder
               ("cx'" ~> "dfield" ~>
                 Eithers.bind (traverseToSingleTerm @@ var "cx'" @@ string "property traversal" @@ (var "traversal" @@ var "cx'") @@ (Core.fieldTerm $ var "dfield"))
-                  ("result" ~> Eithers.bind (Util.coderEncode (project PGM._Schema PGM._Schema_propertyValues @@ var "schema") @@ var "cx'" @@ var "result")
+                  ("result" ~> Eithers.bind (Coders.coderEncode (project PGM._Schema PGM._Schema_propertyValues @@ var "schema") @@ var "cx'" @@ var "result")
                     ("value" ~> right (record PG._Property [
                       PG._Property_key>>: var "key",
                       PG._Property_value>>: var "value"]))))
               ("cx'" ~> "_" ~> left (Ctx.inContext (Error.errorOther $ Error.otherError $ string "property decoding is not yet supported") (var "cx'")))))))
 
 -- | Extract property types from property adapters
-propertyTypes :: TBinding ([Adapter FieldType (PG.PropertyType t) Field (PG.Property v)] -> [PG.PropertyType t])
+propertyTypes :: TTermDefinition ([Adapter FieldType (PG.PropertyType t) Field (PG.Property v)] -> [PG.PropertyType t])
 propertyTypes = define "propertyTypes" $
   doc "Extract property types from property adapters" $
   "propAdapters" ~>
     Lists.map
       ("a" ~> record PG._PropertyType [
-        PG._PropertyType_key>>: project PG._PropertyType PG._PropertyType_key @@ (Util.adapterTarget $ var "a"),
-        PG._PropertyType_value>>: project PG._PropertyType PG._PropertyType_value @@ (Util.adapterTarget $ var "a"),
+        PG._PropertyType_key>>: project PG._PropertyType PG._PropertyType_key @@ (Coders.adapterTarget $ var "a"),
+        PG._PropertyType_value>>: project PG._PropertyType PG._PropertyType_value @@ (Coders.adapterTarget $ var "a"),
         PG._PropertyType_required>>: true])
       (var "propAdapters")
 
 -- | Select an edge id from record fields using an id adapter
-selectEdgeId :: TBinding (Context -> M.Map Name Term -> (Name, Adapter Type t Term v) -> Either (InContext Error) v)
+selectEdgeId :: TTermDefinition (Context -> M.Map Name Term -> (Name, Adapter Type t Term v) -> Either (InContext Error) v)
 selectEdgeId = define "selectEdgeId" $
   doc "Select an edge id from record fields using an id adapter" $
   "cx" ~> "fields" ~> "ad" ~> lets [
@@ -645,11 +645,11 @@ selectEdgeId = define "selectEdgeId" $
     "adapter">: Pairs.second $ var "ad"] $
     Maybes.maybe
       (err (var "cx") (string "no " ++ (Core.unName $ var "fname") ++ string " in record"))
-      ("t" ~> Util.coderEncode (Util.adapterCoder $ var "adapter") @@ var "cx" @@ var "t")
+      ("t" ~> Coders.coderEncode (Coders.adapterCoder $ var "adapter") @@ var "cx" @@ var "t")
       (Maps.lookup (var "fname") (var "fields"))
 
 -- | Select a vertex id from record fields using an id adapter
-selectVertexId :: TBinding (Context -> M.Map Name Term -> (Name, Adapter Type t Term v) -> Either (InContext Error) v)
+selectVertexId :: TTermDefinition (Context -> M.Map Name Term -> (Name, Adapter Type t Term v) -> Either (InContext Error) v)
 selectVertexId = define "selectVertexId" $
   doc "Select a vertex id from record fields using an id adapter" $
   "cx" ~> "fields" ~> "ad" ~> lets [
@@ -657,11 +657,11 @@ selectVertexId = define "selectVertexId" $
     "adapter">: Pairs.second $ var "ad"] $
     Maybes.maybe
       (err (var "cx") (string "no " ++ (Core.unName $ var "fname") ++ string " in record"))
-      ("t" ~> Util.coderEncode (Util.adapterCoder $ var "adapter") @@ var "cx" @@ var "t")
+      ("t" ~> Coders.coderEncode (Coders.adapterCoder $ var "adapter") @@ var "cx" @@ var "t")
       (Maps.lookup (var "fname") (var "fields"))
 
 -- | Traverse to a single term, failing if zero or multiple terms are found
-traverseToSingleTerm :: TBinding (Context -> String -> (Term -> Either (InContext Error) [Term]) -> Term -> Either (InContext Error) Term)
+traverseToSingleTerm :: TTermDefinition (Context -> String -> (Term -> Either (InContext Error) [Term]) -> Term -> Either (InContext Error) Term)
 traverseToSingleTerm = define "traverseToSingleTerm" $
   doc "Traverse to a single term, failing if zero or multiple terms are found" $
   "cx" ~> "desc" ~> "traversal" ~> "term" ~>
@@ -674,7 +674,7 @@ traverseToSingleTerm = define "traverseToSingleTerm" $
             (err (var "cx") (var "desc" ++ string " resolved to multiple terms"))))
 
 -- | Create a vertex coder given all components
-vertexCoder :: TBinding (Graph -> PGM.Schema Graph t v -> Type -> t -> Name -> PG.VertexLabel
+vertexCoder :: TTermDefinition (Graph -> PGM.Schema Graph t v -> Type -> t -> Name -> PG.VertexLabel
   -> (Name, Adapter Type t Term v)
   -> [Adapter FieldType (PG.PropertyType t) Field (PG.Property v)]
   -> [(PG.Direction, FieldType, PG.EdgeLabel, Adapter Type (PG.ElementTypeTree t) Term (PG.ElementTree v))]
@@ -688,19 +688,19 @@ vertexCoder = define "vertexCoder" $
       PG._VertexType_id>>: var "vidType",
       PG._VertexType_properties>>: propertyTypes @@ var "propAdapters"],
     "depTypes">: Lists.map
-      ("ea" ~> Util.adapterTarget $ (Pairs.second $ Pairs.second $ Pairs.second $ var "ea"))
+      ("ea" ~> Coders.adapterTarget $ (Pairs.second $ Pairs.second $ Pairs.second $ var "ea"))
       (var "edgeAdapters"),
     "target">: elementTypeTreeVertex @@ var "vtype" @@ var "depTypes"] $
-    Util.adapter true (var "source") (var "target")
-      (Util.coder
+    Coders.adapter true (var "source") (var "target")
+      (Coders.coder
         ("cx" ~> "term" ~>
-          lets ["deannot">: Rewriting.deannotateTerm @@ var "term",
+          lets ["deannot">: Strip.deannotateTerm @@ var "term",
                 -- Unwrap TermMaybe if present
                 "unwrapped">: cases _Term (var "deannot") (Just $ var "deannot") [
                   _Term_maybe>>: "mt" ~> Maybes.fromMaybe (var "deannot") (var "mt")],
                 "rec">: cases _Term (var "unwrapped") Nothing [
                   _Term_record>>: lambda "r" $ var "r"],
-                "fmap">: Schemas.fieldMap @@ (Core.recordFields $ var "rec")] $
+                "fmap">: Resolution.fieldMap @@ (Core.recordFields $ var "rec")] $
           Eithers.bind (selectVertexId @@ var "cx" @@ var "fmap" @@ var "idAdapter")
             ("vid" ~> Eithers.bind (encodeProperties @@ var "cx" @@ var "fmap" @@ var "propAdapters")
               ("props" ~>
@@ -759,7 +759,7 @@ vertexCoder = define "vertexCoder" $
                                   PG._ElementTree_self>>: inject PG._Element PG._Element_edge (var "fixedEdge"),
                                   PG._ElementTree_dependencies>>: project PG._ElementTree PG._ElementTree_dependencies @@ var "tree"]]]
                             @@ (project PG._ElementTree PG._ElementTree_self @@ var "tree"))
-                          (Util.coderEncode (Util.adapterCoder $ var "eaAdapter") @@ var "cx" @@ var "fterm"))
+                          (Coders.coderEncode (Coders.adapterCoder $ var "eaAdapter") @@ var "cx" @@ var "fterm"))
                         (Maps.lookup (Core.fieldTypeName $ var "eaField") (var "fmap")))
                     (var "edgeAdapters")))
                   ("deps" ~>
@@ -772,7 +772,7 @@ vertexCoder = define "vertexCoder" $
         ("cx" ~> "_" ~> left (Ctx.inContext (Error.errorOther $ Error.otherError $ string "vertex decoding is not yet supported") (var "cx"))))
 
 -- | Create a vertex id adapter
-vertexIdAdapter :: TBinding (Context -> Graph -> PGM.Schema Graph t v -> t -> Name -> Name -> [FieldType]
+vertexIdAdapter :: TTermDefinition (Context -> Graph -> PGM.Schema Graph t v -> t -> Name -> Name -> [FieldType]
   -> Either (InContext Error) (Name, Adapter Type t Term v))
 vertexIdAdapter = define "vertexIdAdapter" $
   doc "Create a vertex id adapter" $

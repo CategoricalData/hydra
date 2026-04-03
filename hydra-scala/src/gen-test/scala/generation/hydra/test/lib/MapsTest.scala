@@ -13,9 +13,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.alter[scala.Predef.String, Int]((opt: Option[scala.Predef.String]) => Some("new"))(3)(Map(1 -> "a", 2 -> "b"))) == (
+      {1: "a", 2: "b", 3: "new"}) == (
 
-      Map(1 -> "a", 2 -> "b", 3 -> "new")))
+      {1: "a", 2: "b", 3: "new"}))
 
   }
 
@@ -23,9 +23,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.alter[scala.Predef.String, Int]((opt: Option[scala.Predef.String]) => Some("updated"))(2)(Map(1 -> "a", 2 -> "b"))) == (
+      {1: "a", 2: "updated"}) == (
 
-      Map(1 -> "a", 2 -> "updated")))
+      {1: "a", 2: "updated"}))
 
   }
 
@@ -33,9 +33,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.alter[scala.Predef.String, Int]((opt: Option[scala.Predef.String]) => None)(2)(Map(1 -> "a", 2 -> "b"))) == (
+      {1: "a"}) == (
 
-      Map(1 -> "a")))
+      {1: "a"}))
 
   }
 
@@ -45,9 +45,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.bimap[Int, Int, scala.Predef.String, scala.Predef.String]((k: Int) => hydra.lib.math.mul(k)(2))((v: scala.Predef.String) => hydra.lib.strings.toUpper(v))(Map(1 -> "a", 2 -> "b"))) == (
+      {2: "A", 4: "B"}) == (
 
-      Map(2 -> "A", 4 -> "B")))
+      {2: "A", 4: "B"}))
 
   }
 
@@ -55,9 +55,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.bimap[Int, Int, scala.Predef.String, scala.Predef.String]((k: Int) => hydra.lib.math.mul(k)(2))((v: scala.Predef.String) => hydra.lib.strings.toUpper(v))(Map())) == (
+      {}) == (
 
-      Map()))
+      {}))
 
   }
 
@@ -67,9 +67,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.elems[Int, scala.Predef.String](Map(1 -> "a", 2 -> "b"))) == (
+      ["a", "b"]) == (
 
-      Seq("a", "b")))
+      ["a", "b"]))
 
   }
 
@@ -77,9 +77,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.elems[Int, scala.Predef.String](Map(1 -> "a", 2 -> "b", 3 -> "c"))) == (
+      ["a", "b", "c"]) == (
 
-      Seq("a", "b", "c")))
+      ["a", "b", "c"]))
 
   }
 
@@ -87,9 +87,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.elems(Map())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -99,9 +99,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.empty) == (
+      {}) == (
 
-      Map()))
+      {}))
 
   }
 
@@ -111,10 +111,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.filter[scala.Predef.String, Int]((v: scala.Predef.String) =>
-  hydra.lib.equality.equal[Int](hydra.lib.strings.charAt(0)(v))(97))(Map(1 -> "a", 2 -> "b", 3 -> "ab"))) == (
+      {1: "a", 3: "ab"}) == (
 
-      Map(1 -> "a", 3 -> "ab")))
+      {1: "a", 3: "ab"}))
 
   }
 
@@ -122,10 +121,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.filter[scala.Predef.String, Int]((v: scala.Predef.String) =>
-  hydra.lib.equality.equal[Int](hydra.lib.strings.charAt(0)(v))(97))(Map(1 -> "b", 2 -> "c"))) == (
+      {}) == (
 
-      Map()))
+      {}))
 
   }
 
@@ -133,10 +131,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.filter((v: scala.Predef.String) =>
-  hydra.lib.equality.equal[Int](hydra.lib.strings.charAt(0)(v))(97))(Map())) == (
+      {}) == (
 
-      Map()))
+      {}))
 
   }
 
@@ -146,9 +143,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.filterWithKey[Int, scala.Predef.String]((k: Int) => (v: scala.Predef.String) => hydra.lib.equality.gt[Int](k)(1))(Map(1 -> "a", 2 -> "b", 3 -> "c"))) == (
+      {2: "b", 3: "c"}) == (
 
-      Map(2 -> "b", 3 -> "c")))
+      {2: "b", 3: "c"}))
 
   }
 
@@ -156,9 +153,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.filterWithKey[Int, scala.Predef.String]((k: Int) => (v: scala.Predef.String) => hydra.lib.equality.gt[Int](k)(1))(Map(1 -> "a"))) == (
+      {}) == (
 
-      Map()))
+      {}))
 
   }
 
@@ -166,9 +163,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.filterWithKey((k: Int) => (v) => hydra.lib.equality.gt[Int](k)(1))(Map())) == (
+      {}) == (
 
-      Map()))
+      {}))
 
   }
 
@@ -178,9 +175,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.findWithDefault[scala.Predef.String, Int]("default")(2)(Map(1 -> "a", 2 -> "b"))) == (
+      b) == (
 
-      "b"))
+      b))
 
   }
 
@@ -188,9 +185,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.findWithDefault[scala.Predef.String, Int]("default")(3)(Map(1 -> "a", 2 -> "b"))) == (
+      default) == (
 
-      "default"))
+      default))
 
   }
 
@@ -200,9 +197,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.fromList[Int, scala.Predef.String](Seq(Tuple2(1, "a"), Tuple2(2, "b")))) == (
+      {1: "a", 2: "b"}) == (
 
-      Map(1 -> "a", 2 -> "b")))
+      {1: "a", 2: "b"}))
 
   }
 
@@ -210,9 +207,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.fromList[Int, scala.Predef.String](Seq(Tuple2(1, "a"), Tuple2(1, "b")))) == (
+      {1: "b"}) == (
 
-      Map(1 -> "b")))
+      {1: "b"}))
 
   }
 
@@ -220,9 +217,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.fromList(Seq())) == (
+      {}) == (
 
-      Map()))
+      {}))
 
   }
 
@@ -232,9 +229,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.insert[Int, scala.Predef.String](3)("c")(Map(1 -> "a", 2 -> "b"))) == (
+      {1: "a", 2: "b", 3: "c"}) == (
 
-      Map(1 -> "a", 2 -> "b", 3 -> "c")))
+      {1: "a", 2: "b", 3: "c"}))
 
   }
 
@@ -242,9 +239,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.insert[Int, scala.Predef.String](2)("updated")(Map(1 -> "a", 2 -> "b"))) == (
+      {1: "a", 2: "updated"}) == (
 
-      Map(1 -> "a", 2 -> "updated")))
+      {1: "a", 2: "updated"}))
 
   }
 
@@ -252,9 +249,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.insert[Int, scala.Predef.String](1)("x")(Map())) == (
+      {1: "x"}) == (
 
-      Map(1 -> "x")))
+      {1: "x"}))
 
   }
 
@@ -264,9 +261,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.keys[Int, scala.Predef.String](Map(1 -> "a", 2 -> "b", 3 -> "c"))) == (
+      [1, 2, 3]) == (
 
-      Seq(1, 2, 3)))
+      [1, 2, 3]))
 
   }
 
@@ -274,9 +271,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.keys[Int, scala.Predef.String](Map(1 -> "a", 2 -> "b", 3 -> "c"))) == (
+      [1, 2, 3]) == (
 
-      Seq(1, 2, 3)))
+      [1, 2, 3]))
 
   }
 
@@ -284,9 +281,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.keys(Map())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -296,9 +293,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.lookup[Int, scala.Predef.String](2)(Map(1 -> "a", 2 -> "b"))) == (
+      just("b")) == (
 
-      Some("b")))
+      just("b")))
 
   }
 
@@ -306,9 +303,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.lookup[Int, scala.Predef.String](3)(Map(1 -> "a", 2 -> "b"))) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -316,9 +313,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.lookup(1)(Map())) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -328,9 +325,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.map[scala.Predef.String, scala.Predef.String, Int]((s: scala.Predef.String) => hydra.lib.strings.toUpper(s))(Map(1 -> "a", 2 -> "b"))) == (
+      {1: "A", 2: "B"}) == (
 
-      Map(1 -> "A", 2 -> "B")))
+      {1: "A", 2: "B"}))
 
   }
 
@@ -338,9 +335,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.map((s: scala.Predef.String) => hydra.lib.strings.toUpper(s))(Map())) == (
+      {}) == (
 
-      Map()))
+      {}))
 
   }
 
@@ -350,9 +347,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.mapKeys[Int, Int, scala.Predef.String]((k: Int) => hydra.lib.math.mul(k)(2))(Map(1 -> "a", 2 -> "b"))) == (
+      {2: "a", 4: "b"}) == (
 
-      Map(2 -> "a", 4 -> "b")))
+      {2: "a", 4: "b"}))
 
   }
 
@@ -360,9 +357,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.mapKeys((k: Int) => hydra.lib.math.mul(k)(2))(Map())) == (
+      {}) == (
 
-      Map()))
+      {}))
 
   }
 
@@ -372,7 +369,7 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.member[Int, scala.Predef.String](2)(Map(1 -> "a", 2 -> "b"))) == (
+      true) == (
 
       true))
 
@@ -382,7 +379,7 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.member[Int, scala.Predef.String](3)(Map(1 -> "a", 2 -> "b"))) == (
+      false) == (
 
       false))
 
@@ -392,7 +389,7 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.member(1)(Map())) == (
+      false) == (
 
       false))
 
@@ -404,7 +401,7 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.`null`(Map())) == (
+      true) == (
 
       true))
 
@@ -414,7 +411,7 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.`null`[Int, scala.Predef.String](Map(1 -> "a"))) == (
+      false) == (
 
       false))
 
@@ -426,9 +423,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.delete[Int, scala.Predef.String](2)(Map(1 -> "a", 2 -> "b", 3 -> "c"))) == (
+      {1: "a", 3: "c"}) == (
 
-      Map(1 -> "a", 3 -> "c")))
+      {1: "a", 3: "c"}))
 
   }
 
@@ -436,9 +433,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.delete[Int, scala.Predef.String](4)(Map(1 -> "a", 2 -> "b"))) == (
+      {1: "a", 2: "b"}) == (
 
-      Map(1 -> "a", 2 -> "b")))
+      {1: "a", 2: "b"}))
 
   }
 
@@ -446,9 +443,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.delete(1)(Map())) == (
+      {}) == (
 
-      Map()))
+      {}))
 
   }
 
@@ -458,9 +455,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.singleton[Int, scala.Predef.String](42)("hello")) == (
+      {42: "hello"}) == (
 
-      Map(42 -> "hello")))
+      {42: "hello"}))
 
   }
 
@@ -470,7 +467,7 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.size[Int, scala.Predef.String](Map(1 -> "a", 2 -> "b", 3 -> "c"))) == (
+      3) == (
 
       3))
 
@@ -480,7 +477,7 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.size[Int, scala.Predef.String](Map(42 -> "test"))) == (
+      1) == (
 
       1))
 
@@ -490,7 +487,7 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.size(Map())) == (
+      0) == (
 
       0))
 
@@ -502,9 +499,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.toList[Int, scala.Predef.String](Map(1 -> "a", 2 -> "b"))) == (
+      [(1, "a"), (2, "b")]) == (
 
-      Seq(Tuple2(1, "a"), Tuple2(2, "b"))))
+      [(1, "a"), (2, "b")]))
 
   }
 
@@ -512,9 +509,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.toList[Int, scala.Predef.String](Map(1 -> "a", 2 -> "b", 3 -> "c"))) == (
+      [(1, "a"), (2, "b"), (3, "c")]) == (
 
-      Seq(Tuple2(1, "a"), Tuple2(2, "b"), Tuple2(3, "c"))))
+      [(1, "a"), (2, "b"), (3, "c")]))
 
   }
 
@@ -522,9 +519,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.toList(Map())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -534,9 +531,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.union[Int, scala.Predef.String](Map(1 -> "a", 2 -> "b"))(Map(2 -> "x", 3 -> "c"))) == (
+      {1: "a", 2: "b", 3: "c"}) == (
 
-      Map(1 -> "a", 2 -> "b", 3 -> "c")))
+      {1: "a", 2: "b", 3: "c"}))
 
   }
 
@@ -544,9 +541,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.union[Int, scala.Predef.String](Map(1 -> "a"))(Map())) == (
+      {1: "a"}) == (
 
-      Map(1 -> "a")))
+      {1: "a"}))
 
   }
 
@@ -554,9 +551,9 @@ class MapsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maps.union[Int, scala.Predef.String](Map())(Map(1 -> "a"))) == (
+      {1: "a"}) == (
 
-      Map(1 -> "a")))
+      {1: "a"}))
 
   }
 }

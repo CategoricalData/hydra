@@ -4,15 +4,10 @@
 
 module Hydra.Pg.Mapping where
 
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Pg.Model as Model
-import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Configurable annotation keys for property graph mapping specifications
 data AnnotationSchema =
@@ -123,12 +118,12 @@ _PropertySpec_value = Core.Name "value"
 -- | A set of mappings which translates between Hydra terms and annotations, and application-specific property graph types
 data Schema s t v =
   Schema {
-    schemaVertexIdTypes :: (Util.Coder Core.Type t),
-    schemaVertexIds :: (Util.Coder Core.Term v),
-    schemaEdgeIdTypes :: (Util.Coder Core.Type t),
-    schemaEdgeIds :: (Util.Coder Core.Term v),
-    schemaPropertyTypes :: (Util.Coder Core.Type t),
-    schemaPropertyValues :: (Util.Coder Core.Term v),
+    schemaVertexIdTypes :: (Coders.Coder Core.Type t),
+    schemaVertexIds :: (Coders.Coder Core.Term v),
+    schemaEdgeIdTypes :: (Coders.Coder Core.Type t),
+    schemaEdgeIds :: (Coders.Coder Core.Term v),
+    schemaPropertyTypes :: (Coders.Coder Core.Type t),
+    schemaPropertyValues :: (Coders.Coder Core.Term v),
     schemaAnnotations :: AnnotationSchema,
     schemaDefaultVertexId :: v,
     schemaDefaultEdgeId :: v}

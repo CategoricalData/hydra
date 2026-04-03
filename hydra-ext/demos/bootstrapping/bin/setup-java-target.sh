@@ -56,7 +56,7 @@ done
 # Hand-written test files
 echo "  Copying test infrastructure..."
 mkdir -p "$OUTPUT_DIR/src/test/java/hydra"
-for f in ReductionTest.java VisitorTest.java TestSuiteRunner.java; do
+for f in ReductionTest.java VisitorTest.java TestSuiteRunner.java TestEnv.java; do
     if [ -f "$HYDRA_JAVA_DIR/src/test/java/hydra/$f" ]; then
         cp "$HYDRA_JAVA_DIR/src/test/java/hydra/$f" "$OUTPUT_DIR/src/test/java/hydra/"
     fi

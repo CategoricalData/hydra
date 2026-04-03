@@ -467,7 +467,7 @@ public interface Core {
   }
 
   static <T0, T1> hydra.util.Maybe<T1> checkUndefinedTypeVariablesInType(T0 path, hydra.graph.Graph cx, hydra.core.Type typ, java.util.function.Function<hydra.core.Name, hydra.util.Maybe<T1>> mkError) {
-    hydra.util.PersistentSet<hydra.core.Name> freeVars = hydra.Rewriting.freeVariablesInType(typ);
+    hydra.util.PersistentSet<hydra.core.Name> freeVars = hydra.Variables.freeVariablesInType(typ);
     hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> undefined = new hydra.util.Lazy<>(() -> hydra.lib.sets.Difference.apply(
       freeVars,
       (cx).typeVariables));
@@ -481,7 +481,7 @@ public interface Core {
   }
 
   static <T0, T1> hydra.util.Maybe<T1> checkUndefinedTypeVariablesInTypeScheme(T0 path, hydra.graph.Graph cx, hydra.core.TypeScheme ts, java.util.function.Function<hydra.core.Name, hydra.util.Maybe<T1>> mkError) {
-    hydra.util.PersistentSet<hydra.core.Name> freeVars = hydra.Rewriting.freeVariablesInTypeScheme(ts);
+    hydra.util.PersistentSet<hydra.core.Name> freeVars = hydra.Variables.freeVariablesInTypeScheme(ts);
     hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> undefined = new hydra.util.Lazy<>(() -> hydra.lib.sets.Difference.apply(
       freeVars,
       (cx).typeVariables));

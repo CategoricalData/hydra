@@ -66,31 +66,31 @@ module_ = Module ns elements
     Just ("Reflection functions for working with term, type, and literal type variants, as well as numeric precision.")
   where
     elements = [
-      toTermDefinition eliminationVariant,
-      toTermDefinition eliminationVariants,
-      toTermDefinition floatTypePrecision,
-      toTermDefinition floatTypes,
-      toTermDefinition floatValueType,
-      toTermDefinition functionVariant,
-      toTermDefinition functionVariants,
-      toTermDefinition integerTypeIsSigned,
-      toTermDefinition integerTypePrecision,
-      toTermDefinition integerTypes,
-      toTermDefinition integerValueType,
-      toTermDefinition literalType,
-      toTermDefinition literalTypeVariant,
-      toTermDefinition literalTypes,
-      toTermDefinition literalVariant,
-      toTermDefinition literalVariants,
-      toTermDefinition termVariant,
-      toTermDefinition termVariants,
-      toTermDefinition typeVariant,
-      toTermDefinition typeVariants]
+      toDefinition eliminationVariant,
+      toDefinition eliminationVariants,
+      toDefinition floatTypePrecision,
+      toDefinition floatTypes,
+      toDefinition floatValueType,
+      toDefinition functionVariant,
+      toDefinition functionVariants,
+      toDefinition integerTypeIsSigned,
+      toDefinition integerTypePrecision,
+      toDefinition integerTypes,
+      toDefinition integerValueType,
+      toDefinition literalType,
+      toDefinition literalTypeVariant,
+      toDefinition literalTypes,
+      toDefinition literalVariant,
+      toDefinition literalVariants,
+      toDefinition termVariant,
+      toDefinition termVariants,
+      toDefinition typeVariant,
+      toDefinition typeVariants]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-eliminationVariant :: TBinding (Elimination -> EliminationVariant)
+eliminationVariant :: TTermDefinition (Elimination -> EliminationVariant)
 eliminationVariant = define "eliminationVariant" $
   doc "Find the elimination inject (constructor) for a given elimination term" $
   match _Elimination Nothing [
@@ -98,7 +98,7 @@ eliminationVariant = define "eliminationVariant" $
     _Elimination_union>>: constant Variants.eliminationVariantUnion,
     _Elimination_wrap>>: constant Variants.eliminationVariantWrap]
 
-eliminationVariants :: TBinding [EliminationVariant]
+eliminationVariants :: TTermDefinition [EliminationVariant]
 eliminationVariants = define "eliminationVariants" $
   doc "All elimination variants (constructors), in a canonical order" $
   list $ injectUnit _EliminationVariant <$> [
@@ -106,7 +106,7 @@ eliminationVariants = define "eliminationVariants" $
     _EliminationVariant_union,
     _EliminationVariant_wrap]
 
-floatTypePrecision :: TBinding (FloatType -> Precision)
+floatTypePrecision :: TTermDefinition (FloatType -> Precision)
 floatTypePrecision = define "floatTypePrecision" $
   doc "Find the precision of a given floating-point type" $
   match _FloatType Nothing [
@@ -114,7 +114,7 @@ floatTypePrecision = define "floatTypePrecision" $
     _FloatType_float32>>: constant $ Util.precisionBits $ int32 32,
     _FloatType_float64>>: constant $ Util.precisionBits $ int32 64]
 
-floatTypes :: TBinding [FloatType]
+floatTypes :: TTermDefinition [FloatType]
 floatTypes = define "floatTypes" $
   doc "All floating-point types in a canonical order" $
   list $ injectUnit _FloatType <$> [
@@ -122,7 +122,7 @@ floatTypes = define "floatTypes" $
     _FloatType_float32,
     _FloatType_float64]
 
-floatValueType :: TBinding (FloatValue -> FloatType)
+floatValueType :: TTermDefinition (FloatValue -> FloatType)
 floatValueType = define "floatValueType" $
   doc "Find the float type for a given floating-point value" $
   match _FloatValue Nothing [
@@ -130,7 +130,7 @@ floatValueType = define "floatValueType" $
     _FloatValue_float32>>: constant Core.floatTypeFloat32,
     _FloatValue_float64>>: constant Core.floatTypeFloat64]
 
-functionVariant :: TBinding (Function -> FunctionVariant)
+functionVariant :: TTermDefinition (Function -> FunctionVariant)
 functionVariant = define "functionVariant" $
   doc "Find the function inject (constructor) for a given function" $
   match _Function Nothing [
@@ -138,7 +138,7 @@ functionVariant = define "functionVariant" $
     _Function_lambda>>: constant Variants.functionVariantLambda,
     _Function_primitive>>: constant Variants.functionVariantPrimitive]
 
-functionVariants :: TBinding [FunctionVariant]
+functionVariants :: TTermDefinition [FunctionVariant]
 functionVariants = define "functionVariants" $
   doc "All function variants (constructors), in a canonical order" $
   list $ injectUnit _FunctionVariant <$> [
@@ -146,7 +146,7 @@ functionVariants = define "functionVariants" $
     _FunctionVariant_lambda,
     _FunctionVariant_primitive]
 
-integerTypeIsSigned :: TBinding (IntegerType -> Bool)
+integerTypeIsSigned :: TTermDefinition (IntegerType -> Bool)
 integerTypeIsSigned = define "integerTypeIsSigned" $
   doc "Find whether a given integer type is signed (true) or unsigned (false)" $
   match _IntegerType Nothing [
@@ -160,7 +160,7 @@ integerTypeIsSigned = define "integerTypeIsSigned" $
     _IntegerType_uint32>>: constant false,
     _IntegerType_uint64>>: constant false]
 
-integerTypePrecision :: TBinding (IntegerType -> Precision)
+integerTypePrecision :: TTermDefinition (IntegerType -> Precision)
 integerTypePrecision = define "integerTypePrecision" $
   doc "Find the precision of a given integer type" $
   match _IntegerType Nothing [
@@ -174,7 +174,7 @@ integerTypePrecision = define "integerTypePrecision" $
     _IntegerType_uint32>>: constant $ Util.precisionBits $ int32 32,
     _IntegerType_uint64>>: constant $ Util.precisionBits $ int32 64]
 
-integerTypes :: TBinding [IntegerType]
+integerTypes :: TTermDefinition [IntegerType]
 integerTypes = define "integerTypes" $
   doc "All integer types, in a canonical order" $
   list $ injectUnit _IntegerType <$> [
@@ -188,7 +188,7 @@ integerTypes = define "integerTypes" $
     _IntegerType_uint32,
     _IntegerType_uint64]
 
-integerValueType :: TBinding (IntegerValue -> IntegerType)
+integerValueType :: TTermDefinition (IntegerValue -> IntegerType)
 integerValueType = define "integerValueType" $
   doc "Find the integer type for a given integer value" $
   match _IntegerValue Nothing [
@@ -202,7 +202,7 @@ integerValueType = define "integerValueType" $
     _IntegerValue_uint32>>: constant Core.integerTypeUint32,
     _IntegerValue_uint64>>: constant Core.integerTypeUint64]
 
-literalType :: TBinding (Literal -> LiteralType)
+literalType :: TTermDefinition (Literal -> LiteralType)
 literalType = define "literalType" $
   doc "Find the literal type for a given literal value" $
   match _Literal Nothing [
@@ -212,7 +212,7 @@ literalType = define "literalType" $
     _Literal_integer>>: injectLambda _LiteralType _LiteralType_integer <.> integerValueType,
     _Literal_string>>: constant $ inject _LiteralType _LiteralType_string unit]
 
-literalTypeVariant :: TBinding (LiteralType -> LiteralVariant)
+literalTypeVariant :: TTermDefinition (LiteralType -> LiteralVariant)
 literalTypeVariant = define "literalTypeVariant" $
   doc "Find the literal type inject (constructor) for a given literal value" $
   match _LiteralType Nothing [
@@ -222,7 +222,7 @@ literalTypeVariant = define "literalTypeVariant" $
     _LiteralType_integer>>: constant $ Variants.literalVariantInteger,
     _LiteralType_string>>:  constant $ Variants.literalVariantString]
 
-literalTypes :: TBinding [LiteralType]
+literalTypes :: TTermDefinition [LiteralType]
 literalTypes = define "literalTypes" $
   doc "All literal types, in a canonical order" $
   Lists.concat $ list [
@@ -234,12 +234,12 @@ literalTypes = define "literalTypes" $
     list [
       Core.literalTypeString]]
 
-literalVariant :: TBinding (Literal -> LiteralVariant)
+literalVariant :: TTermDefinition (Literal -> LiteralVariant)
 literalVariant = define "literalVariant" $
   doc "Find the literal inject (constructor) for a given literal value" $
   literalTypeVariant <.> literalType
 
-literalVariants :: TBinding [LiteralVariant]
+literalVariants :: TTermDefinition [LiteralVariant]
 literalVariants = define "literalVariants" $
   doc "All literal variants, in a canonical order" $
   list $ injectUnit _LiteralVariant <$> [
@@ -249,7 +249,7 @@ literalVariants = define "literalVariants" $
     _LiteralVariant_integer,
     _LiteralVariant_string]
 
-termVariant :: TBinding (Term -> TermVariant)
+termVariant :: TTermDefinition (Term -> TermVariant)
 termVariant = define "termVariant" $
   doc "Find the term inject (constructor) for a given term" $
   match _Term Nothing [
@@ -272,7 +272,7 @@ termVariant = define "termVariant" $
     _Term_variable>>: constant Variants.termVariantVariable,
     _Term_wrap>>: constant Variants.termVariantWrap]
 
-termVariants :: TBinding [TermVariant]
+termVariants :: TTermDefinition [TermVariant]
 termVariants = define "termVariants" $
   doc "All term (expression) variants, in a canonical order" $
   list $ injectUnit _TermVariant <$> [
@@ -294,7 +294,7 @@ termVariants = define "termVariants" $
     _TermVariant_variable,
     _TermVariant_wrap]
 
-typeVariant :: TBinding (Type -> TypeVariant)
+typeVariant :: TTermDefinition (Type -> TypeVariant)
 typeVariant = define "typeVariant" $
   doc "Find the type inject (constructor) for a given type" $
   match _Type Nothing [
@@ -316,7 +316,7 @@ typeVariant = define "typeVariant" $
     _Type_void>>: constant Variants.typeVariantVoid,
     _Type_wrap>>: constant Variants.typeVariantWrap]
 
-typeVariants :: TBinding [TypeVariant]
+typeVariants :: TTermDefinition [TypeVariant]
 typeVariants = define "typeVariants" $
   doc "All type variants, in a canonical order" $
   list $ injectUnit _TypeVariant <$> [

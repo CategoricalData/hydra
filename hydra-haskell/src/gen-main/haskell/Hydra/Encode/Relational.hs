@@ -10,17 +10,12 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Relational as Relational
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 columnName :: Relational.ColumnName -> Core.Term
 columnName x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.relational.ColumnName"),
-      Core.wrappedTermBody = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Relational.unColumnName x))})
+      Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Relational.unColumnName x))})
 
 columnSchema :: (t0 -> Core.Term) -> Relational.ColumnSchema t0 -> Core.Term
 columnSchema t x =
@@ -62,7 +57,7 @@ relationName :: Relational.RelationName -> Core.Term
 relationName x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.relational.RelationName"),
-      Core.wrappedTermBody = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Relational.unRelationName x))})
+      Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Relational.unRelationName x))})
 
 relationSchema :: (t0 -> Core.Term) -> Relational.RelationSchema t0 -> Core.Term
 relationSchema t x =

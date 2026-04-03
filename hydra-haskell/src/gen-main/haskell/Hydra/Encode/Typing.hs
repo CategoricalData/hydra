@@ -12,11 +12,6 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 functionStructure :: (t0 -> Core.Term) -> Typing.FunctionStructure t0 -> Core.Term
 functionStructure env x =
@@ -85,7 +80,7 @@ typeConstraint x =
           Core.fieldTerm = (Core_.type_ (Typing.typeConstraintRight x))},
         Core.Field {
           Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Typing.typeConstraintComment x))}]})
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Typing.typeConstraintComment x))}]})
 
 typeSubst :: Typing.TypeSubst -> Core.Term
 typeSubst x =

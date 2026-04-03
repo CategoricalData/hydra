@@ -1573,7 +1573,7 @@
                                   {
                                     "application": {
                                       "argument": {"variable": "expected"},
-                                      "function": {"variable": "hydra.show.meta.termVariant"}}},
+                                      "function": {"variable": "hydra.show.variants.termVariant"}}},
                                   {"literal": {"string": " term but found "}},
                                   {
                                     "application": {
@@ -1649,7 +1649,7 @@
                                   {
                                     "application": {
                                       "argument": {"variable": "expected"},
-                                      "function": {"variable": "hydra.show.meta.typeVariant"}}},
+                                      "function": {"variable": "hydra.show.variants.typeVariant"}}},
                                   {"literal": {"string": " type but found "}},
                                   {
                                     "application": {
@@ -1806,7 +1806,7 @@
             "variables": ["t0"]}]}}],
   "description": ["String representations of hydra.error.core types"],
   "namespace": "hydra.show.error.core",
-  "termDependencies": ["hydra.show.core", "hydra.show.meta"],
+  "termDependencies": ["hydra.show.core", "hydra.show.variants"],
   "typeDependencies": [
     "hydra.paths",
     "hydra.ast",
@@ -1816,6 +1816,7 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
+    "hydra.error.module",
     "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",

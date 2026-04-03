@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 module Hydra.Sources.Test.Lib.Maps where
 
 -- Standard imports for shallow DSL tests
@@ -17,52 +19,79 @@ import qualified Data.Map                     as M
 -- Additional imports specific to this file
 import Hydra.Testing
 import Hydra.Sources.Libraries
+import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
+import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Maps as Maps
+import qualified Hydra.Dsl.Meta.Lib.Math as Math
+import qualified Hydra.Dsl.Meta.Lib.Maybes as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
+import qualified Hydra.Dsl.Meta.Lib.Chars as Chars
+import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
 
 ns :: Namespace
 ns = Namespace "hydra.test.lib.maps"
 
 module_ :: Module
-module_ = Module ns elements [] [] $
+module_ = Module ns elements
+    [Namespace "hydra.reduction", ShowCore.ns]
+    kernelTypesNamespaces $
     Just "Test cases for hydra.lib.maps primitives"
   where
-    elements = [Phantoms.toTermDefinition allTests]
+    elements = [Phantoms.toDefinition allTests]
 
-emptyStringMap = intStringMap []
-intStringMapOrEmpty = intStringMap
+(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
+(#) = (Phantoms.@@)
+infixl 1 #
 
----- This is a hack for HSpec. We create a map<string, string>, because that is the map type we default to when there are no elements.
---emptyStringMap :: TTerm Term
---emptyStringMap = primitive _maps_fromList @@ (primitive _lists_drop @@ int32 1 @@ list [pair (string "") (string "")])
+showInt32 :: TTerm (Int -> String)
+showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")
 
--- Helper to create map terms (Int -> String maps)
-intStringMap :: [(Int, String)] -> TTerm Term
-intStringMap pairs = Core.termMap $ Phantoms.map $ M.fromList $ fmap toPair pairs
-  where
-    toPair (k, v) = (int32 k, string v)
+showString' :: TTerm (String -> String)
+showString' = Phantoms.lambda "s" $ Literals.showString (Phantoms.var "s")
 
---intStringMapOrEmpty :: [(Int, String)] -> TTerm Term
---intStringMapOrEmpty pairs = if L.null pairs then emptyStringMap else intStringMap pairs
+showBool :: TTerm (Bool -> String)
+showBool = Phantoms.lambda "b" $ Literals.showBoolean (Phantoms.var "b")
 
--- Helper for optional values
-optionalString :: Maybe String -> TTerm Term
-optionalString Nothing = Core.termMaybe nothing
-optionalString (Just s) = Core.termMaybe $ just (Terms.string s)
+showIntStringMap :: TTerm (M.Map Int String -> String)
+showIntStringMap = Phantoms.lambda "m" $ ShowCore.map_ # showInt32 # showString' # Phantoms.var "m"
 
--- Test groups for hydra.lib.maps primitives
+showMaybeString :: TTerm (Maybe String -> String)
+showMaybeString = Phantoms.lambda "mx" $ ShowCore.maybe_ # showString' # Phantoms.var "mx"
+
+showIntList :: TTerm ([Int] -> String)
+showIntList = Phantoms.lambda "xs" $ ShowCore.list_ # showInt32 # Phantoms.var "xs"
+
+showStringList :: TTerm ([String] -> String)
+showStringList = Phantoms.lambda "xs" $ ShowCore.list_ # showString' # Phantoms.var "xs"
+
+showPairList :: TTerm ([(Int, String)] -> String)
+showPairList = Phantoms.lambda "xs" $ ShowCore.list_ # (Phantoms.lambda "p" $ ShowCore.pair_ # showInt32 # showString' # Phantoms.var "p") # Phantoms.var "xs"
+
+-- Phantom-typed map helper
+pMap :: [(Int, String)] -> TTerm (M.Map Int String)
+pMap pairs = Phantoms.map $ M.fromList $ fmap (\(k, v) -> (Phantoms.int32 k, Phantoms.string v)) pairs
+
+pPairList :: [(Int, String)] -> TTerm [(Int, String)]
+pPairList pairs = Phantoms.list $ fmap (\(k, v) -> Phantoms.pair (Phantoms.int32 k) (Phantoms.string v)) pairs
+
+-- Test groups
 
 mapsEmpty :: TTerm TestGroup
 mapsEmpty = subgroup "empty" [
   test "empty map"]
   where
-    test name = primCase name _maps_empty [] emptyStringMap
+    test name = evalPair name showIntStringMap
+      (Maps.empty :: TTerm (M.Map Int String))
+      (pMap [])
 
 mapsSingleton :: TTerm TestGroup
 mapsSingleton = subgroup "singleton" [
   test "single entry" 42 "hello" [(42, "hello")]]
   where
-    test name k v result = primCase name _maps_singleton [int32 k, Terms.string v] (intStringMap result)
+    test name k v result = evalPair name showIntStringMap
+      (Maps.singleton (Phantoms.int32 k) (Phantoms.string v))
+      (pMap result)
 
 mapsFromList :: TTerm TestGroup
 mapsFromList = subgroup "fromList" [
@@ -70,9 +99,9 @@ mapsFromList = subgroup "fromList" [
   test "duplicate keys" [(1, "a"), (1, "b")] [(1, "b")],
   test "empty list" [] []]
   where
-    test name input expected = primCase name _maps_fromList [
-      list $ Prelude.map (\(k, v) -> Core.termPair $ Phantoms.pair (int32 k) (Terms.string v)) input
-      ] $ intStringMap expected
+    test name input expected = evalPair name showIntStringMap
+      (Maps.fromList (pPairList input))
+      (pMap expected)
 
 mapsToList :: TTerm TestGroup
 mapsToList = subgroup "toList" [
@@ -80,8 +109,9 @@ mapsToList = subgroup "toList" [
   test "unsorted keys" [(3, "c"), (1, "a"), (2, "b")] [(1, "a"), (2, "b"), (3, "c")],
   test "empty map" [] []]
   where
-    test name input expected = primCase name _maps_toList [intStringMap input] (
-      list $ Prelude.map (\(k, v) -> Core.termPair $ Phantoms.pair (int32 k) (Terms.string v)) expected)
+    test name input expected = evalPair name showPairList
+      (Maps.toList (pMap input))
+      (pPairList expected)
 
 mapsInsert :: TTerm TestGroup
 mapsInsert = subgroup "insert" [
@@ -89,7 +119,9 @@ mapsInsert = subgroup "insert" [
   test "update existing" 2 "updated" [(1, "a"), (2, "b")] [(1, "a"), (2, "updated")],
   test "insert into empty" 1 "x" [] [(1, "x")]]
   where
-    test name k v m result = primCase name _maps_insert [int32 k, Terms.string v, intStringMap m] (intStringMap result)
+    test name k v m result = evalPair name showIntStringMap
+      (Maps.insert (Phantoms.int32 k) (Phantoms.string v) (pMap m))
+      (pMap result)
 
 mapsRemove :: TTerm TestGroup
 mapsRemove = subgroup "remove" [
@@ -97,7 +129,9 @@ mapsRemove = subgroup "remove" [
   test "remove non-existing" 4 [(1, "a"), (2, "b")] [(1, "a"), (2, "b")],
   test "remove from empty" 1 [] []]
   where
-    test name k m result = primCase name _maps_delete [int32 k, intStringMap m] (intStringMap result)
+    test name k m result = evalPair name showIntStringMap
+      (Maps.delete (Phantoms.int32 k) (pMap m))
+      (pMap result)
 
 mapsLookup :: TTerm TestGroup
 mapsLookup = subgroup "lookup" [
@@ -105,15 +139,19 @@ mapsLookup = subgroup "lookup" [
   test "key not found" 3 [(1, "a"), (2, "b")] Nothing,
   test "lookup in empty" 1 [] Nothing]
   where
-    test name k m result = primCase name _maps_lookup [int32 k, intStringMap m] (optionalString result)
+    test name k m result = evalPair name showMaybeString
+      (Maps.lookup (Phantoms.int32 k) (pMap m))
+      (maybe Phantoms.nothing (Phantoms.just . Phantoms.string) result)
 
 mapsMember :: TTerm TestGroup
 mapsMember = subgroup "member" [
-  test "key exists" 2 [(1, "a"), (2, "b")] true,
-  test "key missing" 3 [(1, "a"), (2, "b")] false,
-  test "empty map" 1 [] false]
+  test "key exists" 2 [(1, "a"), (2, "b")] True,
+  test "key missing" 3 [(1, "a"), (2, "b")] False,
+  test "empty map" 1 [] False]
   where
-    test name k m result = primCase name _maps_member [int32 k, intStringMap m] result
+    test name k m result = evalPair name showBool
+      (Maps.member (Phantoms.int32 k) (pMap m))
+      (Phantoms.boolean result)
 
 mapsSize :: TTerm TestGroup
 mapsSize = subgroup "size" [
@@ -121,14 +159,18 @@ mapsSize = subgroup "size" [
   test "single entry" [(42, "test")] 1,
   test "empty map" [] 0]
   where
-    test name m result = primCase name _maps_size [intStringMapOrEmpty m] (int32 result)
+    test name m result = evalPair name showInt32
+      (Maps.size (pMap m))
+      (Phantoms.int32 result)
 
 mapsNull :: TTerm TestGroup
 mapsNull = subgroup "null" [
-  test "empty map" [] true,
-  test "non-empty map" [(1, "a")] false]
+  test "empty map" [] True,
+  test "non-empty map" [(1, "a")] False]
   where
-    test name m result = primCase name _maps_null [intStringMapOrEmpty m] result
+    test name m result = evalPair name showBool
+      (Maps.null (pMap m))
+      (Phantoms.boolean result)
 
 mapsKeys :: TTerm TestGroup
 mapsKeys = subgroup "keys" [
@@ -136,7 +178,9 @@ mapsKeys = subgroup "keys" [
   test "unsorted keys" [(3, "c"), (1, "a"), (2, "b")] [1, 2, 3],
   test "empty map" [] []]
   where
-    test name m result = primCase name _maps_keys [intStringMapOrEmpty m] (list $ Prelude.map int32 result)
+    test name m result = evalPair name showIntList
+      (Maps.keys (pMap m))
+      (Phantoms.list $ Phantoms.int32 <$> result)
 
 mapsElems :: TTerm TestGroup
 mapsElems = subgroup "elems" [
@@ -144,24 +188,27 @@ mapsElems = subgroup "elems" [
   test "unsorted keys" [(3, "c"), (1, "a"), (2, "b")] ["a", "b", "c"],
   test "empty map" [] []]
   where
-    test name m result = primCase name _maps_elems [intStringMapOrEmpty m] (list $ Prelude.map Terms.string result)
+    test name m result = evalPair name showStringList
+      (Maps.elems (pMap m))
+      (Phantoms.list $ Phantoms.string <$> result)
 
 mapsMap :: TTerm TestGroup
 mapsMap = subgroup "map" [
   test "map over values" [(1, "a"), (2, "b")] [(1, "A"), (2, "B")],
   test "map empty" [] []]
   where
-    test name m result = primCase name _maps_map [
-      lambda "s" (primitive _strings_toUpper @@ var "s"),
-      intStringMapOrEmpty m] (intStringMapOrEmpty result)
+    test name m result = evalPair name showIntStringMap
+      (Maps.map (Phantoms.lambda "s" $ Strings.toUpper (Phantoms.var "s")) (pMap m))
+      (pMap result)
 
 mapsFindWithDefault :: TTerm TestGroup
 mapsFindWithDefault = subgroup "findWithDefault" [
   test "find existing" "default" 2 [(1, "a"), (2, "b")] "b",
   test "use default" "default" 3 [(1, "a"), (2, "b")] "default"]
   where
-    test name def k m result = primCase name _maps_findWithDefault [
-      Terms.string def, int32 k, intStringMap m] (Terms.string result)
+    test name def k m result = stringEvalPair name
+      (Maps.findWithDefault (Phantoms.string def) (Phantoms.int32 k) (pMap m))
+      (Phantoms.string result)
 
 mapsUnion :: TTerm TestGroup
 mapsUnion = subgroup "union" [
@@ -169,16 +216,18 @@ mapsUnion = subgroup "union" [
   test "union with empty" [(1, "a")] [] [(1, "a")],
   test "empty with map" [] [(1, "a")] [(1, "a")]]
   where
-    test name m1 m2 result = primCase name _maps_union [intStringMap m1, intStringMap m2] (intStringMap result)
+    test name m1 m2 result = evalPair name showIntStringMap
+      (Maps.union (pMap m1) (pMap m2))
+      (pMap result)
 
 mapsMapKeys :: TTerm TestGroup
 mapsMapKeys = subgroup "mapKeys" [
   test "double keys" [(1, "a"), (2, "b")] [(2, "a"), (4, "b")],
   test "empty map" [] []]
   where
-    test name m result = primCase name _maps_mapKeys [
-      lambda "k" (primitive _math_mul @@ var "k" @@ int32 2),
-      intStringMapOrEmpty m] (intStringMapOrEmpty result)
+    test name m result = evalPair name showIntStringMap
+      (Maps.mapKeys (Phantoms.lambda "k" $ Math.mul (Phantoms.var "k") (Phantoms.int32 2)) (pMap m))
+      (pMap result)
 
 mapsFilter :: TTerm TestGroup
 mapsFilter = subgroup "filter" [
@@ -186,9 +235,9 @@ mapsFilter = subgroup "filter" [
   test "filter all" [(1, "b"), (2, "c")] [],
   test "empty map" [] []]
   where
-    test name m result = primCase name _maps_filter [
-      lambda "v" (primitive _equality_equal @@ (primitive _strings_charAt @@ int32 0 @@ var "v") @@ int32 97),  -- 'a' = 97
-      intStringMapOrEmpty m] (intStringMapOrEmpty result)
+    test name m result = evalPair name showIntStringMap
+      (Maps.filter (Phantoms.lambda "v" $ Equality.equal (Chars.toLower (Strings.charAt (Phantoms.int32 0) (Phantoms.var "v"))) (Phantoms.int32 97)) (pMap m))
+      (pMap result)
 
 mapsFilterWithKey :: TTerm TestGroup
 mapsFilterWithKey = subgroup "filterWithKey" [
@@ -196,41 +245,39 @@ mapsFilterWithKey = subgroup "filterWithKey" [
   test "filter all" [(1, "a")] [],
   test "empty map" [] []]
   where
-    test name m result = primCase name _maps_filterWithKey [
-      lambda "k" (lambda "v" (primitive _equality_gt @@ var "k" @@ int32 1)),
-      intStringMapOrEmpty m] (intStringMapOrEmpty result)
+    test name m result = evalPair name showIntStringMap
+      (Maps.filterWithKey (Phantoms.lambda "k" $ Phantoms.lambda "v" $ Equality.gt (Phantoms.var "k") (Phantoms.int32 1)) (pMap m))
+      (pMap result)
 
 mapsBimap :: TTerm TestGroup
 mapsBimap = subgroup "bimap" [
   test "transform both" [(1, "a"), (2, "b")] [(2, "A"), (4, "B")],
   test "empty map" [] []]
   where
-    test name m result = primCase name _maps_bimap [
-      lambda "k" (primitive _math_mul @@ var "k" @@ int32 2),
-      lambda "v" (primitive _strings_toUpper @@ var "v"),
-      intStringMapOrEmpty m] (intStringMapOrEmpty result)
+    test name m result = evalPair name showIntStringMap
+      (Maps.bimap
+        (Phantoms.lambda "k" $ Math.mul (Phantoms.var "k") (Phantoms.int32 2))
+        (Phantoms.lambda "v" $ Strings.toUpper (Phantoms.var "v"))
+        (pMap m))
+      (pMap result)
 
 mapsAlter :: TTerm TestGroup
 mapsAlter = subgroup "alter" [
-  test "insert new key" 3 [(1, "a"), (2, "b")] [(1, "a"), (2, "b"), (3, "new")],
-  test "update existing key" 2 [(1, "a"), (2, "b")] [(1, "a"), (2, "updated")],
-  test "delete key" 2 [(1, "a"), (2, "b")] [(1, "a")]]
+  testInsert "insert new key" 3 [(1, "a"), (2, "b")] [(1, "a"), (2, "b"), (3, "new")],
+  testUpdate "update existing key" 2 [(1, "a"), (2, "b")] [(1, "a"), (2, "updated")],
+  testDelete "delete key" 2 [(1, "a"), (2, "b")] [(1, "a")]]
   where
-    -- The alter function tests use different functions:
-    -- insert: always return Just "new"
-    test "insert new key" k m result = primCase "insert new key" _maps_alter [
-      lambda "opt" (Core.termMaybe $ just (Terms.string "new")),
-      int32 k, intStringMap m] (intStringMap result)
-    -- update: return Just "updated" if exists
-    test "update existing key" k m result = primCase "update existing key" _maps_alter [
-      lambda "opt" (Core.termMaybe $ just (Terms.string "updated")),
-      int32 k, intStringMap m] (intStringMap result)
-    -- delete: always return Nothing
-    test "delete key" k m result = primCase "delete key" _maps_alter [
-      lambda "opt" (Core.termMaybe nothing),
-      int32 k, intStringMap m] (intStringMap result)
+    testInsert name k m result = evalPair name showIntStringMap
+      (Maps.alter (Phantoms.lambda "_" $ Phantoms.just (Phantoms.string "new")) (Phantoms.int32 k) (pMap m))
+      (pMap result)
+    testUpdate name k m result = evalPair name showIntStringMap
+      (Maps.alter (Phantoms.lambda "_" $ Phantoms.just (Phantoms.string "updated")) (Phantoms.int32 k) (pMap m))
+      (pMap result)
+    testDelete name k m result = evalPair name showIntStringMap
+      (Maps.alter (Phantoms.lambda "_" $ (Phantoms.nothing :: TTerm (Maybe String))) (Phantoms.int32 k) (pMap m))
+      (pMap result)
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.maps primitives" $
     supergroup "hydra.lib.maps primitives" [

@@ -1,6 +1,6 @@
 package hydra;
 
-import hydra.util.Coder;
+import hydra.coders.Coder;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;

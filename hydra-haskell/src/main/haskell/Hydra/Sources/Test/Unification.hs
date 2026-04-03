@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 -- | Test cases for type unification operations
 module Hydra.Sources.Test.Unification where
 
@@ -8,14 +10,25 @@ import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import qualified Hydra.Dsl.Meta.Lib.Pairs     as Pairs
 import qualified Hydra.Dsl.Meta.Types         as T
+import qualified Hydra.Dsl.Typing             as Typing
+import qualified Hydra.Dsl.Meta.Lib.Eithers   as Eithers
+import qualified Hydra.Dsl.Meta.Lib.Lists     as Lists
+import qualified Hydra.Dsl.Meta.Lib.Literals  as Literals
+import qualified Hydra.Dsl.Meta.Lib.Maps      as Maps
+import qualified Hydra.Dsl.Meta.Lib.Strings   as Strings
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
+import qualified Hydra.Sources.Kernel.Terms.Lexical as LexicalModule
+import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 import Hydra.Testing
+import Hydra.Sources.Libraries
+import qualified Hydra.Sources.Kernel.Terms.Unification as UnificationModule
 
 
 ns :: Namespace
@@ -23,18 +36,99 @@ ns = Namespace "hydra.test.unification"
 
 module_ :: Module
 module_ = Module ns elements
-    []
+    [UnificationModule.ns, LexicalModule.ns, ShowCore.ns]
     kernelTypesNamespaces
     (Just "Test cases for type unification operations")
   where
-    elements = [Phantoms.toTermDefinition allTests]
+    elements = [Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 -- Helper to build names
 nm :: String -> TTerm Name
 nm s = Core.name $ Phantoms.string s
+
+-- Local alias for polymorphic application
+(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
+(#) = (Phantoms.@@)
+infixl 1 #
+
+-- | Universal variableOccursInType test case
+variableOccursCase :: String -> TTerm Name -> TTerm Type -> TTerm Bool -> TTerm TestCaseWithMetadata
+variableOccursCase cname variable typ expected =
+  universalCase cname
+    (Literals.showBoolean (UnificationModule.variableOccursInType # variable # typ))
+    (Literals.showBoolean expected)
+
+-- | Build schema types map from a list of names.
+-- Each name gets TypeScheme [] (TypeVariable name) Nothing
+buildSchemaMap :: TTerm [Name] -> TTerm (M.Map Name TypeScheme)
+buildSchemaMap names = Maps.fromList (Lists.map
+  (Phantoms.lambda "n" $ Phantoms.pair (Phantoms.var "n") (T.mono (Core.typeVariable (Phantoms.var "n"))))
+  names)
+
+-- | Show a TypeSubst as a sorted string like "{a: int32, b: string}"
+showTypeSubst :: TTerm TypeSubst -> TTerm String
+showTypeSubst ts = Strings.cat (Phantoms.list [
+  Phantoms.string "{",
+  Strings.intercalate (Phantoms.string ", ")
+    (Lists.map (Phantoms.lambda "p" $ Strings.cat (Phantoms.list [
+      Core.unName (Pairs.first (Phantoms.var "p")),
+      Phantoms.string ": ",
+      ShowCore.type_ # Pairs.second (Phantoms.var "p")]))
+      (Maps.toList (Typing.unTypeSubst ts))),
+  Phantoms.string "}"])
+
+-- | Show a list of TypeConstraints as "[(left ~ right), ...]"
+showConstraints :: TTerm [TypeConstraint] -> TTerm String
+showConstraints cs = Strings.cat (Phantoms.list [
+  Phantoms.string "[",
+  Strings.intercalate (Phantoms.string ", ")
+    (Lists.map (Phantoms.lambda "c" $ Strings.cat (Phantoms.list [
+      Phantoms.string "(",
+      ShowCore.type_ # Typing.typeConstraintLeft (Phantoms.var "c"),
+      Phantoms.string " ~ ",
+      ShowCore.type_ # Typing.typeConstraintRight (Phantoms.var "c"),
+      Phantoms.string ")"]))
+      cs),
+  Phantoms.string "]"])
+
+-- | Universal unifyTypes test case (expecting success)
+unifyTypesCase :: String -> TTerm [Name] -> TTerm Type -> TTerm Type -> [(TTerm Name, TTerm Type)] -> TTerm TestCaseWithMetadata
+unifyTypesCase cname schemaTypes left right substPairs = universalCase cname
+  (Eithers.either_
+    (Phantoms.lambda "_" $ Phantoms.string "failure")
+    (Phantoms.lambda "ts" $ showTypeSubst (Phantoms.var "ts"))
+    (UnificationModule.unifyTypes # LexicalModule.emptyContext # buildSchemaMap schemaTypes # left # right # Phantoms.string "test"))
+  (showTypeSubst (Phantoms.wrap _TypeSubst (Phantoms.map (M.fromList substPairs))))
+
+-- | Universal unifyTypes test case (expecting failure)
+unifyTypesFailCase :: String -> TTerm [Name] -> TTerm Type -> TTerm Type -> String -> TTerm TestCaseWithMetadata
+unifyTypesFailCase cname schemaTypes left right _errSubstring = universalCase cname
+  (Eithers.either_
+    (Phantoms.lambda "_" $ Phantoms.string "failure")
+    (Phantoms.lambda "ts" $ showTypeSubst (Phantoms.var "ts"))
+    (UnificationModule.unifyTypes # LexicalModule.emptyContext # buildSchemaMap schemaTypes # left # right # Phantoms.string "test"))
+  (Phantoms.string "failure")
+
+-- | Universal joinTypes test case (expecting success)
+joinTypesCase :: String -> TTerm Type -> TTerm Type -> TTerm [TypeConstraint] -> TTerm TestCaseWithMetadata
+joinTypesCase cname left right constraints = universalCase cname
+  (Eithers.either_
+    (Phantoms.lambda "_" $ Phantoms.string "failure")
+    (Phantoms.lambda "cs" $ showConstraints (Phantoms.var "cs"))
+    (UnificationModule.joinTypes # LexicalModule.emptyContext # left # right # Phantoms.string "test"))
+  (showConstraints constraints)
+
+-- | Universal joinTypes test case (expecting failure)
+joinTypesFailCase :: String -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
+joinTypesFailCase cname left right = universalCase cname
+  (Eithers.either_
+    (Phantoms.lambda "_" $ Phantoms.string "failure")
+    (Phantoms.lambda "cs" $ showConstraints (Phantoms.var "cs"))
+    (UnificationModule.joinTypes # LexicalModule.emptyContext # left # right # Phantoms.string "test"))
+  (Phantoms.string "failure")
 
 -- ============================================================
 -- variableOccursInType tests
@@ -406,7 +500,7 @@ joinTypesTests = subgroup "joinTypes" [
 -- All tests
 -- ============================================================
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Test cases for type unification operations" $
     supergroup "unification" [

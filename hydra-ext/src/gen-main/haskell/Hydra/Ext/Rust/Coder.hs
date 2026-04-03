@@ -6,6 +6,7 @@ module Hydra.Ext.Rust.Coder where
 
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
+import qualified Hydra.Environment as Environment
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Ext.Rust.Language as Language
 import qualified Hydra.Ext.Rust.Serde as Serde
@@ -22,16 +23,12 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
-import qualified Hydra.Rewriting as Rewriting
-import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Serialization as Serialization
+import qualified Hydra.Strip as Strip
 import qualified Hydra.Util as Util
+import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
 
 encodeElimination :: Context.Context -> t0 -> Core.Elimination -> Maybe Core.Term -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeElimination cx g elim marg =
@@ -91,7 +88,7 @@ encodeEnumVariant cx g ft =
 
       let fname = Core.unName (Core.fieldTypeName ft)
           ftyp = Core.fieldTypeType ft
-          dtyp = Rewriting.deannotateType ftyp
+          dtyp = Strip.deannotateType ftyp
           isUnit =
                   case dtyp of
                     Core.TypeUnit -> True
@@ -250,7 +247,7 @@ encodeTerm cx g term =
             field = Core.injectionField v0
             fname = Formatting.capitalize (Core.unName (Core.fieldName field))
             fterm = Core.fieldTerm field
-            dterm = Rewriting.deannotateTerm fterm
+            dterm = Strip.deannotateTerm fterm
             isUnit =
                     case dterm of
                       Core.TermUnit -> True
@@ -296,7 +293,7 @@ encodeTermDefinition cx g tdef =
 encodeType :: Context.Context -> t0 -> Core.Type -> Either (Context.InContext Errors.Error) Syntax.Type
 encodeType cx g t =
 
-      let typ = Rewriting.deannotateType t
+      let typ = Strip.deannotateType t
       in case typ of
         Core.TypeAnnotated v0 -> encodeType cx g (Core.annotatedTypeBody v0)
         Core.TypeApplication v0 -> encodeType cx g (Core.applicationTypeFunction v0)
@@ -340,12 +337,12 @@ encodeTypeDefinition cx g tdef =
           typ = Module.typeDefinitionType tdef
           lname = Formatting.capitalize (Names.localNameOf name)
           freeVars =
-                  Lists.filter (\v -> Lists.null (Lists.tail (Strings.splitOn "." (Core.unName v)))) (Sets.toList (Rewriting.freeVariablesInType typ))
+                  Lists.filter (\v -> Lists.null (Lists.tail (Strings.splitOn "." (Core.unName v)))) (Sets.toList (Variables.freeVariablesInType typ))
           generics =
                   Lists.map (\v -> Syntax.GenericParam {
                     Syntax.genericParamName = (Formatting.capitalize (Core.unName v)),
                     Syntax.genericParamBounds = []}) freeVars
-          dtyp = Rewriting.deannotateType typ
+          dtyp = Strip.deannotateType typ
       in (Eithers.bind (case dtyp of
         Core.TypeRecord v0 -> Eithers.bind (Eithers.mapList (encodeStructField cx g) v0) (\sfields -> Right (Syntax.ItemStruct (Syntax.StructDef {
           Syntax.structDefName = lname,
@@ -387,7 +384,7 @@ encodeTypeDefinition cx g tdef =
 moduleToRust :: Module.Module -> [Module.Definition] -> Context.Context -> t0 -> Either (Context.InContext Errors.Error) (M.Map String String)
 moduleToRust mod defs cx g =
 
-      let partitioned = Schemas.partitionDefinitions defs
+      let partitioned = Environment.partitionDefinitions defs
           typeDefs = Pairs.first partitioned
           termDefs = Pairs.second partitioned
       in (Eithers.bind (Eithers.mapList (encodeTypeDefinition cx g) typeDefs) (\typeItems -> Eithers.bind (Eithers.mapList (encodeTermDefinition cx g) termDefs) (\termItems ->

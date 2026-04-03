@@ -8,6 +8,7 @@ from functools import lru_cache
 from hydra.dsl.python import Just, Maybe, Nothing, frozenlist
 from typing import TypeVar, cast
 import hydra.core
+import hydra.environment
 import hydra.graph
 import hydra.lexical
 import hydra.lib.equality
@@ -21,11 +22,14 @@ import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
 import hydra.paths
+import hydra.resolution
 import hydra.rewriting
-import hydra.schemas
+import hydra.scoping
 import hydra.sorting
+import hydra.strip
 import hydra.substitution
 import hydra.typing
+import hydra.variables
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
@@ -37,7 +41,7 @@ def augment_bindings_with_new_free_vars(cx: hydra.graph.Graph, bound_vars: froze
 
     @lru_cache(1)
     def types() -> FrozenDict[hydra.core.Name, hydra.core.Type]:
-        return hydra.lib.maps.map((lambda x1: hydra.rewriting.type_scheme_to_f_type(x1)), cx.bound_types)
+        return hydra.lib.maps.map((lambda x1: hydra.scoping.type_scheme_to_f_type(x1)), cx.bound_types)
     def wrap_after_type_lambdas(vars: frozenlist[tuple[hydra.core.Name, Maybe[hydra.core.Type]]], term: hydra.core.Term) -> hydra.core.Term:
         match term:
             case hydra.core.TermTypeLambda(value=tl):
@@ -48,7 +52,7 @@ def augment_bindings_with_new_free_vars(cx: hydra.graph.Graph, bound_vars: froze
     def augment(b: hydra.core.Binding) -> tuple[hydra.core.Binding, Maybe[tuple[hydra.core.Name, hydra.core.Term]]]:
         @lru_cache(1)
         def free_vars() -> frozenlist[hydra.core.Name]:
-            return hydra.lib.sets.to_list(hydra.lib.sets.intersection(bound_vars, hydra.rewriting.free_variables_in_term(b.term)))
+            return hydra.lib.sets.to_list(hydra.lib.sets.intersection(bound_vars, hydra.variables.free_variables_in_term(b.term)))
         @lru_cache(1)
         def var_type_pairs() -> frozenlist[tuple[hydra.core.Name, Maybe[hydra.core.Type]]]:
             return hydra.lib.lists.map((lambda v: (v, hydra.lib.maps.lookup(v, types()))), free_vars())
@@ -69,7 +73,7 @@ def binding_is_polymorphic(binding: hydra.core.Binding) -> bool:
 def binding_uses_context_type_vars(cx: hydra.graph.Graph, binding: hydra.core.Binding) -> bool:
     r"""Check if a binding's type uses any type variables from the given Graph. Returns True if the free type variables in the binding's type intersect with the type variables in scope (graphTypeVariables)."""
 
-    return hydra.lib.maybes.maybe((lambda : False), (lambda ts: (free_in_type := hydra.rewriting.free_variables_in_type(ts.type), context_type_vars := cx.type_variables, hydra.lib.logic.not_(hydra.lib.sets.null(hydra.lib.sets.intersection(free_in_type, context_type_vars))))[2]), binding.type)
+    return hydra.lib.maybes.maybe((lambda : False), (lambda ts: (free_in_type := hydra.variables.free_variables_in_type(ts.type), context_type_vars := cx.type_variables, hydra.lib.logic.not_(hydra.lib.sets.null(hydra.lib.sets.intersection(free_in_type, context_type_vars))))[2]), binding.type)
 
 def count_var_occurrences(name: hydra.core.Name, term: hydra.core.Term) -> int:
     r"""Count the number of occurrences of a variable name in a term. Assumes no variable shadowing."""
@@ -102,19 +106,19 @@ def hoist_let_bindings_with_predicate(is_parent_binding: Callable[[hydra.core.Bi
             return hydra.lib.pairs.second(binding_with_captured_vars)
         @lru_cache(1)
         def types() -> FrozenDict[hydra.core.Name, hydra.core.Type]:
-            return hydra.lib.maps.map((lambda x1: hydra.rewriting.type_scheme_to_f_type(x1)), cx.bound_types)
+            return hydra.lib.maps.map((lambda x1: hydra.scoping.type_scheme_to_f_type(x1)), cx.bound_types)
         @lru_cache(1)
         def captured_term_var_type_pairs() -> frozenlist[tuple[hydra.core.Name, Maybe[hydra.core.Type]]]:
             return hydra.lib.lists.map((lambda v: (v, hydra.lib.maps.lookup(v, types()))), captured_term_vars())
         @lru_cache(1)
         def captured_term_var_types() -> frozenlist[hydra.core.Type]:
-            return hydra.lib.lists.map((lambda typ: hydra.rewriting.deannotate_type_parameters(typ)), hydra.lib.maybes.cat(hydra.lib.lists.map((lambda x1: hydra.lib.pairs.second(x1)), captured_term_var_type_pairs())))
+            return hydra.lib.lists.map((lambda typ: hydra.strip.deannotate_type_parameters(typ)), hydra.lib.maybes.cat(hydra.lib.lists.map((lambda x1: hydra.lib.pairs.second(x1)), captured_term_var_type_pairs())))
         @lru_cache(1)
         def free_in_binding_type() -> frozenset[hydra.core.Name]:
-            return hydra.lib.maybes.maybe((lambda : hydra.lib.sets.empty()), (lambda ts: hydra.rewriting.free_variables_in_type(ts.type)), b().type)
+            return hydra.lib.maybes.maybe((lambda : hydra.lib.sets.empty()), (lambda ts: hydra.variables.free_variables_in_type(ts.type)), b().type)
         @lru_cache(1)
         def free_in_captured_var_types() -> frozenset[hydra.core.Name]:
-            return hydra.lib.sets.unions(hydra.lib.lists.map((lambda t: hydra.rewriting.free_variables_in_type(t)), captured_term_var_types()))
+            return hydra.lib.sets.unions(hydra.lib.lists.map((lambda t: hydra.variables.free_variables_in_type(t)), captured_term_var_types()))
         @lru_cache(1)
         def captured_type_vars() -> frozenlist[hydra.core.Name]:
             return hydra.lib.sets.to_list(hydra.lib.sets.intersection(cx.type_variables, hydra.lib.sets.union(free_in_binding_type(), free_in_captured_var_types())))
@@ -129,10 +133,10 @@ def hoist_let_bindings_with_predicate(is_parent_binding: Callable[[hydra.core.Bi
             return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(captured_term_var_types()), hydra.lib.lists.length(captured_term_var_type_pairs())), (lambda : hydra.lib.maybes.map((lambda ts: hydra.core.TypeScheme(hydra.lib.lists.nub(hydra.lib.lists.concat2(captured_type_vars(), ts.variables)), hydra.lib.lists.foldl((lambda t, a: cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(a, t)))), ts.type, hydra.lib.lists.reverse(captured_term_var_types())), ts.constraints)), b().type)), (lambda : Nothing()))
         @lru_cache(1)
         def stripped_term() -> hydra.core.Term:
-            return hydra.rewriting.strip_type_lambdas(b().term)
+            return hydra.strip.strip_type_lambdas(b().term)
         @lru_cache(1)
         def term_with_lambdas() -> hydra.core.Term:
-            return hydra.lib.lists.foldl((lambda t, p: cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.lib.pairs.first(p), hydra.lib.maybes.map((lambda dom: hydra.rewriting.deannotate_type_parameters(dom)), hydra.lib.pairs.second(p)), t)))))), stripped_term(), hydra.lib.lists.reverse(captured_term_var_type_pairs()))
+            return hydra.lib.lists.foldl((lambda t, p: cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.lib.pairs.first(p), hydra.lib.maybes.map((lambda dom: hydra.strip.deannotate_type_parameters(dom)), hydra.lib.pairs.second(p)), t)))))), stripped_term(), hydra.lib.lists.reverse(captured_term_var_type_pairs()))
         @lru_cache(1)
         def term_with_type_lambdas() -> hydra.core.Term:
             return hydra.lib.lists.foldl((lambda t, v: cast(hydra.core.Term, hydra.core.TermTypeLambda(hydra.core.TypeLambda(v, t)))), term_with_lambdas(), hydra.lib.lists.reverse(hydra.lib.maybes.maybe((lambda : ()), (lambda v1: v1.variables), new_type_scheme())))
@@ -189,13 +193,13 @@ def hoist_let_bindings_with_predicate(is_parent_binding: Callable[[hydra.core.Bi
                         return hydra.lib.lists.map((lambda v1: v1.name), hoist_us())
                     @lru_cache(1)
                     def poly_let_variables() -> frozenset[hydra.core.Name]:
-                        return hydra.lib.sets.from_list(hydra.lib.lists.filter((lambda v: hydra.lib.maybes.maybe((lambda : False), (lambda x1: hydra.schemas.f_type_is_polymorphic(x1)), hydra.lib.maybes.map((lambda x1: hydra.rewriting.type_scheme_to_f_type(x1)), hydra.lib.maps.lookup(v, cx.bound_types)))), hydra.lib.sets.to_list(hydra.lib.sets.difference(hydra.lib.sets.from_list(hydra.lib.maps.keys(cx.bound_terms)), cx.lambda_variables))))
+                        return hydra.lib.sets.from_list(hydra.lib.lists.filter((lambda v: hydra.lib.maybes.maybe((lambda : False), (lambda x1: hydra.resolution.f_type_is_polymorphic(x1)), hydra.lib.maybes.map((lambda x1: hydra.scoping.type_scheme_to_f_type(x1)), hydra.lib.maps.lookup(v, cx.bound_types)))), hydra.lib.sets.to_list(hydra.lib.sets.difference(hydra.lib.sets.from_list(hydra.lib.maps.keys(cx.bound_terms)), cx.lambda_variables))))
                     @lru_cache(1)
                     def bound_term_variables() -> frozenset[hydra.core.Name]:
                         return hydra.lib.sets.union(cx.lambda_variables, hydra.lib.sets.difference(hydra.lib.sets.from_list(hydra.lib.maps.keys(cx.bound_terms)), cx.lambda_variables))
                     @lru_cache(1)
                     def free_variables_in_each_binding() -> frozenlist[frozenlist[hydra.core.Name]]:
-                        return hydra.lib.lists.map((lambda b: hydra.lib.sets.to_list(hydra.lib.sets.intersection(bound_term_variables(), hydra.rewriting.free_variables_in_term(b.term)))), hoist_us())
+                        return hydra.lib.lists.map((lambda b: hydra.lib.sets.to_list(hydra.lib.sets.intersection(bound_term_variables(), hydra.variables.free_variables_in_term(b.term)))), hoist_us())
                     @lru_cache(1)
                     def binding_dependencies() -> frozenlist[tuple[frozenlist[hydra.core.Name], frozenlist[hydra.core.Name]]]:
                         return hydra.lib.lists.map((lambda vars: hydra.lib.lists.partition((lambda v: hydra.lib.sets.member(v, hydra.lib.sets.from_list(hoisted_binding_names()))), vars)), free_variables_in_each_binding())
@@ -301,7 +305,7 @@ def hoist_let_bindings_with_predicate(is_parent_binding: Callable[[hydra.core.Bi
         return _hoist_new_term_body_1(new_term())
     @lru_cache(1)
     def cx1() -> hydra.graph.Graph:
-        return hydra.rewriting.extend_graph_for_let((lambda c, b: Nothing()), cx0, let0)
+        return hydra.scoping.extend_graph_for_let((lambda c, b: Nothing()), cx0, let0)
     def for_active_binding(b: hydra.core.Binding) -> frozenlist[hydra.core.Binding]:
         @lru_cache(1)
         def prefix() -> str:
@@ -356,7 +360,7 @@ def hoist_subterms(should_hoist: Callable[[tuple[frozenlist[hydra.paths.SubtermS
                     return (acc, term)
 
                 case _:
-                    return (result := recurse(acc, term), (new_acc := hydra.lib.pairs.first(result), (processed_term := hydra.lib.pairs.second(result), (new_counter := hydra.lib.pairs.first(new_acc), (new_bindings := hydra.lib.pairs.second(new_acc), (full_path := hydra.lib.lists.concat2(path_prefix, path), hydra.lib.logic.if_else(should_hoist((full_path, processed_term)), (lambda : (proposed_name := hydra.core.Name(hydra.lib.strings.cat(("_hoist_", name_prefix, "_", hydra.lib.literals.show_int32(new_counter)))), (existing_names := hydra.lib.sets.from_list(hydra.lib.lists.map((lambda b: b.name), new_bindings)), (free_vars_in_subterm := hydra.rewriting.free_variables_in_term(subterm), (all_reserved := hydra.lib.sets.union(existing_names, free_vars_in_subterm), (binding_name := hydra.lexical.choose_unique_name(all_reserved, proposed_name), (all_lambda_vars := cx_inner.lambda_variables, (new_lambda_vars := hydra.lib.sets.difference(all_lambda_vars, baseline_lambda_vars), (free_vars := hydra.rewriting.free_variables_in_term(processed_term), (captured_vars := hydra.lib.sets.to_list(hydra.lib.sets.intersection(new_lambda_vars, free_vars)), (type_map := hydra.lib.maps.map((lambda x1: hydra.rewriting.type_scheme_to_f_type(x1)), cx_inner.bound_types), (wrapped_term := hydra.lib.lists.foldl((lambda body, var_name: cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(var_name, hydra.lib.maps.lookup(var_name, type_map), body)))))), processed_term, hydra.lib.lists.reverse(captured_vars)), (reference := hydra.lib.lists.foldl((lambda fn, var_name: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fn, cast(hydra.core.Term, hydra.core.TermVariable(var_name)))))), cast(hydra.core.Term, hydra.core.TermVariable(binding_name)), captured_vars), (new_binding := hydra.core.Binding(binding_name, wrapped_term, Nothing()), ((hydra.lib.math.add(new_counter, 1), hydra.lib.lists.cons(new_binding, new_bindings)), reference))[1])[1])[1])[1])[1])[1])[1])[1])[1])[1])[1])[1])[1]), (lambda : (new_acc, processed_term))))[1])[1])[1])[1])[1])[1]
+                    return (result := recurse(acc, term), (new_acc := hydra.lib.pairs.first(result), (processed_term := hydra.lib.pairs.second(result), (new_counter := hydra.lib.pairs.first(new_acc), (new_bindings := hydra.lib.pairs.second(new_acc), (full_path := hydra.lib.lists.concat2(path_prefix, path), hydra.lib.logic.if_else(should_hoist((full_path, processed_term)), (lambda : (proposed_name := hydra.core.Name(hydra.lib.strings.cat(("_hoist_", name_prefix, "_", hydra.lib.literals.show_int32(new_counter)))), (existing_names := hydra.lib.sets.from_list(hydra.lib.lists.map((lambda b: b.name), new_bindings)), (free_vars_in_subterm := hydra.variables.free_variables_in_term(subterm), (all_reserved := hydra.lib.sets.union(existing_names, free_vars_in_subterm), (binding_name := hydra.lexical.choose_unique_name(all_reserved, proposed_name), (all_lambda_vars := cx_inner.lambda_variables, (new_lambda_vars := hydra.lib.sets.difference(all_lambda_vars, baseline_lambda_vars), (free_vars := hydra.variables.free_variables_in_term(processed_term), (captured_vars := hydra.lib.sets.to_list(hydra.lib.sets.intersection(new_lambda_vars, free_vars)), (type_map := hydra.lib.maps.map((lambda x1: hydra.scoping.type_scheme_to_f_type(x1)), cx_inner.bound_types), (wrapped_term := hydra.lib.lists.foldl((lambda body, var_name: cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(var_name, hydra.lib.maps.lookup(var_name, type_map), body)))))), processed_term, hydra.lib.lists.reverse(captured_vars)), (reference := hydra.lib.lists.foldl((lambda fn, var_name: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fn, cast(hydra.core.Term, hydra.core.TermVariable(var_name)))))), cast(hydra.core.Term, hydra.core.TermVariable(binding_name)), captured_vars), (new_binding := hydra.core.Binding(binding_name, wrapped_term, Nothing()), ((hydra.lib.math.add(new_counter, 1), hydra.lib.lists.cons(new_binding, new_bindings)), reference))[1])[1])[1])[1])[1])[1])[1])[1])[1])[1])[1])[1])[1]), (lambda : (new_acc, processed_term))))[1])[1])[1])[1])[1])[1]
         @lru_cache(1)
         def result() -> tuple[tuple[int, frozenlist[hydra.core.Binding]], hydra.core.Term]:
             return hydra.rewriting.rewrite_and_fold_term_with_graph_and_path((lambda x1, x2, x3, x4, x5: collect_and_replace(x1, x2, x3, x4, x5)), cx, (counter, ()), subterm)
@@ -468,7 +472,7 @@ def is_union_elimination_application(term: hydra.core.Term) -> bool:
 
     match term:
         case hydra.core.TermApplication(value=app):
-            return is_union_elimination(hydra.rewriting.deannotate_and_detype_term(app.function))
+            return is_union_elimination(hydra.strip.deannotate_and_detype_term(app.function))
 
         case _:
             return False
@@ -540,7 +544,7 @@ def hoist_case_statements_in_graph(bindings: frozenlist[hydra.core.Binding]) -> 
     @lru_cache(1)
     def term1() -> hydra.core.Term:
         return hoist_case_statements(empty_tx(), term0())
-    return hydra.schemas.term_as_bindings(term1())
+    return hydra.environment.term_as_bindings(term1())
 
 def should_hoist_polymorphic(cx: hydra.graph.Graph, binding: hydra.core.Binding) -> bool:
     r"""Predicate for hoisting polymorphic bindings. Returns True if the binding is polymorphic (has type scheme variables) or if its type uses any type variables from the Graph."""

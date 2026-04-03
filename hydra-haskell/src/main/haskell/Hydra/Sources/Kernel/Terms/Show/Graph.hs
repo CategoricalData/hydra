@@ -63,12 +63,12 @@ module_ = Module ns elements
     Just "String representations of hydra.graph types"
   where
    elements = [
-     toTermDefinition graph]
+     toDefinition graph]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-graph :: TBinding ([Binding] -> String)
+graph :: TTermDefinition ([Binding] -> String)
 graph = define "graph" $
   doc "Show a list of bindings as a string" $
   lambda "elements" $ lets [

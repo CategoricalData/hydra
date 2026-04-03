@@ -28,17 +28,17 @@ public class Schema<S, T, V> implements Serializable, Comparable<Schema<S, T, V>
 
   public static final hydra.core.Name DEFAULT_EDGE_ID = new hydra.core.Name("defaultEdgeId");
 
-  public final hydra.util.Coder<hydra.core.Type, T> vertexIdTypes;
+  public final hydra.coders.Coder<hydra.core.Type, T> vertexIdTypes;
 
-  public final hydra.util.Coder<hydra.core.Term, V> vertexIds;
+  public final hydra.coders.Coder<hydra.core.Term, V> vertexIds;
 
-  public final hydra.util.Coder<hydra.core.Type, T> edgeIdTypes;
+  public final hydra.coders.Coder<hydra.core.Type, T> edgeIdTypes;
 
-  public final hydra.util.Coder<hydra.core.Term, V> edgeIds;
+  public final hydra.coders.Coder<hydra.core.Term, V> edgeIds;
 
-  public final hydra.util.Coder<hydra.core.Type, T> propertyTypes;
+  public final hydra.coders.Coder<hydra.core.Type, T> propertyTypes;
 
-  public final hydra.util.Coder<hydra.core.Term, V> propertyValues;
+  public final hydra.coders.Coder<hydra.core.Term, V> propertyValues;
 
   public final hydra.pg.mapping.AnnotationSchema annotations;
 
@@ -46,7 +46,7 @@ public class Schema<S, T, V> implements Serializable, Comparable<Schema<S, T, V>
 
   public final V defaultEdgeId;
 
-  public Schema (hydra.util.Coder<hydra.core.Type, T> vertexIdTypes, hydra.util.Coder<hydra.core.Term, V> vertexIds, hydra.util.Coder<hydra.core.Type, T> edgeIdTypes, hydra.util.Coder<hydra.core.Term, V> edgeIds, hydra.util.Coder<hydra.core.Type, T> propertyTypes, hydra.util.Coder<hydra.core.Term, V> propertyValues, hydra.pg.mapping.AnnotationSchema annotations, V defaultVertexId, V defaultEdgeId) {
+  public Schema (hydra.coders.Coder<hydra.core.Type, T> vertexIdTypes, hydra.coders.Coder<hydra.core.Term, V> vertexIds, hydra.coders.Coder<hydra.core.Type, T> edgeIdTypes, hydra.coders.Coder<hydra.core.Term, V> edgeIds, hydra.coders.Coder<hydra.core.Type, T> propertyTypes, hydra.coders.Coder<hydra.core.Term, V> propertyValues, hydra.pg.mapping.AnnotationSchema annotations, V defaultVertexId, V defaultEdgeId) {
     this.vertexIdTypes = vertexIdTypes;
     this.vertexIds = vertexIds;
     this.edgeIdTypes = edgeIdTypes;
@@ -129,27 +129,27 @@ public class Schema<S, T, V> implements Serializable, Comparable<Schema<S, T, V>
     return ((Comparable) defaultEdgeId).compareTo(other.defaultEdgeId);
   }
 
-  public Schema withVertexIdTypes(hydra.util.Coder<hydra.core.Type, T> vertexIdTypes) {
+  public Schema withVertexIdTypes(hydra.coders.Coder<hydra.core.Type, T> vertexIdTypes) {
     return new Schema(vertexIdTypes, vertexIds, edgeIdTypes, edgeIds, propertyTypes, propertyValues, annotations, defaultVertexId, defaultEdgeId);
   }
 
-  public Schema withVertexIds(hydra.util.Coder<hydra.core.Term, V> vertexIds) {
+  public Schema withVertexIds(hydra.coders.Coder<hydra.core.Term, V> vertexIds) {
     return new Schema(vertexIdTypes, vertexIds, edgeIdTypes, edgeIds, propertyTypes, propertyValues, annotations, defaultVertexId, defaultEdgeId);
   }
 
-  public Schema withEdgeIdTypes(hydra.util.Coder<hydra.core.Type, T> edgeIdTypes) {
+  public Schema withEdgeIdTypes(hydra.coders.Coder<hydra.core.Type, T> edgeIdTypes) {
     return new Schema(vertexIdTypes, vertexIds, edgeIdTypes, edgeIds, propertyTypes, propertyValues, annotations, defaultVertexId, defaultEdgeId);
   }
 
-  public Schema withEdgeIds(hydra.util.Coder<hydra.core.Term, V> edgeIds) {
+  public Schema withEdgeIds(hydra.coders.Coder<hydra.core.Term, V> edgeIds) {
     return new Schema(vertexIdTypes, vertexIds, edgeIdTypes, edgeIds, propertyTypes, propertyValues, annotations, defaultVertexId, defaultEdgeId);
   }
 
-  public Schema withPropertyTypes(hydra.util.Coder<hydra.core.Type, T> propertyTypes) {
+  public Schema withPropertyTypes(hydra.coders.Coder<hydra.core.Type, T> propertyTypes) {
     return new Schema(vertexIdTypes, vertexIds, edgeIdTypes, edgeIds, propertyTypes, propertyValues, annotations, defaultVertexId, defaultEdgeId);
   }
 
-  public Schema withPropertyValues(hydra.util.Coder<hydra.core.Term, V> propertyValues) {
+  public Schema withPropertyValues(hydra.coders.Coder<hydra.core.Term, V> propertyValues) {
     return new Schema(vertexIdTypes, vertexIds, edgeIdTypes, edgeIds, propertyTypes, propertyValues, annotations, defaultVertexId, defaultEdgeId);
   }
 

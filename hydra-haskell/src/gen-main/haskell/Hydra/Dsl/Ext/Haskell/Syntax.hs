@@ -8,11 +8,6 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Ext.Haskell.Syntax as Syntax
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 alternative :: Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.CaseRhs -> Phantoms.TTerm (Maybe Syntax.LocalBindings) -> Phantoms.TTerm Syntax.Alternative
 alternative pattern rhs binds =

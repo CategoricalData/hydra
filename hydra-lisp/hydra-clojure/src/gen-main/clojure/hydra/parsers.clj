@@ -16,7 +16,7 @@
 
 (def hydra_parsers_pure (fn [a] (fn [input] (list :success (->hydra_parsing_parse_success a input)))))
 
-(def hydra_parsers_between (fn [open] (fn [close] (fn [p] ((hydra_parsers_bind open) (fn [_] ((hydra_parsers_bind p) (fn [x] ((hydra_parsers_bind close) (fn [_] (hydra_parsers_pure x)))))))))))
+(def hydra_parsers_between (fn [open] (fn [close] (fn [p] ((hydra_parsers_bind open) (fn [_] ((hydra_parsers_bind p) (fn [x] ((hydra_parsers_bind close) (fn [_2] (hydra_parsers_pure x)))))))))))
 
 (def hydra_parsers_char (fn [c] (hydra_parsers_satisfy (fn [x] ((hydra_lib_equality_equal x) c)))))
 

@@ -38,18 +38,18 @@ module_ = Module ns elements
     (Just "Test cases for AST serialization")
   where
     elements = [
-      Phantoms.toTermDefinition arrowOp,
-      Phantoms.toTermDefinition gtOp,
-      Phantoms.toTermDefinition plusOp,
-      Phantoms.toTermDefinition multOp,
-      Phantoms.toTermDefinition lambdaOp,
-      Phantoms.toTermDefinition caseOp,
-      Phantoms.toTermDefinition allTests]
+      Phantoms.toDefinition arrowOp,
+      Phantoms.toDefinition gtOp,
+      Phantoms.toDefinition plusOp,
+      Phantoms.toDefinition multOp,
+      Phantoms.toDefinition lambdaOp,
+      Phantoms.toDefinition caseOp,
+      Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
     doc "Test cases for AST serialization" $
     supergroup "serialization" [
@@ -62,6 +62,10 @@ allTests = define "allTests" $
 -- Helper for building an infix expression: ifx op lhs rhs
 infixExpr :: AsTerm t Op => t -> TTerm Expr -> TTerm Expr -> TTerm Expr
 infixExpr opExpr lhs rhs = Serialization.ifx @@ asTerm opExpr @@ lhs @@ rhs
+
+-- Universal serialization test case: printExpr (parenthesize expr) == expected
+serCase :: String -> TTerm Expr -> TTerm String -> TTerm TestCaseWithMetadata
+serCase cname expr expected = universalCase cname (Serialization.printExpr @@ (Serialization.parenthesize @@ expr)) expected
 
 -- Helper for building a constant expression
 cstExpr :: TTerm String -> TTerm Expr
@@ -84,31 +88,31 @@ bracketListExpr :: AsTerm t BlockStyle => t -> [TTerm Expr] -> TTerm Expr
 bracketListExpr style exprs = Serialization.bracketList @@ asTerm style @@ list exprs
 
 -- Inline style (reference to kernel)
-inlineBlockStyle :: TBinding BlockStyle
+inlineBlockStyle :: TTermDefinition BlockStyle
 inlineBlockStyle = Serialization.inlineStyle
 
 -- Test operators defined locally to avoid a dependency on hydra.ext.haskell.operators
-arrowOp :: TBinding Op
+arrowOp :: TTermDefinition Op
 arrowOp = define "arrowOp" $
   Serialization.op @@ string "->" @@ (Math.negate $ int32 1) @@ Ast.associativityRight
 
-gtOp :: TBinding Op
+gtOp :: TTermDefinition Op
 gtOp = define "gtOp" $
   Serialization.op @@ string ">" @@ int32 4 @@ Ast.associativityNone
 
-plusOp :: TBinding Op
+plusOp :: TTermDefinition Op
 plusOp = define "plusOp" $
   Serialization.op @@ string "+" @@ int32 6 @@ Ast.associativityBoth
 
-multOp :: TBinding Op
+multOp :: TTermDefinition Op
 multOp = define "multOp" $
   Serialization.op @@ string "*" @@ int32 7 @@ Ast.associativityBoth
 
-lambdaOp :: TBinding Op
+lambdaOp :: TTermDefinition Op
 lambdaOp = define "lambdaOp" $
   Serialization.op @@ string "->" @@ (Math.negate $ int32 1) @@ Ast.associativityRight
 
-caseOp :: TBinding Op
+caseOp :: TTermDefinition Op
 caseOp = define "caseOp" $
   Serialization.op @@ string "->" @@ int32 0 @@ Ast.associativityNone
 

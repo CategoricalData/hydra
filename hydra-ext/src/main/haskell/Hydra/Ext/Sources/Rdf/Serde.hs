@@ -59,13 +59,11 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -85,7 +83,7 @@ import qualified Hydra.Ext.Org.W3.Rdf.Syntax as Rdf
 import qualified Hydra.Ext.Sources.Rdf.Syntax as RdfSyntax
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 ns :: Namespace
@@ -98,24 +96,24 @@ module_ = Module ns elements
     Just "Serialization functions for converting RDF graphs to N-Triples format expressions"
   where
     elements = [
-      toTermDefinition escapeIriChar,
-      toTermDefinition escapeIriStr,
-      toTermDefinition escapeLiteralChar,
-      toTermDefinition escapeLiteralString,
-      toTermDefinition rdfGraphToNtriples,
-      toTermDefinition writeBlankNode,
-      toTermDefinition writeGraph,
-      toTermDefinition writeIri,
-      toTermDefinition writeLanguageTag,
-      toTermDefinition writeLiteral,
-      toTermDefinition writeNode,
-      toTermDefinition writeResource,
-      toTermDefinition writeTriple]
+      toDefinition escapeIriChar,
+      toDefinition escapeIriStr,
+      toDefinition escapeLiteralChar,
+      toDefinition escapeLiteralString,
+      toDefinition rdfGraphToNtriples,
+      toDefinition writeBlankNode,
+      toDefinition writeGraph,
+      toDefinition writeIri,
+      toDefinition writeLanguageTag,
+      toDefinition writeLiteral,
+      toDefinition writeNode,
+      toDefinition writeResource,
+      toDefinition writeTriple]
 
 
 -- | Escape a single IRI character (as char code). Characters outside printable ASCII or in the
 --   set <>"{}|^`\ are replaced with "?"
-escapeIriChar :: TBinding (Int -> String)
+escapeIriChar :: TTermDefinition (Int -> String)
 escapeIriChar = define "escapeIriChar" $
   doc "Escape a single IRI character code to a string" $
   lambda "c" $
@@ -134,14 +132,14 @@ escapeIriChar = define "escapeIriChar" $
       (string "?")
       (Strings.fromList $ list [var "c"])
 
-escapeIriStr :: TBinding (String -> String)
+escapeIriStr :: TTermDefinition (String -> String)
 escapeIriStr = define "escapeIriStr" $
   doc "Escape a string for use in an IRI. Non-printable and special characters are replaced with ?" $
   lambda "s" $
     Strings.cat (Lists.map escapeIriChar (Strings.toList (var "s")))
 
 -- | Escape a single literal character. Handles \", \\, \n, \r, and non-ASCII
-escapeLiteralChar :: TBinding (Int -> String)
+escapeLiteralChar :: TTermDefinition (Int -> String)
 escapeLiteralChar = define "escapeLiteralChar" $
   doc "Escape a single literal character code to a string" $
   lambda "c" $
@@ -157,20 +155,20 @@ escapeLiteralChar = define "escapeLiteralChar" $
               (string "\\r")
               (Strings.fromList $ list [var "c"])))))
 
-escapeLiteralString :: TBinding (String -> String)
+escapeLiteralString :: TTermDefinition (String -> String)
 escapeLiteralString = define "escapeLiteralString" $
   doc "Escape a string for use in an N-Triples literal" $
   lambda "s" $
     Strings.cat (Lists.map escapeLiteralChar (Strings.toList (var "s")))
 
 -- | Convert an RDF graph to an N-Triples string
-rdfGraphToNtriples :: TBinding (Rdf.Graph -> String)
+rdfGraphToNtriples :: TTermDefinition (Rdf.Graph -> String)
 rdfGraphToNtriples = define "rdfGraphToNtriples" $
   doc "Convert an RDF graph to an N-Triples string" $
   lambda "g" $
     Serialization.printExpr @@ (writeGraph @@ var "g")
 
-writeBlankNode :: TBinding (Rdf.BlankNode -> Expr)
+writeBlankNode :: TTermDefinition (Rdf.BlankNode -> Expr)
 writeBlankNode = define "writeBlankNode" $
   doc "Convert a blank node to an expression" $
   lambda "bnode" $
@@ -178,13 +176,13 @@ writeBlankNode = define "writeBlankNode" $
       Serialization.cst @@ string "_:",
       Serialization.cst @@ (unwrap Rdf._BlankNode @@ var "bnode")]
 
-writeGraph :: TBinding (Rdf.Graph -> Expr)
+writeGraph :: TTermDefinition (Rdf.Graph -> Expr)
 writeGraph = define "writeGraph" $
   doc "Convert an RDF graph to an expression" $
   lambda "g" $
     Serialization.newlineSep @@ (Lists.map writeTriple (Sets.toList (unwrap Rdf._Graph @@ var "g")))
 
-writeIri :: TBinding (Rdf.Iri -> Expr)
+writeIri :: TTermDefinition (Rdf.Iri -> Expr)
 writeIri = define "writeIri" $
   doc "Convert an IRI to an expression" $
   lambda "iri" $
@@ -193,7 +191,7 @@ writeIri = define "writeIri" $
       Serialization.cst @@ (escapeIriStr @@ (unwrap Rdf._Iri @@ var "iri")),
       Serialization.cst @@ string ">"]
 
-writeLanguageTag :: TBinding (Rdf.LanguageTag -> Expr)
+writeLanguageTag :: TTermDefinition (Rdf.LanguageTag -> Expr)
 writeLanguageTag = define "writeLanguageTag" $
   doc "Convert a language tag to an expression" $
   lambda "lang" $
@@ -201,7 +199,7 @@ writeLanguageTag = define "writeLanguageTag" $
       Serialization.cst @@ string "@",
       Serialization.cst @@ (unwrap Rdf._LanguageTag @@ var "lang")]
 
-writeLiteral :: TBinding (Rdf.Literal -> Expr)
+writeLiteral :: TTermDefinition (Rdf.Literal -> Expr)
 writeLiteral = define "writeLiteral" $
   doc "Convert a literal to an expression" $
   lambda "lit" $ lets [
@@ -216,7 +214,7 @@ writeLiteral = define "writeLiteral" $
       (var "lang")] $
     Serialization.noSep @@ list [var "lexExpr", var "suffix"]
 
-writeNode :: TBinding (Rdf.Node -> Expr)
+writeNode :: TTermDefinition (Rdf.Node -> Expr)
 writeNode = define "writeNode" $
   doc "Convert a node to an expression" $
   lambda "n" $
@@ -225,7 +223,7 @@ writeNode = define "writeNode" $
       Rdf._Node_bnode>>: lambda "bnode" $ writeBlankNode @@ var "bnode",
       Rdf._Node_literal>>: lambda "lit" $ writeLiteral @@ var "lit"]
 
-writeResource :: TBinding (Rdf.Resource -> Expr)
+writeResource :: TTermDefinition (Rdf.Resource -> Expr)
 writeResource = define "writeResource" $
   doc "Convert a resource to an expression" $
   lambda "r" $
@@ -233,7 +231,7 @@ writeResource = define "writeResource" $
       Rdf._Resource_iri>>: lambda "iri" $ writeIri @@ var "iri",
       Rdf._Resource_bnode>>: lambda "bnode" $ writeBlankNode @@ var "bnode"]
 
-writeTriple :: TBinding (Rdf.Triple -> Expr)
+writeTriple :: TTermDefinition (Rdf.Triple -> Expr)
 writeTriple = define "writeTriple" $
   doc "Convert a triple to an expression" $
   lambda "t" $ lets [

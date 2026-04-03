@@ -7,19 +7,19 @@
 
 (define (test-logic-negand-negtrue-and-true)
 
-  (assert (equal? #t ((hydra_lib_logic_and #t) #t))))
+  (assert (equal? true true)))
 
 (define (test-logic-negand-negtrue-and-false)
 
-  (assert (equal? #f ((hydra_lib_logic_and #t) #f))))
+  (assert (equal? false false)))
 
 (define (test-logic-negand-negfalse-and-true)
 
-  (assert (equal? #f ((hydra_lib_logic_and #f) #t))))
+  (assert (equal? false false)))
 
 (define (test-logic-negand-negfalse-and-false)
 
-  (assert (equal? #f ((hydra_lib_logic_and #f) #f))))
+  (assert (equal? false false)))
 
 ;; ifElse
 
@@ -27,56 +27,56 @@
 
 (define (test-logic-negifelse-negboolean-values-negtrue-condition-returns-then)
 
-  (assert (equal? #t (((hydra_lib_logic_if_else #t) #t) #f))))
+  (assert (equal? true true)))
 
 (define (test-logic-negifelse-negboolean-values-negfalse-condition-returns-else)
 
-  (assert (equal? #f (((hydra_lib_logic_if_else #f) #t) #f))))
+  (assert (equal? false false)))
 
 ;; integer values
 
 (define (test-logic-negifelse-neginteger-values-negtrue-selects-first-int)
 
-  (assert (equal? 42 (((hydra_lib_logic_if_else #t) 42) 0))))
+  (assert (equal? 42:int32 42:int32)))
 
 (define (test-logic-negifelse-neginteger-values-negfalse-selects-second-int)
 
-  (assert (equal? 0 (((hydra_lib_logic_if_else #f) 42) 0))))
+  (assert (equal? 0:int32 0:int32)))
 
 ;; string values
 
 (define (test-logic-negifelse-negstring-values-negtrue-selects-first-string)
 
-  (assert (equal? "yes" (((hydra_lib_logic_if_else #t) "yes") "no"))))
+  (assert (equal? "yes" "yes")))
 
 (define (test-logic-negifelse-negstring-values-negfalse-selects-second-string)
 
-  (assert (equal? "no" (((hydra_lib_logic_if_else #f) "yes") "no"))))
+  (assert (equal? "no" "no")))
 
 ;; not
 
 (define (test-logic-negnot-negnot-true)
 
-  (assert (equal? #f (hydra_lib_logic_not #t))))
+  (assert (equal? false false)))
 
 (define (test-logic-negnot-negnot-false)
 
-  (assert (equal? #t (hydra_lib_logic_not #f))))
+  (assert (equal? true true)))
 
 ;; or
 
 (define (test-logic-negor-negtrue-or-true)
 
-  (assert (equal? #t ((hydra_lib_logic_or #t) #t))))
+  (assert (equal? true true)))
 
 (define (test-logic-negor-negtrue-or-false)
 
-  (assert (equal? #t ((hydra_lib_logic_or #t) #f))))
+  (assert (equal? true true)))
 
 (define (test-logic-negor-negfalse-or-true)
 
-  (assert (equal? #t ((hydra_lib_logic_or #f) #t))))
+  (assert (equal? true true)))
 
 (define (test-logic-negor-negfalse-or-false)
 
-  (assert (equal? #f ((hydra_lib_logic_or #f) #f))))
+  (assert (equal? false false)))

@@ -9,7 +9,7 @@ from hydra.dsl.python import Either, FrozenDict, Left, Right
 from typing import cast
 import hydra.core
 import hydra.errors
-import hydra.extract.helpers
+import hydra.extract.core
 import hydra.lexical
 import hydra.lib.eithers
 import hydra.lib.maps
@@ -26,7 +26,7 @@ def case_convention(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 fterm = field.term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.errors.DecodingError, hydra.util.CaseConvention]]]:
-                    return hydra.lib.maps.from_list(((hydra.core.Name("camel"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.util.CaseConvention.CAMEL), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("pascal"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.util.CaseConvention.PASCAL), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("lowerSnake"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.util.CaseConvention.LOWER_SNAKE), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("upperSnake"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.util.CaseConvention.UPPER_SNAKE), hydra.extract.helpers.decode_unit(cx, input))))))
+                    return hydra.lib.maps.from_list(((hydra.core.Name("camel"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.util.CaseConvention.CAMEL), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("pascal"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.util.CaseConvention.PASCAL), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("lowerSnake"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.util.CaseConvention.LOWER_SNAKE), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("upperSnake"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.util.CaseConvention.UPPER_SNAKE), hydra.extract.core.decode_unit(cx, input))))))
                 return hydra.lib.maybes.maybe((lambda : Left(hydra.errors.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union"))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
 
             case _:
@@ -42,7 +42,7 @@ def comparison(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 fterm = field.term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.errors.DecodingError, hydra.util.Comparison]]]:
-                    return hydra.lib.maps.from_list(((hydra.core.Name("lessThan"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.util.Comparison.LESS_THAN), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("equalTo"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.util.Comparison.EQUAL_TO), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("greaterThan"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.util.Comparison.GREATER_THAN), hydra.extract.helpers.decode_unit(cx, input))))))
+                    return hydra.lib.maps.from_list(((hydra.core.Name("lessThan"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.util.Comparison.LESS_THAN), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("equalTo"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.util.Comparison.EQUAL_TO), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("greaterThan"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.util.Comparison.GREATER_THAN), hydra.extract.core.decode_unit(cx, input))))))
                 return hydra.lib.maybes.maybe((lambda : Left(hydra.errors.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union"))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
 
             case _:
@@ -79,7 +79,7 @@ def precision(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
                             case _:
                                 return Left(hydra.errors.DecodingError("expected literal"))
-                    return hydra.lib.maps.from_list(((hydra.core.Name("arbitrary"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.util.Precision, hydra.util.PrecisionArbitrary())), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("bits"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.util.Precision, hydra.util.PrecisionBits(t))), hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_variant_map_3(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, input)))))))
+                    return hydra.lib.maps.from_list(((hydra.core.Name("arbitrary"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.util.Precision, hydra.util.PrecisionArbitrary())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("bits"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.util.Precision, hydra.util.PrecisionBits(t))), hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_variant_map_3(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, input)))))))
                 return hydra.lib.maybes.maybe((lambda : Left(hydra.errors.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union"))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
 
             case _:

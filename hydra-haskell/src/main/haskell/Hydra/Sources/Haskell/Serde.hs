@@ -61,12 +61,11 @@ import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants      as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -87,7 +86,7 @@ import qualified Hydra.Sources.Haskell.Syntax as HaskellSyntax
 import qualified Hydra.Sources.Haskell.Operators as HaskellOperators
 
 
-haskellSerdeDefinition :: String -> TTerm a -> TBinding a
+haskellSerdeDefinition :: String -> TTerm a -> TTermDefinition a
 haskellSerdeDefinition = definitionInModule module_
 
 ns :: Namespace
@@ -104,44 +103,44 @@ module_ = Module ns elements
       <> "https://stackoverflow.com/questions/7746894/are-there-pronounceable-names-for-common-haskell-operators")
   where
     elements = [
-      toTermDefinition alternativeToExpr,
-      toTermDefinition applicationExpressionToExpr,
-      toTermDefinition applicationPatternToExpr,
-      toTermDefinition assertionToExpr,
-      toTermDefinition caseExpressionToExpr,
-      toTermDefinition caseRhsToExpr,
-      toTermDefinition classAssertionToExpr,
-      toTermDefinition constructRecordExpressionToExpr,
-      toTermDefinition constructorToExpr,
-      toTermDefinition constructorWithCommentsToExpr,
-      toTermDefinition dataOrNewtypeToExpr,
-      toTermDefinition declarationHeadToExpr,
-      toTermDefinition declarationToExpr,
-      toTermDefinition declarationWithCommentsToExpr,
-      toTermDefinition expressionToExpr,
-      toTermDefinition fieldToExpr,
-      toTermDefinition fieldWithCommentsToExpr,
-      toTermDefinition ifExpressionToExpr,
-      toTermDefinition importExportSpecToExpr,
-      toTermDefinition importToExpr,
-      toTermDefinition lambdaExpressionToExpr,
-      toTermDefinition literalToExpr,
-      toTermDefinition localBindingToExpr,
-      toTermDefinition moduleHeadToExpr,
-      toTermDefinition moduleToExpr,
-      toTermDefinition nameToExpr,
-      toTermDefinition patternToExpr,
-      toTermDefinition rightHandSideToExpr,
-      toTermDefinition statementToExpr,
-      toTermDefinition toHaskellComments,
-      toTermDefinition toSimpleComments,
-      toTermDefinition typeSignatureToExpr,
-      toTermDefinition typeToExpr,
-      toTermDefinition valueBindingToExpr,
-      toTermDefinition variableToExpr,
-      toTermDefinition writeQualifiedName]
+      toDefinition alternativeToExpr,
+      toDefinition applicationExpressionToExpr,
+      toDefinition applicationPatternToExpr,
+      toDefinition assertionToExpr,
+      toDefinition caseExpressionToExpr,
+      toDefinition caseRhsToExpr,
+      toDefinition classAssertionToExpr,
+      toDefinition constructorToExpr,
+      toDefinition constructorWithCommentsToExpr,
+      toDefinition dataOrNewtypeToExpr,
+      toDefinition declarationHeadToExpr,
+      toDefinition declarationToExpr,
+      toDefinition declarationWithCommentsToExpr,
+      toDefinition expressionToExpr,
+      toDefinition constructRecordExpressionToExpr,
+      toDefinition fieldToExpr,
+      toDefinition fieldWithCommentsToExpr,
+      toDefinition ifExpressionToExpr,
+      toDefinition importExportSpecToExpr,
+      toDefinition importToExpr,
+      toDefinition lambdaExpressionToExpr,
+      toDefinition literalToExpr,
+      toDefinition localBindingToExpr,
+      toDefinition moduleHeadToExpr,
+      toDefinition moduleToExpr,
+      toDefinition nameToExpr,
+      toDefinition patternToExpr,
+      toDefinition rightHandSideToExpr,
+      toDefinition statementToExpr,
+      toDefinition typeSignatureToExpr,
+      toDefinition typeToExpr,
+      toDefinition valueBindingToExpr,
+      toDefinition variableToExpr,
+      toDefinition toHaskellComments,
+      toDefinition toSimpleComments,
+      toDefinition writeQualifiedName]
 
-alternativeToExpr :: TBinding (H.Alternative -> Expr)
+alternativeToExpr :: TTermDefinition (H.Alternative -> Expr)
 alternativeToExpr = haskellSerdeDefinition "alternativeToExpr" $
   doc "Convert a pattern-matching alternative to an AST expression" $
   lambda "alt" $
@@ -151,7 +150,7 @@ alternativeToExpr = haskellSerdeDefinition "alternativeToExpr" $
       Serialization.cst @@ string "->",
       caseRhsToExpr @@ (project H._Alternative H._Alternative_rhs @@ var "alt")]
 
-applicationExpressionToExpr :: TBinding (H.ApplicationExpression -> Expr)
+applicationExpressionToExpr :: TTermDefinition (H.ApplicationExpression -> Expr)
 applicationExpressionToExpr = haskellSerdeDefinition "applicationExpressionToExpr" $
   doc "Convert a function application expression to an AST expression" $
   lambda "app" $
@@ -159,7 +158,7 @@ applicationExpressionToExpr = haskellSerdeDefinition "applicationExpressionToExp
       (expressionToExpr @@ (project H._ApplicationExpression H._ApplicationExpression_function @@ var "app")) @@
       (expressionToExpr @@ (project H._ApplicationExpression H._ApplicationExpression_argument @@ var "app"))
 
-applicationPatternToExpr :: TBinding (H.ApplicationPattern -> Expr)
+applicationPatternToExpr :: TTermDefinition (H.ApplicationPattern -> Expr)
 applicationPatternToExpr = haskellSerdeDefinition "applicationPatternToExpr" $
   doc "Convert an application pattern to an AST expression" $
   lambda "appPat" $ lets [
@@ -167,7 +166,7 @@ applicationPatternToExpr = haskellSerdeDefinition "applicationPatternToExpr" $
     "pats">: project H._ApplicationPattern H._ApplicationPattern_args @@ var "appPat"] $
     Serialization.spaceSep @@ (Lists.cons (nameToExpr @@ var "name") (Lists.map (patternToExpr) (var "pats")))
 
-assertionToExpr :: TBinding (H.Assertion -> Expr)
+assertionToExpr :: TTermDefinition (H.Assertion -> Expr)
 assertionToExpr = haskellSerdeDefinition "assertionToExpr" $
   doc "Convert a type class assertion to an AST expression" $
   lambda "sert" $
@@ -176,7 +175,7 @@ assertionToExpr = haskellSerdeDefinition "assertionToExpr" $
       H._Assertion_tuple>>: lambda "serts" $
         Serialization.parenList @@ false @@ (Lists.map (assertionToExpr) (var "serts"))]
 
-caseExpressionToExpr :: TBinding (H.CaseExpression -> Expr)
+caseExpressionToExpr :: TTermDefinition (H.CaseExpression -> Expr)
 caseExpressionToExpr = haskellSerdeDefinition "caseExpressionToExpr" $
   doc "Convert a case expression to an AST expression" $
   lambda "caseExpr" $ lets [
@@ -191,12 +190,12 @@ caseExpressionToExpr = haskellSerdeDefinition "caseExpressionToExpr" $
     "rhs">: Serialization.newlineSep @@ (Lists.map (alternativeToExpr) (var "alts"))] $
     Serialization.ifx @@ var "ofOp" @@ var "lhs" @@ var "rhs"
 
-caseRhsToExpr :: TBinding (H.CaseRhs -> Expr)
+caseRhsToExpr :: TTermDefinition (H.CaseRhs -> Expr)
 caseRhsToExpr = haskellSerdeDefinition "caseRhsToExpr" $
   doc "Convert a case right-hand side to an AST expression" $
   lambda "rhs" $ expressionToExpr @@ (unwrap H._CaseRhs @@ var "rhs")
 
-classAssertionToExpr :: TBinding (H.ClassAssertion -> Expr)
+classAssertionToExpr :: TTermDefinition (H.ClassAssertion -> Expr)
 classAssertionToExpr = haskellSerdeDefinition "classAssertionToExpr" $
   doc "Convert a class assertion to an AST expression" $
   lambda "clsAsrt" $ lets [
@@ -205,21 +204,7 @@ classAssertionToExpr = haskellSerdeDefinition "classAssertionToExpr" $
     Serialization.spaceSep @@ (Lists.cons (nameToExpr @@ var "name") (list [
       Serialization.commaSep @@ Serialization.halfBlockStyle @@ (Lists.map (typeToExpr) (var "types"))]))
 
-constructRecordExpressionToExpr :: TBinding (H.ConstructRecordExpression -> Expr)
-constructRecordExpressionToExpr = haskellSerdeDefinition "constructRecordExpressionToExpr" $
-  doc "Convert a record construction expression to an AST expression" $
-  lambda "constructRecord" $ lets [
-    "name">: project H._ConstructRecordExpression H._ConstructRecordExpression_name @@ var "constructRecord",
-    "updates">: project H._ConstructRecordExpression H._ConstructRecordExpression_fields @@ var "constructRecord",
-    "fromUpdate">: lambda "update" $ lets [
-      "fn">: project H._FieldUpdate H._FieldUpdate_name @@ var "update",
-      "val">: project H._FieldUpdate H._FieldUpdate_value @@ var "update"] $
-      Serialization.ifx @@ HaskellOperators.defineOp @@ (nameToExpr @@ var "fn") @@ (expressionToExpr @@ var "val"),
-    "body">: Serialization.commaSep @@ Serialization.halfBlockStyle @@ (Lists.map (var "fromUpdate") (var "updates"))] $
-    Serialization.spaceSep @@ (Lists.cons (nameToExpr @@ var "name") (list [
-      Serialization.brackets @@ Serialization.curlyBraces @@ Serialization.halfBlockStyle @@ var "body"]))
-
-constructorToExpr :: TBinding (H.Constructor -> Expr)
+constructorToExpr :: TTermDefinition (H.Constructor -> Expr)
 constructorToExpr = haskellSerdeDefinition "constructorToExpr" $
   doc "Convert a data constructor to an AST expression" $
   lambda "cons" $
@@ -234,7 +219,7 @@ constructorToExpr = haskellSerdeDefinition "constructorToExpr" $
         Serialization.spaceSep @@ (Lists.cons (nameToExpr @@ var "name") (list [
           Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@ (Lists.map (fieldWithCommentsToExpr) (var "fields"))]))]
 
-constructorWithCommentsToExpr :: TBinding (H.ConstructorWithComments -> Expr)
+constructorWithCommentsToExpr :: TTermDefinition (H.ConstructorWithComments -> Expr)
 constructorWithCommentsToExpr = haskellSerdeDefinition "constructorWithCommentsToExpr" $
   doc "Convert a data constructor with comments to an AST expression" $
   lambda "consWithComments" $ lets [
@@ -246,7 +231,7 @@ constructorWithCommentsToExpr = haskellSerdeDefinition "constructorWithCommentsT
         constructorToExpr @@ var "body"])))
       (var "mc")
 
-dataOrNewtypeToExpr :: TBinding (H.DataOrNewtype -> Expr)
+dataOrNewtypeToExpr :: TTermDefinition (H.DataOrNewtype -> Expr)
 dataOrNewtypeToExpr = haskellSerdeDefinition "dataOrNewtypeToExpr" $
   doc "Convert a data/newtype keyword to an AST expression" $
   lambda "kw" $
@@ -254,7 +239,7 @@ dataOrNewtypeToExpr = haskellSerdeDefinition "dataOrNewtypeToExpr" $
       H._DataOrNewtype_data>>: constant $ Serialization.cst @@ string "data",
       H._DataOrNewtype_newtype>>: constant $ Serialization.cst @@ string "newtype"]
 
-declarationHeadToExpr :: TBinding (H.DeclarationHead -> Expr)
+declarationHeadToExpr :: TTermDefinition (H.DeclarationHead -> Expr)
 declarationHeadToExpr = haskellSerdeDefinition "declarationHeadToExpr" $
   doc "Convert a declaration head to an AST expression" $
   lambda "hd" $
@@ -265,7 +250,7 @@ declarationHeadToExpr = haskellSerdeDefinition "declarationHeadToExpr" $
         Serialization.spaceSep @@ (Lists.cons (declarationHeadToExpr @@ var "fun") (list [variableToExpr @@ var "op"])),
       H._DeclarationHead_simple>>: lambda "name" $ nameToExpr @@ var "name"]
 
-declarationToExpr :: TBinding (H.Declaration -> Expr)
+declarationToExpr :: TTermDefinition (H.Declaration -> Expr)
 declarationToExpr = haskellSerdeDefinition "declarationToExpr" $
   doc "Convert a declaration to an AST expression" $
   lambda "decl" $
@@ -299,7 +284,7 @@ declarationToExpr = haskellSerdeDefinition "declarationToExpr" $
         Serialization.newlineSep @@ (Lists.cons (Serialization.structuralSpaceSep @@ list [nameToExpr @@ var "name", Serialization.cst @@ string "::", typeToExpr @@ var "htype"]) (list [
           valueBindingToExpr @@ var "vb"]))]
 
-declarationWithCommentsToExpr :: TBinding (H.DeclarationWithComments -> Expr)
+declarationWithCommentsToExpr :: TTermDefinition (H.DeclarationWithComments -> Expr)
 declarationWithCommentsToExpr = haskellSerdeDefinition "declarationWithCommentsToExpr" $
   doc "Convert a declaration with comments to an AST expression" $
   lambda "declWithComments" $ lets [
@@ -311,7 +296,7 @@ declarationWithCommentsToExpr = haskellSerdeDefinition "declarationWithCommentsT
         declarationToExpr @@ var "body"])))
       (var "mc")
 
-expressionToExpr :: TBinding (H.Expression -> Expr)
+expressionToExpr :: TTermDefinition (H.Expression -> Expr)
 expressionToExpr = haskellSerdeDefinition "expressionToExpr" $
   doc "Convert a Haskell expression to an AST expression" $
   lambda "expr" $
@@ -339,7 +324,21 @@ expressionToExpr = haskellSerdeDefinition "expressionToExpr" $
         Serialization.parenList @@ false @@ (Lists.map (expressionToExpr) (var "exprs")),
       H._Expression_variable>>: lambda "name" $ nameToExpr @@ var "name"]
 
-fieldToExpr :: TBinding (H.Field -> Expr)
+constructRecordExpressionToExpr :: TTermDefinition (H.ConstructRecordExpression -> Expr)
+constructRecordExpressionToExpr = haskellSerdeDefinition "constructRecordExpressionToExpr" $
+  doc "Convert a record construction expression to an AST expression" $
+  lambda "constructRecord" $ lets [
+    "name">: project H._ConstructRecordExpression H._ConstructRecordExpression_name @@ var "constructRecord",
+    "updates">: project H._ConstructRecordExpression H._ConstructRecordExpression_fields @@ var "constructRecord",
+    "fromUpdate">: lambda "update" $ lets [
+      "fn">: project H._FieldUpdate H._FieldUpdate_name @@ var "update",
+      "val">: project H._FieldUpdate H._FieldUpdate_value @@ var "update"] $
+      Serialization.ifx @@ HaskellOperators.defineOp @@ (nameToExpr @@ var "fn") @@ (expressionToExpr @@ var "val"),
+    "body">: Serialization.commaSep @@ Serialization.halfBlockStyle @@ (Lists.map (var "fromUpdate") (var "updates"))] $
+    Serialization.spaceSep @@ (Lists.cons (nameToExpr @@ var "name") (list [
+      Serialization.brackets @@ Serialization.curlyBraces @@ Serialization.halfBlockStyle @@ var "body"]))
+
+fieldToExpr :: TTermDefinition (H.Field -> Expr)
 fieldToExpr = haskellSerdeDefinition "fieldToExpr" $
   doc "Convert a field declaration to an AST expression" $
   lambda "field" $ lets [
@@ -347,7 +346,7 @@ fieldToExpr = haskellSerdeDefinition "fieldToExpr" $
     "typ">: project H._Field H._Field_type @@ var "field"] $
     Serialization.spaceSep @@ (Lists.cons (nameToExpr @@ var "name") (Lists.cons (Serialization.cst @@ (string "::")) (list [typeToExpr @@ var "typ"])))
 
-fieldWithCommentsToExpr :: TBinding (H.FieldWithComments -> Expr)
+fieldWithCommentsToExpr :: TTermDefinition (H.FieldWithComments -> Expr)
 fieldWithCommentsToExpr = haskellSerdeDefinition "fieldWithCommentsToExpr" $
   doc "Convert a field with comments to an AST expression" $
   lambda "fieldWithComments" $ lets [
@@ -359,7 +358,7 @@ fieldWithCommentsToExpr = haskellSerdeDefinition "fieldWithCommentsToExpr" $
         fieldToExpr @@ var "field"])))
       (var "mc")
 
-ifExpressionToExpr :: TBinding (H.IfExpression -> Expr)
+ifExpressionToExpr :: TTermDefinition (H.IfExpression -> Expr)
 ifExpressionToExpr = haskellSerdeDefinition "ifExpressionToExpr" $
   doc "Convert an if-then-else expression to an AST expression" $
   lambda "ifExpr" $ lets [
@@ -378,12 +377,12 @@ ifExpressionToExpr = haskellSerdeDefinition "ifExpressionToExpr" $
       (Serialization.spaceSep @@ (Lists.cons (Serialization.cst @@ (string "if")) (list [expressionToExpr @@ var "eif"]))) @@
       var "body"
 
-importExportSpecToExpr :: TBinding (H.ImportExportSpec -> Expr)
+importExportSpecToExpr :: TTermDefinition (H.ImportExportSpec -> Expr)
 importExportSpecToExpr = haskellSerdeDefinition "importExportSpecToExpr" $
   doc "Convert an import/export specification to an AST expression" $
   lambda "spec" $ nameToExpr @@ (project H._ImportExportSpec H._ImportExportSpec_name @@ var "spec")
 
-importToExpr :: TBinding (H.Import -> Expr)
+importToExpr :: TTermDefinition (H.Import -> Expr)
 importToExpr = haskellSerdeDefinition "importToExpr" $
   doc "Convert an import statement to an AST expression" $
   lambda "import" $ lets [
@@ -407,7 +406,7 @@ importToExpr = haskellSerdeDefinition "importToExpr" $
       Maybes.map (var "hidingSec") (var "mspec")]] $
     Serialization.spaceSep @@ var "parts"
 
-lambdaExpressionToExpr :: TBinding (H.LambdaExpression -> Expr)
+lambdaExpressionToExpr :: TTermDefinition (H.LambdaExpression -> Expr)
 lambdaExpressionToExpr = haskellSerdeDefinition "lambdaExpressionToExpr" $
   doc "Convert a lambda expression to an AST expression" $
   lambda "lambdaExpr" $ lets [
@@ -419,7 +418,7 @@ lambdaExpressionToExpr = haskellSerdeDefinition "lambdaExpressionToExpr" $
       (Serialization.prefix @@ (string "\\") @@ var "head") @@
       var "body"
 
---literalToExpr :: TBinding (H.Literal -> Expr)
+--literalToExpr :: TTermDefinition (H.Literal -> Expr)
 --literalToExpr = haskellSerdeDefinition "literalToExpr" $
 --  "lit" ~>
 --  "parensIfNeg" <~ ("b" ~> "e" ~> Logic.ifElse (var "b")
@@ -442,7 +441,7 @@ lambdaExpressionToExpr = haskellSerdeDefinition "lambdaExpressionToExpr" $
 --      H._Literal_string>>: lambda "s" $ Literals.showString $ var "s"]
 
 
-literalToExpr :: TBinding (H.Literal -> Expr)
+literalToExpr :: TTermDefinition (H.Literal -> Expr)
 literalToExpr = haskellSerdeDefinition "literalToExpr" $
   doc "Convert a literal value to an AST expression" $
   "lit" ~>
@@ -466,7 +465,7 @@ literalToExpr = haskellSerdeDefinition "literalToExpr" $
         @@ (Literals.showBigint $ var "i"),
       H._Literal_string>>: lambda "s" $ Literals.showString $ var "s"]
 
-localBindingToExpr :: TBinding (H.LocalBinding -> Expr)
+localBindingToExpr :: TTermDefinition (H.LocalBinding -> Expr)
 localBindingToExpr = haskellSerdeDefinition "localBindingToExpr" $
   doc "Convert a local binding to an AST expression" $
   lambda "binding" $
@@ -474,7 +473,7 @@ localBindingToExpr = haskellSerdeDefinition "localBindingToExpr" $
       H._LocalBinding_signature>>: lambda "ts" $ typeSignatureToExpr @@ var "ts",
       H._LocalBinding_value>>: lambda "vb" $ valueBindingToExpr @@ var "vb"]
 
-moduleHeadToExpr :: TBinding (H.ModuleHead -> Expr)
+moduleHeadToExpr :: TTermDefinition (H.ModuleHead -> Expr)
 moduleHeadToExpr = haskellSerdeDefinition "moduleHeadToExpr" $
   doc "Convert a module head to an AST expression" $
   lambda "moduleHead" $ lets [
@@ -493,7 +492,7 @@ moduleHeadToExpr = haskellSerdeDefinition "moduleHeadToExpr" $
         (list [var "head"]))))
       (var "mc")
 
-moduleToExpr :: TBinding (H.Module -> Expr)
+moduleToExpr :: TTermDefinition (H.Module -> Expr)
 moduleToExpr = haskellSerdeDefinition "moduleToExpr" $
   doc "Convert a Haskell module to an AST expression" $
   lambda "module" $ lets [
@@ -508,7 +507,7 @@ moduleToExpr = haskellSerdeDefinition "moduleToExpr" $
       (list [Serialization.newlineSep @@ (Lists.map (importToExpr) (var "imports"))])] $
     Serialization.doubleNewlineSep @@ (Lists.concat $ list [var "warning", var "headerLine", var "importLines", var "declLines"])
 
-nameToExpr :: TBinding (H.Name -> Expr)
+nameToExpr :: TTermDefinition (H.Name -> Expr)
 nameToExpr = haskellSerdeDefinition "nameToExpr" $
   doc "Convert a Haskell name to an AST expression" $
   lambda "name" $
@@ -518,7 +517,7 @@ nameToExpr = haskellSerdeDefinition "nameToExpr" $
         H._Name_normal>>: lambda "qn" $ writeQualifiedName @@ var "qn",
         H._Name_parens>>: lambda "qn" $ Strings.cat $ list [string "(", writeQualifiedName @@ var "qn", string ")"]]
 
-patternToExpr :: TBinding (H.Pattern -> Expr)
+patternToExpr :: TTermDefinition (H.Pattern -> Expr)
 patternToExpr = haskellSerdeDefinition "patternToExpr" $
   doc "Convert a pattern to an AST expression" $
   lambda "pat" $
@@ -533,27 +532,17 @@ patternToExpr = haskellSerdeDefinition "patternToExpr" $
         Serialization.parenList @@ false @@ (Lists.map (patternToExpr) (var "pats")),
       H._Pattern_wildcard>>: constant $ Serialization.cst @@ (string "_")]
 
-rightHandSideToExpr :: TBinding (H.RightHandSide -> Expr)
+rightHandSideToExpr :: TTermDefinition (H.RightHandSide -> Expr)
 rightHandSideToExpr = haskellSerdeDefinition "rightHandSideToExpr" $
   doc "Convert a right-hand side to an AST expression" $
   lambda "rhs" $ expressionToExpr @@ (unwrap H._RightHandSide @@ var "rhs")
 
-statementToExpr :: TBinding (H.Statement -> Expr)
+statementToExpr :: TTermDefinition (H.Statement -> Expr)
 statementToExpr = haskellSerdeDefinition "statementToExpr" $
   doc "Convert a statement to an AST expression" $
   lambda "stmt" $ expressionToExpr @@ (unwrap H._Statement @@ var "stmt")
 
-toHaskellComments :: TBinding (String -> String)
-toHaskellComments = haskellSerdeDefinition "toHaskellComments" $
-  doc "Convert a string to Haddock documentation comments" $
-  lambda "c" $ Strings.intercalate (string "\n") $ Lists.map (lambda "s" $ Strings.cat2 (string "-- | ") (var "s")) (Strings.lines $ var "c")
-
-toSimpleComments :: TBinding (String -> String)
-toSimpleComments = haskellSerdeDefinition "toSimpleComments" $
-  doc "Convert a string to simple line comments" $
-  lambda "c" $ Strings.intercalate (string "\n") $ Lists.map (lambda "s" $ Strings.cat2 (string "-- ") (var "s")) (Strings.lines $ var "c")
-
-typeSignatureToExpr :: TBinding (H.TypeSignature -> Expr)
+typeSignatureToExpr :: TTermDefinition (H.TypeSignature -> Expr)
 typeSignatureToExpr = haskellSerdeDefinition "typeSignatureToExpr" $
   doc "Convert a type signature to an AST expression" $
   lambda "typeSig" $ lets [
@@ -569,7 +558,7 @@ typeSignatureToExpr = haskellSerdeDefinition "typeSignatureToExpr" $
         Serialization.tabIndent @@ var "typeExpr"])
       (var "inlineSig")
 
-typeToExpr :: TBinding (H.Type -> Expr)
+typeToExpr :: TTermDefinition (H.Type -> Expr)
 typeToExpr = haskellSerdeDefinition "typeToExpr" $
   doc "Convert a Haskell type to an AST expression" $
   lambda "htype" $
@@ -592,7 +581,7 @@ typeToExpr = haskellSerdeDefinition "typeToExpr" $
         Serialization.parenList @@ false @@ (Lists.map (typeToExpr) (var "types")),
       H._Type_variable>>: lambda "name" $ nameToExpr @@ var "name"]
 
-valueBindingToExpr :: TBinding (H.ValueBinding -> Expr)
+valueBindingToExpr :: TTermDefinition (H.ValueBinding -> Expr)
 valueBindingToExpr = haskellSerdeDefinition "valueBindingToExpr" $
   doc "Convert a value binding to an AST expression" $
   lambda "vb" $
@@ -620,12 +609,22 @@ valueBindingToExpr = haskellSerdeDefinition "valueBindingToExpr" $
               (list [Serialization.indentBlock @@ Lists.cons (Serialization.cst @@ (string "where")) (Lists.map (localBindingToExpr) (var "bindings"))])))
           (var "local")]
 
-variableToExpr :: TBinding (H.Variable -> Expr)
+variableToExpr :: TTermDefinition (H.Variable -> Expr)
 variableToExpr = haskellSerdeDefinition "variableToExpr" $
   doc "Convert a type variable to an AST expression" $
   lambda "variable" $ nameToExpr @@ (unwrap H._Variable @@ var "variable")
 
-writeQualifiedName :: TBinding (H.QualifiedName -> String)
+toHaskellComments :: TTermDefinition (String -> String)
+toHaskellComments = haskellSerdeDefinition "toHaskellComments" $
+  doc "Convert a string to Haddock documentation comments" $
+  lambda "c" $ Strings.intercalate (string "\n") $ Lists.map (lambda "s" $ Strings.cat2 (string "-- | ") (var "s")) (Strings.lines $ var "c")
+
+toSimpleComments :: TTermDefinition (String -> String)
+toSimpleComments = haskellSerdeDefinition "toSimpleComments" $
+  doc "Convert a string to simple line comments" $
+  lambda "c" $ Strings.intercalate (string "\n") $ Lists.map (lambda "s" $ Strings.cat2 (string "-- ") (var "s")) (Strings.lines $ var "c")
+
+writeQualifiedName :: TTermDefinition (H.QualifiedName -> String)
 writeQualifiedName = haskellSerdeDefinition "writeQualifiedName" $
   doc "Write a qualified name as a string" $
   lambda "qname" $ lets [

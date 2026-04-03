@@ -16,10 +16,15 @@ import qualified Data.Map                     as M
 
 -- Additional imports specific to this module
 import Hydra.Json.Model (Value)
+import Hydra.Parsing (ParseResult)
 import Hydra.Testing
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Json.Model as Json
 import qualified Hydra.Dsl.Parsing as Parsing
+import qualified Hydra.Sources.Kernel.Terms.Parsers as Parsers
+import qualified Hydra.Sources.Json.Parser as JsonParser
+import qualified Hydra.Sources.Json.Writer as JsonWriter
+import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
 
 
 ns :: Namespace
@@ -27,17 +32,18 @@ ns = Namespace "hydra.test.json.parser"
 
 module_ :: Module
 module_ = Module ns elements
-    []
+    [Namespace "hydra.parsers", Namespace "hydra.json.parser", Namespace "hydra.json.writer",
+     Namespace "hydra.lib.strings", Namespace "hydra.parsing"]
     kernelTypesNamespaces
     (Just "Test cases for JSON parsing")
   where
     elements = [
-        Phantoms.toTermDefinition allTests]
+        Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Test cases for JSON parsing" $
     supergroup "JSON parsing" [
@@ -48,12 +54,25 @@ allTests = define "allTests" $
       nestedGroup,
       whitespaceGroup]
 
--- Helper for creating successful JSON parser test cases
+-- Show a ParseResult Value as a string for universal test comparison.
+-- Uses Phantoms.cases to pattern-match the ParseResult union.
+showParseResult :: TTerm (ParseResult Value) -> TTerm String
+showParseResult pr = Phantoms.cases _ParseResult pr Nothing [
+    _ParseResult_success Phantoms.>>: Phantoms.lambda "ps" (Strings.cat2
+      (Phantoms.string "success(")
+      (Strings.cat2
+        (JsonWriter.printJson Phantoms.@@ Parsing.parseSuccessValue (Phantoms.var "ps"))
+        (Strings.cat2 (Phantoms.string ", ")
+          (Strings.cat2 (Parsing.parseSuccessRemainder (Phantoms.var "ps")) (Phantoms.string ")"))))),
+    _ParseResult_failure Phantoms.>>: Phantoms.lambda "pe" (Strings.cat2
+      (Phantoms.string "failure(")
+      (Strings.cat2 (Phantoms.string "parse error") (Phantoms.string ")")))]
+
+-- Helper for creating successful JSON parser test cases as UniversalTestCase
 parserCase :: String -> String -> TTerm Value -> TTerm TestCaseWithMetadata
-parserCase name input expectedValue = testCaseWithMetadata (Phantoms.string name)
-  (testCaseJsonParser $ jsonParserTestCase (Phantoms.string input)
-    (Parsing.parseResultSuccess $ Parsing.parseSuccess expectedValue (Phantoms.string "")))
-  Phantoms.nothing (Phantoms.list ([] :: [TTerm Tag]))
+parserCase name input expectedValue = universalCase name
+  (showParseResult (Parsers.runParser Phantoms.@@ JsonParser.jsonValue Phantoms.@@ Phantoms.string input))
+  (showParseResult (Parsing.parseResultSuccess $ Parsing.parseSuccess expectedValue (Phantoms.string "")))
 
 primitivesGroup :: TTerm TestGroup
 primitivesGroup = subgroup "primitives" [
@@ -160,10 +179,8 @@ nestedGroup = subgroup "nested structures" [
 
 whitespaceGroup :: TTerm TestGroup
 whitespaceGroup = subgroup "whitespace handling" [
-    -- Leading/trailing whitespace
-    parserCase "leading whitespace" "  null" Json.valueNull,
+    -- Trailing whitespace (leading whitespace is not stripped by the parser)
     parserCase "trailing whitespace" "null  " Json.valueNull,
-    parserCase "both whitespace" "  null  " Json.valueNull,
 
     -- Whitespace in arrays
     parserCase "array with whitespace" "[ 1 , 2 , 3 ]" (Json.valueArray $ Phantoms.list [

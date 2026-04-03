@@ -22,6 +22,7 @@ compileJava {
 }
 
 test {
+    useJUnitPlatform()
     testLogging {
         events "failed"
         exceptionFormat "short"

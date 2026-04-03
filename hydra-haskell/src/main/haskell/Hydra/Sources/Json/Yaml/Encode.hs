@@ -62,12 +62,11 @@ import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants      as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -91,7 +90,7 @@ import qualified Hydra.Sources.Yaml.Model as YamlModel
 ns :: Namespace
 ns = Namespace "hydra.json.yaml.encode"
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
@@ -101,11 +100,11 @@ module_ = Module ns elements
     Just "JSON-to-YAML encoding. Converts JSON Values to YAML Nodes (always succeeds), and Hydra Terms to YAML Nodes via JSON."
   where
     elements = [
-      toTermDefinition jsonToYaml,
-      toTermDefinition toYaml]
+      toDefinition jsonToYaml,
+      toDefinition toYaml]
 
 -- | Convert a JSON Value to a YAML Node. This always succeeds since YAML is a superset of JSON.
-jsonToYaml :: TBinding (Value -> YM.Node)
+jsonToYaml :: TTermDefinition (Value -> YM.Node)
 jsonToYaml = define "jsonToYaml" $
   doc "Convert a JSON value to a YAML node. Always succeeds since YAML is a superset of JSON." $
   "value" ~>
@@ -135,7 +134,7 @@ jsonToYaml = define "jsonToYaml" $
       Yaml.nodeScalar $ Yaml.scalarStr $ var "s"]
 
 -- | Encode a Hydra Term to a YAML Node via JSON.
-toYaml :: TBinding (Term -> Either String YM.Node)
+toYaml :: TTermDefinition (Term -> Either String YM.Node)
 toYaml = define "toYaml" $
   doc "Encode a Hydra term to a YAML node via JSON encoding." $
   "term" ~>

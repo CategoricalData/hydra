@@ -197,7 +197,7 @@ def checkTerm(typed: Boolean)(path: hydra.paths.SubtermPath)(cx: hydra.graph.Gra
 
 def checkUndefinedTypeVariablesInType[T0, T1](path: T0)(cx: hydra.graph.Graph)(typ: hydra.core.Type)(mkError: (hydra.core.Name => Option[T1])): Option[T1] =
   {
-  lazy val freeVars: scala.collection.immutable.Set[hydra.core.Name] = hydra.rewriting.freeVariablesInType(typ)
+  lazy val freeVars: scala.collection.immutable.Set[hydra.core.Name] = hydra.variables.freeVariablesInType(typ)
   lazy val undefined: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.difference[hydra.core.Name](freeVars)(cx.typeVariables)
   hydra.lib.logic.ifElse[Option[T1]](hydra.lib.sets.`null`[hydra.core.Name](undefined))(None)({
     lazy val firstUndefined: hydra.core.Name = hydra.lib.lists.head[hydra.core.Name](hydra.lib.sets.toList[hydra.core.Name](undefined))
@@ -207,7 +207,7 @@ def checkUndefinedTypeVariablesInType[T0, T1](path: T0)(cx: hydra.graph.Graph)(t
 
 def checkUndefinedTypeVariablesInTypeScheme[T0, T1](path: T0)(cx: hydra.graph.Graph)(ts: hydra.core.TypeScheme)(mkError: (hydra.core.Name => Option[T1])): Option[T1] =
   {
-  lazy val freeVars: scala.collection.immutable.Set[hydra.core.Name] = hydra.rewriting.freeVariablesInTypeScheme(ts)
+  lazy val freeVars: scala.collection.immutable.Set[hydra.core.Name] = hydra.variables.freeVariablesInTypeScheme(ts)
   lazy val undefined: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.difference[hydra.core.Name](freeVars)(cx.typeVariables)
   hydra.lib.logic.ifElse[Option[T1]](hydra.lib.sets.`null`[hydra.core.Name](undefined))(None)({
     lazy val firstUndefined: hydra.core.Name = hydra.lib.lists.head[hydra.core.Name](hydra.lib.sets.toList[hydra.core.Name](undefined))

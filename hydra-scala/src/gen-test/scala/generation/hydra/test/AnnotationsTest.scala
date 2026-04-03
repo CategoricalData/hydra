@@ -13,9 +13,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.setTermAnnotation("k1")(Some(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42)))))(hydra.core.Term.literal(hydra.core.Literal.string("foo")))) == (
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="foo"}}, annotation={wrap(hydra.core.Name){"k1"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=42:int32}}}}}}) == (
 
-      hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.string("foo")), Map("k1" -> hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))))))
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="foo"}}, annotation={wrap(hydra.core.Name){"k1"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=42:int32}}}}}}))
 
   }
 
@@ -23,9 +23,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.setTermAnnotation("myKey")(Some(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(-17)))))(hydra.core.Term.literal(hydra.core.Literal.string("bar")))) == (
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="bar"}}, annotation={wrap(hydra.core.Name){"myKey"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=-17:int32}}}}}}) == (
 
-      hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.string("bar")), Map("myKey" -> hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(-17))))))))
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="bar"}}, annotation={wrap(hydra.core.Name){"myKey"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=-17:int32}}}}}}))
 
   }
 
@@ -33,9 +33,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.setTermAnnotation("x")(Some(hydra.core.Term.literal(hydra.core.Literal.string("hello"))))(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(0))))) == (
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=0:int32}}}, annotation={wrap(hydra.core.Name){"x"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="hello"}}}}}) == (
 
-      hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(0))), Map("x" -> hydra.core.Term.literal(hydra.core.Literal.string("hello")))))))
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=0:int32}}}, annotation={wrap(hydra.core.Name){"x"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="hello"}}}}}))
 
   }
 
@@ -43,9 +43,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.getTermAnnotation("k1")(hydra.annotations.setTermAnnotation("k1")(Some(hydra.core.Term.literal(hydra.core.Literal.string("value"))))(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42)))))) == (
+      just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="value"}})) == (
 
-      Some(hydra.core.Term.literal(hydra.core.Literal.string("value")))))
+      just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="value"}})))
 
   }
 
@@ -53,9 +53,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.getTermAnnotation("foo")(hydra.annotations.setTermAnnotation("foo")(Some(hydra.core.Term.literal(hydra.core.Literal.string(""))))(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(99)))))) == (
+      just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){string=""}})) == (
 
-      Some(hydra.core.Term.literal(hydra.core.Literal.string("")))))
+      just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){string=""}})))
 
   }
 
@@ -63,9 +63,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.getTermAnnotation("key")(hydra.annotations.setTermAnnotation("key")(Some(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(123)))))(hydra.core.Term.literal(hydra.core.Literal.string("test"))))) == (
+      just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=123:int32}}})) == (
 
-      Some(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(123))))))
+      just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=123:int32}}})))
 
   }
 
@@ -73,9 +73,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.getTermAnnotation("k1")(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int16(42.toShort))))) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -83,9 +83,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.getTermAnnotation("nonexistent")(hydra.core.Term.literal(hydra.core.Literal.string("hello")))) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -93,9 +93,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.getTermAnnotation("k1")(hydra.annotations.setTermAnnotation("k2")(Some(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(1)))))(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42)))))) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -103,9 +103,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.setTermAnnotation("k2")(Some(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(200)))))(hydra.annotations.setTermAnnotation("k1")(Some(hydra.core.Term.literal(hydra.core.Literal.string("first"))))(hydra.core.Term.literal(hydra.core.Literal.boolean(true))))) == (
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){boolean=true}}, annotation={wrap(hydra.core.Name){"k1"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="first"}}, wrap(hydra.core.Name){"k2"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=200:int32}}}}}}) == (
 
-      hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.boolean(true)), Map("k1" -> hydra.core.Term.literal(hydra.core.Literal.string("first")), "k2" -> hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(200))))))))
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){boolean=true}}, annotation={wrap(hydra.core.Name){"k1"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="first"}}, wrap(hydra.core.Name){"k2"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=200:int32}}}}}}))
 
   }
 
@@ -113,9 +113,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.setTermAnnotation("b")(Some(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(0)))))(hydra.annotations.setTermAnnotation("a")(Some(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(-5)))))(hydra.core.Term.literal(hydra.core.Literal.string("test"))))) == (
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="test"}}, annotation={wrap(hydra.core.Name){"a"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=-5:int32}}}, wrap(hydra.core.Name){"b"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=0:int32}}}}}}) == (
 
-      hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.string("test")), Map("a" -> hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(-5))), "b" -> hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(0))))))))
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="test"}}, annotation={wrap(hydra.core.Name){"a"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=-5:int32}}}, wrap(hydra.core.Name){"b"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=0:int32}}}}}}))
 
   }
 
@@ -123,9 +123,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.setTermAnnotation("k1")(Some(hydra.core.Term.literal(hydra.core.Literal.string("outer"))))(hydra.annotations.setTermAnnotation("k1")(Some(hydra.core.Term.literal(hydra.core.Literal.string("inner"))))(hydra.core.Term.literal(hydra.core.Literal.string("bar"))))) == (
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="bar"}}, annotation={wrap(hydra.core.Name){"k1"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="outer"}}}}}) == (
 
-      hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.string("bar")), Map("k1" -> hydra.core.Term.literal(hydra.core.Literal.string("outer")))))))
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="bar"}}, annotation={wrap(hydra.core.Name){"k1"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="outer"}}}}}))
 
   }
 
@@ -133,9 +133,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.setTermAnnotation("x")(Some(hydra.core.Term.literal(hydra.core.Literal.string("new"))))(hydra.annotations.setTermAnnotation("x")(Some(hydra.core.Term.literal(hydra.core.Literal.string("old"))))(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42)))))) == (
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=42:int32}}}, annotation={wrap(hydra.core.Name){"x"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="new"}}}}}) == (
 
-      hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))), Map("x" -> hydra.core.Term.literal(hydra.core.Literal.string("new")))))))
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=42:int32}}}, annotation={wrap(hydra.core.Name){"x"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="new"}}}}}))
 
   }
 
@@ -143,9 +143,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.setTermAnnotation("key")(Some(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(999)))))(hydra.annotations.setTermAnnotation("key")(Some(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(1)))))(hydra.core.Term.literal(hydra.core.Literal.boolean(false))))) == (
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){boolean=false}}, annotation={wrap(hydra.core.Name){"key"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=999:int32}}}}}}) == (
 
-      hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.boolean(false)), Map("key" -> hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(999))))))))
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){boolean=false}}, annotation={wrap(hydra.core.Name){"key"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=999:int32}}}}}}))
 
   }
 
@@ -153,9 +153,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.setTermAnnotation("k1")(None)(hydra.annotations.setTermAnnotation("k1")(Some(hydra.core.Term.literal(hydra.core.Literal.string("foo"))))(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int64(137L)))))) == (
+      inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int64=137:int64}}}) == (
 
-      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int64(137L)))))
+      inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int64=137:int64}}}))
 
   }
 
@@ -163,9 +163,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.setTermAnnotation("x")(None)(hydra.annotations.setTermAnnotation("x")(Some(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42)))))(hydra.core.Term.literal(hydra.core.Literal.string("test"))))) == (
+      inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="test"}}) == (
 
-      hydra.core.Term.literal(hydra.core.Literal.string("test"))))
+      inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="test"}}))
 
   }
 
@@ -173,9 +173,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.setTermAnnotation("k1")(None)(hydra.annotations.setTermAnnotation("k2")(Some(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(200)))))(hydra.annotations.setTermAnnotation("k1")(Some(hydra.core.Term.literal(hydra.core.Literal.string("first"))))(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int64(137L))))))) == (
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int64=137:int64}}}, annotation={wrap(hydra.core.Name){"k2"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=200:int32}}}}}}) == (
 
-      hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int64(137L))), Map("k2" -> hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(200))))))))
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int64=137:int64}}}, annotation={wrap(hydra.core.Name){"k2"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=200:int32}}}}}}))
 
   }
 
@@ -183,9 +183,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.setTermAnnotation("b")(None)(hydra.annotations.setTermAnnotation("b")(Some(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(2)))))(hydra.annotations.setTermAnnotation("a")(Some(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(1)))))(hydra.core.Term.literal(hydra.core.Literal.string("x")))))) == (
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="x"}}, annotation={wrap(hydra.core.Name){"a"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=1:int32}}}}}}) == (
 
-      hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.string("x")), Map("a" -> hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(1))))))))
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="x"}}, annotation={wrap(hydra.core.Name){"a"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=1:int32}}}}}}))
 
   }
 
@@ -195,9 +195,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.setTermDescription(Some("my description"))(hydra.core.Term.literal(hydra.core.Literal.string("foo")))) == (
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="foo"}}, annotation={wrap(hydra.core.Name){"description"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="my description"}}}}}) == (
 
-      hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.string("foo")), Map("description" -> hydra.core.Term.literal(hydra.core.Literal.string("my description")))))))
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="foo"}}, annotation={wrap(hydra.core.Name){"description"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="my description"}}}}}))
 
   }
 
@@ -205,9 +205,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.setTermDescription(Some(""))(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))) == (
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=42:int32}}}, annotation={wrap(hydra.core.Name){"description"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string=""}}}}}) == (
 
-      hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))), Map("description" -> hydra.core.Term.literal(hydra.core.Literal.string("")))))))
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=42:int32}}}, annotation={wrap(hydra.core.Name){"description"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string=""}}}}}))
 
   }
 
@@ -215,9 +215,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.setTermDescription(Some("A longer description with spaces"))(hydra.core.Term.literal(hydra.core.Literal.boolean(true)))) == (
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){boolean=true}}, annotation={wrap(hydra.core.Name){"description"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="A longer description with spaces"}}}}}) == (
 
-      hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.boolean(true)), Map("description" -> hydra.core.Term.literal(hydra.core.Literal.string("A longer description with spaces")))))))
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){boolean=true}}, annotation={wrap(hydra.core.Name){"description"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="A longer description with spaces"}}}}}))
 
   }
 
@@ -225,9 +225,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.getTermDescription(hydra.lexical.emptyContext)(hydra.lexical.emptyGraph)(hydra.annotations.setTermDescription(Some("hello"))(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42)))))) == (
+      right(just("hello"))) == (
 
-      Right(Some("hello"))))
+      right(just("hello"))))
 
   }
 
@@ -235,9 +235,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.getTermDescription(hydra.lexical.emptyContext)(hydra.lexical.emptyGraph)(hydra.annotations.setTermDescription(Some(""))(hydra.core.Term.literal(hydra.core.Literal.string("test"))))) == (
+      right(just(""))) == (
 
-      Right(Some(""))))
+      right(just(""))))
 
   }
 
@@ -245,9 +245,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.getTermDescription(hydra.lexical.emptyContext)(hydra.lexical.emptyGraph)(hydra.annotations.setTermDescription(Some("desc"))(hydra.core.Term.literal(hydra.core.Literal.boolean(false))))) == (
+      right(just("desc"))) == (
 
-      Right(Some("desc"))))
+      right(just("desc"))))
 
   }
 
@@ -255,9 +255,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.getTermDescription(hydra.lexical.emptyContext)(hydra.lexical.emptyGraph)(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int16(42.toShort))))) == (
+      right(nothing)) == (
 
-      Right(None)))
+      right(nothing)))
 
   }
 
@@ -265,9 +265,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.getTermDescription(hydra.lexical.emptyContext)(hydra.lexical.emptyGraph)(hydra.core.Term.literal(hydra.core.Literal.string("no description here")))) == (
+      right(nothing)) == (
 
-      Right(None)))
+      right(nothing)))
 
   }
 
@@ -275,9 +275,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.getTermDescription(hydra.lexical.emptyContext)(hydra.lexical.emptyGraph)(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(0))))) == (
+      right(nothing)) == (
 
-      Right(None)))
+      right(nothing)))
 
   }
 
@@ -285,9 +285,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.setTermDescription(Some("outer"))(hydra.annotations.setTermDescription(Some("inner"))(hydra.core.Term.literal(hydra.core.Literal.string("bar"))))) == (
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="bar"}}, annotation={wrap(hydra.core.Name){"description"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="outer"}}}}}) == (
 
-      hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.string("bar")), Map("description" -> hydra.core.Term.literal(hydra.core.Literal.string("outer")))))))
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="bar"}}, annotation={wrap(hydra.core.Name){"description"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="outer"}}}}}))
 
   }
 
@@ -295,9 +295,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.setTermDescription(Some("new"))(hydra.annotations.setTermDescription(Some("old"))(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(99)))))) == (
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=99:int32}}}, annotation={wrap(hydra.core.Name){"description"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="new"}}}}}) == (
 
-      hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(99))), Map("description" -> hydra.core.Term.literal(hydra.core.Literal.string("new")))))))
+      inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body=inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=99:int32}}}, annotation={wrap(hydra.core.Name){"description"}=inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="new"}}}}}))
 
   }
 
@@ -305,9 +305,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.setTermDescription(None)(hydra.annotations.setTermDescription(Some("desc"))(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int64(137L)))))) == (
+      inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int64=137:int64}}}) == (
 
-      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int64(137L)))))
+      inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int64=137:int64}}}))
 
   }
 
@@ -315,9 +315,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.setTermDescription(None)(hydra.annotations.setTermDescription(Some("to be removed"))(hydra.core.Term.literal(hydra.core.Literal.string("test"))))) == (
+      inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="test"}}) == (
 
-      hydra.core.Term.literal(hydra.core.Literal.string("test"))))
+      inject(hydra.core.Term){literal=inject(hydra.core.Literal){string="test"}}))
 
   }
 
@@ -327,9 +327,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.getTermAnnotation("one")(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -337,9 +337,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.getTermAnnotation("one")(hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))), Map("one" -> hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(1)))))))) == (
+      just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=1:int32}}})) == (
 
-      Some(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(1))))))
+      just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=1:int32}}})))
 
   }
 
@@ -347,9 +347,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.getTermAnnotation("one")(hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))), Map("one" -> hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(1)))))), Map("two" -> hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(2)))))))) == (
+      just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=1:int32}}})) == (
 
-      Some(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(1))))))
+      just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=1:int32}}})))
 
   }
 
@@ -357,9 +357,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.getTermAnnotation("two")(hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))), Map("one" -> hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(1)))))), Map("two" -> hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(2)))))))) == (
+      just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=2:int32}}})) == (
 
-      Some(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(2))))))
+      just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=2:int32}}})))
 
   }
 
@@ -367,9 +367,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.getTermAnnotation("two")(hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))), Map("one" -> hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(1)))))), Map("two" -> hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(2)))))), Map("one" -> hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(99)))))))) == (
+      just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=2:int32}}})) == (
 
-      Some(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(2))))))
+      just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=2:int32}}})))
 
   }
 
@@ -377,9 +377,9 @@ class AnnotationsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.annotations.getTermAnnotation("one")(hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))), Map("one" -> hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(1)))))), Map("two" -> hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(2)))))), Map("one" -> hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(99)))))))) == (
+      just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=99:int32}}})) == (
 
-      Some(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(99))))))
+      just(inject(hydra.core.Term){literal=inject(hydra.core.Literal){integer=inject(hydra.core.IntegerValue){int32=99:int32}}})))
 
   }
 }

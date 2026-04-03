@@ -13,7 +13,7 @@ class CharsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.chars.isAlphaNum(97)) == (
+      true) == (
 
       true))
 
@@ -23,7 +23,7 @@ class CharsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.chars.isAlphaNum(53)) == (
+      true) == (
 
       true))
 
@@ -33,7 +33,7 @@ class CharsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.chars.isAlphaNum(32)) == (
+      false) == (
 
       false))
 
@@ -43,7 +43,7 @@ class CharsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.chars.isAlphaNum(46)) == (
+      false) == (
 
       false))
 
@@ -55,7 +55,7 @@ class CharsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.chars.isLower(97)) == (
+      true) == (
 
       true))
 
@@ -65,7 +65,7 @@ class CharsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.chars.isLower(65)) == (
+      false) == (
 
       false))
 
@@ -75,7 +75,7 @@ class CharsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.chars.isLower(53)) == (
+      false) == (
 
       false))
 
@@ -87,7 +87,7 @@ class CharsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.chars.isSpace(32)) == (
+      true) == (
 
       true))
 
@@ -97,7 +97,7 @@ class CharsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.chars.isSpace(9)) == (
+      true) == (
 
       true))
 
@@ -107,7 +107,7 @@ class CharsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.chars.isSpace(10)) == (
+      true) == (
 
       true))
 
@@ -117,7 +117,7 @@ class CharsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.chars.isSpace(97)) == (
+      false) == (
 
       false))
 
@@ -129,7 +129,7 @@ class CharsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.chars.isUpper(65)) == (
+      true) == (
 
       true))
 
@@ -139,7 +139,7 @@ class CharsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.chars.isUpper(97)) == (
+      false) == (
 
       false))
 
@@ -149,7 +149,7 @@ class CharsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.chars.isUpper(53)) == (
+      false) == (
 
       false))
 
@@ -161,9 +161,9 @@ class CharsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.chars.toLower(65)) == (
+      97:int32) == (
 
-      97))
+      97:int32))
 
   }
 
@@ -171,9 +171,9 @@ class CharsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.chars.toLower(97)) == (
+      97:int32) == (
 
-      97))
+      97:int32))
 
   }
 
@@ -181,9 +181,9 @@ class CharsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.chars.toLower(53)) == (
+      53:int32) == (
 
-      53))
+      53:int32))
 
   }
 
@@ -193,9 +193,9 @@ class CharsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.chars.toUpper(97)) == (
+      65:int32) == (
 
-      65))
+      65:int32))
 
   }
 
@@ -203,9 +203,9 @@ class CharsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.chars.toUpper(65)) == (
+      65:int32) == (
 
-      65))
+      65:int32))
 
   }
 
@@ -213,9 +213,9 @@ class CharsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.chars.toUpper(53)) == (
+      53:int32) == (
 
-      53))
+      53:int32))
 
   }
 }

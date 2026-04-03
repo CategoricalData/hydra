@@ -5,12 +5,12 @@ Note: the following modules are part of the kernel, but they are not default imp
 - Hydra.Decode.Core
 - Hydra.Encode.Core
 - Hydra.Extract.Core
-- Hydra.Extract.Helpers
 - Hydra.Extract.Util
+- Hydra.Show.Variants
+- Hydra.Codegen
 - Hydra.Json.Parser
 - Hydra.Json.Writer
 - Hydra.Parsers
-- Hydra.Packaging
 - Hydra.Show.Core
 - Hydra.Topology
 -}
@@ -18,6 +18,7 @@ Note: the following modules are part of the kernel, but they are not default imp
 module Hydra.Kernel (
   module Hydra.Paths,
   module Hydra.Adapt,
+  module Hydra.Analysis,
   module Hydra.Annotations,
   module Hydra.Arity,
   module Hydra.Checking,
@@ -26,9 +27,10 @@ module Hydra.Kernel (
   module Hydra.Constants,
   module Hydra.Context,
   module Hydra.Core,
+  module Hydra.Dependencies,
+  module Hydra.Environment,
   module Hydra.Error.Checking,
   module Hydra.Error.Core,
-  module Hydra.Error.Packaging,
   module Hydra.Errors,
   module Hydra.Languages,
   module Hydra.Formatting,
@@ -41,13 +43,16 @@ module Hydra.Kernel (
   module Hydra.Parsing,
   module Hydra.Phantoms,
   module Hydra.Names,
+  module Hydra.Predicates,
   module Hydra.Query,
   module Hydra.Reduction,
   module Hydra.Reflect,
   module Hydra.Relational,
+  module Hydra.Resolution,
   module Hydra.Rewriting,
-  module Hydra.Schemas,
+  module Hydra.Scoping,
   module Hydra.Serialization,
+  module Hydra.Strip,
   module Hydra.Settings,
   module Hydra.Sorting,
   module Hydra.Substitution,
@@ -57,11 +62,13 @@ module Hydra.Kernel (
   module Hydra.Typing,
   module Hydra.Unification,
   module Hydra.Util,
+  module Hydra.Variables,
   module Hydra.Variants,
 ) where
 
 import Hydra.Paths
 import Hydra.Adapt
+import Hydra.Analysis
 import Hydra.Annotations
 import Hydra.Arity
 import Hydra.Checking
@@ -70,9 +77,10 @@ import Hydra.Coders
 import Hydra.Constants
 import Hydra.Context
 import Hydra.Core
+import Hydra.Dependencies
+import Hydra.Environment
 import Hydra.Error.Checking
 import Hydra.Error.Core
-import Hydra.Error.Packaging
 import Hydra.Errors
 import Hydra.Languages
 import Hydra.Formatting
@@ -85,14 +93,17 @@ import Hydra.Module.Compat
 import Hydra.Parsing
 import Hydra.Phantoms
 import Hydra.Names
+import Hydra.Predicates
 import Hydra.Query
 import Hydra.Reduction
 import Hydra.Reflect
 import Hydra.Relational
+import Hydra.Resolution
 import Hydra.Rewriting
-import Hydra.Schemas
+import Hydra.Scoping
 import Hydra.Serialization
 import Hydra.Settings
+import Hydra.Strip
 import Hydra.Sorting
 import Hydra.Substitution
 import Hydra.Tabular
@@ -101,4 +112,5 @@ import Hydra.Testing
 import Hydra.Typing
 import Hydra.Unification
 import Hydra.Util
+import Hydra.Variables
 import Hydra.Variants

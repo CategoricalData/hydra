@@ -4,20 +4,16 @@
 
 module Hydra.Dsl.Ext.Avro.Environment where
 
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Ext.Avro.Environment as Environment
 import qualified Hydra.Ext.Org.Apache.Avro.Schema as Schema
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Phantoms as Phantoms
-import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
 
-avroEnvironment :: Phantoms.TTerm (M.Map Environment.AvroQualifiedName (Util.Adapter Schema.Schema Core.Type Model.Value Core.Term)) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (M.Map Core.Name Core.Binding) -> Phantoms.TTerm Environment.AvroEnvironment
+avroEnvironment :: Phantoms.TTerm (M.Map Environment.AvroQualifiedName (Coders.Adapter Schema.Schema Core.Type Model.Value Core.Term)) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (M.Map Core.Name Core.Binding) -> Phantoms.TTerm Environment.AvroEnvironment
 avroEnvironment namedAdapters namespace elements =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.ext.avro.environment.AvroEnvironment"),
@@ -40,7 +36,7 @@ avroEnvironmentElements x =
         Core.projectionField = (Core.Name "elements")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-avroEnvironmentNamedAdapters :: Phantoms.TTerm Environment.AvroEnvironment -> Phantoms.TTerm (M.Map Environment.AvroQualifiedName (Util.Adapter Schema.Schema Core.Type Model.Value Core.Term))
+avroEnvironmentNamedAdapters :: Phantoms.TTerm Environment.AvroEnvironment -> Phantoms.TTerm (M.Map Environment.AvroQualifiedName (Coders.Adapter Schema.Schema Core.Type Model.Value Core.Term))
 avroEnvironmentNamedAdapters x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -79,7 +75,7 @@ avroEnvironmentWithElements original newVal =
           Core.fieldName = (Core.Name "elements"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-avroEnvironmentWithNamedAdapters :: Phantoms.TTerm Environment.AvroEnvironment -> Phantoms.TTerm (M.Map Environment.AvroQualifiedName (Util.Adapter Schema.Schema Core.Type Model.Value Core.Term)) -> Phantoms.TTerm Environment.AvroEnvironment
+avroEnvironmentWithNamedAdapters :: Phantoms.TTerm Environment.AvroEnvironment -> Phantoms.TTerm (M.Map Environment.AvroQualifiedName (Coders.Adapter Schema.Schema Core.Type Model.Value Core.Term)) -> Phantoms.TTerm Environment.AvroEnvironment
 avroEnvironmentWithNamedAdapters original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.ext.avro.environment.AvroEnvironment"),
@@ -305,7 +301,7 @@ avroQualifiedNameWithNamespace original newVal =
               Core.projectionField = (Core.Name "name")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-encodeEnvironment :: Phantoms.TTerm (M.Map Core.Name Core.Type) -> Phantoms.TTerm (M.Map Core.Name (Util.Adapter Core.Type Schema.Schema Core.Term Model.Value)) -> Phantoms.TTerm Environment.EncodeEnvironment
+encodeEnvironment :: Phantoms.TTerm (M.Map Core.Name Core.Type) -> Phantoms.TTerm (M.Map Core.Name (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value)) -> Phantoms.TTerm Environment.EncodeEnvironment
 encodeEnvironment typeMap emitted =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.ext.avro.environment.EncodeEnvironment"),
@@ -317,7 +313,7 @@ encodeEnvironment typeMap emitted =
           Core.fieldName = (Core.Name "emitted"),
           Core.fieldTerm = (Phantoms.unTTerm emitted)}]}))
 
-encodeEnvironmentEmitted :: Phantoms.TTerm Environment.EncodeEnvironment -> Phantoms.TTerm (M.Map Core.Name (Util.Adapter Core.Type Schema.Schema Core.Term Model.Value))
+encodeEnvironmentEmitted :: Phantoms.TTerm Environment.EncodeEnvironment -> Phantoms.TTerm (M.Map Core.Name (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value))
 encodeEnvironmentEmitted x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -333,7 +329,7 @@ encodeEnvironmentTypeMap x =
         Core.projectionField = (Core.Name "typeMap")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-encodeEnvironmentWithEmitted :: Phantoms.TTerm Environment.EncodeEnvironment -> Phantoms.TTerm (M.Map Core.Name (Util.Adapter Core.Type Schema.Schema Core.Term Model.Value)) -> Phantoms.TTerm Environment.EncodeEnvironment
+encodeEnvironmentWithEmitted :: Phantoms.TTerm Environment.EncodeEnvironment -> Phantoms.TTerm (M.Map Core.Name (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value)) -> Phantoms.TTerm Environment.EncodeEnvironment
 encodeEnvironmentWithEmitted original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.ext.avro.environment.EncodeEnvironment"),

@@ -24,14 +24,14 @@ ns = Namespace "hydra.test.lib.lists"
 
 module_ :: Module
 module_ = Module ns elements
-    [TestGraph.ns]
+    [TestGraph.ns, Namespace "hydra.reduction", Namespace "hydra.show.core"]
     kernelTypesNamespaces
     (Just "Test cases for hydra.lib.lists primitives")
   where
     elements = [
-      Phantoms.toTermDefinition allTests]
+      Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 -- Helper functions for building test terms
@@ -45,6 +45,10 @@ optionalInt32 :: Maybe Int -> TTerm Term
 optionalInt32 Nothing = Core.termMaybe nothing
 optionalInt32 (Just x) = Core.termMaybe  $ just (int32 x)
 
+optionalIntList :: Maybe [Int] -> TTerm Term
+optionalIntList Nothing = Core.termMaybe nothing
+optionalIntList (Just xs) = Core.termMaybe $ just (intList xs)
+
 optionalString :: Maybe String -> TTerm Term
 optionalString Nothing = Core.termMaybe nothing
 optionalString (Just x) = Core.termMaybe  $ just (string x)
@@ -52,7 +56,7 @@ optionalString (Just x) = Core.termMaybe  $ just (string x)
 stringList :: [String] -> TTerm Term
 stringList els = list (string <$> els)
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Test cases for hydra.lib.lists primitives" $
     supergroup "hydra.lib.lists primitives" [
@@ -77,6 +81,11 @@ allTests = define "allTests" $
       listsLast,
       listsLength,
       listsMap,
+      listsMaybeAt,
+      listsMaybeHead,
+      listsMaybeInit,
+      listsMaybeLast,
+      listsMaybeTail,
       listsNub,
       listsNull,
       listsPartition,
@@ -294,6 +303,47 @@ allTests = define "allTests" $
           testStr name fun lst result = primCase name _lists_map [fun, stringList lst] (stringList result)
           testInt name fun lst result = primCase name _lists_map [fun, intList lst] (intList result)
   
+      listsMaybeAt = subgroup "maybeAt" [
+        test "valid index" 1 [10, 20, 30] (Just 20),
+        test "first element" 0 [10, 20, 30] (Just 10),
+        test "last element" 2 [10, 20, 30] (Just 30),
+        test "out of bounds" 5 [10, 20, 30] Nothing,
+        test "negative index" (-1) [10, 20, 30] Nothing,
+        test "empty list" 0 [] Nothing]
+        where
+          test name i lst result = primCase name _lists_maybeAt [int32 i, intList lst] (optionalInt32 result)
+
+      listsMaybeHead = subgroup "maybeHead" [
+        testInt "non-empty int list" [1, 2, 3] (Just 1),
+        testInt "empty int list" [] Nothing,
+        testInt "single element" [42] (Just 42),
+        testStr "non-empty string list" ["hello", "world"] (Just "hello"),
+        testStr "empty string list" [] Nothing]
+        where
+          testInt name lst result = primCase name _lists_maybeHead [intList lst] (optionalInt32 result)
+          testStr name lst result = primCase name _lists_maybeHead [stringList lst] (optionalString result)
+
+      listsMaybeInit = subgroup "maybeInit" [
+        test "three elements" [1, 2, 3] (Just [1, 2]),
+        test "single element" [42] (Just []),
+        test "empty list" [] Nothing]
+        where
+          test name lst result = primCase name _lists_maybeInit [intList lst] (optionalIntList result)
+
+      listsMaybeLast = subgroup "maybeLast" [
+        testInt "three elements" [1, 2, 3] (Just 3),
+        testInt "single element" [42] (Just 42),
+        testInt "empty list" [] Nothing]
+        where
+          testInt name lst result = primCase name _lists_maybeLast [intList lst] (optionalInt32 result)
+
+      listsMaybeTail = subgroup "maybeTail" [
+        test "three elements" [1, 2, 3] (Just [2, 3]),
+        test "single element" [42] (Just []),
+        test "empty list" [] Nothing]
+        where
+          test name lst result = primCase name _lists_maybeTail [intList lst] (optionalIntList result)
+
       listsNub = subgroup "nub" [
         testInt "remove duplicates" [1, 2, 1, 3, 2, 4] [1, 2, 3, 4],
         testInt "no duplicates" [1, 2, 3] [1, 2, 3],

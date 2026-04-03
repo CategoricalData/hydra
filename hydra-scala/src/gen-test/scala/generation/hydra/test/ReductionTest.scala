@@ -13,9 +13,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      (x: Int) => x(42)) == (
+      42:int32) == (
 
-      42))
+      42:int32))
 
   }
 
@@ -23,9 +23,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      (x: Int) => 1(42)) == (
+      1:int32) == (
 
-      1))
+      1:int32))
 
   }
 
@@ -33,9 +33,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      (x: Int) => (y: Int) => x(1)(2)) == (
+      1:int32) == (
 
-      1))
+      1:int32))
 
   }
 
@@ -45,7 +45,7 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.strings.toUpper("hello")) == (
+      "HELLO") == (
 
       "HELLO"))
 
@@ -55,7 +55,7 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.strings.toUpper("Hello World")) == (
+      "HELLO WORLD") == (
 
       "HELLO WORLD"))
 
@@ -65,7 +65,7 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.strings.toUpper("")) == (
+      "") == (
 
       ""))
 
@@ -75,7 +75,7 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.strings.toLower("HELLO")) == (
+      "hello") == (
 
       "hello"))
 
@@ -85,9 +85,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.strings.length("hello")) == (
+      5:int32) == (
 
-      5))
+      5:int32))
 
   }
 
@@ -95,9 +95,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.strings.length("")) == (
+      0:int32) == (
 
-      0))
+      0:int32))
 
   }
 
@@ -105,9 +105,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.add(3)(5)) == (
+      8:int32) == (
 
-      8))
+      8:int32))
 
   }
 
@@ -115,9 +115,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.add(-10)(3)) == (
+      -7:int32) == (
 
-      -7))
+      -7:int32))
 
   }
 
@@ -125,9 +125,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.add(0)(42)) == (
+      42:int32) == (
 
-      42))
+      42:int32))
 
   }
 
@@ -135,9 +135,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.sub(10)(3)) == (
+      7:int32) == (
 
-      7))
+      7:int32))
 
   }
 
@@ -145,9 +145,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.mul(6)(7)) == (
+      42:int32) == (
 
-      42))
+      42:int32))
 
   }
 
@@ -155,9 +155,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.mul(100)(0)) == (
+      0:int32) == (
 
-      0))
+      0:int32))
 
   }
 
@@ -165,9 +165,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.div(20)(4)) == (
+      5:int32) == (
 
-      5))
+      5:int32))
 
   }
 
@@ -175,9 +175,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.mod(17)(5)) == (
+      2:int32) == (
 
-      2))
+      2:int32))
 
   }
 
@@ -185,9 +185,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.strings.splitOn(",")("a,b,c")) == (
+      ["a", "b", "c"]) == (
 
-      Seq("a", "b", "c")))
+      ["a", "b", "c"]))
 
   }
 
@@ -195,7 +195,7 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.strings.cat2("hello")("world")) == (
+      "helloworld") == (
 
       "helloworld"))
 
@@ -207,9 +207,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.length[Int](Seq(1, 2, 3))) == (
+      3:int32) == (
 
-      3))
+      3:int32))
 
   }
 
@@ -217,9 +217,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.length[scala.Predef.String](Seq("a", "b"))) == (
+      2:int32) == (
 
-      2))
+      2:int32))
 
   }
 
@@ -227,9 +227,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.length(Seq())) == (
+      0:int32) == (
 
-      0))
+      0:int32))
 
   }
 
@@ -237,9 +237,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.length[Boolean](Seq(true))) == (
+      1:int32) == (
 
-      1))
+      1:int32))
 
   }
 
@@ -247,9 +247,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.head[Int](Seq(10, 20, 30))) == (
+      10:int32) == (
 
-      10))
+      10:int32))
 
   }
 
@@ -257,7 +257,7 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.head[scala.Predef.String](Seq("first", "second"))) == (
+      "first") == (
 
       "first"))
 
@@ -267,9 +267,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.last[Int](Seq(10, 20, 30))) == (
+      30:int32) == (
 
-      30))
+      30:int32))
 
   }
 
@@ -277,9 +277,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.concat2[Int](Seq(1, 2))(Seq(3, 4))) == (
+      [1:int32, 2:int32, 3:int32, 4:int32]) == (
 
-      Seq(1, 2, 3, 4)))
+      [1:int32, 2:int32, 3:int32, 4:int32]))
 
   }
 
@@ -287,9 +287,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.concat2[Int](Seq())(Seq(1, 2))) == (
+      [1:int32, 2:int32]) == (
 
-      Seq(1, 2)))
+      [1:int32, 2:int32]))
 
   }
 
@@ -297,9 +297,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.reverse[Int](Seq(1, 2, 3))) == (
+      [3:int32, 2:int32, 1:int32]) == (
 
-      Seq(3, 2, 1)))
+      [3:int32, 2:int32, 1:int32]))
 
   }
 
@@ -307,9 +307,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.reverse(Seq())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -319,9 +319,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.size(hydra.lib.sets.empty)) == (
+      0:int32) == (
 
-      0))
+      0:int32))
 
   }
 
@@ -331,9 +331,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      42) == (
+      42:int32) == (
 
-      42))
+      42:int32))
 
   }
 
@@ -341,9 +341,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      -17) == (
+      -17:int32) == (
 
-      -17))
+      -17:int32))
 
   }
 
@@ -351,9 +351,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      0) == (
+      0:int32) == (
 
-      0))
+      0:int32))
 
   }
 
@@ -409,19 +409,31 @@ class ReductionTest extends AnyFunSuite {
 
   test("literals as values - float literal is a value") {
 
-    assert(math.abs((3.14) - (3.14)) <= 1e-15)
+    assert((
+
+      3.14:float64) == (
+
+      3.14:float64))
 
   }
 
   test("literals as values - negative float literal") {
 
-    assert(math.abs((-2.718) - (-2.718)) <= 1e-15)
+    assert((
+
+      -2.718:float64) == (
+
+      -2.718:float64))
 
   }
 
   test("literals as values - zero float literal") {
 
-    assert(math.abs((0.0) - (0.0)) <= 1e-15)
+    assert((
+
+      0.0:float64) == (
+
+      0.0:float64))
 
   }
 
@@ -431,9 +443,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      Seq()) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -441,9 +453,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      Seq(1, 2, 3)) == (
+      [1:int32, 2:int32, 3:int32]) == (
 
-      Seq(1, 2, 3)))
+      [1:int32, 2:int32, 3:int32]))
 
   }
 
@@ -451,9 +463,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      Seq((x: Int) => x(42))) == (
+      [42:int32]) == (
 
-      Seq(42)))
+      [42:int32]))
 
   }
 
@@ -463,9 +475,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      None) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -473,9 +485,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      Some(42)) == (
+      just(42:int32)) == (
 
-      Some(42)))
+      just(42:int32)))
 
   }
 
@@ -483,9 +495,183 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      Some((x: Int) => x(42))) == (
+      just(42:int32)) == (
 
-      Some(42)))
+      just(42:int32)))
+
+  }
+
+  // alpha conversion
+
+  test("alpha conversion - variable at top level") {
+
+    assert((
+
+      y) == (
+
+      y))
+
+  }
+
+  test("alpha conversion - variable in list") {
+
+    assert((
+
+      [42:int32, y]) == (
+
+      [42:int32, y]))
+
+  }
+
+  test("alpha conversion - lambda with different variable is transparent") {
+
+    assert((
+
+      λz.[42:int32, y, z]) == (
+
+      λz.[42:int32, y, z]))
+
+  }
+
+  test("alpha conversion - lambda with same variable is opaque") {
+
+    assert((
+
+      λx.[42:int32, x, z]) == (
+
+      λx.[42:int32, x, z]))
+
+  }
+
+  test("alpha conversion - nested lambda outer variable") {
+
+    assert((
+
+      λa.λb.y) == (
+
+      λa.λb.y))
+
+  }
+
+  test("alpha conversion - nested lambda shadows outer") {
+
+    assert((
+
+      λx.λy.x) == (
+
+      λx.λy.x))
+
+  }
+
+  test("alpha conversion - application with variable") {
+
+    assert((
+
+      (f @ y)) == (
+
+      (f @ y)))
+
+  }
+
+  test("alpha conversion - application with both variables same") {
+
+    assert((
+
+      (y @ y)) == (
+
+      (y @ y)))
+
+  }
+
+  // type reduction
+
+  test("type reduction - unit type unchanged") {
+
+    assert((
+
+      unit) == (
+
+      unit))
+
+  }
+
+  test("type reduction - string type unchanged") {
+
+    assert((
+
+      string) == (
+
+      string))
+
+  }
+
+  test("type reduction - int32 type unchanged") {
+
+    assert((
+
+      int32) == (
+
+      int32))
+
+  }
+
+  test("type reduction - identity type applied to string") {
+
+    assert((
+
+      (string → string)) == (
+
+      (string → string)))
+
+  }
+
+  test("type reduction - constant type ignores argument") {
+
+    assert((
+
+      int32) == (
+
+      int32))
+
+  }
+
+  test("type reduction - nested forall first application") {
+
+    assert((
+
+      (∀y.(int32 → y))) == (
+
+      (∀y.(int32 → y))))
+
+  }
+
+  test("type reduction - nested forall both applications") {
+
+    assert((
+
+      (int32 → string)) == (
+
+      (int32 → string)))
+
+  }
+
+  test("type reduction - list type applied") {
+
+    assert((
+
+      list<int32>) == (
+
+      list<int32>))
+
+  }
+
+  test("type reduction - optional type applied") {
+
+    assert((
+
+      maybe<string>) == (
+
+      maybe<string>))
 
   }
 }

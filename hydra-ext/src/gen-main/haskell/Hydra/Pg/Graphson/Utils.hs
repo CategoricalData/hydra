@@ -18,13 +18,8 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Pg.Graphson.Construct as Construct
 import qualified Hydra.Pg.Graphson.Syntax as Syntax
 import qualified Hydra.Pg.Model as Model_
-import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Convert a list of property graph elements to a list of vertices with their adjacent edges
 elementsToVerticesWithAdjacentEdges :: Ord t0 => ([Model_.Element t0] -> [Model_.VertexWithAdjacentEdges t0])
@@ -78,7 +73,7 @@ encodeStringValue s = Right (Syntax.ValueString s)
 -- | Encode a Hydra Term as a GraphSON Value. Supports literals and unit values.
 encodeTermValue :: Core.Term -> Either (Context.InContext Errors.Error) Syntax.Value
 encodeTermValue term =
-    case (Rewriting.deannotateTerm term) of
+    case (Strip.deannotateTerm term) of
       Core.TermLiteral v0 -> case v0 of
         Core.LiteralBinary v1 -> Right (Syntax.ValueBinary (Literals.binaryToString v1))
         Core.LiteralBoolean v1 -> Right (Syntax.ValueBoolean v1)

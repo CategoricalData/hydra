@@ -5,13 +5,14 @@
 module Hydra.Test.Inference.AlgorithmW where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Inference as Inference
+import qualified Hydra.Lib.Eithers as Eithers
+import qualified Hydra.Lib.Pairs as Pairs
+import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Test.TestGraph as TestGraph
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Algorithm W test cases
 allTests :: Testing.TestGroup
@@ -32,24 +33,24 @@ testGroupForSystemF =
       Testing.testGroupCases = [
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#1",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-            Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
-            Testing.inferenceTestCaseOutput = Core.TypeScheme {
+              Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))))),
+            Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0"],
               Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))})),
-              Core.typeSchemeConstraints = Nothing}})),
+              Core.typeSchemeConstraints = Nothing}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#2",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-            Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
               Core.letBindings = [
                 Core.Binding {
                   Core.bindingName = (Core.Name "foo"),
@@ -58,17 +59,17 @@ testGroupForSystemF =
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
                   Core.bindingType = Nothing}],
-              Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-            Testing.inferenceTestCaseOutput = Core.TypeScheme {
+              Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
+            Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-              Core.typeSchemeConstraints = Nothing}})),
+              Core.typeSchemeConstraints = Nothing}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#3",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-            Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
               Core.letBindings = [
                 Core.Binding {
                   Core.bindingName = (Core.Name "f"),
@@ -79,17 +80,17 @@ testGroupForSystemF =
                   Core.bindingType = Nothing}],
               Core.letBody = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})),
-            Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})))),
+            Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-              Core.typeSchemeConstraints = Nothing}})),
+              Core.typeSchemeConstraints = Nothing}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#4",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-            Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
               Core.letBindings = [
                 Core.Binding {
                   Core.bindingName = (Core.Name "f"),
@@ -100,17 +101,17 @@ testGroupForSystemF =
                       Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
                   Core.bindingType = Nothing}],
-              Core.letBody = (Core.TermVariable (Core.Name "f"))})),
-            Testing.inferenceTestCaseOutput = Core.TypeScheme {
+              Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
+            Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-              Core.typeSchemeConstraints = Nothing}})),
+              Core.typeSchemeConstraints = Nothing}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#5",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-            Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
               Core.letBindings = [
                 Core.Binding {
                   Core.bindingName = (Core.Name "sng"),
@@ -120,20 +121,20 @@ testGroupForSystemF =
                     Core.lambdaBody = (Core.TermList [
                       Core.TermVariable (Core.Name "x")])}))),
                   Core.bindingType = Nothing}],
-              Core.letBody = (Core.TermVariable (Core.Name "sng"))})),
-            Testing.inferenceTestCaseOutput = Core.TypeScheme {
+              Core.letBody = (Core.TermVariable (Core.Name "sng"))})))),
+            Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0"],
               Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                 Core.functionTypeCodomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))})),
-              Core.typeSchemeConstraints = Nothing}})),
+              Core.typeSchemeConstraints = Nothing}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#6",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-            Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
               Core.letBindings = [
                 Core.Binding {
                   Core.bindingName = (Core.Name "sng"),
@@ -147,19 +148,19 @@ testGroupForSystemF =
                 Core.applicationFunction = (Core.TermVariable (Core.Name "sng")),
                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}), (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermVariable (Core.Name "sng")),
-                Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "alice"))}))))})),
-            Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "alice"))}))))})))),
+            Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypePair (Core.PairType {
                 Core.pairTypeFirst = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
                 Core.pairTypeSecond = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))})),
-              Core.typeSchemeConstraints = Nothing}})),
+              Core.typeSchemeConstraints = Nothing}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#7",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-            Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
               Core.letBindings = [
                 Core.Binding {
                   Core.bindingName = (Core.Name "+"),
@@ -189,17 +190,17 @@ testGroupForSystemF =
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))}))})),
                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.negate"))),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))}))})),
-            Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))}))})))),
+            Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-              Core.typeSchemeConstraints = Nothing}})),
+              Core.typeSchemeConstraints = Nothing}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#9",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-            Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
               Core.letBindings = [
                 Core.Binding {
                   Core.bindingName = (Core.Name "f"),
@@ -215,8 +216,8 @@ testGroupForSystemF =
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})))}))),
                   Core.bindingType = Nothing}],
-              Core.letBody = (Core.TermVariable (Core.Name "f"))})),
-            Testing.inferenceTestCaseOutput = Core.TypeScheme {
+              Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
+            Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0"],
               Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -224,13 +225,13 @@ testGroupForSystemF =
                 Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))})),
-              Core.typeSchemeConstraints = Nothing}})),
+              Core.typeSchemeConstraints = Nothing}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#10",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-            Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
               Core.letBindings = [
                 Core.Binding {
                   Core.bindingName = (Core.Name "f"),
@@ -260,8 +261,8 @@ testGroupForSystemF =
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "xx"))}))})))}))),
                   Core.bindingType = Nothing}],
-              Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "f"), (Core.TermVariable (Core.Name "g"))))})),
-            Testing.inferenceTestCaseOutput = Core.TypeScheme {
+              Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "f"), (Core.TermVariable (Core.Name "g"))))})))),
+            Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0",
                 (Core.Name "t1")],
@@ -276,13 +277,13 @@ testGroupForSystemF =
                   Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                     Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t1"))}))}))})),
-              Core.typeSchemeConstraints = Nothing}})),
+              Core.typeSchemeConstraints = Nothing}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#11",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-            Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
               Core.letBindings = [
                 Core.Binding {
                   Core.bindingName = (Core.Name "f"),
@@ -312,8 +313,8 @@ testGroupForSystemF =
                           Core.applicationArgument = (Core.TermVariable (Core.Name "v"))})),
                         Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})))}))),
                   Core.bindingType = Nothing}],
-              Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "f"), (Core.TermVariable (Core.Name "g"))))})),
-            Testing.inferenceTestCaseOutput = Core.TypeScheme {
+              Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "f"), (Core.TermVariable (Core.Name "g"))))})))),
+            Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0",
                 (Core.Name "t1"),
@@ -330,13 +331,13 @@ testGroupForSystemF =
                   Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t2")),
                     Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t3"))}))}))})),
-              Core.typeSchemeConstraints = Nothing}})),
+              Core.typeSchemeConstraints = Nothing}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#12",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-            Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
               Core.letBindings = [
                 Core.Binding {
                   Core.bindingName = (Core.Name "f"),
@@ -366,8 +367,8 @@ testGroupForSystemF =
                           Core.applicationArgument = (Core.TermVariable (Core.Name "v"))})),
                         Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})))}))),
                   Core.bindingType = Nothing}],
-              Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "f"), (Core.TermVariable (Core.Name "g"))))})),
-            Testing.inferenceTestCaseOutput = Core.TypeScheme {
+              Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "f"), (Core.TermVariable (Core.Name "g"))))})))),
+            Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0",
                 (Core.Name "t1")],
@@ -382,13 +383,13 @@ testGroupForSystemF =
                   Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                     Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t1"))}))}))})),
-              Core.typeSchemeConstraints = Nothing}})),
+              Core.typeSchemeConstraints = Nothing}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#13",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-            Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
               Core.letBindings = [
                 Core.Binding {
                   Core.bindingName = (Core.Name "f"),
@@ -418,8 +419,8 @@ testGroupForSystemF =
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
                         Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})))}))),
                   Core.bindingType = Nothing}],
-              Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "f"), (Core.TermVariable (Core.Name "g"))))})),
-            Testing.inferenceTestCaseOutput = Core.TypeScheme {
+              Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "f"), (Core.TermVariable (Core.Name "g"))))})))),
+            Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0",
                 (Core.Name "t1")],
@@ -434,6 +435,6 @@ testGroupForSystemF =
                   Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                     Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t1"))}))}))})),
-              Core.typeSchemeConstraints = Nothing}})),
+              Core.typeSchemeConstraints = Nothing}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}

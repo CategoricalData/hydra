@@ -7,11 +7,6 @@ module Hydra.Encode.Parsing where
 import qualified Hydra.Core as Core
 import qualified Hydra.Parsing as Parsing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 parseError :: Parsing.ParseError -> Core.Term
 parseError x =
@@ -20,10 +15,10 @@ parseError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "message"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Parsing.parseErrorMessage x))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Parsing.parseErrorMessage x))},
         Core.Field {
           Core.fieldName = (Core.Name "remainder"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Parsing.parseErrorRemainder x))}]})
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Parsing.parseErrorRemainder x))}]})
 
 parseResult :: (t0 -> Core.Term) -> Parsing.ParseResult t0 -> Core.Term
 parseResult a x =
@@ -49,4 +44,4 @@ parseSuccess a x =
           Core.fieldTerm = (a (Parsing.parseSuccessValue x))},
         Core.Field {
           Core.fieldName = (Core.Name "remainder"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Parsing.parseSuccessRemainder x))}]})
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Parsing.parseSuccessRemainder x))}]})

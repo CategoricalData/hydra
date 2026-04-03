@@ -346,10 +346,10 @@
 (defvar hydra--annotation-cache (make-hash-table :test 'equal))
 
 (defun hydra--install-annotation-cache ()
-  "Wrap hydra_rewriting_deannotate_term to cache annotations before stripping."
-  (let ((original (or (and (fboundp 'hydra_rewriting_deannotate_term)
-                           (symbol-function 'hydra_rewriting_deannotate_term))
-                      hydra_rewriting_deannotate_term)))
+  "Wrap hydra_strip_deannotate_term to cache annotations before stripping."
+  (let ((original (or (and (fboundp 'hydra_strip_deannotate_term)
+                           (symbol-function 'hydra_strip_deannotate_term))
+                      hydra_strip_deannotate_term)))
     (let ((wrapper (lambda (t_)
                      (when (hydra--is-annotated-p t_)
                        (let ((body (funcall original t_))
@@ -358,8 +358,8 @@
                            (puthash body anns hydra--annotation-cache))))
                      (funcall original t_))))
       ;; Set both value and function cells
-      (setq hydra_rewriting_deannotate_term wrapper)
-      (fset 'hydra_rewriting_deannotate_term wrapper))))
+      (setq hydra_strip_deannotate_term wrapper)
+      (fset 'hydra_strip_deannotate_term wrapper))))
 
 (defun hydra--lookup-cached-annotations (term)
   (gethash term hydra--annotation-cache))
@@ -397,6 +397,8 @@
                     (mapcar (lambda (entry)
                               (list (car entry) (list :function (list :primitive (car entry)))))
                             prim-entries)
+                    (when (fboundp 'hydra-annotation-bindings)
+                      (hydra-annotation-bindings))
                     (list
                      (list "hydra.monads.emptyContext" (list :unit))
                      (list "hydra.lexical.emptyGraph" (list :unit)))))))
@@ -420,8 +422,8 @@
                                       hydra_json_bootstrap_types_by_name nil))
                  (test-types (if (boundp 'hydra_test_test_graph_test_types)
                                  hydra_test_test_graph_test_types nil))
-                 (type-to-ts (when (boundp 'hydra_rewriting_f_type_to_type_scheme)
-                               hydra_rewriting_f_type_to_type_scheme))
+                 (type-to-ts (when (boundp 'hydra_scoping_f_type_to_type_scheme)
+                               hydra_scoping_f_type_to_type_scheme))
                  (kernel-entries
                   (when (and bootstrap-types type-to-ts)
                     (mapcar (lambda (entry)
@@ -496,6 +498,16 @@
                   (list 0 1 0))))))
       (error (message "FAIL: %s" path) (message "  EXCEPTION: %S" err) (list 0 1 0)))))
 
+(defun hydra-run-universal-test (path tc)
+  (let ((actual (cdr (assq :actual tc)))
+        (expected (cdr (assq :expected tc))))
+    (if (equal actual expected)
+        (list 1 0 0)
+      (message "FAIL: %s" path)
+      (message "  Expected: %S" expected)
+      (message "  Actual:   %S" actual)
+      (list 0 1 0))))
+
 (defun hydra-run-simple-test (path expected actual-fn)
   (condition-case err
       (let ((actual (funcall actual-fn)))
@@ -531,11 +543,11 @@
 
 (defun hydra-run-deannotate-term-test (path tc)
   (hydra-run-simple-test path (cdr (assq :output tc))
-    (lambda () (funcall hydra_rewriting_deannotate_term (cdr (assq :input tc))))))
+    (lambda () (funcall hydra_strip_deannotate_term (cdr (assq :input tc))))))
 
 (defun hydra-run-deannotate-type-test (path tc)
   (hydra-run-simple-test path (cdr (assq :output tc))
-    (lambda () (funcall hydra_rewriting_deannotate_type (cdr (assq :input tc))))))
+    (lambda () (funcall hydra_strip_deannotate_type (cdr (assq :input tc))))))
 
 (defun hydra-run-flatten-let-terms-test (path tc)
   (hydra-run-simple-test path (cdr (assq :output tc))
@@ -960,6 +972,7 @@
              ((eq case-type :json_encode)             (list 0 0 1))
              ((eq case-type :validate_core_term)      (hydra-run-validate-core-term-test full case-data))
              ((eq case-type :delegated_evaluation)    (list 0 0 1))
+             ((eq case-type :universal)               (hydra-run-universal-test full case-data))
              (t (list 0 0 1))))))
     (error
      (message "FAIL: %s > %s" path (cdr (assq :name tcase)))
@@ -982,7 +995,7 @@
             (let ((r (hydra-run-test-group full sg bench-path)))
               (setq pass (+ pass (car r)))
               (setq fail (+ fail (cadr r)))
-              (setq skip (+ skip (caddr r)))
+              (setq skip (+ skip (nth 2 r)))
               (when (and (>= (length r) 4) (nth 3 r))
                 (push (nth 3 r) sub-benchmarks))))
           ;; Iterate cases
@@ -990,7 +1003,7 @@
             (let ((r (hydra-run-test-case full tc)))
               (setq pass (+ pass (car r)))
               (setq fail (+ fail (cadr r)))
-              (setq skip (+ skip (caddr r)))))
+              (setq skip (+ skip (nth 2 r)))))
           (let* ((elapsed-ms (* 1000.0 (- (float-time) t0)))
                  (benchmark (list (cons :path bench-path)
                                   (cons :passed pass)
@@ -1050,7 +1063,7 @@
          (result (hydra-run-test-group "" suite))
          (pass (car result))
          (fail (cadr result))
-         (skip (caddr result))
+         (skip (nth 2 result))
          (benchmark (nth 3 result))
          (total-ms (* 1000.0 (- (float-time) t0))))
     (message "\nResults: %d passed, %d failed, %d skipped" pass fail skip)

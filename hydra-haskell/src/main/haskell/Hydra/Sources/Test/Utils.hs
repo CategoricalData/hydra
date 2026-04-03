@@ -66,13 +66,12 @@ import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors    as ShowError
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants      as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -87,7 +86,7 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 
@@ -102,13 +101,13 @@ module_ = Module ns elements
     Just "Shared utility functions for test code generation codecs"
   where
     elements = [
-      toTermDefinition inferTestGroupTerms,
-      toTermDefinition inferTestCase,
-      toTermDefinition inferTerm]
+      toDefinition inferTestGroupTerms,
+      toDefinition inferTestCase,
+      toDefinition inferTerm]
 
 
 -- | Run type inference on all terms in a TestGroup
-inferTestGroupTerms :: TBinding (Graph -> TestGroup -> Either String TestGroup)
+inferTestGroupTerms :: TTermDefinition (Graph -> TestGroup -> Either String TestGroup)
 inferTestGroupTerms = define "inferTestGroupTerms" $
   doc "Run type inference on all terms in a TestGroup to ensure lambdas have domain types" $
   lambda "g" $ lambda "tg" $ lets [
@@ -126,7 +125,7 @@ inferTestGroupTerms = define "inferTestGroupTerms" $
 
 
 -- | Run type inference on the terms in a test case
-inferTestCase :: TBinding (Graph -> TestCaseWithMetadata -> Either String TestCaseWithMetadata)
+inferTestCase :: TTermDefinition (Graph -> TestCaseWithMetadata -> Either String TestCaseWithMetadata)
 inferTestCase = define "inferTestCase" $
   doc "Run type inference on the terms in a test case" $
   lambda "g" $ lambda "tcm" $ lets [
@@ -137,24 +136,11 @@ inferTestCase = define "inferTestCase" $
     Eithers.map
       (lambda "inferredCase" $
         Testing.testCaseWithMetadata (var "name_") (var "inferredCase") (var "desc") (var "tags_"))
-      (cases _TestCase (var "tcase") (Just (Phantoms.right (var "tcase"))) [
-        _TestCase_delegatedEvaluation>>: lambda "delCase" $ lets [
-          "input_">: project _DelegatedEvaluationTestCase _DelegatedEvaluationTestCase_input @@ var "delCase",
-          "output_">: project _DelegatedEvaluationTestCase _DelegatedEvaluationTestCase_output @@ var "delCase"] $
-          Eithers.bind
-            (inferTerm @@ var "g" @@ var "input_")
-            (lambda "inferredInput" $
-              Eithers.map
-                (lambda "inferredOutput" $
-                  inject _TestCase _TestCase_delegatedEvaluation
-                    (record _DelegatedEvaluationTestCase [
-                      _DelegatedEvaluationTestCase_input>>: var "inferredInput",
-                      _DelegatedEvaluationTestCase_output>>: var "inferredOutput"]))
-                (inferTerm @@ var "g" @@ var "output_"))])
+      (Phantoms.right (var "tcase"))
 
 
 -- | Run type inference on a single term
-inferTerm :: TBinding (Graph -> Term -> Either String Term)
+inferTerm :: TTermDefinition (Graph -> Term -> Either String Term)
 inferTerm = define "inferTerm" $
   doc "Run type inference on a single term" $
   lambda "g" $ lambda "term" $

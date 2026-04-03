@@ -5,15 +5,16 @@
 module Hydra.Test.Inference.NominalTypes where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Inference as Inference
+import qualified Hydra.Lib.Eithers as Eithers
+import qualified Hydra.Lib.Pairs as Pairs
+import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Test.TestGraph as TestGraph
 import qualified Hydra.Test.TestTerms as TestTerms
 import qualified Hydra.Test.TestTypes as TestTypes
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Nominal type tests
 allTests :: Testing.TestGroup
@@ -38,8 +39,8 @@ testGroupForCaseStatements =
       Testing.testGroupCases = [
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#1",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-            Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
               Core.caseStatementTypeName = TestTypes.testTypeSimpleNumberName,
               Core.caseStatementDefault = Nothing,
               Core.caseStatementCases = [
@@ -54,20 +55,20 @@ testGroupForCaseStatements =
                   Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))}]})))),
-            Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                    Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))}]})))))),
+            Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable TestTypes.testTypeSimpleNumberName),
                 Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
-              Core.typeSchemeConstraints = Nothing}})),
+              Core.typeSchemeConstraints = Nothing}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#2",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-            Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
               Core.caseStatementTypeName = TestTypes.testTypeUnionMonomorphicName,
               Core.caseStatementDefault = Nothing,
               Core.caseStatementCases = [
@@ -88,13 +89,13 @@ testGroupForCaseStatements =
                   Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "_"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean False))})))}]})))),
-            Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                    Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean False))})))}]})))))),
+            Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable TestTypes.testTypeUnionMonomorphicName),
                 Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeBoolean)})),
-              Core.typeSchemeConstraints = Nothing}})),
+              Core.typeSchemeConstraints = Nothing}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]}
@@ -112,16 +113,16 @@ testGroupForProjections =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                   Core.projectionTypeName = TestTypes.testTypePersonName,
-                  Core.projectionField = (Core.Name "firstName")})))),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                  Core.projectionField = (Core.Name "firstName")})))))),
+                Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeVariable TestTypes.testTypePersonName),
                     Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})),
-                  Core.typeSchemeConstraints = Nothing}})),
+                  Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]}]},
@@ -132,9 +133,9 @@ testGroupForProjections =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.first"))),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.first"))))),
+                Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0",
                     (Core.Name "t1")],
@@ -143,20 +144,20 @@ testGroupForProjections =
                       Core.pairTypeFirst = (Core.TypeVariable (Core.Name "t0")),
                       Core.pairTypeSecond = (Core.TypeVariable (Core.Name "t1"))})),
                     Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))})),
-                  Core.typeSchemeConstraints = Nothing}})),
+                  Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermApplication (Core.Application {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.second"))),
-                  Core.applicationArgument = (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)), (Core.TermLiteral (Core.LiteralString "foo"))))})),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                  Core.applicationArgument = (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)), (Core.TermLiteral (Core.LiteralString "foo"))))})))),
+                Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = (Core.TypeLiteral Core.LiteralTypeString),
-                  Core.typeSchemeConstraints = Nothing}})),
+                  Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]}]}],
@@ -175,8 +176,8 @@ testGroupForRecords =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermRecord (Core.Record {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermRecord (Core.Record {
                   Core.recordTypeName = TestTypes.testTypeLatLonName,
                   Core.recordFields = [
                     Core.Field {
@@ -184,18 +185,18 @@ testGroupForRecords =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 37.7749)))},
                     Core.Field {
                       Core.fieldName = (Core.Name "lon"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (-122.4194))))}]})),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (-122.4194))))}]})))),
+                Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypeLatLonName),
-                  Core.typeSchemeConstraints = Nothing}})),
+                  Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermRecord (Core.Record {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermRecord (Core.Record {
                   Core.recordTypeName = TestTypes.testTypeLatLonPolyName,
                   Core.recordFields = [
                     Core.Field {
@@ -203,20 +204,20 @@ testGroupForRecords =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 37.7749)))},
                     Core.Field {
                       Core.fieldName = (Core.Name "lon"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (-122.4194))))}]})),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (-122.4194))))}]})))),
+                Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
                     Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeLatLonPolyName),
                     Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))})),
-                  Core.typeSchemeConstraints = Nothing}})),
+                  Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "lon"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermRecord (Core.Record {
@@ -227,22 +228,22 @@ testGroupForRecords =
                         Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 37.7749)))},
                       Core.Field {
                         Core.fieldName = (Core.Name "lon"),
-                        Core.fieldTerm = (Core.TermVariable (Core.Name "lon"))}]}))}))),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                        Core.fieldTerm = (Core.TermVariable (Core.Name "lon"))}]}))}))))),
+                Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)),
                     Core.functionTypeCodomain = (Core.TypeApplication (Core.ApplicationType {
                       Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeLatLonPolyName),
                       Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))}))})),
-                  Core.typeSchemeConstraints = Nothing}})),
+                  Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#4",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "latlon"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermRecord (Core.Record {
@@ -253,8 +254,8 @@ testGroupForRecords =
                         Core.fieldTerm = (Core.TermVariable (Core.Name "latlon"))},
                       Core.Field {
                         Core.fieldName = (Core.Name "lon"),
-                        Core.fieldTerm = (Core.TermVariable (Core.Name "latlon"))}]}))}))),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                        Core.fieldTerm = (Core.TermVariable (Core.Name "latlon"))}]}))}))))),
+                Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
                   Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -262,18 +263,18 @@ testGroupForRecords =
                     Core.functionTypeCodomain = (Core.TypeApplication (Core.ApplicationType {
                       Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeLatLonPolyName),
                       Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))}))})),
-                  Core.typeSchemeConstraints = Nothing}})),
+                  Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#5",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = TestTerms.testDataArthur,
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph TestTerms.testDataArthur)),
+                Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypePersonName),
-                  Core.typeSchemeConstraints = Nothing}})),
+                  Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]}]},
@@ -284,8 +285,8 @@ testGroupForRecords =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermRecord (Core.Record {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermRecord (Core.Record {
                   Core.recordTypeName = TestTypes.testTypeIntListName,
                   Core.recordFields = [
                     Core.Field {
@@ -301,18 +302,18 @@ testGroupForRecords =
                             Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 43)))},
                           Core.Field {
                             Core.fieldName = (Core.Name "tail"),
-                            Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]})),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                            Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]})))),
+                Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypeIntListName),
-                  Core.typeSchemeConstraints = Nothing}})),
+                  Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermApplication (Core.Application {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
@@ -333,18 +334,18 @@ testGroupForRecords =
                               Core.Field {
                                 Core.fieldName = (Core.Name "tail"),
                                 Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]}))}))),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
+                Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypeIntListName),
-                  Core.typeSchemeConstraints = Nothing}})),
+                  Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermRecord (Core.Record {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermRecord (Core.Record {
                   Core.recordTypeName = TestTypes.testTypeListName,
                   Core.recordFields = [
                     Core.Field {
@@ -360,20 +361,20 @@ testGroupForRecords =
                             Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 43)))},
                           Core.Field {
                             Core.fieldName = (Core.Name "tail"),
-                            Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]})),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                            Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]})))),
+                Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
                     Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeListName),
                     Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
-                  Core.typeSchemeConstraints = Nothing}})),
+                  Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#4",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermApplication (Core.Application {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
@@ -394,20 +395,20 @@ testGroupForRecords =
                               Core.Field {
                                 Core.fieldName = (Core.Name "tail"),
                                 Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]}))}))),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
+                Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
                     Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeListName),
                     Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
-                  Core.typeSchemeConstraints = Nothing}})),
+                  Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#5",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermRecord (Core.Record {
@@ -426,8 +427,8 @@ testGroupForRecords =
                               Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
                             Core.Field {
                               Core.fieldName = (Core.Name "tail"),
-                              Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]}))}))),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                              Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]}))}))))),
+                Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
                   Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -435,7 +436,7 @@ testGroupForRecords =
                     Core.functionTypeCodomain = (Core.TypeApplication (Core.ApplicationType {
                       Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeListName),
                       Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))}))})),
-                  Core.typeSchemeConstraints = Nothing}})),
+                  Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]}]},
@@ -446,8 +447,8 @@ testGroupForRecords =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermApplication (Core.Application {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
@@ -468,20 +469,20 @@ testGroupForRecords =
                               Core.Field {
                                 Core.fieldName = (Core.Name "tail"),
                                 Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]}))}))),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
+                Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
                     Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeBuddyListAName),
                     Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
-                  Core.typeSchemeConstraints = Nothing}})),
+                  Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermRecord (Core.Record {
@@ -500,8 +501,8 @@ testGroupForRecords =
                               Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
                             Core.Field {
                               Core.fieldName = (Core.Name "tail"),
-                              Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]}))}))),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                              Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]}))}))))),
+                Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
                   Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -509,7 +510,7 @@ testGroupForRecords =
                     Core.functionTypeCodomain = (Core.TypeApplication (Core.ApplicationType {
                       Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeBuddyListAName),
                       Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))}))})),
-                  Core.typeSchemeConstraints = Nothing}})),
+                  Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]}]}],
@@ -528,31 +529,31 @@ testGroupForVariants =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermUnion (Core.Injection {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermUnion (Core.Injection {
                   Core.injectionTypeName = TestTypes.testTypeTimestampName,
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "unixTimeMillis"),
-                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint64 1638200308368)))}})),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint64 1638200308368)))}})))),
+                Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypeTimestampName),
-                  Core.typeSchemeConstraints = Nothing}})),
+                  Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermUnion (Core.Injection {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermUnion (Core.Injection {
                   Core.injectionTypeName = TestTypes.testTypeUnionMonomorphicName,
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "string"),
-                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))}})),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))}})))),
+                Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypeUnionMonomorphicName),
-                  Core.typeSchemeConstraints = Nothing}})),
+                  Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]}]},
@@ -563,43 +564,43 @@ testGroupForVariants =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermUnion (Core.Injection {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermUnion (Core.Injection {
                   Core.injectionTypeName = TestTypes.testTypeUnionPolymorphicRecursiveName,
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "bool"),
-                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralBoolean True))}})),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralBoolean True))}})))),
+                Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
                   Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
                     Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeUnionPolymorphicRecursiveName),
                     Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))})),
-                  Core.typeSchemeConstraints = Nothing}})),
+                  Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermUnion (Core.Injection {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermUnion (Core.Injection {
                   Core.injectionTypeName = TestTypes.testTypeUnionPolymorphicRecursiveName,
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "value"),
-                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}})),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}})))),
+                Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
                     Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeUnionPolymorphicRecursiveName),
                     Core.applicationTypeArgument = (Core.TypeLiteral Core.LiteralTypeString)})),
-                  Core.typeSchemeConstraints = Nothing}})),
+                  Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "other"),
@@ -613,13 +614,13 @@ testGroupForVariants =
                     Core.injectionTypeName = TestTypes.testTypeUnionPolymorphicRecursiveName,
                     Core.injectionField = Core.Field {
                       Core.fieldName = (Core.Name "other"),
-                      Core.fieldTerm = (Core.TermVariable (Core.Name "other"))}}))})),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.fieldTerm = (Core.TermVariable (Core.Name "other"))}}))})))),
+                Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
                     Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeUnionPolymorphicRecursiveName),
                     Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
-                  Core.typeSchemeConstraints = Nothing}})),
+                  Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]}]}],
@@ -638,32 +639,32 @@ testGroupForWrappers =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermWrap (Core.WrappedTerm {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermWrap (Core.WrappedTerm {
                   Core.wrappedTermTypeName = TestTypes.testTypeStringAliasName,
-                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "foo"))})),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "foo"))})))),
+                Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypeStringAliasName),
-                  Core.typeSchemeConstraints = Nothing}})),
+                  Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "v"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermWrap (Core.WrappedTerm {
                     Core.wrappedTermTypeName = TestTypes.testTypeStringAliasName,
-                    Core.wrappedTermBody = (Core.TermVariable (Core.Name "v"))}))}))),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                    Core.wrappedTermBody = (Core.TermVariable (Core.Name "v"))}))}))))),
+                Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeLiteral Core.LiteralTypeString),
                     Core.functionTypeCodomain = (Core.TypeVariable TestTypes.testTypeStringAliasName)})),
-                  Core.typeSchemeConstraints = Nothing}})),
+                  Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]}]},
@@ -674,29 +675,29 @@ testGroupForWrappers =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap TestTypes.testTypeStringAliasName))),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap TestTypes.testTypeStringAliasName))))),
+                Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeVariable TestTypes.testTypeStringAliasName),
                     Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})),
-                  Core.typeSchemeConstraints = Nothing}})),
+                  Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermApplication (Core.Application {
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap TestTypes.testTypeStringAliasName))),
                   Core.applicationArgument = (Core.TermWrap (Core.WrappedTerm {
                     Core.wrappedTermTypeName = TestTypes.testTypeStringAliasName,
-                    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "foo"))}))})),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "foo"))}))})))),
+                Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = (Core.TypeLiteral Core.LiteralTypeString),
-                  Core.typeSchemeConstraints = Nothing}})),
+                  Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]}]}],

@@ -1,7 +1,7 @@
 ;; Note: this is an automatically generated file. Do not edit.
 ;; hydra.lib.logic primitives
 
-(ns generation.hydra.test.lib.logic-test
+(ns test-ns
   (:require [clojure.test :refer :all]))
 
 ;; and
@@ -10,25 +10,25 @@
 
   (is (= true
 
-         ((hydra_lib_logic_and true) true))))
+         true)))
 
 (deftest test-logic-negand-negtrue-and-false
 
   (is (= false
 
-         ((hydra_lib_logic_and true) false))))
+         false)))
 
 (deftest test-logic-negand-negfalse-and-true
 
   (is (= false
 
-         ((hydra_lib_logic_and false) true))))
+         false)))
 
 (deftest test-logic-negand-negfalse-and-false
 
   (is (= false
 
-         ((hydra_lib_logic_and false) false))))
+         false)))
 
 ;; ifElse
 
@@ -38,27 +38,27 @@
 
   (is (= true
 
-         (((hydra_lib_logic_if_else true) true) false))))
+         true)))
 
 (deftest test-logic-negifelse-negboolean-values-negfalse-condition-returns-else
 
   (is (= false
 
-         (((hydra_lib_logic_if_else false) true) false))))
+         false)))
 
 ;; integer values
 
 (deftest test-logic-negifelse-neginteger-values-negtrue-selects-first-int
 
-  (is (= 42
+  (is (= 42:int32
 
-         (((hydra_lib_logic_if_else true) 42) 0))))
+         42:int32)))
 
 (deftest test-logic-negifelse-neginteger-values-negfalse-selects-second-int
 
-  (is (= 0
+  (is (= 0:int32
 
-         (((hydra_lib_logic_if_else false) 42) 0))))
+         0:int32)))
 
 ;; string values
 
@@ -66,13 +66,13 @@
 
   (is (= "yes"
 
-         (((hydra_lib_logic_if_else true) "yes") "no"))))
+         "yes")))
 
 (deftest test-logic-negifelse-negstring-values-negfalse-selects-second-string
 
   (is (= "no"
 
-         (((hydra_lib_logic_if_else false) "yes") "no"))))
+         "no")))
 
 ;; not
 
@@ -80,13 +80,13 @@
 
   (is (= false
 
-         (hydra_lib_logic_not true))))
+         false)))
 
 (deftest test-logic-negnot-negnot-false
 
   (is (= true
 
-         (hydra_lib_logic_not false))))
+         true)))
 
 ;; or
 
@@ -94,22 +94,22 @@
 
   (is (= true
 
-         ((hydra_lib_logic_or true) true))))
+         true)))
 
 (deftest test-logic-negor-negtrue-or-false
 
   (is (= true
 
-         ((hydra_lib_logic_or true) false))))
+         true)))
 
 (deftest test-logic-negor-negfalse-or-true
 
   (is (= true
 
-         ((hydra_lib_logic_or false) true))))
+         true)))
 
 (deftest test-logic-negor-negfalse-or-false
 
   (is (= false
 
-         ((hydra_lib_logic_or false) false))))
+         false)))

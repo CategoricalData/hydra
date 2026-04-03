@@ -127,7 +127,7 @@ public interface Utils {
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.graphson.syntax.Value> encodeTermValue(hydra.core.Term term) {
-    return hydra.Rewriting.deannotateTerm(term).accept(new hydra.core.Term.PartialVisitor<>() {
+    return hydra.Strip.deannotateTerm(term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.graphson.syntax.Value> otherwise(hydra.core.Term instance) {
         return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.graphson.syntax.Value>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError("unsupported term variant for GraphSON encoding")), hydra.Lexical.emptyContext())));

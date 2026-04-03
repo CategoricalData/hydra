@@ -19,11 +19,6 @@ import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging_
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Check for module namespaces that conflict when mapped to target language paths
 checkConflictingModuleNamespaces :: Packaging_.Package -> Maybe Packaging.InvalidPackageError

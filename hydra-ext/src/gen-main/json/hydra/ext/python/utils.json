@@ -1198,7 +1198,7 @@
                                             "argument": {"variable": "hydra.ext.python.names.encodeNamespace"},
                                             "function": {
                                               "typeApplication": {
-                                                "body": {"variable": "hydra.schemas.namespacesForDefinitions"},
+                                                "body": {"variable": "hydra.analysis.namespacesForDefinitions"},
                                                 "type": {"variable": "hydra.ext.python.syntax.DottedName"}}}}}}}}},
                                 "type": [
                                   {
@@ -5690,7 +5690,7 @@
     "hydra.ext.python.names",
     "hydra.ext.python.serde",
     "hydra.serialization",
-    "hydra.schemas"],
+    "hydra.analysis"],
   "typeDependencies": [
     "hydra.ext.python.environment",
     "hydra.ext.python.syntax",
@@ -5702,6 +5702,7 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
+    "hydra.error.module",
     "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",

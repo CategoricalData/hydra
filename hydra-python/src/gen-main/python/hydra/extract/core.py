@@ -20,12 +20,14 @@ import hydra.lib.logic
 import hydra.lib.maps
 import hydra.lib.maybes
 import hydra.lib.pairs
+import hydra.lib.sets
 import hydra.lib.strings
-import hydra.rewriting
 import hydra.show.core
+import hydra.strip
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
+T2 = TypeVar("T2")
 
 def bigfloat_value(cx: hydra.context.Context, v: hydra.core.FloatValue) -> Either[hydra.context.InContext[hydra.errors.Error], Decimal]:
     r"""Extract a bigfloat value from a FloatValue."""
@@ -147,6 +149,86 @@ def case_field(cx: hydra.context.Context, name: hydra.core.Name, n: str, graph: 
     field_name = hydra.core.Name(n)
     return hydra.lib.eithers.bind(cases(cx, name, graph, term), (lambda cs: (matching := hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name.value, field_name.value)), cs.cases), hydra.lib.logic.if_else(hydra.lib.lists.null(matching), (lambda : Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("not enough cases"))), cx))), (lambda : Right(hydra.lib.lists.head(matching)))))[1]))
 
+def decode_either(left_decoder: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], right_decoder: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T1]], g: hydra.graph.Graph, term: hydra.core.Term):
+    def _hoist_hydra_extract_core_decode_either_1(g, left_decoder, right_decoder, v1):
+        match v1:
+            case hydra.core.TermEither(value=e):
+                return hydra.lib.eithers.either((lambda lv: hydra.lib.eithers.map((lambda x: Left(x)), left_decoder(g, lv))), (lambda rv: hydra.lib.eithers.map((lambda x: Right(x)), right_decoder(g, rv))), e)
+
+            case _:
+                return Left(hydra.errors.DecodingError("expected either value"))
+    return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda x: hydra.errors.DecodingError(x)), (lambda x: x), hydra.lexical.strip_and_dereference_term_either(g, term)), (lambda stripped: _hoist_hydra_extract_core_decode_either_1(g, left_decoder, right_decoder, stripped)))
+
+def decode_list(elem_decoder: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], g: hydra.graph.Graph, term: hydra.core.Term):
+    def _hoist_hydra_extract_core_decode_list_1(elem_decoder, g, v1):
+        match v1:
+            case hydra.core.TermList(value=els):
+                return hydra.lib.eithers.map_list((lambda v12: elem_decoder(g, v12)), els)
+
+            case _:
+                return Left(hydra.errors.DecodingError("expected list"))
+    return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda x: hydra.errors.DecodingError(x)), (lambda x: x), hydra.lexical.strip_and_dereference_term_either(g, term)), (lambda stripped: _hoist_hydra_extract_core_decode_list_1(elem_decoder, g, stripped)))
+
+def decode_map(key_decoder: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], val_decoder: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T1]], g: hydra.graph.Graph, term: hydra.core.Term):
+    def _hoist_hydra_extract_core_decode_map_1(g, key_decoder, val_decoder, v1):
+        match v1:
+            case hydra.core.TermMap(value=m):
+                return hydra.lib.eithers.map((lambda x1: hydra.lib.maps.from_list(x1)), hydra.lib.eithers.map_list((lambda kv: hydra.lib.eithers.bind(key_decoder(g, hydra.lib.pairs.first(kv)), (lambda k: hydra.lib.eithers.map((lambda v: (k, v)), val_decoder(g, hydra.lib.pairs.second(kv)))))), hydra.lib.maps.to_list(m)))
+
+            case _:
+                return Left(hydra.errors.DecodingError("expected map"))
+    return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda x: hydra.errors.DecodingError(x)), (lambda x: x), hydra.lexical.strip_and_dereference_term_either(g, term)), (lambda stripped: _hoist_hydra_extract_core_decode_map_1(g, key_decoder, val_decoder, stripped)))
+
+def decode_maybe(elem_decoder: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], g: hydra.graph.Graph, term: hydra.core.Term):
+    def _hoist_hydra_extract_core_decode_maybe_1(elem_decoder, g, v1):
+        match v1:
+            case hydra.core.TermMaybe(value=opt):
+                return hydra.lib.eithers.map_maybe((lambda v12: elem_decoder(g, v12)), opt)
+
+            case _:
+                return Left(hydra.errors.DecodingError("expected optional value"))
+    return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda x: hydra.errors.DecodingError(x)), (lambda x: x), hydra.lexical.strip_and_dereference_term_either(g, term)), (lambda stripped: _hoist_hydra_extract_core_decode_maybe_1(elem_decoder, g, stripped)))
+
+def decode_pair(first_decoder: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], second_decoder: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T1]], g: hydra.graph.Graph, term: hydra.core.Term):
+    def _hoist_hydra_extract_core_decode_pair_1(first_decoder, g, second_decoder, v1):
+        match v1:
+            case hydra.core.TermPair(value=p):
+                return hydra.lib.eithers.bind(first_decoder(g, hydra.lib.pairs.first(p)), (lambda f: hydra.lib.eithers.map((lambda s: (f, s)), second_decoder(g, hydra.lib.pairs.second(p)))))
+
+            case _:
+                return Left(hydra.errors.DecodingError("expected pair"))
+    return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda x: hydra.errors.DecodingError(x)), (lambda x: x), hydra.lexical.strip_and_dereference_term_either(g, term)), (lambda stripped: _hoist_hydra_extract_core_decode_pair_1(first_decoder, g, second_decoder, stripped)))
+
+def decode_set(elem_decoder: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], g: hydra.graph.Graph, term: hydra.core.Term):
+    def _hoist_hydra_extract_core_decode_set_1(elem_decoder, g, v1):
+        match v1:
+            case hydra.core.TermSet(value=s):
+                return hydra.lib.eithers.map((lambda x1: hydra.lib.sets.from_list(x1)), hydra.lib.eithers.map_list((lambda v12: elem_decoder(g, v12)), hydra.lib.sets.to_list(s)))
+
+            case _:
+                return Left(hydra.errors.DecodingError("expected set"))
+    return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda x: hydra.errors.DecodingError(x)), (lambda x: x), hydra.lexical.strip_and_dereference_term_either(g, term)), (lambda stripped: _hoist_hydra_extract_core_decode_set_1(elem_decoder, g, stripped)))
+
+def decode_unit(g: hydra.graph.Graph, term: hydra.core.Term):
+    def _hoist_hydra_extract_core_decode_unit_1(v1):
+        match v1:
+            case hydra.core.TermUnit():
+                return Right(None)
+
+            case _:
+                return Left(hydra.errors.DecodingError("expected a unit value"))
+    return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda x: hydra.errors.DecodingError(x)), (lambda x: x), hydra.lexical.strip_and_dereference_term_either(g, term)), (lambda stripped: _hoist_hydra_extract_core_decode_unit_1(stripped)))
+
+def decode_wrapped(body_decoder: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], g: hydra.graph.Graph, term: hydra.core.Term):
+    def _hoist_hydra_extract_core_decode_wrapped_1(body_decoder, g, v1):
+        match v1:
+            case hydra.core.TermWrap(value=wt):
+                return body_decoder(g, wt.body)
+
+            case _:
+                return Left(hydra.errors.DecodingError("expected wrapped value"))
+    return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda x: hydra.errors.DecodingError(x)), (lambda x: x), hydra.lexical.strip_and_dereference_term_either(g, term)), (lambda stripped: _hoist_hydra_extract_core_decode_wrapped_1(body_decoder, g, stripped)))
+
 def either_term(cx: hydra.context.Context, left_fun: Callable[[hydra.core.Term], Either[hydra.context.InContext[hydra.errors.Error], T0]], right_fun: Callable[[hydra.core.Term], Either[hydra.context.InContext[hydra.errors.Error], T1]], graph: hydra.graph.Graph, term0: hydra.core.Term):
     def _hoist_hydra_extract_core_either_term_1(cx, left_fun, right_fun, term, v1):
         match v1:
@@ -162,7 +244,7 @@ def either_type(cx: hydra.context.Context, typ: hydra.core.Type) -> Either[hydra
 
     @lru_cache(1)
     def stripped() -> hydra.core.Type:
-        return hydra.rewriting.deannotate_type(typ)
+        return hydra.strip.deannotate_type(typ)
     match stripped():
         case hydra.core.TypeEither(value=et):
             return Right(et)
@@ -218,7 +300,7 @@ def function_type(cx: hydra.context.Context, typ: hydra.core.Type) -> Either[hyd
 
     @lru_cache(1)
     def stripped() -> hydra.core.Type:
-        return hydra.rewriting.deannotate_type(typ)
+        return hydra.strip.deannotate_type(typ)
     match stripped():
         case hydra.core.TypeFunction(value=ft):
             return Right(ft)
@@ -364,7 +446,7 @@ def list_type(cx: hydra.context.Context, typ: hydra.core.Type) -> Either[hydra.c
 
     @lru_cache(1)
     def stripped() -> hydra.core.Type:
-        return hydra.rewriting.deannotate_type(typ)
+        return hydra.strip.deannotate_type(typ)
     match stripped():
         case hydra.core.TypeList(value=t):
             return Right(t)
@@ -397,7 +479,7 @@ def map_type(cx: hydra.context.Context, typ: hydra.core.Type) -> Either[hydra.co
 
     @lru_cache(1)
     def stripped() -> hydra.core.Type:
-        return hydra.rewriting.deannotate_type(typ)
+        return hydra.strip.deannotate_type(typ)
     match stripped():
         case hydra.core.TypeMap(value=mt):
             return Right(mt)
@@ -420,7 +502,7 @@ def maybe_type(cx: hydra.context.Context, typ: hydra.core.Type) -> Either[hydra.
 
     @lru_cache(1)
     def stripped() -> hydra.core.Type:
-        return hydra.rewriting.deannotate_type(typ)
+        return hydra.strip.deannotate_type(typ)
     match stripped():
         case hydra.core.TypeMaybe(value=t):
             return Right(t)
@@ -463,13 +545,18 @@ def record_type(cx: hydra.context.Context, ename: T0, typ: hydra.core.Type) -> E
 
     @lru_cache(1)
     def stripped() -> hydra.core.Type:
-        return hydra.rewriting.deannotate_type(typ)
+        return hydra.strip.deannotate_type(typ)
     match stripped():
         case hydra.core.TypeRecord(value=fields):
             return Right(fields)
 
         case _:
             return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "record type"), " but found "), hydra.show.core.type(typ))))), cx))
+
+def require_field(field_name: str, decoder: Callable[[T0, T1], Either[hydra.errors.DecodingError, T2]], field_map: FrozenDict[hydra.core.Name, T1], g: T0) -> Either[hydra.errors.DecodingError, T2]:
+    r"""Require a field from a record's field map and decode it."""
+
+    return hydra.lib.maybes.maybe((lambda : Left(hydra.errors.DecodingError(hydra.lib.strings.cat(("missing field ", field_name, " in record"))))), (lambda field_term: decoder(g, field_term)), hydra.lib.maps.lookup(hydra.core.Name(field_name), field_map))
 
 def set(cx: hydra.context.Context, graph: hydra.graph.Graph, term: hydra.core.Term):
     def _hoist_hydra_extract_core_set_1(cx, stripped, v1):
@@ -491,7 +578,7 @@ def set_type(cx: hydra.context.Context, typ: hydra.core.Type) -> Either[hydra.co
 
     @lru_cache(1)
     def stripped() -> hydra.core.Type:
-        return hydra.rewriting.deannotate_type(typ)
+        return hydra.strip.deannotate_type(typ)
     match stripped():
         case hydra.core.TypeSet(value=t):
             return Right(t)
@@ -513,6 +600,11 @@ def string(cx: hydra.context.Context, graph: hydra.graph.Graph, t: hydra.core.Te
     r"""Extract a string value from a term."""
 
     return hydra.lib.eithers.bind(literal(cx, graph, t), (lambda l: string_literal(cx, l)))
+
+def to_field_map(record: hydra.core.Record) -> FrozenDict[hydra.core.Name, hydra.core.Term]:
+    r"""Convert a Record's fields to a Map from Name to Term."""
+
+    return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda f: (f.name, f.term)), record.fields))
 
 def uint16_value(cx: hydra.context.Context, v: hydra.core.IntegerValue) -> Either[hydra.context.InContext[hydra.errors.Error], int]:
     r"""Extract a uint16 value from an IntegerValue."""
@@ -579,7 +671,7 @@ def union_type(cx: hydra.context.Context, ename: T0, typ: hydra.core.Type) -> Ei
 
     @lru_cache(1)
     def stripped() -> hydra.core.Type:
-        return hydra.rewriting.deannotate_type(typ)
+        return hydra.strip.deannotate_type(typ)
     match stripped():
         case hydra.core.TypeUnion(value=fields):
             return Right(fields)
@@ -617,7 +709,7 @@ def wrapped_type(cx: hydra.context.Context, ename: T0, typ: hydra.core.Type) -> 
 
     @lru_cache(1)
     def stripped() -> hydra.core.Type:
-        return hydra.rewriting.deannotate_type(typ)
+        return hydra.strip.deannotate_type(typ)
     match stripped():
         case hydra.core.TypeWrap(value=inner_type):
             return Right(inner_type)

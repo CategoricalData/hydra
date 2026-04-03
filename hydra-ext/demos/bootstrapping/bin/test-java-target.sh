@@ -11,6 +11,15 @@ if [ -z "$OUTPUT_DIR" ]; then
     exit 1
 fi
 
+# Patch TestGraph.java to use TestEnv (real graph with primitives) instead of emptyGraph.
+# TODO: Replace this with hydra.test.environment module.
+echo "Patching TestGraph.java..."
+TESTGRAPH="$OUTPUT_DIR/src/gen-test/java/hydra/test/TestGraph.java"
+if [ -f "$TESTGRAPH" ]; then
+    sed -i '' 's/return hydra.Lexical.emptyGraph();/return hydra.TestEnv.testGraph();/' "$TESTGRAPH"
+    sed -i '' 's/return hydra.Lexical.emptyContext();/return hydra.TestEnv.testContext();/' "$TESTGRAPH"
+fi
+
 echo "Building Java target..."
 cd "$OUTPUT_DIR"
 ./gradlew compileJava compileTestJava 2>&1

@@ -30,7 +30,7 @@
                                       "function": {
                                         "application": {
                                           "argument": {"variable": "vold"},
-                                          "function": {"variable": "hydra.rewriting.replaceFreeTermVariable"}}}}}}},
+                                          "function": {"variable": "hydra.variables.replaceFreeTermVariable"}}}}}}},
                               "domain": [{"variable": "hydra.core.Term"}],
                               "parameter": "term"}}},
                         "domain": [{"variable": "hydra.core.Name"}],
@@ -223,7 +223,7 @@
                                                                                                 "function": {
                                                                                                   "elimination": {
                                                                                                     "record": {"field": "parameter", "typeName": "hydra.core.ForallType"}}}}}},
-                                                                                          "function": {"variable": "hydra.rewriting.replaceFreeTypeVariable"}}}}}}},
+                                                                                          "function": {"variable": "hydra.variables.replaceFreeTypeVariable"}}}}}}},
                                                                               "function": {
                                                                                 "application": {
                                                                                   "argument": {"variable": "graph"},
@@ -276,7 +276,7 @@
                                                                                           "function": {
                                                                                             "application": {
                                                                                               "argument": {"variable": "cx"},
-                                                                                              "function": {"variable": "hydra.schemas.requireType"}}}}}}},
+                                                                                              "function": {"variable": "hydra.resolution.requireType"}}}}}}},
                                                                                   "function": {
                                                                                     "typeApplication": {
                                                                                       "body": {
@@ -576,7 +576,7 @@
                                                                                 "argument": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "lhs"},
-                                                                                    "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                                                                                    "function": {"variable": "hydra.strip.deannotateTerm"}}},
                                                                                 "function": {
                                                                                   "function": {
                                                                                     "elimination": {
@@ -643,7 +643,7 @@
                                                                                                                                             "function": {
                                                                                                                                               "application": {
                                                                                                                                                 "argument": {"variable": "v"},
-                                                                                                                                                "function": {"variable": "hydra.rewriting.replaceFreeTermVariable"}}}}}}},
+                                                                                                                                                "function": {"variable": "hydra.variables.replaceFreeTermVariable"}}}}}}},
                                                                                                                                     "function": {
                                                                                                                                       "application": {
                                                                                                                                         "argument": {"variable": "body"},
@@ -655,7 +655,7 @@
                                                                                                                                                 "function": {
                                                                                                                                                   "application": {
                                                                                                                                                     "argument": {"variable": "v"},
-                                                                                                                                                    "function": {"variable": "hydra.rewriting.isFreeVariableInTerm"}}}}},
+                                                                                                                                                    "function": {"variable": "hydra.variables.isFreeVariableInTerm"}}}}},
                                                                                                                                             "function": {
                                                                                                                                               "typeApplication": {
                                                                                                                                                 "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
@@ -952,7 +952,7 @@
                                                                                                                             "function": {
                                                                                                                               "application": {
                                                                                                                                 "argument": {"variable": "v"},
-                                                                                                                                "function": {"variable": "hydra.rewriting.isFreeVariableInTerm"}}}}},
+                                                                                                                                "function": {"variable": "hydra.variables.isFreeVariableInTerm"}}}}},
                                                                                                                         "function": {"function": {"primitive": "hydra.lib.logic.not"}}}},
                                                                                                                     "function": {
                                                                                                                       "application": {
@@ -1427,7 +1427,7 @@
                                                                   "term": {
                                                                     "application": {
                                                                       "argument": {"variable": "t"},
-                                                                      "function": {"variable": "hydra.rewriting.detypeTerm"}}},
+                                                                      "function": {"variable": "hydra.strip.detypeTerm"}}},
                                                                   "type": [
                                                                     {
                                                                       "constraints": null,
@@ -1845,7 +1845,7 @@
                                                                                                       "parameter": "_"}}},
                                                                                                 "domain": [{"variable": "hydra.graph.Graph"}],
                                                                                                 "parameter": "_"}}},
-                                                                                          "function": {"variable": "hydra.rewriting.extendGraphForLet"}}}}}}},
+                                                                                          "function": {"variable": "hydra.scoping.extendGraphForLet"}}}}}}},
                                                                               "function": {"variable": "termArityWithContext"}}}}},
                                                                       "domain": [{"variable": "hydra.core.Let"}],
                                                                       "parameter": "l"}}}},
@@ -1870,7 +1870,7 @@
                                                                                   "function": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "tx"},
-                                                                                      "function": {"variable": "hydra.rewriting.extendGraphForTypeLambda"}}}}},
+                                                                                      "function": {"variable": "hydra.scoping.extendGraphForTypeLambda"}}}}},
                                                                               "function": {"variable": "termArityWithContext"}}}}},
                                                                       "domain": [{"variable": "hydra.core.TypeLambda"}],
                                                                       "parameter": "tl"}}}},
@@ -1923,7 +1923,7 @@
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                               "function": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "hydra.rewriting.typeSchemeToFType"},
+                                                                                  "argument": {"variable": "hydra.scoping.typeSchemeToFType"},
                                                                                   "function": {
                                                                                     "typeApplication": {
                                                                                       "body": {
@@ -3018,7 +3018,7 @@
                                                                                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                                                                               "function": {
                                                                                                                                                 "application": {
-                                                                                                                                                  "argument": {"variable": "hydra.rewriting.typeSchemeToFType"},
+                                                                                                                                                  "argument": {"variable": "hydra.scoping.typeSchemeToFType"},
                                                                                                                                                   "function": {
                                                                                                                                                     "typeApplication": {
                                                                                                                                                       "body": {
@@ -3069,7 +3069,7 @@
                                                                                                                                                     "parameter": "_"}}},
                                                                                                                                               "domain": [{"variable": "hydra.graph.Graph"}],
                                                                                                                                               "parameter": "_"}}},
-                                                                                                                                        "function": {"variable": "hydra.rewriting.extendGraphForLet"}}}}}}},
+                                                                                                                                        "function": {"variable": "hydra.scoping.extendGraphForLet"}}}}}}},
                                                                                                                             "function": {"variable": "termHeadType"}}}}},
                                                                                                                     "domain": [{"variable": "hydra.core.Let"}],
                                                                                                                     "parameter": "l2"}}}},
@@ -3094,7 +3094,7 @@
                                                                                                                                 "function": {
                                                                                                                                   "application": {
                                                                                                                                     "argument": {"variable": "tx2"},
-                                                                                                                                    "function": {"variable": "hydra.rewriting.extendGraphForTypeLambda"}}}}},
+                                                                                                                                    "function": {"variable": "hydra.scoping.extendGraphForTypeLambda"}}}}},
                                                                                                                             "function": {"variable": "termHeadType"}}}}},
                                                                                                                     "domain": [{"variable": "hydra.core.TypeLambda"}],
                                                                                                                     "parameter": "tl2"}}}},
@@ -3149,7 +3149,7 @@
                                                                                                                                                                           "function": {
                                                                                                                                                                             "elimination": {
                                                                                                                                                                               "record": {"field": "parameter", "typeName": "hydra.core.ForallType"}}}}}},
-                                                                                                                                                                    "function": {"variable": "hydra.rewriting.replaceFreeTypeVariable"}}}}}}}]},
+                                                                                                                                                                    "function": {"variable": "hydra.variables.replaceFreeTypeVariable"}}}}}}}]},
                                                                                                                                                     "domain": [{"variable": "hydra.core.ForallType"}],
                                                                                                                                                     "parameter": "ft2"}}}}],
                                                                                                                                           "default": [{"maybe": [{"variable": "htyp2"}]}],
@@ -3207,7 +3207,7 @@
                                                                                                                                     "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                                                         "function": {
                                                                                                                           "application": {
-                                                                                                                            "argument": {"variable": "hydra.rewriting.typeSchemeToFType"},
+                                                                                                                            "argument": {"variable": "hydra.scoping.typeSchemeToFType"},
                                                                                                                             "function": {
                                                                                                                               "typeApplication": {
                                                                                                                                 "body": {
@@ -4065,7 +4065,7 @@
                                                                                                                                                           "function": {
                                                                                                                                                             "application": {
                                                                                                                                                               "argument": {"variable": "tx"},
-                                                                                                                                                              "function": {"variable": "hydra.rewriting.extendGraphForLambda"}}}}},
+                                                                                                                                                              "function": {"variable": "hydra.scoping.extendGraphForLambda"}}}}},
                                                                                                                                                       "type": [
                                                                                                                                                         {
                                                                                                                                                           "constraints": null,
@@ -4293,7 +4293,7 @@
                                                                                                                                                         "parameter": "_"}}},
                                                                                                                                                   "domain": [{"variable": "hydra.graph.Graph"}],
                                                                                                                                                   "parameter": "_"}}},
-                                                                                                                                            "function": {"variable": "hydra.rewriting.extendGraphForLet"}}}}}}},
+                                                                                                                                            "function": {"variable": "hydra.scoping.extendGraphForLet"}}}}}}},
                                                                                                                                 "type": [
                                                                                                                                   {
                                                                                                                                     "constraints": null,
@@ -4732,7 +4732,7 @@
                                                                                                                                     "function": {
                                                                                                                                       "application": {
                                                                                                                                         "argument": {"variable": "tx"},
-                                                                                                                                        "function": {"variable": "hydra.rewriting.extendGraphForTypeLambda"}}}}},
+                                                                                                                                        "function": {"variable": "hydra.scoping.extendGraphForTypeLambda"}}}}},
                                                                                                                                 "type": [
                                                                                                                                   {
                                                                                                                                     "constraints": null,
@@ -4888,7 +4888,7 @@
                                                                                                                                                     "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                                                                         "function": {
                                                                                                                                           "application": {
-                                                                                                                                            "argument": {"variable": "hydra.rewriting.typeSchemeToFType"},
+                                                                                                                                            "argument": {"variable": "hydra.scoping.typeSchemeToFType"},
                                                                                                                                             "function": {
                                                                                                                                               "typeApplication": {
                                                                                                                                                 "body": {
@@ -5788,7 +5788,7 @@
                                                                                                                                                             "function": {
                                                                                                                                                               "application": {
                                                                                                                                                                 "argument": {"variable": "tx"},
-                                                                                                                                                                "function": {"variable": "hydra.rewriting.extendGraphForLambda"}}}}},
+                                                                                                                                                                "function": {"variable": "hydra.scoping.extendGraphForLambda"}}}}},
                                                                                                                                                         "type": [
                                                                                                                                                           {
                                                                                                                                                             "constraints": null,
@@ -5941,7 +5941,7 @@
                                                                                                                                                                 "parameter": "_"}}},
                                                                                                                                                           "domain": [{"variable": "hydra.graph.Graph"}],
                                                                                                                                                           "parameter": "_"}}},
-                                                                                                                                                    "function": {"variable": "hydra.rewriting.extendGraphForLet"}}}}}}},
+                                                                                                                                                    "function": {"variable": "hydra.scoping.extendGraphForLet"}}}}}}},
                                                                                                                                         "type": [
                                                                                                                                           {
                                                                                                                                             "constraints": null,
@@ -5993,7 +5993,7 @@
                                                                                                                                             "function": {
                                                                                                                                               "application": {
                                                                                                                                                 "argument": {"variable": "tx"},
-                                                                                                                                                "function": {"variable": "hydra.rewriting.extendGraphForTypeLambda"}}}}},
+                                                                                                                                                "function": {"variable": "hydra.scoping.extendGraphForTypeLambda"}}}}},
                                                                                                                                         "type": [
                                                                                                                                           {
                                                                                                                                             "constraints": null,
@@ -6040,7 +6040,7 @@
                                                                                                                                                     "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                                                                         "function": {
                                                                                                                                           "application": {
-                                                                                                                                            "argument": {"variable": "hydra.rewriting.typeSchemeToFType"},
+                                                                                                                                            "argument": {"variable": "hydra.scoping.typeSchemeToFType"},
                                                                                                                                             "function": {
                                                                                                                                               "typeApplication": {
                                                                                                                                                 "body": {
@@ -7284,7 +7284,7 @@
                                                                                                                                                                               "function": {
                                                                                                                                                                                 "application": {
                                                                                                                                                                                   "argument": {"variable": "tx"},
-                                                                                                                                                                                  "function": {"variable": "hydra.rewriting.extendGraphForLambda"}}}}},
+                                                                                                                                                                                  "function": {"variable": "hydra.scoping.extendGraphForLambda"}}}}},
                                                                                                                                                                           "type": [
                                                                                                                                                                             {
                                                                                                                                                                               "constraints": null,
@@ -7353,7 +7353,7 @@
                                                                                                                                                                             "parameter": "_"}}},
                                                                                                                                                                       "domain": [{"variable": "hydra.graph.Graph"}],
                                                                                                                                                                       "parameter": "_"}}},
-                                                                                                                                                                "function": {"variable": "hydra.rewriting.extendGraphForLet"}}}}}}},
+                                                                                                                                                                "function": {"variable": "hydra.scoping.extendGraphForLet"}}}}}}},
                                                                                                                                                     "type": [
                                                                                                                                                       {
                                                                                                                                                         "constraints": null,
@@ -7431,7 +7431,7 @@
                                                                                                                                                         "function": {
                                                                                                                                                           "application": {
                                                                                                                                                             "argument": {"variable": "tx"},
-                                                                                                                                                            "function": {"variable": "hydra.rewriting.extendGraphForTypeLambda"}}}}},
+                                                                                                                                                            "function": {"variable": "hydra.scoping.extendGraphForTypeLambda"}}}}},
                                                                                                                                                     "type": [
                                                                                                                                                       {
                                                                                                                                                         "constraints": null,
@@ -8132,7 +8132,7 @@
                                                                                                               "argument": {
                                                                                                                 "application": {
                                                                                                                   "argument": {"variable": "reducedArg"},
-                                                                                                                  "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                                                                                                                  "function": {"variable": "hydra.strip.deannotateTerm"}}},
                                                                                                               "function": {
                                                                                                                 "application": {
                                                                                                                   "argument": {"variable": "graph"},
@@ -8487,7 +8487,7 @@
                                                                                               "term": {
                                                                                                 "application": {
                                                                                                   "argument": {"variable": "original"},
-                                                                                                  "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                                                                                                  "function": {"variable": "hydra.strip.deannotateTerm"}}},
                                                                                               "type": [
                                                                                                 {
                                                                                                   "constraints": null,
@@ -8612,7 +8612,7 @@
                                                                                                                                   "argument": {
                                                                                                                                     "application": {
                                                                                                                                       "argument": {"variable": "arg"},
-                                                                                                                                      "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                                                                                                                                      "function": {"variable": "hydra.strip.deannotateTerm"}}},
                                                                                                                                   "function": {
                                                                                                                                     "application": {
                                                                                                                                       "argument": {"variable": "eager"},
@@ -8763,7 +8763,7 @@
                                                                                                                                                                 "function": {
                                                                                                                                                                   "application": {
                                                                                                                                                                     "argument": {"variable": "param"},
-                                                                                                                                                                    "function": {"variable": "hydra.rewriting.replaceFreeTermVariable"}}}}}}},
+                                                                                                                                                                    "function": {"variable": "hydra.variables.replaceFreeTermVariable"}}}}}}},
                                                                                                                                                         "function": {
                                                                                                                                                           "application": {
                                                                                                                                                             "argument": {"variable": "eager"},
@@ -8790,7 +8790,7 @@
                                                                                                                                               "argument": {
                                                                                                                                                 "application": {
                                                                                                                                                   "argument": {"variable": "arg"},
-                                                                                                                                                  "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                                                                                                                                                  "function": {"variable": "hydra.strip.deannotateTerm"}}},
                                                                                                                                               "function": {
                                                                                                                                                 "application": {
                                                                                                                                                   "argument": {"variable": "eager"},
@@ -8898,7 +8898,7 @@
                                                                                                                                                           "argument": {"variable": "reducedArgs"},
                                                                                                                                                           "function": {
                                                                                                                                                             "application": {
-                                                                                                                                                              "argument": {"variable": "hydra.rewriting.deannotateTerm"},
+                                                                                                                                                              "argument": {"variable": "hydra.strip.deannotateTerm"},
                                                                                                                                                               "function": {
                                                                                                                                                                 "typeApplication": {
                                                                                                                                                                   "body": {
@@ -9546,7 +9546,7 @@
                                                                                                                                                                               "function": {
                                                                                                                                                                                 "function": {
                                                                                                                                                                                   "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}}}},
-                                                                                                                                                                          "function": {"variable": "hydra.rewriting.replaceFreeTermVariable"}}}}}}}},
+                                                                                                                                                                          "function": {"variable": "hydra.variables.replaceFreeTermVariable"}}}}}}}},
                                                                                                                                                             {
                                                                                                                                                               "name": "type",
                                                                                                                                                               "term": {
@@ -9619,7 +9619,7 @@
                                                                                                                                                                                     "function": {
                                                                                                                                                                                       "function": {
                                                                                                                                                                                         "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}}}},
-                                                                                                                                                                                "function": {"variable": "hydra.rewriting.replaceFreeTermVariable"}}}}}}},
+                                                                                                                                                                                "function": {"variable": "hydra.variables.replaceFreeTermVariable"}}}}}}},
                                                                                                                                                                     "domain": [{"variable": "hydra.core.Binding"}],
                                                                                                                                                                     "parameter": "b"}}},
                                                                                                                                                               "domain": [{"variable": "hydra.core.Term"}],
@@ -9963,7 +9963,7 @@
                       "argument": {
                         "application": {
                           "argument": {"variable": "term"},
-                          "function": {"variable": "hydra.rewriting.freeVariablesInTerm"}}},
+                          "function": {"variable": "hydra.variables.freeVariablesInTerm"}}},
                       "function": {
                         "typeApplication": {
                           "body": {"function": {"primitive": "hydra.lib.sets.null"}},
@@ -10257,7 +10257,7 @@
                                       "argument": {
                                         "application": {
                                           "argument": {"variable": "term"},
-                                          "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                                          "function": {"variable": "hydra.strip.deannotateTerm"}}},
                                       "function": {
                                         "function": {
                                           "elimination": {
@@ -10545,9 +10545,12 @@
     "hydra.inference",
     "hydra.lexical",
     "hydra.rewriting",
-    "hydra.schemas",
+    "hydra.scoping",
+    "hydra.resolution",
     "hydra.show.core",
-    "hydra.show.errors"],
+    "hydra.show.errors",
+    "hydra.strip",
+    "hydra.variables"],
   "typeDependencies": [
     "hydra.paths",
     "hydra.ast",
@@ -10557,6 +10560,7 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
+    "hydra.error.module",
     "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",

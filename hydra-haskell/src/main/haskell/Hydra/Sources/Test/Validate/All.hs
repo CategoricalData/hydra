@@ -23,10 +23,10 @@ module_ :: Module
 module_ = Module ns elements namespaces kernelTypesNamespaces $
     Just "Hydra's validation test suite"
   where
-    elements = [Phantoms.toTermDefinition allTests]
+    elements = [Phantoms.toDefinition allTests]
     namespaces = [ValidateCore.ns]
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     doc "The group of all validation tests" $
     Testing.testGroup (string "validation") nothing (list subgroups) (list ([] :: [TTerm TestCaseWithMetadata]))

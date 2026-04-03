@@ -32,6 +32,12 @@ intercalate = L.intercalate
 length :: String -> Int
 length = L.length
 
+-- | Get the Unicode code point of the character at a specific index, returning Nothing if out of bounds.
+maybeCharAt :: Int -> String -> Maybe Int
+maybeCharAt i s
+  | i < 0 || i >= L.length s = Nothing
+  | otherwise = Just (C.ord (s !! i))
+
 -- | Split a string into lines.
 lines :: String -> [String]
 lines = L.lines

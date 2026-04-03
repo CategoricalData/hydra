@@ -59,13 +59,11 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -85,7 +83,7 @@ import qualified Hydra.Ext.Protobuf.Proto3 as P3
 import qualified Hydra.Ext.Sources.Protobuf.Proto3 as Proto3Syntax
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 ns :: Namespace
@@ -98,40 +96,40 @@ module_ = Module ns elements
     Just "Serialization functions for converting Protocol Buffers v3 AST to abstract expressions"
   where
     elements = [
-      toTermDefinition deprecatedOptionName,
-      toTermDefinition descriptionOptionName,
-      toTermDefinition excludeInternalOptions,
-      toTermDefinition optDesc,
-      toTermDefinition protoBlock,
-      toTermDefinition semi,
-      toTermDefinition writeDefinition,
-      toTermDefinition writeEnumDefinition,
-      toTermDefinition writeEnumValue,
-      toTermDefinition writeField,
-      toTermDefinition writeFieldOption,
-      toTermDefinition writeFieldOptions,
-      toTermDefinition writeFieldType,
-      toTermDefinition writeFileOption,
-      toTermDefinition writeFileOptions,
-      toTermDefinition writeImport,
-      toTermDefinition writeMessageDefinition,
-      toTermDefinition writeProtoFile,
-      toTermDefinition writeScalarType,
-      toTermDefinition writeSimpleType,
-      toTermDefinition writeValue]
+      toDefinition deprecatedOptionName,
+      toDefinition descriptionOptionName,
+      toDefinition excludeInternalOptions,
+      toDefinition optDesc,
+      toDefinition protoBlock,
+      toDefinition semi,
+      toDefinition writeDefinition,
+      toDefinition writeEnumDefinition,
+      toDefinition writeEnumValue,
+      toDefinition writeField,
+      toDefinition writeFieldOption,
+      toDefinition writeFieldOptions,
+      toDefinition writeFieldType,
+      toDefinition writeFileOption,
+      toDefinition writeFileOptions,
+      toDefinition writeImport,
+      toDefinition writeMessageDefinition,
+      toDefinition writeProtoFile,
+      toDefinition writeScalarType,
+      toDefinition writeSimpleType,
+      toDefinition writeValue]
 
 
-deprecatedOptionName :: TBinding String
+deprecatedOptionName :: TTermDefinition String
 deprecatedOptionName = define "deprecatedOptionName" $
   doc "The name of the deprecated option" $
   string "deprecated"
 
-descriptionOptionName :: TBinding String
+descriptionOptionName :: TTermDefinition String
 descriptionOptionName = define "descriptionOptionName" $
   doc "A special Protobuf option name for descriptions (documentation)" $
   string "_description"
 
-excludeInternalOptions :: TBinding ([P3.Option] -> [P3.Option])
+excludeInternalOptions :: TTermDefinition ([P3.Option] -> [P3.Option])
 excludeInternalOptions = define "excludeInternalOptions" $
   doc "Filter out internal options (those whose names start with underscore)" $
   lambda "opts" $
@@ -142,7 +140,7 @@ excludeInternalOptions = define "excludeInternalOptions" $
           (int32 95))  -- 95 = '_'
       (var "opts")
 
-optDesc :: TBinding (Bool -> [P3.Option] -> Expr -> Expr)
+optDesc :: TTermDefinition (Bool -> [P3.Option] -> Expr -> Expr)
 optDesc = define "optDesc" $
   doc "Prepend an optional description comment to an expression" $
   lambda "doubleNewline" $ lambda "opts" $ lambda "expr" $ lets [
@@ -165,19 +163,19 @@ optDesc = define "optDesc" $
           (Serialization.newlineSep @@ list [var "comment", var "expr"])] $
         var "sep")
 
-protoBlock :: TBinding ([Expr] -> Expr)
+protoBlock :: TTermDefinition ([Expr] -> Expr)
 protoBlock = define "protoBlock" $
   doc "Wrap expressions in a curly-braced block with double-newline separation" $
   lambda "exprs" $
     Serialization.brackets @@ Serialization.curlyBraces @@ Serialization.fullBlockStyle @@
       (Serialization.doubleNewlineSep @@ var "exprs")
 
-semi :: TBinding (Expr -> Expr)
+semi :: TTermDefinition (Expr -> Expr)
 semi = define "semi" $
   doc "Append a semicolon to an expression" $
   lambda "e" $ Serialization.noSep @@ list [var "e", Serialization.cst @@ string ";"]
 
-writeDefinition :: TBinding (P3.Definition -> Expr)
+writeDefinition :: TTermDefinition (P3.Definition -> Expr)
 writeDefinition = define "writeDefinition" $
   doc "Convert a definition to an expression" $
   lambda "def" $
@@ -185,7 +183,7 @@ writeDefinition = define "writeDefinition" $
       P3._Definition_enum>>: lambda "e" $ writeEnumDefinition @@ var "e",
       P3._Definition_message>>: lambda "m" $ writeMessageDefinition @@ var "m"]
 
-writeEnumDefinition :: TBinding (P3.EnumDefinition -> Expr)
+writeEnumDefinition :: TTermDefinition (P3.EnumDefinition -> Expr)
 writeEnumDefinition = define "writeEnumDefinition" $
   doc "Convert an enum definition to an expression" $
   lambda "ed" $ lets [
@@ -198,7 +196,7 @@ writeEnumDefinition = define "writeEnumDefinition" $
         Serialization.cst @@ (unwrap P3._TypeName @@ var "name"),
         protoBlock @@ (Lists.map writeEnumValue (var "values"))])
 
-writeEnumValue :: TBinding (P3.EnumValue -> Expr)
+writeEnumValue :: TTermDefinition (P3.EnumValue -> Expr)
 writeEnumValue = define "writeEnumValue" $
   doc "Convert an enum value to an expression" $
   lambda "ev" $ lets [
@@ -211,7 +209,7 @@ writeEnumValue = define "writeEnumValue" $
         Serialization.cst @@ string "=",
         Serialization.cst @@ (Literals.showInt32 (var "number"))]))
 
-writeField :: TBinding (P3.Field -> Expr)
+writeField :: TTermDefinition (P3.Field -> Expr)
 writeField = define "writeField" $
   doc "Convert a field to an expression" $
   lambda "f" $ lets [
@@ -250,7 +248,7 @@ writeField = define "writeField" $
             Maybes.pure (Serialization.cst @@ (Literals.showInt32 (var "num"))),
             writeFieldOptions @@ var "options"]))])
 
-writeFieldOption :: TBinding (P3.Option -> Expr)
+writeFieldOption :: TTermDefinition (P3.Option -> Expr)
 writeFieldOption = define "writeFieldOption" $
   doc "Convert a field option to an expression" $
   lambda "opt" $ lets [
@@ -261,7 +259,7 @@ writeFieldOption = define "writeFieldOption" $
       Serialization.cst @@ string "=",
       writeValue @@ var "value"]
 
-writeFieldOptions :: TBinding ([P3.Option] -> Maybe Expr)
+writeFieldOptions :: TTermDefinition ([P3.Option] -> Maybe Expr)
 writeFieldOptions = define "writeFieldOptions" $
   doc "Convert field options to an optional bracket-enclosed expression" $
   lambda "opts0" $ lets [
@@ -271,7 +269,7 @@ writeFieldOptions = define "writeFieldOptions" $
       (Maybes.pure (Serialization.bracketList @@ Serialization.inlineStyle @@
         (Lists.map writeFieldOption (var "opts"))))
 
-writeFieldType :: TBinding (P3.FieldType -> Expr)
+writeFieldType :: TTermDefinition (P3.FieldType -> Expr)
 writeFieldType = define "writeFieldType" $
   doc "Convert a field type to an expression" $
   lambda "ftyp" $
@@ -292,7 +290,7 @@ writeFieldType = define "writeFieldType" $
       P3._FieldType_oneof>>: lambda "fields" $
         Serialization.cst @@ string "oneof"]
 
-writeFileOption :: TBinding (P3.Option -> Expr)
+writeFileOption :: TTermDefinition (P3.Option -> Expr)
 writeFileOption = define "writeFileOption" $
   doc "Convert a file-level option to an expression" $
   lambda "opt" $ lets [
@@ -304,7 +302,7 @@ writeFileOption = define "writeFileOption" $
       Serialization.cst @@ string "=",
       writeValue @@ var "value"])
 
-writeFileOptions :: TBinding ([P3.Option] -> Maybe Expr)
+writeFileOptions :: TTermDefinition ([P3.Option] -> Maybe Expr)
 writeFileOptions = define "writeFileOptions" $
   doc "Convert file-level options to an optional newline-separated expression" $
   lambda "opts0" $ lets [
@@ -313,7 +311,7 @@ writeFileOptions = define "writeFileOptions" $
       nothing
       (Maybes.pure (Serialization.newlineSep @@ (Lists.map writeFileOption (var "opts"))))
 
-writeImport :: TBinding (P3.FileReference -> Expr)
+writeImport :: TTermDefinition (P3.FileReference -> Expr)
 writeImport = define "writeImport" $
   doc "Convert a file reference to an import expression" $
   lambda "ref" $
@@ -321,7 +319,7 @@ writeImport = define "writeImport" $
       Serialization.cst @@ string "import",
       Serialization.cst @@ (Literals.showString (unwrap P3._FileReference @@ var "ref"))])
 
-writeMessageDefinition :: TBinding (P3.MessageDefinition -> Expr)
+writeMessageDefinition :: TTermDefinition (P3.MessageDefinition -> Expr)
 writeMessageDefinition = define "writeMessageDefinition" $
   doc "Convert a message definition to an expression" $
   lambda "md" $ lets [
@@ -334,7 +332,7 @@ writeMessageDefinition = define "writeMessageDefinition" $
         Serialization.cst @@ (unwrap P3._TypeName @@ var "name"),
         protoBlock @@ (Lists.map writeField (var "fields"))])
 
-writeProtoFile :: TBinding (P3.ProtoFile -> Expr)
+writeProtoFile :: TTermDefinition (P3.ProtoFile -> Expr)
 writeProtoFile = define "writeProtoFile" $
   doc "Convert a proto file to an expression" $
   lambda "pf" $ lets [
@@ -361,7 +359,7 @@ writeProtoFile = define "writeProtoFile" $
       (Serialization.doubleNewlineSep @@ (Maybes.cat $ list [
         var "headerSec", var "importsSec", var "optionsSec", var "defsSec"]))
 
-writeScalarType :: TBinding (P3.ScalarType -> Expr)
+writeScalarType :: TTermDefinition (P3.ScalarType -> Expr)
 writeScalarType = define "writeScalarType" $
   doc "Convert a scalar type to an expression" $
   lambda "sct" $ Serialization.cst @@
@@ -382,7 +380,7 @@ writeScalarType = define "writeScalarType" $
       P3._ScalarType_uint32>>: constant $ string "uint32",
       P3._ScalarType_uint64>>: constant $ string "uint64"])
 
-writeSimpleType :: TBinding (P3.SimpleType -> Expr)
+writeSimpleType :: TTermDefinition (P3.SimpleType -> Expr)
 writeSimpleType = define "writeSimpleType" $
   doc "Convert a simple type to an expression" $
   lambda "st" $
@@ -391,7 +389,7 @@ writeSimpleType = define "writeSimpleType" $
         Serialization.cst @@ (unwrap P3._TypeName @@ var "name"),
       P3._SimpleType_scalar>>: lambda "sct" $ writeScalarType @@ var "sct"]
 
-writeValue :: TBinding (P3.Value -> Expr)
+writeValue :: TTermDefinition (P3.Value -> Expr)
 writeValue = define "writeValue" $
   doc "Convert a value to an expression" $
   lambda "v" $ Serialization.cst @@

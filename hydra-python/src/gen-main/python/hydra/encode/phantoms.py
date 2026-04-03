@@ -18,3 +18,6 @@ def t_term(a: T0, x: hydra.phantoms.TTerm[T1]) -> hydra.core.Term:
 
 def t_binding(a: T0, x: hydra.phantoms.TBinding[T1]) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.phantoms.TBinding"), (hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name)), hydra.core.Field(hydra.core.Name("term"), t_term(a, x.term))))))
+
+def t_term_definition(a: T0, x: hydra.phantoms.TTermDefinition[T1]) -> hydra.core.Term:
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.phantoms.TTermDefinition"), (hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name)), hydra.core.Field(hydra.core.Name("term"), t_term(a, x.term))))))

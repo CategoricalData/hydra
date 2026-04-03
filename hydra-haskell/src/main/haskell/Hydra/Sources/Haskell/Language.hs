@@ -60,12 +60,11 @@ import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants      as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -80,7 +79,7 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-haskellLanguageDefinition :: String -> TTerm a -> TBinding a
+haskellLanguageDefinition :: String -> TTerm a -> TTermDefinition a
 haskellLanguageDefinition = definitionInModule module_
 
 ns :: Namespace
@@ -88,12 +87,12 @@ ns = Namespace "hydra.ext.haskell.language"
 
 module_ :: Module
 module_ = Module ns
-  [toTermDefinition haskellLanguage, toTermDefinition reservedWords]
+  [toDefinition haskellLanguage, toDefinition reservedWords]
   []
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints and reserved words for Haskell"
 
-haskellLanguage :: TBinding Language
+haskellLanguage :: TTermDefinition Language
 haskellLanguage = haskellLanguageDefinition "haskellLanguage" $
   doc "Language constraints for Haskell" $ lets [
   "eliminationVariants">: Sets.fromList $ list [
@@ -167,7 +166,7 @@ haskellLanguage = haskellLanguageDefinition "haskellLanguage" $
       (var "typeVariants")
       (var "typePredicate"))
 
-reservedWords :: TBinding (S.Set String)
+reservedWords :: TTermDefinition (S.Set String)
 reservedWords = haskellLanguageDefinition "reservedWords" $
   doc ("Created on 2025-02-28 using GHCi 9.6.6\n\n"
     <> "You can reproduce these lists of symbols by issuing the command `:browse Prelude` in GHCi, pasting the results into\n"

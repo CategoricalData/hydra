@@ -24,10 +24,10 @@ ns :: Namespace
 ns = Namespace "hydra.test.lib.chars"
 
 module_ :: Module
-module_ = Module ns elements [] [] $
+module_ = Module ns elements [Namespace "hydra.reduction", Namespace "hydra.show.core"] [] $
     Just "Test cases for hydra.lib.chars primitives"
   where
-    elements = [Phantoms.toTermDefinition allTests]
+    elements = [Phantoms.toDefinition allTests]
 
 -- Test groups for hydra.lib.chars primitives
 
@@ -81,7 +81,7 @@ charsToUpper = subgroup "toUpper" [
   where
     test name x result = primCase name _chars_toUpper [int32 x] (int32 result)
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.chars primitives" $
     supergroup "hydra.lib.chars primitives" [

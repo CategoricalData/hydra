@@ -13,9 +13,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.abs(5)) == (
+      5:int32) == (
 
-      5))
+      5:int32))
 
   }
 
@@ -23,9 +23,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.abs(-5)) == (
+      5:int32) == (
 
-      5))
+      5:int32))
 
   }
 
@@ -33,9 +33,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.abs(0)) == (
+      0:int32) == (
 
-      0))
+      0:int32))
 
   }
 
@@ -45,9 +45,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.add(3)(5)) == (
+      8:int32) == (
 
-      8))
+      8:int32))
 
   }
 
@@ -55,9 +55,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.add(-3)(-5)) == (
+      -8:int32) == (
 
-      -8))
+      -8:int32))
 
   }
 
@@ -65,9 +65,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.add(10)(-3)) == (
+      7:int32) == (
 
-      7))
+      7:int32))
 
   }
 
@@ -75,9 +75,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.add(42)(0)) == (
+      42:int32) == (
 
-      42))
+      42:int32))
 
   }
 
@@ -87,9 +87,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.div(10)(2)) == (
+      5:int32) == (
 
-      5))
+      5:int32))
 
   }
 
@@ -97,9 +97,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.div(10)(3)) == (
+      3:int32) == (
 
-      3))
+      3:int32))
 
   }
 
@@ -107,9 +107,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.div(-10)(3)) == (
+      -4:int32) == (
 
-      -4))
+      -4:int32))
 
   }
 
@@ -117,9 +117,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.div(10)(-3)) == (
+      -4:int32) == (
 
-      -4))
+      -4:int32))
 
   }
 
@@ -129,7 +129,7 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.even(4)) == (
+      true) == (
 
       true))
 
@@ -139,7 +139,7 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.even(5)) == (
+      false) == (
 
       false))
 
@@ -149,7 +149,7 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.even(-4)) == (
+      true) == (
 
       true))
 
@@ -159,7 +159,7 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.even(-5)) == (
+      false) == (
 
       false))
 
@@ -169,7 +169,7 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.even(0)) == (
+      true) == (
 
       true))
 
@@ -181,9 +181,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.max(10)(5)) == (
+      10:int32) == (
 
-      10))
+      10:int32))
 
   }
 
@@ -191,9 +191,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.max(5)(10)) == (
+      10:int32) == (
 
-      10))
+      10:int32))
 
   }
 
@@ -201,9 +201,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.max(7)(7)) == (
+      7:int32) == (
 
-      7))
+      7:int32))
 
   }
 
@@ -211,9 +211,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.max(-3)(-5)) == (
+      -3:int32) == (
 
-      -3))
+      -3:int32))
 
   }
 
@@ -221,9 +221,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.max(-5)(5)) == (
+      5:int32) == (
 
-      5))
+      5:int32))
 
   }
 
@@ -231,9 +231,71 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.max(0)(42)) == (
+      42:int32) == (
 
-      42))
+      42:int32))
+
+  }
+
+  // maybeDiv
+
+  test("maybeDiv - basic division") {
+
+    assert((
+
+      just(3:int32)) == (
+
+      just(3:int32)))
+
+  }
+
+  test("maybeDiv - exact division") {
+
+    assert((
+
+      just(5:int32)) == (
+
+      just(5:int32)))
+
+  }
+
+  test("maybeDiv - division by zero") {
+
+    assert((
+
+      nothing) == (
+
+      nothing))
+
+  }
+
+  test("maybeDiv - zero divided") {
+
+    assert((
+
+      just(0:int32)) == (
+
+      just(0:int32)))
+
+  }
+
+  test("maybeDiv - negative dividend") {
+
+    assert((
+
+      just(-4:int32)) == (
+
+      just(-4:int32)))
+
+  }
+
+  test("maybeDiv - negative divisor") {
+
+    assert((
+
+      just(-4:int32)) == (
+
+      just(-4:int32)))
 
   }
 
@@ -243,9 +305,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.min(5)(10)) == (
+      5:int32) == (
 
-      5))
+      5:int32))
 
   }
 
@@ -253,9 +315,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.min(10)(5)) == (
+      5:int32) == (
 
-      5))
+      5:int32))
 
   }
 
@@ -263,9 +325,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.min(7)(7)) == (
+      7:int32) == (
 
-      7))
+      7:int32))
 
   }
 
@@ -273,9 +335,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.min(-3)(-5)) == (
+      -5:int32) == (
 
-      -5))
+      -5:int32))
 
   }
 
@@ -283,9 +345,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.min(-5)(5)) == (
+      -5:int32) == (
 
-      -5))
+      -5:int32))
 
   }
 
@@ -293,9 +355,61 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.min(0)(42)) == (
+      0:int32) == (
 
-      0))
+      0:int32))
+
+  }
+
+  // maybeMod
+
+  test("maybeMod - basic modulo") {
+
+    assert((
+
+      just(1:int32)) == (
+
+      just(1:int32)))
+
+  }
+
+  test("maybeMod - exact division") {
+
+    assert((
+
+      just(0:int32)) == (
+
+      just(0:int32)))
+
+  }
+
+  test("maybeMod - division by zero") {
+
+    assert((
+
+      nothing) == (
+
+      nothing))
+
+  }
+
+  test("maybeMod - negative dividend") {
+
+    assert((
+
+      just(2:int32)) == (
+
+      just(2:int32)))
+
+  }
+
+  test("maybeMod - negative divisor") {
+
+    assert((
+
+      just(-2:int32)) == (
+
+      just(-2:int32)))
 
   }
 
@@ -305,9 +419,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.mod(10)(3)) == (
+      1:int32) == (
 
-      1))
+      1:int32))
 
   }
 
@@ -315,9 +429,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.mod(10)(2)) == (
+      0:int32) == (
 
-      0))
+      0:int32))
 
   }
 
@@ -325,9 +439,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.mod(-10)(3)) == (
+      2:int32) == (
 
-      2))
+      2:int32))
 
   }
 
@@ -335,9 +449,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.mod(10)(-3)) == (
+      -2:int32) == (
 
-      -2))
+      -2:int32))
 
   }
 
@@ -347,9 +461,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.mul(3)(5)) == (
+      15:int32) == (
 
-      15))
+      15:int32))
 
   }
 
@@ -357,9 +471,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.mul(-3)(-5)) == (
+      15:int32) == (
 
-      15))
+      15:int32))
 
   }
 
@@ -367,9 +481,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.mul(3)(-5)) == (
+      -15:int32) == (
 
-      -15))
+      -15:int32))
 
   }
 
@@ -377,9 +491,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.mul(42)(0)) == (
+      0:int32) == (
 
-      0))
+      0:int32))
 
   }
 
@@ -387,9 +501,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.mul(42)(1)) == (
+      42:int32) == (
 
-      42))
+      42:int32))
 
   }
 
@@ -399,9 +513,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.negate(5)) == (
+      -5:int32) == (
 
-      -5))
+      -5:int32))
 
   }
 
@@ -409,9 +523,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.negate(-5)) == (
+      5:int32) == (
 
-      5))
+      5:int32))
 
   }
 
@@ -419,9 +533,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.negate(0)) == (
+      0:int32) == (
 
-      0))
+      0:int32))
 
   }
 
@@ -431,7 +545,7 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.odd(5)) == (
+      true) == (
 
       true))
 
@@ -441,7 +555,7 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.odd(4)) == (
+      false) == (
 
       false))
 
@@ -451,7 +565,7 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.odd(-5)) == (
+      true) == (
 
       true))
 
@@ -461,7 +575,7 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.odd(-4)) == (
+      false) == (
 
       false))
 
@@ -471,9 +585,51 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.odd(0)) == (
+      false) == (
 
       false))
+
+  }
+
+  // maybePred
+
+  test("maybePred - positive") {
+
+    assert((
+
+      just(4:int32)) == (
+
+      just(4:int32)))
+
+  }
+
+  test("maybePred - zero") {
+
+    assert((
+
+      just(-1:int32)) == (
+
+      just(-1:int32)))
+
+  }
+
+  test("maybePred - negative") {
+
+    assert((
+
+      just(-6:int32)) == (
+
+      just(-6:int32)))
+
+  }
+
+  test("maybePred - minBound") {
+
+    assert((
+
+      nothing) == (
+
+      nothing))
 
   }
 
@@ -483,9 +639,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.pred(5)) == (
+      4:int32) == (
 
-      4))
+      4:int32))
 
   }
 
@@ -493,9 +649,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.pred(0)) == (
+      -1:int32) == (
 
-      -1))
+      -1:int32))
 
   }
 
@@ -503,9 +659,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.pred(-5)) == (
+      -6:int32) == (
 
-      -6))
+      -6:int32))
 
   }
 
@@ -515,9 +671,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.range(1)(5)) == (
+      [1:int32, 2:int32, 3:int32, 4:int32, 5:int32]) == (
 
-      Seq(1, 2, 3, 4, 5)))
+      [1:int32, 2:int32, 3:int32, 4:int32, 5:int32]))
 
   }
 
@@ -525,9 +681,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.range(5)(5)) == (
+      [5:int32]) == (
 
-      Seq(5)))
+      [5:int32]))
 
   }
 
@@ -535,9 +691,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.range(3)(4)) == (
+      [3:int32, 4:int32]) == (
 
-      Seq(3, 4)))
+      [3:int32, 4:int32]))
 
   }
 
@@ -545,9 +701,61 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.range(-2)(2)) == (
+      [-2:int32, -1:int32, 0:int32, 1:int32, 2:int32]) == (
 
-      Seq(-2, -1, 0, 1, 2)))
+      [-2:int32, -1:int32, 0:int32, 1:int32, 2:int32]))
+
+  }
+
+  // maybeRem
+
+  test("maybeRem - basic remainder") {
+
+    assert((
+
+      just(1:int32)) == (
+
+      just(1:int32)))
+
+  }
+
+  test("maybeRem - exact division") {
+
+    assert((
+
+      just(0:int32)) == (
+
+      just(0:int32)))
+
+  }
+
+  test("maybeRem - division by zero") {
+
+    assert((
+
+      nothing) == (
+
+      nothing))
+
+  }
+
+  test("maybeRem - negative dividend") {
+
+    assert((
+
+      just(-1:int32)) == (
+
+      just(-1:int32)))
+
+  }
+
+  test("maybeRem - negative divisor") {
+
+    assert((
+
+      just(1:int32)) == (
+
+      just(1:int32)))
 
   }
 
@@ -557,9 +765,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.rem(10)(3)) == (
+      1:int32) == (
 
-      1))
+      1:int32))
 
   }
 
@@ -567,9 +775,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.rem(10)(2)) == (
+      0:int32) == (
 
-      0))
+      0:int32))
 
   }
 
@@ -577,9 +785,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.rem(-10)(3)) == (
+      -1:int32) == (
 
-      -1))
+      -1:int32))
 
   }
 
@@ -587,9 +795,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.rem(10)(-3)) == (
+      1:int32) == (
 
-      1))
+      1:int32))
 
   }
 
@@ -599,9 +807,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.signum(5)) == (
+      1:int32) == (
 
-      1))
+      1:int32))
 
   }
 
@@ -609,9 +817,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.signum(-5)) == (
+      -1:int32) == (
 
-      -1))
+      -1:int32))
 
   }
 
@@ -619,9 +827,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.signum(0)) == (
+      0:int32) == (
 
-      0))
+      0:int32))
 
   }
 
@@ -631,9 +839,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.sub(10)(3)) == (
+      7:int32) == (
 
-      7))
+      7:int32))
 
   }
 
@@ -641,9 +849,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.sub(-10)(-3)) == (
+      -7:int32) == (
 
-      -7))
+      -7:int32))
 
   }
 
@@ -651,9 +859,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.sub(10)(-3)) == (
+      13:int32) == (
 
-      13))
+      13:int32))
 
   }
 
@@ -661,9 +869,51 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.sub(42)(0)) == (
+      42:int32) == (
 
-      42))
+      42:int32))
+
+  }
+
+  // maybeSucc
+
+  test("maybeSucc - positive") {
+
+    assert((
+
+      just(6:int32)) == (
+
+      just(6:int32)))
+
+  }
+
+  test("maybeSucc - zero") {
+
+    assert((
+
+      just(1:int32)) == (
+
+      just(1:int32)))
+
+  }
+
+  test("maybeSucc - negative") {
+
+    assert((
+
+      just(-4:int32)) == (
+
+      just(-4:int32)))
+
+  }
+
+  test("maybeSucc - maxBound") {
+
+    assert((
+
+      nothing) == (
+
+      nothing))
 
   }
 
@@ -673,9 +923,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.succ(5)) == (
+      6:int32) == (
 
-      6))
+      6:int32))
 
   }
 
@@ -683,9 +933,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.succ(0)) == (
+      1:int32) == (
 
-      1))
+      1:int32))
 
   }
 
@@ -693,9 +943,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.succ(-5)) == (
+      -4:int32) == (
 
-      -4))
+      -4:int32))
 
   }
 
@@ -703,7 +953,11 @@ class MathTest extends AnyFunSuite {
 
   test("e - Euler's number") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.e)) - (2.71828182846)) <= 1e-15)
+    assert((
+
+      2.71828182846:float64) == (
+
+      2.71828182846:float64))
 
   }
 
@@ -711,7 +965,11 @@ class MathTest extends AnyFunSuite {
 
   test("pi - pi constant") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.pi)) - (3.14159265359)) <= 1e-15)
+    assert((
+
+      3.14159265359:float64) == (
+
+      3.14159265359:float64))
 
   }
 
@@ -719,31 +977,51 @@ class MathTest extends AnyFunSuite {
 
   test("sin - sin 0") {
 
-    assert(math.abs((hydra.lib.math.sin(0.0)) - (0.0)) <= 1e-15)
+    assert((
+
+      0.0:float64) == (
+
+      0.0:float64))
 
   }
 
   test("sin - sin pi/2") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.sin(1.5707963267948966))) - (1.0)) <= 1e-15)
+    assert((
+
+      1.0:float64) == (
+
+      1.0:float64))
 
   }
 
   test("sin - sin pi") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.sin(3.141592653589793))) - (1.22464679915e-16)) <= 1e-15)
+    assert((
+
+      1.22464679915e-16:float64) == (
+
+      1.22464679915e-16:float64))
 
   }
 
   test("sin - sin 1") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.sin(1.0))) - (0.841470984808)) <= 1e-15)
+    assert((
+
+      0.841470984808:float64) == (
+
+      0.841470984808:float64))
 
   }
 
   test("sin - sin 0.5") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.sin(0.5))) - (0.479425538604)) <= 1e-15)
+    assert((
+
+      0.479425538604:float64) == (
+
+      0.479425538604:float64))
 
   }
 
@@ -751,31 +1029,51 @@ class MathTest extends AnyFunSuite {
 
   test("cos - cos 0") {
 
-    assert(math.abs((hydra.lib.math.cos(0.0)) - (1.0)) <= 1e-15)
+    assert((
+
+      1.0:float64) == (
+
+      1.0:float64))
 
   }
 
   test("cos - cos pi/2") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.cos(1.5707963267948966))) - (6.12323399574e-17)) <= 1e-15)
+    assert((
+
+      6.12323399574e-17:float64) == (
+
+      6.12323399574e-17:float64))
 
   }
 
   test("cos - cos pi") {
 
-    assert(math.abs((hydra.lib.math.cos(3.141592653589793)) - (-1.0)) <= 1e-15)
+    assert((
+
+      -1.0:float64) == (
+
+      -1.0:float64))
 
   }
 
   test("cos - cos 1") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.cos(1.0))) - (0.540302305868)) <= 1e-15)
+    assert((
+
+      0.540302305868:float64) == (
+
+      0.540302305868:float64))
 
   }
 
   test("cos - cos 0.5") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.cos(0.5))) - (0.87758256189)) <= 1e-15)
+    assert((
+
+      0.87758256189:float64) == (
+
+      0.87758256189:float64))
 
   }
 
@@ -783,25 +1081,41 @@ class MathTest extends AnyFunSuite {
 
   test("tan - tan 0") {
 
-    assert(math.abs((hydra.lib.math.tan(0.0)) - (0.0)) <= 1e-15)
+    assert((
+
+      0.0:float64) == (
+
+      0.0:float64))
 
   }
 
   test("tan - tan pi/4") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.tan(0.7853981633974483))) - (1.0)) <= 1e-15)
+    assert((
+
+      1.0:float64) == (
+
+      1.0:float64))
 
   }
 
   test("tan - tan 1") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.tan(1.0))) - (1.55740772465)) <= 1e-15)
+    assert((
+
+      1.55740772465:float64) == (
+
+      1.55740772465:float64))
 
   }
 
   test("tan - tan 0.5") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.tan(0.5))) - (0.546302489844)) <= 1e-15)
+    assert((
+
+      0.546302489844:float64) == (
+
+      0.546302489844:float64))
 
   }
 
@@ -809,25 +1123,41 @@ class MathTest extends AnyFunSuite {
 
   test("asin - asin 0") {
 
-    assert(math.abs((hydra.lib.math.asin(0.0)) - (0.0)) <= 1e-15)
+    assert((
+
+      0.0:float64) == (
+
+      0.0:float64))
 
   }
 
   test("asin - asin 1") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.asin(1.0))) - (1.57079632679)) <= 1e-15)
+    assert((
+
+      1.57079632679:float64) == (
+
+      1.57079632679:float64))
 
   }
 
   test("asin - asin -1") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.asin(-1.0))) - (-1.57079632679)) <= 1e-15)
+    assert((
+
+      -1.57079632679:float64) == (
+
+      -1.57079632679:float64))
 
   }
 
   test("asin - asin 0.5") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.asin(0.5))) - (0.523598775598)) <= 1e-15)
+    assert((
+
+      0.523598775598:float64) == (
+
+      0.523598775598:float64))
 
   }
 
@@ -835,25 +1165,41 @@ class MathTest extends AnyFunSuite {
 
   test("acos - acos 1") {
 
-    assert(math.abs((hydra.lib.math.acos(1.0)) - (0.0)) <= 1e-15)
+    assert((
+
+      0.0:float64) == (
+
+      0.0:float64))
 
   }
 
   test("acos - acos 0") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.acos(0.0))) - (1.57079632679)) <= 1e-15)
+    assert((
+
+      1.57079632679:float64) == (
+
+      1.57079632679:float64))
 
   }
 
   test("acos - acos -1") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.acos(-1.0))) - (3.14159265359)) <= 1e-15)
+    assert((
+
+      3.14159265359:float64) == (
+
+      3.14159265359:float64))
 
   }
 
   test("acos - acos 0.5") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.acos(0.5))) - (1.0471975512)) <= 1e-15)
+    assert((
+
+      1.0471975512:float64) == (
+
+      1.0471975512:float64))
 
   }
 
@@ -861,19 +1207,31 @@ class MathTest extends AnyFunSuite {
 
   test("atan - atan 0") {
 
-    assert(math.abs((hydra.lib.math.atan(0.0)) - (0.0)) <= 1e-15)
+    assert((
+
+      0.0:float64) == (
+
+      0.0:float64))
 
   }
 
   test("atan - atan 1") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.atan(1.0))) - (0.785398163397)) <= 1e-15)
+    assert((
+
+      0.785398163397:float64) == (
+
+      0.785398163397:float64))
 
   }
 
   test("atan - atan 0.5") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.atan(0.5))) - (0.463647609001)) <= 1e-15)
+    assert((
+
+      0.463647609001:float64) == (
+
+      0.463647609001:float64))
 
   }
 
@@ -881,25 +1239,41 @@ class MathTest extends AnyFunSuite {
 
   test("atan2 - atan2 1 1") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.atan2(1.0)(1.0))) - (0.785398163397)) <= 1e-15)
+    assert((
+
+      0.785398163397:float64) == (
+
+      0.785398163397:float64))
 
   }
 
   test("atan2 - atan2 1 0") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.atan2(1.0)(0.0))) - (1.57079632679)) <= 1e-15)
+    assert((
+
+      1.57079632679:float64) == (
+
+      1.57079632679:float64))
 
   }
 
   test("atan2 - atan2 0 1") {
 
-    assert(math.abs((hydra.lib.math.atan2(0.0)(1.0)) - (0.0)) <= 1e-15)
+    assert((
+
+      0.0:float64) == (
+
+      0.0:float64))
 
   }
 
   test("atan2 - atan2 3 4") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.atan2(3.0)(4.0))) - (0.643501108793)) <= 1e-15)
+    assert((
+
+      0.643501108793:float64) == (
+
+      0.643501108793:float64))
 
   }
 
@@ -907,19 +1281,31 @@ class MathTest extends AnyFunSuite {
 
   test("sinh - sinh 0") {
 
-    assert(math.abs((hydra.lib.math.sinh(0.0)) - (0.0)) <= 1e-15)
+    assert((
+
+      0.0:float64) == (
+
+      0.0:float64))
 
   }
 
   test("sinh - sinh 1") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.sinh(1.0))) - (1.17520119364)) <= 1e-15)
+    assert((
+
+      1.17520119364:float64) == (
+
+      1.17520119364:float64))
 
   }
 
   test("sinh - sinh 2") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.sinh(2.0))) - (3.62686040785)) <= 1e-15)
+    assert((
+
+      3.62686040785:float64) == (
+
+      3.62686040785:float64))
 
   }
 
@@ -927,19 +1313,31 @@ class MathTest extends AnyFunSuite {
 
   test("cosh - cosh 0") {
 
-    assert(math.abs((hydra.lib.math.cosh(0.0)) - (1.0)) <= 1e-15)
+    assert((
+
+      1.0:float64) == (
+
+      1.0:float64))
 
   }
 
   test("cosh - cosh 1") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.cosh(1.0))) - (1.54308063482)) <= 1e-15)
+    assert((
+
+      1.54308063482:float64) == (
+
+      1.54308063482:float64))
 
   }
 
   test("cosh - cosh 2") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.cosh(2.0))) - (3.76219569108)) <= 1e-15)
+    assert((
+
+      3.76219569108:float64) == (
+
+      3.76219569108:float64))
 
   }
 
@@ -947,19 +1345,31 @@ class MathTest extends AnyFunSuite {
 
   test("tanh - tanh 0") {
 
-    assert(math.abs((hydra.lib.math.tanh(0.0)) - (0.0)) <= 1e-15)
+    assert((
+
+      0.0:float64) == (
+
+      0.0:float64))
 
   }
 
   test("tanh - tanh 1") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.tanh(1.0))) - (0.761594155956)) <= 1e-15)
+    assert((
+
+      0.761594155956:float64) == (
+
+      0.761594155956:float64))
 
   }
 
   test("tanh - tanh 0.5") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.tanh(0.5))) - (0.46211715726)) <= 1e-15)
+    assert((
+
+      0.46211715726:float64) == (
+
+      0.46211715726:float64))
 
   }
 
@@ -967,19 +1377,31 @@ class MathTest extends AnyFunSuite {
 
   test("asinh - asinh 0") {
 
-    assert(math.abs((hydra.lib.math.asinh(0.0)) - (0.0)) <= 1e-15)
+    assert((
+
+      0.0:float64) == (
+
+      0.0:float64))
 
   }
 
   test("asinh - asinh 1") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.asinh(1.0))) - (0.88137358702)) <= 1e-15)
+    assert((
+
+      0.88137358702:float64) == (
+
+      0.88137358702:float64))
 
   }
 
   test("asinh - asinh 0.5") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.asinh(0.5))) - (0.48121182506)) <= 1e-15)
+    assert((
+
+      0.48121182506:float64) == (
+
+      0.48121182506:float64))
 
   }
 
@@ -987,19 +1409,31 @@ class MathTest extends AnyFunSuite {
 
   test("acosh - acosh 1") {
 
-    assert(math.abs((hydra.lib.math.acosh(1.0)) - (0.0)) <= 1e-15)
+    assert((
+
+      0.0:float64) == (
+
+      0.0:float64))
 
   }
 
   test("acosh - acosh 2") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.acosh(2.0))) - (1.31695789692)) <= 1e-15)
+    assert((
+
+      1.31695789692:float64) == (
+
+      1.31695789692:float64))
 
   }
 
   test("acosh - acosh 3") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.acosh(3.0))) - (1.76274717404)) <= 1e-15)
+    assert((
+
+      1.76274717404:float64) == (
+
+      1.76274717404:float64))
 
   }
 
@@ -1007,19 +1441,31 @@ class MathTest extends AnyFunSuite {
 
   test("atanh - atanh 0") {
 
-    assert(math.abs((hydra.lib.math.atanh(0.0)) - (0.0)) <= 1e-15)
+    assert((
+
+      0.0:float64) == (
+
+      0.0:float64))
 
   }
 
   test("atanh - atanh 0.5") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.atanh(0.5))) - (0.549306144334)) <= 1e-15)
+    assert((
+
+      0.549306144334:float64) == (
+
+      0.549306144334:float64))
 
   }
 
   test("atanh - atanh 0.1") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.atanh(0.1))) - (0.100335347731)) <= 1e-15)
+    assert((
+
+      0.100335347731:float64) == (
+
+      0.100335347731:float64))
 
   }
 
@@ -1027,31 +1473,51 @@ class MathTest extends AnyFunSuite {
 
   test("exp - exp 0") {
 
-    assert(math.abs((hydra.lib.math.exp(0.0)) - (1.0)) <= 1e-15)
+    assert((
+
+      1.0:float64) == (
+
+      1.0:float64))
 
   }
 
   test("exp - exp 1") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.exp(1.0))) - (2.71828182846)) <= 1e-15)
+    assert((
+
+      2.71828182846:float64) == (
+
+      2.71828182846:float64))
 
   }
 
   test("exp - exp -1") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.exp(-1.0))) - (0.367879441171)) <= 1e-15)
+    assert((
+
+      0.367879441171:float64) == (
+
+      0.367879441171:float64))
 
   }
 
   test("exp - exp 2") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.exp(2.0))) - (7.38905609893)) <= 1e-15)
+    assert((
+
+      7.38905609893:float64) == (
+
+      7.38905609893:float64))
 
   }
 
   test("exp - exp 0.5") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.exp(0.5))) - (1.6487212707)) <= 1e-15)
+    assert((
+
+      1.6487212707:float64) == (
+
+      1.6487212707:float64))
 
   }
 
@@ -1059,25 +1525,41 @@ class MathTest extends AnyFunSuite {
 
   test("log - log 1") {
 
-    assert(math.abs((hydra.lib.math.log(1.0)) - (0.0)) <= 1e-15)
+    assert((
+
+      0.0:float64) == (
+
+      0.0:float64))
 
   }
 
   test("log - log e") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.log(2.718281828459045))) - (1.0)) <= 1e-15)
+    assert((
+
+      1.0:float64) == (
+
+      1.0:float64))
 
   }
 
   test("log - log 2") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.log(2.0))) - (0.69314718056)) <= 1e-15)
+    assert((
+
+      0.69314718056:float64) == (
+
+      0.69314718056:float64))
 
   }
 
   test("log - log 10") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.log(10.0))) - (2.30258509299)) <= 1e-15)
+    assert((
+
+      2.30258509299:float64) == (
+
+      2.30258509299:float64))
 
   }
 
@@ -1085,31 +1567,51 @@ class MathTest extends AnyFunSuite {
 
   test("logBase - log10 1") {
 
-    assert(math.abs((hydra.lib.math.logBase(10.0)(1.0)) - (0.0)) <= 1e-15)
+    assert((
+
+      0.0:float64) == (
+
+      0.0:float64))
 
   }
 
   test("logBase - log10 10") {
 
-    assert(math.abs((hydra.lib.math.logBase(10.0)(10.0)) - (1.0)) <= 1e-15)
+    assert((
+
+      1.0:float64) == (
+
+      1.0:float64))
 
   }
 
   test("logBase - log10 100") {
 
-    assert(math.abs((hydra.lib.math.logBase(10.0)(100.0)) - (2.0)) <= 1e-15)
+    assert((
+
+      2.0:float64) == (
+
+      2.0:float64))
 
   }
 
   test("logBase - log2 8") {
 
-    assert(math.abs((hydra.lib.math.logBase(2.0)(8.0)) - (3.0)) <= 1e-15)
+    assert((
+
+      3.0:float64) == (
+
+      3.0:float64))
 
   }
 
   test("logBase - log2 10") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.logBase(2.0)(10.0))) - (3.32192809489)) <= 1e-15)
+    assert((
+
+      3.32192809489:float64) == (
+
+      3.32192809489:float64))
 
   }
 
@@ -1117,25 +1619,41 @@ class MathTest extends AnyFunSuite {
 
   test("pow - 2^3") {
 
-    assert(math.abs((hydra.lib.math.pow(2.0)(3.0)) - (8.0)) <= 1e-15)
+    assert((
+
+      8.0:float64) == (
+
+      8.0:float64))
 
   }
 
   test("pow - 10^0") {
 
-    assert(math.abs((hydra.lib.math.pow(10.0)(0.0)) - (1.0)) <= 1e-15)
+    assert((
+
+      1.0:float64) == (
+
+      1.0:float64))
 
   }
 
   test("pow - 2^-1") {
 
-    assert(math.abs((hydra.lib.math.pow(2.0)(-1.0)) - (0.5)) <= 1e-15)
+    assert((
+
+      0.5:float64) == (
+
+      0.5:float64))
 
   }
 
   test("pow - 2^0.5") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.pow(2.0)(0.5))) - (1.41421356237)) <= 1e-15)
+    assert((
+
+      1.41421356237:float64) == (
+
+      1.41421356237:float64))
 
   }
 
@@ -1143,31 +1661,51 @@ class MathTest extends AnyFunSuite {
 
   test("sqrt - sqrt 4") {
 
-    assert(math.abs((hydra.lib.math.sqrt(4.0)) - (2.0)) <= 1e-15)
+    assert((
+
+      2.0:float64) == (
+
+      2.0:float64))
 
   }
 
   test("sqrt - sqrt 9") {
 
-    assert(math.abs((hydra.lib.math.sqrt(9.0)) - (3.0)) <= 1e-15)
+    assert((
+
+      3.0:float64) == (
+
+      3.0:float64))
 
   }
 
   test("sqrt - sqrt 2") {
 
-    assert(math.abs((hydra.lib.math.sqrt(2.0)) - (1.4142135623730951)) <= 1e-15)
+    assert((
+
+      1.4142135623730951:float64) == (
+
+      1.4142135623730951:float64))
 
   }
 
   test("sqrt - sqrt 0") {
 
-    assert(math.abs((hydra.lib.math.sqrt(0.0)) - (0.0)) <= 1e-15)
+    assert((
+
+      0.0:float64) == (
+
+      0.0:float64))
 
   }
 
   test("sqrt - sqrt 3") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(12)(hydra.lib.math.sqrt(3.0))) - (1.73205080757)) <= 1e-15)
+    assert((
+
+      1.73205080757:float64) == (
+
+      1.73205080757:float64))
 
   }
 
@@ -1177,9 +1715,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.ceiling(3.2)) == (
+      4:bigint) == (
 
-      BigInt("4")))
+      4:bigint))
 
   }
 
@@ -1187,9 +1725,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.ceiling(3.0)) == (
+      3:bigint) == (
 
-      BigInt("3")))
+      3:bigint))
 
   }
 
@@ -1197,9 +1735,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.ceiling(-3.2)) == (
+      -3:bigint) == (
 
-      BigInt("-3")))
+      -3:bigint))
 
   }
 
@@ -1207,9 +1745,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.ceiling(-3.0)) == (
+      -3:bigint) == (
 
-      BigInt("-3")))
+      -3:bigint))
 
   }
 
@@ -1219,9 +1757,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.floor(3.8)) == (
+      3:bigint) == (
 
-      BigInt("3")))
+      3:bigint))
 
   }
 
@@ -1229,9 +1767,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.floor(3.0)) == (
+      3:bigint) == (
 
-      BigInt("3")))
+      3:bigint))
 
   }
 
@@ -1239,9 +1777,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.floor(-3.2)) == (
+      -4:bigint) == (
 
-      BigInt("-4")))
+      -4:bigint))
 
   }
 
@@ -1249,9 +1787,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.floor(-3.0)) == (
+      -3:bigint) == (
 
-      BigInt("-3")))
+      -3:bigint))
 
   }
 
@@ -1261,9 +1799,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.round(3.4)) == (
+      3:bigint) == (
 
-      BigInt("3")))
+      3:bigint))
 
   }
 
@@ -1271,9 +1809,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.round(3.5)) == (
+      4:bigint) == (
 
-      BigInt("4")))
+      4:bigint))
 
   }
 
@@ -1281,9 +1819,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.round(3.6)) == (
+      4:bigint) == (
 
-      BigInt("4")))
+      4:bigint))
 
   }
 
@@ -1291,9 +1829,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.round(-3.4)) == (
+      -3:bigint) == (
 
-      BigInt("-3")))
+      -3:bigint))
 
   }
 
@@ -1301,9 +1839,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.round(-3.5)) == (
+      -4:bigint) == (
 
-      BigInt("-4")))
+      -4:bigint))
 
   }
 
@@ -1311,31 +1849,51 @@ class MathTest extends AnyFunSuite {
 
   test("roundBigfloat - zero") {
 
-    assert((BigDecimal(0.0)).compare(hydra.lib.math.roundBigfloat(5)(BigDecimal(0.0))) == 0)
+    assert((
+
+      0.0:bigfloat) == (
+
+      0.0:bigfloat))
 
   }
 
   test("roundBigfloat - round pi to 4 digits") {
 
-    assert((BigDecimal(3.142)).compare(hydra.lib.math.roundBigfloat(4)(BigDecimal(3.141592653589793))) == 0)
+    assert((
+
+      3.142:bigfloat) == (
+
+      3.142:bigfloat))
 
   }
 
   test("roundBigfloat - round 1234.5 to 3 digits") {
 
-    assert((BigDecimal(1230.0)).compare(hydra.lib.math.roundBigfloat(3)(BigDecimal(1234.5))) == 0)
+    assert((
+
+      1230.0:bigfloat) == (
+
+      1230.0:bigfloat))
 
   }
 
   test("roundBigfloat - round 0.001234 to 2 digits") {
 
-    assert((BigDecimal(1.2e-3)).compare(hydra.lib.math.roundBigfloat(2)(BigDecimal(1.234e-3))) == 0)
+    assert((
+
+      1.2e-3:bigfloat) == (
+
+      1.2e-3:bigfloat))
 
   }
 
   test("roundBigfloat - negative") {
 
-    assert((BigDecimal(-1230.0)).compare(hydra.lib.math.roundBigfloat(3)(BigDecimal(-1234.5))) == 0)
+    assert((
+
+      -1230.0:bigfloat) == (
+
+      -1230.0:bigfloat))
 
   }
 
@@ -1343,25 +1901,41 @@ class MathTest extends AnyFunSuite {
 
   test("roundFloat32 - zero") {
 
-    assert(math.abs((hydra.lib.math.roundFloat32(5)(0.0f)) - (0.0f)) <= 1e-15)
+    assert((
+
+      0.0:float32) == (
+
+      0.0:float32))
 
   }
 
   test("roundFloat32 - round pi to 4 digits") {
 
-    assert(math.abs((hydra.lib.math.roundFloat32(4)(3.1415927f)) - (3.142f)) <= 1e-15)
+    assert((
+
+      3.142:float32) == (
+
+      3.142:float32))
 
   }
 
   test("roundFloat32 - round 1234.5 to 3 digits") {
 
-    assert(math.abs((hydra.lib.math.roundFloat32(3)(1234.5f)) - (1230.0f)) <= 1e-15)
+    assert((
+
+      1230.0:float32) == (
+
+      1230.0:float32))
 
   }
 
   test("roundFloat32 - negative") {
 
-    assert(math.abs((hydra.lib.math.roundFloat32(3)(-1234.5f)) - (-1230.0f)) <= 1e-15)
+    assert((
+
+      -1230.0:float32) == (
+
+      -1230.0:float32))
 
   }
 
@@ -1369,43 +1943,71 @@ class MathTest extends AnyFunSuite {
 
   test("roundFloat64 - zero") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(5)(0.0)) - (0.0)) <= 1e-15)
+    assert((
+
+      0.0:float64) == (
+
+      0.0:float64))
 
   }
 
   test("roundFloat64 - round pi to 4 digits") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(4)(3.141592653589793)) - (3.142)) <= 1e-15)
+    assert((
+
+      3.142:float64) == (
+
+      3.142:float64))
 
   }
 
   test("roundFloat64 - round pi to 10 digits") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(10)(3.141592653589793)) - (3.141592654)) <= 1e-15)
+    assert((
+
+      3.141592654:float64) == (
+
+      3.141592654:float64))
 
   }
 
   test("roundFloat64 - round 1234.5 to 3 digits") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(3)(1234.5)) - (1230.0)) <= 1e-15)
+    assert((
+
+      1230.0:float64) == (
+
+      1230.0:float64))
 
   }
 
   test("roundFloat64 - round 0.001234 to 2 digits") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(2)(1.234e-3)) - (1.2e-3)) <= 1e-15)
+    assert((
+
+      1.2e-3:float64) == (
+
+      1.2e-3:float64))
 
   }
 
   test("roundFloat64 - negative") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(3)(-1234.5)) - (-1230.0)) <= 1e-15)
+    assert((
+
+      -1230.0:float64) == (
+
+      -1230.0:float64))
 
   }
 
   test("roundFloat64 - round 1 digit") {
 
-    assert(math.abs((hydra.lib.math.roundFloat64(1)(9.876)) - (10.0)) <= 1e-15)
+    assert((
+
+      10.0:float64) == (
+
+      10.0:float64))
 
   }
 
@@ -1415,9 +2017,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.truncate(3.8)) == (
+      3:bigint) == (
 
-      BigInt("3")))
+      3:bigint))
 
   }
 
@@ -1425,9 +2027,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.truncate(3.2)) == (
+      3:bigint) == (
 
-      BigInt("3")))
+      3:bigint))
 
   }
 
@@ -1435,9 +2037,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.truncate(-3.8)) == (
+      -3:bigint) == (
 
-      BigInt("-3")))
+      -3:bigint))
 
   }
 
@@ -1445,9 +2047,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.math.truncate(-3.2)) == (
+      -3:bigint) == (
 
-      BigInt("-3")))
+      -3:bigint))
 
   }
 }

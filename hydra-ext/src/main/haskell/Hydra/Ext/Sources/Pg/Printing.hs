@@ -60,13 +60,11 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -85,7 +83,7 @@ import qualified Hydra.Pg.Model as PG
 import qualified Hydra.Ext.Sources.Pg.Model as PgModel
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 ns :: Namespace
@@ -98,14 +96,14 @@ module_ = Module ns elements
     Just "Printing functions for property graph elements"
   where
     elements = [
-      toTermDefinition printEdge,
-      toTermDefinition printGraph,
-      toTermDefinition printLazyGraph,
-      toTermDefinition printProperty,
-      toTermDefinition printVertex]
+      toDefinition printEdge,
+      toDefinition printGraph,
+      toDefinition printLazyGraph,
+      toDefinition printProperty,
+      toDefinition printVertex]
 
 -- | Print an edge using the provided printer functions
-printEdge :: TBinding ((v -> String) -> PG.Edge v -> String)
+printEdge :: TTermDefinition ((v -> String) -> PG.Edge v -> String)
 printEdge = define "printEdge" $
   doc "Print an edge using the provided value printer" $
   "printValue" ~> "edge" ~> lets [
@@ -125,7 +123,7 @@ printEdge = define "printEdge" $
       var "inId", string ")"]
 
 -- | Print a graph using the provided printer functions
-printGraph :: TBinding ((v -> String) -> PG.Graph v -> String)
+printGraph :: TTermDefinition ((v -> String) -> PG.Graph v -> String)
 printGraph = define "printGraph" $
   doc "Print a graph using the provided value printer" $
   "printValue" ~> "graph" ~>
@@ -135,7 +133,7 @@ printGraph = define "printGraph" $
         PG._LazyGraph_edges>>: Maps.elems (project PG._Graph PG._Graph_edges @@ var "graph")])
 
 -- | Print a lazy graph using the provided printer functions
-printLazyGraph :: TBinding ((v -> String) -> PG.LazyGraph v -> String)
+printLazyGraph :: TTermDefinition ((v -> String) -> PG.LazyGraph v -> String)
 printLazyGraph = define "printLazyGraph" $
   doc "Print a lazy graph using the provided value printer" $
   "printValue" ~> "lg" ~> lets [
@@ -148,7 +146,7 @@ printLazyGraph = define "printLazyGraph" $
       Strings.cat (Lists.map ("e" ~> Strings.cat (list [string "\n\t", printEdge @@ var "printValue" @@ var "e"])) (var "edges"))]
 
 -- | Print a property using the provided printer functions
-printProperty :: TBinding ((v -> String) -> PG.PropertyKey -> v -> String)
+printProperty :: TTermDefinition ((v -> String) -> PG.PropertyKey -> v -> String)
 printProperty = define "printProperty" $
   doc "Print a property using the provided value printer" $
   "printValue" ~> "key" ~> "value" ~>
@@ -158,7 +156,7 @@ printProperty = define "printProperty" $
       var "printValue" @@ var "value"]
 
 -- | Print a vertex using the provided printer functions
-printVertex :: TBinding ((v -> String) -> PG.Vertex v -> String)
+printVertex :: TTermDefinition ((v -> String) -> PG.Vertex v -> String)
 printVertex = define "printVertex" $
   doc "Print a vertex using the provided value printer" $
   "printValue" ~> "vertex" ~> lets [

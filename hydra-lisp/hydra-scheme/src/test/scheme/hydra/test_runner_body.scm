@@ -234,7 +234,7 @@
          (bootstrap-types hydra_json_bootstrap_types_by_name)
          (test-types hydra_test_test_graph_test_types)
          ;; Convert types to TypeSchemes using f_type_to_type_scheme
-         (type-to-ts hydra_rewriting_f_type_to_type_scheme)
+         (type-to-ts hydra_scoping_f_type_to_type_scheme)
          (kernel-schemas (map (lambda (entry)
                                 (list (car entry) (type-to-ts (cdr entry))))
                               bootstrap-types))
@@ -803,7 +803,7 @@
   (run-simple-test path
     (hydra_testing_deannotate_term_test_case-output tc)
     (lambda ()
-      (hydra_rewriting_deannotate_term
+      (hydra_strip_deannotate_term
         (hydra_testing_deannotate_term_test_case-input tc)))))
 
 (define (run-deannotate-type-test path tc)
@@ -1516,7 +1516,8 @@
            (full (string-append path " > " tname))
            (tags (hydra_testing_test_case_with_metadata-tags tcase))
            (disabled? (member "disabled" tags))
-           (tc (hydra_testing_test_case_with_metadata-case tcase)))
+           (tc (hydra_testing_test_case_with_metadata-case tcase))
+           (_ (when (eq? (car tc) 'universal) (display (string-append "TRACE: " tname "\n")))))
       (if disabled?
           (list 0 0 1)
           (let ((case-type (car tc))
@@ -1563,6 +1564,16 @@
               ((eq? case-type 'validate_core_term)      (run-validate-core-term-test full case-data))
               ;; Skip remaining unimplemented test types
               ((eq? case-type 'delegated_evaluation)    (list 0 0 1))
+              ((eq? case-type 'universal)
+               (let ((actual (hydra_testing_universal_test_case-actual case-data))
+                     (expected (hydra_testing_universal_test_case-expected case-data)))
+                 (if (equal? actual expected)
+                   (list 1 0 0)
+                   (begin
+                     (display (string-append "FAIL: " full "\n"))
+                     (display (string-append "  Expected: " (if (string? expected) expected (obj->string expected)) "\n"))
+                     (display (string-append "  Actual:   " (if (string? actual) actual (obj->string actual)) "\n"))
+                     (list 0 1 0)))))
               (else                                     (list 0 0 1))))))))
 
 ;; Benchmark helpers

@@ -59,13 +59,12 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -84,7 +83,7 @@ import qualified Hydra.Ext.Org.Apache.Tinkerpop.Features as TF
 import qualified Hydra.Ext.Sources.Tinkerpop.Features as TinkerpopFeatures
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 ns :: Namespace
@@ -92,12 +91,12 @@ ns = Namespace "hydra.ext.tinkerpop.language"
 
 module_ :: Module
 module_ = Module ns elements
-    [Rewriting.ns]
+    [Strip.ns]
     (TinkerpopFeatures.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Language constraints based on TinkerPop Graph.Features"
   where
     elements = [
-      toTermDefinition tinkerpopLanguage]
+      toDefinition tinkerpopLanguage]
 
 
 -- | Populate language constraints based on TinkerPop Graph.Features.
@@ -105,7 +104,7 @@ module_ = Module ns elements
 --       for Hydra we cannot support a term or type pattern unless it is provably safe in the target environment.
 --       Otherwise, generated expressions could cause failure during runtime operations.
 -- Also note that extra features are required on top of Graph.Features, again for reasons of completeness.
-tinkerpopLanguage :: TBinding (LanguageName -> TF.Features -> TF.ExtraFeatures a -> Language)
+tinkerpopLanguage :: TTermDefinition (LanguageName -> TF.Features -> TF.ExtraFeatures a -> Language)
 tinkerpopLanguage = define "tinkerpopLanguage" $
   doc "Populate language constraints based on TinkerPop Graph.Features" $
   lambda "name" $ lambda "features" $ lambda "extras" $ lets [
@@ -181,10 +180,10 @@ tinkerpopLanguage = define "tinkerpopLanguage" $
       Maybes.pure Variants.typeVariantWrap]),
 
     "typePredicate">: "typ" ~> lets [
-      "dt">: Rewriting.deannotateType @@ var "typ"] $
+      "dt">: Strip.deannotateType @@ var "typ"] $
       cases _Type (var "dt") (Just true) [
         -- Only lists of literal values are supported, as nothing else is mentioned in Graph.Features
-        _Type_list>>: "t" ~> cases _Type (Rewriting.deannotateType @@ var "t") (Just false) [
+        _Type_list>>: "t" ~> cases _Type (Strip.deannotateType @@ var "t") (Just false) [
           _Type_literal>>: "lt" ~> cases _LiteralType (var "lt") (Just false) [
             _LiteralType_boolean>>: constant
               (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsBooleanArrayValues @@ var "vpFeatures"),
@@ -207,7 +206,7 @@ tinkerpopLanguage = define "tinkerpopLanguage" $
           project TF._ExtraFeatures TF._ExtraFeatures_supportsMapKey @@ var "extras"
             @@ (project _MapType _MapType_keys @@ var "mt"),
         _Type_wrap>>: constant true,
-        _Type_maybe>>: "ot" ~> cases _Type (Rewriting.deannotateType @@ var "ot") (Just false) [
+        _Type_maybe>>: "ot" ~> cases _Type (Strip.deannotateType @@ var "ot") (Just false) [
           _Type_literal>>: constant true]]] $
 
   Coders.language

@@ -29,9 +29,9 @@ public class AdapterContext implements Serializable, Comparable<AdapterContext> 
   /**
    * A map of type names to adapters for those types
    */
-  public final hydra.util.PersistentMap<hydra.core.Name, hydra.util.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>> adapters;
+  public final hydra.util.PersistentMap<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>> adapters;
 
-  public AdapterContext (hydra.graph.Graph graph, hydra.coders.Language language, hydra.util.PersistentMap<hydra.core.Name, hydra.util.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>> adapters) {
+  public AdapterContext (hydra.graph.Graph graph, hydra.coders.Language language, hydra.util.PersistentMap<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>> adapters) {
     this.graph = graph;
     this.language = language;
     this.adapters = adapters;
@@ -80,7 +80,7 @@ public class AdapterContext implements Serializable, Comparable<AdapterContext> 
     return new AdapterContext(graph, language, adapters);
   }
 
-  public AdapterContext withAdapters(hydra.util.PersistentMap<hydra.core.Name, hydra.util.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>> adapters) {
+  public AdapterContext withAdapters(hydra.util.PersistentMap<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>> adapters) {
     return new AdapterContext(graph, language, adapters);
   }
 }

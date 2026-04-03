@@ -26,9 +26,9 @@
 
 (require 'hydra.names)
 
-(require 'hydra.rewriting)
+(require 'hydra.strip)
 
-(defvar hydra_ext_scala_utils_name_of_type (lambda (cx) (lambda (t_) (funcall (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :variable) (funcall (lambda (name) (list :just name)) match_value)) ((equal (car match_target) :forall) (funcall (lambda (ft) (funcall (hydra_ext_scala_utils_name_of_type cx) (funcall (lambda (v) (hydra_core_forall_type-body v)) ft))) match_value)) (t (list :nothing)))) (cadr match_target))) (hydra_rewriting_deannotate_type t_)))))
+(defvar hydra_ext_scala_utils_name_of_type (lambda (cx) (lambda (t_) (funcall (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :variable) (funcall (lambda (name) (list :just name)) match_value)) ((equal (car match_target) :forall) (funcall (lambda (ft) (funcall (hydra_ext_scala_utils_name_of_type cx) (funcall (lambda (v) (hydra_core_forall_type-body v)) ft))) match_value)) (t (list :nothing)))) (cadr match_target))) (hydra_strip_deannotate_type t_)))))
 
 (defvar hydra_ext_scala_utils_scala_reserved_words hydra_ext_scala_language_scala_reserved_words)
 

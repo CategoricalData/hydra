@@ -4,6 +4,7 @@
 
 module Hydra.Ext.Haskell.Utils where
 
+import qualified Hydra.Analysis as Analysis
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
@@ -22,13 +23,8 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
-import qualified Hydra.Rewriting as Rewriting
-import qualified Hydra.Schemas as Schemas
+import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Create an application pattern from a name and argument patterns
@@ -83,7 +79,7 @@ hsvar s = Syntax.ExpressionVariable (rawName s)
 -- | Compute the Haskell module namespaces for a Hydra module
 namespacesForModule :: Module.Module -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (Module.Namespaces Syntax.ModuleName)
 namespacesForModule mod cx g =
-    Eithers.bind (Schemas.moduleDependencyNamespaces cx g True True True True mod) (\nss ->
+    Eithers.bind (Analysis.moduleDependencyNamespaces cx g True True True True mod) (\nss ->
       let ns = Module.moduleNamespace mod
           toModuleName =
                   \namespace ->
@@ -208,7 +204,7 @@ unionFieldReference boundNames namespaces sname fname =
 -- | Unpack nested forall types into a list of type variables and the inner type
 unpackForallType :: Core.Type -> ([Core.Name], Core.Type)
 unpackForallType t =
-    case (Rewriting.deannotateType t) of
+    case (Strip.deannotateType t) of
       Core.TypeForall v0 ->
         let v = Core.forallTypeParameter v0
             tbody = Core.forallTypeBody v0

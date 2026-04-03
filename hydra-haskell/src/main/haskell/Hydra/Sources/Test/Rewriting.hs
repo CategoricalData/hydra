@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 
 -- | Test cases for term rewriting operations (free variables, simplify, flatten let, lift lambda)
 module Hydra.Sources.Test.Rewriting where
@@ -21,6 +22,23 @@ import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Coders        as Coders
 import qualified Data.Set                     as S
 
+import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Reduction as ReductionModule
+import qualified Hydra.Sources.Kernel.Terms.Dependencies as DependenciesModule
+import qualified Hydra.Sources.Kernel.Terms.Rewriting as RewritingModule
+import qualified Hydra.Sources.Kernel.Terms.Strip as StripModule
+import qualified Hydra.Sources.Kernel.Terms.Variables as VariablesModule
+import qualified Hydra.Dsl.Meta.Lib.Maps as Maps
+import qualified Hydra.Dsl.Meta.Lib.Pairs as Pairs
+import qualified Hydra.Dsl.Meta.Lib.Sets as Sets
+import qualified Hydra.Dsl.Meta.Lib.Lists as Lists
+import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
+import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
+import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
+import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
+import qualified Hydra.Dsl.Meta.Lib.Logic as Logic
+import qualified Hydra.Dsl.Meta.Lib.Math as Math
+
 -- NOTE: This file previously used T for Terms and Ty for Types.
 -- After standardization: Terms are unqualified, T is for Types.
 
@@ -30,14 +48,204 @@ ns = Namespace "hydra.test.rewriting"
 
 module_ :: Module
 module_ = Module ns elements
-    []
+    [ShowCore.ns, ReductionModule.ns, RewritingModule.ns, TestGraph.ns]
     kernelTypesNamespaces
     (Just "Test cases for term rewriting operations")
   where
-    elements = [Phantoms.toTermDefinition allTests]
+    elements = [Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
+
+-- Local alias for polymorphic application (Phantoms.@@ applies TBindings; Terms.@@ only works on TTerm Term)
+(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
+(#) = (Phantoms.@@)
+infixl 1 #
+
+-- Field constructor for cases/match (uses Phantoms.>>: to create Field, since the unqualified >>: from Testing creates tuples)
+(~>:) :: AsTerm t a => Name -> t -> Field
+(~>:) = (Phantoms.>>:)
+infixr 0 ~>:
+
+-- | Show a term as a string using ShowCore.term
+showTerm :: TTerm Term -> TTerm String
+showTerm t = ShowCore.term # t
+
+-- | Show a type as a string using ShowCore.type_
+showType :: TTerm Type -> TTerm String
+showType t = ShowCore.type_ # t
+
+-- | Show a set of names as a sorted, comma-separated string: "{name1, name2, ...}"
+-- Note: uses Phantoms.xxx (not Terms.xxx) for polymorphic list/string/lambda constructors
+showNameSet :: TTerm (S.Set Name) -> TTerm String
+showNameSet s = Strings.cat $ plist [
+  pstring "{",
+  Strings.intercalate (pstring ", ") (Lists.map (plambda "n" (Core.unName (pvar "n"))) (Sets.toList s)),
+  pstring "}"]
+  where
+    plist = Phantoms.list; pstring = Phantoms.string; plambda = Phantoms.lambda; pvar = Phantoms.var
+
+-- | Core DSL Term-level constructors for building Term-typed values
+-- These produce values of Hydra type Term (not String, Int, etc.)
+tStr :: String -> TTerm Term
+tStr s = Core.termLiteral (Core.literalString (Phantoms.string s))
+
+-- | The "replaceFooWithBar" rewriter function for rewriteTerm tests
+-- \recurse term -> if term == literal "foo" then literal "bar" else recurse term
+replaceFooWithBarFn :: TTerm ((Term -> Term) -> Term -> Term)
+replaceFooWithBarFn = Phantoms.lambda "recurse" $ Phantoms.lambda "term" $
+  Logic.ifElse
+    (Equality.equal (Phantoms.var "term") (tStr "foo"))
+    (tStr "bar")
+    (Phantoms.var "recurse" # Phantoms.var "term")
+
+-- | The "replaceStringWithInt32" rewriter function for rewriteType tests
+-- \recurse typ -> if typ == TypeLiteral LiteralTypeString then TypeLiteral (LiteralTypeInteger IntegerTypeInt32) else recurse typ
+replaceStringWithInt32Fn :: TTerm ((Type -> Type) -> Type -> Type)
+replaceStringWithInt32Fn = Phantoms.lambda "recurse" $ Phantoms.lambda "typ" $
+  Logic.ifElse
+    (Equality.equal (Phantoms.var "typ") (Core.typeLiteral Core.literalTypeString))
+    (Core.typeLiteral (Core.literalTypeInteger Core.integerTypeInt32))
+    (Phantoms.var "recurse" # Phantoms.var "typ")
+
+-- | Fold operation: sum int32 literals
+-- \acc term -> acc + (case term of TermLiteral (LiteralInteger (IntegerValueInt32 n)) -> n; _ -> 0)
+sumInt32LiteralsFoldFn :: TTerm (Int -> Term -> Int)
+sumInt32LiteralsFoldFn = Phantoms.lambda "acc" $ Phantoms.lambda "term" $
+  Math.add (Phantoms.var "acc") $
+    Phantoms.cases _Term (Phantoms.var "term") (Just (Phantoms.int32 0)) [
+      _Term_literal ~>: Phantoms.lambda "lit" $
+        Phantoms.cases _Literal (Phantoms.var "lit") (Just (Phantoms.int32 0)) [
+          _Literal_integer ~>: Phantoms.lambda "intVal" $
+            Phantoms.cases _IntegerValue (Phantoms.var "intVal") (Just (Phantoms.int32 0)) [
+              _IntegerValue_int32 ~>: Phantoms.lambda "n" $ Phantoms.var "n"]]]
+
+-- | Fold operation: collect list lengths
+-- \acc term -> acc ++ (case term of TermList elems -> [length elems]; _ -> [])
+collectListLengthsFoldFn :: TTerm ([Int] -> Term -> [Int])
+collectListLengthsFoldFn = Phantoms.lambda "acc" $ Phantoms.lambda "term" $
+  Lists.concat (Phantoms.list [
+    Phantoms.var "acc",
+    Phantoms.cases _Term (Phantoms.var "term") (Just (Phantoms.list ([] :: [TTerm Int]))) [
+      _Term_list ~>: Phantoms.lambda "elems" $
+        Phantoms.list [Lists.length (Phantoms.var "elems")]]])
+
+-- | Fold operation: collect labels from pair terms
+-- \acc term -> acc ++ (case term of TermPair (TermLiteral s, _) -> [s]; _ -> [])
+collectLabelsFoldFn :: TTerm ([Literal] -> Term -> [Literal])
+collectLabelsFoldFn = Phantoms.lambda "acc" $ Phantoms.lambda "term" $
+  Lists.concat (Phantoms.list [
+    Phantoms.var "acc",
+    Phantoms.cases _Term (Phantoms.var "term") (Just (Phantoms.list ([] :: [TTerm Literal]))) [
+      _Term_pair ~>: Phantoms.lambda "p" $
+        Phantoms.cases _Term (Pairs.first (Phantoms.var "p")) (Just (Phantoms.list ([] :: [TTerm Literal]))) [
+          _Term_literal ~>: Phantoms.lambda "lit" $ Phantoms.list [Phantoms.var "lit"]]]])
+
+-- | Universal foldOverTermCase: applies fold operation and shows result
+foldOverTermCase :: String -> TTerm Term -> TTerm TraversalOrder -> FoldOp -> TTerm Term -> TTerm TestCaseWithMetadata
+foldOverTermCase cname input order op output = universalCase cname
+  (showTerm (applyFoldOp op order input))
+  (showTerm output)
+
+-- | Fold operations (local enum to replace the Testing.FoldOperation type)
+data FoldOp = FoldOpSumInt32 | FoldOpCollectListLengths | FoldOpCollectLabels
+
+foldOpSumInt32Literals :: FoldOp
+foldOpSumInt32Literals = FoldOpSumInt32
+
+foldOpCollectListLengths :: FoldOp
+foldOpCollectListLengths = FoldOpCollectListLengths
+
+foldOpCollectLabels :: FoldOp
+foldOpCollectLabels = FoldOpCollectLabels
+
+-- | Apply a fold operation and wrap the result as a Term
+applyFoldOp :: FoldOp -> TTerm TraversalOrder -> TTerm Term -> TTerm Term
+applyFoldOp FoldOpSumInt32 order input =
+  Core.termLiteral (Core.literalInteger (Core.integerValueInt32
+    (RewritingModule.foldOverTerm # order # sumInt32LiteralsFoldFn # Phantoms.int32 0 # input)))
+applyFoldOp FoldOpCollectListLengths order input =
+  Core.termList (Lists.map
+    (Phantoms.lambda "n" $ Core.termLiteral (Core.literalInteger (Core.integerValueInt32 (Phantoms.var "n"))))
+    (RewritingModule.foldOverTerm # order # collectListLengthsFoldFn # Phantoms.list ([] :: [TTerm Int]) # input))
+applyFoldOp FoldOpCollectLabels order input =
+  Core.termList (Lists.map
+    (Phantoms.lambda "lit" $ Core.termLiteral (Phantoms.var "lit"))
+    (RewritingModule.foldOverTerm # order # collectLabelsFoldFn # Phantoms.list ([] :: [TTerm Literal]) # input))
+
+-- | Universal eta expansion test case: applies etaExpandTypedTerm with testContext and testGraph
+etaCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+etaCase cname input output = universalCase cname
+  (Eithers.either_
+    (Phantoms.lambda "_" $ Phantoms.string "eta expansion failed")
+    (Phantoms.lambda "t" $ ShowCore.term # Phantoms.var "t")
+    (ReductionModule.etaExpandTypedTerm # TestGraph.testContext # TestGraph.testGraph # input))
+  (showTerm output)
+
+-- | Helper for Term -> Term kernel function test cases
+termCase :: String -> TTermDefinition (Term -> Term) -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+termCase cname func input output = universalCase cname (showTerm (func # input)) (showTerm output)
+
+-- | Helper for Type -> Type kernel function test cases
+typeCase :: String -> TTermDefinition (Type -> Type) -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
+typeCase cname func input output = universalCase cname (showType (func # input)) (showType output)
+
+-- | Universal rewriteTerm test case: applies replaceFooWithBar rewriter
+rewriteTermCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+rewriteTermCase cname input output = universalCase cname
+  (showTerm (RewritingModule.rewriteTerm # replaceFooWithBarFn # input))
+  (showTerm output)
+
+-- | Universal rewriteType test case: applies replaceStringWithInt32 rewriter
+rewriteTypeCase :: String -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
+rewriteTypeCase cname input output = universalCase cname
+  (showType (RewritingModule.rewriteType # replaceStringWithInt32Fn # input))
+  (showType output)
+
+-- | Universal sortBindingsCase: applies topologicalSortBindingMap and shows result
+sortBindingsCase :: String -> TTerm [(Name, Term)] -> TTerm [[(Name, Term)]] -> TTerm TestCaseWithMetadata
+sortBindingsCase cname bindings expected = universalCase cname
+  (showBindingGroups (DependenciesModule.topologicalSortBindingMap # Maps.fromList bindings))
+  (showBindingGroups expected)
+  where
+    showBindingGroups :: TTerm [[(Name, Term)]] -> TTerm String
+    showBindingGroups groups = ShowCore.list_ # showGroupFn # groups
+    showGroupFn :: TTerm ([(Name, Term)] -> String)
+    showGroupFn = Phantoms.lambda "group" $ ShowCore.list_ # showBindingFn # Phantoms.var "group"
+    showBindingFn :: TTerm ((Name, Term) -> String)
+    showBindingFn = Phantoms.lambda "pair" $ Strings.cat (Phantoms.list [
+      Phantoms.string "(",
+      Core.unName (Pairs.first (Phantoms.var "pair")),
+      Phantoms.string ", ",
+      ShowCore.term # Pairs.second (Phantoms.var "pair"),
+      Phantoms.string ")"])
+
+-- | Convenience helpers for specific kernel functions
+flattenCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+flattenCase cname = termCase cname DependenciesModule.flattenLetTerms
+
+liftLambdaCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+liftLambdaCase cname = termCase cname DependenciesModule.liftLambdaAboveLet
+
+simplifyCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+simplifyCase cname = termCase cname DependenciesModule.simplifyTerm
+
+deannotateTermCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+deannotateTermCase cname = termCase cname StripModule.deannotateTerm
+
+deannotateTypeCase :: String -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
+deannotateTypeCase cname = typeCase cname StripModule.deannotateType
+
+unshadowCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+unshadowCase cname = termCase cname VariablesModule.unshadowVariables
+
+normalizeTypeVarsCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+normalizeTypeVarsCase cname = termCase cname VariablesModule.normalizeTypeVariablesInTerm
+
+freeVarsCase :: String -> TTerm Term -> TTerm (S.Set Name) -> TTerm TestCaseWithMetadata
+freeVarsCase cname input expected = universalCase cname
+  (showNameSet (VariablesModule.freeVariablesInTerm # input))
+  (showNameSet expected)
 
 -- | Test cases for rewriteAndFoldTermWithPath
 -- These tests verify that the path-tracking rewrite function correctly tracks accessor paths
@@ -133,7 +341,7 @@ rewriteAndFoldTermWithPathGroup = subgroup "rewriteAndFoldTermWithPath" [
       foldOpCollectListLengths
       (list [int32 2, int32 1])]
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Test cases for term rewriting operations" $
     supergroup "rewriting" [

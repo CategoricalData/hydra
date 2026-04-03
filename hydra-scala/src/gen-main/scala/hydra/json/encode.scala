@@ -46,7 +46,7 @@ def encodeLiteral[T0](lit: hydra.core.Literal): Either[T0, hydra.json.model.Valu
 
 def toJson(term: hydra.core.Term): Either[scala.Predef.String, hydra.json.model.Value] =
   {
-  lazy val stripped: hydra.core.Term = hydra.rewriting.deannotateTerm(term)
+  lazy val stripped: hydra.core.Term = hydra.strip.deannotateTerm(term)
   stripped match
     case hydra.core.Term.literal(v_Term_literal_lit) => hydra.json.encode.encodeLiteral(v_Term_literal_lit)
     case hydra.core.Term.list(v_Term_list_terms) => {

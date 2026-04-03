@@ -10,9 +10,6 @@ import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 aesGcmCtrV1 :: Phantoms.TTerm (Maybe B.ByteString) -> Phantoms.TTerm (Maybe B.ByteString) -> Phantoms.TTerm (Maybe Bool) -> Phantoms.TTerm Format.AesGcmCtrV1
 aesGcmCtrV1 aadPrefix aadFileUnique supplyAadPrefix =

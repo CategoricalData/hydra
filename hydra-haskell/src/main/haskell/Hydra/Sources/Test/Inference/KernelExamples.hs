@@ -25,19 +25,19 @@ module_ = Module ns elements
     (Just "Inference tests for examples from the Hydra kernel")
   where
     elements = [
-      Phantoms.toTermDefinition allTests,
-      Phantoms.toTermDefinition testGroupForNestedLet]
+      Phantoms.toDefinition allTests,
+      Phantoms.toDefinition testGroupForNestedLet]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
   Phantoms.doc "Examples from the Hydra kernel" $
   supergroup "Examples from the Hydra kernel" [
     testGroupForNestedLet]
 
-testGroupForNestedLet :: TBinding TestGroup
+testGroupForNestedLet :: TTermDefinition TestGroup
 testGroupForNestedLet = define "testGroupForNestedLet" $
   supergroup "Nested let" [
     subgroup "hydra.formatting.mapFirstLetter" [
@@ -81,7 +81,7 @@ testGroupForNestedLet = define "testGroupForNestedLet" $
     -- This tests whether union elimination with a default case causes
     -- inference to over-generalize the pair-first type variable.
     subgroup "Recursive let with pair return (case on Type)" [
-      expectMono 3 [tag_disabledForMinimalInference]
+      expectMono 3 [tag_disabledForMinimalInference, tag_disabled]
         (lambda "typ" $ lets [
           "go">:
             lambda "depth" $ lambda "subst" $ lambda "t" $

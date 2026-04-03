@@ -14,12 +14,9 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Typing as Typing
+import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Compose two type substitutions
 composeTypeSubst :: Typing.TypeSubst -> Typing.TypeSubst -> Typing.TypeSubst
@@ -61,7 +58,7 @@ substInClassConstraints subst constraints =
         let varName = Pairs.first pair
             metadata = Pairs.second pair
         in (Maybes.maybe (insertOrMerge varName metadata acc) (\targetType ->
-          let freeVars = Sets.toList (Rewriting.freeVariablesInType targetType)
+          let freeVars = Sets.toList (Variables.freeVariablesInType targetType)
           in (Lists.foldl (\acc2 -> \freeVar -> insertOrMerge freeVar metadata acc2) acc freeVars)) (Maps.lookup varName substMap))) Maps.empty (Maps.toList constraints))
 
 -- | Apply a type substitution to a graph's bound types and class constraints

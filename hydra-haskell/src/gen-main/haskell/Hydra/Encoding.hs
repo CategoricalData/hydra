@@ -20,13 +20,8 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
-import qualified Hydra.Schemas as Schemas
+import qualified Hydra.Predicates as Predicates
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Transform a type binding into an encoder binding
 encodeBinding :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Errors.DecodingError) Core.Binding
@@ -671,7 +666,7 @@ filterTypeBindings cx graph bindings =
 -- | Check if a binding is encodable (serializable type)
 isEncodableBinding :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Errors.Error) (Maybe Core.Binding)
 isEncodableBinding cx graph b =
-    Eithers.bind (Schemas.isSerializableByName cx graph (Core.bindingName b)) (\serializable -> Right (Logic.ifElse serializable (Just b) Nothing))
+    Eithers.bind (Predicates.isSerializableByName cx graph (Core.bindingName b)) (\serializable -> Right (Logic.ifElse serializable (Just b) Nothing))
 
 -- | Check whether a type is the unit type
 isUnitType :: Core.Type -> Bool

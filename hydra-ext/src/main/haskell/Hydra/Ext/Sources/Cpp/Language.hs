@@ -61,13 +61,11 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -82,17 +80,17 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
 module_ = Module (Namespace "hydra.ext.cpp.language")
-  [toTermDefinition cppLanguage, toTermDefinition cppReservedWords]
+  [toDefinition cppLanguage, toDefinition cppReservedWords]
   [Lexical.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints and reserved words for C++"
 
-cppLanguage :: TBinding Language
+cppLanguage :: TTermDefinition Language
 cppLanguage = define "cppLanguage" $
   doc "Language constraints for C++" $ lets [
   "eliminationVariants">: Sets.fromList $ list [
@@ -161,7 +159,7 @@ cppLanguage = define "cppLanguage" $
       (var "typeVariants")
       (var "typePredicate"))
 
-cppReservedWords :: TBinding (S.Set String)
+cppReservedWords :: TTermDefinition (S.Set String)
 cppReservedWords = define "cppReservedWords" $
   doc "A set of reserved words in C++" $ lets [
   "cppKeywords">:

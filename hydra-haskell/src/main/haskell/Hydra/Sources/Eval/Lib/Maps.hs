@@ -57,7 +57,7 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 ns :: Namespace
 ns = Namespace "hydra.eval.lib.maps"
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
@@ -67,17 +67,17 @@ module_ = Module ns elements
     Just ("Evaluation-level implementations of Map functions for the Hydra interpreter.")
   where
     elements = [
-      toTermDefinition alter_,
-      toTermDefinition bimap_,
-      toTermDefinition filter_,
-      toTermDefinition filterWithKey_,
-      toTermDefinition findWithDefault_,
-      toTermDefinition map_,
-      toTermDefinition mapKeys_]
+      toDefinition alter_,
+      toDefinition bimap_,
+      toDefinition filter_,
+      toDefinition filterWithKey_,
+      toDefinition findWithDefault_,
+      toDefinition map_,
+      toDefinition mapKeys_]
 
 -- | Interpreter-friendly alter for Map terms.
 -- Applies funTerm to the current value (or Nothing) and updates accordingly.
-alter_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
+alter_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
 alter_ = define "alter" $
   doc "Interpreter-friendly alter for Map terms." $
   "cx" ~> "g" ~>
@@ -117,7 +117,7 @@ alter_ = define "alter" $
 
 -- | Interpreter-friendly bimap for Map terms.
 -- Applies keyFun to each key and valFun to each value.
-bimap_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
+bimap_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
 bimap_ = define "bimap" $
   doc "Interpreter-friendly bimap for Map terms." $
   "cx" ~> "g" ~>
@@ -139,7 +139,7 @@ bimap_ = define "bimap" $
 
 -- | Interpreter-friendly filter for Map terms.
 -- Keeps entries where valPred returns true for the value.
-filter_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+filter_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 filter_ = define "filter" $
   doc "Interpreter-friendly filter for Map terms." $
   "cx" ~> "g" ~>
@@ -167,7 +167,7 @@ filter_ = define "filter" $
 
 -- | Interpreter-friendly filterWithKey for Map terms.
 -- Keeps entries where pred returns true for the key and value.
-filterWithKey_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+filterWithKey_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 filterWithKey_ = define "filterWithKey" $
   doc "Interpreter-friendly filterWithKey for Map terms." $
   "cx" ~> "g" ~>
@@ -198,7 +198,7 @@ filterWithKey_ = define "filterWithKey" $
 
 -- | Interpreter-friendly findWithDefault for Map terms.
 -- findWithDefault default key map: returns the value at key, or default if not found.
-findWithDefault_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
+findWithDefault_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
 findWithDefault_ = define "findWithDefault" $
   doc "Interpreter-friendly findWithDefault for Map terms." $
   "cx" ~> "g" ~>
@@ -216,7 +216,7 @@ findWithDefault_ = define "findWithDefault" $
 
 -- | Interpreter-friendly map for Map terms.
 -- Applies valFun to each value.
-map_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+map_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 map_ = define "map" $
   doc "Interpreter-friendly map for Map terms." $
   "cx" ~> "g" ~>
@@ -235,7 +235,7 @@ map_ = define "map" $
 
 -- | Interpreter-friendly mapKeys for Map terms.
 -- Applies keyFun to each key.
-mapKeys_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+mapKeys_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 mapKeys_ = define "mapKeys" $
   doc "Interpreter-friendly mapKeys for Map terms." $
   "cx" ~> "g" ~>

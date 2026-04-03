@@ -23,12 +23,9 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core____
+import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
@@ -37,7 +34,7 @@ aggregateAnnotations :: Ord t2 => ((t0 -> Maybe t1) -> (t1 -> t0) -> (t1 -> M.Ma
 aggregateAnnotations getValue getX getAnns t =
 
       let toPairs =
-              \rest -> \t -> Maybes.maybe rest (\yy -> toPairs (Lists.cons (Maps.toList (getAnns yy)) rest) (getX yy)) (getValue t)
+              \rest -> \t2 -> Maybes.maybe rest (\yy -> toPairs (Lists.cons (Maps.toList (getAnns yy)) rest) (getX yy)) (getValue t2)
       in (Maps.fromList (Lists.concat (toPairs [] t)))
 
 -- | Debug if the debug ID matches (Either version)
@@ -120,17 +117,17 @@ getTypeClasses :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context
 getTypeClasses cx graph term =
 
       let decodeClass =
-              \term ->
+              \term2 ->
                 let byName =
                         Maps.fromList [
                           (Core.Name "equality", Classes.TypeClassEquality),
                           (Core.Name "ordering", Classes.TypeClassOrdering)]
-                in (Eithers.bind (Core___.unitVariant cx (Core.Name "hydra.classes.TypeClass") graph term) (\fn -> Maybes.maybe (Left (Context.InContext {
-                  Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected: expected type class, got " (Core____.term term)))),
+                in (Eithers.bind (Core___.unitVariant cx (Core.Name "hydra.classes.TypeClass") graph term2) (\fn -> Maybes.maybe (Left (Context.InContext {
+                  Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected: expected type class, got " (Core____.term term2)))),
                   Context.inContextContext = cx})) (\x -> Right x) (Maps.lookup fn byName)))
-      in (Maybes.maybe (Right Maps.empty) (\term -> Core___.map cx (\t -> Eithers.bimap (\de -> Context.InContext {
+      in (Maybes.maybe (Right Maps.empty) (\term2 -> Core___.map cx (\t -> Eithers.bimap (\de -> Context.InContext {
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError de))),
-        Context.inContextContext = cx}) (\x -> x) (Core_.name graph t)) (Core___.setOf cx decodeClass graph) graph term) (getTermAnnotation Constants.key_classes term))
+        Context.inContextContext = cx}) (\x -> x) (Core_.name graph t)) (Core___.setOf cx decodeClass graph) graph term2) (getTermAnnotation Constants.key_classes term))
 
 -- | Get type description (Either version)
 getTypeDescription :: Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Errors.Error) (Maybe String)
@@ -182,7 +179,7 @@ normalizeTermAnnotations :: Core.Term -> Core.Term
 normalizeTermAnnotations term =
 
       let anns = termAnnotationInternal term
-          stripped = Rewriting.deannotateTerm term
+          stripped = Strip.deannotateTerm term
       in (Logic.ifElse (Maps.null anns) stripped (Core.TermAnnotated (Core.AnnotatedTerm {
         Core.annotatedTermBody = stripped,
         Core.annotatedTermAnnotation = anns})))
@@ -192,7 +189,7 @@ normalizeTypeAnnotations :: Core.Type -> Core.Type
 normalizeTypeAnnotations typ =
 
       let anns = typeAnnotationInternal typ
-          stripped = Rewriting.deannotateType typ
+          stripped = Strip.deannotateType typ
       in (Logic.ifElse (Maps.null anns) stripped (Core.TypeAnnotated (Core.AnnotatedType {
         Core.annotatedTypeBody = stripped,
         Core.annotatedTypeAnnotation = anns})))
@@ -226,7 +223,7 @@ setDescription d =
 setTermAnnotation :: Core.Name -> Maybe Core.Term -> Core.Term -> Core.Term
 setTermAnnotation key val term =
 
-      let term_ = Rewriting.deannotateTerm term
+      let term_ = Strip.deannotateTerm term
           anns = setAnnotation key val (termAnnotationInternal term)
       in (Logic.ifElse (Maps.null anns) term_ (Core.TermAnnotated (Core.AnnotatedTerm {
         Core.annotatedTermBody = term_,
@@ -245,7 +242,7 @@ setType mt = setAnnotation Constants.key_type (Maybes.map Core__.type_ mt)
 setTypeAnnotation :: Core.Name -> Maybe Core.Term -> Core.Type -> Core.Type
 setTypeAnnotation key val typ =
 
-      let typ_ = Rewriting.deannotateType typ
+      let typ_ = Strip.deannotateType typ
           anns = setAnnotation key val (typeAnnotationInternal typ)
       in (Logic.ifElse (Maps.null anns) typ_ (Core.TypeAnnotated (Core.AnnotatedType {
         Core.annotatedTypeBody = typ_,

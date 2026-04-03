@@ -5,7 +5,7 @@ package hydra.testing;
 import java.io.Serializable;
 
 /**
- * A test case in which we delegate evaluation of an input term and an expected output term to a target programming language like Haskell, Java, or Python, checking whether the term evaluates as expected when translated into that language
+ * DEPRECATED: Delegated evaluation test case (to be removed)
  */
 public class DelegatedEvaluationTestCase implements Serializable, Comparable<DelegatedEvaluationTestCase> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.DelegatedEvaluationTestCase");
@@ -14,14 +14,8 @@ public class DelegatedEvaluationTestCase implements Serializable, Comparable<Del
 
   public static final hydra.core.Name OUTPUT = new hydra.core.Name("output");
 
-  /**
-   * The first of two terms which should evaluate to the same expression
-   */
   public final hydra.core.Term input;
 
-  /**
-   * The second of two terms which should evaluate to the same expression
-   */
   public final hydra.core.Term output;
 
   public DelegatedEvaluationTestCase (hydra.core.Term input, hydra.core.Term output) {

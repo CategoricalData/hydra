@@ -15,9 +15,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.apply[scala.Predef.String, scala.Predef.String](Seq(hydra.lib.strings.toUpper, hydra.lib.strings.toLower))(Seq("One", "Two", "Three"))) == (
+      ["ONE", "TWO", "THREE", "one", "two", "three"]) == (
 
-      Seq("ONE", "TWO", "THREE", "one", "two", "three")))
+      ["ONE", "TWO", "THREE", "one", "two", "three"]))
 
   }
 
@@ -27,9 +27,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.apply(Seq())(Seq("a", "b"))) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -37,9 +37,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.apply[scala.Predef.String, scala.Predef.String](Seq(hydra.lib.strings.toUpper))(Seq())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -47,9 +47,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.apply[scala.Predef.String, scala.Predef.String](Seq(hydra.lib.strings.toUpper))(Seq("hello"))) == (
+      ["HELLO"]) == (
 
-      Seq("HELLO")))
+      ["HELLO"]))
 
   }
 
@@ -57,9 +57,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.apply[scala.Predef.String, scala.Predef.String](Seq(hydra.lib.strings.toUpper, hydra.lib.strings.toLower))(Seq("Test"))) == (
+      ["TEST", "test"]) == (
 
-      Seq("TEST", "test")))
+      ["TEST", "test"]))
 
   }
 
@@ -69,9 +69,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.at[Int](0)(Seq(1, 2, 3))) == (
+      1:int32) == (
 
-      1))
+      1:int32))
 
   }
 
@@ -79,9 +79,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.at[Int](1)(Seq(1, 2, 3))) == (
+      2:int32) == (
 
-      2))
+      2:int32))
 
   }
 
@@ -89,9 +89,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.at[Int](2)(Seq(1, 2, 3))) == (
+      3:int32) == (
 
-      3))
+      3:int32))
 
   }
 
@@ -99,9 +99,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.at[Int](0)(Seq(42))) == (
+      42:int32) == (
 
-      42))
+      42:int32))
 
   }
 
@@ -109,7 +109,7 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.at[scala.Predef.String](1)(Seq("hello", "world"))) == (
+      "world") == (
 
       "world"))
 
@@ -121,9 +121,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.bind[Int, Int](Seq(1, 2, 3, 4))((x: Int) => hydra.lib.lists.pure[Int](hydra.lib.math.negate(x)))) == (
+      [-1:int32, -2:int32, -3:int32, -4:int32]) == (
 
-      Seq(-1, -2, -3, -4)))
+      [-1:int32, -2:int32, -3:int32, -4:int32]))
 
   }
 
@@ -131,9 +131,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.bind[Int, Int](Seq())((x: Int) => hydra.lib.lists.pure[Int](hydra.lib.math.negate(x)))) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -141,9 +141,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.bind[Int, Int](Seq(5))((x: Int) => hydra.lib.lists.pure[Int](hydra.lib.math.negate(x)))) == (
+      [-5:int32]) == (
 
-      Seq(-5)))
+      [-5:int32]))
 
   }
 
@@ -151,9 +151,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.bind[Int, Int](Seq(1, 1, 2))((x: Int) => hydra.lib.lists.pure[Int](hydra.lib.math.negate(x)))) == (
+      [-1:int32, -1:int32, -2:int32]) == (
 
-      Seq(-1, -1, -2)))
+      [-1:int32, -1:int32, -2:int32]))
 
   }
 
@@ -163,9 +163,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.concat[Int](Seq(Seq(1, 2, 3), Seq(4, 5), Seq(6, 7, 8)))) == (
+      [1:int32, 2:int32, 3:int32, 4:int32, 5:int32, 6:int32, 7:int32, 8:int32]) == (
 
-      Seq(1, 2, 3, 4, 5, 6, 7, 8)))
+      [1:int32, 2:int32, 3:int32, 4:int32, 5:int32, 6:int32, 7:int32, 8:int32]))
 
   }
 
@@ -173,9 +173,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.concat[Int](Seq(Seq(), Seq(1, 2), Seq(), Seq(3)))) == (
+      [1:int32, 2:int32, 3:int32]) == (
 
-      Seq(1, 2, 3)))
+      [1:int32, 2:int32, 3:int32]))
 
   }
 
@@ -183,9 +183,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.concat[Int](Seq(Seq(1, 2, 3)))) == (
+      [1:int32, 2:int32, 3:int32]) == (
 
-      Seq(1, 2, 3)))
+      [1:int32, 2:int32, 3:int32]))
 
   }
 
@@ -193,9 +193,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.concat(Seq(Seq(), Seq(), Seq()))) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -203,9 +203,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.concat(Seq())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -215,9 +215,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.concat2[Int](Seq(1, 2))(Seq(3, 4))) == (
+      [1:int32, 2:int32, 3:int32, 4:int32]) == (
 
-      Seq(1, 2, 3, 4)))
+      [1:int32, 2:int32, 3:int32, 4:int32]))
 
   }
 
@@ -225,9 +225,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.concat2[Int](Seq())(Seq(1, 2))) == (
+      [1:int32, 2:int32]) == (
 
-      Seq(1, 2)))
+      [1:int32, 2:int32]))
 
   }
 
@@ -235,9 +235,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.concat2[Int](Seq(1, 2))(Seq())) == (
+      [1:int32, 2:int32]) == (
 
-      Seq(1, 2)))
+      [1:int32, 2:int32]))
 
   }
 
@@ -245,9 +245,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.concat2(Seq())(Seq())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -255,9 +255,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.concat2[Int](Seq(1))(Seq(2))) == (
+      [1:int32, 2:int32]) == (
 
-      Seq(1, 2)))
+      [1:int32, 2:int32]))
 
   }
 
@@ -265,9 +265,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.concat2[scala.Predef.String](Seq("a", "b"))(Seq("c", "d"))) == (
+      ["a", "b", "c", "d"]) == (
 
-      Seq("a", "b", "c", "d")))
+      ["a", "b", "c", "d"]))
 
   }
 
@@ -277,9 +277,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.cons[Int](1)(Seq(2, 3))) == (
+      [1:int32, 2:int32, 3:int32]) == (
 
-      Seq(1, 2, 3)))
+      [1:int32, 2:int32, 3:int32]))
 
   }
 
@@ -287,9 +287,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.cons[Int](1)(Seq())) == (
+      [1:int32]) == (
 
-      Seq(1)))
+      [1:int32]))
 
   }
 
@@ -297,9 +297,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.cons[Int](-1)(Seq(2, 3))) == (
+      [-1:int32, 2:int32, 3:int32]) == (
 
-      Seq(-1, 2, 3)))
+      [-1:int32, 2:int32, 3:int32]))
 
   }
 
@@ -307,9 +307,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.cons[scala.Predef.String]("hello")(Seq("world"))) == (
+      ["hello", "world"]) == (
 
-      Seq("hello", "world")))
+      ["hello", "world"]))
 
   }
 
@@ -319,9 +319,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.drop[Int](2)(Seq(1, 2, 3, 4, 5))) == (
+      [3:int32, 4:int32, 5:int32]) == (
 
-      Seq(3, 4, 5)))
+      [3:int32, 4:int32, 5:int32]))
 
   }
 
@@ -329,9 +329,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.drop[Int](0)(Seq(1, 2, 3))) == (
+      [1:int32, 2:int32, 3:int32]) == (
 
-      Seq(1, 2, 3)))
+      [1:int32, 2:int32, 3:int32]))
 
   }
 
@@ -339,9 +339,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.drop[Int](3)(Seq(1, 2, 3))) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -349,9 +349,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.drop[Int](5)(Seq(1, 2))) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -359,9 +359,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.drop(3)(Seq())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -369,9 +369,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.drop[Int](-1)(Seq(1, 2, 3))) == (
+      [1:int32, 2:int32, 3:int32]) == (
 
-      Seq(1, 2, 3)))
+      [1:int32, 2:int32, 3:int32]))
 
   }
 
@@ -381,9 +381,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.dropWhile[Int]((x: Int) => hydra.lib.equality.lt[Int](x)(3))(Seq(1, 2, 3, 2, 1))) == (
+      [3:int32, 2:int32, 1:int32]) == (
 
-      Seq(3, 2, 1)))
+      [3:int32, 2:int32, 1:int32]))
 
   }
 
@@ -391,9 +391,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.dropWhile[Int]((x: Int) => hydra.lib.equality.lt[Int](x)(10))(Seq(1, 2, 3))) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -401,9 +401,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.dropWhile[Int]((x: Int) => hydra.lib.equality.lt[Int](x)(0))(Seq(1, 2, 3))) == (
+      [1:int32, 2:int32, 3:int32]) == (
 
-      Seq(1, 2, 3)))
+      [1:int32, 2:int32, 3:int32]))
 
   }
 
@@ -411,9 +411,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.dropWhile[Int]((x: Int) => hydra.lib.equality.lt[Int](x)(5))(Seq())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -423,7 +423,7 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.elem[Int](2)(Seq(1, 2, 3))) == (
+      true) == (
 
       true))
 
@@ -433,7 +433,7 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.elem[Int](4)(Seq(1, 2, 3))) == (
+      false) == (
 
       false))
 
@@ -443,7 +443,7 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.elem[Int](1)(Seq())) == (
+      false) == (
 
       false))
 
@@ -453,7 +453,7 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.elem[Int](1)(Seq(1))) == (
+      true) == (
 
       true))
 
@@ -463,7 +463,7 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.elem[Int](2)(Seq(1))) == (
+      false) == (
 
       false))
 
@@ -473,7 +473,7 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.elem[Int](2)(Seq(1, 2, 2, 3))) == (
+      true) == (
 
       true))
 
@@ -483,7 +483,7 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.elem[scala.Predef.String]("hello")(Seq("world", "hello", "test"))) == (
+      true) == (
 
       true))
 
@@ -493,7 +493,7 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.elem[scala.Predef.String]("missing")(Seq("world", "hello"))) == (
+      false) == (
 
       false))
 
@@ -505,9 +505,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.filter[Int]((x: Int) => hydra.lib.equality.gt[Int](x)(0))(Seq(-1, 2, -3, 4, 5))) == (
+      [2:int32, 4:int32, 5:int32]) == (
 
-      Seq(2, 4, 5)))
+      [2:int32, 4:int32, 5:int32]))
 
   }
 
@@ -515,9 +515,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.filter[Int]((x: Int) => hydra.lib.equality.lt[Int](x)(10))(Seq(1, 2, 3))) == (
+      [1:int32, 2:int32, 3:int32]) == (
 
-      Seq(1, 2, 3)))
+      [1:int32, 2:int32, 3:int32]))
 
   }
 
@@ -525,9 +525,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.filter[Int]((x: Int) => hydra.lib.equality.gt[Int](x)(10))(Seq(1, 2, 3))) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -535,9 +535,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.filter[Int]((x: Int) => hydra.lib.equality.gt[Int](x)(0))(Seq())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -547,9 +547,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.find[Int]((x: Int) => hydra.lib.equality.gt[Int](x)(3))(Seq(1, 2, 4, 5))) == (
+      just(4:int32)) == (
 
-      Some(4)))
+      just(4:int32)))
 
   }
 
@@ -557,9 +557,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.find[Int]((x: Int) => hydra.lib.equality.gt[Int](x)(0))(Seq(1, 2, 3))) == (
+      just(1:int32)) == (
 
-      Some(1)))
+      just(1:int32)))
 
   }
 
@@ -567,9 +567,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.find[Int]((x: Int) => hydra.lib.equality.gt[Int](x)(10))(Seq(1, 2, 3))) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -577,9 +577,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.find[Int]((x: Int) => hydra.lib.equality.gt[Int](x)(0))(Seq())) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -587,9 +587,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.find[Int]((x: Int) => hydra.lib.equality.equal[Int](x)(42))(Seq(42))) == (
+      just(42:int32)) == (
 
-      Some(42)))
+      just(42:int32)))
 
   }
 
@@ -599,9 +599,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.foldl[Int, Int](hydra.lib.math.add)(0)(Seq(1, 2, 3, 4))) == (
+      10:int32) == (
 
-      10))
+      10:int32))
 
   }
 
@@ -609,9 +609,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.foldl[Int, Int](hydra.lib.math.mul)(1)(Seq(2, 3, 4))) == (
+      24:int32) == (
 
-      24))
+      24:int32))
 
   }
 
@@ -619,9 +619,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.foldl[Int, Int](hydra.lib.math.add)(5)(Seq())) == (
+      5:int32) == (
 
-      5))
+      5:int32))
 
   }
 
@@ -629,9 +629,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.foldl[Int, Int](hydra.lib.math.add)(10)(Seq(5))) == (
+      15:int32) == (
 
-      15))
+      15:int32))
 
   }
 
@@ -639,9 +639,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.foldl[Int, Int](hydra.lib.math.sub)(10)(Seq(1, 2, 3))) == (
+      4:int32) == (
 
-      4))
+      4:int32))
 
   }
 
@@ -651,9 +651,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.foldr[Int, Int](hydra.lib.math.sub)(0)(Seq(1, 2, 3))) == (
+      2:int32) == (
 
-      2))
+      2:int32))
 
   }
 
@@ -661,9 +661,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.foldr[Int, Int](hydra.lib.math.add)(5)(Seq())) == (
+      5:int32) == (
 
-      5))
+      5:int32))
 
   }
 
@@ -671,9 +671,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.foldr[Int, Int](hydra.lib.math.add)(10)(Seq(5))) == (
+      15:int32) == (
 
-      15))
+      15:int32))
 
   }
 
@@ -681,9 +681,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.foldr[Int, Int](hydra.lib.math.add)(0)(Seq(1, 2, 3, 4))) == (
+      10:int32) == (
 
-      10))
+      10:int32))
 
   }
 
@@ -691,9 +691,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.foldr[Int, Int](hydra.lib.math.sub)(10)(Seq(1, 2, 3))) == (
+      -8:int32) == (
 
-      -8))
+      -8:int32))
 
   }
 
@@ -703,9 +703,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.group[Int](Seq(1, 1, 2, 2, 2, 3, 1))) == (
+      [[1:int32, 1:int32], [2:int32, 2:int32, 2:int32], [3:int32], [1:int32]]) == (
 
-      Seq(Seq(1, 1), Seq(2, 2, 2), Seq(3), Seq(1))))
+      [[1:int32, 1:int32], [2:int32, 2:int32, 2:int32], [3:int32], [1:int32]]))
 
   }
 
@@ -713,9 +713,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.group[Int](Seq(1, 2, 3))) == (
+      [[1:int32], [2:int32], [3:int32]]) == (
 
-      Seq(Seq(1), Seq(2), Seq(3))))
+      [[1:int32], [2:int32], [3:int32]]))
 
   }
 
@@ -723,9 +723,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.group[Int](Seq(1, 1, 1))) == (
+      [[1:int32, 1:int32, 1:int32]]) == (
 
-      Seq(Seq(1, 1, 1))))
+      [[1:int32, 1:int32, 1:int32]]))
 
   }
 
@@ -733,9 +733,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.group(Seq())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -743,9 +743,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.group[Int](Seq(1))) == (
+      [[1:int32]]) == (
 
-      Seq(Seq(1))))
+      [[1:int32]]))
 
   }
 
@@ -755,9 +755,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.head[Int](Seq(1, 2, 3))) == (
+      1:int32) == (
 
-      1))
+      1:int32))
 
   }
 
@@ -765,9 +765,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.head[Int](Seq(42))) == (
+      42:int32) == (
 
-      42))
+      42:int32))
 
   }
 
@@ -775,9 +775,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.head[Int](Seq(-1, -2, -3))) == (
+      -1:int32) == (
 
-      -1))
+      -1:int32))
 
   }
 
@@ -785,7 +785,7 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.head[scala.Predef.String](Seq("hello", "world"))) == (
+      "hello") == (
 
       "hello"))
 
@@ -797,9 +797,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.init[Int](Seq(1, 2, 3, 4))) == (
+      [1:int32, 2:int32, 3:int32]) == (
 
-      Seq(1, 2, 3)))
+      [1:int32, 2:int32, 3:int32]))
 
   }
 
@@ -807,9 +807,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.init[Int](Seq(1, 2))) == (
+      [1:int32]) == (
 
-      Seq(1)))
+      [1:int32]))
 
   }
 
@@ -817,9 +817,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.init[Int](Seq(1))) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -827,9 +827,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.init[scala.Predef.String](Seq("a", "b", "c"))) == (
+      ["a", "b"]) == (
 
-      Seq("a", "b")))
+      ["a", "b"]))
 
   }
 
@@ -839,9 +839,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.intercalate[Int](Seq(0, 0))(Seq(Seq(1, 2, 3), Seq(4, 5), Seq(6, 7, 8)))) == (
+      [1:int32, 2:int32, 3:int32, 0:int32, 0:int32, 4:int32, 5:int32, 0:int32, 0:int32, 6:int32, 7:int32, 8:int32]) == (
 
-      Seq(1, 2, 3, 0, 0, 4, 5, 0, 0, 6, 7, 8)))
+      [1:int32, 2:int32, 3:int32, 0:int32, 0:int32, 4:int32, 5:int32, 0:int32, 0:int32, 6:int32, 7:int32, 8:int32]))
 
   }
 
@@ -849,9 +849,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.intercalate[Int](Seq())(Seq(Seq(1, 2), Seq(3, 4)))) == (
+      [1:int32, 2:int32, 3:int32, 4:int32]) == (
 
-      Seq(1, 2, 3, 4)))
+      [1:int32, 2:int32, 3:int32, 4:int32]))
 
   }
 
@@ -859,9 +859,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.intercalate[Int](Seq(99))(Seq(Seq(1), Seq(2), Seq(3)))) == (
+      [1:int32, 99:int32, 2:int32, 99:int32, 3:int32]) == (
 
-      Seq(1, 99, 2, 99, 3)))
+      [1:int32, 99:int32, 2:int32, 99:int32, 3:int32]))
 
   }
 
@@ -869,9 +869,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.intercalate[Int](Seq(0))(Seq())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -879,9 +879,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.intercalate[Int](Seq(0))(Seq(Seq(1, 2, 3)))) == (
+      [1:int32, 2:int32, 3:int32]) == (
 
-      Seq(1, 2, 3)))
+      [1:int32, 2:int32, 3:int32]))
 
   }
 
@@ -889,9 +889,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.intercalate[Int](Seq(0))(Seq(Seq(), Seq(1), Seq()))) == (
+      [0:int32, 1:int32, 0:int32]) == (
 
-      Seq(0, 1, 0)))
+      [0:int32, 1:int32, 0:int32]))
 
   }
 
@@ -901,9 +901,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.intersperse[scala.Predef.String]("and")(Seq("one", "two", "three"))) == (
+      ["one", "and", "two", "and", "three"]) == (
 
-      Seq("one", "and", "two", "and", "three")))
+      ["one", "and", "two", "and", "three"]))
 
   }
 
@@ -911,9 +911,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.intersperse[scala.Predef.String]("x")(Seq("only"))) == (
+      ["only"]) == (
 
-      Seq("only")))
+      ["only"]))
 
   }
 
@@ -921,9 +921,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.intersperse[scala.Predef.String]("x")(Seq())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -931,9 +931,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.intersperse[scala.Predef.String]("+")(Seq("a", "b"))) == (
+      ["a", "+", "b"]) == (
 
-      Seq("a", "+", "b")))
+      ["a", "+", "b"]))
 
   }
 
@@ -941,9 +941,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.intersperse[Int](0)(Seq(1, 2, 3))) == (
+      [1:int32, 0:int32, 2:int32, 0:int32, 3:int32]) == (
 
-      Seq(1, 0, 2, 0, 3)))
+      [1:int32, 0:int32, 2:int32, 0:int32, 3:int32]))
 
   }
 
@@ -953,9 +953,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.last[Int](Seq(1, 2, 3))) == (
+      3:int32) == (
 
-      3))
+      3:int32))
 
   }
 
@@ -963,9 +963,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.last[Int](Seq(42))) == (
+      42:int32) == (
 
-      42))
+      42:int32))
 
   }
 
@@ -973,9 +973,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.last[Int](Seq(-1, -2, -3))) == (
+      -3:int32) == (
 
-      -3))
+      -3:int32))
 
   }
 
@@ -983,7 +983,7 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.last[scala.Predef.String](Seq("hello", "world"))) == (
+      "world") == (
 
       "world"))
 
@@ -995,9 +995,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.length[Int](Seq(1, 2, 3))) == (
+      3:int32) == (
 
-      3))
+      3:int32))
 
   }
 
@@ -1005,9 +1005,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.length(Seq())) == (
+      0:int32) == (
 
-      0))
+      0:int32))
 
   }
 
@@ -1015,9 +1015,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.length[Int](Seq(42))) == (
+      1:int32) == (
 
-      1))
+      1:int32))
 
   }
 
@@ -1025,9 +1025,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.length[Int](Seq(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))) == (
+      10:int32) == (
 
-      10))
+      10:int32))
 
   }
 
@@ -1035,9 +1035,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.length[scala.Predef.String](Seq("a", "b", "c"))) == (
+      3:int32) == (
 
-      3))
+      3:int32))
 
   }
 
@@ -1047,9 +1047,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.map[scala.Predef.String, scala.Predef.String](hydra.lib.strings.toUpper)(Seq("one", "two"))) == (
+      ["ONE", "TWO"]) == (
 
-      Seq("ONE", "TWO")))
+      ["ONE", "TWO"]))
 
   }
 
@@ -1057,9 +1057,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.map[scala.Predef.String, scala.Predef.String](hydra.lib.strings.toUpper)(Seq())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -1067,9 +1067,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.map[scala.Predef.String, scala.Predef.String](hydra.lib.strings.toUpper)(Seq("hello"))) == (
+      ["HELLO"]) == (
 
-      Seq("HELLO")))
+      ["HELLO"]))
 
   }
 
@@ -1077,9 +1077,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.map[Int, Int](hydra.lib.math.negate)(Seq(1, 2, 3))) == (
+      [-1:int32, -2:int32, -3:int32]) == (
 
-      Seq(-1, -2, -3)))
+      [-1:int32, -2:int32, -3:int32]))
 
   }
 
@@ -1087,9 +1087,219 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.map[Int, Int](hydra.lib.equality.identity[Int])(Seq(1, 2, 3))) == (
+      [1:int32, 2:int32, 3:int32]) == (
 
-      Seq(1, 2, 3)))
+      [1:int32, 2:int32, 3:int32]))
+
+  }
+
+  // maybeAt
+
+  test("maybeAt - valid index") {
+
+    assert((
+
+      just(20:int32)) == (
+
+      just(20:int32)))
+
+  }
+
+  test("maybeAt - first element") {
+
+    assert((
+
+      just(10:int32)) == (
+
+      just(10:int32)))
+
+  }
+
+  test("maybeAt - last element") {
+
+    assert((
+
+      just(30:int32)) == (
+
+      just(30:int32)))
+
+  }
+
+  test("maybeAt - out of bounds") {
+
+    assert((
+
+      nothing) == (
+
+      nothing))
+
+  }
+
+  test("maybeAt - negative index") {
+
+    assert((
+
+      nothing) == (
+
+      nothing))
+
+  }
+
+  test("maybeAt - empty list") {
+
+    assert((
+
+      nothing) == (
+
+      nothing))
+
+  }
+
+  // maybeHead
+
+  test("maybeHead - non-empty int list") {
+
+    assert((
+
+      just(1:int32)) == (
+
+      just(1:int32)))
+
+  }
+
+  test("maybeHead - empty int list") {
+
+    assert((
+
+      nothing) == (
+
+      nothing))
+
+  }
+
+  test("maybeHead - single element") {
+
+    assert((
+
+      just(42:int32)) == (
+
+      just(42:int32)))
+
+  }
+
+  test("maybeHead - non-empty string list") {
+
+    assert((
+
+      just("hello")) == (
+
+      just("hello")))
+
+  }
+
+  test("maybeHead - empty string list") {
+
+    assert((
+
+      nothing) == (
+
+      nothing))
+
+  }
+
+  // maybeInit
+
+  test("maybeInit - three elements") {
+
+    assert((
+
+      just([1:int32, 2:int32])) == (
+
+      just([1:int32, 2:int32])))
+
+  }
+
+  test("maybeInit - single element") {
+
+    assert((
+
+      just([])) == (
+
+      just([])))
+
+  }
+
+  test("maybeInit - empty list") {
+
+    assert((
+
+      nothing) == (
+
+      nothing))
+
+  }
+
+  // maybeLast
+
+  test("maybeLast - three elements") {
+
+    assert((
+
+      just(3:int32)) == (
+
+      just(3:int32)))
+
+  }
+
+  test("maybeLast - single element") {
+
+    assert((
+
+      just(42:int32)) == (
+
+      just(42:int32)))
+
+  }
+
+  test("maybeLast - empty list") {
+
+    assert((
+
+      nothing) == (
+
+      nothing))
+
+  }
+
+  // maybeTail
+
+  test("maybeTail - three elements") {
+
+    assert((
+
+      just([2:int32, 3:int32])) == (
+
+      just([2:int32, 3:int32])))
+
+  }
+
+  test("maybeTail - single element") {
+
+    assert((
+
+      just([])) == (
+
+      just([])))
+
+  }
+
+  test("maybeTail - empty list") {
+
+    assert((
+
+      nothing) == (
+
+      nothing))
 
   }
 
@@ -1099,9 +1309,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.nub[Int](Seq(1, 2, 1, 3, 2, 4))) == (
+      [1:int32, 2:int32, 3:int32, 4:int32]) == (
 
-      Seq(1, 2, 3, 4)))
+      [1:int32, 2:int32, 3:int32, 4:int32]))
 
   }
 
@@ -1109,9 +1319,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.nub[Int](Seq(1, 2, 3))) == (
+      [1:int32, 2:int32, 3:int32]) == (
 
-      Seq(1, 2, 3)))
+      [1:int32, 2:int32, 3:int32]))
 
   }
 
@@ -1119,9 +1329,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.nub[Int](Seq(1, 1, 1))) == (
+      [1:int32]) == (
 
-      Seq(1)))
+      [1:int32]))
 
   }
 
@@ -1129,9 +1339,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.nub(Seq())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -1139,9 +1349,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.nub[Int](Seq(1))) == (
+      [1:int32]) == (
 
-      Seq(1)))
+      [1:int32]))
 
   }
 
@@ -1149,9 +1359,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.nub[scala.Predef.String](Seq("a", "b", "a", "c"))) == (
+      ["a", "b", "c"]) == (
 
-      Seq("a", "b", "c")))
+      ["a", "b", "c"]))
 
   }
 
@@ -1161,7 +1371,7 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.`null`(Seq())) == (
+      true) == (
 
       true))
 
@@ -1171,7 +1381,7 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.`null`[Int](Seq(1))) == (
+      false) == (
 
       false))
 
@@ -1181,7 +1391,7 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.`null`[Int](Seq(1, 2, 3))) == (
+      false) == (
 
       false))
 
@@ -1191,7 +1401,7 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.`null`(Seq())) == (
+      true) == (
 
       true))
 
@@ -1201,7 +1411,7 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.`null`[scala.Predef.String](Seq("a"))) == (
+      false) == (
 
       false))
 
@@ -1213,9 +1423,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.partition[Int]((x: Int) => hydra.lib.equality.gt[Int](x)(3))(Seq(1, 2, 3, 4, 5, 6))) == (
+      ([4:int32, 5:int32, 6:int32], [1:int32, 2:int32, 3:int32])) == (
 
-      Tuple2(Seq(4, 5, 6), Seq(1, 2, 3))))
+      ([4:int32, 5:int32, 6:int32], [1:int32, 2:int32, 3:int32])))
 
   }
 
@@ -1223,9 +1433,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.partition[Int]((x: Int) => hydra.lib.equality.lt[Int](x)(10))(Seq(1, 2, 3))) == (
+      ([1:int32, 2:int32, 3:int32], [])) == (
 
-      Tuple2(Seq(1, 2, 3), Seq())))
+      ([1:int32, 2:int32, 3:int32], [])))
 
   }
 
@@ -1233,9 +1443,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.partition[Int]((x: Int) => hydra.lib.equality.gt[Int](x)(10))(Seq(1, 2, 3))) == (
+      ([], [1:int32, 2:int32, 3:int32])) == (
 
-      Tuple2(Seq(), Seq(1, 2, 3))))
+      ([], [1:int32, 2:int32, 3:int32])))
 
   }
 
@@ -1243,9 +1453,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.partition[Int]((x: Int) => hydra.lib.math.even(x))(Seq(1, 2, 3, 4, 5, 6))) == (
+      ([2:int32, 4:int32, 6:int32], [1:int32, 3:int32, 5:int32])) == (
 
-      Tuple2(Seq(2, 4, 6), Seq(1, 3, 5))))
+      ([2:int32, 4:int32, 6:int32], [1:int32, 3:int32, 5:int32])))
 
   }
 
@@ -1253,9 +1463,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.partition[Int]((x: Int) => hydra.lib.equality.lt[Int](x)(5))(Seq())) == (
+      ([], [])) == (
 
-      Tuple2(Seq(), Seq())))
+      ([], [])))
 
   }
 
@@ -1265,9 +1475,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.pure[scala.Predef.String]("one")) == (
+      ["one"]) == (
 
-      Seq("one")))
+      ["one"]))
 
   }
 
@@ -1275,9 +1485,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.pure[scala.Predef.String]("")) == (
+      [""]) == (
 
-      Seq("")))
+      [""]))
 
   }
 
@@ -1285,9 +1495,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.pure[Int](42)) == (
+      [42:int32]) == (
 
-      Seq(42)))
+      [42:int32]))
 
   }
 
@@ -1295,9 +1505,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.pure[Int](-5)) == (
+      [-5:int32]) == (
 
-      Seq(-5)))
+      [-5:int32]))
 
   }
 
@@ -1307,9 +1517,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.replicate[Int](3)(42)) == (
+      [42:int32, 42:int32, 42:int32]) == (
 
-      Seq(42, 42, 42)))
+      [42:int32, 42:int32, 42:int32]))
 
   }
 
@@ -1317,9 +1527,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.replicate[Int](0)(1)) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -1327,9 +1537,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.replicate[Int](1)(99)) == (
+      [99:int32]) == (
 
-      Seq(99)))
+      [99:int32]))
 
   }
 
@@ -1337,9 +1547,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.replicate[scala.Predef.String](2)("hello")) == (
+      ["hello", "hello"]) == (
 
-      Seq("hello", "hello")))
+      ["hello", "hello"]))
 
   }
 
@@ -1349,9 +1559,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.reverse[Int](Seq(1, 2, 3, 4))) == (
+      [4:int32, 3:int32, 2:int32, 1:int32]) == (
 
-      Seq(4, 3, 2, 1)))
+      [4:int32, 3:int32, 2:int32, 1:int32]))
 
   }
 
@@ -1359,9 +1569,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.reverse[Int](Seq(1))) == (
+      [1:int32]) == (
 
-      Seq(1)))
+      [1:int32]))
 
   }
 
@@ -1369,9 +1579,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.reverse(Seq())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -1379,9 +1589,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.reverse[Int](Seq(1, 2))) == (
+      [2:int32, 1:int32]) == (
 
-      Seq(2, 1)))
+      [2:int32, 1:int32]))
 
   }
 
@@ -1389,9 +1599,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.reverse[scala.Predef.String](Seq("a", "b", "c"))) == (
+      ["c", "b", "a"]) == (
 
-      Seq("c", "b", "a")))
+      ["c", "b", "a"]))
 
   }
 
@@ -1401,9 +1611,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.safeHead[Int](Seq(1, 2, 3))) == (
+      just(1:int32)) == (
 
-      Some(1)))
+      just(1:int32)))
 
   }
 
@@ -1411,9 +1621,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.safeHead(Seq())) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -1421,9 +1631,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.safeHead[Int](Seq(42))) == (
+      just(42:int32)) == (
 
-      Some(42)))
+      just(42:int32)))
 
   }
 
@@ -1431,9 +1641,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.safeHead[scala.Predef.String](Seq("hello", "world"))) == (
+      just("hello")) == (
 
-      Some("hello")))
+      just("hello")))
 
   }
 
@@ -1441,9 +1651,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.safeHead(Seq())) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -1453,9 +1663,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.singleton[Int](42)) == (
+      [42:int32]) == (
 
-      Seq(42)))
+      [42:int32]))
 
   }
 
@@ -1463,9 +1673,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.singleton[Int](-1)) == (
+      [-1:int32]) == (
 
-      Seq(-1)))
+      [-1:int32]))
 
   }
 
@@ -1473,9 +1683,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.singleton[Int](0)) == (
+      [0:int32]) == (
 
-      Seq(0)))
+      [0:int32]))
 
   }
 
@@ -1483,9 +1693,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.singleton[scala.Predef.String]("hello")) == (
+      ["hello"]) == (
 
-      Seq("hello")))
+      ["hello"]))
 
   }
 
@@ -1495,9 +1705,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.sort[Int](Seq(3, 1, 4, 1, 5))) == (
+      [1:int32, 1:int32, 3:int32, 4:int32, 5:int32]) == (
 
-      Seq(1, 1, 3, 4, 5)))
+      [1:int32, 1:int32, 3:int32, 4:int32, 5:int32]))
 
   }
 
@@ -1505,9 +1715,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.sort[Int](Seq(1, 2, 3))) == (
+      [1:int32, 2:int32, 3:int32]) == (
 
-      Seq(1, 2, 3)))
+      [1:int32, 2:int32, 3:int32]))
 
   }
 
@@ -1515,9 +1725,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.sort[Int](Seq(3, 2, 1))) == (
+      [1:int32, 2:int32, 3:int32]) == (
 
-      Seq(1, 2, 3)))
+      [1:int32, 2:int32, 3:int32]))
 
   }
 
@@ -1525,9 +1735,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.sort[Int](Seq(1))) == (
+      [1:int32]) == (
 
-      Seq(1)))
+      [1:int32]))
 
   }
 
@@ -1535,9 +1745,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.sort(Seq())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -1545,9 +1755,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.sort[Int](Seq(2, 1, 2, 3, 1))) == (
+      [1:int32, 1:int32, 2:int32, 2:int32, 3:int32]) == (
 
-      Seq(1, 1, 2, 2, 3)))
+      [1:int32, 1:int32, 2:int32, 2:int32, 3:int32]))
 
   }
 
@@ -1555,9 +1765,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.sort[scala.Predef.String](Seq("zebra", "apple", "banana"))) == (
+      ["apple", "banana", "zebra"]) == (
 
-      Seq("apple", "banana", "zebra")))
+      ["apple", "banana", "zebra"]))
 
   }
 
@@ -1567,9 +1777,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.sortOn[scala.Predef.String, Int](hydra.lib.strings.length)(Seq("hello", "hi", "world"))) == (
+      ["hi", "hello", "world"]) == (
 
-      Seq("hi", "hello", "world")))
+      ["hi", "hello", "world"]))
 
   }
 
@@ -1577,9 +1787,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.sortOn[scala.Predef.String, Int](hydra.lib.strings.length)(Seq())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -1587,9 +1797,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.sortOn[scala.Predef.String, Int](hydra.lib.strings.length)(Seq("test"))) == (
+      ["test"]) == (
 
-      Seq("test")))
+      ["test"]))
 
   }
 
@@ -1597,9 +1807,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.sortOn[Int, Int](hydra.lib.math.negate)(Seq(1, 3, 2))) == (
+      [3:int32, 2:int32, 1:int32]) == (
 
-      Seq(3, 2, 1)))
+      [3:int32, 2:int32, 1:int32]))
 
   }
 
@@ -1607,9 +1817,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.sortOn[Int, Int](hydra.lib.math.abs)(Seq(-1, -3, 2))) == (
+      [-1:int32, 2:int32, -3:int32]) == (
 
-      Seq(-1, 2, -3)))
+      [-1:int32, 2:int32, -3:int32]))
 
   }
 
@@ -1619,9 +1829,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.span[Int]((x: Int) => hydra.lib.equality.lt[Int](x)(3))(Seq(1, 2, 3, 1, 2))) == (
+      ([1:int32, 2:int32], [3:int32, 1:int32, 2:int32])) == (
 
-      Tuple2(Seq(1, 2), Seq(3, 1, 2))))
+      ([1:int32, 2:int32], [3:int32, 1:int32, 2:int32])))
 
   }
 
@@ -1629,9 +1839,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.span[Int]((x: Int) => hydra.lib.equality.lt[Int](x)(10))(Seq(1, 2, 3))) == (
+      ([1:int32, 2:int32, 3:int32], [])) == (
 
-      Tuple2(Seq(1, 2, 3), Seq())))
+      ([1:int32, 2:int32, 3:int32], [])))
 
   }
 
@@ -1639,9 +1849,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.span[Int]((x: Int) => hydra.lib.equality.gt[Int](x)(10))(Seq(1, 2, 3))) == (
+      ([], [1:int32, 2:int32, 3:int32])) == (
 
-      Tuple2(Seq(), Seq(1, 2, 3))))
+      ([], [1:int32, 2:int32, 3:int32])))
 
   }
 
@@ -1649,9 +1859,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.span[Int]((x: Int) => hydra.lib.equality.lt[Int](x)(5))(Seq())) == (
+      ([], [])) == (
 
-      Tuple2(Seq(), Seq())))
+      ([], [])))
 
   }
 
@@ -1661,9 +1871,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.tail[Int](Seq(1, 2, 3, 4))) == (
+      [2:int32, 3:int32, 4:int32]) == (
 
-      Seq(2, 3, 4)))
+      [2:int32, 3:int32, 4:int32]))
 
   }
 
@@ -1671,9 +1881,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.tail[Int](Seq(1, 2))) == (
+      [2:int32]) == (
 
-      Seq(2)))
+      [2:int32]))
 
   }
 
@@ -1681,9 +1891,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.tail[Int](Seq(1))) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -1691,9 +1901,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.tail[scala.Predef.String](Seq("a", "b", "c"))) == (
+      ["b", "c"]) == (
 
-      Seq("b", "c")))
+      ["b", "c"]))
 
   }
 
@@ -1703,9 +1913,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.take[Int](2)(Seq(1, 2, 3, 4, 5))) == (
+      [1:int32, 2:int32]) == (
 
-      Seq(1, 2)))
+      [1:int32, 2:int32]))
 
   }
 
@@ -1713,9 +1923,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.take[Int](0)(Seq(1, 2, 3))) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -1723,9 +1933,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.take[Int](3)(Seq(1, 2, 3))) == (
+      [1:int32, 2:int32, 3:int32]) == (
 
-      Seq(1, 2, 3)))
+      [1:int32, 2:int32, 3:int32]))
 
   }
 
@@ -1733,9 +1943,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.take[Int](5)(Seq(1, 2))) == (
+      [1:int32, 2:int32]) == (
 
-      Seq(1, 2)))
+      [1:int32, 2:int32]))
 
   }
 
@@ -1743,9 +1953,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.take(3)(Seq())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -1753,9 +1963,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.take[Int](-1)(Seq(1, 2, 3))) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -1765,9 +1975,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.transpose[Int](Seq(Seq(1, 2, 3), Seq(4, 5, 6)))) == (
+      [[1:int32, 4:int32], [2:int32, 5:int32], [3:int32, 6:int32]]) == (
 
-      Seq(Seq(1, 4), Seq(2, 5), Seq(3, 6))))
+      [[1:int32, 4:int32], [2:int32, 5:int32], [3:int32, 6:int32]]))
 
   }
 
@@ -1775,9 +1985,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.transpose(Seq())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -1785,9 +1995,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.transpose[Int](Seq(Seq(1, 2, 3)))) == (
+      [[1:int32], [2:int32], [3:int32]]) == (
 
-      Seq(Seq(1), Seq(2), Seq(3))))
+      [[1:int32], [2:int32], [3:int32]]))
 
   }
 
@@ -1795,9 +2005,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.transpose[Int](Seq(Seq(1), Seq(2), Seq(3)))) == (
+      [[1:int32, 2:int32, 3:int32]]) == (
 
-      Seq(Seq(1, 2, 3))))
+      [[1:int32, 2:int32, 3:int32]]))
 
   }
 
@@ -1805,9 +2015,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.transpose[Int](Seq(Seq(1, 2), Seq(3), Seq(4, 5, 6)))) == (
+      [[1:int32, 3:int32, 4:int32], [2:int32, 5:int32], [6:int32]]) == (
 
-      Seq(Seq(1, 3, 4), Seq(2, 5), Seq(6))))
+      [[1:int32, 3:int32, 4:int32], [2:int32, 5:int32], [6:int32]]))
 
   }
 
@@ -1817,9 +2027,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.zip[Int, scala.Predef.String](Seq(1, 2, 3))(Seq("a", "b", "c"))) == (
+      [(1:int32, "a"), (2:int32, "b"), (3:int32, "c")]) == (
 
-      Seq(Tuple2(1, "a"), Tuple2(2, "b"), Tuple2(3, "c"))))
+      [(1:int32, "a"), (2:int32, "b"), (3:int32, "c")]))
 
   }
 
@@ -1827,9 +2037,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.zip[Int, scala.Predef.String](Seq(1, 2))(Seq("a", "b", "c"))) == (
+      [(1:int32, "a"), (2:int32, "b")]) == (
 
-      Seq(Tuple2(1, "a"), Tuple2(2, "b"))))
+      [(1:int32, "a"), (2:int32, "b")]))
 
   }
 
@@ -1837,9 +2047,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.zip[Int, scala.Predef.String](Seq(1, 2, 3))(Seq("a", "b"))) == (
+      [(1:int32, "a"), (2:int32, "b")]) == (
 
-      Seq(Tuple2(1, "a"), Tuple2(2, "b"))))
+      [(1:int32, "a"), (2:int32, "b")]))
 
   }
 
@@ -1847,9 +2057,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.zip(Seq())(Seq("a", "b"))) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -1857,9 +2067,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.zip(Seq(1, 2))(Seq())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -1867,9 +2077,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.zip(Seq())(Seq())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -1879,9 +2089,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.zipWith[Int, Int, Int](hydra.lib.math.add)(Seq(1, 2, 3))(Seq(4, 5, 6))) == (
+      [5:int32, 7:int32, 9:int32]) == (
 
-      Seq(5, 7, 9)))
+      [5:int32, 7:int32, 9:int32]))
 
   }
 
@@ -1889,9 +2099,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.zipWith[Int, Int, Int](hydra.lib.math.add)(Seq(1, 2))(Seq(4, 5, 6))) == (
+      [5:int32, 7:int32]) == (
 
-      Seq(5, 7)))
+      [5:int32, 7:int32]))
 
   }
 
@@ -1899,9 +2109,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.zipWith[Int, Int, Int](hydra.lib.math.add)(Seq(1, 2, 3))(Seq(4, 5))) == (
+      [5:int32, 7:int32]) == (
 
-      Seq(5, 7)))
+      [5:int32, 7:int32]))
 
   }
 
@@ -1909,9 +2119,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.zipWith[Int, Int, Int](hydra.lib.math.add)(Seq())(Seq(1, 2, 3))) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -1919,9 +2129,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.zipWith[Int, Int, Int](hydra.lib.math.add)(Seq(1, 2, 3))(Seq())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -1929,9 +2139,9 @@ class ListsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.lists.zipWith[scala.Predef.String, scala.Predef.String, scala.Predef.String](hydra.lib.strings.cat2)(Seq("a", "b"))(Seq("1", "2"))) == (
+      ["a1", "b2"]) == (
 
-      Seq("a1", "b2")))
+      ["a1", "b2"]))
 
   }
 }

@@ -20,13 +20,8 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
-import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Collect forall type variable names from a type
 collectForallVars :: Core.Type -> [Core.Name]
@@ -149,7 +144,7 @@ generateBindingsForType cx graph b =
       in (Eithers.bind (Eithers.bimap (\_wc_e -> Context.InContext {
         Context.inContextObject = _wc_e,
         Context.inContextContext = cx}) (\_wc_a -> _wc_a) (Core_.type_ graph (Core.bindingTerm b))) (\rawType ->
-        let typ = Rewriting.deannotateTypeParameters (Rewriting.deannotateType rawType)
+        let typ = Strip.deannotateTypeParameters (Strip.deannotateType rawType)
         in (Right (case typ of
           Core.TypeRecord v0 -> Lists.concat [
             generateRecordConstructor rawType typeName v0,
@@ -396,7 +391,7 @@ generateUnionInjector origType typeName ft =
                     (Strings.intercalate "" (Lists.map (\s -> Formatting.capitalize s) (Strings.splitOn "." (Core.unName fieldName))))]
           injectorName = dslElementName typeName injectorLocalName
           isUnit =
-                  (\t -> case (Rewriting.deannotateType t) of
+                  (\t -> case (Strip.deannotateType t) of
                     Core.TypeUnit -> True
                     _ -> False) fieldType
           dFieldValue =

@@ -229,7 +229,7 @@
                               "argument": {
                                 "application": {
                                   "argument": {"variable": "typ"},
-                                  "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                  "function": {"variable": "hydra.strip.deannotateType"}}},
                               "function": {
                                 "function": {
                                   "elimination": {
@@ -245,7 +245,7 @@
                                                     "argument": {
                                                       "application": {
                                                         "argument": {"variable": "inner"},
-                                                        "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                                        "function": {"variable": "hydra.strip.deannotateType"}}},
                                                     "function": {
                                                       "function": {
                                                         "elimination": {
@@ -338,7 +338,7 @@
             "variables": []}]}}],
   "description": ["Language constraints and reserved words for GraphQL"],
   "namespace": "hydra.ext.graphql.language",
-  "termDependencies": ["hydra.lexical", "hydra.rewriting"],
+  "termDependencies": ["hydra.lexical", "hydra.strip"],
   "typeDependencies": [
     "hydra.paths",
     "hydra.ast",
@@ -348,6 +348,7 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
+    "hydra.error.module",
     "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",

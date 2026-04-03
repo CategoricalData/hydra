@@ -10,7 +10,7 @@
 
 (require 'hydra.error.core)
 
-(defvar hydra_encode_error_core_constant_condition_error (lambda (x) (list :record (make-hydra_core_record "hydra.error.core.ConstantConditionError" (list (make-hydra_core_field "location" (hydra_encode_paths_subterm_path (funcall (lambda (v) (hydra_error_core_constant_condition_error-location v)) x))) (make-hydra_core_field "value" (funcall (lambda (x) (list :literal (list :boolean x))) (funcall (lambda (v) (hydra_error_core_constant_condition_error-value v)) x))))))))
+(defvar hydra_encode_error_core_constant_condition_error (lambda (x) (list :record (make-hydra_core_record "hydra.error.core.ConstantConditionError" (list (make-hydra_core_field "location" (hydra_encode_paths_subterm_path (funcall (lambda (v) (hydra_error_core_constant_condition_error-location v)) x))) (make-hydra_core_field "value" (funcall (lambda (x2) (list :literal (list :boolean x2))) (funcall (lambda (v) (hydra_error_core_constant_condition_error-value v)) x))))))))
 
 (defvar hydra_encode_error_core_duplicate_binding_error (lambda (x) (list :record (make-hydra_core_record "hydra.error.core.DuplicateBindingError" (list (make-hydra_core_field "location" (hydra_encode_paths_subterm_path (funcall (lambda (v) (hydra_error_core_duplicate_binding_error-location v)) x))) (make-hydra_core_field "name" (hydra_encode_core_name (funcall (lambda (v) (hydra_error_core_duplicate_binding_error-name v)) x))))))))
 

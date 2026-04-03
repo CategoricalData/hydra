@@ -165,6 +165,9 @@ evalLibLists = standardLibrary _hydra_lib_lists [
   mkPrim _lists_map 2 $ \cx g args -> case args of
     [f, lt] -> EvalLists.map cx g f lt
     _ -> unexpected cx "lists.map" 2,
+  mkPrim _lists_maybeHead 1 $ \cx g args -> case args of
+    [lt] -> EvalLists.maybeHead cx g lt
+    _ -> unexpected cx "lists.maybeHead" 1,
   mkPrim _lists_nub 1 $ \cx g args -> case args of
     [lt] -> EvalLists.nub cx g lt
     _ -> unexpected cx "lists.nub" 1,

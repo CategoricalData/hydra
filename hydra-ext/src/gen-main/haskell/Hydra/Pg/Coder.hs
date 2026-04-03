@@ -5,6 +5,7 @@
 module Hydra.Pg.Coder where
 
 import qualified Hydra.Annotations as Annotations
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
@@ -22,15 +23,10 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Pg.Mapping as Mapping
 import qualified Hydra.Pg.Model as Model
 import qualified Hydra.Pg.TermsToElements as TermsToElements
-import qualified Hydra.Rewriting as Rewriting
-import qualified Hydra.Schemas as Schemas
-import qualified Hydra.Util as Util
+import qualified Hydra.Resolution as Resolution
+import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Check a condition, returning an error if false
 check :: t0 -> Bool -> Either t1 () -> Either t1 ()
@@ -44,7 +40,7 @@ checkRecordName cx expected actual =
       Context.inContextContext = cx}))
 
 -- | Construct an edge coder from components
-constructEdgeCoder :: Context.Context -> Graph.Graph -> Model.VertexLabel -> Mapping.Schema t0 t1 t2 -> Core.Type -> t1 -> t1 -> Model.Direction -> Core.Name -> [Core.FieldType] -> [Util.Adapter Core.FieldType (Model.PropertyType t1) Core.Field (Model.Property t2)] -> Maybe (Core.FieldType, (Mapping.ValueSpec, (Maybe String))) -> Maybe (Core.FieldType, (Mapping.ValueSpec, (Maybe String))) -> Either (Context.InContext Errors.Error) (Util.Adapter Core.Type (Model.ElementTypeTree t1) Core.Term (Model.ElementTree t2))
+constructEdgeCoder :: Context.Context -> Graph.Graph -> Model.VertexLabel -> Mapping.Schema t0 t1 t2 -> Core.Type -> t1 -> t1 -> Model.Direction -> Core.Name -> [Core.FieldType] -> [Coders.Adapter Core.FieldType (Model.PropertyType t1) Core.Field (Model.Property t2)] -> Maybe (Core.FieldType, (Mapping.ValueSpec, (Maybe String))) -> Maybe (Core.FieldType, (Mapping.ValueSpec, (Maybe String))) -> Either (Context.InContext Errors.Error) (Coders.Adapter Core.Type (Model.ElementTypeTree t1) Core.Term (Model.ElementTree t2))
 constructEdgeCoder cx g parentLabel schema source vidType eidType dir name fields propAdapters mOutSpec mInSpec =
     Eithers.bind (findLabelString cx g source name (Core.Name (Mapping.annotationSchemaEdgeLabel (Mapping.schemaAnnotations schema)))) (\labelStr ->
       let label = Model.EdgeLabel labelStr
@@ -61,14 +57,14 @@ constructEdgeCoder cx g parentLabel schema source vidType eidType dir name field
           Context.inContextContext = cx})) (\a -> Right (Model.VertexLabel a)) (Pairs.second (Pairs.second spec))) mInSpec) (\inLabel -> Right (edgeCoder g dir schema source eidType name label outLabel inLabel idAdapter outIdAdapter inIdAdapter propAdapters vertexAdapters)))))))))))
 
 -- | Construct a vertex coder from components
-constructVertexCoder :: Context.Context -> Graph.Graph -> Mapping.Schema t0 t1 t2 -> Core.Type -> t1 -> t1 -> Core.Name -> [Core.FieldType] -> [Util.Adapter Core.FieldType (Model.PropertyType t1) Core.Field (Model.Property t2)] -> Either (Context.InContext Errors.Error) (Util.Adapter Core.Type (Model.ElementTypeTree t1) Core.Term (Model.ElementTree t2))
+constructVertexCoder :: Context.Context -> Graph.Graph -> Mapping.Schema t0 t1 t2 -> Core.Type -> t1 -> t1 -> Core.Name -> [Core.FieldType] -> [Coders.Adapter Core.FieldType (Model.PropertyType t1) Core.Field (Model.Property t2)] -> Either (Context.InContext Errors.Error) (Coders.Adapter Core.Type (Model.ElementTypeTree t1) Core.Term (Model.ElementTree t2))
 constructVertexCoder cx g schema source vidType eidType name fields propAdapters =
     Eithers.bind (findLabelString cx g source name (Core.Name (Mapping.annotationSchemaVertexLabel (Mapping.schemaAnnotations schema)))) (\labelStr ->
       let label = Model.VertexLabel labelStr
       in (Eithers.bind (vertexIdAdapter cx g schema vidType name (Core.Name (Mapping.annotationSchemaVertexId (Mapping.schemaAnnotations schema))) fields) (\idAdapter -> Eithers.bind (findAdjacenEdgeAdapters cx g schema vidType eidType label Model.DirectionOut fields) (\outEdgeAdapters -> Eithers.bind (findAdjacenEdgeAdapters cx g schema vidType eidType label Model.DirectionIn fields) (\inEdgeAdapters -> Right (vertexCoder g schema source vidType name label idAdapter propAdapters (Lists.concat2 outEdgeAdapters inEdgeAdapters)))))))
 
 -- | Create an edge coder given all components
-edgeCoder :: t0 -> Model.Direction -> Mapping.Schema t1 t2 t3 -> t4 -> t5 -> Core.Name -> Model.EdgeLabel -> Model.VertexLabel -> Model.VertexLabel -> Maybe (Core.Name, (Util.Adapter t6 t7 Core.Term t3)) -> Maybe (Core.Name, (Util.Adapter t8 t9 Core.Term t3)) -> Maybe (Core.Name, (Util.Adapter t10 t11 Core.Term t3)) -> [Util.Adapter Core.FieldType (Model.PropertyType t5) Core.Field (Model.Property t3)] -> [(Core.Name, (Util.Adapter t12 t13 Core.Term (Model.ElementTree t3)))] -> Util.Adapter t4 (Model.ElementTypeTree t5) Core.Term (Model.ElementTree t3)
+edgeCoder :: t0 -> Model.Direction -> Mapping.Schema t1 t2 t3 -> t4 -> t5 -> Core.Name -> Model.EdgeLabel -> Model.VertexLabel -> Model.VertexLabel -> Maybe (Core.Name, (Coders.Adapter t6 t7 Core.Term t3)) -> Maybe (Core.Name, (Coders.Adapter t8 t9 Core.Term t3)) -> Maybe (Core.Name, (Coders.Adapter t10 t11 Core.Term t3)) -> [Coders.Adapter Core.FieldType (Model.PropertyType t5) Core.Field (Model.Property t3)] -> [(Core.Name, (Coders.Adapter t12 t13 Core.Term (Model.ElementTree t3)))] -> Coders.Adapter t4 (Model.ElementTypeTree t5) Core.Term (Model.ElementTree t3)
 edgeCoder g dir schema source eidType tname label outLabel inLabel mIdAdapter outAdapter inAdapter propAdapters vertexAdapters =
 
       let et =
@@ -78,13 +74,13 @@ edgeCoder g dir schema source eidType tname label outLabel inLabel mIdAdapter ou
                 Model.edgeTypeOut = outLabel,
                 Model.edgeTypeIn = inLabel,
                 Model.edgeTypeProperties = (propertyTypes propAdapters)}
-      in Util.Adapter {
-        Util.adapterIsLossy = True,
-        Util.adapterSource = source,
-        Util.adapterTarget = (elementTypeTreeEdge et []),
-        Util.adapterCoder = Util.Coder {
-          Util.coderEncode = (\cx -> \term ->
-            let deannot = Rewriting.deannotateTerm term
+      in Coders.Adapter {
+        Coders.adapterIsLossy = True,
+        Coders.adapterSource = source,
+        Coders.adapterTarget = (elementTypeTreeEdge et []),
+        Coders.adapterCoder = Coders.Coder {
+          Coders.coderEncode = (\cx -> \term ->
+            let deannot = Strip.deannotateTerm term
                 unwrapped =
                         case deannot of
                           Core.TermMaybe v0 -> Maybes.fromMaybe deannot v0
@@ -93,35 +89,35 @@ edgeCoder g dir schema source eidType tname label outLabel inLabel mIdAdapter ou
                         case unwrapped of
                           Core.TermRecord v0 -> v0
             in (Eithers.bind (checkRecordName cx tname (Core.recordTypeName rec)) (\_chk ->
-              let fieldsm = Schemas.fieldMap (Core.recordFields rec)
+              let fieldsm = Resolution.fieldMap (Core.recordFields rec)
               in (Eithers.bind (Maybes.maybe (Right (Mapping.schemaDefaultEdgeId schema)) (selectEdgeId cx fieldsm) mIdAdapter) (\edgeId -> Eithers.bind (encodeProperties cx fieldsm propAdapters) (\props ->
                 let getVertexId =
                         \dirCheck -> \adapter -> Maybes.maybe (Right (Mapping.schemaDefaultVertexId schema)) (selectVertexId cx fieldsm) (Logic.ifElse (Equality.equal dir dirCheck) Nothing adapter)
                 in (Eithers.bind (getVertexId Model.DirectionOut outAdapter) (\outId -> Eithers.bind (getVertexId Model.DirectionIn inAdapter) (\inId -> Eithers.bind (Eithers.map (\xs -> Maybes.cat xs) (Eithers.mapList (\va ->
                   let fname = Pairs.first va
                       ad = Pairs.second va
-                  in (Maybes.maybe (Right Nothing) (\fterm -> Eithers.map (\x -> Just x) (Util.coderEncode (Util.adapterCoder ad) cx fterm)) (Maps.lookup fname fieldsm))) vertexAdapters)) (\deps -> Right (elementTreeEdge (Model.Edge {
+                  in (Maybes.maybe (Right Nothing) (\fterm -> Eithers.map (\x -> Just x) (Coders.coderEncode (Coders.adapterCoder ad) cx fterm)) (Maps.lookup fname fieldsm))) vertexAdapters)) (\deps -> Right (elementTreeEdge (Model.Edge {
                   Model.edgeLabel = label,
                   Model.edgeId = edgeId,
                   Model.edgeOut = outId,
                   Model.edgeIn = inId,
                   Model.edgeProperties = props}) deps))))))))))),
-          Util.coderDecode = (\cx -> \_ -> Left (Context.InContext {
+          Coders.coderDecode = (\cx -> \_ -> Left (Context.InContext {
             Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "edge decoding is not yet supported")),
             Context.inContextContext = cx}))}}
 
 -- | Create an edge id adapter
-edgeIdAdapter :: Context.Context -> t0 -> Mapping.Schema t1 t2 t3 -> t4 -> Core.Name -> Core.Name -> [Core.FieldType] -> Either (Context.InContext Errors.Error) (Maybe (Core.Name, (Util.Adapter Core.Type t4 Core.Term t3)))
+edgeIdAdapter :: Context.Context -> t0 -> Mapping.Schema t1 t2 t3 -> t4 -> Core.Name -> Core.Name -> [Core.FieldType] -> Either (Context.InContext Errors.Error) (Maybe (Core.Name, (Coders.Adapter Core.Type t4 Core.Term t3)))
 edgeIdAdapter cx g schema eidType name idKey fields =
     Eithers.bind (findIdProjectionSpec cx False name idKey fields) (\mIdSpec -> Maybes.maybe (Right Nothing) (\idSpec -> Eithers.map (\x -> Just x) (projectionAdapter cx g eidType (Mapping.schemaEdgeIds schema) idSpec "id")) mIdSpec)
 
 -- | Construct an element adapter for a given type, interpreting it either as a vertex specification or an edge specification
-elementCoder :: Maybe (Model.Direction, Model.VertexLabel) -> Mapping.Schema t0 t1 t2 -> Core.Type -> t1 -> t1 -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (Util.Adapter Core.Type (Model.ElementTypeTree t1) Core.Term (Model.ElementTree t2))
+elementCoder :: Maybe (Model.Direction, Model.VertexLabel) -> Mapping.Schema t0 t1 t2 -> Core.Type -> t1 -> t1 -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (Coders.Adapter Core.Type (Model.ElementTypeTree t1) Core.Term (Model.ElementTree t2))
 elementCoder mparent schema source vidType eidType cx g =
 
       let dir = Maybes.maybe Model.DirectionBoth (\p -> Pairs.first p) mparent
           parentLabel = Maybes.maybe (Model.VertexLabel "NOLABEL") (\p -> Pairs.second p) mparent
-      in case (Rewriting.deannotateType source) of
+      in case (Strip.deannotateType source) of
         Core.TypeMaybe v0 -> elementCoder mparent schema v0 vidType eidType cx g
         Core.TypeRecord v0 ->
           let name = Core.Name "placeholder"
@@ -167,27 +163,27 @@ elementTypeTreeVertex vtype deps =
       Model.elementTypeTreeDependencies = deps}
 
 -- | Encode all properties from a field map using property adapters
-encodeProperties :: Context.Context -> M.Map Core.Name Core.Term -> [Util.Adapter Core.FieldType t0 Core.Field (Model.Property t1)] -> Either (Context.InContext Errors.Error) (M.Map Model.PropertyKey t1)
+encodeProperties :: Context.Context -> M.Map Core.Name Core.Term -> [Coders.Adapter Core.FieldType t0 Core.Field (Model.Property t1)] -> Either (Context.InContext Errors.Error) (M.Map Model.PropertyKey t1)
 encodeProperties cx fields adapters =
     Eithers.map (\props -> Maps.fromList (Lists.map (\prop -> (Model.propertyKey prop, (Model.propertyValue prop))) props)) (Eithers.map (\xs -> Maybes.cat xs) (Eithers.mapList (encodeProperty cx fields) adapters))
 
 -- | Encode a single property from a field map using a property adapter
-encodeProperty :: Context.Context -> M.Map Core.Name Core.Term -> Util.Adapter Core.FieldType t0 Core.Field t1 -> Either (Context.InContext Errors.Error) (Maybe t1)
+encodeProperty :: Context.Context -> M.Map Core.Name Core.Term -> Coders.Adapter Core.FieldType t0 Core.Field t1 -> Either (Context.InContext Errors.Error) (Maybe t1)
 encodeProperty cx fields adapter =
 
-      let fname = Core.fieldTypeName (Util.adapterSource adapter)
-          ftyp = Rewriting.deannotateType (Core.fieldTypeType (Util.adapterSource adapter))
+      let fname = Core.fieldTypeName (Coders.adapterSource adapter)
+          ftyp = Strip.deannotateType (Core.fieldTypeType (Coders.adapterSource adapter))
           isMaybe =
                   case ftyp of
                     Core.TypeMaybe _ -> True
                     _ -> False
           encodeValue =
-                  \v -> Eithers.map (\x -> Just x) (Util.coderEncode (Util.adapterCoder adapter) cx (Core.Field {
+                  \v -> Eithers.map (\x -> Just x) (Coders.coderEncode (Coders.adapterCoder adapter) cx (Core.Field {
                     Core.fieldName = fname,
                     Core.fieldTerm = v}))
       in (Maybes.maybe (Logic.ifElse isMaybe (Right Nothing) (Left (Context.InContext {
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "expected field not found in record: " (Core.unName fname)))),
-        Context.inContextContext = cx}))) (\value -> Logic.ifElse isMaybe (case (Rewriting.deannotateTerm value) of
+        Context.inContextContext = cx}))) (\value -> Logic.ifElse isMaybe (case (Strip.deannotateTerm value) of
         Core.TermMaybe v0 -> Maybes.maybe (Right Nothing) encodeValue v0
         _ -> encodeValue value) (encodeValue value)) (Maps.lookup fname fields))
 
@@ -196,7 +192,7 @@ extractString :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.
 extractString cx g t = Core_.string cx g t
 
 -- | Find adjacent edge adapters for a given direction
-findAdjacenEdgeAdapters :: Context.Context -> Graph.Graph -> Mapping.Schema t0 t1 t2 -> t1 -> t1 -> Model.VertexLabel -> Model.Direction -> [Core.FieldType] -> Either (Context.InContext Errors.Error) [(Model.Direction, (Core.FieldType, (Model.EdgeLabel, (Util.Adapter Core.Type (Model.ElementTypeTree t1) Core.Term (Model.ElementTree t2)))))]
+findAdjacenEdgeAdapters :: Context.Context -> Graph.Graph -> Mapping.Schema t0 t1 t2 -> t1 -> t1 -> Model.VertexLabel -> Model.Direction -> [Core.FieldType] -> Either (Context.InContext Errors.Error) [(Model.Direction, (Core.FieldType, (Model.EdgeLabel, (Coders.Adapter Core.Type (Model.ElementTypeTree t1) Core.Term (Model.ElementTree t2)))))]
 findAdjacenEdgeAdapters cx g schema vidType eidType parentLabel dir fields =
     Eithers.map (\xs -> Maybes.cat xs) (Eithers.mapList (\field ->
       let key =
@@ -221,7 +217,7 @@ findIdProjectionSpec cx required tname idKey fields =
       Graph.graphTypeVariables = Sets.empty})) (Annotations.getTypeAnnotation idKey (Core.fieldTypeType mi)))) mid)
 
 -- | Find an incident vertex adapter for a projection spec
-findIncidentVertexAdapter :: Context.Context -> Graph.Graph -> Mapping.Schema t0 t1 t2 -> t1 -> t1 -> (Core.FieldType, (Mapping.ValueSpec, (Maybe String))) -> Either (Context.InContext Errors.Error) (Core.Name, (Util.Adapter Core.Type (Model.ElementTypeTree t1) Core.Term (Model.ElementTree t2)))
+findIncidentVertexAdapter :: Context.Context -> Graph.Graph -> Mapping.Schema t0 t1 t2 -> t1 -> t1 -> (Core.FieldType, (Mapping.ValueSpec, (Maybe String))) -> Either (Context.InContext Errors.Error) (Core.Name, (Coders.Adapter Core.Type (Model.ElementTypeTree t1) Core.Term (Model.ElementTree t2)))
 findIncidentVertexAdapter cx g schema vidType eidType spec =
 
       let field = Pairs.first spec
@@ -284,71 +280,71 @@ hasVertexAdapters dir mOutSpec mInSpec =
       Model.DirectionBoth -> Logic.and (Maybes.isJust mOutSpec) (Maybes.isJust mInSpec)
 
 -- | Create a projection adapter from a projection spec
-projectionAdapter :: t0 -> t1 -> t2 -> Util.Coder Core.Term t3 -> (Core.FieldType, (Mapping.ValueSpec, t4)) -> String -> Either t5 (Core.Name, (Util.Adapter Core.Type t2 Core.Term t3))
+projectionAdapter :: t0 -> t1 -> t2 -> Coders.Coder Core.Term t3 -> (Core.FieldType, (Mapping.ValueSpec, t4)) -> String -> Either t5 (Core.Name, (Coders.Adapter Core.Type t2 Core.Term t3))
 projectionAdapter cx g idtype coder spec key =
 
       let field = Pairs.first spec
           values = Pairs.first (Pairs.second spec)
-      in (Eithers.bind (TermsToElements.parseValueSpec cx g values) (\traversal -> Right (Core.fieldTypeName field, Util.Adapter {
-        Util.adapterIsLossy = True,
-        Util.adapterSource = (Core.fieldTypeType field),
-        Util.adapterTarget = idtype,
-        Util.adapterCoder = Util.Coder {
-          Util.coderEncode = (\cx_ -> \typ -> Eithers.bind (traverseToSingleTerm cx_ (Strings.cat2 key "-projection") (traversal cx_) typ) (\t -> Util.coderEncode coder cx_ t)),
-          Util.coderDecode = (\cx_ -> \_ -> Left (Context.InContext {
+      in (Eithers.bind (TermsToElements.parseValueSpec cx g values) (\traversal -> Right (Core.fieldTypeName field, Coders.Adapter {
+        Coders.adapterIsLossy = True,
+        Coders.adapterSource = (Core.fieldTypeType field),
+        Coders.adapterTarget = idtype,
+        Coders.adapterCoder = Coders.Coder {
+          Coders.coderEncode = (\cx_ -> \typ -> Eithers.bind (traverseToSingleTerm cx_ (Strings.cat2 key "-projection") (traversal cx_) typ) (\t -> Coders.coderEncode coder cx_ t)),
+          Coders.coderDecode = (\cx_ -> \_ -> Left (Context.InContext {
             Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 "edge '" key) "' decoding is not yet supported"))),
             Context.inContextContext = cx_}))}})))
 
 -- | Create a property adapter from a property spec
-propertyAdapter :: Context.Context -> t0 -> Mapping.Schema t1 t2 t3 -> (Core.FieldType, (Mapping.ValueSpec, (Maybe String))) -> Either (Context.InContext Errors.Error) (Util.Adapter Core.FieldType (Model.PropertyType t2) Core.Field (Model.Property t3))
+propertyAdapter :: Context.Context -> t0 -> Mapping.Schema t1 t2 t3 -> (Core.FieldType, (Mapping.ValueSpec, (Maybe String))) -> Either (Context.InContext Errors.Error) (Coders.Adapter Core.FieldType (Model.PropertyType t2) Core.Field (Model.Property t3))
 propertyAdapter cx g schema spec =
 
       let tfield = Pairs.first spec
           values = Pairs.first (Pairs.second spec)
           alias = Pairs.second (Pairs.second spec)
           key = Model.PropertyKey (Maybes.fromMaybe (Core.unName (Core.fieldTypeName tfield)) alias)
-      in (Eithers.bind (Util.coderEncode (Mapping.schemaPropertyTypes schema) cx (Core.fieldTypeType tfield)) (\pt -> Eithers.bind (TermsToElements.parseValueSpec cx g values) (\traversal -> Right (Util.Adapter {
-        Util.adapterIsLossy = True,
-        Util.adapterSource = tfield,
-        Util.adapterTarget = Model.PropertyType {
+      in (Eithers.bind (Coders.coderEncode (Mapping.schemaPropertyTypes schema) cx (Core.fieldTypeType tfield)) (\pt -> Eithers.bind (TermsToElements.parseValueSpec cx g values) (\traversal -> Right (Coders.Adapter {
+        Coders.adapterIsLossy = True,
+        Coders.adapterSource = tfield,
+        Coders.adapterTarget = Model.PropertyType {
           Model.propertyTypeKey = key,
           Model.propertyTypeValue = pt,
           Model.propertyTypeRequired = True},
-        Util.adapterCoder = Util.Coder {
-          Util.coderEncode = (\cx_ -> \dfield -> Eithers.bind (traverseToSingleTerm cx_ "property traversal" (traversal cx_) (Core.fieldTerm dfield)) (\result -> Eithers.bind (Util.coderEncode (Mapping.schemaPropertyValues schema) cx_ result) (\value -> Right (Model.Property {
+        Coders.adapterCoder = Coders.Coder {
+          Coders.coderEncode = (\cx_ -> \dfield -> Eithers.bind (traverseToSingleTerm cx_ "property traversal" (traversal cx_) (Core.fieldTerm dfield)) (\result -> Eithers.bind (Coders.coderEncode (Mapping.schemaPropertyValues schema) cx_ result) (\value -> Right (Model.Property {
             Model.propertyKey = key,
             Model.propertyValue = value})))),
-          Util.coderDecode = (\cx_ -> \_ -> Left (Context.InContext {
+          Coders.coderDecode = (\cx_ -> \_ -> Left (Context.InContext {
             Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "property decoding is not yet supported")),
             Context.inContextContext = cx_}))}}))))
 
 -- | Extract property types from property adapters
-propertyTypes :: [Util.Adapter t0 (Model.PropertyType t1) t2 t3] -> [Model.PropertyType t1]
+propertyTypes :: [Coders.Adapter t0 (Model.PropertyType t1) t2 t3] -> [Model.PropertyType t1]
 propertyTypes propAdapters =
     Lists.map (\a -> Model.PropertyType {
-      Model.propertyTypeKey = (Model.propertyTypeKey (Util.adapterTarget a)),
-      Model.propertyTypeValue = (Model.propertyTypeValue (Util.adapterTarget a)),
+      Model.propertyTypeKey = (Model.propertyTypeKey (Coders.adapterTarget a)),
+      Model.propertyTypeValue = (Model.propertyTypeValue (Coders.adapterTarget a)),
       Model.propertyTypeRequired = True}) propAdapters
 
 -- | Select an edge id from record fields using an id adapter
-selectEdgeId :: Context.Context -> M.Map Core.Name t0 -> (Core.Name, (Util.Adapter t1 t2 t0 t3)) -> Either (Context.InContext Errors.Error) t3
+selectEdgeId :: Context.Context -> M.Map Core.Name t0 -> (Core.Name, (Coders.Adapter t1 t2 t0 t3)) -> Either (Context.InContext Errors.Error) t3
 selectEdgeId cx fields ad =
 
       let fname = Pairs.first ad
           adapter = Pairs.second ad
       in (Maybes.maybe (Left (Context.InContext {
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 "no " (Core.unName fname)) " in record"))),
-        Context.inContextContext = cx})) (\t -> Util.coderEncode (Util.adapterCoder adapter) cx t) (Maps.lookup fname fields))
+        Context.inContextContext = cx})) (\t -> Coders.coderEncode (Coders.adapterCoder adapter) cx t) (Maps.lookup fname fields))
 
 -- | Select a vertex id from record fields using an id adapter
-selectVertexId :: Context.Context -> M.Map Core.Name t0 -> (Core.Name, (Util.Adapter t1 t2 t0 t3)) -> Either (Context.InContext Errors.Error) t3
+selectVertexId :: Context.Context -> M.Map Core.Name t0 -> (Core.Name, (Coders.Adapter t1 t2 t0 t3)) -> Either (Context.InContext Errors.Error) t3
 selectVertexId cx fields ad =
 
       let fname = Pairs.first ad
           adapter = Pairs.second ad
       in (Maybes.maybe (Left (Context.InContext {
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 "no " (Core.unName fname)) " in record"))),
-        Context.inContextContext = cx})) (\t -> Util.coderEncode (Util.adapterCoder adapter) cx t) (Maps.lookup fname fields))
+        Context.inContextContext = cx})) (\t -> Coders.coderEncode (Coders.adapterCoder adapter) cx t) (Maps.lookup fname fields))
 
 -- | Traverse to a single term, failing if zero or multiple terms are found
 traverseToSingleTerm :: Context.Context -> String -> (t0 -> Either (Context.InContext Errors.Error) [t1]) -> t0 -> Either (Context.InContext Errors.Error) t1
@@ -360,7 +356,7 @@ traverseToSingleTerm cx desc traversal term =
       Context.inContextContext = cx}))))
 
 -- | Create a vertex coder given all components
-vertexCoder :: t0 -> Mapping.Schema t1 t2 t3 -> t4 -> t5 -> t6 -> Model.VertexLabel -> (Core.Name, (Util.Adapter t7 t8 Core.Term t3)) -> [Util.Adapter Core.FieldType (Model.PropertyType t5) Core.Field (Model.Property t3)] -> [(Model.Direction, (Core.FieldType, (Model.EdgeLabel, (Util.Adapter t9 (Model.ElementTypeTree t5) Core.Term (Model.ElementTree t3)))))] -> Util.Adapter t4 (Model.ElementTypeTree t5) Core.Term (Model.ElementTree t3)
+vertexCoder :: t0 -> Mapping.Schema t1 t2 t3 -> t4 -> t5 -> t6 -> Model.VertexLabel -> (Core.Name, (Coders.Adapter t7 t8 Core.Term t3)) -> [Coders.Adapter Core.FieldType (Model.PropertyType t5) Core.Field (Model.Property t3)] -> [(Model.Direction, (Core.FieldType, (Model.EdgeLabel, (Coders.Adapter t9 (Model.ElementTypeTree t5) Core.Term (Model.ElementTree t3)))))] -> Coders.Adapter t4 (Model.ElementTypeTree t5) Core.Term (Model.ElementTree t3)
 vertexCoder g schema source vidType tname vlabel idAdapter propAdapters edgeAdapters =
 
       let vtype =
@@ -368,15 +364,15 @@ vertexCoder g schema source vidType tname vlabel idAdapter propAdapters edgeAdap
                 Model.vertexTypeLabel = vlabel,
                 Model.vertexTypeId = vidType,
                 Model.vertexTypeProperties = (propertyTypes propAdapters)}
-          depTypes = Lists.map (\ea -> Util.adapterTarget (Pairs.second (Pairs.second (Pairs.second ea)))) edgeAdapters
+          depTypes = Lists.map (\ea -> Coders.adapterTarget (Pairs.second (Pairs.second (Pairs.second ea)))) edgeAdapters
           target = elementTypeTreeVertex vtype depTypes
-      in Util.Adapter {
-        Util.adapterIsLossy = True,
-        Util.adapterSource = source,
-        Util.adapterTarget = target,
-        Util.adapterCoder = Util.Coder {
-          Util.coderEncode = (\cx -> \term ->
-            let deannot = Rewriting.deannotateTerm term
+      in Coders.Adapter {
+        Coders.adapterIsLossy = True,
+        Coders.adapterSource = source,
+        Coders.adapterTarget = target,
+        Coders.adapterCoder = Coders.Coder {
+          Coders.coderEncode = (\cx -> \term ->
+            let deannot = Strip.deannotateTerm term
                 unwrapped =
                         case deannot of
                           Core.TermMaybe v0 -> Maybes.fromMaybe deannot v0
@@ -384,7 +380,7 @@ vertexCoder g schema source vidType tname vlabel idAdapter propAdapters edgeAdap
                 rec =
                         case unwrapped of
                           Core.TermRecord v0 -> v0
-                fmap = Schemas.fieldMap (Core.recordFields rec)
+                fmap = Resolution.fieldMap (Core.recordFields rec)
             in (Eithers.bind (selectVertexId cx fmap idAdapter) (\vid -> Eithers.bind (encodeProperties cx fmap propAdapters) (\props -> Eithers.bind (Eithers.map (\xs -> Lists.concat xs) (Eithers.mapList (\ea ->
               let eaDir = Pairs.first ea
                   eaField = Pairs.first (Pairs.second ea)
@@ -432,15 +428,15 @@ vertexCoder g schema source vidType tname vlabel idAdapter propAdapters edgeAdap
                   in [
                     Model.ElementTree {
                       Model.elementTreeSelf = (Model.ElementEdge fixedEdge),
-                      Model.elementTreeDependencies = (Model.elementTreeDependencies tree)}]) (Model.elementTreeSelf tree)) (Util.coderEncode (Util.adapterCoder eaAdapter) cx fterm)) (Maps.lookup (Core.fieldTypeName eaField) fmap))) edgeAdapters)) (\deps -> Right (elementTreeVertex (Model.Vertex {
+                      Model.elementTreeDependencies = (Model.elementTreeDependencies tree)}]) (Model.elementTreeSelf tree)) (Coders.coderEncode (Coders.adapterCoder eaAdapter) cx fterm)) (Maps.lookup (Core.fieldTypeName eaField) fmap))) edgeAdapters)) (\deps -> Right (elementTreeVertex (Model.Vertex {
               Model.vertexLabel = vlabel,
               Model.vertexId = vid,
               Model.vertexProperties = props}) deps)))))),
-          Util.coderDecode = (\cx -> \_ -> Left (Context.InContext {
+          Coders.coderDecode = (\cx -> \_ -> Left (Context.InContext {
             Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "vertex decoding is not yet supported")),
             Context.inContextContext = cx}))}}
 
 -- | Create a vertex id adapter
-vertexIdAdapter :: Context.Context -> t0 -> Mapping.Schema t1 t2 t3 -> t4 -> Core.Name -> Core.Name -> [Core.FieldType] -> Either (Context.InContext Errors.Error) (Core.Name, (Util.Adapter Core.Type t4 Core.Term t3))
+vertexIdAdapter :: Context.Context -> t0 -> Mapping.Schema t1 t2 t3 -> t4 -> Core.Name -> Core.Name -> [Core.FieldType] -> Either (Context.InContext Errors.Error) (Core.Name, (Coders.Adapter Core.Type t4 Core.Term t3))
 vertexIdAdapter cx g schema vidType name idKey fields =
     Eithers.bind (findIdProjectionSpec cx True name idKey fields) (\mIdSpec -> Eithers.bind (Right (Maybes.fromJust mIdSpec)) (\idSpec -> projectionAdapter cx g vidType (Mapping.schemaVertexIds schema) idSpec "id"))

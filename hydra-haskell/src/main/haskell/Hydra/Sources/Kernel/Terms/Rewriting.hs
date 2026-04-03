@@ -4,71 +4,24 @@ module Hydra.Sources.Kernel.Terms.Rewriting where
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
   applyInsideTypeLambdasAndAnnotations,
-  deannotateAndDetypeTerm,
-  deannotateTerm,
-  deannotateType,
-  deannotateTypeParameters,
-  deannotateTypeRecursive,
-  deannotateTypeSchemeRecursive,
-  detypeTerm,
-  flattenLetTerms,
-  stripTypeLambdas,
   foldOverTerm,
   foldOverType,
-  freeTypeVariablesInTerm,
-  freeVariablesInTerm,
-  freeVariablesInType,
-  freeVariablesInTypeOrdered,
-  freeVariablesInTypeSimple,
-  freeVariablesInTypeScheme,
-  freeVariablesInTypeSchemeSimple,
-  inlineType,
-  isFreeVariableInTerm,
-  isLambda,
-  liftLambdaAboveLet,
+  foldTermWithGraphAndPath,
   mapBeneathTypeAnnotations,
-  normalizeTypeVariablesInTerm,
-  pruneLet,
-  removeTermAnnotations,
-  removeTypeAnnotations,
-  removeTypeAnnotationsFromTerm,
-  removeTypesFromTerm,
-  replaceFreeTermVariable,
-  replaceFreeTypeVariable,
-  replaceTypedefs,
   rewriteAndFoldTerm,
+  rewriteAndFoldTermWithGraph,
+  rewriteAndFoldTermWithGraphAndPath,
   rewriteAndFoldTermWithPath,
   rewriteTerm,
   rewriteTermM,
   rewriteTermWithContext,
   rewriteTermWithContextM,
+  rewriteTermWithGraph,
   rewriteType,
   rewriteTypeM,
-  simplifyTerm,
-  substituteTypeVariables,
-  substituteTypeVariablesInTerm,
-  substituteVariable,
-  substituteVariables,
   subterms,
   subtermsWithSteps,
-  subtypes,
-  termDependencyNames,
-  toShortNames,
-  topologicalSortBindingMap,
-  topologicalSortBindings,
-  fTypeToTypeScheme,
-  typeDependencyNames,
-  typeNamesInType,
-  typeSchemeToFType,
-  extendGraphForLambda,
-  extendGraphForLet,
-  extendGraphForTypeLambda,
-  extendGraphWithBindings,
-  foldTermWithGraphAndPath,
-  rewriteAndFoldTermWithGraph,
-  rewriteAndFoldTermWithGraphAndPath,
-  rewriteTermWithGraph,
-  unshadowVariables)
+  subtypes)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths        as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
@@ -117,91 +70,43 @@ import qualified Data.Map                    as M
 import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
-import qualified Hydra.Sources.Kernel.Terms.Names as Names
-import qualified Hydra.Sources.Kernel.Terms.Sorting as Sorting
+import qualified Hydra.Sources.Kernel.Terms.Scoping as Scoping
 
 
 ns :: Namespace
 ns = Namespace "hydra.rewriting"
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [Names.ns, Sorting.ns]
+    [Scoping.ns]
     kernelTypesNamespaces $
-    Just ("Utilities for type and term rewriting and analysis.")
+    Just "Core rewrite and fold combinators for terms and types"
   where
    elements = [
-     toTermDefinition applyInsideTypeLambdasAndAnnotations,
-     toTermDefinition extendGraphForLambda,
-     toTermDefinition extendGraphForLet,
-     toTermDefinition extendGraphForTypeLambda,
-     toTermDefinition extendGraphWithBindings,
-     toTermDefinition deannotateAndDetypeTerm,
-     toTermDefinition deannotateTerm,
-     toTermDefinition deannotateType,
-     toTermDefinition deannotateTypeParameters,
-     toTermDefinition deannotateTypeRecursive,
-     toTermDefinition deannotateTypeSchemeRecursive,
-     toTermDefinition detypeTerm,
-     toTermDefinition flattenLetTerms,
-     toTermDefinition foldOverTerm,
-     toTermDefinition foldOverType,
-     toTermDefinition foldTermWithGraphAndPath,
-     toTermDefinition fTypeToTypeScheme,
-     toTermDefinition freeTypeVariablesInTerm,
-     toTermDefinition freeVariablesInTerm,
-     toTermDefinition freeVariablesInType,
-     toTermDefinition freeVariablesInTypeOrdered,
-     toTermDefinition freeVariablesInTypeSchemeSimple,
-     toTermDefinition freeVariablesInTypeScheme,
-     toTermDefinition freeVariablesInTypeSimple,
-     toTermDefinition inlineType,
-     toTermDefinition isFreeVariableInTerm,
-     toTermDefinition isLambda,
-     toTermDefinition liftLambdaAboveLet,
-     toTermDefinition mapBeneathTypeAnnotations,
-     toTermDefinition normalizeTypeVariablesInTerm,
-     toTermDefinition pruneLet,
-     toTermDefinition removeTermAnnotations,
-     toTermDefinition removeTypeAnnotations,
-     toTermDefinition removeTypeAnnotationsFromTerm,
-     toTermDefinition removeTypesFromTerm,
-     toTermDefinition replaceFreeTermVariable,
-     toTermDefinition replaceFreeTypeVariable,
-     toTermDefinition replaceTypedefs,
-     toTermDefinition rewriteAndFoldTerm,
-     toTermDefinition rewriteAndFoldTermWithGraph,
-     toTermDefinition rewriteAndFoldTermWithGraphAndPath,
-     toTermDefinition rewriteAndFoldTermWithPath,
-     toTermDefinition rewriteTerm,
-     toTermDefinition rewriteTermM,
-     toTermDefinition rewriteTermWithContext,
-     toTermDefinition rewriteTermWithGraph,
-     toTermDefinition rewriteTermWithContextM,
-     toTermDefinition rewriteType,
-     toTermDefinition rewriteTypeM,
-     toTermDefinition simplifyTerm,
-     toTermDefinition substituteTypeVariables,
-     toTermDefinition substituteTypeVariablesInTerm,
-     toTermDefinition substituteVariable,
-     toTermDefinition substituteVariables,
-     toTermDefinition stripTypeLambdas,
-     toTermDefinition subterms,
-     toTermDefinition subtermsWithSteps,
-     toTermDefinition subtypes,
-     toTermDefinition termDependencyNames,
-     toTermDefinition toShortNames,
-     toTermDefinition topologicalSortBindingMap,
-     toTermDefinition topologicalSortBindings,
-     toTermDefinition typeDependencyNames,
-     toTermDefinition typeNamesInType,
-     toTermDefinition typeSchemeToFType,
-     toTermDefinition unshadowVariables]
+     toDefinition applyInsideTypeLambdasAndAnnotations,
+     toDefinition foldOverTerm,
+     toDefinition foldOverType,
+     toDefinition foldTermWithGraphAndPath,
+     toDefinition mapBeneathTypeAnnotations,
+     toDefinition rewriteAndFoldTerm,
+     toDefinition rewriteAndFoldTermWithGraph,
+     toDefinition rewriteAndFoldTermWithGraphAndPath,
+     toDefinition rewriteAndFoldTermWithPath,
+     toDefinition rewriteTerm,
+     toDefinition rewriteTermM,
+     toDefinition rewriteTermWithContext,
+     toDefinition rewriteTermWithContextM,
+     toDefinition rewriteTermWithGraph,
+     toDefinition rewriteType,
+     toDefinition rewriteTypeM,
+     toDefinition subterms,
+     toDefinition subtermsWithSteps,
+     toDefinition subtypes]
 
-applyInsideTypeLambdasAndAnnotations :: TBinding ((Term -> Term) -> Term -> Term)
+applyInsideTypeLambdasAndAnnotations :: TTermDefinition ((Term -> Term) -> Term -> Term)
 applyInsideTypeLambdasAndAnnotations = define "applyInsideTypeLambdasAndAnnotations" $
   doc "Apply a term-level function inside any leading type lambdas" $
   "f" ~> "term0" ~> cases _Term (var "term0")
@@ -211,144 +116,7 @@ applyInsideTypeLambdasAndAnnotations = define "applyInsideTypeLambdasAndAnnotati
     _Term_typeLambda>>: "tl" ~> Core.termTypeLambda $ Core.typeLambdaWithBody (var "tl")
       (applyInsideTypeLambdasAndAnnotations @@ var "f" @@ (Core.typeLambdaBody $ var "tl"))]
 
-deannotateAndDetypeTerm :: TBinding (Term -> Term)
-deannotateAndDetypeTerm = define "deannotateAndDetypeTerm" $
-  doc "Strip type annotations from the top levels of a term" $
-  "t" ~> cases _Term (var "t")
-    (Just $ var "t") [
-    _Term_annotated>>: "at" ~> deannotateAndDetypeTerm @@ (Core.annotatedTermBody $ var "at"),
-    _Term_typeApplication>>: "tt" ~> deannotateAndDetypeTerm @@ (Core.typeApplicationTermBody $ var "tt"),
-    _Term_typeLambda>>: "ta" ~> deannotateAndDetypeTerm @@ (Core.typeLambdaBody $ var "ta")]
-
-deannotateTerm :: TBinding (Term -> Term)
-deannotateTerm = define "deannotateTerm" $
-  doc "Strip all annotations (including System F type annotations) from the top levels of a term" $
-  "t" ~> cases _Term (var "t")
-    (Just $ var "t") [
-    _Term_annotated>>: "at" ~> deannotateTerm @@ (Core.annotatedTermBody $ var "at")]
-
-deannotateType :: TBinding (Type -> Type)
-deannotateType = define "deannotateType" $
-  doc "Strip all annotations from a term" $
-  "t" ~> cases _Type (var "t")
-    (Just $ var "t") [
-    _Type_annotated>>: deannotateType <.> (project _AnnotatedType _AnnotatedType_body)]
-
-deannotateTypeParameters :: TBinding (Type -> Type)
-deannotateTypeParameters = define "deannotateTypeParameters" $
-  doc "Strip any top-level type lambdas from a type, extracting the (possibly nested) type body" $
-  "t" ~> cases _Type (deannotateType @@ var "t")
-    (Just $ var "t") [
-    _Type_forall>>: "lt" ~> deannotateTypeParameters @@ (project _ForallType _ForallType_body @@ var "lt")]
-
-deannotateTypeRecursive :: TBinding (Type -> Type)
-deannotateTypeRecursive = define "deannotateTypeRecursive" $
-  doc "Recursively strip all annotations from a type" $
-  "typ" ~>
-  "strip" <~ ("recurse" ~> "typ" ~>
-    "rewritten" <~ var "recurse" @@ var "typ" $
-    cases _Type (var "rewritten")
-      (Just $ var "rewritten") [
-      _Type_annotated>>: "at" ~> Core.annotatedTypeBody $ var "at"]) $
-  rewriteType @@ var "strip" @@ var "typ"
-
-deannotateTypeSchemeRecursive :: TBinding (TypeScheme -> TypeScheme)
-deannotateTypeSchemeRecursive = define "deannotateTypeSchemeRecursive" $
-  doc "Recursively strip all annotations from a type scheme" $
-  "ts" ~>
-  "vars" <~ Core.typeSchemeVariables (var "ts") $
-  "typ" <~ Core.typeSchemeType (var "ts") $
-  "constraints" <~ Core.typeSchemeConstraints (var "ts") $
-  Core.typeScheme (var "vars") (deannotateTypeRecursive @@ var "typ") (var "constraints")
-
-detypeTerm :: TBinding (Term -> Term)
-detypeTerm = define "detypeTerm" $
-  doc "Strip System F type annotations from the top levels of a term, but leave application-specific annotations intact" $
-  "t" ~> cases _Term (var "t")
-    (Just $ var "t") [
-    _Term_annotated>>: "at" ~>
-       "subj" <~ Core.annotatedTermBody (var "at") $
-       "ann" <~ Core.annotatedTermAnnotation (var "at") $
-       Core.termAnnotated $ Core.annotatedTerm (detypeTerm @@ var "subj") (var "ann"),
-    _Term_typeApplication>>: "tt" ~> deannotateAndDetypeTerm @@ (Core.typeApplicationTermBody $ var "tt"),
-    _Term_typeLambda>>: "ta" ~> deannotateAndDetypeTerm @@ (Core.typeLambdaBody $ var "ta")]
-
-stripTypeLambdas :: TBinding (Term -> Term)
-stripTypeLambdas = define "stripTypeLambdas" $
-  doc "Strip outer type lambda wrappers from a term, preserving type application wrappers and annotations" $
-  "t" ~> cases _Term (var "t")
-    (Just $ var "t") [
-    _Term_annotated>>: "at" ~>
-       "subj" <~ Core.annotatedTermBody (var "at") $
-       "ann" <~ Core.annotatedTermAnnotation (var "at") $
-       Core.termAnnotated $ Core.annotatedTerm (stripTypeLambdas @@ var "subj") (var "ann"),
-    _Term_typeLambda>>: "ta" ~> stripTypeLambdas @@ (Core.typeLambdaBody $ var "ta")]
-
-flattenLetTerms :: TBinding (Term -> Term)
-flattenLetTerms = define "flattenLetTerms" $
-  doc "Flatten nested let expressions" $
-  "term" ~>
-  "rewriteBinding" <~ ("binding" ~>
-    "key0" <~ Core.bindingName (var "binding") $
-    "val0" <~ Core.bindingTerm (var "binding") $
-    "t" <~ Core.bindingType (var "binding") $
-    cases _Term (var "val0")
-      (Just $ pair (Core.binding (var "key0") (var "val0") (var "t")) (list ([] :: [TTerm Binding]))) [
-      _Term_annotated>>: "at" ~>
-        "val1" <~ Core.annotatedTermBody (var "at") $
-        "ann" <~ Core.annotatedTermAnnotation (var "at") $
-        "recursive" <~ var "rewriteBinding" @@ (Core.binding (var "key0") (var "val1") (var "t")) $
-        "innerBinding" <~ Pairs.first (var "recursive") $
-        "deps" <~ Pairs.second (var "recursive") $
-        "val2" <~ Core.bindingTerm (var "innerBinding") $
-        pair
-          (Core.binding (var "key0") (Core.termAnnotated $ Core.annotatedTerm (var "val2") (var "ann")) (var "t"))
-          (var "deps"),
-      _Term_let>>: "innerLet" ~>
-        "bindings1" <~ Core.letBindings (var "innerLet") $
-        "body1" <~ Core.letBody (var "innerLet") $
-        "prefix" <~ Strings.cat2 (unwrap _Name @@ var "key0") (string "_") $
-        "qualify" <~ ("n" ~> Core.name $ Strings.cat2 (var "prefix") (unwrap _Name @@ var "n")) $
-        "toSubstPair" <~ ("b" ~> pair (Core.bindingName $ var "b") (var "qualify" @@ (Core.bindingName $ var "b"))) $
-        "subst" <~ Maps.fromList (Lists.map (var "toSubstPair") (var "bindings1")) $
-        "replaceVars" <~ substituteVariables @@ var "subst" $
-        "newBody" <~ var "replaceVars" @@ var "body1" $
-        "newBinding" <~ ("b" ~> Core.binding
-          (var "qualify" @@ (Core.bindingName $ var "b"))
-          (var "replaceVars" @@ (Core.bindingTerm $ var "b"))
-          (Core.bindingType $ var "b")) $
-        pair
-          (Core.binding (var "key0") (var "newBody") (var "t"))
-          (Lists.map (var "newBinding") (var "bindings1"))]) $
-  -- flattenBodyLet: if body is a let, merge its bindings into the outer let
-  -- Note: The default case uses concat2 with empty list to force bindings to have type [Binding]
-  -- This ensures proper type inference and prevents incorrect generalization
-  "flattenBodyLet" <~ ("bindings" ~> "body" ~>
-    cases _Term (var "body") (Just $ pair (Lists.concat2 (list ([] :: [TTerm Binding])) (var "bindings")) (var "body")) [
-      _Term_let>>: "innerLt" ~>
-        "innerBindings" <~ Core.letBindings (var "innerLt") $
-        "innerBody" <~ Core.letBody (var "innerLt") $
-        var "flattenBodyLet" @@ Lists.concat2 (var "bindings") (var "innerBindings") @@ var "innerBody"]) $
-  "flatten" <~ ("recurse" ~> "term" ~>
-    "rewritten" <~ var "recurse" @@ var "term" $
-    cases _Term (var "rewritten")
-      (Just $ var "rewritten") [
-      _Term_let>>: "lt" ~>
-        "bindings" <~ Core.letBindings (var "lt") $
-        "body" <~ Core.letBody (var "lt") $
-        -- Put dependencies BEFORE the binding that depends on them
-        -- This is important for hoisting: dependencies need to be hoisted first
-        -- so that transitive capture works correctly
-        "forResult" <~ ("hr" ~> Lists.concat2 (Pairs.second $ var "hr") (Lists.pure (Pairs.first $ var "hr"))) $
-        "flattenedBindings" <~ Lists.concat (Lists.map (var "forResult" <.> var "rewriteBinding") (var "bindings")) $
-        -- Now check if body is also a let and merge those bindings too
-        "merged" <~ var "flattenBodyLet" @@ var "flattenedBindings" @@ var "body" $
-        "newBindings" <~ Pairs.first (var "merged") $
-        "newBody" <~ Pairs.second (var "merged") $
-        Core.termLet $ Core.let_ (var "newBindings") (var "newBody")]) $
-  rewriteTerm @@ var "flatten" @@ var "term"
-
-foldOverTerm :: TBinding (TraversalOrder -> (x -> Term -> x) -> x -> Term -> x)
+foldOverTerm :: TTermDefinition (TraversalOrder -> (x -> Term -> x) -> x -> Term -> x)
 foldOverTerm = define "foldOverTerm" $
   doc "Fold over a term, traversing its subterms in the specified order" $
   "order" ~> "fld" ~> "b0" ~> "term" ~> cases _TraversalOrder (var "order") Nothing [
@@ -361,7 +129,7 @@ foldOverTerm = define "foldOverTerm" $
         @@ (subterms @@ var "term"))
       @@ var "term")]
 
-foldOverType :: TBinding (TraversalOrder -> (x -> Type -> x) -> x -> Type -> x)
+foldOverType :: TTermDefinition (TraversalOrder -> (x -> Type -> x) -> x -> Type -> x)
 foldOverType = define "foldOverType" $
   doc "Fold over a type, traversing its subtypes in the specified order" $
   "order" ~> "fld" ~> "b0" ~> "typ" ~> cases _TraversalOrder (var "order") Nothing [
@@ -374,242 +142,8 @@ foldOverType = define "foldOverType" $
         @@ (subtypes @@ var "typ"))
       @@ var "typ")]
 
---freeTypeVariablesInTerm :: TBinding (Term -> S.Set Name)
---freeTypeVariablesInTerm = define "freeTypeVariablesInTerm" $
---  doc "Find free type variables introduced by type applications within a term." $
---  "term" ~> cases _Term (var "term")
---    (Just $ Lists.foldl (binaryFunction Sets.union) Sets.empty $
---      Lists.map (freeTypeVariablesInTerm) (subterms @@ var "term")) [
---    _Term_typeApplication>>: "tt" ~> Sets.union
---      (freeVariablesInType @@ (Core.typeApplicationTermType $ var "tt"))
---      (freeTypeVariablesInTerm @@ (Core.typeApplicationTermBody $ var "tt")),
---    _Term_typeLambda>>: "tl" ~>
---      "tmp" <~ freeTypeVariablesInTerm @@ (Core.typeLambdaBody $ var "tl") $
---      Sets.delete (Core.typeLambdaParameter $ var "tl") (var "tmp")]
 
-freeTypeVariablesInTerm :: TBinding (Term -> S.Set Name)
-freeTypeVariablesInTerm = define "freeTypeVariablesInTerm" $
-  doc ("Get the set of free type variables in a term (including schema names, where they appear in type annotations)."
-    <> " In this context, only the type schemes of let bindings can bind type variables; type lambdas do not.") $
-  "term0" ~>
-  "allOf" <~ ("sets" ~> Lists.foldl (binaryFunction Sets.union) Sets.empty $ var "sets") $
-  "tryType" <~ ("tvars" ~> "typ" ~> Sets.difference (freeVariablesInType @@ var "typ") (var "tvars")) $
-  "getAll" <~ ("vars" ~> "term" ~>
-    "recurse" <~ var "getAll" @@ var "vars" $
-    "dflt" <~ (var "allOf" @@ Lists.map (var "recurse") (subterms @@ var "term")) $
-    cases _Term (var "term")
-      (Just $ var "dflt") [
-      _Term_function>>: "f" ~> cases _Function (var "f")
-        (Just $ var "dflt") [
-        _Function_elimination>>: "e" ~> var "dflt",
-        _Function_lambda>>: "l" ~>
-          "domt" <~ optCases (Core.lambdaDomain $ var "l") (Sets.empty) (var "tryType" @@ var "vars") $
-          Sets.union (var "domt") (var "recurse" @@ (Core.lambdaBody $ var "l"))],
-      _Term_let>>: "l" ~>
-        "forBinding" <~ ("b" ~>
-          "newVars" <~ optCases (Core.bindingType $ var "b")
-             (var "vars")
-             ("ts" ~> Sets.union (var "vars") (Sets.fromList $ Core.typeSchemeVariables $ var "ts")) $
-          Sets.union
-            (var "getAll" @@ var "newVars" @@ (Core.bindingTerm $ var "b"))
-            (optCases (Core.bindingType $ var "b")
-              Sets.empty
-              ("ts" ~> var "tryType" @@ var "newVars" @@ (Core.typeSchemeType $ var "ts")))) $
-        Sets.union
-          (var "allOf" @@ Lists.map (var "forBinding") (Core.letBindings $ var "l"))
-          (var "recurse" @@ (Core.letBody $ var "l")),
-      _Term_typeApplication>>: "tt" ~>
-        Sets.union
-          (var "tryType" @@ var "vars" @@ (Core.typeApplicationTermType $ var "tt"))
-          (var "recurse" @@ (Core.typeApplicationTermBody $ var "tt")),
-      _Term_typeLambda>>: "tl" ~>
-        Sets.union
-          -- The type variable introduced by a type lambda is considered unbound unless it is also introduced in an
-          -- enclosing let binding, as all type lambda terms are in Hydra.
-          (var "tryType" @@ var "vars" @@ (Core.typeVariable $ Core.typeLambdaParameter $ var "tl"))
-          (var "recurse" @@ (Core.typeLambdaBody $ var "tl"))]) $
-  var "getAll" @@ Sets.empty @@ var "term0"
-
-freeVariablesInTerm :: TBinding (Term -> S.Set Name)
-freeVariablesInTerm = define "freeVariablesInTerm" $
-  doc "Find the free variables (i.e. variables not bound by a lambda or let) in a term" $
-  "term" ~>
-  -- Note: the subterm fold is wrapped in a lambda (dfltVars) rather than precomputed in a let binding,
-  -- because in eager languages a let-bound default would be evaluated unconditionally, even for
-  -- Variable/Lambda/Let cases where it is not needed. This avoids redundant traversal.
-  "dfltVars" <~ ("_" ~> Lists.foldl ("s" ~> "t" ~> Sets.union (var "s") (freeVariablesInTerm @@ var "t"))
-    Sets.empty
-    (subterms @@ var "term")) $
-  cases _Term (var "term")
-    (Just $ var "dfltVars" @@ unit) [
-    _Term_function>>: match _Function (Just $ var "dfltVars" @@ unit) [
-      _Function_lambda>>: "l" ~> Sets.delete
-        (Core.lambdaParameter $ var "l")
-        (freeVariablesInTerm @@ (Core.lambdaBody $ var "l"))],
-    _Term_let>>: "l" ~> Sets.difference
-      (var "dfltVars" @@ unit)
-      (Sets.fromList (Lists.map (unaryFunction Core.bindingName) (Core.letBindings $ var "l"))),
-    _Term_variable>>: "v" ~> Sets.singleton $ var "v"]
-
---freeVariablesInTermOpt :: TBinding (Term -> S.Set Name)
---freeVariablesInTermOpt = define "freeVariablesInTermOpt" $
---  doc ("A possibly more efficient function to find the free variables (i.e. variables not bound by a lambda or let) in a term") $
---  "term0" ~>
---  "gather" ~> ("s" ~> "locallyBound" ~> "term"  ~>
---    "dflt" <~ (Lists.foldl
---      ("s1" ~> "term1" ~> var "gather" @@ var "s1" @@ var "locallyBound" @@ var "term1")
---      (var "s")
---      (subterms @@ var "term")) $
---    cases _Term (var "term")
---      (Just $ var "dflt") [
---      _Term_function>>: "f" ~> cases _Function (var "f")
---        (Just $ var "dflt") [
---        _Function_lambda>>: "l" ~> var "gather" @@ var "s"
---          @@ (S.insert (Core.lambdaParameter $ var "l") (var "locallyBound"))
---          @@ (Core.lambdaBody $ var "l")],
---      _Term_let>>: "l" ~>
---        "locallyBound1" <~ S.union (var "locallyBound") (Sets.fromList $ Lists.map (unaryFunction Core.bindingName) (Core.letBindings $ var "l")) $
---        "forBinding" <~ ("s1" ~> "b" ~> var "gather" @@ var "s1" @@ var "locallyBound1" @@ (Core.bindingTerm $ var "b")) $
---        Lists.foldl
---          (var "forBinding")
---          (var "gather"
---            @@ var "s"
---            @@ var "locallyBound1"
---            @@ (Core.letBody $ var "l"))
---          (Core.letBindings $ var "l"),
---      _Term_variable>>: "name" ~> Logic.ifElse (Sets.member (var "name") (var "locallyBound"))
---        (var "s")
---        (Sets.insert (var "name") (var "s"))]) $
---  "gather" @@ Sets.empty @@ Sets.empty @@ var "term0"
-
-freeVariablesInType :: TBinding (Type -> S.Set Name)
-freeVariablesInType = define "freeVariablesInType" $
-  doc "Find the free variables (i.e. variables not bound by a lambda or let) in a type" $
-  "typ" ~>
-  "dfltVars" <~ Phantoms.fold ("s" ~> "t" ~> Sets.union (var "s") (recurse @@ var "t"))
-    @@ Sets.empty
-    @@ (subtypes @@ var "typ") $
-  cases _Type (var "typ")
-    (Just $ var "dfltVars") [
-    _Type_forall>>: "lt" ~> Sets.delete
-        (Core.forallTypeParameter $ var "lt")
-        (recurse @@ (Core.forallTypeBody $ var "lt")),
-    -- TODO: let-types
-    _Type_variable>>: "v" ~> Sets.singleton $ var "v"]
-  where
-    recurse = freeVariablesInType
-
-freeVariablesInTypeOrdered :: TBinding (Type -> [Name])
-freeVariablesInTypeOrdered = define "freeVariablesInTypeOrdered" $
-  doc "Find the free variables in a type in deterministic left-to-right order" $
-  "typ" ~>
-  "collectVars" <~ ("boundVars" ~> "t" ~>
-    cases _Type (var "t")
-      (Just $ Lists.concat $ Lists.map (var "collectVars" @@ var "boundVars") $
-              subtypes @@ var "t") [
-      _Type_variable>>: "v" ~>
-        Logic.ifElse (Sets.member (var "v") (var "boundVars"))
-          (list ([] :: [TTerm Name]))
-          (list [var "v"]),
-      _Type_forall>>: "ft" ~>
-        var "collectVars" @@
-          (Sets.insert (Core.forallTypeParameter $ var "ft") (var "boundVars")) @@
-          (Core.forallTypeBody $ var "ft")]) $
-  (Lists.nub :: TTerm [Name] -> TTerm [Name]) $ var "collectVars" @@ Sets.empty @@ var "typ"
-
-freeVariablesInTypeSimple :: TBinding (Type -> S.Set Name)
-freeVariablesInTypeSimple = define "freeVariablesInTypeSimple" $
-  doc "Same as freeVariablesInType, but ignores the binding action of lambda types" $
-  "typ" ~>
-  "helper" <~ ("types" ~> "typ" ~> cases _Type (var "typ")
-    (Just $ var "types") [
-    _Type_variable>>: "v" ~> Sets.insert (var "v") (var "types")]) $
-  foldOverType @@ Coders.traversalOrderPre @@ var "helper" @@ Sets.empty @@ var "typ"
-
-freeVariablesInTypeScheme :: TBinding (TypeScheme -> S.Set Name)
-freeVariablesInTypeScheme = define "freeVariablesInTypeScheme" $
-  doc "Find free variables in a type scheme" $
-  "ts" ~>
-  "vars" <~ Core.typeSchemeVariables (var "ts") $
-  "t" <~ Core.typeSchemeType (var "ts") $
-  Sets.difference (freeVariablesInType @@ var "t") (Sets.fromList $ var "vars")
-
-freeVariablesInTypeSchemeSimple :: TBinding (TypeScheme -> S.Set Name)
-freeVariablesInTypeSchemeSimple = define "freeVariablesInTypeSchemeSimple" $
-  doc "Find free variables in a type scheme (simple version)" $
-  "ts" ~>
-  "vars" <~ Core.typeSchemeVariables (var "ts") $
-  "t" <~ Core.typeSchemeType (var "ts") $
-  Sets.difference (freeVariablesInTypeSimple @@ var "t") (Sets.fromList $ var "vars")
-
-inlineType :: TBinding (M.Map Name Type -> Type -> Prelude.Either String Type)
-inlineType = define "inlineType" $
-  doc "Inline all type variables in a type using the provided schema (Either version). Note: this function is only appropriate for nonrecursive type definitions" $
-  "schema" ~> "typ" ~>
-  "f" <~ ("recurse" ~> "typ" ~>
-    "afterRecurse" <~ ("tr" ~> cases _Type (var "tr")
-      (Just $ right $ var "tr") [
-      _Type_variable>>: "v" ~>
-        Maybes.maybe
-          (left $ Strings.cat2 (string "No such type in schema: ") (unwrap _Name @@ var "v"))
-          (inlineType @@ var "schema")
-          (Maps.lookup (var "v") (var "schema"))]) $
-    "tr" <<~ var "recurse" @@ var "typ" $
-    var "afterRecurse" @@ var "tr") $
-  rewriteTypeM @@ var "f" @@ var "typ"
-
-isFreeVariableInTerm :: TBinding (Name -> Term -> Bool)
-isFreeVariableInTerm = define "isFreeVariableInTerm" $
- doc "Check whether a variable is free (not bound) in a term" $
- "v" ~> "term" ~>
-   Logic.not $ Sets.member (var "v") (freeVariablesInTerm @@ var "term")
-
-isLambda :: TBinding (Term -> Bool)
-isLambda = define "isLambda" $
-  doc "Check whether a term is a lambda, possibly nested within let and/or annotation terms" $
-  "term" ~> cases _Term (deannotateTerm @@ var "term")
-    (Just false) [
-    _Term_function>>: match _Function
-      (Just false) [
-      _Function_lambda>>: constant true],
-    _Term_let>>: "lt" ~> isLambda @@ (project _Let _Let_body @@ var "lt")]
-
--- TODO: account for shadowing among let- and lambda-bound variables
-liftLambdaAboveLet :: TBinding (Term -> Term)
-liftLambdaAboveLet = define "liftLambdaAboveLet" $
-  doc ("Rewrite terms like `let foo = bar in λx.baz` to `λx.let foo = bar in baz`, lifting lambda-bound variables"
-    <> " above let-bound variables, recursively. This is helpful for targets such as Python.") $
-  "term0" ~>
-  "rewrite" <~ ("recurse" ~> "term" ~>
-    "rewriteBinding" <~ ("b" ~> Core.bindingWithTerm (var "b") $ var "rewrite" @@ var "recurse" @@ Core.bindingTerm (var "b")) $
-    "rewriteBindings" <~ ("bs" ~> Lists.map (var "rewriteBinding") (var "bs")) $
-    "digForLambdas" <~ ("original" ~> "cons" ~> "term" ~> cases _Term (var"term")
-      (Just $ var "recurse" @@ var "original") [
-      _Term_annotated>>: "at" ~> var "digForLambdas"
-        @@ var "original"
-        @@ ("t" ~> Core.termAnnotated $ Core.annotatedTermWithBody (var "at") (var "cons" @@ var "t"))
-        @@ (Core.annotatedTermBody $ var "at"),
-      _Term_function>>: "f" ~> cases _Function (var "f")
-        (Just $ var "recurse" @@ var "original") [
-        _Function_lambda>>: "l" ~> Core.termFunction $ Core.functionLambda $ Core.lambdaWithBody (var "l") $
-          var "digForLambdas"
-            @@ (var "cons" @@ (Core.lambdaBody $ var "l"))
-            @@ ("t" ~> var "cons" @@ var "t")
-            @@ (Core.lambdaBody $ var "l")],
-      _Term_let>>: "l" ~> var "digForLambdas"
-        @@ var "original"
-        @@ ("t" ~> var "cons" @@ (Core.termLet $ Core.let_ (var "rewriteBindings" @@ (Core.letBindings $ var "l")) (var "t")))
-        @@ Core.letBody (var "l")]) $
-    -- Note: we match *before* recursing for the sake of efficiency.
-    cases _Term (var "term")
-      (Just $ var "recurse" @@ var "term") [
-      _Term_let>>: "l" ~> var "digForLambdas"
-        @@ var "term"
-        @@ ("t" ~> Core.termLet $ Core.let_ (var "rewriteBindings" @@ (Core.letBindings $ var "l")) (var "t"))
-        @@ Core.letBody (var "l")]) $
-  rewriteTerm @@ var "rewrite" @@ var "term0"
-
-mapBeneathTypeAnnotations :: TBinding ((Type -> Type) -> Type -> Type)
+mapBeneathTypeAnnotations :: TTermDefinition ((Type -> Type) -> Type -> Type)
 mapBeneathTypeAnnotations = define "mapBeneathTypeAnnotations" $
   doc "Apply a transformation to the first type beneath a chain of annotations" $
   "f" ~> "t" ~> cases _Type (var "t")
@@ -618,274 +152,7 @@ mapBeneathTypeAnnotations = define "mapBeneathTypeAnnotations" $
       (mapBeneathTypeAnnotations @@ var "f" @@ (Core.annotatedTypeBody $ var "at"))
       (Core.annotatedTypeAnnotation $ var "at")]
 
-normalizeTypeVariablesInTerm :: TBinding (Term -> Term)
-normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
-  doc "Recursively replace the type variables of let bindings with the systematic type variables t0, t1, t2, ..." $
-  "term" ~>
-  "replaceName" <~ ("subst" ~> "v" ~> Maybes.fromMaybe (var "v") $ Maps.lookup (var "v") (var "subst")) $
-  "substType" <~ ("subst" ~> "typ" ~>
-    "rewrite" <~ ("recurse" ~> "typ" ~> cases _Type (var "typ")
-      (Just $ var "recurse" @@ var "typ") [
-      _Type_variable>>: "v" ~> Core.typeVariable $ var "replaceName" @@ var "subst" @@ var "v"]) $
-    rewriteType @@ var "rewrite" @@ var "typ") $
-  -- Thread a triple: ((subst, boundVars), next)
-  "rewriteWithSubst" <~ ("state" ~> "term0" ~>
-    "sb"   <~ Pairs.first  (var "state") $
-    "next" <~ Pairs.second (var "state") $
-    "subst"     <~ Pairs.first  (var "sb") $
-    "boundVars" <~ Pairs.second (var "sb") $
-    "rewrite" <~ ("recurse" ~> "term" ~> cases _Term (var "term")
-      (Just $ var "recurse" @@ var "term") [
-      -- Lambdas have a "domain" type which needs to be rewritten
-      _Term_function>>: match _Function
-        (Just $ var "recurse" @@ var "term") [
-        _Function_elimination>>: constant $ var "recurse" @@ var "term",
-        _Function_lambda>>: "l" ~>
-          "domain" <~ Core.lambdaDomain (var "l") $
-          Core.termFunction $ Core.functionLambda $ Core.lambda
-            (Core.lambdaParameter $ var "l")
-            (Maybes.map (var "substType" @@ var "subst") (var "domain"))
-            (var "rewriteWithSubst" @@ (pair (pair (var "subst") (var "boundVars")) (var "next")) @@ (Core.lambdaBody $ var "l"))],
-      -- Let bindings each have a type which needs to be rewritten
-      _Term_let>>: "lt" ~>
-        "bindings0" <~ Core.letBindings (var "lt") $
-        "body0"     <~ Core.letBody (var "lt") $
-        -- Sequentially rewrite bindings without advancing 'next' across siblings
-        "step" <~ ("acc" ~> "bs" ~>
-          Logic.ifElse (Lists.null (var "bs"))
-            (Lists.reverse (var "acc"))
-            ("b"  <~ Lists.head (var "bs") $
-          "tl" <~ Lists.tail (var "bs") $
-          "noType" <~ (
-            "newVal" <~ var "rewriteWithSubst" @@ (pair (pair (var "subst") (var "boundVars")) (var "next")) @@ (Core.bindingTerm $ var "b") $
-            "b1"     <~ Core.binding (Core.bindingName $ var "b") (var "newVal") nothing $
-            var "step" @@ (Lists.cons (var "b1") (var "acc")) @@ var "tl") $
-          "withType" <~ ("ts" ~>
-            "vars" <~ Core.typeSchemeVariables (var "ts") $
-            "typ"  <~ Core.typeSchemeType (var "ts") $
-            "k"    <~ Lists.length (var "vars") $
-            -- Build exactly k fresh names t{next}, t{next+1}, ...
-            "gen"  <~ ("i" ~> "rem" ~> "acc2" ~>
-              "ti" <~ Core.name (Strings.cat2 (string "t") (Literals.showInt32 (Math.add (var "next") (var "i")))) $
-              Logic.ifElse (Equality.equal (var "rem") (int32 0))
-                (Lists.reverse (var "acc2"))
-                (var "gen"
-                  @@ (Math.add (var "i") (int32 1))
-                  @@ (Math.sub (var "rem") (int32 1))
-                  @@ (Lists.cons (var "ti") (var "acc2")))) $
-            "newVars"  <~ var "gen" @@ (int32 0) @@ (var "k") @@ (list ([] :: [TTerm Name])) $
-            "newSubst" <~ Maps.union (Maps.fromList $ Lists.zip (var "vars") (var "newVars")) (var "subst") $
-            "newBound" <~ Sets.union (var "boundVars") (Sets.fromList (var "newVars")) $
-            "newVal"   <~ var "rewriteWithSubst" @@ (pair (pair (var "newSubst") (var "newBound")) (Math.add (var "next") (var "k"))) @@ (Core.bindingTerm $ var "b") $
-            -- Rename constraint keys using newSubst (a Map Name Name)
-            -- For each (varName, metadata), if varName is in newSubst, use the new name
-            "renameConstraintKeys" <~ ("constraintMap" ~>
-              Maps.fromList $ Lists.map
-                ("p" ~>
-                  "oldName" <~ Pairs.first (var "p") $
-                  "meta" <~ Pairs.second (var "p") $
-                  "newName" <~ Maybes.fromMaybe (var "oldName") (Maps.lookup (var "oldName") (var "newSubst")) $
-                  pair (var "newName") (var "meta"))
-                (Maps.toList $ var "constraintMap")) $
-            "oldConstraints" <~ Core.typeSchemeConstraints (var "ts") $
-            "newConstraints" <~ Maybes.map (var "renameConstraintKeys") (var "oldConstraints") $
-            "b1"       <~ Core.binding
-              (Core.bindingName $ var "b")
-              (var "newVal")
-              (just $ Core.typeScheme (var "newVars") (var "substType" @@ var "newSubst" @@ var "typ") (var "newConstraints")) $
-            -- Note: do not advance 'next' for the next sibling; keep current 'next'
-            var "step" @@ (Lists.cons (var "b1") (var "acc")) @@ var "tl") $
-          optCases (Core.bindingType $ var "b")
-               -- Untyped binding: rewrite its term with current state; 'next' unchanged for siblings
-               (var "noType")
-               -- Typed binding: allocate |vars| fresh t{next+i}; bump 'next' only for the binding's TERM
-               ("ts" ~> var "withType" @@ var "ts"))) $
-        "bindings1" <~ var "step" @@ (list ([] :: [TTerm Binding])) @@ (var "bindings0") $
-        Core.termLet $ Core.let_
-          (var "bindings1")
-          -- Body sees the original 'next' (binding lambdas don't bind in the body)
-          (var "rewriteWithSubst" @@ (pair (pair (var "subst") (var "boundVars")) (var "next")) @@ var "body0"),
-      -- Type application terms have a type which needs to be rewritten, and we also recurse into the body term.
-      _Term_typeApplication>>: "tt" ~> Core.termTypeApplication $ Core.typeApplicationTerm
-        (var "rewriteWithSubst" @@ (pair (pair (var "subst") (var "boundVars")) (var "next")) @@ (Core.typeApplicationTermBody $ var "tt"))
-        (var "substType" @@ var "subst" @@ (Core.typeApplicationTermType $ var "tt")),
-      -- Type lambdas introduce a type variable which needs to be replaced, and we also recurse into the body term.
-      -- Note: in Hydra currently, type lambdas are exclusively created during type inference in combination with
-      -- polymorphic let bindings, so the type variable should already be present in the substitution.
-      -- If "free-standing" type lambdas are ever supported in the future, we will have to create a fresh type variable here.
-      _Term_typeLambda>>: "ta" ~> Core.termTypeLambda $ Core.typeLambda
-        (var "replaceName" @@ var "subst" @@ (Core.typeLambdaParameter $ var "ta"))
-        (var "rewriteWithSubst" @@ (pair (pair (var "subst") (var "boundVars")) (var "next")) @@ (Core.typeLambdaBody $ var "ta"))]) $
-    rewriteTerm @@ var "rewrite" @@ var "term0") $
-  -- initial state: ((emptySubst, emptyBound), next=0)
-  var "rewriteWithSubst" @@ (pair (pair Maps.empty Sets.empty) (int32 0)) @@ var "term"
-
-pruneLet :: TBinding (Let -> Let)
-pruneLet = define "pruneLet" $
-  doc ("Given a let expression, remove any unused bindings. The resulting expression is still a let,"
-    <> " even if has no remaining bindings") $
-  "l" ~>
-  "bindingMap" <~ Maps.fromList (Lists.map
-    ("b" ~> pair (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")) $ Core.letBindings $ var "l") $
-  "rootName" <~ Core.name (string "[[[root]]]") $
-  "adj" <~ ("n" ~> Sets.intersection (Sets.fromList $ Maps.keys $ var "bindingMap")
-      (freeVariablesInTerm @@ (Logic.ifElse (Equality.equal (var "n") (var "rootName"))
-        (Core.letBody $ var "l")
-        (Maybes.fromJust $ Maps.lookup (var "n") (var "bindingMap"))))) $
-  "reachable" <~ Sorting.findReachableNodes @@ var "adj" @@ var "rootName" $
-  "prunedBindings" <~ Lists.filter
-    ("b" ~> Sets.member (Core.bindingName $ var "b") (var "reachable"))
-    (Core.letBindings $ var "l") $
-  Core.let_
-    (var "prunedBindings")
-    (Core.letBody $ var "l")
-
-removeTermAnnotations :: TBinding (Term -> Term)
-removeTermAnnotations = define "removeTermAnnotations" $
-  doc "Recursively remove term annotations, including within subterms" $
-  "term" ~>
-  "remove" <~ ("recurse" ~> "term" ~>
-    "rewritten" <~ var "recurse" @@ var "term" $
-    cases _Term (var "term")
-      (Just $ var "rewritten") [
-      _Term_annotated>>: "at" ~> Core.annotatedTermBody $ var "at"]) $
-  rewriteTerm @@ var "remove" @@ var "term"
-
-removeTypeAnnotations :: TBinding (Type -> Type)
-removeTypeAnnotations = define "removeTypeAnnotations" $
-  doc "Recursively remove type annotations, including within subtypes" $
-  "typ" ~>
-  "remove" <~ ("recurse" ~> "typ" ~>
-    "rewritten" <~ var "recurse" @@ var "typ" $
-    cases _Type (var "rewritten")
-      (Just $ var "rewritten") [
-      _Type_annotated>>: "at" ~> Core.annotatedTypeBody $ var "at"]) $
-  rewriteType @@ var "remove" @@ var "typ"
-
-removeTypesFromTerm :: TBinding (Term -> Term)
-removeTypesFromTerm = define "removeTypesFromTerm" $
-  doc "Strip type annotations from terms while preserving other annotations" $
-  "term" ~>
-  "strip" <~ ("recurse" ~> "term" ~>
-    "rewritten" <~ var "recurse" @@ var "term" $
-    "stripBinding" <~ ("b" ~> Core.binding
-      (Core.bindingName $ var "b")
-      (Core.bindingTerm $ var "b")
-      nothing) $
-    cases _Term (var "rewritten")
-      (Just $ var "rewritten") [
-      _Term_function>>: "f" ~> cases _Function (var "f")
-        (Just $ Core.termFunction $ var "f") [
-        _Function_elimination>>: "e" ~> Core.termFunction $ Core.functionElimination $ var "e",
-        _Function_lambda>>: "l" ~> Core.termFunction $ Core.functionLambda $ Core.lambda
-          (Core.lambdaParameter $ var "l")
-          nothing
-          (Core.lambdaBody $ var "l")],
-      _Term_let>>: "lt" ~> Core.termLet $ Core.let_
-        (Lists.map (var "stripBinding") (Core.letBindings $ var "lt"))
-        (Core.letBody $ var "lt"),
-      _Term_typeApplication>>: "tt" ~> Core.typeApplicationTermBody $ var "tt",
-      _Term_typeLambda>>: "ta" ~> Core.typeLambdaBody $ var "ta"]) $
-  rewriteTerm @@ var "strip" @@ var "term"
-
-removeTypeAnnotationsFromTerm :: TBinding (Term -> Term)
-removeTypeAnnotationsFromTerm = define "removeTypeAnnotationsFromTerm" $
-  doc "Strip type annotations (TypeLambda, TypeApplication, binding type schemes) from terms while preserving lambda domain types and other annotations" $
-  "term" ~>
-  "strip" <~ ("recurse" ~> "term" ~>
-    "rewritten" <~ var "recurse" @@ var "term" $
-    "stripBinding" <~ ("b" ~> Core.binding
-      (Core.bindingName $ var "b")
-      (Core.bindingTerm $ var "b")
-      nothing) $
-    cases _Term (var "rewritten")
-      (Just $ var "rewritten") [
-      _Term_let>>: "lt" ~> Core.termLet $ Core.let_
-        (Lists.map (var "stripBinding") (Core.letBindings $ var "lt"))
-        (Core.letBody $ var "lt"),
-      _Term_typeApplication>>: "tt" ~> Core.typeApplicationTermBody $ var "tt",
-      _Term_typeLambda>>: "ta" ~> Core.typeLambdaBody $ var "ta"]) $
-  rewriteTerm @@ var "strip" @@ var "term"
-
-replaceFreeTermVariable :: TBinding (Name -> Term -> Term -> Term)
-replaceFreeTermVariable = define "replaceFreeTermVariable" $
-  doc "Replace a free variable in a term" $
-  "vold" ~> "tnew" ~> "term" ~>
-  "rewrite" <~ ("recurse" ~> "t" ~> cases _Term (var "t")
-    (Just $ var "recurse" @@ var "t") [
-    _Term_function>>: "f" ~>
-      cases _Function (var "f")
-        (Just $ var "recurse" @@ var "t") [
-        _Function_lambda>>: "l" ~>
-          "v" <~ Core.lambdaParameter (var "l") $
-          Logic.ifElse (Equality.equal (var "v") (var "vold"))
-            (var "t")
-            (var "recurse" @@ var "t")],
-    _Term_variable>>: "v" ~>
-      Logic.ifElse (Equality.equal (var "v") (var "vold"))
-        (var "tnew")
-        (Core.termVariable $ var "v")]) $
-  rewriteTerm @@ var "rewrite" @@ var "term"
-
-replaceFreeTypeVariable :: TBinding (Name -> Type -> Type -> Type)
-replaceFreeTypeVariable = define "replaceFreeTypeVariable" $
-  doc "Replace free occurrences of a name in a type" $
-  "v" ~> "rep" ~> "typ" ~>
-  "mapExpr" <~ ("recurse" ~> "t" ~> cases _Type (var "t")
-    (Just $ var "recurse" @@ var "t") [
-    _Type_forall>>: "ft" ~> Logic.ifElse
-      (Equality.equal (var "v") (Core.forallTypeParameter $ var "ft"))
-      (var "t")
-      (Core.typeForall $ Core.forallType
-        (Core.forallTypeParameter $ var "ft")
-        (var "recurse" @@ (Core.forallTypeBody $ var "ft"))),
-    _Type_variable>>: "v'" ~> Logic.ifElse
-      (Equality.equal (var "v") (var "v'"))
-      (var "rep")
-      (var "t")]) $
-  rewriteType @@ var "mapExpr" @@ var "typ"
-
-replaceTypedefs :: TBinding (M.Map Name TypeScheme -> Type -> Type)
-replaceTypedefs = define "replaceTypedefs" $
-  doc "Replace all occurrences of simple typedefs (type aliases) with the aliased types, recursively" $
-  "types" ~> "typ0" ~>
-  "rewrite" <~ ("recurse" ~> "typ" ~>
-    -- Note: dflt (recurse @@ typ) is NOT bound as a let here, because in strict languages (Java, Python)
-    -- this would eagerly recurse into Record/Union/Wrap fields, causing infinite recursion on recursive types.
-    -- Instead, we inline (recurse @@ typ) only where needed.
-    cases _Type (var "typ")
-      (Just $ var "recurse" @@ var "typ") [
---      _Type_forall>>: "ft" ~> ... -- TODO: shadowing via forall-bound variables
-      _Type_annotated>>: "at" ~> Core.typeAnnotated $ Core.annotatedType
-        (var "rewrite" @@ var "recurse" @@ (Core.annotatedTypeBody $ var "at"))
-        (Core.annotatedTypeAnnotation $ var "at"),
-      _Type_record>>: constant $ var "typ",
-      _Type_union>>: constant $ var "typ",
-      _Type_variable>>: "v" ~>
-        "forMono" <~ ("t" ~> cases _Type (var "t")
-          (Just $ var "rewrite" @@ var "recurse" @@ var "t") [
-          _Type_record>>: constant $ var "typ",
-          _Type_union>>: constant $ var "typ",
-          _Type_wrap>>: constant $ var "typ"]) $
-        "forTypeScheme" <~ ("ts" ~>
-          "t" <~ Core.typeSchemeType (var "ts") $
-          Logic.ifElse (Lists.null $ Core.typeSchemeVariables $ var "ts")
-            (var "forMono" @@ var "t")
-            (var "typ")) $ -- TODO: this may be too simple
-        optCases (Maps.lookup (var "v") (var "types"))
-        (var "typ")
-        ("ts" ~> var "forTypeScheme" @@ var "ts"),
-      _Type_wrap>>: constant $ var "typ"]) $
-  rewriteType @@ var "rewrite" @@ var "typ0"
-
--- TODO: this is a fixpoint combinator, but its type is sometimes incorrectly inferred based on how it is used.
---       For now, we generally define local "rewrite"/"recurse" helper functions rather than using this global one.
---rewrite :: TBinding (((x -> y) -> x -> y) -> ((x -> y) -> x -> y) -> x -> y)
---rewrite = define "rewrite" $ "fsub" ~> "f" ~>
---  "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
---  var "recurse"
-
-rewriteAndFoldTerm :: TBinding (((a -> Term -> (a, Term)) -> a -> Term -> (a, Term)) -> a -> Term -> (a, Term))
+rewriteAndFoldTerm :: TTermDefinition (((a -> Term -> (a, Term)) -> a -> Term -> (a, Term)) -> a -> Term -> (a, Term))
 rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
   doc "Rewrite a term, and at the same time, fold a function over it, accumulating a value" $
   "f" ~> "term0" ~>
@@ -1035,7 +302,7 @@ rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
 -- | Rewrite a term with path tracking, and fold a function over it.
 -- The path is the list of accessors from the root to the current term.
 -- The function f receives: (recurse path acc term -> (acc', term')) -> path -> acc -> term -> (acc', term')
-rewriteAndFoldTermWithPath :: TBinding ((([SubtermStep] -> a -> Term -> (a, Term)) -> [SubtermStep] -> a -> Term -> (a, Term)) -> a -> Term -> (a, Term))
+rewriteAndFoldTermWithPath :: TTermDefinition ((([SubtermStep] -> a -> Term -> (a, Term)) -> [SubtermStep] -> a -> Term -> (a, Term)) -> a -> Term -> (a, Term))
 rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
   doc "Rewrite a term with path tracking, and fold a function over it, accumulating a value. The path is a list of SubtermSteps from root to current position." $
   "f" ~> "term0" ~>
@@ -1312,7 +579,7 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ list ([] :: [TTerm SubtermStep]) @@ var "term0"
 
-rewriteTerm :: TBinding (((Term -> Term) -> Term -> Term) -> Term -> Term)
+rewriteTerm :: TTermDefinition (((Term -> Term) -> Term -> Term) -> Term -> Term)
 rewriteTerm = define "rewriteTerm" $ "f" ~> "term0" ~>
   "fsub" <~ ("recurse" ~> "term" ~>
     "forField" <~ ("f" ~> Core.fieldWithTerm (var "f") (var "recurse" @@ (Core.fieldTerm $ var "f"))) $
@@ -1383,7 +650,7 @@ rewriteTerm = define "rewriteTerm" $ "f" ~> "term0" ~>
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ var "term0"
 
-rewriteTermM :: TBinding (((Term -> Prelude.Either e Term) -> Term -> Prelude.Either e Term) -> Term -> Prelude.Either e Term)
+rewriteTermM :: TTermDefinition (((Term -> Prelude.Either e Term) -> Term -> Prelude.Either e Term) -> Term -> Prelude.Either e Term)
 rewriteTermM = define "rewriteTermM" $
   doc "Either-based term rewriting with custom transformation function" $
   "f" ~> "term0" ~>
@@ -1491,7 +758,7 @@ rewriteTermM = define "rewriteTermM" $
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ var "term0"
 
-rewriteTermWithContext :: TBinding (((a -> Term -> Term) -> a -> Term -> Term) -> a -> Term -> Term)
+rewriteTermWithContext :: TTermDefinition (((a -> Term -> Term) -> a -> Term -> Term) -> a -> Term -> Term)
 rewriteTermWithContext = define "rewriteTermWithContext" $
   doc ("A variant of rewriteTerm which allows a context (e.g. a TypeContext)"
     <> " to be passed down to all subterms during rewriting") $
@@ -1565,7 +832,7 @@ rewriteTermWithContext = define "rewriteTermWithContext" $
   "rewrite" <~ ("cx" ~> "term" ~> var "f" @@ (var "forSubterms" @@ var "rewrite") @@ var "cx" @@ var "term") $
   var "rewrite" @@ var "cx0" @@ var "term0"
 
-rewriteTermWithContextM :: TBinding (((a -> Term -> Prelude.Either e Term) -> a -> Term -> Prelude.Either e Term) -> a -> Term -> Prelude.Either e Term)
+rewriteTermWithContextM :: TTermDefinition (((a -> Term -> Prelude.Either e Term) -> a -> Term -> Prelude.Either e Term) -> a -> Term -> Prelude.Either e Term)
 rewriteTermWithContextM = define "rewriteTermWithContextM" $
   doc ("Either-based variant of rewriteTermWithContextM which allows a context (e.g. a TypeContext)"
     <> " to be passed down to all subterms during rewriting") $
@@ -1676,7 +943,7 @@ rewriteTermWithContextM = define "rewriteTermWithContextM" $
   "rewrite" <~ ("cx" ~> "term" ~> var "f" @@ (var "forSubterms" @@ var "rewrite") @@ var "cx" @@ var "term") $
   var "rewrite" @@ var "cx0" @@ var "term0"
 
-rewriteType :: TBinding (((Type -> Type) -> Type -> Type) -> Type -> Type)
+rewriteType :: TTermDefinition (((Type -> Type) -> Type -> Type) -> Type -> Type)
 rewriteType = define "rewriteType" $ "f" ~> "typ0" ~>
   "fsub" <~ ("recurse" ~> "typ" ~>
     "forField" <~ ("field" ~> Core.fieldTypeWithType (var "field") (var "recurse" @@ (Core.fieldTypeType $ var "field"))) $
@@ -1719,7 +986,7 @@ rewriteType = define "rewriteType" $ "f" ~> "typ0" ~>
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ var "typ0"
 
-rewriteTypeM :: TBinding (((Type -> Prelude.Either e Type) -> Type -> Prelude.Either e Type) -> Type -> Prelude.Either e Type)
+rewriteTypeM :: TTermDefinition (((Type -> Prelude.Either e Type) -> Type -> Prelude.Either e Type) -> Type -> Prelude.Either e Type)
 rewriteTypeM = define "rewriteTypeM" $
   doc "Either-based type rewriting" $
   "f" ~> "typ0" ~>
@@ -1781,119 +1048,7 @@ rewriteTypeM = define "rewriteTypeM" $
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ var "typ0"
 
-simplifyTerm :: TBinding (Term -> Term)
-simplifyTerm = define "simplifyTerm" $
-  doc "Simplify terms by applying beta reduction where possible" $
-  "term" ~>
-  "simplify" <~ ("recurse" ~> "term" ~>
-    "forRhs" <~ ("rhs" ~> "var" ~> "body" ~> cases _Term (deannotateTerm @@ var "rhs")
-      (Just $ var "term") [
-      _Term_variable>>: "v" ~>
-        simplifyTerm @@ (substituteVariable @@ var "var" @@ var "v" @@ var "body")]) $
-    "forLhs" <~ ("lhs" ~> "rhs" ~>
-      "forFun" <~ ("fun" ~> cases _Function (var "fun")
-        (Just $ var "term") [
-        _Function_lambda>>: "l" ~>
-          "var" <~ Core.lambdaParameter (var "l") $
-          "body" <~ Core.lambdaBody (var "l") $
-          Logic.ifElse (Sets.member (var "var") (freeVariablesInTerm @@ var "body"))
-            (var "forRhs" @@ var "rhs" @@ var "var" @@ var "body")
-            (simplifyTerm @@ var "body")]) $
-      cases _Term (deannotateTerm @@ var "lhs")
-        (Just $ var "term") [
-        _Term_function>>: "fun" ~> var "forFun" @@ var "fun"]) $
-    "forTerm" <~ ("stripped" ~> cases _Term (var "stripped")
-      (Just $ var "term") [
-      _Term_application>>: "app" ~>
-        "lhs" <~ Core.applicationFunction (var "app") $
-        "rhs" <~ Core.applicationArgument (var "app") $
-        var "forLhs" @@ var "lhs" @@ var "rhs"]) $
-    "stripped" <~ deannotateTerm @@ var "term" $
-    var "recurse" @@ (var "forTerm" @@ var "stripped")) $
-  rewriteTerm @@ var "simplify" @@ var "term"
-
-substituteTypeVariables :: TBinding (M.Map Name Name -> Type -> Type)
-substituteTypeVariables = define "substituteTypeVariables" $
-  doc "Substitute type variables in a type" $
-  "subst" ~> "typ" ~>
-  "replace" <~ ("recurse" ~> "typ" ~> cases _Type (var "typ")
-    (Just $ var "recurse" @@ var "typ") [
-    _Type_variable>>: "n" ~>
-      Core.typeVariable $ Maybes.fromMaybe (var "n") $ Maps.lookup (var "n") (var "subst")]) $
-  rewriteType @@ var "replace" @@ var "typ"
-
-substituteTypeVariablesInTerm :: TBinding (M.Map Name Name -> Term -> Term)
-substituteTypeVariablesInTerm = define "substituteTypeVariablesInTerm" $
-  doc "Substitute type variables throughout a term, including in type annotations, type applications, lambda domains, and type schemes" $
-  "subst" ~> "term" ~>
-  "st" <~ substituteTypeVariables @@ var "subst" $
-  "stOpt" <~ ("mt" ~> Maybes.map (var "st") (var "mt")) $
-  "stScheme" <~ ("ts" ~> Core.typeScheme (Core.typeSchemeVariables $ var "ts") (var "st" @@ (Core.typeSchemeType $ var "ts")) (Core.typeSchemeConstraints $ var "ts")) $
-  "stSchemeOpt" <~ ("mts" ~> Maybes.map (var "stScheme") (var "mts")) $
-  "replace" <~ ("recurse" ~> "t" ~>
-    cases _Term (var "t")
-      (Just $ var "recurse" @@ var "t") [
-      _Term_function>>: match _Function
-        (Just $ var "recurse" @@ var "t") [
-        _Function_lambda>>: "l" ~> Core.termFunction $ Core.functionLambda $ Core.lambda
-          (Core.lambdaParameter $ var "l")
-          (var "stOpt" @@ (Core.lambdaDomain $ var "l"))
-          (var "recurse" @@ (Core.lambdaBody $ var "l"))],
-      _Term_let>>: "lt" ~>
-        "mapBinding" <~ ("b" ~> Core.binding
-          (Core.bindingName $ var "b")
-          (var "recurse" @@ (Core.bindingTerm $ var "b"))
-          (var "stSchemeOpt" @@ (Core.bindingType $ var "b"))) $
-        Core.termLet $ Core.let_
-          (Lists.map (var "mapBinding") (Core.letBindings $ var "lt"))
-          (var "recurse" @@ (Core.letBody $ var "lt")),
-      _Term_typeApplication>>: "tt" ~> Core.termTypeApplication $ Core.typeApplicationTerm
-        (var "recurse" @@ (Core.typeApplicationTermBody $ var "tt"))
-        (var "st" @@ (Core.typeApplicationTermType $ var "tt")),
-      _Term_typeLambda>>: "tl" ~> Core.termTypeLambda $ Core.typeLambda
-        (Maybes.fromMaybe (Core.typeLambdaParameter $ var "tl") (Maps.lookup (Core.typeLambdaParameter $ var "tl") (var "subst")))
-        (var "recurse" @@ (Core.typeLambdaBody $ var "tl")),
-      _Term_annotated>>: "at" ~> Core.termAnnotated $ Core.annotatedTerm
-        (var "recurse" @@ (Core.annotatedTermBody $ var "at"))
-        (Core.annotatedTermAnnotation $ var "at")]) $
-  rewriteTerm @@ var "replace" @@ var "term"
-
-substituteVariable :: TBinding (Name -> Name -> Term -> Term)
-substituteVariable = define "substituteVariable" $
-  doc "Substitute one variable for another in a term" $
-  "from" ~> "to" ~> "term" ~>
-  "replace" <~ ("recurse" ~> "term" ~>
-    cases _Term (var "term")
-      (Just $ var "recurse" @@ var "term") [
-      _Term_variable>>: "x" ~>
-        Core.termVariable $ Logic.ifElse (Equality.equal (var "x") (var "from")) (var "to") (var "x"),
-      _Term_function>>: match _Function
-        (Just $ var "recurse" @@ var "term") [
-        _Function_lambda>>: "l" ~> Logic.ifElse
-          (Equality.equal (Core.lambdaParameter $ var "l") (var "from"))
-          (var "term")
-          (var "recurse" @@ var "term")]]) $
-  rewriteTerm @@ var "replace" @@ var "term"
-
-substituteVariables :: TBinding (M.Map Name Name -> Term -> Term)
-substituteVariables = define "substituteVariables" $
-  doc "Substitute multiple variables in a term" $
-  "subst" ~> "term" ~>
-  "replace" <~ ("recurse" ~> "term" ~>
-    cases _Term (var "term")
-      (Just $ var "recurse" @@ var "term") [
-      _Term_variable>>: "n" ~>
-        Core.termVariable $ Maybes.fromMaybe (var "n") $ Maps.lookup (var "n") (var "subst"),
-      _Term_function>>: match _Function
-        (Just $ var "recurse" @@ var "term") [
-        _Function_lambda>>: "l" ~>
-          Maybes.maybe
-            (var "recurse" @@ var "term")
-            (constant $ var "term")
-            (Maps.lookup (Core.lambdaParameter $ var "l") (var "subst"))]]) $
-  rewriteTerm @@ var "replace" @@ var "term"
-
-subterms :: TBinding (Term -> [Term])
+subterms :: TTermDefinition (Term -> [Term])
 subterms = define "subterms" $
   doc "Find the children of a given term" $
   match _Term Nothing [
@@ -1932,7 +1087,7 @@ subterms = define "subterms" $
     _Term_variable>>: constant $ list ([] :: [TTerm Term]),
     _Term_wrap>>: "n" ~> list [Core.wrappedTermBody $ var "n"]]
 
-subtermsWithSteps :: TBinding (Term -> [(SubtermStep, Term)])
+subtermsWithSteps :: TTermDefinition (Term -> [(SubtermStep, Term)])
 subtermsWithSteps = define "subtermsWithSteps" $
   doc "Find the children of a given term" $
   match _Term Nothing [
@@ -1998,7 +1153,7 @@ subtermsWithSteps = define "subtermsWithSteps" $
     single step term = list [result step term]
     result step term = pair step term
 
-subtypes :: TBinding (Type -> [Type])
+subtypes :: TTermDefinition (Type -> [Type])
 subtypes = define "subtypes" $
   doc "Find the children of a given type expression" $
   match _Type Nothing [
@@ -2030,265 +1185,7 @@ subtypes = define "subtypes" $
     _Type_void>>: constant $ list ([] :: [TTerm Type]),
     _Type_wrap>>: "nt" ~> list [var "nt"]]
 
-termDependencyNames :: TBinding (Bool -> Bool -> Bool -> Term -> S.Set Name)
-termDependencyNames = define "termDependencyNames" $
-  doc "Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that" $
-  "binds" ~> "withPrims" ~> "withNoms" ~> "term0" ~>
-  "addNames" <~ ("names" ~> "term" ~>
-    "nominal" <~ ("name" ~> Logic.ifElse (var "withNoms")
-      (Sets.insert (var "name") (var "names"))
-      (var "names")) $
-    "prim" <~ ("name" ~> Logic.ifElse (var "withPrims")
-      (Sets.insert (var "name") (var "names"))
-      (var "names")) $
-    "var" <~ ("name" ~> Logic.ifElse (var "binds")
-      (Sets.insert (var "name") (var "names"))
-      (var "names")) $
-    cases _Term (var "term")
-      (Just $ var "names") [
-      _Term_function>>: "f" ~> cases _Function (var "f")
-        (Just $ var "names") [
-        _Function_primitive>>: "name" ~> var "prim" @@ var "name",
-        _Function_elimination>>: "e" ~> cases _Elimination (var "e")
-          Nothing [
-          _Elimination_record>>: "proj" ~> var "nominal" @@ (Core.projectionTypeName $ var "proj"),
-          _Elimination_union>>: "caseStmt" ~> var "nominal" @@ (Core.caseStatementTypeName $ var "caseStmt"),
-          _Elimination_wrap>>: "name" ~> var "nominal" @@ var "name"]],
-      _Term_record>>: "record" ~> var "nominal" @@ (Core.recordTypeName $ var "record"),
-      _Term_union>>: "injection" ~> var "nominal" @@ (Core.injectionTypeName $ var "injection"),
-      _Term_variable>>: "name" ~> var "var" @@ var "name",
-      _Term_wrap>>: "wrappedTerm" ~> var "nominal" @@ (Core.wrappedTermTypeName $ var "wrappedTerm")]) $
-  foldOverTerm @@ Coders.traversalOrderPre @@ var "addNames" @@ Sets.empty @@ var "term0"
-
-toShortNames :: TBinding ([Name] -> M.Map Name Name)
-toShortNames = define "toShortNames" $
-  doc "Generate short names from a list of fully qualified names" $
-  "original" ~>
-  "addName" <~ ("acc" ~> "name" ~>
-    "local" <~ Names.localNameOf @@ var "name" $
-    "group" <~ Maybes.fromMaybe Sets.empty (Maps.lookup (var "local") (var "acc")) $
-    Maps.insert (var "local") (Sets.insert (var "name") (var "group")) (var "acc")) $
-  "groupNamesByLocal" <~ ("names" ~> Lists.foldl (var "addName") Maps.empty (var "names")) $
-  "groups" <~ var "groupNamesByLocal" @@ var "original" $
-  "renameGroup" <~ ("localNames" ~>
-    "local" <~ Pairs.first (var "localNames") $
-    "names" <~ Pairs.second (var "localNames") $
-    "rangeFrom" <~ ("start" ~> Lists.cons (var "start") (var "rangeFrom" @@ (Math.add (var "start") (int32 1)))) $
-    "rename" <~ ("name" ~> "i" ~> pair (var "name") $ Core.name $
-      Logic.ifElse (Equality.gt (var "i") (int32 1))
-        (Strings.cat2 (var "local") (Literals.showInt32 $ var "i"))
-        (var "local")) $
-    Lists.zipWith (var "rename") (Sets.toList $ var "names") (var "rangeFrom" @@ int32 1)) $
-  Maps.fromList $ Lists.concat $ Lists.map (var "renameGroup") $ Maps.toList $ var "groups"
-
-topologicalSortBindingMap :: TBinding (M.Map Name Term -> [[(Name, Term)]])
-topologicalSortBindingMap = define "topologicalSortBindingMap" $
-  doc "Topological sort of connected components, in terms of dependencies between variable/term binding pairs" $
-  "bindingMap" ~>
-  "bindings" <~ Maps.toList (var "bindingMap") $
-  "keys" <~ Sets.fromList (Lists.map (unaryFunction Pairs.first) (var "bindings")) $
-  -- TODO: this function currently serves no purpose; it always yields false
-  "hasTypeAnnotation" <~ ("term" ~>
-    cases _Term (var "term")
-      (Just false) [
-      _Term_annotated>>: "at" ~> var "hasTypeAnnotation" @@ (Core.annotatedTermBody $ var "at")]) $
-  "depsOf" <~ ("nameAndTerm" ~>
-    "name" <~ Pairs.first (var "nameAndTerm") $
-    "term" <~ Pairs.second (var "nameAndTerm") $
-    pair (var "name") $ Logic.ifElse (var "hasTypeAnnotation" @@ var "term")
-      (list ([] :: [TTerm Name]))
-      (Sets.toList $ Sets.intersection (var "keys") $ freeVariablesInTerm @@ var "term")) $
-  "toPair" <~ ("name" ~> pair (var "name") $ Maybes.fromMaybe
-    (Core.termLiteral $ Core.literalString $ string "Impossible!")
-    (Maps.lookup (var "name") (var "bindingMap"))) $
-  Lists.map (unaryFunction $ Lists.map $ var "toPair") (Sorting.topologicalSortComponents @@ Lists.map (var "depsOf") (var "bindings"))
-
-topologicalSortBindings :: TBinding ([Binding] -> Either [[Name]] [Name])
-topologicalSortBindings = define "topologicalSortBindings" $
-  doc "Topological sort of elements based on their dependencies" $
-  "els" ~>
-  "adjlist" <~ ("e" ~> pair
-    (Core.bindingName $ var "e")
-    (Sets.toList $ termDependencyNames @@ false @@ true @@ true @@ (Core.bindingTerm $ var "e"))) $
-  Sorting.topologicalSort @@ Lists.map (var "adjlist") (var "els")
-
-typeDependencyNames :: TBinding (Bool -> Type -> S.Set Name)
-typeDependencyNames = define "typeDependencyNames" $
-  "withSchema" ~> "typ" ~> Logic.ifElse (var "withSchema")
-    (Sets.union
-      (freeVariablesInType @@ var "typ")
-      (typeNamesInType @@ var "typ"))
-    (freeVariablesInType @@ var "typ")
-
-typeNamesInType :: TBinding (Type -> S.Set Name)
-typeNamesInType = define "typeNamesInType" $
-  "typ0" ~>
-  "addNames" <~ ("names" ~> "typ" ~> var "names") $
-  foldOverType @@ Coders.traversalOrderPre @@ var "addNames" @@ Sets.empty @@ var "typ0"
-
-unshadowVariables :: TBinding (Term -> Term)
-unshadowVariables = define "unshadowVariables" $
-  doc ("Rename all shadowed variables (both lambda parameters and let-bound variables"
-    <> " that shadow lambda parameters) in a term.") $
-  "term0" ~>
-  -- Find a fresh name not in the key set of the map, trying base2, base3, etc.
-  "freshName" <~ ("base" ~> "i" ~> "m" ~>
-    "candidate" <~ Core.name (Strings.cat2 (Core.unName $ var "base") (Literals.showInt32 $ var "i")) $
-    Logic.ifElse (Maps.member (var "candidate") (var "m"))
-      (var "freshName" @@ var "base" @@ Math.add (var "i") (int32 1) @@ var "m")
-      (var "candidate")) $
-  "f" <~ ("recurse" ~> "m" ~> "term" ~>
-    cases _Term (var "term") (Just $ var "recurse" @@ var "m" @@ var "term") [
-    _Term_function>>: "fn" ~> cases _Function (var "fn")
-      (Just $ var "recurse" @@ var "m" @@ var "term") [
-      _Function_lambda>>: "l" ~>
-        "v" <~ Core.lambdaParameter (var "l") $
-        "domain" <~ Core.lambdaDomain (var "l") $
-        "body" <~ Core.lambdaBody (var "l") $
-        Logic.ifElse (Maps.member (var "v") (var "m"))
-          -- Shadowed: find a fresh name, add v -> fresh to map, recurse into body
-          ("v2" <~ var "freshName" @@ var "v" @@ int32 2 @@ var "m" $
-            "m2" <~ Maps.insert (var "v") (var "v2") (Maps.insert (var "v2") (var "v2") (var "m")) $
-            Core.termFunction $ Core.functionLambda $ Core.lambda (var "v2") (var "domain")
-              (var "f" @@ var "recurse" @@ var "m2" @@ var "body"))
-          -- First occurrence: register v -> v (identity), recurse into body
-          (Core.termFunction $ Core.functionLambda $ Core.lambda (var "v") (var "domain")
-            (var "f" @@ var "recurse" @@ Maps.insert (var "v") (var "v") (var "m") @@ var "body"))],
-    _Term_let>>: "lt" ~>
-      -- Register all let-bound names as in-scope (identity mapping) so inner lambdas know about them
-      "m2" <~ Lists.foldl ("acc" ~> "b" ~>
-        "bname" <~ Core.bindingName (var "b") $
-        Logic.ifElse (Maps.member (var "bname") (var "acc"))
-          (var "acc")
-          (Maps.insert (var "bname") (var "bname") (var "acc")))
-        (var "m") (Core.letBindings $ var "lt") $
-      var "recurse" @@ var "m2" @@ var "term",
-    _Term_variable>>: "v" ~> Core.termVariable $ optCases (Maps.lookup (var "v") (var "m"))
-      (var "v")
-      ("renamed" ~> var "renamed")]) $
-  rewriteTermWithContext @@ var "f" @@ Maps.empty @@ var "term0"
-
-fTypeToTypeScheme :: TBinding (Type -> TypeScheme)
-fTypeToTypeScheme = define "fTypeToTypeScheme" $
-  doc "Convert a forall type to a type scheme" $
-  "typ" ~>
-  "gatherForall" <~ ("vars" ~> "typ" ~> cases _Type (deannotateType @@ var "typ")
-     (Just $ Core.typeScheme (Lists.reverse $ var "vars") (var "typ") Phantoms.nothing) [
-     _Type_forall>>: "ft" ~> var "gatherForall" @@
-       (Lists.cons (Core.forallTypeParameter $ var "ft") (var "vars")) @@
-       (Core.forallTypeBody $ var "ft")]) $
-  var "gatherForall" @@ list ([] :: [TTerm Name]) @@ var "typ"
-
-typeSchemeToFType :: TBinding (TypeScheme -> Type)
-typeSchemeToFType = define "typeSchemeToFType" $
-  doc "Convert a type scheme to a forall type" $
-  "ts" ~>
-  "vars" <~ Core.typeSchemeVariables (var "ts") $
-  "body" <~ Core.typeSchemeType (var "ts") $
-  Lists.foldl
-    ("t" ~> "v" ~> Core.typeForall $ Core.forallType (var "v") (var "t"))
-    (var "body")
-    (Lists.reverse $ var "vars")
-
-extendGraphForLambda :: TBinding (Graph -> Lambda -> Graph)
-extendGraphForLambda = define "extendGraphForLambda" $
-  doc "Extend a graph by descending into a lambda body" $
-  "g" ~> "lam" ~>
-  "var" <~ Core.lambdaParameter (var "lam") $
-  Graph.graph
-    (Graph.graphBoundTerms $ var "g")
-    (optCases (Core.lambdaDomain $ var "lam")
-      (Graph.graphBoundTypes $ var "g")
-      ("dom" ~> Maps.insert (var "var") (fTypeToTypeScheme @@ var "dom") $ Graph.graphBoundTypes $ var "g"))
-    (Graph.graphClassConstraints $ var "g")
-    (Sets.insert (var "var") $ Graph.graphLambdaVariables $ var "g")
-    (Maps.delete (var "var") $ Graph.graphMetadata $ var "g")
-    (Graph.graphPrimitives $ var "g")
-    (Graph.graphSchemaTypes $ var "g")
-    (Graph.graphTypeVariables $ var "g")
-
-extendGraphForLet :: TBinding ((Graph -> Binding -> Maybe Term) -> Graph -> Let -> Graph)
-extendGraphForLet = define "extendGraphForLet" $
-  doc "Extend a graph by descending into a let body" $
-  "forBinding" ~> "g" ~> "letrec" ~>
-  "bindings" <~ Core.letBindings (var "letrec") $
-  -- Pre-extend graph with sibling bindings so forBinding can resolve them
-  "g2" <~ (extendGraphWithBindings @@ var "bindings" @@ var "g") $
-  Graph.graph
-    -- Add all binding terms
-    (Maps.union
-      (Maps.fromList $ Lists.map ("b" ~> pair (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")) (var "bindings"))
-      (Graph.graphBoundTerms $ var "g"))
-    -- Add typed binding type schemes; untyped bindings are not added, so outer types are shadowed by union precedence
-    (Maps.union
-      (Maps.fromList $ Maybes.cat $ Lists.map
-        ("b" ~> Maybes.map ("ts" ~> pair (Core.bindingName $ var "b") (var "ts"))
-          (Core.bindingType $ var "b"))
-        (var "bindings"))
-      (Graph.graphBoundTypes $ var "g"))
-    (Graph.graphClassConstraints $ var "g")
-    -- Remove all binding names from lambda variables; they are shadowed
-    (Lists.foldl ("s" ~> "b" ~> Sets.delete (Core.bindingName $ var "b") (var "s"))
-      (Graph.graphLambdaVariables $ var "g")
-      (var "bindings"))
-    -- Update metadata per binding, accumulating a full graph so each binding sees earlier siblings' metadata
-    (Graph.graphMetadata $ Lists.foldl
-      ("gAcc" ~> "b" ~>
-        "m" <~ (Graph.graphMetadata $ var "gAcc") $
-        "newMeta" <~ (optCases (var "forBinding" @@ var "gAcc" @@ var "b")
-          (Maps.delete (Core.bindingName $ var "b") (var "m"))
-          ("t" ~> Maps.insert (Core.bindingName $ var "b") (var "t") (var "m"))) $
-        Graph.graph
-          (Graph.graphBoundTerms $ var "gAcc")
-          (Graph.graphBoundTypes $ var "gAcc")
-          (Graph.graphClassConstraints $ var "gAcc")
-          (Graph.graphLambdaVariables $ var "gAcc")
-          (var "newMeta")
-          (Graph.graphPrimitives $ var "gAcc")
-          (Graph.graphSchemaTypes $ var "gAcc")
-          (Graph.graphTypeVariables $ var "gAcc"))
-      (var "g2")
-      (var "bindings"))
-    (Graph.graphPrimitives $ var "g")
-    (Graph.graphSchemaTypes $ var "g")
-    (Graph.graphTypeVariables $ var "g")
-
-extendGraphForTypeLambda :: TBinding (Graph -> TypeLambda -> Graph)
-extendGraphForTypeLambda = define "extendGraphForTypeLambda" $
-  doc "Extend a graph by descending into a type lambda body" $
-  "g" ~> "tlam" ~>
-  "name" <~ Core.typeLambdaParameter (var "tlam") $
-  Graph.graph
-    (Graph.graphBoundTerms $ var "g")
-    (Graph.graphBoundTypes $ var "g")
-    (Graph.graphClassConstraints $ var "g")
-    (Graph.graphLambdaVariables $ var "g")
-    (Graph.graphMetadata $ var "g")
-    (Graph.graphPrimitives $ var "g")
-    (Graph.graphSchemaTypes $ var "g")
-    (Sets.insert (var "name") $ Graph.graphTypeVariables $ var "g")
-
-extendGraphWithBindings :: TBinding ([Binding] -> Graph -> Graph)
-extendGraphWithBindings = define "extendGraphWithBindings" $
-  doc "Add bindings to an existing graph" $
-  "bindings" ~> "g" ~>
-  -- Merge new binding terms/types into existing graph
-  "newTerms" <~ Maps.fromList (Lists.map ("b" ~>
-    pair (Core.bindingName (var "b")) (Core.bindingTerm (var "b"))) (var "bindings")) $
-  "newTypes" <~ Maps.fromList (Maybes.cat (Lists.map ("b" ~>
-    Maybes.map ("ts" ~> pair (Core.bindingName (var "b")) (var "ts"))
-      (Core.bindingType (var "b"))) (var "bindings"))) $
-  Graph.graph
-    (Maps.union (var "newTerms") (Graph.graphBoundTerms (var "g")))
-    (Maps.union (var "newTypes") (Graph.graphBoundTypes (var "g")))
-    (Graph.graphClassConstraints (var "g"))
-    (Graph.graphLambdaVariables (var "g"))
-    (Graph.graphMetadata (var "g"))
-    (Graph.graphPrimitives (var "g"))
-    (Graph.graphSchemaTypes (var "g"))
-    (Graph.graphTypeVariables (var "g"))
-
-rewriteAndFoldTermWithGraph :: TBinding (((a -> Term -> (a, Term)) -> Graph -> a -> Term -> (a, Term)) -> Graph -> a -> Term -> (a, Term))
+rewriteAndFoldTermWithGraph :: TTermDefinition (((a -> Term -> (a, Term)) -> Graph -> a -> Term -> (a, Term)) -> Graph -> a -> Term -> (a, Term))
 rewriteAndFoldTermWithGraph = define "rewriteAndFoldTermWithGraph" $
   doc ("Rewrite a term while folding to produce a value, with Graph updated as we descend into subterms."
     <> " Combines the features of rewriteAndFoldTerm and rewriteTermWithGraph."
@@ -2301,9 +1198,9 @@ rewriteAndFoldTermWithGraph = define "rewriteAndFoldTermWithGraph" $
       (Just $ var "cx") [
       _Term_function>>: "fun" ~> cases _Function (var "fun")
         (Just $ var "cx") [
-        _Function_lambda>>: "l" ~> extendGraphForLambda @@ var "cx" @@ var "l"],
-      _Term_let>>: "l" ~> extendGraphForLet @@ constant (constant nothing) @@ var "cx" @@ var "l",
-      _Term_typeLambda>>: "tl" ~> extendGraphForTypeLambda @@ var "cx" @@ var "tl"]) $
+        _Function_lambda>>: "l" ~> Scoping.extendGraphForLambda @@ var "cx" @@ var "l"],
+      _Term_let>>: "l" ~> Scoping.extendGraphForLet @@ constant (constant nothing) @@ var "cx" @@ var "l",
+      _Term_typeLambda>>: "tl" ~> Scoping.extendGraphForTypeLambda @@ var "cx" @@ var "tl"]) $
     "recurseForUser" <~ ("newVal" ~> "subterm" ~>
       "result" <~ var "lowLevelRecurse" @@ pair (var "newVal") (var "cx1") @@ var "subterm" $
       pair (Pairs.first $ Pairs.first $ var "result") (Pairs.second $ var "result")) $
@@ -2312,7 +1209,7 @@ rewriteAndFoldTermWithGraph = define "rewriteAndFoldTermWithGraph" $
   "result" <~ rewriteAndFoldTerm @@ var "wrapper" @@ pair (var "val0") (var "cx0") @@ var "term0" $
   pair (Pairs.first $ Pairs.first $ var "result") (Pairs.second $ var "result")
 
-rewriteAndFoldTermWithGraphAndPath :: TBinding (
+rewriteAndFoldTermWithGraphAndPath :: TTermDefinition (
   ((a -> Term -> (a, Term)) -> [SubtermStep] -> Graph -> a -> Term -> (a, Term))
   -> Graph -> a -> Term -> (a, Term))
 rewriteAndFoldTermWithGraphAndPath = define "rewriteAndFoldTermWithGraphAndPath" $
@@ -2328,9 +1225,9 @@ rewriteAndFoldTermWithGraphAndPath = define "rewriteAndFoldTermWithGraphAndPath"
       (Just $ var "cx") [
       _Term_function>>: "fun" ~> cases _Function (var "fun")
         (Just $ var "cx") [
-        _Function_lambda>>: "l" ~> extendGraphForLambda @@ var "cx" @@ var "l"],
-      _Term_let>>: "l" ~> extendGraphForLet @@ constant (constant nothing) @@ var "cx" @@ var "l",
-      _Term_typeLambda>>: "tl" ~> extendGraphForTypeLambda @@ var "cx" @@ var "tl"]) $
+        _Function_lambda>>: "l" ~> Scoping.extendGraphForLambda @@ var "cx" @@ var "l"],
+      _Term_let>>: "l" ~> Scoping.extendGraphForLet @@ constant (constant nothing) @@ var "cx" @@ var "l",
+      _Term_typeLambda>>: "tl" ~> Scoping.extendGraphForTypeLambda @@ var "cx" @@ var "tl"]) $
     "recurseForUser" <~ ("valIn" ~> "termIn" ~>
       "result" <~ var "recurse" @@ var "path" @@ pair (var "cx1") (var "valIn") @@ var "termIn" $
       pair (Pairs.second $ Pairs.first $ var "result") (Pairs.second $ var "result")) $
@@ -2339,7 +1236,7 @@ rewriteAndFoldTermWithGraphAndPath = define "rewriteAndFoldTermWithGraphAndPath"
   "result" <~ rewriteAndFoldTermWithPath @@ var "wrapper" @@ pair (var "cx0") (var "val0") @@ var "term0" $
   pair (Pairs.second $ Pairs.first $ var "result") (Pairs.second $ var "result")
 
-rewriteTermWithGraph :: TBinding (((Term -> Term) -> Graph -> Term -> Term) -> Graph -> Term -> Term)
+rewriteTermWithGraph :: TTermDefinition (((Term -> Term) -> Graph -> Term -> Term) -> Graph -> Term -> Term)
 rewriteTermWithGraph = define "rewriteTermWithGraph" $
   doc "Rewrite a term with the help of a Graph which is updated as we descend into subterms" $
   "f" ~> "cx0" ~> "term0" ~>
@@ -2349,21 +1246,21 @@ rewriteTermWithGraph = define "rewriteTermWithGraph" $
       _Term_function>>: "fun" ~> cases _Function (var "fun")
         (Just $ var "f" @@ var "recurse1" @@ var "cx" @@ var "term") [
         _Function_lambda>>: "l" ~>
-          "cx1" <~ extendGraphForLambda @@ var "cx" @@ var "l" $
+          "cx1" <~ Scoping.extendGraphForLambda @@ var "cx" @@ var "l" $
           "recurse2" <~ ("term" ~> var "recurse" @@ var "cx1" @@ var "term") $
           var "f" @@ var "recurse2" @@ var "cx1" @@ var "term"],
       _Term_let>>: "l" ~>
-        "cx1" <~ extendGraphForLet @@ constant (constant nothing) @@ var "cx" @@ var "l" $
+        "cx1" <~ Scoping.extendGraphForLet @@ constant (constant nothing) @@ var "cx" @@ var "l" $
         "recurse2" <~ ("term" ~> var "recurse" @@ var "cx1" @@ var "term") $
         var "f" @@ var "recurse2" @@ var "cx1" @@ var "term",
       _Term_typeLambda>>: "tl" ~>
-        "cx1" <~ extendGraphForTypeLambda @@ var "cx" @@ var "tl" $
+        "cx1" <~ Scoping.extendGraphForTypeLambda @@ var "cx" @@ var "tl" $
         "recurse2" <~ ("term" ~> var "recurse" @@ var "cx1" @@ var "term") $
         var "f" @@ var "recurse2" @@ var "cx1" @@ var "term"]) $
   "rewrite" <~ ("cx" ~> "term" ~> var "f2" @@ (var "rewrite") @@ var "cx" @@ var "term") $
   var "rewrite" @@ var "cx0" @@ var "term0"
 
-foldTermWithGraphAndPath :: TBinding (
+foldTermWithGraphAndPath :: TTermDefinition (
   ((a -> Term -> a) -> [SubtermStep] -> Graph -> a -> Term -> a)
   -> Graph -> a -> Term -> a)
 foldTermWithGraphAndPath = define "foldTermWithGraphAndPath" $

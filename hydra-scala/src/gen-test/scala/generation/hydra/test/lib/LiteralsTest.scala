@@ -13,9 +13,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.bigintToInt8(BigInt("42"))) == (
+      42:int8) == (
 
-      42.toByte))
+      42:int8))
 
   }
 
@@ -23,9 +23,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.bigintToInt8(BigInt("-42"))) == (
+      -42:int8) == (
 
-      -42.toByte))
+      -42:int8))
 
   }
 
@@ -35,9 +35,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.bigintToInt16(BigInt("1000"))) == (
+      1000:int16) == (
 
-      1000.toShort))
+      1000:int16))
 
   }
 
@@ -45,9 +45,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.bigintToInt16(BigInt("-1000"))) == (
+      -1000:int16) == (
 
-      -1000.toShort))
+      -1000:int16))
 
   }
 
@@ -57,9 +57,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.bigintToInt32(BigInt("42"))) == (
+      42:int32) == (
 
-      42))
+      42:int32))
 
   }
 
@@ -67,9 +67,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.bigintToInt32(BigInt("-42"))) == (
+      -42:int32) == (
 
-      -42))
+      -42:int32))
 
   }
 
@@ -77,9 +77,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.bigintToInt32(BigInt("0"))) == (
+      0:int32) == (
 
-      0))
+      0:int32))
 
   }
 
@@ -89,9 +89,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.bigintToInt64(BigInt("1000000"))) == (
+      1000000:int64) == (
 
-      1000000L))
+      1000000:int64))
 
   }
 
@@ -99,9 +99,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.bigintToInt64(BigInt("-1000000"))) == (
+      -1000000:int64) == (
 
-      -1000000L))
+      -1000000:int64))
 
   }
 
@@ -111,9 +111,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.bigintToUint8(BigInt("0"))) == (
+      0:uint8) == (
 
-      0.toByte))
+      0:uint8))
 
   }
 
@@ -121,9 +121,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.bigintToUint8(BigInt("100"))) == (
+      100:uint8) == (
 
-      100.toByte))
+      100:uint8))
 
   }
 
@@ -133,9 +133,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.bigintToUint16(BigInt("0"))) == (
+      0:uint16) == (
 
-      0))
+      0:uint16))
 
   }
 
@@ -143,9 +143,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.bigintToUint16(BigInt("1000"))) == (
+      1000:uint16) == (
 
-      1000))
+      1000:uint16))
 
   }
 
@@ -155,9 +155,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.bigintToUint32(BigInt("0"))) == (
+      0:uint32) == (
 
-      0L))
+      0:uint32))
 
   }
 
@@ -165,9 +165,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.bigintToUint32(BigInt("100000"))) == (
+      100000:uint32) == (
 
-      100000L))
+      100000:uint32))
 
   }
 
@@ -177,9 +177,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.bigintToUint64(BigInt("0"))) == (
+      0:uint64) == (
 
-      BigInt("0")))
+      0:uint64))
 
   }
 
@@ -187,9 +187,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.bigintToUint64(BigInt("1000000"))) == (
+      1000000:uint64) == (
 
-      BigInt("1000000")))
+      1000000:uint64))
 
   }
 
@@ -199,9 +199,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.int8ToBigint(42.toByte)) == (
+      42:bigint) == (
 
-      BigInt("42")))
+      42:bigint))
 
   }
 
@@ -209,9 +209,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.int8ToBigint(-42.toByte)) == (
+      -42:bigint) == (
 
-      BigInt("-42")))
+      -42:bigint))
 
   }
 
@@ -219,9 +219,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.int8ToBigint(127.toByte)) == (
+      127:bigint) == (
 
-      BigInt("127")))
+      127:bigint))
 
   }
 
@@ -229,9 +229,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.int8ToBigint(-128.toByte)) == (
+      -128:bigint) == (
 
-      BigInt("-128")))
+      -128:bigint))
 
   }
 
@@ -241,9 +241,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.int16ToBigint(1000.toShort)) == (
+      1000:bigint) == (
 
-      BigInt("1000")))
+      1000:bigint))
 
   }
 
@@ -251,9 +251,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.int16ToBigint(-1000.toShort)) == (
+      -1000:bigint) == (
 
-      BigInt("-1000")))
+      -1000:bigint))
 
   }
 
@@ -263,9 +263,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.int32ToBigint(42)) == (
+      42:bigint) == (
 
-      BigInt("42")))
+      42:bigint))
 
   }
 
@@ -273,9 +273,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.int32ToBigint(-42)) == (
+      -42:bigint) == (
 
-      BigInt("-42")))
+      -42:bigint))
 
   }
 
@@ -283,9 +283,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.int32ToBigint(0)) == (
+      0:bigint) == (
 
-      BigInt("0")))
+      0:bigint))
 
   }
 
@@ -295,9 +295,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.int64ToBigint(1000000L)) == (
+      1000000:bigint) == (
 
-      BigInt("1000000")))
+      1000000:bigint))
 
   }
 
@@ -305,9 +305,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.int64ToBigint(-1000000L)) == (
+      -1000000:bigint) == (
 
-      BigInt("-1000000")))
+      -1000000:bigint))
 
   }
 
@@ -317,9 +317,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.uint8ToBigint(0.toByte)) == (
+      0:bigint) == (
 
-      BigInt("0")))
+      0:bigint))
 
   }
 
@@ -327,9 +327,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.uint8ToBigint(-1.toByte)) == (
+      255:bigint) == (
 
-      BigInt("255")))
+      255:bigint))
 
   }
 
@@ -339,9 +339,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.uint16ToBigint(0)) == (
+      0:bigint) == (
 
-      BigInt("0")))
+      0:bigint))
 
   }
 
@@ -349,9 +349,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.uint16ToBigint(1000)) == (
+      1000:bigint) == (
 
-      BigInt("1000")))
+      1000:bigint))
 
   }
 
@@ -361,9 +361,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.uint32ToBigint(0L)) == (
+      0:bigint) == (
 
-      BigInt("0")))
+      0:bigint))
 
   }
 
@@ -371,9 +371,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.uint32ToBigint(100000L)) == (
+      100000:bigint) == (
 
-      BigInt("100000")))
+      100000:bigint))
 
   }
 
@@ -383,9 +383,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.uint64ToBigint(BigInt("0"))) == (
+      0:bigint) == (
 
-      BigInt("0")))
+      0:bigint))
 
   }
 
@@ -393,9 +393,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.uint64ToBigint(BigInt("1000000"))) == (
+      1000000:bigint) == (
 
-      BigInt("1000000")))
+      1000000:bigint))
 
   }
 
@@ -403,19 +403,31 @@ class LiteralsTest extends AnyFunSuite {
 
   test("float32ToBigfloat - positive") {
 
-    assert((BigDecimal(2.5)).compare(hydra.lib.literals.float32ToBigfloat(2.5f)) == 0)
+    assert((
+
+      2.5:bigfloat) == (
+
+      2.5:bigfloat))
 
   }
 
   test("float32ToBigfloat - negative") {
 
-    assert((BigDecimal(-2.5)).compare(hydra.lib.literals.float32ToBigfloat(-2.5f)) == 0)
+    assert((
+
+      -2.5:bigfloat) == (
+
+      -2.5:bigfloat))
 
   }
 
   test("float32ToBigfloat - zero") {
 
-    assert((BigDecimal(0.0)).compare(hydra.lib.literals.float32ToBigfloat(0.0f)) == 0)
+    assert((
+
+      0.0:bigfloat) == (
+
+      0.0:bigfloat))
 
   }
 
@@ -423,19 +435,31 @@ class LiteralsTest extends AnyFunSuite {
 
   test("float64ToBigfloat - positive") {
 
-    assert((BigDecimal(3.14159)).compare(hydra.lib.literals.float64ToBigfloat(3.14159)) == 0)
+    assert((
+
+      3.14159:bigfloat) == (
+
+      3.14159:bigfloat))
 
   }
 
   test("float64ToBigfloat - negative") {
 
-    assert((BigDecimal(-2.71828)).compare(hydra.lib.literals.float64ToBigfloat(-2.71828)) == 0)
+    assert((
+
+      -2.71828:bigfloat) == (
+
+      -2.71828:bigfloat))
 
   }
 
   test("float64ToBigfloat - zero") {
 
-    assert((BigDecimal(0.0)).compare(hydra.lib.literals.float64ToBigfloat(0.0)) == 0)
+    assert((
+
+      0.0:bigfloat) == (
+
+      0.0:bigfloat))
 
   }
 
@@ -443,19 +467,31 @@ class LiteralsTest extends AnyFunSuite {
 
   test("bigfloatToFloat32 - positive") {
 
-    assert(math.abs((hydra.lib.literals.bigfloatToFloat32(BigDecimal(3.14))) - (3.14f)) <= 1e-15)
+    assert((
+
+      3.14:float32) == (
+
+      3.14:float32))
 
   }
 
   test("bigfloatToFloat32 - negative") {
 
-    assert(math.abs((hydra.lib.literals.bigfloatToFloat32(BigDecimal(-2.5))) - (-2.5f)) <= 1e-15)
+    assert((
+
+      -2.5:float32) == (
+
+      -2.5:float32))
 
   }
 
   test("bigfloatToFloat32 - zero") {
 
-    assert(math.abs((hydra.lib.literals.bigfloatToFloat32(BigDecimal(0.0))) - (0.0f)) <= 1e-15)
+    assert((
+
+      0.0:float32) == (
+
+      0.0:float32))
 
   }
 
@@ -463,19 +499,31 @@ class LiteralsTest extends AnyFunSuite {
 
   test("bigfloatToFloat64 - positive") {
 
-    assert(math.abs((hydra.lib.literals.bigfloatToFloat64(BigDecimal(3.14159))) - (3.14159)) <= 1e-15)
+    assert((
+
+      3.14159:float64) == (
+
+      3.14159:float64))
 
   }
 
   test("bigfloatToFloat64 - negative") {
 
-    assert(math.abs((hydra.lib.literals.bigfloatToFloat64(BigDecimal(-2.71828))) - (-2.71828)) <= 1e-15)
+    assert((
+
+      -2.71828:float64) == (
+
+      -2.71828:float64))
 
   }
 
   test("bigfloatToFloat64 - zero") {
 
-    assert(math.abs((hydra.lib.literals.bigfloatToFloat64(BigDecimal(0.0))) - (0.0)) <= 1e-15)
+    assert((
+
+      0.0:float64) == (
+
+      0.0:float64))
 
   }
 
@@ -483,19 +531,31 @@ class LiteralsTest extends AnyFunSuite {
 
   test("bigintToBigfloat - positive") {
 
-    assert((BigDecimal(42.0)).compare(hydra.lib.literals.bigintToBigfloat(BigInt("42"))) == 0)
+    assert((
+
+      42.0:bigfloat) == (
+
+      42.0:bigfloat))
 
   }
 
   test("bigintToBigfloat - negative") {
 
-    assert((BigDecimal(-42.0)).compare(hydra.lib.literals.bigintToBigfloat(BigInt("-42"))) == 0)
+    assert((
+
+      -42.0:bigfloat) == (
+
+      -42.0:bigfloat))
 
   }
 
   test("bigintToBigfloat - zero") {
 
-    assert((BigDecimal(0.0)).compare(hydra.lib.literals.bigintToBigfloat(BigInt("0"))) == 0)
+    assert((
+
+      0.0:bigfloat) == (
+
+      0.0:bigfloat))
 
   }
 
@@ -505,9 +565,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.bigfloatToBigint(BigDecimal(42.7))) == (
+      43:bigint) == (
 
-      BigInt("43")))
+      43:bigint))
 
   }
 
@@ -515,9 +575,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.bigfloatToBigint(BigDecimal(-42.7))) == (
+      -43:bigint) == (
 
-      BigInt("-43")))
+      -43:bigint))
 
   }
 
@@ -525,9 +585,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.bigfloatToBigint(BigDecimal(0.0))) == (
+      0:bigint) == (
 
-      BigInt("0")))
+      0:bigint))
 
   }
 
@@ -535,9 +595,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.bigfloatToBigint(BigDecimal(42.3))) == (
+      42:bigint) == (
 
-      BigInt("42")))
+      42:bigint))
 
   }
 
@@ -545,9 +605,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.bigfloatToBigint(BigDecimal(42.5))) == (
+      42:bigint) == (
 
-      BigInt("42")))
+      42:bigint))
 
   }
 
@@ -555,9 +615,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.bigfloatToBigint(BigDecimal(43.5))) == (
+      44:bigint) == (
 
-      BigInt("44")))
+      44:bigint))
 
   }
 
@@ -567,7 +627,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showInt8(42.toByte)) == (
+      "42") == (
 
       "42"))
 
@@ -577,7 +637,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showInt8(-42.toByte)) == (
+      "-42") == (
 
       "-42"))
 
@@ -589,7 +649,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showInt16(1000.toShort)) == (
+      "1000") == (
 
       "1000"))
 
@@ -599,7 +659,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showInt16(-1000.toShort)) == (
+      "-1000") == (
 
       "-1000"))
 
@@ -611,7 +671,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showInt32(42)) == (
+      "42") == (
 
       "42"))
 
@@ -621,7 +681,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showInt32(-42)) == (
+      "-42") == (
 
       "-42"))
 
@@ -631,7 +691,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showInt32(0)) == (
+      "0") == (
 
       "0"))
 
@@ -643,7 +703,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showInt64(1000000L)) == (
+      "1000000") == (
 
       "1000000"))
 
@@ -653,7 +713,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showInt64(-1000000L)) == (
+      "-1000000") == (
 
       "-1000000"))
 
@@ -665,7 +725,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showUint8(0.toByte)) == (
+      "0") == (
 
       "0"))
 
@@ -675,7 +735,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showUint8(-1.toByte)) == (
+      "255") == (
 
       "255"))
 
@@ -687,7 +747,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showUint16(0)) == (
+      "0") == (
 
       "0"))
 
@@ -697,7 +757,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showUint16(1000)) == (
+      "1000") == (
 
       "1000"))
 
@@ -709,7 +769,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showUint32(0L)) == (
+      "0") == (
 
       "0"))
 
@@ -719,7 +779,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showUint32(100000L)) == (
+      "100000") == (
 
       "100000"))
 
@@ -731,7 +791,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showUint64(BigInt("0"))) == (
+      "0") == (
 
       "0"))
 
@@ -741,7 +801,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showUint64(BigInt("1000000"))) == (
+      "1000000") == (
 
       "1000000"))
 
@@ -753,7 +813,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showBigint(BigInt("42"))) == (
+      "42") == (
 
       "42"))
 
@@ -763,7 +823,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showBigint(BigInt("-42"))) == (
+      "-42") == (
 
       "-42"))
 
@@ -773,7 +833,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showBigint(BigInt("0"))) == (
+      "0") == (
 
       "0"))
 
@@ -785,7 +845,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showFloat32(3.14f)) == (
+      "3.14") == (
 
       "3.14"))
 
@@ -795,7 +855,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showFloat32(-2.5f)) == (
+      "-2.5") == (
 
       "-2.5"))
 
@@ -805,7 +865,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showFloat32(0.0f)) == (
+      "0.0") == (
 
       "0.0"))
 
@@ -815,7 +875,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showFloat32(5.0e-2f)) == (
+      "5.0e-2") == (
 
       "5.0e-2"))
 
@@ -825,7 +885,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showFloat32(3.0e-2f)) == (
+      "3.0e-2") == (
 
       "3.0e-2"))
 
@@ -835,7 +895,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showFloat32(1.0e-3f)) == (
+      "1.0e-3") == (
 
       "1.0e-3"))
 
@@ -845,7 +905,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showFloat32(0.1f)) == (
+      "0.1") == (
 
       "0.1"))
 
@@ -857,7 +917,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showFloat64(3.14159)) == (
+      "3.14159") == (
 
       "3.14159"))
 
@@ -867,7 +927,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showFloat64(0.0)) == (
+      "0.0") == (
 
       "0.0"))
 
@@ -877,7 +937,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showFloat64(5.0e-2)) == (
+      "5.0e-2") == (
 
       "5.0e-2"))
 
@@ -887,7 +947,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showFloat64(3.0e-2)) == (
+      "3.0e-2") == (
 
       "3.0e-2"))
 
@@ -897,7 +957,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showFloat64(1.0e-3)) == (
+      "1.0e-3") == (
 
       "1.0e-3"))
 
@@ -907,7 +967,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showFloat64(0.1)) == (
+      "0.1") == (
 
       "0.1"))
 
@@ -919,7 +979,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showBigfloat(BigDecimal(3.14))) == (
+      "3.14") == (
 
       "3.14"))
 
@@ -929,7 +989,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showBigfloat(BigDecimal(0.0))) == (
+      "0.0") == (
 
       "0.0"))
 
@@ -939,7 +999,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showBigfloat(BigDecimal(5.0e-2))) == (
+      "5.0e-2") == (
 
       "5.0e-2"))
 
@@ -949,7 +1009,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showBigfloat(BigDecimal(3.0e-2))) == (
+      "3.0e-2") == (
 
       "3.0e-2"))
 
@@ -959,7 +1019,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showBigfloat(BigDecimal(1.0e-3))) == (
+      "1.0e-3") == (
 
       "1.0e-3"))
 
@@ -969,7 +1029,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showBigfloat(BigDecimal(0.1))) == (
+      "0.1") == (
 
       "0.1"))
 
@@ -981,7 +1041,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showBoolean(true)) == (
+      "true") == (
 
       "true"))
 
@@ -991,7 +1051,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showBoolean(false)) == (
+      "false") == (
 
       "false"))
 
@@ -1003,7 +1063,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showString("hello")) == (
+      "\"hello\"") == (
 
       "\"hello\""))
 
@@ -1013,7 +1073,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showString("")) == (
+      "\"\"") == (
 
       "\"\""))
 
@@ -1023,7 +1083,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showString("caf\u00E9")) == (
+      "\"caf\\233\"") == (
 
       "\"caf\\233\""))
 
@@ -1033,7 +1093,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showString("\u03BB")) == (
+      "\"\\955\"") == (
 
       "\"\\955\""))
 
@@ -1043,7 +1103,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showString("A\u00E9B")) == (
+      "\"A\\233B\"") == (
 
       "\"A\\233B\""))
 
@@ -1053,7 +1113,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showString("\t")) == (
+      "\"\\t\"") == (
 
       "\"\\t\""))
 
@@ -1063,7 +1123,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showString("\n")) == (
+      "\"\\n\"") == (
 
       "\"\\n\""))
 
@@ -1073,7 +1133,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showString("\r")) == (
+      "\"\\r\"") == (
 
       "\"\\r\""))
 
@@ -1083,7 +1143,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showString("\\")) == (
+      "\"\\\\\"") == (
 
       "\"\\\\\""))
 
@@ -1093,7 +1153,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showString("\"")) == (
+      "\"\\\"\"") == (
 
       "\"\\\"\""))
 
@@ -1103,7 +1163,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showString("\u0000")) == (
+      "\"\\NUL\"") == (
 
       "\"\\NUL\""))
 
@@ -1113,7 +1173,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showString("\u0007")) == (
+      "\"\\a\"") == (
 
       "\"\\a\""))
 
@@ -1123,7 +1183,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showString("\b")) == (
+      "\"\\b\"") == (
 
       "\"\\b\""))
 
@@ -1133,7 +1193,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showString("\f")) == (
+      "\"\\f\"") == (
 
       "\"\\f\""))
 
@@ -1143,7 +1203,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showString("\u000B")) == (
+      "\"\\v\"") == (
 
       "\"\\v\""))
 
@@ -1153,7 +1213,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.showString("\u007F")) == (
+      "\"\\DEL\"") == (
 
       "\"\\DEL\""))
 
@@ -1165,9 +1225,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readInt8("42")) == (
+      just(42:int8)) == (
 
-      Some(42.toByte)))
+      just(42:int8)))
 
   }
 
@@ -1175,9 +1235,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readInt8("-42")) == (
+      just(-42:int8)) == (
 
-      Some(-42.toByte)))
+      just(-42:int8)))
 
   }
 
@@ -1185,9 +1245,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readInt8("127")) == (
+      just(127:int8)) == (
 
-      Some(127.toByte)))
+      just(127:int8)))
 
   }
 
@@ -1195,9 +1255,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readInt8("-128")) == (
+      just(-128:int8)) == (
 
-      Some(-128.toByte)))
+      just(-128:int8)))
 
   }
 
@@ -1205,9 +1265,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readInt8("abc")) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -1215,9 +1275,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readInt8("128")) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -1227,9 +1287,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readInt16("1000")) == (
+      just(1000:int16)) == (
 
-      Some(1000.toShort)))
+      just(1000:int16)))
 
   }
 
@@ -1237,9 +1297,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readInt16("-1000")) == (
+      just(-1000:int16)) == (
 
-      Some(-1000.toShort)))
+      just(-1000:int16)))
 
   }
 
@@ -1247,9 +1307,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readInt16("abc")) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -1259,9 +1319,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readInt32("42")) == (
+      just(42:int32)) == (
 
-      Some(42)))
+      just(42:int32)))
 
   }
 
@@ -1269,9 +1329,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readInt32("-42")) == (
+      just(-42:int32)) == (
 
-      Some(-42)))
+      just(-42:int32)))
 
   }
 
@@ -1279,9 +1339,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readInt32("abc")) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -1291,9 +1351,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readInt64("1000000")) == (
+      just(1000000:int64)) == (
 
-      Some(1000000L)))
+      just(1000000:int64)))
 
   }
 
@@ -1301,9 +1361,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readInt64("-1000000")) == (
+      just(-1000000:int64)) == (
 
-      Some(-1000000L)))
+      just(-1000000:int64)))
 
   }
 
@@ -1311,9 +1371,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readInt64("abc")) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -1323,9 +1383,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readUint8("0")) == (
+      just(0:uint8)) == (
 
-      Some(0.toByte)))
+      just(0:uint8)))
 
   }
 
@@ -1333,9 +1393,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readUint8("100")) == (
+      just(100:uint8)) == (
 
-      Some(100.toByte)))
+      just(100:uint8)))
 
   }
 
@@ -1343,9 +1403,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readUint8("255")) == (
+      just(255:uint8)) == (
 
-      Some(-1.toByte)))
+      just(255:uint8)))
 
   }
 
@@ -1353,9 +1413,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readUint8("abc")) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -1363,9 +1423,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readUint8("-1")) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -1375,9 +1435,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readUint16("0")) == (
+      just(0:uint16)) == (
 
-      Some(0)))
+      just(0:uint16)))
 
   }
 
@@ -1385,9 +1445,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readUint16("1000")) == (
+      just(1000:uint16)) == (
 
-      Some(1000)))
+      just(1000:uint16)))
 
   }
 
@@ -1395,9 +1455,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readUint16("abc")) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -1405,9 +1465,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readUint16("-1")) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -1417,9 +1477,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readUint32("0")) == (
+      just(0:uint32)) == (
 
-      Some(0L)))
+      just(0:uint32)))
 
   }
 
@@ -1427,9 +1487,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readUint32("100000")) == (
+      just(100000:uint32)) == (
 
-      Some(100000L)))
+      just(100000:uint32)))
 
   }
 
@@ -1437,9 +1497,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readUint32("abc")) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -1447,9 +1507,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readUint32("-1")) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -1459,9 +1519,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readUint64("0")) == (
+      just(0:uint64)) == (
 
-      Some(BigInt("0"))))
+      just(0:uint64)))
 
   }
 
@@ -1469,9 +1529,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readUint64("1000000")) == (
+      just(1000000:uint64)) == (
 
-      Some(BigInt("1000000"))))
+      just(1000000:uint64)))
 
   }
 
@@ -1479,9 +1539,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readUint64("abc")) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -1489,9 +1549,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readUint64("-1")) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -1501,9 +1561,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readBigint("42")) == (
+      just(42:bigint)) == (
 
-      Some(BigInt("42"))))
+      just(42:bigint)))
 
   }
 
@@ -1511,9 +1571,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readBigint("-42")) == (
+      just(-42:bigint)) == (
 
-      Some(BigInt("-42"))))
+      just(-42:bigint)))
 
   }
 
@@ -1521,9 +1581,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readBigint("0")) == (
+      just(0:bigint)) == (
 
-      Some(BigInt("0"))))
+      just(0:bigint)))
 
   }
 
@@ -1531,9 +1591,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readBigint("123456789012345678901234567890")) == (
+      just(123456789012345678901234567890:bigint)) == (
 
-      Some(BigInt("123456789012345678901234567890"))))
+      just(123456789012345678901234567890:bigint)))
 
   }
 
@@ -1541,9 +1601,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readBigint("abc")) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -1553,9 +1613,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readFloat32("3.14")) == (
+      just(3.14:float32)) == (
 
-      Some(3.14f)))
+      just(3.14:float32)))
 
   }
 
@@ -1563,9 +1623,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readFloat32("-2.5")) == (
+      just(-2.5:float32)) == (
 
-      Some(-2.5f)))
+      just(-2.5:float32)))
 
   }
 
@@ -1573,9 +1633,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readFloat32("abc")) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -1585,9 +1645,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readFloat64("3.14159")) == (
+      just(3.14159:float64)) == (
 
-      Some(3.14159)))
+      just(3.14159:float64)))
 
   }
 
@@ -1595,9 +1655,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readFloat64("-2.71828")) == (
+      just(-2.71828:float64)) == (
 
-      Some(-2.71828)))
+      just(-2.71828:float64)))
 
   }
 
@@ -1605,9 +1665,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readFloat64("abc")) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -1617,9 +1677,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readBigfloat("3.14")) == (
+      just(3.14:bigfloat)) == (
 
-      Some(BigDecimal(3.14))))
+      just(3.14:bigfloat)))
 
   }
 
@@ -1627,9 +1687,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readBigfloat("abc")) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -1639,9 +1699,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readBoolean("true")) == (
+      just(true)) == (
 
-      Some(true)))
+      just(true)))
 
   }
 
@@ -1649,9 +1709,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readBoolean("false")) == (
+      just(false)) == (
 
-      Some(false)))
+      just(false)))
 
   }
 
@@ -1659,9 +1719,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readBoolean("yes")) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -1671,9 +1731,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readString("\"hello\"")) == (
+      just("hello")) == (
 
-      Some("hello")))
+      just("hello")))
 
   }
 
@@ -1681,9 +1741,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readString("\"\"")) == (
+      just("")) == (
 
-      Some("")))
+      just("")))
 
   }
 
@@ -1691,9 +1751,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.readString("hello")) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -1703,9 +1763,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.stringToBinary("aGVsbG8=")) == (
+      [binary]) == (
 
-      Array[Byte](104.toByte, 101.toByte, 108.toByte, 108.toByte, 111.toByte)))
+      [binary]))
 
   }
 
@@ -1713,9 +1773,9 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.stringToBinary("")) == (
+      [binary]) == (
 
-      Array[Byte]()))
+      [binary]))
 
   }
 
@@ -1725,7 +1785,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.binaryToString(Array[Byte](104.toByte, 101.toByte, 108.toByte, 108.toByte, 111.toByte))) == (
+      "aGVsbG8=") == (
 
       "aGVsbG8="))
 
@@ -1735,7 +1795,7 @@ class LiteralsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.literals.binaryToString(Array[Byte]())) == (
+      "") == (
 
       ""))
 

@@ -38,11 +38,11 @@
 
 (require 'hydra.lib.strings)
 
-(require 'hydra.rewriting)
-
 (require 'hydra.show.core)
 
-(defvar hydra_annotations_aggregate_annotations (lambda (get_value) (lambda (get_x) (lambda (get_anns) (lambda (t_) (letrec ((to_pairs (lambda (rest) (lambda (t_) (funcall (funcall (hydra_lib_maybes_maybe (lambda () rest)) (lambda (yy) (funcall (to_pairs (funcall (hydra_lib_lists_cons (hydra_lib_maps_to_list (get_anns yy))) rest)) (get_x yy)))) (get_value t_)))))) (hydra_lib_maps_from_list (hydra_lib_lists_concat (funcall (to_pairs (list)) t_)))))))))
+(require 'hydra.strip)
+
+(defvar hydra_annotations_aggregate_annotations (lambda (get_value) (lambda (get_x) (lambda (get_anns) (lambda (t_) (letrec ((to_pairs (lambda (rest) (lambda (t2) (funcall (funcall (hydra_lib_maybes_maybe (lambda () rest)) (lambda (yy) (funcall (to_pairs (funcall (hydra_lib_lists_cons (hydra_lib_maps_to_list (get_anns yy))) rest)) (get_x yy)))) (get_value t2)))))) (hydra_lib_maps_from_list (hydra_lib_lists_concat (funcall (to_pairs (list)) t_)))))))))
 
 (defvar hydra_annotations_get_attr (lambda (key) (lambda (cx) (funcall (hydra_lib_maps_lookup key) (funcall (lambda (v) (hydra_context_context-other v)) cx)))))
 
@@ -72,7 +72,7 @@
 
 (defvar hydra_annotations_get_type_annotation (lambda (key) (lambda (typ) (funcall (hydra_lib_maps_lookup key) (hydra_annotations_type_annotation_internal typ)))))
 
-(defvar hydra_annotations_get_type_classes (lambda (cx) (lambda (graph) (lambda (term) (let ((decode_class (lambda (term) (let ((by_name (hydra_lib_maps_from_list (list (list "equality" (list :equality nil)) (list "ordering" (list :ordering nil)))))) (funcall (hydra_lib_eithers_bind (funcall (funcall (funcall (hydra_extract_core_unit_variant cx) "hydra.classes.TypeClass") graph) term)) (lambda (fn_) (funcall (funcall (hydra_lib_maybes_maybe (lambda () (list :left (make-hydra_context_in_context (list :other (funcall (hydra_lib_strings_cat2 "unexpected: expected type class, got ") (hydra_show_core_term term))) cx)))) (lambda (x) (list :right x))) (funcall (hydra_lib_maps_lookup fn_) by_name)))))))) (funcall (funcall (hydra_lib_maybes_maybe (lambda () (list :right hydra_lib_maps_empty))) (lambda (term) (funcall (funcall (funcall (funcall (hydra_extract_core_map cx) (lambda (t_) (funcall (funcall (hydra_lib_eithers_bimap (lambda (de) (make-hydra_context_in_context (list :other (funcall (lambda (v) v) de)) cx))) (lambda (x) x)) (funcall (hydra_decode_core_name graph) t_)))) (funcall (funcall (hydra_extract_core_set_of cx) decode_class) graph)) graph) term))) (funcall (hydra_annotations_get_term_annotation hydra_constants_key_classes) term)))))))
+(defvar hydra_annotations_get_type_classes (lambda (cx) (lambda (graph) (lambda (term) (let ((decode_class (lambda (term2) (let ((by_name (hydra_lib_maps_from_list (list (list "equality" (list :equality nil)) (list "ordering" (list :ordering nil)))))) (funcall (hydra_lib_eithers_bind (funcall (funcall (funcall (hydra_extract_core_unit_variant cx) "hydra.classes.TypeClass") graph) term2)) (lambda (fn_) (funcall (funcall (hydra_lib_maybes_maybe (lambda () (list :left (make-hydra_context_in_context (list :other (funcall (hydra_lib_strings_cat2 "unexpected: expected type class, got ") (hydra_show_core_term term2))) cx)))) (lambda (x) (list :right x))) (funcall (hydra_lib_maps_lookup fn_) by_name)))))))) (funcall (funcall (hydra_lib_maybes_maybe (lambda () (list :right hydra_lib_maps_empty))) (lambda (term2) (funcall (funcall (funcall (funcall (hydra_extract_core_map cx) (lambda (t_) (funcall (funcall (hydra_lib_eithers_bimap (lambda (de) (make-hydra_context_in_context (list :other (funcall (lambda (v) v) de)) cx))) (lambda (x) x)) (funcall (hydra_decode_core_name graph) t_)))) (funcall (funcall (hydra_extract_core_set_of cx) decode_class) graph)) graph) term2))) (funcall (hydra_annotations_get_term_annotation hydra_constants_key_classes) term)))))))
 
 (defvar hydra_annotations_get_type_description (lambda (cx) (lambda (graph) (lambda (typ) (funcall (funcall (hydra_annotations_get_description cx) graph) (hydra_annotations_type_annotation_internal typ))))))
 
@@ -88,9 +88,9 @@
 
 (defvar hydra_annotations_next_count (lambda (key) (lambda (cx) (let ((count (funcall (hydra_annotations_get_count key) cx))) (list count (funcall (funcall (hydra_annotations_put_count key) (funcall (hydra_lib_math_add count) 1)) cx))))))
 
-(defvar hydra_annotations_normalize_term_annotations (lambda (term) (let ((anns (hydra_annotations_term_annotation_internal term))) (let ((stripped (hydra_rewriting_deannotate_term term))) (if (hydra_lib_maps_null anns) stripped (list :annotated (make-hydra_core_annotated_term stripped anns)))))))
+(defvar hydra_annotations_normalize_term_annotations (lambda (term) (let ((anns (hydra_annotations_term_annotation_internal term))) (let ((stripped (hydra_strip_deannotate_term term))) (if (hydra_lib_maps_null anns) stripped (list :annotated (make-hydra_core_annotated_term stripped anns)))))))
 
-(defvar hydra_annotations_normalize_type_annotations (lambda (typ) (let ((anns (hydra_annotations_type_annotation_internal typ))) (let ((stripped (hydra_rewriting_deannotate_type typ))) (if (hydra_lib_maps_null anns) stripped (list :annotated (make-hydra_core_annotated_type stripped anns)))))))
+(defvar hydra_annotations_normalize_type_annotations (lambda (typ) (let ((anns (hydra_annotations_type_annotation_internal typ))) (let ((stripped (hydra_strip_deannotate_type typ))) (if (hydra_lib_maps_null anns) stripped (list :annotated (make-hydra_core_annotated_type stripped anns)))))))
 
 (defvar hydra_annotations_reset_count (lambda (key) (lambda (cx) (funcall (funcall (hydra_annotations_put_attr key) (list :literal (list :integer (list :int32 0)))) cx))))
 
@@ -98,13 +98,13 @@
 
 (defvar hydra_annotations_set_description (lambda (d) (funcall (hydra_annotations_set_annotation hydra_constants_key_description) (funcall (hydra_lib_maybes_map (lambda (arg_) (funcall (lambda (x) (list :literal x)) (funcall (lambda (x) (list :string x)) arg_)))) d))))
 
-(defvar hydra_annotations_set_term_annotation (lambda (key) (lambda (val) (lambda (term) (let ((term_ (hydra_rewriting_deannotate_term term))) (let ((anns (funcall (funcall (hydra_annotations_set_annotation key) val) (hydra_annotations_term_annotation_internal term)))) (if (hydra_lib_maps_null anns) term_ (list :annotated (make-hydra_core_annotated_term term_ anns)))))))))
+(defvar hydra_annotations_set_term_annotation (lambda (key) (lambda (val) (lambda (term) (let ((term_ (hydra_strip_deannotate_term term))) (let ((anns (funcall (funcall (hydra_annotations_set_annotation key) val) (hydra_annotations_term_annotation_internal term)))) (if (hydra_lib_maps_null anns) term_ (list :annotated (make-hydra_core_annotated_term term_ anns)))))))))
 
 (defvar hydra_annotations_set_term_description (lambda (d) (funcall (hydra_annotations_set_term_annotation hydra_constants_key_description) (funcall (hydra_lib_maybes_map (lambda (s) (list :literal (list :string s)))) d))))
 
 (defvar hydra_annotations_set_type (lambda (mt) (funcall (hydra_annotations_set_annotation hydra_constants_key_type) (funcall (hydra_lib_maybes_map hydra_encode_core_type) mt))))
 
-(defvar hydra_annotations_set_type_annotation (lambda (key) (lambda (val) (lambda (typ) (let ((typ_ (hydra_rewriting_deannotate_type typ))) (let ((anns (funcall (funcall (hydra_annotations_set_annotation key) val) (hydra_annotations_type_annotation_internal typ)))) (if (hydra_lib_maps_null anns) typ_ (list :annotated (make-hydra_core_annotated_type typ_ anns)))))))))
+(defvar hydra_annotations_set_type_annotation (lambda (key) (lambda (val) (lambda (typ) (let ((typ_ (hydra_strip_deannotate_type typ))) (let ((anns (funcall (funcall (hydra_annotations_set_annotation key) val) (hydra_annotations_type_annotation_internal typ)))) (if (hydra_lib_maps_null anns) typ_ (list :annotated (make-hydra_core_annotated_type typ_ anns)))))))))
 
 (defvar hydra_annotations_set_type_classes (lambda (m) (lambda (term) (let ((encode_class (lambda (tc) (funcall (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :equality) (funcall (lambda (_) (list :union (make-hydra_core_injection "hydra.classes.TypeClass" (make-hydra_core_field "equality" (list :unit nil))))) match_value)) ((equal (car match_target) :ordering) (funcall (lambda (_) (list :union (make-hydra_core_injection "hydra.classes.TypeClass" (make-hydra_core_field "ordering" (list :unit nil))))) match_value)))) (cadr match_target))) tc)))) (let ((encode_pair (lambda (name_classes) (let ((name (hydra_lib_pairs_first name_classes))) (let ((classes (hydra_lib_pairs_second name_classes))) (list (hydra_encode_core_name name) (list :set (hydra_lib_sets_from_list (funcall (hydra_lib_lists_map encode_class) (hydra_lib_sets_to_list classes)))))))))) (let ((encoded (if (hydra_lib_maps_null m) (list :nothing) (list :just (list :map (hydra_lib_maps_from_list (funcall (hydra_lib_lists_map encode_pair) (hydra_lib_maps_to_list m)))))))) (funcall (funcall (hydra_annotations_set_term_annotation hydra_constants_key_classes) encoded) term)))))))
 

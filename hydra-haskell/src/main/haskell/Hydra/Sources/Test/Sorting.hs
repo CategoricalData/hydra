@@ -8,10 +8,9 @@ module Hydra.Sources.Test.Sorting where
 -- Standard imports for shallow DSL tests
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing
-import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
-import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms      as Phantoms hiding ((++))
 import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
@@ -22,11 +21,16 @@ import qualified Data.Map                     as M
 import Hydra.Testing
 import Hydra.Sources.Libraries
 import qualified Hydra.Sources.Kernel.Terms.Sorting as SortingModule
+import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
+import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 
 import qualified Data.Int as I
 
 
--- Note: We use Int for input types in helpers because Phantoms.int32 expects Int
+-- Note: We use Int for input types in helpers because int32 expects Int
 -- and produces TTerm I.Int32. The test data literals (1, 2, 3) are polymorphic.
 
 ns :: Namespace
@@ -34,37 +38,65 @@ ns = Namespace "hydra.test.sorting"
 
 module_ :: Module
 module_ = Module ns elements
-    [SortingModule.ns]
+    [SortingModule.ns, ShowCore.ns]
     kernelTypesNamespaces
     (Just "Test cases for topological sorting algorithms")
   where
-    elements = [Phantoms.toTermDefinition allTests]
+    elements = [Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TBinding a
-define = Phantoms.definitionInModule module_
+define :: String -> TTerm a -> TTermDefinition a
+define = definitionInModule module_
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
-    Phantoms.doc "Test cases for topological sorting" $
+    doc "Test cases for topological sorting" $
     supergroup "sorting" [
       topologicalSortGroup,
       topologicalSortSCCGroup]
 
+-- | Show a list of Int32 as a string like "[1, 2, 3]"
+showIntList :: TTerm [Int] -> TTerm String
+showIntList xs = ShowCore.list_ @@ unaryFunction Literals.showInt32 @@ xs
+
+-- | Show a list of lists of Int32 as a string like "[[1, 2], [3]]"
+showIntListList :: TTerm [[Int]] -> TTerm String
+showIntListList xs = ShowCore.list_ @@ unaryFunction showIntList @@ xs
+
+-- | Show Either [[Int]] [Int] as "left([[1, 2]])" or "right([1, 2, 3])"
+showEitherResult :: TTerm (Either [[Int]] [Int]) -> TTerm String
+showEitherResult = Eithers.either_
+  (lambda "cs" (Strings.cat2 (string "left(") (Strings.cat2 (showIntListList (var "cs")) (string ")"))))
+  (lambda "xs" (Strings.cat2 (string "right(") (Strings.cat2 (showIntList (var "xs")) (string ")"))))
+
 -- Helper to create adjacency list
 adj :: [(Int, [Int])] -> TTerm [(Int, [Int])]
-adj pairs = Phantoms.list [Phantoms.pair (Phantoms.int32 n) (Phantoms.list (Phantoms.int32 <$> deps)) | (n, deps) <- pairs]
+adj pairs = list [pair (int32 n) (list (int32 <$> deps)) | (n, deps) <- pairs]
+
+-- Universal sort test case
+sortCase :: String -> TTerm [(Int, [Int])] -> TTerm (Either [[Int]] [Int]) -> TTerm TestCaseWithMetadata
+sortCase cname adjList expected =
+  universalCase cname
+    (showEitherResult (SortingModule.topologicalSort @@ adjList))
+    (showEitherResult expected)
+
+-- Universal SCC test case
+sortSCCCase :: String -> TTerm [(Int, [Int])] -> TTerm [[Int]] -> TTerm TestCaseWithMetadata
+sortSCCCase cname adjList expected =
+  universalCase cname
+    (showIntListList (SortingModule.topologicalSortComponents @@ adjList))
+    (showIntListList expected)
 
 -- Helper for Right result (sorted list)
 sorted :: [Int] -> TTerm (Either [[Int]] [Int])
-sorted xs = Phantoms.right $ Phantoms.list (Phantoms.int32 <$> xs)
+sorted xs = right $ list (int32 <$> xs)
 
 -- Helper for Left result (cycles)
 cycles :: [[Int]] -> TTerm (Either [[Int]] [Int])
-cycles cs = Phantoms.left $ Phantoms.list [Phantoms.list (Phantoms.int32 <$> c) | c <- cs]
+cycles cs = left $ list [list (int32 <$> c) | c <- cs]
 
 -- Helper for SCC result
 sccs :: [[Int]] -> TTerm [[Int]]
-sccs cs = Phantoms.list [Phantoms.list (Phantoms.int32 <$> c) | c <- cs]
+sccs cs = list [list (int32 <$> c) | c <- cs]
 
 -- | Test cases for topological sort (without cycles)
 topologicalSortGroup :: TTerm TestGroup

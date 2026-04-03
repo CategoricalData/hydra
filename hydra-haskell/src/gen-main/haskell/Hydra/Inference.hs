@@ -23,19 +23,18 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Names as Names
 import qualified Hydra.Reflect as Reflect
+import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Rewriting as Rewriting
-import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Show.Core as Core__
 import qualified Hydra.Show.Typing as Typing
 import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Substitution as Substitution
 import qualified Hydra.Typing as Typing_
 import qualified Hydra.Unification as Unification
+import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
@@ -63,8 +62,8 @@ bindUnboundTypeVariables cx term0 =
                                   Core.bindingTerm = (bindUnboundTypeVariables cx bterm),
                                   Core.bindingType = Nothing}) (\ts ->
                                   let bvars = Sets.fromList (Core.typeSchemeVariables ts)
-                                      unboundInType = Rewriting.freeVariablesInType (Core.typeSchemeType ts)
-                                      unboundInTerm = Rewriting.freeTypeVariablesInTerm bterm
+                                      unboundInType = Variables.freeVariablesInType (Core.typeSchemeType ts)
+                                      unboundInTerm = Variables.freeTypeVariablesInTerm bterm
                                       unbound = Sets.toList (Sets.difference (Sets.union unboundInType unboundInTerm) (Sets.union svars bvars))
                                       ts2 =
                                               Core.TypeScheme {
@@ -110,7 +109,7 @@ finalizeInferredTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either (C
 finalizeInferredTerm flowCx cx term =
 
       let term2 = bindUnboundTypeVariables cx term
-      in (Eithers.bind (Checking.checkForUnboundTypeVariables flowCx cx term2) (\_ -> Right (Rewriting.normalizeTypeVariablesInTerm term2)))
+      in (Eithers.bind (Checking.checkForUnboundTypeVariables flowCx cx term2) (\_ -> Right (Variables.normalizeTypeVariablesInTerm term2)))
 
 -- | Infer a term's type and map over the result
 forInferredTerm :: Context.Context -> Graph.Graph -> Core.Term -> String -> (Typing_.InferenceResult -> t0) -> Either (Context.InContext Errors.Error) (t0, Context.Context)
@@ -120,13 +119,13 @@ forInferredTerm fcx cx term desc f =
 -- | Get all free variables in a graph's bound types
 freeVariablesInContext :: Graph.Graph -> S.Set Core.Name
 freeVariablesInContext cx =
-    Lists.foldl Sets.union Sets.empty (Lists.map Rewriting.freeVariablesInTypeSchemeSimple (Maps.elems (Graph.graphBoundTypes cx)))
+    Lists.foldl Sets.union Sets.empty (Lists.map Variables.freeVariablesInTypeSchemeSimple (Maps.elems (Graph.graphBoundTypes cx)))
 
 -- | Generate a fresh type variable
 freshVariableType :: Context.Context -> (Core.Type, Context.Context)
 freshVariableType cx =
 
-      let result = Schemas.freshName cx
+      let result = Names.freshName cx
           name = Pairs.first result
           cx2 = Pairs.second result
       in (Core.TypeVariable name, cx2)
@@ -140,7 +139,7 @@ generalize cx typ =
                 let parts = Strings.splitOn "." (Core.unName name)
                 in (Equality.lte (Lists.length parts) 1)
           vars =
-                  Lists.nub (Lists.filter (\v -> Logic.and (isUnbound cx v) (isTypeVarName v)) (Rewriting.freeVariablesInTypeOrdered typ))
+                  Lists.nub (Lists.filter (\v -> Logic.and (isUnbound cx v) (isTypeVarName v)) (Variables.freeVariablesInTypeOrdered typ))
           allConstraints = Graph.graphClassConstraints cx
           relevantConstraints =
                   Maps.fromList (Maybes.cat (Lists.map (\v -> Maybes.map (\meta -> (v, meta)) (Maps.lookup v allConstraints)) vars))
@@ -293,7 +292,7 @@ inferTypeOfApplication fcx0 cx app =
               t1 = Typing_.inferenceResultType rhsResult
               s1 = Typing_.inferenceResultSubst rhsResult
               c1 = Typing_.inferenceResultClassConstraints rhsResult
-              vResult = Schemas.freshName fcx3
+              vResult = Names.freshName fcx3
               v = Pairs.first vResult
               fcx4 = Pairs.second vResult
           in (Eithers.bind (Eithers.bimap (\_ic -> Context.InContext {
@@ -329,7 +328,7 @@ inferTypeOfCaseStatement fcx cx caseStmt =
           dflt = Core.caseStatementDefault caseStmt
           cases = Core.caseStatementCases caseStmt
           fnames = Lists.map Core.fieldName cases
-      in (Eithers.bind (Schemas.requireSchemaType fcx (Graph.graphSchemaTypes cx) tname) (\stRp ->
+      in (Eithers.bind (Resolution.requireSchemaType fcx (Graph.graphSchemaTypes cx) tname) (\stRp ->
         let schemaType = Pairs.first stRp
             fcx2 = Pairs.second stRp
             svars = Core.typeSchemeVariables schemaType
@@ -351,7 +350,7 @@ inferTypeOfCaseStatement fcx cx caseStmt =
                 itypes = Pairs.first (Pairs.second caseResults)
                 isubst = Pairs.first (Pairs.second (Pairs.second caseResults))
                 caseElemConstraints = Pairs.second (Pairs.second (Pairs.second caseResults))
-                codvResult = Schemas.freshName fcx4
+                codvResult = Names.freshName fcx4
                 codv = Pairs.first codvResult
                 fcx5 = Pairs.second codvResult
                 cod = Core.TypeVariable codv
@@ -376,7 +375,7 @@ inferTypeOfCaseStatement fcx cx caseStmt =
               Core.caseStatementCases = (Lists.zipWith (\n -> \t -> Core.Field {
                 Core.fieldName = n,
                 Core.fieldTerm = t}) fnames iterms)}))))) (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = (Schemas.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
+              Core.functionTypeDomain = (Resolution.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
               Core.functionTypeCodomain = cod})) (Substitution.composeTypeSubstList (Lists.concat [
               Maybes.toList (Maybes.map Typing_.inferenceResultSubst dfltResult),
               [
@@ -389,7 +388,7 @@ inferTypeOfCaseStatement fcx cx caseStmt =
 inferTypeOfCollection :: Context.Context -> Graph.Graph -> (Core.Type -> Core.Type) -> ([Core.Term] -> Core.Term) -> String -> S.Set Core.Name -> [Core.Term] -> Either (Context.InContext Errors.Error) Typing_.InferenceResult
 inferTypeOfCollection fcx cx typCons trmCons desc classNames els =
 
-      let varResult = Schemas.freshName fcx
+      let varResult = Names.freshName fcx
           var = Pairs.first varResult
           fcx2 = Pairs.second varResult
           classConstraints =
@@ -490,7 +489,7 @@ inferTypeOfInjection fcx cx injection =
           term = Core.fieldTerm field
       in (Eithers.bind (inferTypeOfTerm fcx cx term "injected term") (\result ->
         let fcx2 = Typing_.inferenceResultContext result
-        in (Eithers.bind (Schemas.requireSchemaType fcx2 (Graph.graphSchemaTypes cx) tname) (\stRp ->
+        in (Eithers.bind (Resolution.requireSchemaType fcx2 (Graph.graphSchemaTypes cx) tname) (\stRp ->
           let schemaType = Pairs.first stRp
               fcx3 = Pairs.second stRp
               svars = Core.typeSchemeVariables schemaType
@@ -498,11 +497,11 @@ inferTypeOfInjection fcx cx injection =
               iterm = Typing_.inferenceResultTerm result
               ityp = Typing_.inferenceResultType result
               isubst = Typing_.inferenceResultSubst result
-          in (Eithers.bind (Core_.unionType fcx3 tname stype) (\sfields -> Eithers.bind (Schemas.findFieldType fcx3 fname sfields) (\ftyp -> Eithers.bind (mapConstraints fcx3 cx (\subst -> yield fcx3 (buildTypeApplicationTerm svars (Core.TermUnion (Core.Injection {
+          in (Eithers.bind (Core_.unionType fcx3 tname stype) (\sfields -> Eithers.bind (Resolution.findFieldType fcx3 fname sfields) (\ftyp -> Eithers.bind (mapConstraints fcx3 cx (\subst -> yield fcx3 (buildTypeApplicationTerm svars (Core.TermUnion (Core.Injection {
             Core.injectionTypeName = tname,
             Core.injectionField = Core.Field {
               Core.fieldName = fname,
-              Core.fieldTerm = iterm}}))) (Schemas.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)) (Substitution.composeTypeSubst isubst subst)) [
+              Core.fieldTerm = iterm}}))) (Resolution.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)) (Substitution.composeTypeSubst isubst subst)) [
             Typing_.TypeConstraint {
               Typing_.typeConstraintLeft = ftyp,
               Typing_.typeConstraintRight = ityp,
@@ -514,7 +513,7 @@ inferTypeOfLambda fcx cx lambda =
 
       let var = Core.lambdaParameter lambda
           body = Core.lambdaBody lambda
-          vdomResult = Schemas.freshName fcx
+          vdomResult = Names.freshName fcx
           vdom = Pairs.first vdomResult
           fcx2 = Pairs.second vdomResult
           dom = Core.TypeVariable vdom
@@ -541,8 +540,8 @@ inferTypeOfLambda fcx cx lambda =
                       Core.functionTypeCodomain = icod})
             vars =
                     Sets.unions [
-                      Rewriting.freeVariablesInType rdom,
-                      (Rewriting.freeVariablesInType icod),
+                      Variables.freeVariablesInType rdom,
+                      (Variables.freeVariablesInType icod),
                       (freeVariablesInContext (Substitution.substInContext isubst cx2))]
             cx3 = Substitution.substInContext isubst cx
             iconstraints = Substitution.substInClassConstraints isubst (Typing_.inferenceResultClassConstraints result)
@@ -570,7 +569,7 @@ inferTypeOfLet fcx0 cx let0 =
                   \binding ->
                     let name = Core.bindingName binding
                         term = Core.bindingTerm binding
-                    in (name, (Lists.filter (\n -> Sets.member n nameSet) (Sets.toList (Rewriting.freeVariablesInTerm term))))
+                    in (name, (Lists.filter (\n -> Sets.member n nameSet) (Sets.toList (Variables.freeVariablesInTerm term))))
           adjList = Lists.map toPair bindings0
           groups = Sorting.topologicalSortComponents adjList
           bindingMap = Maps.fromList (Lists.zip names bindings0)
@@ -584,7 +583,7 @@ inferTypeOfLet fcx0 cx let0 =
                     let helper =
                             \level -> \bins -> \term ->
                               let nonzero =
-                                      \term -> case term of
+                                      \term2 -> case term2 of
                                         Core.TermLet v0 ->
                                           let bs = Core.letBindings v0
                                               letBody = Core.letBody v0
@@ -630,7 +629,7 @@ inferTypeOfLetNormalized fcx0 cx0 letTerm =
           bins0 = Core.letBindings letTerm
           body0 = Core.letBody letTerm
           bnames = Lists.map Core.bindingName bins0
-          bvarsResult = Schemas.freshNames (Lists.length bins0) fcx
+          bvarsResult = Names.freshNames (Lists.length bins0) fcx
           bvars = Pairs.first bvarsResult
           fcx2 = Pairs.second bvarsResult
           tbins0 = Lists.map (\x -> Core.TypeVariable x) bvars
@@ -730,10 +729,10 @@ inferTypeOfLiteral fcx lit =
 inferTypeOfMap :: Context.Context -> Graph.Graph -> M.Map Core.Term Core.Term -> Either (Context.InContext Errors.Error) Typing_.InferenceResult
 inferTypeOfMap fcx cx m =
 
-      let kvarResult = Schemas.freshName fcx
+      let kvarResult = Names.freshName fcx
           kvar = Pairs.first kvarResult
           fcx2 = Pairs.second kvarResult
-          vvarResult = Schemas.freshName fcx2
+          vvarResult = Names.freshName fcx2
           vvar = Pairs.first vvarResult
           fcx3 = Pairs.second vvarResult
           keyConstraints =
@@ -817,7 +816,7 @@ inferTypeOfPrimitive fcx cx name =
     Maybes.maybe (Left (Context.InContext {
       Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "No such primitive: " (Core.unName name)))),
       Context.inContextContext = fcx})) (\scheme ->
-      let tsResult = Schemas.instantiateTypeScheme fcx scheme
+      let tsResult = Resolution.instantiateTypeScheme fcx scheme
           ts = Pairs.first tsResult
           fcx2 = Pairs.second tsResult
           constraints = Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints ts)
@@ -829,15 +828,15 @@ inferTypeOfProjection fcx cx proj =
 
       let tname = Core.projectionTypeName proj
           fname = Core.projectionField proj
-      in (Eithers.bind (Schemas.requireSchemaType fcx (Graph.graphSchemaTypes cx) tname) (\stRp ->
+      in (Eithers.bind (Resolution.requireSchemaType fcx (Graph.graphSchemaTypes cx) tname) (\stRp ->
         let schemaType = Pairs.first stRp
             fcx2 = Pairs.second stRp
             svars = Core.typeSchemeVariables schemaType
             stype = Core.typeSchemeType schemaType
-        in (Eithers.bind (Core_.recordType fcx2 tname stype) (\sfields -> Eithers.bind (Schemas.findFieldType fcx2 fname sfields) (\ftyp -> Right (yield fcx2 (buildTypeApplicationTerm svars (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        in (Eithers.bind (Core_.recordType fcx2 tname stype) (\sfields -> Eithers.bind (Resolution.findFieldType fcx2 fname sfields) (\ftyp -> Right (yield fcx2 (buildTypeApplicationTerm svars (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = tname,
           Core.projectionField = fname}))))) (Core.TypeFunction (Core.FunctionType {
-          Core.functionTypeDomain = (Schemas.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
+          Core.functionTypeDomain = (Resolution.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
           Core.functionTypeCodomain = ftyp})) Substitution.idTypeSubst))))))
 
 -- | Infer the type of a record (Either version)
@@ -847,7 +846,7 @@ inferTypeOfRecord fcx cx record =
       let tname = Core.recordTypeName record
           fields = Core.recordFields record
           fnames = Lists.map Core.fieldName fields
-      in (Eithers.bind (Schemas.requireSchemaType fcx (Graph.graphSchemaTypes cx) tname) (\stRp ->
+      in (Eithers.bind (Resolution.requireSchemaType fcx (Graph.graphSchemaTypes cx) tname) (\stRp ->
         let schemaType = Pairs.first stRp
             fcx2 = Pairs.second stRp
         in (Eithers.bind (inferMany fcx2 cx (Lists.map (\f -> (Core.fieldTerm f, (Strings.cat2 "field " (Core.unName (Core.fieldName f))))) fields)) (\rp ->
@@ -867,7 +866,7 @@ inferTypeOfRecord fcx cx record =
             Core.recordTypeName = tname,
             Core.recordFields = (Lists.zipWith (\n -> \t -> Core.Field {
               Core.fieldName = n,
-              Core.fieldTerm = t}) fnames iterms)}))) (Schemas.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)) (Substitution.composeTypeSubst isubst subst) (Substitution.substInClassConstraints subst recElemConstraints)) [
+              Core.fieldTerm = t}) fnames iterms)}))) (Resolution.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)) (Substitution.composeTypeSubst isubst subst) (Substitution.substInClassConstraints subst recElemConstraints)) [
             Typing_.TypeConstraint {
               Typing_.typeConstraintLeft = stype,
               Typing_.typeConstraintRight = ityp,
@@ -928,13 +927,13 @@ inferTypeOfUnit fcx =
 -- | Infer the type of an unwrap operation (Either version)
 inferTypeOfUnwrap :: Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Errors.Error) Typing_.InferenceResult
 inferTypeOfUnwrap fcx cx tname =
-    Eithers.bind (Schemas.requireSchemaType fcx (Graph.graphSchemaTypes cx) tname) (\stRp ->
+    Eithers.bind (Resolution.requireSchemaType fcx (Graph.graphSchemaTypes cx) tname) (\stRp ->
       let schemaType = Pairs.first stRp
           fcx2 = Pairs.second stRp
           svars = Core.typeSchemeVariables schemaType
           stype = Core.typeSchemeType schemaType
       in (Eithers.bind (Core_.wrappedType fcx2 tname stype) (\wtyp -> Right (yield fcx2 (buildTypeApplicationTerm svars (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap tname)))) (Core.TypeFunction (Core.FunctionType {
-        Core.functionTypeDomain = (Schemas.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
+        Core.functionTypeDomain = (Resolution.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
         Core.functionTypeCodomain = wtyp})) Substitution.idTypeSubst))))
 
 -- | Infer the type of a variable (Either version)
@@ -943,7 +942,7 @@ inferTypeOfVariable fcx cx name =
     Maybes.maybe (Left (Context.InContext {
       Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Variable not bound to type: " (Core.unName name)))),
       Context.inContextContext = fcx})) (\scheme ->
-      let tsResult = Schemas.instantiateTypeScheme fcx scheme
+      let tsResult = Resolution.instantiateTypeScheme fcx scheme
           ts = Pairs.first tsResult
           fcx2 = Pairs.second tsResult
           constraints = Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints ts)
@@ -960,7 +959,7 @@ inferTypeOfWrappedTerm fcx cx wt =
 
       let tname = Core.wrappedTermTypeName wt
           term = Core.wrappedTermBody wt
-      in (Eithers.bind (Schemas.requireSchemaType fcx (Graph.graphSchemaTypes cx) tname) (\stRp ->
+      in (Eithers.bind (Resolution.requireSchemaType fcx (Graph.graphSchemaTypes cx) tname) (\stRp ->
         let schemaType = Pairs.first stRp
             fcx2 = Pairs.second stRp
         in (Eithers.bind (inferTypeOfTerm fcx2 cx term "wrapped term") (\result ->
@@ -973,7 +972,7 @@ inferTypeOfWrappedTerm fcx cx wt =
               ityp = Core.TypeWrap itype
           in (Eithers.bind (mapConstraints fcx3 cx (\subst -> yield fcx3 (buildTypeApplicationTerm svars (Core.TermWrap (Core.WrappedTerm {
             Core.wrappedTermTypeName = tname,
-            Core.wrappedTermBody = iterm}))) (Schemas.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)) (Substitution.composeTypeSubst isubst subst)) [
+            Core.wrappedTermBody = iterm}))) (Resolution.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)) (Substitution.composeTypeSubst isubst subst)) [
             Typing_.TypeConstraint {
               Typing_.typeConstraintLeft = stype,
               Typing_.typeConstraintRight = ityp,
@@ -999,7 +998,7 @@ inferTypesOfTemporaryBindings fcx cx bins =
                       u = Typing_.inferenceResultSubst result1
                       c1Inferred = Typing_.inferenceResultClassConstraints result1
                   in (Eithers.bind (Maybes.maybe (Right Maps.empty) (\ts ->
-                    let tsResult = Schemas.instantiateTypeScheme fcx2 ts
+                    let tsResult = Resolution.instantiateTypeScheme fcx2 ts
                         instantiatedTs = Pairs.first tsResult
                         freshConstraints = Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints instantiatedTs)
                     in (Eithers.bind (Eithers.bimap (\_ic -> Context.InContext {

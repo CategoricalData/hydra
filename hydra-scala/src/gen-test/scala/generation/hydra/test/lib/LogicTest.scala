@@ -13,7 +13,7 @@ class LogicTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.logic.and(true)(true)) == (
+      true) == (
 
       true))
 
@@ -23,7 +23,7 @@ class LogicTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.logic.and(true)(false)) == (
+      false) == (
 
       false))
 
@@ -33,7 +33,7 @@ class LogicTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.logic.and(false)(true)) == (
+      false) == (
 
       false))
 
@@ -43,7 +43,7 @@ class LogicTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.logic.and(false)(false)) == (
+      false) == (
 
       false))
 
@@ -57,7 +57,7 @@ class LogicTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.logic.ifElse[Boolean](true)(true)(false)) == (
+      true) == (
 
       true))
 
@@ -67,7 +67,7 @@ class LogicTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.logic.ifElse[Boolean](false)(true)(false)) == (
+      false) == (
 
       false))
 
@@ -79,9 +79,9 @@ class LogicTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.logic.ifElse[Int](true)(42)(0)) == (
+      42:int32) == (
 
-      42))
+      42:int32))
 
   }
 
@@ -89,9 +89,9 @@ class LogicTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.logic.ifElse[Int](false)(42)(0)) == (
+      0:int32) == (
 
-      0))
+      0:int32))
 
   }
 
@@ -101,7 +101,7 @@ class LogicTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.logic.ifElse[scala.Predef.String](true)("yes")("no")) == (
+      "yes") == (
 
       "yes"))
 
@@ -111,7 +111,7 @@ class LogicTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.logic.ifElse[scala.Predef.String](false)("yes")("no")) == (
+      "no") == (
 
       "no"))
 
@@ -123,7 +123,7 @@ class LogicTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.logic.not(true)) == (
+      false) == (
 
       false))
 
@@ -133,7 +133,7 @@ class LogicTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.logic.not(false)) == (
+      true) == (
 
       true))
 
@@ -145,7 +145,7 @@ class LogicTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.logic.or(true)(true)) == (
+      true) == (
 
       true))
 
@@ -155,7 +155,7 @@ class LogicTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.logic.or(true)(false)) == (
+      true) == (
 
       true))
 
@@ -165,7 +165,7 @@ class LogicTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.logic.or(false)(true)) == (
+      true) == (
 
       true))
 
@@ -175,7 +175,7 @@ class LogicTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.logic.or(false)(false)) == (
+      false) == (
 
       false))
 

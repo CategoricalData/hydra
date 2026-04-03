@@ -6,9 +6,10 @@ import           Hydra.Dsl.Annotations (doc)
 import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types ((>:), (@@), (~>))
 import qualified Hydra.Dsl.Types as T
+import qualified Hydra.Sources.Kernel.Types.Context as Context
 import qualified Hydra.Sources.Kernel.Types.Core as Core
+import qualified Hydra.Sources.Kernel.Types.Errors as Error
 import qualified Hydra.Sources.Kernel.Types.Graph as Graph
-import qualified Hydra.Sources.Kernel.Types.Util as Util
 import qualified Hydra.Sources.Kernel.Types.Variants as Variants
 
 
@@ -19,11 +20,14 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [Graph.ns, Util.ns, Variants.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef elements) [Context.ns, Error.ns, Graph.ns, Variants.ns] [Core.ns] $
     Just "Abstractions for paired transformations between languages"
   where
     elements = [
+      adapter,
       adapterContext,
+      bicoder,
+      coder,
       coderDirection,
       language,
       languageConstraints,
@@ -31,6 +35,23 @@ module_ = Module ns (map toTypeDef elements) [Graph.ns, Util.ns, Variants.ns] [C
       symmetricAdapter,
       traversalOrder,
       typeAdapter]
+
+adapter :: Binding
+adapter = define "Adapter" $
+  doc "A two-level bidirectional encoder which adapts types to types and terms to terms" $
+  T.forAlls ["t1", "t2", "v1", "v2"] $ T.record [
+    "isLossy">:
+      doc "Whether information may be lost in the course of this adaptation"
+      T.boolean,
+    "source">:
+      doc "The source type"
+      "t1",
+    "target">:
+      doc "The target type"
+      "t2",
+    "coder">:
+      doc "The coder for transforming instances of the source type to instances of the target type" $
+      coder @@ "v1" @@ "v2"]
 
 adapterContext :: Binding
 adapterContext = define "AdapterContext" $
@@ -44,9 +65,31 @@ adapterContext = define "AdapterContext" $
       language,
     "adapters">:
       doc "A map of type names to adapters for those types" $
-      T.map Core.name (Util.adapter
+      T.map Core.name (adapter
         @@ Core.type_ @@ Core.type_
         @@ Core.term @@ Core.term)]
+
+bicoder :: Binding
+bicoder = define "Bicoder" $
+  doc "A two-level encoder and decoder, operating both at a type level and an instance (data) level" $
+  T.forAlls ["t1", "t2", "v1", "v2"] $ T.record [
+    "encode">:
+      doc "A function from source types to adapters" $
+      "t1" ~> adapter @@ "t1" @@ "t2" @@ "v1" @@ "v2",
+    "decode">:
+      doc "A function from target types to adapters" $
+      "t2" ~> adapter @@ "t2" @@ "t1" @@ "v2" @@ "v1"]
+
+coder :: Binding
+coder = define "Coder" $
+  doc "An encoder and decoder; a bidirectional transformation between two types" $
+  T.forAlls ["v1", "v2"] $ T.record [
+    "encode">:
+      doc "A function which encodes source values as target values in a given context" $
+      Context.context ~> "v1" ~> T.either_ (Context.inContext @@ Error.error_) "v2",
+    "decode">:
+      doc "A function which decodes target values as source values in a given context" $
+      Context.context ~> "v2" ~> T.either_ (Context.inContext @@ Error.error_) "v1"]
 
 coderDirection :: Binding
 coderDirection = define "CoderDirection" $
@@ -103,7 +146,7 @@ languageName = define "LanguageName" $
 symmetricAdapter :: Binding
 symmetricAdapter = define "SymmetricAdapter" $
   doc "A bidirectional encoder which maps between the same type and term languages on either side" $
-  T.forAlls ["t", "v"] $ Util.adapter @@ "t" @@ "t" @@ "v" @@ "v"
+  T.forAlls ["t", "v"] $ adapter @@ "t" @@ "t" @@ "v" @@ "v"
 
 traversalOrder :: Binding
 traversalOrder = define "TraversalOrder" $

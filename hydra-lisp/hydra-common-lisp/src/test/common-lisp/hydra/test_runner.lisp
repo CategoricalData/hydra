@@ -414,9 +414,9 @@
 (defvar *annotation-cache* (make-hash-table :test #'equal))
 
 (defun install-annotation-cache ()
-  "Wrap hydra_rewriting_deannotate_term to cache annotations before stripping."
-  (let ((original hydra_rewriting_deannotate_term))
-    (setf hydra_rewriting_deannotate_term
+  "Wrap hydra_strip_deannotate_term to cache annotations before stripping."
+  (let ((original hydra_strip_deannotate_term))
+    (setf hydra_strip_deannotate_term
           (lambda (t_)
             (when (and (consp t_) (eq (first t_) :annotated))
               ;; Cache the full annotated term's annotations keyed by the stripped body
@@ -490,8 +490,8 @@
                                hydra_test_test_graph_test_types
                                nil))
                ;; f_type_to_type_scheme conversion
-               (type-to-ts (when (boundp 'hydra_rewriting_f_type_to_type_scheme)
-                             hydra_rewriting_f_type_to_type_scheme))
+               (type-to-ts (when (boundp 'hydra_scoping_f_type_to_type_scheme)
+                             hydra_scoping_f_type_to_type_scheme))
                ;; Build kernel schemas: map each bootstrap type through type-to-ts
                (kernel-entries
                 (when (and bootstrap-types type-to-ts)
@@ -823,6 +823,17 @@
             (list 0 1 0))))
     (error (e) (format t "FAIL: ~A~%  EXCEPTION: ~A~%" path e) (list 0 1 0))))
 
+(defun run-universal-test (path tc)
+  (let ((actual (a :actual tc))
+        (expected (a :expected tc)))
+    (if (equal actual expected)
+      (list 1 0 0)
+      (progn
+        (format t "FAIL: ~a~%" path)
+        (format t "  Expected: ~a~%" expected)
+        (format t "  Actual:   ~a~%" actual)
+        (list 0 1 0)))))
+
 (defun run-simple-test (path expected actual-fn)
   (handler-case
     (let ((actual (funcall actual-fn)))
@@ -861,7 +872,7 @@
     (lambda () (funcall (funcall (funcall hydra_formatting_convert_case (a :from_convention tc)) (a :to_convention tc)) (a :from_string tc)))))
 
 (defun run-deannotate-term-test (path tc)
-  (run-simple-test path (a :output tc) (lambda () (funcall hydra_rewriting_deannotate_term (a :input tc)))))
+  (run-simple-test path (a :output tc) (lambda () (funcall hydra_strip_deannotate_term (a :input tc)))))
 
 (defun run-deannotate-type-test (path tc)
   (run-simple-test path (a :output tc) (lambda () (funcall hydra_rewriting_deannotate_type (a :input tc)))))
@@ -1308,6 +1319,7 @@
                 ((eq case-type :json_encode)             (list 0 0 1)) ;; no test data (Java also skips)
                 ((eq case-type :validate_core_term)      (run-validate-core-term-test full case-data))
                 ((eq case-type :delegated_evaluation)    (list 0 0 1))
+                ((eq case-type :universal)               (run-universal-test full case-data))
                 (t (list 0 0 1))))))
     (error (e)
       (let* ((tname (cdr (assoc :name tcase)))

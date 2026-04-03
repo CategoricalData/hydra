@@ -2,6 +2,7 @@ module Hydra.Sources.Kernel.Terms.Validate.Packaging where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
+import Hydra.Error.Packaging (InvalidModuleError, InvalidPackageError)
 import Hydra.Packaging (Package)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Error.Packaging       as ErrorPackaging
@@ -34,20 +35,20 @@ module_ = Module ns elements
     Just "Validation functions for modules and packages"
   where
     elements = [
-      toTermDefinition checkConflictingModuleNamespaces,
-      toTermDefinition checkConflictingVariantNames,
-      toTermDefinition checkDefinitionNamespaces,
-      toTermDefinition checkDuplicateDefinitionNames,
-      toTermDefinition checkDuplicateModuleNamespaces,
-      toTermDefinition definitionName,
-      toTermDefinition module',
-      toTermDefinition package]
+      toDefinition checkConflictingModuleNamespaces,
+      toDefinition checkConflictingVariantNames,
+      toDefinition checkDefinitionNamespaces,
+      toDefinition checkDuplicateDefinitionNames,
+      toDefinition checkDuplicateModuleNamespaces,
+      toDefinition definitionName,
+      toDefinition module',
+      toDefinition package]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 -- | Extract the name from a Definition (term or type)
-definitionName :: TBinding (Definition -> Name)
+definitionName :: TTermDefinition (Definition -> Name)
 definitionName = define "definitionName" $
   doc "Extract the name from a definition" $
   "def" ~>
@@ -59,7 +60,7 @@ definitionName = define "definitionName" $
 -- directory structure. Two namespaces conflict if they are identical when lowercased,
 -- e.g. hydra.fooBar and hydra.foobar, or hydra.Foo.Bar and hydra.foo.bar.
 -- Fails on the first conflict found.
-checkConflictingModuleNamespaces :: TBinding (Package -> Maybe InvalidPackageError)
+checkConflictingModuleNamespaces :: TTermDefinition (Package -> Maybe InvalidPackageError)
 checkConflictingModuleNamespaces = define "checkConflictingModuleNamespaces" $
   doc "Check for module namespaces that conflict when mapped to target language paths" $
   "pkg" ~>
@@ -90,7 +91,7 @@ checkConflictingModuleNamespaces = define "checkConflictingModuleNamespaces" $
 -- For each union type, the capitalized type local name concatenated with
 -- the capitalized variant field name must not collide with any other type
 -- definition's local name in the same module.
-checkConflictingVariantNames :: TBinding (Module -> Maybe InvalidModuleError)
+checkConflictingVariantNames :: TTermDefinition (Module -> Maybe InvalidModuleError)
 checkConflictingVariantNames = define "checkConflictingVariantNames" $
   doc "Check for union variant names that, when mapped to constructor names, conflict with other type definitions" $
   "mod" ~>
@@ -140,7 +141,7 @@ checkConflictingVariantNames = define "checkConflictingVariantNames" $
 -- | Check that all definition names in a module have the module's namespace as a prefix.
 -- For a module with namespace foo.bar, every definition name must have the form foo.bar.xyz.
 -- Fails on the first definition that violates this constraint.
-checkDefinitionNamespaces :: TBinding (Module -> Maybe InvalidModuleError)
+checkDefinitionNamespaces :: TTermDefinition (Module -> Maybe InvalidModuleError)
 checkDefinitionNamespaces = define "checkDefinitionNamespaces" $
   doc "Check that all definition names in a module have the module's namespace as a prefix" $
   "mod" ~>
@@ -165,7 +166,7 @@ checkDefinitionNamespaces = define "checkDefinitionNamespaces" $
 
 -- | Check for duplicate definition names in a module.
 -- Fails on the first duplicate found.
-checkDuplicateDefinitionNames :: TBinding (Module -> Maybe InvalidModuleError)
+checkDuplicateDefinitionNames :: TTermDefinition (Module -> Maybe InvalidModuleError)
 checkDuplicateDefinitionNames = define "checkDuplicateDefinitionNames" $
   doc "Check for duplicate definition names in a module" $
   "mod" ~>
@@ -192,7 +193,7 @@ checkDuplicateDefinitionNames = define "checkDuplicateDefinitionNames" $
 
 -- | Check for duplicate module namespaces in a package.
 -- Fails on the first duplicate found.
-checkDuplicateModuleNamespaces :: TBinding (Package -> Maybe InvalidPackageError)
+checkDuplicateModuleNamespaces :: TTermDefinition (Package -> Maybe InvalidPackageError)
 checkDuplicateModuleNamespaces = define "checkDuplicateModuleNamespaces" $
   doc "Check for duplicate module namespaces in a package" $
   "pkg" ~>
@@ -214,7 +215,7 @@ checkDuplicateModuleNamespaces = define "checkDuplicateModuleNamespaces" $
 
 -- | Validate a module, returning the first error found or nothing if valid.
 -- Checks are run in order; stops at the first failure.
-module' :: TBinding (Module -> Maybe InvalidModuleError)
+module' :: TTermDefinition (Module -> Maybe InvalidModuleError)
 module' = define "module" $
   doc "Validate a module, returning the first error found or nothing if valid" $
   "mod" ~>
@@ -229,7 +230,7 @@ module' = define "module" $
 -- | Validate a package, returning the first error found or nothing if valid.
 -- Package-level checks run first, then each module is validated in order.
 -- Stops at the first failure.
-package :: TBinding (Package -> Maybe InvalidPackageError)
+package :: TTermDefinition (Package -> Maybe InvalidPackageError)
 package = define "package" $
   doc "Validate a package, returning the first error found or nothing if valid" $
   "pkg" ~>

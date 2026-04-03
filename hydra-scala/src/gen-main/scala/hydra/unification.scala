@@ -27,8 +27,8 @@ import hydra.lib.strings
 def joinTypes(cx: hydra.context.Context)(left: hydra.core.Type)(right: hydra.core.Type)(comment: scala.Predef.String): Either[hydra.context.InContext[hydra.errors.UnificationError],
    Seq[hydra.typing.TypeConstraint]] =
   {
-  lazy val sleft: hydra.core.Type = hydra.rewriting.deannotateType(left)
-  lazy val sright: hydra.core.Type = hydra.rewriting.deannotateType(right)
+  lazy val sleft: hydra.core.Type = hydra.strip.deannotateType(left)
+  lazy val sright: hydra.core.Type = hydra.strip.deannotateType(right)
   def joinOne(l: hydra.core.Type)(r: hydra.core.Type): hydra.typing.TypeConstraint =
     hydra.typing.TypeConstraint(l, r, hydra.lib.strings.cat2("join types; ")(comment))
   def cannotUnify[T0]: Either[hydra.context.InContext[hydra.errors.UnificationError], T0] =
@@ -105,8 +105,8 @@ def unifyTypeConstraints[T0](cx: hydra.context.Context)(schemaTypes: Map[hydra.c
   def withConstraint(c: hydra.typing.TypeConstraint)(rest: Seq[hydra.typing.TypeConstraint]): Either[hydra.context.InContext[hydra.errors.UnificationError],
      hydra.typing.TypeSubst] =
     {
-    lazy val sleft: hydra.core.Type = hydra.rewriting.deannotateType(c.left)
-    lazy val sright: hydra.core.Type = hydra.rewriting.deannotateType(c.right)
+    lazy val sleft: hydra.core.Type = hydra.strip.deannotateType(c.left)
+    lazy val sright: hydra.core.Type = hydra.strip.deannotateType(c.right)
     lazy val comment: scala.Predef.String = (c.comment)
     def bind(v: hydra.core.Name)(t: hydra.core.Type): Either[hydra.context.InContext[hydra.errors.UnificationError], hydra.typing.TypeSubst] =
       {

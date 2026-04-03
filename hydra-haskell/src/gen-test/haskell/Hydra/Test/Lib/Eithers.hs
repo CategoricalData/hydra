@@ -4,14 +4,15 @@
 
 module Hydra.Test.Lib.Eithers where
 
-import qualified Hydra.Core as Core
+import qualified Hydra.Lib.Eithers as Eithers
+import qualified Hydra.Lib.Equality as Equality
+import qualified Hydra.Lib.Literals as Literals
+import qualified Hydra.Lib.Logic as Logic
+import qualified Hydra.Lib.Math as Math
+import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Show.Core as Core
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Test cases for hydra.lib.eithers primitives
 allTests :: Testing.TestGroup
@@ -27,77 +28,23 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "bind Right with success",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.bind"))),
-                    Core.applicationArgument = (Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "ab"))))})),
-                  Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                    Core.lambdaParameter = (Core.Name "s"),
-                    Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
-                          Core.applicationArgument = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.null"))),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "s"))}))})),
-                        Core.applicationArgument = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))))})),
-                      Core.applicationArgument = (Core.TermEither (Right (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.length"))),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "s"))}))))}))})))})),
-                Testing.evaluationTestCaseOutput = (Core.TermEither (Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\e -> Core.either (\n -> Literals.showInt32 n) (\n -> Literals.showInt32 n) e) (Eithers.bind (Right "ab") (\s -> Logic.ifElse (Strings.null s) (Left 0) (Right (Strings.length s))))),
+                Testing.universalTestCaseExpected = ((\e -> Core.either (\n -> Literals.showInt32 n) (\n -> Literals.showInt32 n) e) (Right 2))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "bind Right with failure",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.bind"))),
-                    Core.applicationArgument = (Core.TermEither (Right (Core.TermLiteral (Core.LiteralString ""))))})),
-                  Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                    Core.lambdaParameter = (Core.Name "s"),
-                    Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
-                          Core.applicationArgument = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.null"))),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "s"))}))})),
-                        Core.applicationArgument = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))))})),
-                      Core.applicationArgument = (Core.TermEither (Right (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.length"))),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "s"))}))))}))})))})),
-                Testing.evaluationTestCaseOutput = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\e -> Core.either (\n -> Literals.showInt32 n) (\n -> Literals.showInt32 n) e) (Eithers.bind (Right "") (\s -> Logic.ifElse (Strings.null s) (Left 0) (Right (Strings.length s))))),
+                Testing.universalTestCaseExpected = ((\e -> Core.either (\n -> Literals.showInt32 n) (\n -> Literals.showInt32 n) e) (Left 0))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "bind Left returns Left unchanged",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.bind"))),
-                    Core.applicationArgument = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))})),
-                  Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                    Core.lambdaParameter = (Core.Name "s"),
-                    Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
-                          Core.applicationArgument = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.null"))),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "s"))}))})),
-                        Core.applicationArgument = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))))})),
-                      Core.applicationArgument = (Core.TermEither (Right (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.length"))),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "s"))}))))}))})))})),
-                Testing.evaluationTestCaseOutput = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\e -> Core.either (\n -> Literals.showInt32 n) (\n -> Literals.showInt32 n) e) (Eithers.bind (Left 42) (\s -> Logic.ifElse (Strings.null s) (Left 0) (Right (Strings.length s))))),
+                Testing.universalTestCaseExpected = ((\e -> Core.either (\n -> Literals.showInt32 n) (\n -> Literals.showInt32 n) e) (Left 42))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -107,54 +54,16 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "map left value",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.bimap"))),
-                      Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                        Core.lambdaParameter = (Core.Name "x"),
-                        Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.mul"))),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))})))})),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "s"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.length"))),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "s"))}))})))})),
-                  Core.applicationArgument = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))))})),
-                Testing.evaluationTestCaseOutput = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\e -> Core.either (\n -> Literals.showInt32 n) (\n -> Literals.showInt32 n) e) (Eithers.bimap (\x -> Math.mul x 2) (\s -> Strings.length s) (Left 5))),
+                Testing.universalTestCaseExpected = ((\e -> Core.either (\n -> Literals.showInt32 n) (\n -> Literals.showInt32 n) e) (Left 10))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "map right value",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.bimap"))),
-                      Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                        Core.lambdaParameter = (Core.Name "x"),
-                        Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.mul"))),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))})))})),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "s"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.length"))),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "s"))}))})))})),
-                  Core.applicationArgument = (Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "ab"))))})),
-                Testing.evaluationTestCaseOutput = (Core.TermEither (Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\e -> Core.either (\n -> Literals.showInt32 n) (\n -> Literals.showInt32 n) e) (Eithers.bimap (\x -> Math.mul x 2) (\s -> Strings.length s) (Right "ab"))),
+                Testing.universalTestCaseExpected = ((\e -> Core.either (\n -> Literals.showInt32 n) (\n -> Literals.showInt32 n) e) (Right 2))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -164,22 +73,16 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "left value",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.isLeft"))),
-                  Core.applicationArgument = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))})),
-                Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralBoolean True))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\b -> Literals.showBoolean b) (Eithers.isLeft (Left 42))),
+                Testing.universalTestCaseExpected = ((\b -> Literals.showBoolean b) True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "right value",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.isLeft"))),
-                  Core.applicationArgument = (Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "test"))))})),
-                Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralBoolean False))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\b -> Literals.showBoolean b) (Eithers.isLeft (Right "test"))),
+                Testing.universalTestCaseExpected = ((\b -> Literals.showBoolean b) False)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -189,22 +92,16 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "right value",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.isRight"))),
-                  Core.applicationArgument = (Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "test"))))})),
-                Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralBoolean True))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\b -> Literals.showBoolean b) (Eithers.isRight (Right "test"))),
+                Testing.universalTestCaseExpected = ((\b -> Literals.showBoolean b) True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "left value",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.isRight"))),
-                  Core.applicationArgument = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))})),
-                Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralBoolean False))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\b -> Literals.showBoolean b) (Eithers.isRight (Left 42))),
+                Testing.universalTestCaseExpected = ((\b -> Literals.showBoolean b) False)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -214,26 +111,16 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "extract left",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.fromLeft"))),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 99)))})),
-                  Core.applicationArgument = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))})),
-                Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\n -> Literals.showInt32 n) (Eithers.fromLeft 99 (Left 42))),
+                Testing.universalTestCaseExpected = ((\n -> Literals.showInt32 n) 42)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "use default for right",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.fromLeft"))),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 99)))})),
-                  Core.applicationArgument = (Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "test"))))})),
-                Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 99)))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\n -> Literals.showInt32 n) (Eithers.fromLeft 99 (Right "test"))),
+                Testing.universalTestCaseExpected = ((\n -> Literals.showInt32 n) 99)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -243,26 +130,16 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "extract right",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.fromRight"))),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "default"))})),
-                  Core.applicationArgument = (Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "test"))))})),
-                Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "test"))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\s -> Literals.showString s) (Eithers.fromRight "default" (Right "test"))),
+                Testing.universalTestCaseExpected = ((\s -> Literals.showString s) "test")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "use default for left",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.fromRight"))),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "default"))})),
-                  Core.applicationArgument = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))})),
-                Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "default"))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\s -> Literals.showString s) (Eithers.fromRight "default" (Left 42))),
+                Testing.universalTestCaseExpected = ((\s -> Literals.showString s) "default")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -272,54 +149,16 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "apply left function",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.either"))),
-                      Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                        Core.lambdaParameter = (Core.Name "x"),
-                        Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.mul"))),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))})))})),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "s"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.length"))),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "s"))}))})))})),
-                  Core.applicationArgument = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))))})),
-                Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\n -> Literals.showInt32 n) (Eithers.either (\x -> Math.mul x 2) (\s -> Strings.length s) (Left 5))),
+                Testing.universalTestCaseExpected = ((\n -> Literals.showInt32 n) 10)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "apply right function",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.either"))),
-                      Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                        Core.lambdaParameter = (Core.Name "x"),
-                        Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.mul"))),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))})))})),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "s"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.length"))),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "s"))}))})))})),
-                  Core.applicationArgument = (Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "ab"))))})),
-                Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\n -> Literals.showInt32 n) (Eithers.either (\x -> Math.mul x 2) (\s -> Strings.length s) (Right "ab"))),
+                Testing.universalTestCaseExpected = ((\n -> Literals.showInt32 n) 2)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -329,54 +168,42 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "filter left values",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.lefts"))),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))),
-                    (Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "a")))),
-                    (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))))),
-                    (Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "b"))))])})),
-                Testing.evaluationTestCaseOutput = (Core.TermList [
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))])})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\xs -> Core.list (\n -> Literals.showInt32 n) xs) (Eithers.lefts [
+                  Left 1,
+                  (Right "a"),
+                  (Left 2),
+                  (Right "b")])),
+                Testing.universalTestCaseExpected = ((\xs -> Core.list (\n -> Literals.showInt32 n) xs) [
+                  1,
+                  2])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "all lefts",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.lefts"))),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))),
-                    (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))))])})),
-                Testing.evaluationTestCaseOutput = (Core.TermList [
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))])})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\xs -> Core.list (\n -> Literals.showInt32 n) xs) (Eithers.lefts [
+                  Left 1,
+                  (Left 2)])),
+                Testing.universalTestCaseExpected = ((\xs -> Core.list (\n -> Literals.showInt32 n) xs) [
+                  1,
+                  2])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "all rights",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.lefts"))),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "a"))),
-                    (Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "b"))))])})),
-                Testing.evaluationTestCaseOutput = (Core.TermList [])})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\xs -> Core.list (\n -> Literals.showInt32 n) xs) (Eithers.lefts [
+                  Right "a",
+                  (Right "b")])),
+                Testing.universalTestCaseExpected = ((\xs -> Core.list (\n -> Literals.showInt32 n) xs) [])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty list",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.lefts"))),
-                  Core.applicationArgument = (Core.TermList [])})),
-                Testing.evaluationTestCaseOutput = (Core.TermList [])})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\xs -> Core.list (\n -> Literals.showInt32 n) xs) (Eithers.lefts [])),
+                Testing.universalTestCaseExpected = ((\xs -> Core.list (\n -> Literals.showInt32 n) xs) [])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -386,54 +213,42 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "filter right values",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.rights"))),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))),
-                    (Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "a")))),
-                    (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))))),
-                    (Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "b"))))])})),
-                Testing.evaluationTestCaseOutput = (Core.TermList [
-                  Core.TermLiteral (Core.LiteralString "a"),
-                  (Core.TermLiteral (Core.LiteralString "b"))])})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\xs -> Core.list (\s -> Literals.showString s) xs) (Eithers.rights [
+                  Left 1,
+                  (Right "a"),
+                  (Left 2),
+                  (Right "b")])),
+                Testing.universalTestCaseExpected = ((\xs -> Core.list (\s -> Literals.showString s) xs) [
+                  "a",
+                  "b"])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "all rights",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.rights"))),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "a"))),
-                    (Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "b"))))])})),
-                Testing.evaluationTestCaseOutput = (Core.TermList [
-                  Core.TermLiteral (Core.LiteralString "a"),
-                  (Core.TermLiteral (Core.LiteralString "b"))])})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\xs -> Core.list (\s -> Literals.showString s) xs) (Eithers.rights [
+                  Right "a",
+                  (Right "b")])),
+                Testing.universalTestCaseExpected = ((\xs -> Core.list (\s -> Literals.showString s) xs) [
+                  "a",
+                  "b"])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "all lefts",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.rights"))),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))),
-                    (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))))])})),
-                Testing.evaluationTestCaseOutput = (Core.TermList [])})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\xs -> Core.list (\s -> Literals.showString s) xs) (Eithers.rights [
+                  Left 1,
+                  (Left 2)])),
+                Testing.universalTestCaseExpected = ((\xs -> Core.list (\s -> Literals.showString s) xs) [])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty list",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.rights"))),
-                  Core.applicationArgument = (Core.TermList [])})),
-                Testing.evaluationTestCaseOutput = (Core.TermList [])})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\xs -> Core.list (\s -> Literals.showString s) xs) (Eithers.rights [])),
+                Testing.universalTestCaseExpected = ((\xs -> Core.list (\s -> Literals.showString s) xs) [])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -443,58 +258,46 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "partition mixed",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.partitionEithers"))),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))),
-                    (Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "a")))),
-                    (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))))),
-                    (Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "b"))))])})),
-                Testing.evaluationTestCaseOutput = (Core.TermPair (Core.TermList [
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))], (Core.TermList [
-                  Core.TermLiteral (Core.LiteralString "a"),
-                  (Core.TermLiteral (Core.LiteralString "b"))])))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\p -> Core.pair (\xs -> Core.list (\n -> Literals.showInt32 n) xs) (\xs -> Core.list (\s -> Literals.showString s) xs) p) (Eithers.partitionEithers [
+                  Left 1,
+                  (Right "a"),
+                  (Left 2),
+                  (Right "b")])),
+                Testing.universalTestCaseExpected = ((\p -> Core.pair (\xs -> Core.list (\n -> Literals.showInt32 n) xs) (\xs -> Core.list (\s -> Literals.showString s) xs) p) ([
+                  1,
+                  2], [
+                  "a",
+                  "b"]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "all lefts",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.partitionEithers"))),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))),
-                    (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))))])})),
-                Testing.evaluationTestCaseOutput = (Core.TermPair (Core.TermList [
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))], (Core.TermList [])))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\p -> Core.pair (\xs -> Core.list (\n -> Literals.showInt32 n) xs) (\xs -> Core.list (\s -> Literals.showString s) xs) p) (Eithers.partitionEithers [
+                  Left 1,
+                  (Left 2)])),
+                Testing.universalTestCaseExpected = ((\p -> Core.pair (\xs -> Core.list (\n -> Literals.showInt32 n) xs) (\xs -> Core.list (\s -> Literals.showString s) xs) p) ([
+                  1,
+                  2], []))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "all rights",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.partitionEithers"))),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "a"))),
-                    (Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "b"))))])})),
-                Testing.evaluationTestCaseOutput = (Core.TermPair (Core.TermList [], (Core.TermList [
-                  Core.TermLiteral (Core.LiteralString "a"),
-                  (Core.TermLiteral (Core.LiteralString "b"))])))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\p -> Core.pair (\xs -> Core.list (\n -> Literals.showInt32 n) xs) (\xs -> Core.list (\s -> Literals.showString s) xs) p) (Eithers.partitionEithers [
+                  Right "a",
+                  (Right "b")])),
+                Testing.universalTestCaseExpected = ((\p -> Core.pair (\xs -> Core.list (\n -> Literals.showInt32 n) xs) (\xs -> Core.list (\s -> Literals.showString s) xs) p) ([], [
+                  "a",
+                  "b"]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty list",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.partitionEithers"))),
-                  Core.applicationArgument = (Core.TermList [])})),
-                Testing.evaluationTestCaseOutput = (Core.TermPair (Core.TermList [], (Core.TermList [])))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\p -> Core.pair (\xs -> Core.list (\n -> Literals.showInt32 n) xs) (\xs -> Core.list (\s -> Literals.showString s) xs) p) (Eithers.partitionEithers [])),
+                Testing.universalTestCaseExpected = ((\p -> Core.pair (\xs -> Core.list (\n -> Literals.showInt32 n) xs) (\xs -> Core.list (\s -> Literals.showString s) xs) p) ([], []))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -504,40 +307,16 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "map right value",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.map"))),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "x"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.mul"))),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))})))})),
-                  Core.applicationArgument = (Core.TermEither (Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))))})),
-                Testing.evaluationTestCaseOutput = (Core.TermEither (Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\e -> Core.either (\n -> Literals.showInt32 n) (\n -> Literals.showInt32 n) e) (Eithers.map (\x -> Math.mul x 2) (Right 5))),
+                Testing.universalTestCaseExpected = ((\e -> Core.either (\n -> Literals.showInt32 n) (\n -> Literals.showInt32 n) e) (Right 10))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "preserve left",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.map"))),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "x"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.mul"))),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))})))})),
-                  Core.applicationArgument = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 99)))))})),
-                Testing.evaluationTestCaseOutput = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 99)))))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\e -> Core.either (\n -> Literals.showInt32 n) (\n -> Literals.showInt32 n) e) (Eithers.map (\x -> Math.mul x 2) (Left 99))),
+                Testing.universalTestCaseExpected = ((\e -> Core.either (\n -> Literals.showInt32 n) (\n -> Literals.showInt32 n) e) (Left 99))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -547,98 +326,32 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "all succeed",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.mapList"))),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "x"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
-                            Core.applicationArgument = (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.equal"))),
-                                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})),
-                          Core.applicationArgument = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralString "zero"))))})),
-                        Core.applicationArgument = (Core.TermEither (Right (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.mul"))),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))))}))})))})),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
-                Testing.evaluationTestCaseOutput = (Core.TermEither (Right (Core.TermList [
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4))),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 6)))])))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\e -> Core.either (\s -> Literals.showString s) (\xs -> Core.list (\n -> Literals.showInt32 n) xs) e) (Eithers.mapList (\x -> Logic.ifElse (Equality.equal x 0) (Left "zero") (Right (Math.mul x 2))) [
+                  1,
+                  2,
+                  3])),
+                Testing.universalTestCaseExpected = ((\e -> Core.either (\s -> Literals.showString s) (\xs -> Core.list (\n -> Literals.showInt32 n) xs) e) (Right [
+                  2,
+                  4,
+                  6]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "first fails",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.mapList"))),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "x"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
-                            Core.applicationArgument = (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.equal"))),
-                                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})),
-                          Core.applicationArgument = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralString "zero"))))})),
-                        Core.applicationArgument = (Core.TermEither (Right (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.mul"))),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))))}))})))})),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0))),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
-                Testing.evaluationTestCaseOutput = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralString "zero"))))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\e -> Core.either (\s -> Literals.showString s) (\xs -> Core.list (\n -> Literals.showInt32 n) xs) e) (Eithers.mapList (\x -> Logic.ifElse (Equality.equal x 0) (Left "zero") (Right (Math.mul x 2))) [
+                  1,
+                  0,
+                  3])),
+                Testing.universalTestCaseExpected = ((\e -> Core.either (\s -> Literals.showString s) (\xs -> Core.list (\n -> Literals.showInt32 n) xs) e) (Left "zero"))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty list",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.mapList"))),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "x"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
-                            Core.applicationArgument = (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.equal"))),
-                                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})),
-                          Core.applicationArgument = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralString "zero"))))})),
-                        Core.applicationArgument = (Core.TermEither (Right (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.mul"))),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))))}))})))})),
-                  Core.applicationArgument = (Core.TermList [])})),
-                Testing.evaluationTestCaseOutput = (Core.TermEither (Right (Core.TermList [])))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\e -> Core.either (\s -> Literals.showString s) (\xs -> Core.list (\n -> Literals.showInt32 n) xs) e) (Eithers.mapList (\x -> Logic.ifElse (Equality.equal x 0) (Left "zero") (Right (Math.mul x 2))) [])),
+                Testing.universalTestCaseExpected = ((\e -> Core.either (\s -> Literals.showString s) (\xs -> Core.list (\n -> Literals.showInt32 n) xs) e) (Right []))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -648,89 +361,23 @@ allTests =
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "just succeeds",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.mapMaybe"))),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "x"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
-                            Core.applicationArgument = (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.equal"))),
-                                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})),
-                          Core.applicationArgument = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralString "zero"))))})),
-                        Core.applicationArgument = (Core.TermEither (Right (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.mul"))),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))))}))})))})),
-                  Core.applicationArgument = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))))})),
-                Testing.evaluationTestCaseOutput = (Core.TermEither (Right (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))))))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\e -> Core.either (\s -> Literals.showString s) (\mx -> Core.maybe (\n -> Literals.showInt32 n) mx) e) (Eithers.mapMaybe (\x -> Logic.ifElse (Equality.equal x 0) (Left "zero") (Right (Math.mul x 2))) (Just 5))),
+                Testing.universalTestCaseExpected = ((\e -> Core.either (\s -> Literals.showString s) (\mx -> Core.maybe (\n -> Literals.showInt32 n) mx) e) (Right (Just 10)))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "just fails",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.mapMaybe"))),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "x"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
-                            Core.applicationArgument = (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.equal"))),
-                                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})),
-                          Core.applicationArgument = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralString "zero"))))})),
-                        Core.applicationArgument = (Core.TermEither (Right (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.mul"))),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))))}))})))})),
-                  Core.applicationArgument = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))))})),
-                Testing.evaluationTestCaseOutput = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralString "zero"))))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\e -> Core.either (\s -> Literals.showString s) (\mx -> Core.maybe (\n -> Literals.showInt32 n) mx) e) (Eithers.mapMaybe (\x -> Logic.ifElse (Equality.equal x 0) (Left "zero") (Right (Math.mul x 2))) (Just 0))),
+                Testing.universalTestCaseExpected = ((\e -> Core.either (\s -> Literals.showString s) (\mx -> Core.maybe (\n -> Literals.showInt32 n) mx) e) (Left "zero"))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "nothing",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-                Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-                Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.mapMaybe"))),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "x"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
-                            Core.applicationArgument = (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.equal"))),
-                                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})),
-                          Core.applicationArgument = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralString "zero"))))})),
-                        Core.applicationArgument = (Core.TermEither (Right (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.mul"))),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))))}))})))})),
-                  Core.applicationArgument = (Core.TermMaybe Nothing)})),
-                Testing.evaluationTestCaseOutput = (Core.TermEither (Right (Core.TermMaybe Nothing)))})),
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = ((\e -> Core.either (\s -> Literals.showString s) (\mx -> Core.maybe (\n -> Literals.showInt32 n) mx) e) (Eithers.mapMaybe (\x -> Logic.ifElse (Equality.equal x 0) (Left "zero") (Right (Math.mul x 2))) Nothing)),
+                Testing.universalTestCaseExpected = ((\e -> Core.either (\s -> Literals.showString s) (\mx -> Core.maybe (\n -> Literals.showInt32 n) mx) e) (Right Nothing))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}

@@ -13,9 +13,9 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.apply[Int, Int](Some(hydra.lib.math.add(3)))(Some(5))) == (
+      just(8)) == (
 
-      Some(8)))
+      just(8)))
 
   }
 
@@ -23,9 +23,9 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.apply(None)(Some(5))) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -33,9 +33,9 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.apply[Int, Int](Some(hydra.lib.math.add(3)))(None)) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -45,9 +45,9 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.bind[Int, Int](Some(5))((x: Int) => Some(hydra.lib.math.mul(x)(2)))) == (
+      just(10)) == (
 
-      Some(10)))
+      just(10)))
 
   }
 
@@ -55,9 +55,9 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.bind[Int, Int](None)((x: Int) => Some(hydra.lib.math.mul(x)(2)))) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -67,7 +67,7 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.cases[Int, Int](Some(5))(0)((x: Int) => hydra.lib.math.mul(x)(2))) == (
+      10) == (
 
       10))
 
@@ -77,7 +77,7 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.cases[Int, Int](None)(99)((x: Int) => hydra.lib.math.mul(x)(2))) == (
+      99) == (
 
       99))
 
@@ -89,9 +89,9 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.cat[Int](Seq(Some(1), None, Some(2)))) == (
+      [1, 2]) == (
 
-      Seq(1, 2)))
+      [1, 2]))
 
   }
 
@@ -99,9 +99,9 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.cat[Int](Seq(Some(1), Some(2)))) == (
+      [1, 2]) == (
 
-      Seq(1, 2)))
+      [1, 2]))
 
   }
 
@@ -109,9 +109,9 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.cat(Seq(None, None))) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -119,9 +119,9 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.cat(Seq())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -131,11 +131,9 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.compose[Int, Int, Int]((x: Int) =>
-  hydra.lib.logic.ifElse[Option[Int]](hydra.lib.equality.lte[Int](x)(5))(Some(hydra.lib.math.add(x)(1)))(None))((y: Int) =>
-  hydra.lib.logic.ifElse[Option[Int]](hydra.lib.equality.gte[Int](y)(5))(Some(hydra.lib.math.mul(y)(2)))(None))(5)) == (
+      just(12)) == (
 
-      Some(12)))
+      just(12)))
 
   }
 
@@ -143,11 +141,9 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.compose[Int, Int, Int]((x: Int) =>
-  hydra.lib.logic.ifElse[Option[Int]](hydra.lib.equality.lte[Int](x)(5))(Some(hydra.lib.math.add(x)(1)))(None))((y: Int) =>
-  hydra.lib.logic.ifElse[Option[Int]](hydra.lib.equality.gte[Int](y)(5))(Some(hydra.lib.math.mul(y)(2)))(None))(10)) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -155,11 +151,9 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.compose[Int, Int, Int]((x: Int) =>
-  hydra.lib.logic.ifElse[Option[Int]](hydra.lib.equality.lte[Int](x)(5))(Some(hydra.lib.math.add(x)(1)))(None))((y: Int) =>
-  hydra.lib.logic.ifElse[Option[Int]](hydra.lib.equality.gte[Int](y)(5))(Some(hydra.lib.math.mul(y)(2)))(None))(3)) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -169,7 +163,7 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.fromJust[Int](Some(42))) == (
+      42) == (
 
       42))
 
@@ -181,7 +175,7 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.fromMaybe[Int](0)(Some(42))) == (
+      42) == (
 
       42))
 
@@ -191,7 +185,7 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.fromMaybe[Int](99)(None)) == (
+      99) == (
 
       99))
 
@@ -203,7 +197,7 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.isJust[Int](Some(42))) == (
+      true) == (
 
       true))
 
@@ -213,7 +207,7 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.isJust(None)) == (
+      false) == (
 
       false))
 
@@ -225,7 +219,7 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.isNothing[Int](Some(42))) == (
+      false) == (
 
       false))
 
@@ -235,7 +229,7 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.isNothing(None)) == (
+      true) == (
 
       true))
 
@@ -247,9 +241,9 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.map[Int, Int]((x: Int) => hydra.lib.math.mul(x)(2))(Some(5))) == (
+      just(10)) == (
 
-      Some(10)))
+      just(10)))
 
   }
 
@@ -257,9 +251,9 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.map[Int, Int]((x: Int) => hydra.lib.math.mul(x)(2))(None)) == (
+      nothing) == (
 
-      None))
+      nothing))
 
   }
 
@@ -269,10 +263,9 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.mapMaybe[Int, Int]((x: Int) =>
-  hydra.lib.logic.ifElse[Option[Int]](hydra.lib.equality.gt[Int](x)(2))(Some(hydra.lib.math.mul(x)(2)))(None))(Seq(1, 2, 3, 4, 5))) == (
+      [6, 8, 10]) == (
 
-      Seq(6, 8, 10)))
+      [6, 8, 10]))
 
   }
 
@@ -280,10 +273,9 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.mapMaybe[Int, Int]((x: Int) =>
-  hydra.lib.logic.ifElse[Option[Int]](hydra.lib.equality.gt[Int](x)(2))(Some(hydra.lib.math.mul(x)(2)))(None))(Seq(1, 2))) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -291,10 +283,9 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.mapMaybe[Int, Int]((x: Int) =>
-  hydra.lib.logic.ifElse[Option[Int]](hydra.lib.equality.gt[Int](x)(2))(Some(hydra.lib.math.mul(x)(2)))(None))(Seq())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -304,7 +295,7 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.maybe[Int, Int](0)((x: Int) => hydra.lib.math.mul(x)(2))(Some(5))) == (
+      10) == (
 
       10))
 
@@ -314,7 +305,7 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.maybe[Int, Int](99)((x: Int) => hydra.lib.math.mul(x)(2))(None)) == (
+      99) == (
 
       99))
 
@@ -326,9 +317,9 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.pure[Int](42)) == (
+      just(42)) == (
 
-      Some(42)))
+      just(42)))
 
   }
 
@@ -336,9 +327,9 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.pure[scala.Predef.String]("hello")) == (
+      just("hello")) == (
 
-      Some("hello")))
+      just("hello")))
 
   }
 
@@ -348,9 +339,9 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.toList[Int](Some(42))) == (
+      [42]) == (
 
-      Seq(42)))
+      [42]))
 
   }
 
@@ -358,9 +349,9 @@ class MaybesTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.maybes.toList(None)) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 }

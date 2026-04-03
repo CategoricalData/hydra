@@ -14,7 +14,7 @@
 
 (require 'hydra.lib.sets)
 
-(defvar hydra_encode_core_name (lambda (x) (list :wrap (make-hydra_core_wrapped_term "hydra.core.Name" (funcall (lambda (x) (list :literal (list :string x))) (funcall (lambda (v) v) x))))))
+(defvar hydra_encode_core_name (lambda (x) (list :wrap (make-hydra_core_wrapped_term "hydra.core.Name" (funcall (lambda (x2) (list :literal (list :string x2))) (funcall (lambda (v) v) x))))))
 
 (defvar hydra_encode_core_projection (lambda (x) (list :record (make-hydra_core_record "hydra.core.Projection" (list (make-hydra_core_field "typeName" (hydra_encode_core_name (funcall (lambda (v) (hydra_core_projection-type_name v)) x))) (make-hydra_core_field "field" (hydra_encode_core_name (funcall (lambda (v) (hydra_core_projection-field v)) x))))))))
 

@@ -22,6 +22,6 @@
 
 (defvar hydra_encode_typing_term_subst (lambda (x) (list :wrap (make-hydra_core_wrapped_term "hydra.typing.TermSubst" (funcall (lambda (m) (list :map (funcall (funcall (hydra_lib_maps_bimap hydra_encode_core_name) hydra_encode_core_term) m))) (funcall (lambda (v) v) x))))))
 
-(defvar hydra_encode_typing_type_constraint (lambda (x) (list :record (make-hydra_core_record "hydra.typing.TypeConstraint" (list (make-hydra_core_field "left" (hydra_encode_core_type (funcall (lambda (v) (hydra_typing_type_constraint-left v)) x))) (make-hydra_core_field "right" (hydra_encode_core_type (funcall (lambda (v) (hydra_typing_type_constraint-right v)) x))) (make-hydra_core_field "comment" (funcall (lambda (x) (list :literal (list :string x))) (funcall (lambda (v) (hydra_typing_type_constraint-comment v)) x))))))))
+(defvar hydra_encode_typing_type_constraint (lambda (x) (list :record (make-hydra_core_record "hydra.typing.TypeConstraint" (list (make-hydra_core_field "left" (hydra_encode_core_type (funcall (lambda (v) (hydra_typing_type_constraint-left v)) x))) (make-hydra_core_field "right" (hydra_encode_core_type (funcall (lambda (v) (hydra_typing_type_constraint-right v)) x))) (make-hydra_core_field "comment" (funcall (lambda (x2) (list :literal (list :string x2))) (funcall (lambda (v) (hydra_typing_type_constraint-comment v)) x))))))))
 
 (provide 'hydra.encode.typing)

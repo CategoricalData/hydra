@@ -7,7 +7,7 @@ module Hydra.Decode.Classes where
 import qualified Hydra.Classes as Classes
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Helpers as Helpers
+import qualified Hydra.Extract.Core as Core_
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
@@ -15,11 +15,6 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 typeClass :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Classes.TypeClass
 typeClass cx raw =
@@ -30,8 +25,8 @@ typeClass cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "equality", (\input -> Eithers.map (\t -> Classes.TypeClassEquality) (Helpers.decodeUnit cx input))),
-                      (Core.Name "ordering", (\input -> Eithers.map (\t -> Classes.TypeClassOrdering) (Helpers.decodeUnit cx input)))]
+                      (Core.Name "equality", (\input -> Eithers.map (\t -> Classes.TypeClassEquality) (Core_.decodeUnit cx input))),
+                      (Core.Name "ordering", (\input -> Eithers.map (\t -> Classes.TypeClassOrdering) (Core_.decodeUnit cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),

@@ -62,12 +62,13 @@ module_ = Module ns elements
     Just "String representations of hydra.util types"
   where
    elements = [
-     toTermDefinition caseConvention]
+     toDefinition caseConvention,
+     toDefinition comparison]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-caseConvention :: TBinding (CaseConvention -> String)
+caseConvention :: TTermDefinition (CaseConvention -> String)
 caseConvention = define "caseConvention" $
   doc "Show a case convention as a string" $
   "c" ~> cases _CaseConvention (var "c") Nothing [
@@ -75,3 +76,11 @@ caseConvention = define "caseConvention" $
     _CaseConvention_upperSnake>>: constant (string "UPPER_SNAKE_CASE"),
     _CaseConvention_camel>>: constant (string "camelCase"),
     _CaseConvention_pascal>>: constant (string "PascalCase")]
+
+comparison :: TTermDefinition (Comparison -> String)
+comparison = define "comparison" $
+  doc "Show a comparison result as a string" $
+  "c" ~> cases _Comparison (var "c") Nothing [
+    _Comparison_lessThan>>: constant (string "lessThan"),
+    _Comparison_equalTo>>: constant (string "equalTo"),
+    _Comparison_greaterThan>>: constant (string "greaterThan")]

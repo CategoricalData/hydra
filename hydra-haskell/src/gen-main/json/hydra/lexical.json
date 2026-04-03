@@ -1334,7 +1334,7 @@
                           "term": {
                             "application": {
                               "argument": {"variable": "t"},
-                              "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                              "function": {"variable": "hydra.strip.deannotateType"}}},
                           "type": [
                             {
                               "constraints": null,
@@ -1916,7 +1916,7 @@
                                                 "term": {
                                                   "application": {
                                                     "argument": {"variable": "term"},
-                                                    "function": {"variable": "hydra.rewriting.deannotateAndDetypeTerm"}}},
+                                                    "function": {"variable": "hydra.strip.deannotateAndDetypeTerm"}}},
                                                 "type": [
                                                   {
                                                     "constraints": null,
@@ -2121,7 +2121,7 @@
                                                   "term": {
                                                     "application": {
                                                       "argument": {"variable": "term"},
-                                                      "function": {"variable": "hydra.rewriting.deannotateAndDetypeTerm"}}},
+                                                      "function": {"variable": "hydra.strip.deannotateAndDetypeTerm"}}},
                                                   "type": [
                                                     {
                                                       "constraints": null,
@@ -3461,7 +3461,7 @@
                                               "term": {
                                                 "application": {
                                                   "argument": {"variable": "term"},
-                                                  "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                                                  "function": {"variable": "hydra.strip.deannotateTerm"}}},
                                               "type": [
                                                 {
                                                   "constraints": null,
@@ -3559,7 +3559,7 @@
                                   "term": {
                                     "application": {
                                       "argument": {"variable": "term"},
-                                      "function": {"variable": "hydra.rewriting.deannotateAndDetypeTerm"}}},
+                                      "function": {"variable": "hydra.strip.deannotateAndDetypeTerm"}}},
                                   "type": [
                                     {
                                       "constraints": null,
@@ -3685,7 +3685,7 @@
                                 "term": {
                                   "application": {
                                     "argument": {"variable": "term"},
-                                    "function": {"variable": "hydra.rewriting.deannotateAndDetypeTerm"}}},
+                                    "function": {"variable": "hydra.strip.deannotateAndDetypeTerm"}}},
                                 "type": [
                                   {
                                     "constraints": null,
@@ -3790,7 +3790,7 @@
             "variables": []}]}}],
   "description": ["A module for lexical operations over graphs."],
   "namespace": "hydra.lexical",
-  "termDependencies": ["hydra.rewriting", "hydra.show.core", "hydra.show.errors"],
+  "termDependencies": ["hydra.strip", "hydra.show.core", "hydra.show.errors"],
   "typeDependencies": [
     "hydra.paths",
     "hydra.ast",
@@ -3800,6 +3800,7 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
+    "hydra.error.module",
     "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",

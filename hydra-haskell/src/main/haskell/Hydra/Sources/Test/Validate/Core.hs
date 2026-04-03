@@ -25,22 +25,22 @@ ns = Namespace "hydra.test.validate.core"
 
 module_ :: Module
 module_ = Module ns elements
-    []
+    [Namespace "hydra.validate.core", Namespace "hydra.show.error.core"]
     kernelTypesNamespaces
     (Just "Test cases for core term and type validation")
   where
     elements = [
-      Phantoms.toTermDefinition allTests,
-      Phantoms.toTermDefinition duplicateBindingsTests,
-      Phantoms.toTermDefinition duplicateFieldsTests,
-      Phantoms.toTermDefinition emptyLetBindingsTests,
-      Phantoms.toTermDefinition identityApplicationTests,
-      Phantoms.toTermDefinition variableShadowingTests]
+      Phantoms.toDefinition allTests,
+      Phantoms.toDefinition duplicateBindingsTests,
+      Phantoms.toDefinition duplicateFieldsTests,
+      Phantoms.toDefinition emptyLetBindingsTests,
+      Phantoms.toDefinition identityApplicationTests,
+      Phantoms.toDefinition variableShadowingTests]
       -- Commented out pending test gen fixes (raw constructors / unresolvable names):
       -- annotationTests, selfApplicationTests, emptyCaseStatementTests,
       -- emptyTypeNameTests, namingConventionTests
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 -- ============================================================================
@@ -205,7 +205,7 @@ projTerm tname fname = toTermTerm $ Phantoms.project (Name tname) (Name fname)
 -- Test groups
 -- ============================================================================
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
   Phantoms.doc "Test cases for core term and type validation" $
   supergroup "validate.core" [
@@ -226,7 +226,7 @@ allTests = define "allTests" $
 -- T2: Duplicate bindings
 -- ============================================================================
 
-duplicateBindingsTests :: TBinding TestGroup
+duplicateBindingsTests :: TTermDefinition TestGroup
 duplicateBindingsTests = define "duplicateBindingsTests" $
   subgroup "duplicate bindings" [
     untypedCase "no bindings (literal)"
@@ -257,7 +257,7 @@ duplicateBindingsTests = define "duplicateBindingsTests" $
 -- T3/T4: Duplicate fields
 -- ============================================================================
 
-duplicateFieldsTests :: TBinding TestGroup
+duplicateFieldsTests :: TTermDefinition TestGroup
 duplicateFieldsTests = define "duplicateFieldsTests" $
   subgroup "duplicate fields" [
     untypedCase "no fields (literal)"
@@ -280,7 +280,7 @@ duplicateFieldsTests = define "duplicateFieldsTests" $
 -- T1: Empty let bindings
 -- ============================================================================
 
-emptyLetBindingsTests :: TBinding TestGroup
+emptyLetBindingsTests :: TTermDefinition TestGroup
 emptyLetBindingsTests = define "emptyLetBindingsTests" $
   subgroup "empty let bindings" [
     untypedCase "let with bindings is valid"
@@ -294,7 +294,7 @@ emptyLetBindingsTests = define "emptyLetBindingsTests" $
 -- T5: Empty type name
 -- ============================================================================
 
-{- emptyTypeNameTests :: TBinding TestGroup
+{- emptyTypeNameTests :: TTermDefinition TestGroup
 emptyTypeNameTests = define "emptyTypeNameTests" $
   subgroup "empty type name" [
     untypedCase "record with valid type name"
@@ -317,7 +317,7 @@ emptyTypeNameTests = define "emptyTypeNameTests" $
 -- T6: Empty case statement
 -- ============================================================================
 
-{- emptyCaseStatementTests :: TBinding TestGroup
+{- emptyCaseStatementTests :: TTermDefinition TestGroup
 emptyCaseStatementTests = define "emptyCaseStatementTests" $
   subgroup "empty case statement" [
     untypedCase "case with branches is valid"
@@ -335,7 +335,7 @@ emptyCaseStatementTests = define "emptyCaseStatementTests" $
 -- T20/T21: Annotations
 -- ============================================================================
 
-{- annotationTests :: TBinding TestGroup
+{- annotationTests :: TTermDefinition TestGroup
 annotationTests = define "annotationTests" $
   subgroup "annotations" [
     untypedCase "annotated term is valid"
@@ -353,7 +353,7 @@ annotationTests = define "annotationTests" $
 -- T22: Unknown primitive
 -- ============================================================================
 
-unknownPrimitiveTests :: TBinding TestGroup
+unknownPrimitiveTests :: TTermDefinition TestGroup
 unknownPrimitiveTests = define "unknownPrimitiveTests" $
   subgroup "unknown primitive" [
     untypedCase "known primitive is valid"
@@ -367,7 +367,7 @@ unknownPrimitiveTests = define "unknownPrimitiveTests" $
 -- T15: Self-application
 -- ============================================================================
 
-{- selfApplicationTests :: TBinding TestGroup
+{- selfApplicationTests :: TTermDefinition TestGroup
 selfApplicationTests = define "selfApplicationTests" $
   subgroup "self application" [
     untypedCase "normal application is valid"
@@ -382,7 +382,7 @@ selfApplicationTests = define "selfApplicationTests" $
 -- T16: Identity application
 -- ============================================================================
 
-identityApplicationTests :: TBinding TestGroup
+identityApplicationTests :: TTermDefinition TestGroup
 identityApplicationTests = define "identityApplicationTests" $
   subgroup "identity application" [
     untypedCase "non-identity lambda application is valid"
@@ -396,7 +396,7 @@ identityApplicationTests = define "identityApplicationTests" $
 -- T14: Redundant wrap/unwrap
 -- ============================================================================
 
-redundantWrapUnwrapTests :: TBinding TestGroup
+redundantWrapUnwrapTests :: TTermDefinition TestGroup
 redundantWrapUnwrapTests = define "redundantWrapUnwrapTests" $
   subgroup "redundant wrap unwrap" [
     untypedCase "unwrap of different type is valid"
@@ -410,7 +410,7 @@ redundantWrapUnwrapTests = define "redundantWrapUnwrapTests" $
 -- T11: Variable shadowing
 -- ============================================================================
 
-variableShadowingTests :: TBinding TestGroup
+variableShadowingTests :: TTermDefinition TestGroup
 variableShadowingTests = define "variableShadowingTests" $
   subgroup "variable shadowing" [
     untypedCase "lambda with fresh variable is valid"
@@ -428,7 +428,7 @@ variableShadowingTests = define "variableShadowingTests" $
 -- T17/T18: Naming conventions
 -- ============================================================================
 
-{- namingConventionTests :: TBinding TestGroup
+{- namingConventionTests :: TTermDefinition TestGroup
 namingConventionTests = define "namingConventionTests" $
   subgroup "naming conventions" [
     untypedCase "lambda with valid name"

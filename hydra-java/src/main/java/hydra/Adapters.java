@@ -1,6 +1,6 @@
 package hydra;
 
-import hydra.util.Adapter;
+import hydra.coders.Adapter;
 import hydra.util.StatelessAdapter;
 import hydra.util.Either;
 

@@ -238,7 +238,7 @@ public interface Decoding {
   static hydra.core.Term decodeEitherType(hydra.core.EitherType et) {
     hydra.core.Term leftDecoder = hydra.Decoding.decodeType((et).left);
     hydra.core.Term rightDecoder = hydra.Decoding.decodeType((et).right);
-    return new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.extract.helpers.decodeEither")), leftDecoder)), rightDecoder));
+    return new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.extract.core.decodeEither")), leftDecoder)), rightDecoder));
   }
 
   static hydra.core.Term decodeForallType(hydra.core.ForallType ft) {
@@ -247,7 +247,7 @@ public interface Decoding {
 
   static hydra.core.Term decodeListType(hydra.core.Type elemType) {
     hydra.core.Term elemDecoder = hydra.Decoding.decodeType(elemType);
-    return new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.extract.helpers.decodeList")), elemDecoder));
+    return new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.extract.core.decodeList")), elemDecoder));
   }
 
   static hydra.core.Term decodeLiteralType(hydra.core.LiteralType lt) {
@@ -414,12 +414,12 @@ public interface Decoding {
   static hydra.core.Term decodeMapType(hydra.core.MapType mt) {
     hydra.core.Term keyDecoder = hydra.Decoding.decodeType((mt).keys);
     hydra.core.Term valDecoder = hydra.Decoding.decodeType((mt).values);
-    return new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.extract.helpers.decodeMap")), keyDecoder)), valDecoder));
+    return new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.extract.core.decodeMap")), keyDecoder)), valDecoder));
   }
 
   static hydra.core.Term decodeMaybeType(hydra.core.Type elemType) {
     hydra.core.Term elemDecoder = hydra.Decoding.decodeType(elemType);
-    return new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.extract.helpers.decodeMaybe")), elemDecoder));
+    return new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.extract.core.decodeMaybe")), elemDecoder));
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.module.Module>> decodeModule(hydra.context.Context cx, hydra.graph.Graph graph, hydra.module.Module mod) {
@@ -469,7 +469,7 @@ public interface Decoding {
               (java.util.function.Function<hydra.core.Binding, hydra.module.Definition>) (b -> new hydra.module.Definition.Term(new hydra.module.TermDefinition((b).name, (b).term, (b).type))),
               decodedBindings), hydra.lib.lists.Concat2.apply(
               hydra.util.ConsList.of(
-                new hydra.module.Namespace("hydra.extract.helpers"),
+                new hydra.module.Namespace("hydra.extract.core"),
                 new hydra.module.Namespace("hydra.lexical"),
                 new hydra.module.Namespace("hydra.rewriting")),
               allDecodedDeps.get()), hydra.util.ConsList.of(
@@ -493,7 +493,7 @@ public interface Decoding {
   static hydra.core.Term decodePairType(hydra.core.PairType pt) {
     hydra.core.Term firstDecoder = hydra.Decoding.decodeType((pt).first);
     hydra.core.Term secondDecoder = hydra.Decoding.decodeType((pt).second);
-    return new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.extract.helpers.decodePair")), firstDecoder)), secondDecoder));
+    return new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.extract.core.decodePair")), firstDecoder)), secondDecoder));
   }
 
   static hydra.core.Term decodeRecordType(hydra.util.ConsList<hydra.core.FieldType> rt) {
@@ -503,7 +503,7 @@ public interface Decoding {
   }
 
   static hydra.core.Term decodeRecordTypeImpl(hydra.core.Name tname, hydra.util.ConsList<hydra.core.FieldType> rt) {
-    java.util.function.Function<hydra.core.FieldType, hydra.core.Term> decodeFieldTerm = (java.util.function.Function<hydra.core.FieldType, hydra.core.Term>) (ft -> new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.extract.helpers.requireField")), new hydra.core.Term.Literal(new hydra.core.Literal.String_((ft).name.value)))), hydra.Decoding.decodeType((ft).type))), new hydra.core.Term.Variable(new hydra.core.Name("fieldMap")))), new hydra.core.Term.Variable(new hydra.core.Name("cx")))));
+    java.util.function.Function<hydra.core.FieldType, hydra.core.Term> decodeFieldTerm = (java.util.function.Function<hydra.core.FieldType, hydra.core.Term>) (ft -> new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.extract.core.requireField")), new hydra.core.Term.Literal(new hydra.core.Literal.String_((ft).name.value)))), hydra.Decoding.decodeType((ft).type))), new hydra.core.Term.Variable(new hydra.core.Name("fieldMap")))), new hydra.core.Term.Variable(new hydra.core.Name("cx")))));
     java.util.function.Function<hydra.core.FieldType, hydra.core.Name> localVarName = (java.util.function.Function<hydra.core.FieldType, hydra.core.Name>) (ft -> new hydra.core.Name(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
       "field_",
       (ft).name.value))));
@@ -514,7 +514,7 @@ public interface Decoding {
         (java.util.function.Function<hydra.core.FieldType, hydra.core.Field>) (ft -> new hydra.core.Field((ft).name, new hydra.core.Term.Variable((localVarName).apply(ft)))),
         rt))))),
       hydra.lib.lists.Reverse.apply(rt)));
-    return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("cx"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("raw"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.eithers.either"))), new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("err"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Either(hydra.util.Either.<hydra.core.Term, hydra.core.Term>left(new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra.errors.DecodingError"), new hydra.core.Term.Variable(new hydra.core.Name("err"))))))))))), new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("stripped"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Union(new hydra.core.CaseStatement(new hydra.core.Name("hydra.core.Term"), hydra.util.Maybe.just(new hydra.core.Term.Either(hydra.util.Either.<hydra.core.Term, hydra.core.Term>left(new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra.errors.DecodingError"), new hydra.core.Term.Literal(new hydra.core.Literal.String_("expected record"))))))), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("record"), new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("record"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Let(new hydra.core.Let(hydra.util.ConsList.of(new hydra.core.Binding(new hydra.core.Name("fieldMap"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.extract.helpers.toFieldMap")), new hydra.core.Term.Variable(new hydra.core.Name("record")))), (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing()))), decodeBody.get()))))))))))), new hydra.core.Term.Variable(new hydra.core.Name("stripped"))))))))), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lexical.stripAndDereferenceTermEither")), new hydra.core.Term.Variable(new hydra.core.Name("cx")))), new hydra.core.Term.Variable(new hydra.core.Name("raw"))))))))))));
+    return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("cx"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("raw"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.eithers.either"))), new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("err"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Either(hydra.util.Either.<hydra.core.Term, hydra.core.Term>left(new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra.errors.DecodingError"), new hydra.core.Term.Variable(new hydra.core.Name("err"))))))))))), new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("stripped"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Union(new hydra.core.CaseStatement(new hydra.core.Name("hydra.core.Term"), hydra.util.Maybe.just(new hydra.core.Term.Either(hydra.util.Either.<hydra.core.Term, hydra.core.Term>left(new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra.errors.DecodingError"), new hydra.core.Term.Literal(new hydra.core.Literal.String_("expected record"))))))), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("record"), new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("record"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Let(new hydra.core.Let(hydra.util.ConsList.of(new hydra.core.Binding(new hydra.core.Name("fieldMap"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.extract.core.toFieldMap")), new hydra.core.Term.Variable(new hydra.core.Name("record")))), (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing()))), decodeBody.get()))))))))))), new hydra.core.Term.Variable(new hydra.core.Name("stripped"))))))))), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lexical.stripAndDereferenceTermEither")), new hydra.core.Term.Variable(new hydra.core.Name("cx")))), new hydra.core.Term.Variable(new hydra.core.Name("raw"))))))))))));
   }
 
   static hydra.core.Term decodeRecordTypeNamed(hydra.core.Name ename, hydra.util.ConsList<hydra.core.FieldType> rt) {
@@ -525,7 +525,7 @@ public interface Decoding {
 
   static hydra.core.Term decodeSetType(hydra.core.Type elemType) {
     hydra.core.Term elemDecoder = hydra.Decoding.decodeType(elemType);
-    return new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.extract.helpers.decodeSet")), elemDecoder));
+    return new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.extract.core.decodeSet")), elemDecoder));
   }
 
   static hydra.core.Term decodeType(hydra.core.Type typ) {
@@ -737,7 +737,7 @@ public interface Decoding {
   }
 
   static hydra.core.Term decodeUnitType() {
-    return new hydra.core.Term.Variable(new hydra.core.Name("hydra.extract.helpers.decodeUnit"));
+    return new hydra.core.Term.Variable(new hydra.core.Name("hydra.extract.core.decodeUnit"));
   }
 
   static hydra.core.Term decodeWrappedType(hydra.core.Type wt) {
@@ -1046,7 +1046,7 @@ public interface Decoding {
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.core.Binding>> isDecodableBinding(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Binding b) {
     return hydra.lib.eithers.Bind.apply(
-      hydra.Schemas.isSerializableByName(
+      hydra.Predicates.isSerializableByName(
         cx,
         graph,
         (b).name),

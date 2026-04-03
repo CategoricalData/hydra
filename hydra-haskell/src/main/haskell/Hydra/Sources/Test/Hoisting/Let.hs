@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 -- | Test cases for let-binding hoisting transformations
 
 module Hydra.Sources.Test.Hoisting.Let where
@@ -19,17 +21,22 @@ import qualified Data.Map                     as M
 import Hydra.Testing
 import Hydra.Sources.Libraries
 
+import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Hoisting as HoistingModule
+
 
 ns :: Namespace
 ns = Namespace "hydra.test.hoisting.let"
 
 module_ :: Module
-module_ = Module ns elements [] kernelTypesNamespaces $
+module_ = Module ns elements
+    [ShowCore.ns, HoistingModule.ns]
+    kernelTypesNamespaces $
     Just "Test cases for let-binding hoisting transformations"
   where
-    elements = [Phantoms.toTermDefinition allTests]
+    elements = [Phantoms.toDefinition allTests]
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for let-binding hoisting transformations" $
     supergroup "hoistLet" [
@@ -40,6 +47,27 @@ allTests = definitionInModule module_ "allTests" $
 -- Helper to build names
 nm :: String -> TTerm Name
 nm s = Core.name $ Phantoms.string s
+
+-- Local alias for polymorphic application (Phantoms.@@ applies TBindings; Terms.@@ only works on TTerm Term)
+(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
+(#) = (Phantoms.@@)
+infixl 1 #
+
+-- | Show a Let as a string using ShowCore.let_
+showLet :: TTerm Let -> TTerm String
+showLet l = ShowCore.let_ # l
+
+-- | Local universal version of hoistLetBindingsCase (hoistAll=True)
+hoistLetBindingsCase :: String -> TTerm Let -> TTerm Let -> TTerm TestCaseWithMetadata
+hoistLetBindingsCase cname input output = universalCase cname
+  (showLet (HoistingModule.hoistAllLetBindings # input))
+  (showLet output)
+
+-- | Local universal version of hoistPolymorphicLetBindingsCase
+hoistPolymorphicLetBindingsCase :: String -> TTerm Let -> TTerm Let -> TTerm TestCaseWithMetadata
+hoistPolymorphicLetBindingsCase cname input output = universalCase cname
+  (showLet (HoistingModule.hoistPolymorphicLetBindings # Phantoms.lambda "b" (Phantoms.boolean True) # input))
+  (showLet output)
 
 -- Helper for single-binding let
 letExpr :: String -> TTerm Term -> TTerm Term -> TTerm Term

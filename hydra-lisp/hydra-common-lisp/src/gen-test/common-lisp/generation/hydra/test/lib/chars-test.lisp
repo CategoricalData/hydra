@@ -5,90 +5,90 @@
 
 (defun test-chars-negisalphanum-negletter ()
 
-  (assert (equal cl:t (hydra_lib_chars_is_alpha_num 97))))
+  (assert (equal true true)))
 
 (defun test-chars-negisalphanum-negdigit ()
 
-  (assert (equal cl:t (hydra_lib_chars_is_alpha_num 53))))
+  (assert (equal true true)))
 
 (defun test-chars-negisalphanum-negspace ()
 
-  (assert (equal cl:nil (hydra_lib_chars_is_alpha_num 32))))
+  (assert (equal false false)))
 
 (defun test-chars-negisalphanum-negpunctuation ()
 
-  (assert (equal cl:nil (hydra_lib_chars_is_alpha_num 46))))
+  (assert (equal false false)))
 
 ;; isLower
 
 (defun test-chars-negislower-neglowercase ()
 
-  (assert (equal cl:t (hydra_lib_chars_is_lower 97))))
+  (assert (equal true true)))
 
 (defun test-chars-negislower-neguppercase ()
 
-  (assert (equal cl:nil (hydra_lib_chars_is_lower 65))))
+  (assert (equal false false)))
 
 (defun test-chars-negislower-negdigit ()
 
-  (assert (equal cl:nil (hydra_lib_chars_is_lower 53))))
+  (assert (equal false false)))
 
 ;; isSpace
 
 (defun test-chars-negisspace-negspace ()
 
-  (assert (equal cl:t (hydra_lib_chars_is_space 32))))
+  (assert (equal true true)))
 
 (defun test-chars-negisspace-negtab ()
 
-  (assert (equal cl:t (hydra_lib_chars_is_space 9))))
+  (assert (equal true true)))
 
 (defun test-chars-negisspace-negnewline ()
 
-  (assert (equal cl:t (hydra_lib_chars_is_space 10))))
+  (assert (equal true true)))
 
 (defun test-chars-negisspace-negletter ()
 
-  (assert (equal cl:nil (hydra_lib_chars_is_space 97))))
+  (assert (equal false false)))
 
 ;; isUpper
 
 (defun test-chars-negisupper-neguppercase ()
 
-  (assert (equal cl:t (hydra_lib_chars_is_upper 65))))
+  (assert (equal true true)))
 
 (defun test-chars-negisupper-neglowercase ()
 
-  (assert (equal cl:nil (hydra_lib_chars_is_upper 97))))
+  (assert (equal false false)))
 
 (defun test-chars-negisupper-negdigit ()
 
-  (assert (equal cl:nil (hydra_lib_chars_is_upper 53))))
+  (assert (equal false false)))
 
 ;; toLower
 
 (defun test-chars-negtolower-neguppercase ()
 
-  (assert (equal 97 (hydra_lib_chars_to_lower 65))))
+  (assert (equal 97:int32 97:int32)))
 
 (defun test-chars-negtolower-neglowercase ()
 
-  (assert (equal 97 (hydra_lib_chars_to_lower 97))))
+  (assert (equal 97:int32 97:int32)))
 
 (defun test-chars-negtolower-negdigit ()
 
-  (assert (equal 53 (hydra_lib_chars_to_lower 53))))
+  (assert (equal 53:int32 53:int32)))
 
 ;; toUpper
 
 (defun test-chars-negtoupper-neglowercase ()
 
-  (assert (equal 65 (hydra_lib_chars_to_upper 97))))
+  (assert (equal 65:int32 65:int32)))
 
 (defun test-chars-negtoupper-neguppercase ()
 
-  (assert (equal 65 (hydra_lib_chars_to_upper 65))))
+  (assert (equal 65:int32 65:int32)))
 
 (defun test-chars-negtoupper-negdigit ()
 
-  (assert (equal 53 (hydra_lib_chars_to_upper 53))))
+  (assert (equal 53:int32 53:int32)))

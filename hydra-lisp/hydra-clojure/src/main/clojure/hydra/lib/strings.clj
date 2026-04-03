@@ -54,6 +54,14 @@
           (butlast parts)
           parts)))))
 
+;; maybe_char_at :: Int -> String -> Maybe Int
+(def hydra_lib_strings_maybe_char_at
+  "Get the Unicode code point at a specific index, returning Nothing if out of bounds."
+  (fn [n] (fn [s]
+    (if (and (>= n 0) (< n (.codePointCount s 0 (.length s))))
+      (list :just (.codePointAt s (int (.offsetByCodePoints s 0 (int n)))))
+      (list :nothing)))))
+
 ;; null :: String -> Bool
 (def hydra_lib_strings_null
   "Check whether a string is empty."

@@ -25,13 +25,8 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
-import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Construct CommonProperties from a list of constraints, using defaults for other fields
 common :: [Model.CommonConstraint] -> Model.CommonProperties
@@ -74,7 +69,7 @@ encodeFieldType rname order ft cx =
           ftype = Core.fieldTypeType ft
           iri = Utils.propertyIri rname fname
           forType =
-                  \mn -> \mx -> \t -> case (Rewriting.deannotateType t) of
+                  \mn -> \mx -> \t -> case (Strip.deannotateType t) of
                     Core.TypeMaybe v0 -> forType (Just 0) mx v0
                     Core.TypeSet v0 -> forType mn Nothing v0
                     _ -> forTypeDefault mn mx t
@@ -161,7 +156,7 @@ encodeTerm subject term cx g =
       Core.TermMap v0 -> Eithers.map (\_r -> ([
         Syntax.Description {
           Syntax.descriptionSubject = (Utils.resourceToNode subject),
-          Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList (Lists.concat (Pairs.first _r))))}], (Pairs.second _r))) (foldAccumResult (\_cx0 -> \kv -> Eithers.bind (Core__.string _cx0 g (Rewriting.deannotateTerm (Pairs.first kv))) (\_ks ->
+          Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList (Lists.concat (Pairs.first _r))))}], (Pairs.second _r))) (foldAccumResult (\_cx0 -> \kv -> Eithers.bind (Core__.string _cx0 g (Strip.deannotateTerm (Pairs.first kv))) (\_ks ->
         let pair2 = Utils.nextBlankNode _cx0
             node2 = Pairs.first pair2
             cx2 = Pairs.second pair2
@@ -197,7 +192,7 @@ encodeType :: Core.Name -> Core.Type -> Context.Context -> Either (Context.InCon
 encodeType tname typ cx =
 
       let any = Right (common [])
-      in case (Rewriting.deannotateType typ) of
+      in case (Strip.deannotateType typ) of
         Core.TypeEither _ -> any
         Core.TypeList _ -> any
         Core.TypeLiteral v0 -> Right (encodeLiteralType v0)
