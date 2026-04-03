@@ -95,6 +95,26 @@ length = primitive1 _lists_length
 map :: (AsTerm f (a -> b), AsTerm t [a]) => f -> t -> TTerm [b]
 map f l = primitive2 _lists_map (asTerm f) (asTerm l)
 
+-- | Get the element at a specified index in a list, returning Nothing if out of bounds.
+maybeAt :: TTerm Int -> TTerm [a] -> TTerm (Maybe a)
+maybeAt = primitive2 _lists_maybeAt
+
+-- | Get the first element of a list, returning Nothing if the list is empty.
+maybeHead :: TTerm [a] -> TTerm (Maybe a)
+maybeHead = primitive1 _lists_maybeHead
+
+-- | Return all elements except the last one, returning Nothing if the list is empty.
+maybeInit :: TTerm [a] -> TTerm (Maybe [a])
+maybeInit = primitive1 _lists_maybeInit
+
+-- | Get the last element of a list, returning Nothing if the list is empty.
+maybeLast :: TTerm [a] -> TTerm (Maybe a)
+maybeLast = primitive1 _lists_maybeLast
+
+-- | Get all elements of a list except the first, returning Nothing if the list is empty.
+maybeTail :: TTerm [a] -> TTerm (Maybe [a])
+maybeTail = primitive1 _lists_maybeTail
+
 -- | Remove duplicate elements from a list.
 nub :: Eq a => TTerm [a] -> TTerm [a]
 nub = primitive1 _lists_nub
@@ -120,6 +140,7 @@ reverse :: TTerm [a] -> TTerm [a]
 reverse = primitive1 _lists_reverse
 
 -- | Get the first element of a list, returning Nothing if the list is empty.
+-- Deprecated: use maybeHead instead.
 safeHead :: TTerm [a] -> TTerm (Maybe a)
 safeHead = primitive1 _lists_safeHead
 

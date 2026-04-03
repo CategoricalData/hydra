@@ -156,6 +156,31 @@ def map(f: Callable[[A], B], values: Sequence[A]) -> frozenlist[B]:
     return tuple(f(v) for v in values)
 
 
+def maybe_at(i: int, values: Sequence[A]) -> Maybe[A]:
+    """Get the element at a specified index, returning Nothing if the index is out of bounds."""
+    return Just(values[i]) if 0 <= i < len(values) else Nothing()
+
+
+def maybe_head(values: Sequence[A]) -> Maybe[A]:
+    """Get the first element of a list, returning Nothing if the list is empty."""
+    return Just(values[0]) if len(values) > 0 else Nothing()
+
+
+def maybe_init(values: Sequence[A]) -> Maybe[frozenlist[A]]:
+    """Return all elements except the last, returning Nothing if the list is empty."""
+    return Just(tuple(values[:-1])) if len(values) > 0 else Nothing()
+
+
+def maybe_last(values: Sequence[A]) -> Maybe[A]:
+    """Get the last element of a list, returning Nothing if the list is empty."""
+    return Just(values[-1]) if len(values) > 0 else Nothing()
+
+
+def maybe_tail(values: Sequence[A]) -> Maybe[frozenlist[A]]:
+    """Get all elements except the first, returning Nothing if the list is empty."""
+    return Just(tuple(values[1:])) if len(values) > 0 else Nothing()
+
+
 def nub(values: Sequence[A]) -> frozenlist[A]:
     """Remove duplicate elements from a list."""
     seen: set[A] = set()
