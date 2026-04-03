@@ -48,7 +48,7 @@ module_ = Module ns elements
   where
     elements = [
       toDefinition dslBindingName,
-      toDefinition dslElementName,
+      toDefinition dslDefinitionName,
       toDefinition dslModule,
       toDefinition dslNamespace,
       toDefinition filterTypeBindings,
@@ -260,8 +260,8 @@ dslBindingName = define "dslBindingName" $
 -- For example, ("hydra.core.AnnotatedTerm", "annotatedTermBody") -> "hydra.dsl.core.annotatedTermBody"
 -- This extracts the namespace from the type name, transforms it to the DSL namespace,
 -- and appends the local element name.
-dslElementName :: TTermDefinition (Name -> String -> Name)
-dslElementName = define "dslElementName" $
+dslDefinitionName :: TTermDefinition (Name -> String -> Name)
+dslDefinitionName = define "dslDefinitionName" $
   doc "Generate a qualified DSL element name from a type name and local element name" $
   "typeName" ~> "localName" ~>
   "parts" <~ (Strings.splitOn (string ".") (Core.unName (var "typeName"))) $
@@ -325,7 +325,7 @@ generateRecordAccessor = define "generateRecordAccessor" $
   "accessorLocalName" <~ (Strings.cat $ list [
     Formatting.decapitalize @@ (Names.localNameOf @@ var "typeName"),
     Strings.intercalate (string "") (Lists.map ("s" ~> Formatting.capitalize @@ var "s") (Strings.splitOn (string ".") (Core.unName (var "fieldName"))))]) $
-  "accessorName" <~ (dslElementName @@ var "typeName" @@ var "accessorLocalName") $
+  "accessorName" <~ (dslDefinitionName @@ var "typeName" @@ var "accessorLocalName") $
   -- Body: projection as a simple elimination
   "paramDomain" <~ (wrapInTTerm (nominalResultType @@ var "typeName" @@ var "origType")) $
   "body" <~ (Core.termFunction $ Core.functionLambda $
@@ -356,7 +356,7 @@ generateRecordWithUpdater = define "generateRecordWithUpdater" $
     Formatting.decapitalize @@ (Names.localNameOf @@ var "typeName"),
     string "With",
     Strings.intercalate (string "") (Lists.map ("s" ~> Formatting.capitalize @@ var "s") (Strings.splitOn (string ".") (Core.unName (var "targetFieldName"))))]) $
-  "updaterName" <~ (dslElementName @@ var "typeName" @@ var "updaterLocalName") $
+  "updaterName" <~ (dslDefinitionName @@ var "typeName" @@ var "updaterLocalName") $
   -- Build deep fields: project from unwrapped original, except target uses unwrapped newVal
   "dFields" <~ (Lists.map
     ("ft" ~> deepField (Core.fieldTypeName (var "ft"))
@@ -400,7 +400,7 @@ generateUnionInjector = define "generateUnionInjector" $
   "injectorLocalName" <~ (Strings.cat $ list [
     Formatting.decapitalize @@ (Names.localNameOf @@ var "typeName"),
     Strings.intercalate (string "") (Lists.map ("s" ~> Formatting.capitalize @@ var "s") (Strings.splitOn (string ".") (Core.unName (var "fieldName"))))]) $
-  "injectorName" <~ (dslElementName @@ var "typeName" @@ var "injectorLocalName") $
+  "injectorName" <~ (dslDefinitionName @@ var "typeName" @@ var "injectorLocalName") $
   -- Check if field type is unit (for unit variants like enum members)
   "isUnit" <~ (isUnitType_ @@ var "fieldType") $
   -- Build simple injection
@@ -441,10 +441,10 @@ generateWrappedTypeAccessors = define "generateWrappedTypeAccessors" $
   "origType" ~> "typeName" ~> "innerType" ~>
   "localName" <~ (Names.localNameOf @@ var "typeName") $
   -- Wrap function: decapitalized type name
-  "wrapName" <~ (dslElementName @@ var "typeName" @@ (Formatting.decapitalize @@ var "localName")) $
+  "wrapName" <~ (dslDefinitionName @@ var "typeName" @@ (Formatting.decapitalize @@ var "localName")) $
   -- Unwrap function: "un" + type local name
   "unwrapLocalName" <~ (Strings.cat $ list [string "un", var "localName"]) $
-  "unwrapName" <~ (dslElementName @@ var "typeName" @@ var "unwrapLocalName") $
+  "unwrapName" <~ (dslDefinitionName @@ var "typeName" @@ var "unwrapLocalName") $
   "wrapperType" <~ (nominalResultType @@ var "typeName" @@ var "origType") $
   -- Wrap: \(x :: TTerm<InnerType>) -> WrappedTerm typeName x
   "wrapDomain" <~ (wrapInTTerm (var "innerType")) $
@@ -551,7 +551,7 @@ dslModule = define "dslModule" $
       (Maybes.cat $ Lists.map
         ("d" ~> cases _Definition (var "d") (Just nothing) [
           _Definition_type>>: "td" ~>
-            just (Annotations.typeBinding @@ (Module.typeDefinitionName $ var "td") @@ (Module.typeDefinitionType $ var "td"))])
+            just (Annotations.typeBinding @@ (Module.typeDefinitionName $ var "td") @@ (Core.typeSchemeType $ Module.typeDefinitionType $ var "td"))])
         (Module.moduleDefinitions (var "mod")))) $
     Logic.ifElse (Lists.null (var "typeBindings"))
       (right nothing)

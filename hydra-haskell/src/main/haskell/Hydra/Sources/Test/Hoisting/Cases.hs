@@ -1139,7 +1139,7 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
 
     -- ============================================================
     -- Test: Case inside case default with let binding
-    -- This is the pattern from isSimpleAssignment in CoderUtils:
+    -- This is the pattern from isSimpleAssignment in Analysis:
     -- match term with
     --   specific_case -> ...
     --   _ -> let baseTerm = f(term) in match baseTerm with ...
@@ -1151,7 +1151,7 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
       -- Input: let f = (case x of just a -> a | _ -> let b = g(x) in (case b of ...)(b)) x
       -- The outer case is applied (through `cases`/`apply`), putting default branch
       -- at non-top-level. Inner applied case in default > let body must be hoisted.
-      -- This is the pattern from isSimpleAssignment in CoderUtils.
+      -- This is the pattern from isSimpleAssignment in Analysis.
       (letExpr "f"
         (apply
           (match (nm "Optional") nothing

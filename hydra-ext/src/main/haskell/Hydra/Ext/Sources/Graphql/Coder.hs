@@ -87,7 +87,6 @@ import qualified Hydra.Ext.Sources.Graphql.Language as GraphqlLanguage
 import qualified Hydra.Ext.Sources.Graphql.Serde as GraphqlSerde
 import qualified Hydra.Dsl.Meta.Context as Ctx
 import qualified Hydra.Dsl.Errors as Error
-import qualified Hydra.Sources.CoderUtils as CoderUtils
 
 
 ns :: Namespace
@@ -159,7 +158,7 @@ encodeTypeDefinition = define "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "tdef" $
     encodeNamedType @@ var "cx" @@ var "g" @@ var "prefixes"
       @@ (Module.typeDefinitionName $ var "tdef")
-      @@ (Module.typeDefinitionType $ var "tdef")
+      @@ (Core.typeSchemeType $ Module.typeDefinitionType $ var "tdef")
 
 -- | Get the description from a type as a GraphQL Description
 descriptionFromType :: TTermDefinition (Context -> Graph -> Type -> Either (InContext Error) (Maybe G.Description))

@@ -31,7 +31,7 @@ definitionToBinding d = case d of
     bindingTerm = termDefinitionTerm td,
     bindingType = termDefinitionType td}
   DefinitionType td ->
-    let encoded = EncodeCore.type_ (typeDefinitionType td)
+    let encoded = EncodeCore.type_ (typeSchemeType $ typeDefinitionType td)
         annotated = TermAnnotated (AnnotatedTerm {
           annotatedTermBody = encoded,
           annotatedTermAnnotation = M.fromList [

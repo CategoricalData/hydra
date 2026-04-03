@@ -218,7 +218,7 @@ main = do
   let allKernelNamespaces = mainNamespaces ++ evalLibNamespaces
 
   loadStart <- getCurrentTime
-  mainMods <- loadModulesFromJson False kernelJsonDir kernelModules allKernelNamespaces
+  mainMods <- loadModulesFromJson kernelJsonDir kernelModules allKernelNamespaces
   loadEnd <- getCurrentTime
   putStrLn $ "  Loaded " ++ show (length mainMods) ++ " modules."
   putStrLn $ "  Time: " ++ formatTime (elapsed loadEnd loadStart)
@@ -233,7 +233,7 @@ main = do
       let kernelNsSet = fmap unNamespace allKernelNamespaces
           (_, extCoderNamespaces) = partition (\ns -> unNamespace ns `elem` kernelNsSet) coderNamespaces
       loadStart2 <- getCurrentTime
-      mods <- loadModulesFromJson False extJsonDir kernelModules extCoderNamespaces
+      mods <- loadModulesFromJson extJsonDir kernelModules extCoderNamespaces
       loadEnd2 <- getCurrentTime
       putStrLn $ "  Loaded " ++ show (length mods) ++ " modules."
       putStrLn $ "  Time: " ++ formatTime (elapsed loadEnd2 loadStart2)
@@ -250,7 +250,7 @@ main = do
       putStrLn "Step 2b: Loading DSL modules from kernel JSON..."
       dslNamespaces <- readManifestField kernelJsonDir "dslModules"
       loadStart3 <- getCurrentTime
-      mods <- loadModulesFromJson False kernelJsonDir kernelModules dslNamespaces
+      mods <- loadModulesFromJson kernelJsonDir kernelModules dslNamespaces
       loadEnd3 <- getCurrentTime
       putStrLn $ "  Loaded " ++ show (length mods) ++ " DSL modules."
       putStrLn $ "  Time: " ++ formatTime (elapsed loadEnd3 loadStart3)
@@ -285,7 +285,7 @@ main = do
       let loadedNsSet = fmap (unNamespace . moduleNamespace) allMainMods
           toLoad = Prelude.filter (\ns -> unNamespace ns `notElem` loadedNsSet) extDemoNamespaces
       putStrLn $ "Loading " ++ show (length toLoad) ++ " ext demo modules from JSON..."
-      extMods <- loadModulesFromJson False extJsonDir kernelModules toLoad
+      extMods <- loadModulesFromJson extJsonDir kernelModules toLoad
       putStrLn $ "  Loaded " ++ show (length extMods) ++ " ext demo modules"
       putStrLn ""
       return (extMods, allMainMods ++ extMods)
@@ -328,7 +328,7 @@ main = do
     then do
       putStrLn "Loading test modules from JSON..."
       testNamespaces <- readManifestField kernelJsonDir "testModules"
-      testMods <- loadModulesFromJson False testJsonDir kernelModules testNamespaces
+      testMods <- loadModulesFromJson testJsonDir kernelModules testNamespaces
       putStrLn $ "  Loaded " ++ show (length testMods) ++ " test modules"
       putStrLn ""
 

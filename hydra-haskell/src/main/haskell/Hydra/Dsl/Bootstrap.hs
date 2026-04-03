@@ -72,7 +72,7 @@ defineType = datatype
 -- the type encoded as a term. We decode it back.
 toTypeDef :: Binding -> Definition
 toTypeDef b = case Decode.type_ bootstrapGraph (stripAnnotations $ bindingTerm b) of
-  Right typ -> DefinitionType $ TypeDefinition (bindingName b) typ
+  Right typ -> DefinitionType $ TypeDefinition (bindingName b) (TypeScheme [] typ Nothing)
   Left err -> error $ "toTypeDef: failed to decode type from binding "
     ++ show (bindingName b) ++ ": " ++ show err
   where

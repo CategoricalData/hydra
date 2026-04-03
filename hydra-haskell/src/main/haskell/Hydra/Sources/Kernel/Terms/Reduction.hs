@@ -527,7 +527,7 @@ etaExpansionArity = define "etaExpansionArity" $
       Maybes.maybe (int32 0)
         ("ts" ~> Arity.typeArity @@ (Core.typeSchemeType $ var "ts"))
         (Maybes.bind
-          (Lexical.lookupElement @@ var "graph" @@ var "name")
+          (Lexical.lookupBinding @@ var "graph" @@ var "name")
           ("b" ~> Core.bindingType $ var "b"))]
 
 -- TODO: add lambda domains as part of the rewriting process, so inference does not need to be performed again.
@@ -826,7 +826,7 @@ reduceTerm = define "reduceTerm" $
               (var "forPrimitive" @@ var "prim" @@ var "arity" @@ var "args")],
       _Term_variable>>: "v" ~>
         -- Look up the variable in the graph; if found, reduce its definition
-        "mBinding" <~ Lexical.dereferenceElement @@ var "graph" @@ var "v" $
+        "mBinding" <~ Lexical.lookupBinding @@ var "graph" @@ var "v" $
         Maybes.maybe
           -- Not found: lambda-bound variable, return with args applied
           (right $ var "applyToArguments" @@ var "original" @@ var "args")

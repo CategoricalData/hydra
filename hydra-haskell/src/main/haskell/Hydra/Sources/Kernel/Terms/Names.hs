@@ -3,7 +3,7 @@ module Hydra.Sources.Kernel.Terms.Names where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  compactName, freshName, freshNames, localNameOf, namespaceOf, namespaceToFilePath,
+  compactName, freshName, freshNames, localNameOf, nameToFilePath, namespaceOf, namespaceToFilePath,
   normalTypeVariable, qname, qualifyName,
   uniqueLabel, unqualifyName)
 import Hydra.Sources.Libraries
@@ -73,6 +73,7 @@ module_ = Module ns elements
      toDefinition freshName,
      toDefinition freshNames,
      toDefinition localNameOf,
+     toDefinition nameToFilePath,
      toDefinition namespaceOf,
      toDefinition namespaceToFilePath,
      toDefinition normalTypeVariable,
@@ -103,6 +104,23 @@ localNameOf :: TTermDefinition (Name -> String)
 localNameOf = define "localNameOf" $
   doc "Extract the local part of a name" $
   unaryFunction Module.qualifiedNameLocal <.> qualifyName
+
+nameToFilePath :: TTermDefinition (CaseConvention -> CaseConvention -> FileExtension -> Name -> FilePath)
+nameToFilePath = define "nameToFilePath" $
+  doc "Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator" $
+  "nsConv" ~> "localConv" ~> "ext" ~> "name" ~>
+  "qualName" <~ qualifyName @@ var "name" $
+  "ns" <~ Module.qualifiedNameNamespace (var "qualName") $
+  "local" <~ Module.qualifiedNameLocal (var "qualName") $
+  "nsToFilePath" <~ ("ns" ~>
+    Strings.intercalate (string "/") (Lists.map
+      ("part" ~> Formatting.convertCase @@ Util.caseConventionCamel @@ var "nsConv" @@ var "part")
+      (Strings.splitOn (string ".") (Module.unNamespace (var "ns"))))) $
+  "prefix" <~ Maybes.maybe (string "")
+    ("n" ~> Strings.cat2 (var "nsToFilePath" @@ var "n") (string "/"))
+    (var "ns") $
+  "suffix" <~ Formatting.convertCase @@ Util.caseConventionPascal @@ var "localConv" @@ var "local" $
+  Strings.cat (list [var "prefix", var "suffix", string ".", Module.unFileExtension (var "ext")])
 
 namespaceOf :: TTermDefinition (Name -> Maybe Namespace)
 namespaceOf = define "namespaceOf" $

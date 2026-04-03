@@ -49,7 +49,6 @@ import qualified Data.Maybe                                as Y
 import qualified Hydra.Ext.Lisp.Syntax as L
 import qualified Hydra.Ext.Sources.Lisp.Syntax as LispSyntax
 import qualified Hydra.Ext.Sources.Lisp.Language as LispLanguageSource
-import qualified Hydra.Sources.CoderUtils as CoderUtils
 
 
 def :: String -> TTerm a -> TTermDefinition a
@@ -61,7 +60,7 @@ ns = Namespace "hydra.ext.lisp.coder"
 module_ :: Module
 module_ = Module ns elements
     [moduleNamespace LispLanguageSource.module_,
-      Formatting.ns, Names.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Sorting.ns, Lexical.ns, CoderUtils.ns]
+      Formatting.ns, Names.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Sorting.ns, Lexical.ns]
     (LispSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Lisp code generator: converts Hydra type and term modules to Lisp AST"
   where
@@ -102,7 +101,7 @@ module_ = Module ns elements
       toDefinition moduleToLisp,
       toDefinition qualifiedSnakeName,
       toDefinition qualifiedTypeName,
-      toDefinition CoderUtils.reorderDefs,
+      toDefinition Environment.reorderDefs,
       toDefinition wrapInThunk]
 
 
@@ -822,7 +821,7 @@ encodeTypeDefinition :: TTermDefinition (Context -> Graph -> TypeDefinition -> E
 encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Module.typeDefinitionName (var "tdef") $
-    "typ" <~ Module.typeDefinitionType (var "tdef") $
+    "typ" <~ (Core.typeSchemeType $ Module.typeDefinitionType (var "tdef")) $
     "lname" <~ (qualifiedSnakeName @@ var "name") $
     "dtyp" <~ (Strip.deannotateType @@ var "typ") $
     encodeTypeBody @@ var "lname" @@ var "typ" @@ var "dtyp"
@@ -1013,13 +1012,13 @@ moduleToLisp :: TTermDefinition (L.Dialect -> Module -> [Definition] -> Context 
 moduleToLisp = def "moduleToLisp" $
   "dialect" ~> "mod" ~> "defs0" ~> "cx" ~> "g" ~>
     -- Reorder definitions: types first, then topologically sorted terms
-    "defs" <~ (CoderUtils.reorderDefs @@ var "defs0") $
+    "defs" <~ (Environment.reorderDefs @@ var "defs0") $
     "partitioned" <~ (Environment.partitionDefinitions @@ var "defs") $
     "allTypeDefs" <~ Pairs.first (var "partitioned") $
     "termDefs" <~ Pairs.second (var "partitioned") $
     -- Filter out type aliases (non-nominal types)
     "typeDefs" <~ Lists.filter (lambda "td" $
-      Predicates.isNominalType @@ Module.typeDefinitionType (var "td"))
+      Predicates.isNominalType @@ (Core.typeSchemeType $ Module.typeDefinitionType (var "td")))
       (var "allTypeDefs") $
     "typeItems" <<~ (Eithers.mapList (encodeTypeDefinition @@ var "cx" @@ var "g") (var "typeDefs")) $
     "termItems" <<~ (Eithers.mapList (encodeTermDefinition @@ var "dialect" @@ var "cx" @@ var "g") (var "termDefs")) $

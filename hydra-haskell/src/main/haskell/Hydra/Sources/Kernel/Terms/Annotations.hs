@@ -3,7 +3,8 @@ module Hydra.Sources.Kernel.Terms.Annotations where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  aggregateAnnotations, debugIf, failOnFlag, getDebugId,
+  aggregateAnnotations, commentsFromBinding, commentsFromFieldType,
+  debugIf, failOnFlag, getDebugId,
   getAttr, getAttrWithDefault, getCount,
   getDescription, getTermAnnotation, getTermDescription,
   getType, getTypeAnnotation, getTypeClasses,
@@ -85,6 +86,8 @@ module_ = Module ns elements
   where
    elements = [
      toDefinition aggregateAnnotations,
+     toDefinition commentsFromBinding,
+     toDefinition commentsFromFieldType,
      toDefinition debugIf,
      toDefinition failOnFlag,
      toDefinition getDebugId,
@@ -136,6 +139,18 @@ aggregateAnnotations = define "aggregateAnnotations" $
       @@ (var "getX" @@ var "yy")))
     (var "getValue" @@ var "t")) $
   Maps.fromList (Lists.concat (var "toPairs" @@ list ([] :: [TTerm [(Name, Term)]]) @@ var "t"))
+
+commentsFromBinding :: TTermDefinition (Context -> Graph -> Binding -> Either (InContext Error) (Maybe String))
+commentsFromBinding = define "commentsFromBinding" $
+  doc "Extract comments/description from a Binding" $
+  "cx" ~> "g" ~> "b" ~>
+  getTermDescription @@ var "cx" @@ var "g" @@ (Core.bindingTerm $ var "b")
+
+commentsFromFieldType :: TTermDefinition (Context -> Graph -> FieldType -> Either (InContext Error) (Maybe String))
+commentsFromFieldType = define "commentsFromFieldType" $
+  doc "Extract comments/description from a FieldType" $
+  "cx" ~> "g" ~> "ft" ~>
+  getTypeDescription @@ var "cx" @@ var "g" @@ (Core.fieldTypeType $ var "ft")
 
 debugIf :: TTermDefinition (Context -> String -> String -> Prelude.Either (InContext Error) ())
 debugIf = define "debugIf" $
