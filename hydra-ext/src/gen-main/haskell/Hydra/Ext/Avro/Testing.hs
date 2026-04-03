@@ -8,11 +8,6 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Ext.Org.Apache.Avro.Schema as Schema
 import qualified Hydra.Json.Model as Model
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | A test case which maps an Avro schema to a Hydra type and compares the result
 data TypeLevelForwardTestCase =

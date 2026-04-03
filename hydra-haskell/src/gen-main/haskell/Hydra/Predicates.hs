@@ -25,11 +25,7 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Determines whether a given term is an encoded term (meta-level term)
 isEncodedTerm :: Core.Term -> Bool

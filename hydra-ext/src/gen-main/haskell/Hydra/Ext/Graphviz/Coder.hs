@@ -21,11 +21,7 @@ import qualified Hydra.Paths as Paths
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Paths as Paths_
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Create a DOT label attribute
 labelAttr :: String -> Dot.EqualityPair

@@ -722,6 +722,57 @@
                                                       "type": {"list": {"variable": "hydra.ext.haskell.syntax.Import"}},
                                                       "variables": []}]},
                                                 {
+                                                  "name": "meta",
+                                                  "term": {
+                                                    "application": {
+                                                      "argument": {"variable": "defs"},
+                                                      "function": {"variable": "hydra.ext.haskell.coder.gatherMetadata"}}},
+                                                  "type": [
+                                                    {
+                                                      "constraints": null,
+                                                      "type": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"},
+                                                      "variables": []}]},
+                                                {
+                                                  "name": "condImport",
+                                                  "term": {
+                                                    "typeLambda": {
+                                                      "body": {
+                                                        "function": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "function": {
+                                                                "lambda": {
+                                                                  "body": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "typeApplication": {"body": {"list": []}, "type": {"variable": "t0"}}},
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {"list": [{"variable": "triple"}]},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "flag"},
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                                  "type": {"list": {"variable": "t0"}}}}}}}}}},
+                                                                  "domain": [{"variable": "t0"}],
+                                                                  "parameter": "triple"}}},
+                                                            "domain": [{"literal": {"boolean": {}}}],
+                                                            "parameter": "flag"}}},
+                                                      "parameter": "t0"}},
+                                                  "type": [
+                                                    {
+                                                      "constraints": null,
+                                                      "type": {
+                                                        "function": {
+                                                          "codomain": {
+                                                            "function": {
+                                                              "codomain": {"list": {"variable": "t0"}},
+                                                              "domain": {"variable": "t0"}}},
+                                                          "domain": {"literal": {"boolean": {}}}}},
+                                                      "variables": ["t0"]}]},
+                                                {
                                                   "name": "standardImports",
                                                   "term": {
                                                     "let": {
@@ -957,64 +1008,8 @@
                                                           "argument": {
                                                             "application": {
                                                               "argument": {
-                                                                "application": {
-                                                                  "argument": {
-                                                                    "typeApplication": {
-                                                                      "body": {"list": []},
-                                                                      "type": {
-                                                                        "pair": {
-                                                                          "first": {
-                                                                            "pair": {
-                                                                              "first": {"literal": {"string": {}}},
-                                                                              "second": {"maybe": {"literal": {"string": {}}}}}},
-                                                                          "second": {"list": {"literal": {"string": {}}}}}}}},
-                                                                  "function": {
-                                                                    "application": {
-                                                                      "argument": {
-                                                                        "list": [
-                                                                          {
-                                                                            "typeApplication": {
-                                                                              "body": {
-                                                                                "typeApplication": {
-                                                                                  "body": {
-                                                                                    "pair": {
-                                                                                      "@first": {
-                                                                                        "typeApplication": {
-                                                                                          "body": {
-                                                                                            "typeApplication": {
-                                                                                              "body": {
-                                                                                                "pair": {
-                                                                                                  "@first": {"literal": {"string": "Hydra.Lib.Literals"}},
-                                                                                                  "@second": {"maybe": [{"literal": {"string": "Literals"}}]}}},
-                                                                                              "type": {"literal": {"string": {}}}}},
-                                                                                          "type": {"maybe": {"literal": {"string": {}}}}}},
-                                                                                      "@second": {
-                                                                                        "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}}},
-                                                                                  "type": {
-                                                                                    "pair": {
-                                                                                      "first": {"literal": {"string": {}}},
-                                                                                      "second": {"maybe": {"literal": {"string": {}}}}}}}},
-                                                                              "type": {"list": {"literal": {"string": {}}}}}}]},
-                                                                      "function": {
-                                                                        "application": {
-                                                                          "argument": {
-                                                                            "application": {
-                                                                              "argument": {"variable": "mod"},
-                                                                              "function": {"variable": "hydra.analysis.moduleContainsBinaryLiterals"}}},
-                                                                          "function": {
-                                                                            "typeApplication": {
-                                                                              "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
-                                                                              "type": {
-                                                                                "list": {
-                                                                                  "pair": {
-                                                                                    "first": {
-                                                                                      "pair": {
-                                                                                        "first": {"literal": {"string": {}}},
-                                                                                        "second": {"maybe": {"literal": {"string": {}}}}}},
-                                                                                    "second": {"list": {"literal": {"string": {}}}}}}}}}}}}}}},
-                                                              "function": {
-                                                                "application": {
-                                                                  "argument": {
+                                                                "list": [
+                                                                  {
                                                                     "list": [
                                                                       {
                                                                         "typeApplication": {
@@ -1047,8 +1042,10 @@
                                                                                 "pair": {
                                                                                   "first": {"literal": {"string": {}}},
                                                                                   "second": {"maybe": {"literal": {"string": {}}}}}}}},
-                                                                          "type": {"list": {"literal": {"string": {}}}}}},
-                                                                      {
+                                                                          "type": {"list": {"literal": {"string": {}}}}}}]},
+                                                                  {
+                                                                    "application": {
+                                                                      "argument": {
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
@@ -1071,7 +1068,30 @@
                                                                                   "first": {"literal": {"string": {}}},
                                                                                   "second": {"maybe": {"literal": {"string": {}}}}}}}},
                                                                           "type": {"list": {"literal": {"string": {}}}}}},
-                                                                      {
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "meta"},
+                                                                              "function": {
+                                                                                "function": {
+                                                                                  "elimination": {
+                                                                                    "record": {
+                                                                                      "field": "usesByteString",
+                                                                                      "typeName": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}}}}},
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {"variable": "condImport"},
+                                                                              "type": {
+                                                                                "pair": {
+                                                                                  "first": {
+                                                                                    "pair": {
+                                                                                      "first": {"literal": {"string": {}}},
+                                                                                      "second": {"maybe": {"literal": {"string": {}}}}}},
+                                                                                  "second": {"list": {"literal": {"string": {}}}}}}}}}}}},
+                                                                  {
+                                                                    "application": {
+                                                                      "argument": {
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
@@ -1094,30 +1114,30 @@
                                                                                   "first": {"literal": {"string": {}}},
                                                                                   "second": {"maybe": {"literal": {"string": {}}}}}}}},
                                                                           "type": {"list": {"literal": {"string": {}}}}}},
-                                                                      {
-                                                                        "typeApplication": {
-                                                                          "body": {
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "meta"},
+                                                                              "function": {
+                                                                                "function": {
+                                                                                  "elimination": {
+                                                                                    "record": {
+                                                                                      "field": "usesInt",
+                                                                                      "typeName": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}}}}},
+                                                                          "function": {
                                                                             "typeApplication": {
-                                                                              "body": {
-                                                                                "pair": {
-                                                                                  "@first": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {
-                                                                                        "typeApplication": {
-                                                                                          "body": {
-                                                                                            "pair": {
-                                                                                              "@first": {"literal": {"string": "Data.List"}},
-                                                                                              "@second": {"maybe": [{"literal": {"string": "L"}}]}}},
-                                                                                          "type": {"literal": {"string": {}}}}},
-                                                                                      "type": {"maybe": {"literal": {"string": {}}}}}},
-                                                                                  "@second": {
-                                                                                    "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}}},
+                                                                              "body": {"variable": "condImport"},
                                                                               "type": {
                                                                                 "pair": {
-                                                                                  "first": {"literal": {"string": {}}},
-                                                                                  "second": {"maybe": {"literal": {"string": {}}}}}}}},
-                                                                          "type": {"list": {"literal": {"string": {}}}}}},
-                                                                      {
+                                                                                  "first": {
+                                                                                    "pair": {
+                                                                                      "first": {"literal": {"string": {}}},
+                                                                                      "second": {"maybe": {"literal": {"string": {}}}}}},
+                                                                                  "second": {"list": {"literal": {"string": {}}}}}}}}}}}},
+                                                                  {
+                                                                    "application": {
+                                                                      "argument": {
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
@@ -1140,7 +1160,30 @@
                                                                                   "first": {"literal": {"string": {}}},
                                                                                   "second": {"maybe": {"literal": {"string": {}}}}}}}},
                                                                           "type": {"list": {"literal": {"string": {}}}}}},
-                                                                      {
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "meta"},
+                                                                              "function": {
+                                                                                "function": {
+                                                                                  "elimination": {
+                                                                                    "record": {
+                                                                                      "field": "usesMap",
+                                                                                      "typeName": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}}}}},
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {"variable": "condImport"},
+                                                                              "type": {
+                                                                                "pair": {
+                                                                                  "first": {
+                                                                                    "pair": {
+                                                                                      "first": {"literal": {"string": {}}},
+                                                                                      "second": {"maybe": {"literal": {"string": {}}}}}},
+                                                                                  "second": {"list": {"literal": {"string": {}}}}}}}}}}}},
+                                                                  {
+                                                                    "application": {
+                                                                      "argument": {
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
@@ -1162,17 +1205,94 @@
                                                                                 "pair": {
                                                                                   "first": {"literal": {"string": {}}},
                                                                                   "second": {"maybe": {"literal": {"string": {}}}}}}}},
-                                                                          "type": {"list": {"literal": {"string": {}}}}}}]},
-                                                                  "function": {
-                                                                    "typeApplication": {
-                                                                      "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
-                                                                      "type": {
-                                                                        "pair": {
-                                                                          "first": {
+                                                                          "type": {"list": {"literal": {"string": {}}}}}},
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "meta"},
+                                                                              "function": {
+                                                                                "function": {
+                                                                                  "elimination": {
+                                                                                    "record": {
+                                                                                      "field": "usesSet",
+                                                                                      "typeName": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}}}}},
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {"variable": "condImport"},
+                                                                              "type": {
+                                                                                "pair": {
+                                                                                  "first": {
+                                                                                    "pair": {
+                                                                                      "first": {"literal": {"string": {}}},
+                                                                                      "second": {"maybe": {"literal": {"string": {}}}}}},
+                                                                                  "second": {"list": {"literal": {"string": {}}}}}}}}}}}},
+                                                                  {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "typeApplication": {
+                                                                          "body": {"list": []},
+                                                                          "type": {
                                                                             "pair": {
-                                                                              "first": {"literal": {"string": {}}},
-                                                                              "second": {"maybe": {"literal": {"string": {}}}}}},
-                                                                          "second": {"list": {"literal": {"string": {}}}}}}}}}}}},
+                                                                              "first": {
+                                                                                "pair": {
+                                                                                  "first": {"literal": {"string": {}}},
+                                                                                  "second": {"maybe": {"literal": {"string": {}}}}}},
+                                                                              "second": {"list": {"literal": {"string": {}}}}}}}},
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "list": [
+                                                                              {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "pair": {
+                                                                                          "@first": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {
+                                                                                                    "pair": {
+                                                                                                      "@first": {"literal": {"string": "Hydra.Lib.Literals"}},
+                                                                                                      "@second": {"maybe": [{"literal": {"string": "Literals"}}]}}},
+                                                                                                  "type": {"literal": {"string": {}}}}},
+                                                                                              "type": {"maybe": {"literal": {"string": {}}}}}},
+                                                                                          "@second": {
+                                                                                            "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}}},
+                                                                                      "type": {
+                                                                                        "pair": {
+                                                                                          "first": {"literal": {"string": {}}},
+                                                                                          "second": {"maybe": {"literal": {"string": {}}}}}}}},
+                                                                                  "type": {"list": {"literal": {"string": {}}}}}}]},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "mod"},
+                                                                                  "function": {"variable": "hydra.analysis.moduleContainsBinaryLiterals"}}},
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                                  "type": {
+                                                                                    "list": {
+                                                                                      "pair": {
+                                                                                        "first": {
+                                                                                          "pair": {
+                                                                                            "first": {"literal": {"string": {}}},
+                                                                                            "second": {"maybe": {"literal": {"string": {}}}}}},
+                                                                                        "second": {"list": {"literal": {"string": {}}}}}}}}}}}}}}}]},
+                                                              "function": {
+                                                                "typeApplication": {
+                                                                  "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                                                  "type": {
+                                                                    "pair": {
+                                                                      "first": {
+                                                                        "pair": {
+                                                                          "first": {"literal": {"string": {}}},
+                                                                          "second": {"maybe": {"literal": {"string": {}}}}}},
+                                                                      "second": {"list": {"literal": {"string": {}}}}}}}}}},
                                                           "function": {
                                                             "application": {
                                                               "argument": {"variable": "toImport"},
@@ -1361,6 +1481,30 @@
                   "application": {
                     "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
                     "function": {"variable": "hydra.module.Namespaces"}}}}},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.ext.haskell.coder.emptyMetadata",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "Create an initial empty metadata record with all flags set to false"}}}],
+            "body": {
+              "record": {
+                "fields": [
+                  {"name": "usesByteString", "term": {"literal": {"boolean": false}}},
+                  {"name": "usesInt", "term": {"literal": {"boolean": false}}},
+                  {"name": "usesMap", "term": {"literal": {"boolean": false}}},
+                  {"name": "usesSet", "term": {"literal": {"boolean": false}}}],
+                "typeName": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"},
             "variables": []}]}},
     {
       "term": {
@@ -7829,6 +7973,243 @@
             "variables": ["t0"]}]}},
     {
       "term": {
+        "name": "hydra.ext.haskell.coder.extendMetaForTerm",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "Extend metadata by analyzing a term for standard import usage (bottom-up step function)"}}}],
+            "body": {
+              "function": {
+                "lambda": {
+                  "body": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "application": {
+                            "argument": {"variable": "term"},
+                            "function": {
+                              "function": {
+                                "elimination": {
+                                  "union": {
+                                    "cases": [
+                                      {
+                                        "name": "map",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "application": {
+                                                  "argument": {"variable": "meta"},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"literal": {"boolean": true}},
+                                                      "function": {"variable": "hydra.ext.haskell.coder.setMetaUsesMap"}}}}},
+                                              "domain": [
+                                                {
+                                                  "map": {
+                                                    "keys": {"variable": "hydra.core.Term"},
+                                                    "values": {"variable": "hydra.core.Term"}}}],
+                                              "parameter": "_"}}}},
+                                      {
+                                        "name": "set",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "application": {
+                                                  "argument": {"variable": "meta"},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"literal": {"boolean": true}},
+                                                      "function": {"variable": "hydra.ext.haskell.coder.setMetaUsesSet"}}}}},
+                                              "domain": [{"set": {"variable": "hydra.core.Term"}}],
+                                              "parameter": "_"}}}}],
+                                    "default": [{"variable": "meta"}],
+                                    "typeName": "hydra.core.Term"}}}}}},
+                        "domain": [{"variable": "hydra.core.Term"}],
+                        "parameter": "term"}}},
+                  "domain": [{"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}],
+                  "parameter": "meta"}}}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {
+                  "function": {
+                    "codomain": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"},
+                    "domain": {"variable": "hydra.core.Term"}}},
+                "domain": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.ext.haskell.coder.extendMetaForType",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "Extend metadata by analyzing a type for standard import usage (bottom-up step function)"}}}],
+            "body": {
+              "function": {
+                "lambda": {
+                  "body": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {"variable": "typ"},
+                                "function": {"variable": "hydra.strip.deannotateType"}}},
+                            "function": {
+                              "function": {
+                                "elimination": {
+                                  "union": {
+                                    "cases": [
+                                      {
+                                        "name": "literal",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "application": {
+                                                  "argument": {"variable": "lt"},
+                                                  "function": {
+                                                    "function": {
+                                                      "elimination": {
+                                                        "union": {
+                                                          "cases": [
+                                                            {
+                                                              "name": "binary",
+                                                              "term": {
+                                                                "function": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "meta"},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {"literal": {"boolean": true}},
+                                                                            "function": {"variable": "hydra.ext.haskell.coder.setMetaUsesByteString"}}}}},
+                                                                    "domain": [{"unit": {}}],
+                                                                    "parameter": "_"}}}},
+                                                            {
+                                                              "name": "integer",
+                                                              "term": {
+                                                                "function": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "it"},
+                                                                        "function": {
+                                                                          "function": {
+                                                                            "elimination": {
+                                                                              "union": {
+                                                                                "cases": [
+                                                                                  {
+                                                                                    "name": "int8",
+                                                                                    "term": {
+                                                                                      "function": {
+                                                                                        "lambda": {
+                                                                                          "body": {
+                                                                                            "application": {
+                                                                                              "argument": {"variable": "meta"},
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "argument": {"literal": {"boolean": true}},
+                                                                                                  "function": {"variable": "hydra.ext.haskell.coder.setMetaUsesInt"}}}}},
+                                                                                          "domain": [{"unit": {}}],
+                                                                                          "parameter": "_"}}}},
+                                                                                  {
+                                                                                    "name": "int16",
+                                                                                    "term": {
+                                                                                      "function": {
+                                                                                        "lambda": {
+                                                                                          "body": {
+                                                                                            "application": {
+                                                                                              "argument": {"variable": "meta"},
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "argument": {"literal": {"boolean": true}},
+                                                                                                  "function": {"variable": "hydra.ext.haskell.coder.setMetaUsesInt"}}}}},
+                                                                                          "domain": [{"unit": {}}],
+                                                                                          "parameter": "_"}}}},
+                                                                                  {
+                                                                                    "name": "int64",
+                                                                                    "term": {
+                                                                                      "function": {
+                                                                                        "lambda": {
+                                                                                          "body": {
+                                                                                            "application": {
+                                                                                              "argument": {"variable": "meta"},
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "argument": {"literal": {"boolean": true}},
+                                                                                                  "function": {"variable": "hydra.ext.haskell.coder.setMetaUsesInt"}}}}},
+                                                                                          "domain": [{"unit": {}}],
+                                                                                          "parameter": "_"}}}}],
+                                                                                "default": [{"variable": "meta"}],
+                                                                                "typeName": "hydra.core.IntegerType"}}}}}},
+                                                                    "domain": [{"variable": "hydra.core.IntegerType"}],
+                                                                    "parameter": "it"}}}}],
+                                                          "default": [{"variable": "meta"}],
+                                                          "typeName": "hydra.core.LiteralType"}}}}}},
+                                              "domain": [{"variable": "hydra.core.LiteralType"}],
+                                              "parameter": "lt"}}}},
+                                      {
+                                        "name": "map",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "application": {
+                                                  "argument": {"variable": "meta"},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"literal": {"boolean": true}},
+                                                      "function": {"variable": "hydra.ext.haskell.coder.setMetaUsesMap"}}}}},
+                                              "domain": [{"variable": "hydra.core.MapType"}],
+                                              "parameter": "_"}}}},
+                                      {
+                                        "name": "set",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "application": {
+                                                  "argument": {"variable": "meta"},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"literal": {"boolean": true}},
+                                                      "function": {"variable": "hydra.ext.haskell.coder.setMetaUsesSet"}}}}},
+                                              "domain": [{"variable": "hydra.core.Type"}],
+                                              "parameter": "_"}}}}],
+                                    "default": [{"variable": "meta"}],
+                                    "typeName": "hydra.core.Type"}}}}}},
+                        "domain": [{"variable": "hydra.core.Type"}],
+                        "parameter": "typ"}}},
+                  "domain": [{"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}],
+                  "parameter": "meta"}}}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {
+                  "function": {
+                    "codomain": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"},
+                    "domain": {"variable": "hydra.core.Type"}}},
+                "domain": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}},
+            "variables": []}]}},
+    {
+      "term": {
         "name": "hydra.ext.haskell.coder.findOrdVariables",
         "term": {
           "annotated": {
@@ -8045,6 +8426,276 @@
               "function": {
                 "codomain": {"set": {"variable": "hydra.core.Name"}},
                 "domain": {"variable": "hydra.core.Type"}}},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.ext.haskell.coder.gatherMetadata",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "Gather metadata from definitions by bottom-up traversal of all terms and types"}}}],
+            "body": {
+              "function": {
+                "lambda": {
+                  "body": {
+                    "let": {
+                      "bindings": [
+                        {
+                          "name": "addDef",
+                          "term": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {"variable": "def"},
+                                          "function": {
+                                            "function": {
+                                              "elimination": {
+                                                "union": {
+                                                  "cases": [
+                                                    {
+                                                      "name": "term",
+                                                      "term": {
+                                                        "function": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "let": {
+                                                                "bindings": [
+                                                                  {
+                                                                    "name": "term",
+                                                                    "term": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "termDef"},
+                                                                        "function": {
+                                                                          "function": {
+                                                                            "elimination": {
+                                                                              "record": {"field": "term", "typeName": "hydra.module.TermDefinition"}}}}}},
+                                                                    "type": [
+                                                                      {
+                                                                        "constraints": null,
+                                                                        "type": {"variable": "hydra.core.Term"},
+                                                                        "variables": []}]}],
+                                                                "body": {
+                                                                  "let": {
+                                                                    "bindings": [
+                                                                      {
+                                                                        "name": "metaWithTerm",
+                                                                        "term": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "term"},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "meta"},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "function": {
+                                                                                        "lambda": {
+                                                                                          "body": {
+                                                                                            "function": {
+                                                                                              "lambda": {
+                                                                                                "body": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "t"},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "m"},
+                                                                                                        "function": {"variable": "hydra.ext.haskell.coder.extendMetaForTerm"}}}}},
+                                                                                                "domain": [{"variable": "hydra.core.Term"}],
+                                                                                                "parameter": "t"}}},
+                                                                                          "domain": [{"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}],
+                                                                                          "parameter": "m"}}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "union": {
+                                                                                            "field": {"name": "pre", "term": {"unit": {}}},
+                                                                                            "typeName": "hydra.coders.TraversalOrder"}},
+                                                                                        "function": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"variable": "hydra.rewriting.foldOverTerm"},
+                                                                                            "type": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}}}}}}}}}},
+                                                                        "type": [
+                                                                          {
+                                                                            "constraints": null,
+                                                                            "type": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"},
+                                                                            "variables": []}]}],
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "termDef"},
+                                                                            "function": {
+                                                                              "function": {
+                                                                                "elimination": {
+                                                                                  "record": {"field": "type", "typeName": "hydra.module.TermDefinition"}}}}}},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "ts"},
+                                                                                          "function": {
+                                                                                            "function": {
+                                                                                              "elimination": {"record": {"field": "type", "typeName": "hydra.core.TypeScheme"}}}}}},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "metaWithTerm"},
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "argument": {
+                                                                                                "function": {
+                                                                                                  "lambda": {
+                                                                                                    "body": {
+                                                                                                      "function": {
+                                                                                                        "lambda": {
+                                                                                                          "body": {
+                                                                                                            "application": {
+                                                                                                              "argument": {"variable": "t"},
+                                                                                                              "function": {
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "m"},
+                                                                                                                  "function": {"variable": "hydra.ext.haskell.coder.extendMetaForType"}}}}},
+                                                                                                          "domain": [{"variable": "hydra.core.Type"}],
+                                                                                                          "parameter": "t"}}},
+                                                                                                    "domain": [{"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}],
+                                                                                                    "parameter": "m"}}},
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "argument": {
+                                                                                                    "union": {
+                                                                                                      "field": {"name": "pre", "term": {"unit": {}}},
+                                                                                                      "typeName": "hydra.coders.TraversalOrder"}},
+                                                                                                  "function": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"variable": "hydra.rewriting.foldOverType"},
+                                                                                                      "type": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}}}}}}}}}},
+                                                                                  "domain": [{"variable": "hydra.core.TypeScheme"}],
+                                                                                  "parameter": "ts"}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "metaWithTerm"},
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                        "type": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}},
+                                                                                    "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
+                                                            "domain": [{"variable": "hydra.module.TermDefinition"}],
+                                                            "parameter": "termDef"}}}},
+                                                    {
+                                                      "name": "type",
+                                                      "term": {
+                                                        "function": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "let": {
+                                                                "bindings": [
+                                                                  {
+                                                                    "name": "typ",
+                                                                    "term": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "typeDef"},
+                                                                        "function": {
+                                                                          "function": {
+                                                                            "elimination": {
+                                                                              "record": {"field": "type", "typeName": "hydra.module.TypeDefinition"}}}}}},
+                                                                    "type": [
+                                                                      {
+                                                                        "constraints": null,
+                                                                        "type": {"variable": "hydra.core.Type"},
+                                                                        "variables": []}]}],
+                                                                "body": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "typ"},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "meta"},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "body": {
+                                                                                    "function": {
+                                                                                      "lambda": {
+                                                                                        "body": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "t"},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "m"},
+                                                                                                "function": {"variable": "hydra.ext.haskell.coder.extendMetaForType"}}}}},
+                                                                                        "domain": [{"variable": "hydra.core.Type"}],
+                                                                                        "parameter": "t"}}},
+                                                                                  "domain": [{"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}],
+                                                                                  "parameter": "m"}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "union": {
+                                                                                    "field": {"name": "pre", "term": {"unit": {}}},
+                                                                                    "typeName": "hydra.coders.TraversalOrder"}},
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"variable": "hydra.rewriting.foldOverType"},
+                                                                                    "type": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}}}}}}}}}}}},
+                                                            "domain": [{"variable": "hydra.module.TypeDefinition"}],
+                                                            "parameter": "typeDef"}}}}],
+                                                  "default": null,
+                                                  "typeName": "hydra.module.Definition"}}}}}},
+                                      "domain": [{"variable": "hydra.module.Definition"}],
+                                      "parameter": "def"}}},
+                                "domain": [{"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}],
+                                "parameter": "meta"}}},
+                          "type": [
+                            {
+                              "constraints": null,
+                              "type": {
+                                "function": {
+                                  "codomain": {
+                                    "function": {
+                                      "codomain": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"},
+                                      "domain": {"variable": "hydra.module.Definition"}}},
+                                  "domain": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}},
+                              "variables": []}]}],
+                      "body": {
+                        "application": {
+                          "argument": {"variable": "defs"},
+                          "function": {
+                            "application": {
+                              "argument": {"variable": "hydra.ext.haskell.coder.emptyMetadata"},
+                              "function": {
+                                "application": {
+                                  "argument": {"variable": "addDef"},
+                                  "function": {
+                                    "typeApplication": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
+                                          "type": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}},
+                                      "type": {"variable": "hydra.module.Definition"}}}}}}}}}}},
+                  "domain": [{"list": {"variable": "hydra.module.Definition"}}],
+                  "parameter": "defs"}}}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"},
+                "domain": {"list": {"variable": "hydra.module.Definition"}}}},
             "variables": []}]}},
     {
       "term": {
@@ -8814,6 +9465,254 @@
                   "application": {
                     "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
                     "function": {"variable": "hydra.module.Namespaces"}}}}},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.ext.haskell.coder.setMetaUsesByteString",
+        "term": {
+          "function": {
+            "lambda": {
+              "body": {
+                "function": {
+                  "lambda": {
+                    "body": {
+                      "record": {
+                        "fields": [
+                          {"name": "usesByteString", "term": {"variable": "b"}},
+                          {
+                            "name": "usesInt",
+                            "term": {
+                              "application": {
+                                "argument": {"variable": "m"},
+                                "function": {
+                                  "function": {
+                                    "elimination": {
+                                      "record": {
+                                        "field": "usesInt",
+                                        "typeName": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}}}}}},
+                          {
+                            "name": "usesMap",
+                            "term": {
+                              "application": {
+                                "argument": {"variable": "m"},
+                                "function": {
+                                  "function": {
+                                    "elimination": {
+                                      "record": {
+                                        "field": "usesMap",
+                                        "typeName": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}}}}}},
+                          {
+                            "name": "usesSet",
+                            "term": {
+                              "application": {
+                                "argument": {"variable": "m"},
+                                "function": {
+                                  "function": {
+                                    "elimination": {
+                                      "record": {
+                                        "field": "usesSet",
+                                        "typeName": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}}}}}}],
+                        "typeName": "hydra.ext.haskell.environment.HaskellModuleMetadata"}},
+                    "domain": [{"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}],
+                    "parameter": "m"}}},
+              "domain": [{"literal": {"boolean": {}}}],
+              "parameter": "b"}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {
+                  "function": {
+                    "codomain": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"},
+                    "domain": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}},
+                "domain": {"literal": {"boolean": {}}}}},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.ext.haskell.coder.setMetaUsesInt",
+        "term": {
+          "function": {
+            "lambda": {
+              "body": {
+                "function": {
+                  "lambda": {
+                    "body": {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "usesByteString",
+                            "term": {
+                              "application": {
+                                "argument": {"variable": "m"},
+                                "function": {
+                                  "function": {
+                                    "elimination": {
+                                      "record": {
+                                        "field": "usesByteString",
+                                        "typeName": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}}}}}},
+                          {"name": "usesInt", "term": {"variable": "b"}},
+                          {
+                            "name": "usesMap",
+                            "term": {
+                              "application": {
+                                "argument": {"variable": "m"},
+                                "function": {
+                                  "function": {
+                                    "elimination": {
+                                      "record": {
+                                        "field": "usesMap",
+                                        "typeName": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}}}}}},
+                          {
+                            "name": "usesSet",
+                            "term": {
+                              "application": {
+                                "argument": {"variable": "m"},
+                                "function": {
+                                  "function": {
+                                    "elimination": {
+                                      "record": {
+                                        "field": "usesSet",
+                                        "typeName": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}}}}}}],
+                        "typeName": "hydra.ext.haskell.environment.HaskellModuleMetadata"}},
+                    "domain": [{"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}],
+                    "parameter": "m"}}},
+              "domain": [{"literal": {"boolean": {}}}],
+              "parameter": "b"}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {
+                  "function": {
+                    "codomain": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"},
+                    "domain": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}},
+                "domain": {"literal": {"boolean": {}}}}},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.ext.haskell.coder.setMetaUsesMap",
+        "term": {
+          "function": {
+            "lambda": {
+              "body": {
+                "function": {
+                  "lambda": {
+                    "body": {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "usesByteString",
+                            "term": {
+                              "application": {
+                                "argument": {"variable": "m"},
+                                "function": {
+                                  "function": {
+                                    "elimination": {
+                                      "record": {
+                                        "field": "usesByteString",
+                                        "typeName": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}}}}}},
+                          {
+                            "name": "usesInt",
+                            "term": {
+                              "application": {
+                                "argument": {"variable": "m"},
+                                "function": {
+                                  "function": {
+                                    "elimination": {
+                                      "record": {
+                                        "field": "usesInt",
+                                        "typeName": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}}}}}},
+                          {"name": "usesMap", "term": {"variable": "b"}},
+                          {
+                            "name": "usesSet",
+                            "term": {
+                              "application": {
+                                "argument": {"variable": "m"},
+                                "function": {
+                                  "function": {
+                                    "elimination": {
+                                      "record": {
+                                        "field": "usesSet",
+                                        "typeName": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}}}}}}],
+                        "typeName": "hydra.ext.haskell.environment.HaskellModuleMetadata"}},
+                    "domain": [{"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}],
+                    "parameter": "m"}}},
+              "domain": [{"literal": {"boolean": {}}}],
+              "parameter": "b"}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {
+                  "function": {
+                    "codomain": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"},
+                    "domain": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}},
+                "domain": {"literal": {"boolean": {}}}}},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.ext.haskell.coder.setMetaUsesSet",
+        "term": {
+          "function": {
+            "lambda": {
+              "body": {
+                "function": {
+                  "lambda": {
+                    "body": {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "usesByteString",
+                            "term": {
+                              "application": {
+                                "argument": {"variable": "m"},
+                                "function": {
+                                  "function": {
+                                    "elimination": {
+                                      "record": {
+                                        "field": "usesByteString",
+                                        "typeName": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}}}}}},
+                          {
+                            "name": "usesInt",
+                            "term": {
+                              "application": {
+                                "argument": {"variable": "m"},
+                                "function": {
+                                  "function": {
+                                    "elimination": {
+                                      "record": {
+                                        "field": "usesInt",
+                                        "typeName": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}}}}}},
+                          {
+                            "name": "usesMap",
+                            "term": {
+                              "application": {
+                                "argument": {"variable": "m"},
+                                "function": {
+                                  "function": {
+                                    "elimination": {
+                                      "record": {
+                                        "field": "usesMap",
+                                        "typeName": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}}}}}},
+                          {"name": "usesSet", "term": {"variable": "b"}}],
+                        "typeName": "hydra.ext.haskell.environment.HaskellModuleMetadata"}},
+                    "domain": [{"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}],
+                    "parameter": "m"}}},
+              "domain": [{"literal": {"boolean": {}}}],
+              "parameter": "b"}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {
+                  "function": {
+                    "codomain": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"},
+                    "domain": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}},
+                "domain": {"literal": {"boolean": {}}}}},
             "variables": []}]}},
     {
       "term": {
@@ -12639,6 +13538,7 @@
     "hydra.strip",
     "hydra.variables"],
   "typeDependencies": [
+    "hydra.ext.haskell.environment",
     "hydra.ext.haskell.syntax",
     "hydra.paths",
     "hydra.ast",

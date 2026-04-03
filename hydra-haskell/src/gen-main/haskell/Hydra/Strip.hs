@@ -8,11 +8,6 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Rewriting as Rewriting
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Strip type annotations from the top levels of a term
 deannotateAndDetypeTerm :: Core.Term -> Core.Term

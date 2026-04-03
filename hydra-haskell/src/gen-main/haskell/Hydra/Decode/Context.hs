@@ -13,11 +13,6 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 context :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Context.Context
 context cx raw =

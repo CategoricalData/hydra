@@ -7,11 +7,6 @@ module Hydra.Packaging where
 import qualified Hydra.Core as Core
 import qualified Hydra.Module as Module
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | A package, which is a named collection of modules with metadata and dependencies
 data Package =

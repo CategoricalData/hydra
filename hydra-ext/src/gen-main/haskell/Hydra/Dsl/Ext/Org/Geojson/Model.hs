@@ -9,11 +9,7 @@ import qualified Hydra.Ext.Org.Geojson.Model as Model
 import qualified Hydra.Json.Model as Model_
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
 
 boundingBox :: Phantoms.TTerm [Model.CoordinateRange] -> Phantoms.TTerm Model.BoundingBox
 boundingBox x =

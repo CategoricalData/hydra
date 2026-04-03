@@ -15,6 +15,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Encode.Core as Core_
 import qualified Hydra.Errors as Errors
+import qualified Hydra.Ext.Haskell.Environment as Environment
 import qualified Hydra.Ext.Haskell.Language as Language
 import qualified Hydra.Ext.Haskell.Serde as Serde
 import qualified Hydra.Ext.Haskell.Syntax as Syntax
@@ -44,9 +45,6 @@ import qualified Hydra.Strip as Strip
 import qualified Hydra.Util as Util
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
@@ -103,6 +101,9 @@ constructModule namespaces mod defs cx g =
                                 Syntax.importAs = (Just alias),
                                 Syntax.importSpec = Nothing}
                     in (Lists.map toImport (Maps.toList (Module.namespacesMapping namespaces)))
+          meta = gatherMetadata defs
+          condImport = \flag -> \triple -> Logic.ifElse flag [
+                triple] []
           standardImports =
 
                     let toImport =
@@ -120,22 +121,23 @@ constructModule namespaces mod defs cx g =
                                 Syntax.importModule = (Syntax.ModuleName name),
                                 Syntax.importAs = (Maybes.map (\x -> Syntax.ModuleName x) malias),
                                 Syntax.importSpec = spec}
-                    in (Lists.map toImport (Lists.concat2 [
-                      (("Prelude", Nothing), [
-                        "Enum",
-                        "Ordering",
-                        "decodeFloat",
-                        "encodeFloat",
-                        "fail",
-                        "map",
-                        "pure",
-                        "sum"]),
-                      (("Data.ByteString", (Just "B")), []),
-                      (("Data.Int", (Just "I")), []),
-                      (("Data.List", (Just "L")), []),
-                      (("Data.Map", (Just "M")), []),
-                      (("Data.Set", (Just "S")), [])] (Logic.ifElse (Analysis.moduleContainsBinaryLiterals mod) [
-                      (("Hydra.Lib.Literals", (Just "Literals")), [])] [])))
+                    in (Lists.map toImport (Lists.concat [
+                      [
+                        (("Prelude", Nothing), [
+                          "Enum",
+                          "Ordering",
+                          "decodeFloat",
+                          "encodeFloat",
+                          "fail",
+                          "map",
+                          "pure",
+                          "sum"])],
+                      (condImport (Environment.haskellModuleMetadataUsesByteString meta) (("Data.ByteString", (Just "B")), [])),
+                      (condImport (Environment.haskellModuleMetadataUsesInt meta) (("Data.Int", (Just "I")), [])),
+                      (condImport (Environment.haskellModuleMetadataUsesMap meta) (("Data.Map", (Just "M")), [])),
+                      (condImport (Environment.haskellModuleMetadataUsesSet meta) (("Data.Set", (Just "S")), [])),
+                      (Logic.ifElse (Analysis.moduleContainsBinaryLiterals mod) [
+                        (("Hydra.Lib.Literals", (Just "Literals")), [])] [])]))
       in (Eithers.bind (Eithers.mapList createDeclarations defs) (\declLists ->
         let decls = Lists.concat declLists
             mc = Module.moduleDescription mod
@@ -146,6 +148,15 @@ constructModule namespaces mod defs cx g =
             Syntax.moduleHeadExports = []})),
           Syntax.moduleImports = imports,
           Syntax.moduleDeclarations = decls}))))
+
+-- | Create an initial empty metadata record with all flags set to false
+emptyMetadata :: Environment.HaskellModuleMetadata
+emptyMetadata =
+    Environment.HaskellModuleMetadata {
+      Environment.haskellModuleMetadataUsesByteString = False,
+      Environment.haskellModuleMetadataUsesInt = False,
+      Environment.haskellModuleMetadataUsesMap = False,
+      Environment.haskellModuleMetadataUsesSet = False}
 
 -- | Encode a Hydra case statement as a Haskell case expression with a given scrutinee
 encodeCaseExpression :: Int -> Module.Namespaces Syntax.ModuleName -> Core.CaseStatement -> Syntax.Expression -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
@@ -461,6 +472,30 @@ encodeTypeWithClassAssertions namespaces explicitClasses typ cx g =
           Syntax.contextTypeCtx = hassert,
           Syntax.contextTypeType = htyp}))))))
 
+-- | Extend metadata by analyzing a term for standard import usage (bottom-up step function)
+extendMetaForTerm :: Environment.HaskellModuleMetadata -> Core.Term -> Environment.HaskellModuleMetadata
+extendMetaForTerm meta term =
+    case term of
+      Core.TermMap _ -> setMetaUsesMap True meta
+      Core.TermSet _ -> setMetaUsesSet True meta
+      _ -> meta
+
+-- | Extend metadata by analyzing a type for standard import usage (bottom-up step function)
+extendMetaForType :: Environment.HaskellModuleMetadata -> Core.Type -> Environment.HaskellModuleMetadata
+extendMetaForType meta typ =
+    case (Strip.deannotateType typ) of
+      Core.TypeLiteral v0 -> case v0 of
+        Core.LiteralTypeBinary -> setMetaUsesByteString True meta
+        Core.LiteralTypeInteger v1 -> case v1 of
+          Core.IntegerTypeInt8 -> setMetaUsesInt True meta
+          Core.IntegerTypeInt16 -> setMetaUsesInt True meta
+          Core.IntegerTypeInt64 -> setMetaUsesInt True meta
+          _ -> meta
+        _ -> meta
+      Core.TypeMap _ -> setMetaUsesMap True meta
+      Core.TypeSet _ -> setMetaUsesSet True meta
+      _ -> meta
+
 -- | Find type variables that require an Ord constraint (used in maps or sets)
 findOrdVariables :: Core.Type -> S.Set Core.Name
 findOrdVariables typ =
@@ -478,6 +513,21 @@ findOrdVariables typ =
                     Core.TypeVariable v0 -> Logic.ifElse (isTypeVariable v0) (Sets.insert v0 names) names
                     _ -> names
       in (Rewriting.foldOverType Coders.TraversalOrderPre fold Sets.empty typ)
+
+-- | Gather metadata from definitions by bottom-up traversal of all terms and types
+gatherMetadata :: [Module.Definition] -> Environment.HaskellModuleMetadata
+gatherMetadata defs =
+
+      let addDef =
+              \meta -> \def -> case def of
+                Module.DefinitionTerm v0 ->
+                  let term = Module.termDefinitionTerm v0
+                      metaWithTerm = Rewriting.foldOverTerm Coders.TraversalOrderPre (\m -> \t -> extendMetaForTerm m t) meta term
+                  in (Maybes.maybe metaWithTerm (\ts -> Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType m t) metaWithTerm (Core.typeSchemeType ts)) (Module.termDefinitionType v0))
+                Module.DefinitionType v0 ->
+                  let typ = Module.typeDefinitionType v0
+                  in (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType m t) meta typ)
+      in (Lists.foldl addDef emptyMetadata defs)
 
 -- | Get implicit typeclass constraints for type variables that need Ord
 getImplicitTypeClasses :: Core.Type -> M.Map Core.Name (S.Set Classes.TypeClass)
@@ -534,6 +584,38 @@ nameDecls namespaces name typ =
                     let fname = Core.fieldTypeName fieldType
                     in (constantForFieldName name fname, (Core.unName fname))
       in (Logic.ifElse useCoreImport (Lists.cons (toDecl (Core.Name "hydra.core.Name") nameDecl) (Lists.map (toDecl (Core.Name "hydra.core.Name")) fieldDecls)) [])
+
+setMetaUsesByteString :: Bool -> Environment.HaskellModuleMetadata -> Environment.HaskellModuleMetadata
+setMetaUsesByteString b m =
+    Environment.HaskellModuleMetadata {
+      Environment.haskellModuleMetadataUsesByteString = b,
+      Environment.haskellModuleMetadataUsesInt = (Environment.haskellModuleMetadataUsesInt m),
+      Environment.haskellModuleMetadataUsesMap = (Environment.haskellModuleMetadataUsesMap m),
+      Environment.haskellModuleMetadataUsesSet = (Environment.haskellModuleMetadataUsesSet m)}
+
+setMetaUsesInt :: Bool -> Environment.HaskellModuleMetadata -> Environment.HaskellModuleMetadata
+setMetaUsesInt b m =
+    Environment.HaskellModuleMetadata {
+      Environment.haskellModuleMetadataUsesByteString = (Environment.haskellModuleMetadataUsesByteString m),
+      Environment.haskellModuleMetadataUsesInt = b,
+      Environment.haskellModuleMetadataUsesMap = (Environment.haskellModuleMetadataUsesMap m),
+      Environment.haskellModuleMetadataUsesSet = (Environment.haskellModuleMetadataUsesSet m)}
+
+setMetaUsesMap :: Bool -> Environment.HaskellModuleMetadata -> Environment.HaskellModuleMetadata
+setMetaUsesMap b m =
+    Environment.HaskellModuleMetadata {
+      Environment.haskellModuleMetadataUsesByteString = (Environment.haskellModuleMetadataUsesByteString m),
+      Environment.haskellModuleMetadataUsesInt = (Environment.haskellModuleMetadataUsesInt m),
+      Environment.haskellModuleMetadataUsesMap = b,
+      Environment.haskellModuleMetadataUsesSet = (Environment.haskellModuleMetadataUsesSet m)}
+
+setMetaUsesSet :: Bool -> Environment.HaskellModuleMetadata -> Environment.HaskellModuleMetadata
+setMetaUsesSet b m =
+    Environment.HaskellModuleMetadata {
+      Environment.haskellModuleMetadataUsesByteString = (Environment.haskellModuleMetadataUsesByteString m),
+      Environment.haskellModuleMetadataUsesInt = (Environment.haskellModuleMetadataUsesInt m),
+      Environment.haskellModuleMetadataUsesMap = (Environment.haskellModuleMetadataUsesMap m),
+      Environment.haskellModuleMetadataUsesSet = b}
 
 -- | Convert a Hydra term definition to a Haskell declaration with comments
 toDataDeclaration :: Module.Namespaces Syntax.ModuleName -> Module.TermDefinition -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.DeclarationWithComments

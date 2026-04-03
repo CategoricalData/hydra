@@ -9,9 +9,7 @@ module Hydra.Ext.Org.Apache.Atlas where
 import qualified Hydra.Core as Core
 import qualified Hydra.Ext.Org.W3.Xml.Schema as Schema
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
 import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 

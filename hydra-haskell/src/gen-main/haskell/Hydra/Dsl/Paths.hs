@@ -8,11 +8,6 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 subtermEdge :: Phantoms.TTerm Paths.SubtermNode -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Paths.SubtermNode -> Phantoms.TTerm Paths.SubtermEdge
 subtermEdge source path target =

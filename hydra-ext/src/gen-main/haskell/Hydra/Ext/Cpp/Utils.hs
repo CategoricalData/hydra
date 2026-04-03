@@ -8,11 +8,6 @@ import qualified Hydra.Ext.Cpp.Syntax as Syntax
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Create a const reference parameter
 constParameter :: String -> Syntax.TypeExpression -> Syntax.Parameter

@@ -16,11 +16,6 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Pg.Model as Model_
 import qualified Hydra.Pg.Rdf.Environment as Environment
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Convert edge types into property shape constraints for a given vertex label
 edgeTypesToPropertyShapes :: t0 -> (Model_.EdgeLabel -> Syntax.Iri) -> Model_.VertexLabel -> [Model_.EdgeType t1] -> [Model.CommonConstraint]

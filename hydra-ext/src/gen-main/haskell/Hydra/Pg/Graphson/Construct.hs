@@ -17,11 +17,7 @@ import qualified Hydra.Pg.Graphson.Coder as Coder
 import qualified Hydra.Pg.Graphson.Syntax as Syntax
 import qualified Hydra.Pg.Model as Model_
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Convert a property graph adjacent edge to a GraphSON adjacent edge
 adjacentEdgeToGraphson :: (t0 -> Either t1 Syntax.Value) -> Model_.AdjacentEdge t0 -> Either t1 (Syntax.EdgeLabel, Syntax.AdjacentEdge)

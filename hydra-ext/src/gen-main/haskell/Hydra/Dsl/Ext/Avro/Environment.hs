@@ -11,11 +11,7 @@ import qualified Hydra.Ext.Org.Apache.Avro.Schema as Schema
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
 
 avroEnvironment :: Phantoms.TTerm (M.Map Environment.AvroQualifiedName (Coders.Adapter Schema.Schema Core.Type Model.Value Core.Term)) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (M.Map Core.Name Core.Binding) -> Phantoms.TTerm Environment.AvroEnvironment
 avroEnvironment namedAdapters namespace elements =
