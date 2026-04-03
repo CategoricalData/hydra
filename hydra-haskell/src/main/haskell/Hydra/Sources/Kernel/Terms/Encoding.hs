@@ -823,11 +823,11 @@ encodeForallType = define "encodeForallType" $
         nothing
         (encodeType @@ Core.forallTypeBody (var "ft"))
 
--- | Generate an encoder for an optional type
--- Encodes the inner value if present and wraps in Term.optional
+-- | Generate an encoder for a Maybe type
+-- Encodes the inner value if present and wraps in Term.maybe
 encodeOptionalType :: TTermDefinition (Type -> Term)
 encodeOptionalType = define "encodeOptionalType" $
-  doc "Generate an encoder for an optional type" $
+  doc "Generate an encoder for a Maybe type" $
   "elemType" ~> DC.lambda "opt" $
     DC.injection _Term (DC.field _Term_maybe
       (DC.primitiveEncoded _maybes_map @@@ (encodeType @@ var "elemType") @@@ DC.var "opt"))

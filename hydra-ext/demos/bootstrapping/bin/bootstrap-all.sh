@@ -922,6 +922,31 @@ def fmt_time(secs):
     if secs is None: return "?"
     return f"{secs:.1f}s" if secs < 60 else f"{int(secs)//60}m {secs%60:.0f}s"
 
+def load_benchmark_counts(path_key):
+    """Load test passed/skipped counts from benchmark JSON."""
+    single = os.path.join(run_dir, f"{path_key}.benchmark.json")
+    if os.path.exists(single):
+        try:
+            d = json.load(open(single))
+            s = d.get("summary") or {}
+            passed = s.get("totalPassed")
+            skipped = s.get("totalSkipped", 0)
+            if passed is not None:
+                return (passed, skipped)
+        except: pass
+    # Try numbered files (take first)
+    files = sorted(glob.glob(os.path.join(run_dir, f"{path_key}_*.benchmark.json")))
+    if files:
+        try:
+            d = json.load(open(files[0]))
+            s = d.get("summary") or {}
+            passed = s.get("totalPassed")
+            skipped = s.get("totalSkipped", 0)
+            if passed is not None:
+                return (passed, skipped)
+        except: pass
+    return (None, None)
+
 def load_benchmark_timing(path_key):
     """Load test run time from benchmark JSON files, or fall back to testRunTimeSeconds."""
     single = os.path.join(run_dir, f"{path_key}.benchmark.json")
@@ -976,6 +1001,7 @@ for h in hosts:
     r1 = [capitalize(h)]
     r2 = [""]
     r3 = [""]
+    r4 = [""]
     for t in targets:
         key = f"{h}-to-{t}"
         d = data.get(key)
@@ -983,10 +1009,12 @@ for h in hosts:
             r1.append("(not run)")
             r2.append("")
             r3.append("")
+            r4.append("")
         elif d.get("status") == "fail":
             r1.append("FAILED")
             r2.append("")
             r3.append("")
+            r4.append("")
         else:
             gen = d.get("generation", {})
             m = gen.get("main", {})
@@ -998,9 +1026,18 @@ for h in hosts:
             r1.append(f"{mf} files ({tf} test)")
             r2.append(f"gen: {mt} ({tt})")
             r3.append(f"test: {load_benchmark_timing(key)}")
+            passed, skipped = load_benchmark_counts(key)
+            if passed is not None:
+                count_str = f"{passed} pass"
+                if skipped and skipped > 0:
+                    count_str += f", {skipped} skip"
+                r4.append(count_str)
+            else:
+                r4.append("")
     rows.append(r1)
     rows.append(r2)
     rows.append(r3)
+    rows.append(r4)
 
 num_cols = len(header)
 widths = [max(len(row[c]) if c < len(row) else 0 for row in rows) + 2 for c in range(num_cols)]
@@ -1021,14 +1058,14 @@ def draw_row(row):
     print("".join(parts))
 
 print()
-print("  Each cell: main files (test files) / gen: main time (test time) / test: run time")
+print("  Each cell: main files (test files) / gen: main time (test time) / test: run time / pass, skip")
 print()
 
 rule("\u250c", "\u252c", "\u2510")
 draw_row(rows[0])
 rule("\u251c", "\u253c", "\u2524")
 for i in range(1, len(rows)):
-    if i > 1 and (i - 1) % 3 == 0:
+    if i > 1 and (i - 1) % 4 == 0:
         rule("\u251c", "\u253c", "\u2524")
     draw_row(rows[i])
 rule("\u2514", "\u2534", "\u2518")

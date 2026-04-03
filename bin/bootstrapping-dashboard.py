@@ -343,6 +343,7 @@ def cmd_latest(args):
         line1 = [capitalize(host)]
         line2 = [""]
         line3 = [""]
+        line4 = [""]
         for target in targets:
             key = f"{host}-to-{target}"
             data = run["paths"].get(key)
@@ -350,6 +351,7 @@ def cmd_latest(args):
                 line1.append("(not run)")
                 line2.append("")
                 line3.append("")
+                line4.append("")
                 continue
 
             status = data.get("status", "?")
@@ -357,6 +359,7 @@ def cmd_latest(args):
                 line1.append(f"{_RED}FAILED{_RESET}")
                 line2.append("")
                 line3.append("")
+                line4.append("")
                 continue
 
             gen = data.get("generation") or {}
@@ -381,11 +384,27 @@ def cmd_latest(args):
             else:
                 line3.append(f"{_GRAY}tests: \u2014{_RESET}")
 
-        host_rows.append([line1, line2, line3])
+            # Test pass/skip counts from benchmark JSONs
+            bdata = load_benchmark_data(run_dir, key)
+            if bdata:
+                s = bdata[0].get("summary") or {}
+                passed = s.get("totalPassed")
+                skipped = s.get("totalSkipped", 0)
+                if passed is not None:
+                    count_str = f"{passed} pass"
+                    if skipped and skipped > 0:
+                        count_str += f", {skipped} skip"
+                    line4.append(count_str)
+                else:
+                    line4.append("")
+            else:
+                line4.append("")
 
-    print("  Each cell: main files @ gen time / test files @ gen time / test run time")
+        host_rows.append([line1, line2, line3, line4])
+
+    print("  Each cell: main files @ gen time / test files @ gen time / test run time / pass, skip")
     print()
-    draw_matrix(header_row, host_rows, 3)
+    draw_matrix(header_row, host_rows, 4)
 
     # Show test group details if --depth > 0
     if args.depth and args.depth > 0:
