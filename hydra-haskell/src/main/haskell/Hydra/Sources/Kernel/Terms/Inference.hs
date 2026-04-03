@@ -810,7 +810,7 @@ inferTypeOfMap = define "inferTypeOfMap" $
 
 inferTypeOfOptional :: TTermDefinition (Context -> Graph -> Maybe Term -> Prelude.Either (InContext Error) InferenceResult)
 inferTypeOfOptional = define "inferTypeOfOptional" $
-  doc "Infer the type of an optional (Either version)" $
+  doc "Infer the type of a Maybe value" $
   "fcx" ~> "cx" ~> "m" ~>
   "trmCons" <~ ("terms" ~> Logic.ifElse (Lists.null $ var "terms")
     (Core.termMaybe nothing)

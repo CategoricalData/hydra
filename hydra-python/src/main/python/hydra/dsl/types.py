@@ -309,7 +309,7 @@ def map_(k: Typeable, v: Typeable) -> Type:
 
 
 def maybe(t: Typeable) -> Type:
-    """Maybe (optional/nullable) type.
+    """Maybe (nullable) type.
 
     Example: maybe(string())
     """
