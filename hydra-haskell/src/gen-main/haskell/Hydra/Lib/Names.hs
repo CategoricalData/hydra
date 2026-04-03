@@ -542,11 +542,20 @@ mathMax = Core.Name "hydra.lib.math.max"
 mathMaybeDiv :: Core.Name
 mathMaybeDiv = Core.Name "hydra.lib.math.maybeDiv"
 
-mathMin :: Core.Name
-mathMin = Core.Name "hydra.lib.math.min"
-
 mathMaybeMod :: Core.Name
 mathMaybeMod = Core.Name "hydra.lib.math.maybeMod"
+
+mathMaybePred :: Core.Name
+mathMaybePred = Core.Name "hydra.lib.math.maybePred"
+
+mathMaybeRem :: Core.Name
+mathMaybeRem = Core.Name "hydra.lib.math.maybeRem"
+
+mathMaybeSucc :: Core.Name
+mathMaybeSucc = Core.Name "hydra.lib.math.maybeSucc"
+
+mathMin :: Core.Name
+mathMin = Core.Name "hydra.lib.math.min"
 
 mathMod :: Core.Name
 mathMod = Core.Name "hydra.lib.math.mod"
@@ -566,17 +575,11 @@ mathPi = Core.Name "hydra.lib.math.pi"
 mathPow :: Core.Name
 mathPow = Core.Name "hydra.lib.math.pow"
 
-mathMaybePred :: Core.Name
-mathMaybePred = Core.Name "hydra.lib.math.maybePred"
-
 mathPred :: Core.Name
 mathPred = Core.Name "hydra.lib.math.pred"
 
 mathRange :: Core.Name
 mathRange = Core.Name "hydra.lib.math.range"
-
-mathMaybeRem :: Core.Name
-mathMaybeRem = Core.Name "hydra.lib.math.maybeRem"
 
 mathRem :: Core.Name
 mathRem = Core.Name "hydra.lib.math.rem"
@@ -607,9 +610,6 @@ mathSqrt = Core.Name "hydra.lib.math.sqrt"
 
 mathSub :: Core.Name
 mathSub = Core.Name "hydra.lib.math.sub"
-
-mathMaybeSucc :: Core.Name
-mathMaybeSucc = Core.Name "hydra.lib.math.maybeSucc"
 
 mathSucc :: Core.Name
 mathSucc = Core.Name "hydra.lib.math.succ"

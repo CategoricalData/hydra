@@ -4085,7 +4085,7 @@
             "annotation": [
               {
                 "@key": "description",
-                "@value": {"literal": {"string": "Generate an encoder for an optional type"}}}],
+                "@value": {"literal": {"string": "Generate an encoder for a Maybe type"}}}],
             "body": {
               "function": {
                 "lambda": {
