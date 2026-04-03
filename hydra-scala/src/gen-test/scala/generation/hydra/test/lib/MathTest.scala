@@ -237,6 +237,68 @@ class MathTest extends AnyFunSuite {
 
   }
 
+  // maybeDiv
+
+  test("maybeDiv - basic division") {
+
+    assert((
+
+      just(3:int32)) == (
+
+      just(3:int32)))
+
+  }
+
+  test("maybeDiv - exact division") {
+
+    assert((
+
+      just(5:int32)) == (
+
+      just(5:int32)))
+
+  }
+
+  test("maybeDiv - division by zero") {
+
+    assert((
+
+      nothing) == (
+
+      nothing))
+
+  }
+
+  test("maybeDiv - zero divided") {
+
+    assert((
+
+      just(0:int32)) == (
+
+      just(0:int32)))
+
+  }
+
+  test("maybeDiv - negative dividend") {
+
+    assert((
+
+      just(-4:int32)) == (
+
+      just(-4:int32)))
+
+  }
+
+  test("maybeDiv - negative divisor") {
+
+    assert((
+
+      just(-4:int32)) == (
+
+      just(-4:int32)))
+
+  }
+
   // min
 
   test("min - first is smaller") {
@@ -296,6 +358,58 @@ class MathTest extends AnyFunSuite {
       0:int32) == (
 
       0:int32))
+
+  }
+
+  // maybeMod
+
+  test("maybeMod - basic modulo") {
+
+    assert((
+
+      just(1:int32)) == (
+
+      just(1:int32)))
+
+  }
+
+  test("maybeMod - exact division") {
+
+    assert((
+
+      just(0:int32)) == (
+
+      just(0:int32)))
+
+  }
+
+  test("maybeMod - division by zero") {
+
+    assert((
+
+      nothing) == (
+
+      nothing))
+
+  }
+
+  test("maybeMod - negative dividend") {
+
+    assert((
+
+      just(2:int32)) == (
+
+      just(2:int32)))
+
+  }
+
+  test("maybeMod - negative divisor") {
+
+    assert((
+
+      just(-2:int32)) == (
+
+      just(-2:int32)))
 
   }
 
@@ -477,6 +591,48 @@ class MathTest extends AnyFunSuite {
 
   }
 
+  // maybePred
+
+  test("maybePred - positive") {
+
+    assert((
+
+      just(4:int32)) == (
+
+      just(4:int32)))
+
+  }
+
+  test("maybePred - zero") {
+
+    assert((
+
+      just(-1:int32)) == (
+
+      just(-1:int32)))
+
+  }
+
+  test("maybePred - negative") {
+
+    assert((
+
+      just(-6:int32)) == (
+
+      just(-6:int32)))
+
+  }
+
+  test("maybePred - minBound") {
+
+    assert((
+
+      nothing) == (
+
+      nothing))
+
+  }
+
   // pred
 
   test("pred - positive") {
@@ -548,6 +704,58 @@ class MathTest extends AnyFunSuite {
       [-2:int32, -1:int32, 0:int32, 1:int32, 2:int32]) == (
 
       [-2:int32, -1:int32, 0:int32, 1:int32, 2:int32]))
+
+  }
+
+  // maybeRem
+
+  test("maybeRem - basic remainder") {
+
+    assert((
+
+      just(1:int32)) == (
+
+      just(1:int32)))
+
+  }
+
+  test("maybeRem - exact division") {
+
+    assert((
+
+      just(0:int32)) == (
+
+      just(0:int32)))
+
+  }
+
+  test("maybeRem - division by zero") {
+
+    assert((
+
+      nothing) == (
+
+      nothing))
+
+  }
+
+  test("maybeRem - negative dividend") {
+
+    assert((
+
+      just(-1:int32)) == (
+
+      just(-1:int32)))
+
+  }
+
+  test("maybeRem - negative divisor") {
+
+    assert((
+
+      just(1:int32)) == (
+
+      just(1:int32)))
 
   }
 
@@ -664,6 +872,48 @@ class MathTest extends AnyFunSuite {
       42:int32) == (
 
       42:int32))
+
+  }
+
+  // maybeSucc
+
+  test("maybeSucc - positive") {
+
+    assert((
+
+      just(6:int32)) == (
+
+      just(6:int32)))
+
+  }
+
+  test("maybeSucc - zero") {
+
+    assert((
+
+      just(1:int32)) == (
+
+      just(1:int32)))
+
+  }
+
+  test("maybeSucc - negative") {
+
+    assert((
+
+      just(-4:int32)) == (
+
+      just(-4:int32)))
+
+  }
+
+  test("maybeSucc - maxBound") {
+
+    assert((
+
+      nothing) == (
+
+      nothing))
 
   }
 

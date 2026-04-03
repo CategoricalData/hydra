@@ -275,6 +275,7 @@
     "hydra.json.writer",
     "hydra.ext.haskell.syntax",
     "hydra.ext.haskell.coder",
+    "hydra.ext.haskell.environment",
     "hydra.ext.haskell.language",
     "hydra.ext.haskell.operators",
     "hydra.ext.haskell.serde",

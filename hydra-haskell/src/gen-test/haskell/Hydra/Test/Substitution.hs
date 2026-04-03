@@ -11,11 +11,6 @@ import qualified Hydra.Substitution as Substitution
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Test cases for type and term substitution operations
 allTests :: Testing.TestGroup

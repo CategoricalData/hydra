@@ -25,11 +25,7 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Determines whether a given term is an encoded term (meta-level term)
 isEncodedTerm :: Core.Term -> Bool
@@ -125,16 +121,16 @@ typeDependencies :: Context.Context -> Graph.Graph -> Bool -> (Core.Type -> Core
 typeDependencies cx graph withSchema transform name =
 
       let requireType =
-              \name ->
+              \name2 ->
                 let cx1 =
                         Context.Context {
-                          Context.contextTrace = (Lists.cons (Strings.cat2 "type dependencies of " (Core.unName name)) (Context.contextTrace cx)),
+                          Context.contextTrace = (Lists.cons (Strings.cat2 "type dependencies of " (Core.unName name2)) (Context.contextTrace cx)),
                           Context.contextMessages = (Context.contextMessages cx),
                           Context.contextOther = (Context.contextOther cx)}
-                in (Eithers.bind (Lexical.requireElement cx1 graph name) (\el -> Eithers.bimap (\_wc_e -> Context.InContext {
+                in (Eithers.bind (Lexical.requireElement cx1 graph name2) (\el -> Eithers.bimap (\_wc_e -> Context.InContext {
                   Context.inContextObject = _wc_e,
                   Context.inContextContext = cx1}) (\_wc_a -> _wc_a) (Eithers.bimap (\_e -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _e))) (\_a -> _a) (Core_.type_ graph (Core.bindingTerm el)))))
-          toPair = \name -> Eithers.map (\typ -> (name, (transform typ))) (requireType name)
+          toPair = \name2 -> Eithers.map (\typ -> (name2, (transform typ))) (requireType name2)
           deps =
                   \seeds -> \names -> Logic.ifElse (Sets.null seeds) (Right names) (Eithers.bind (Eithers.mapList toPair (Sets.toList seeds)) (\pairs ->
                     let newNames = Maps.union names (Maps.fromList pairs)

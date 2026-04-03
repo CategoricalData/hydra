@@ -9,11 +9,6 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Reflect as Reflect
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Language constraints for Hydra Core, i.e. no constraints.
 hydraLanguage :: Coders.Language

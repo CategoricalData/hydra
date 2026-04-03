@@ -8,11 +8,6 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Ext.Dev.Osv.Schema as Schema
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 credited :: Phantoms.TTerm String -> Phantoms.TTerm (Maybe [Schema.Url]) -> Phantoms.TTerm Schema.Credited
 credited name contact =

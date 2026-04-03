@@ -15,11 +15,6 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Reduction as Reduction
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Interpreter-friendly applicative apply for List terms.
 apply :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
@@ -229,6 +224,11 @@ map cx g funTerm listTerm =
     Eithers.bind (Core_.list cx g listTerm) (\elements -> Right (Core.TermList (Lists.reverse (Lists.foldl (\acc -> \el -> Lists.cons (Core.TermApplication (Core.Application {
       Core.applicationFunction = funTerm,
       Core.applicationArgument = el})) acc) [] elements))))
+
+-- | Interpreter-friendly maybeHead for List terms.
+maybeHead :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
+maybeHead cx g listTerm =
+    Eithers.bind (Core_.list cx g listTerm) (\elements -> Right (Logic.ifElse (Lists.null elements) (Core.TermMaybe Nothing) (Core.TermMaybe (Just (Lists.head elements)))))
 
 -- | Interpreter-friendly nub for List terms.
 nub :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term

@@ -14,6 +14,7 @@
           hydra_lib_strings_is_suffix_of
           hydra_lib_strings_length
           hydra_lib_strings_lines
+          hydra_lib_strings_maybe_char_at
           hydra_lib_strings_null
           hydra_lib_strings_replicate
           hydra_lib_strings_reverse
@@ -139,6 +140,14 @@
                        (loop (+ i 1) (+ i 1) (cons (substring s start i) acc))))
                   (else
                    (loop (+ i 1) start acc))))))))
+
+    ;; maybe_char_at :: Int -> String -> Maybe Int
+    (define hydra_lib_strings_maybe_char_at
+      (lambda (n)
+        (lambda (s)
+          (if (and (>= n 0) (< n (string-length s)))
+              (list 'just (char->int (string-ref s n)))
+              (list 'nothing)))))
 
     ;; Check whether a string is empty.
     (define hydra_lib_strings_null

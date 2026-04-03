@@ -15,11 +15,6 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 value :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Model.Value
 value cx raw =
@@ -31,25 +26,25 @@ value cx raw =
             variantMap =
                     Maps.fromList [
                       (Core.Name "array", (\input -> Eithers.map (\t -> Model.ValueArray t) (Core_.decodeList value cx input))),
-                      (Core.Name "boolean", (\input -> Eithers.map (\t -> Model.ValueBoolean t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+                      (Core.Name "boolean", (\input -> Eithers.map (\t -> Model.ValueBoolean t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
                         Core.TermLiteral v1 -> case v1 of
                           Core.LiteralBoolean v2 -> Right v2
                           _ -> Left (Errors.DecodingError "expected boolean literal")
                         _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx input)))),
                       (Core.Name "null", (\input -> Eithers.map (\t -> Model.ValueNull) (Core_.decodeUnit cx input))),
-                      (Core.Name "number", (\input -> Eithers.map (\t -> Model.ValueNumber t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+                      (Core.Name "number", (\input -> Eithers.map (\t -> Model.ValueNumber t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
                         Core.TermLiteral v1 -> case v1 of
                           Core.LiteralFloat v2 -> case v2 of
                             Core.FloatValueBigfloat v3 -> Right v3
                             _ -> Left (Errors.DecodingError "expected bigfloat value")
                           _ -> Left (Errors.DecodingError "expected bigfloat literal")
                         _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx input)))),
-                      (Core.Name "object", (\input -> Eithers.map (\t -> Model.ValueObject t) (Core_.decodeMap (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+                      (Core.Name "object", (\input -> Eithers.map (\t -> Model.ValueObject t) (Core_.decodeMap (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
                         Core.TermLiteral v1 -> case v1 of
                           Core.LiteralString v2 -> Right v2
                           _ -> Left (Errors.DecodingError "expected string literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) value cx input))),
-                      (Core.Name "string", (\input -> Eithers.map (\t -> Model.ValueString t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+                        _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) value cx input))),
+                      (Core.Name "string", (\input -> Eithers.map (\t -> Model.ValueString t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
                         Core.TermLiteral v1 -> case v1 of
                           Core.LiteralString v2 -> Right v2
                           _ -> Left (Errors.DecodingError "expected string literal")

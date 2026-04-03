@@ -8,11 +8,6 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Ext.Cypher.OpenCypher as OpenCypher
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 addOrSubtractExpression :: Phantoms.TTerm OpenCypher.MultiplyDivideModuloExpression -> Phantoms.TTerm [OpenCypher.AddOrSubtractRightHandSide] -> Phantoms.TTerm OpenCypher.AddOrSubtractExpression
 addOrSubtractExpression left right =

@@ -31,11 +31,7 @@ import qualified Hydra.Show.Core as Core_
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Construct PDL schema files from type definitions, with topological sorting and cycle detection
 constructModule :: Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> Module.Module -> [Module.TypeDefinition] -> Either (Context.InContext Errors.Error) (M.Map String Pdl.SchemaFile)

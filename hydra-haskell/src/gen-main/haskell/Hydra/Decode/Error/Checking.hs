@@ -18,11 +18,6 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 checkingError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.CheckingError
 checkingError cx raw =
@@ -82,19 +77,19 @@ typeArityMismatchError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core__.toFieldMap v0
-        in (Eithers.bind (Core__.requireField "type" Core_.type_ fieldMap cx) (\field_type -> Eithers.bind (Core__.requireField "expectedArity" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+        in (Eithers.bind (Core__.requireField "type" Core_.type_ fieldMap cx) (\field_type -> Eithers.bind (Core__.requireField "expectedArity" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralInteger v2 -> case v2 of
               Core.IntegerValueInt32 v3 -> Right v3
               _ -> Left (Errors.DecodingError "expected int32 value")
             _ -> Left (Errors.DecodingError "expected int32 literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_expectedArity -> Eithers.bind (Core__.requireField "actualArity" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_expectedArity -> Eithers.bind (Core__.requireField "actualArity" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralInteger v2 -> case v2 of
               Core.IntegerValueInt32 v3 -> Right v3
               _ -> Left (Errors.DecodingError "expected int32 value")
             _ -> Left (Errors.DecodingError "expected int32 literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_actualArity -> Eithers.bind (Core__.requireField "typeArguments" (Core__.decodeList Core_.type_) fieldMap cx) (\field_typeArguments -> Right (Checking.TypeArityMismatchError {
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_actualArity -> Eithers.bind (Core__.requireField "typeArguments" (Core__.decodeList Core_.type_) fieldMap cx) (\field_typeArguments -> Right (Checking.TypeArityMismatchError {
           Checking.typeArityMismatchErrorType = field_type,
           Checking.typeArityMismatchErrorExpectedArity = field_expectedArity,
           Checking.typeArityMismatchErrorActualArity = field_actualArity,
@@ -126,11 +121,11 @@ unequalTypesError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core__.toFieldMap v0
-        in (Eithers.bind (Core__.requireField "types" (Core__.decodeList Core_.type_) fieldMap cx) (\field_types -> Eithers.bind (Core__.requireField "description" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+        in (Eithers.bind (Core__.requireField "types" (Core__.decodeList Core_.type_) fieldMap cx) (\field_types -> Eithers.bind (Core__.requireField "description" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_description -> Right (Checking.UnequalTypesError {
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_description -> Right (Checking.UnequalTypesError {
           Checking.unequalTypesErrorTypes = field_types,
           Checking.unequalTypesErrorDescription = field_description}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)

@@ -10,6 +10,8 @@ import hydra.core.*
 
 import hydra.errors.*
 
+import hydra.ext.haskell.environment.*
+
 import hydra.ext.haskell.syntax.*
 
 import hydra.graph.*
@@ -84,6 +86,8 @@ def constructModule(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax
     hydra.lib.lists.map[Tuple2[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName], hydra.ext.haskell.syntax.Import](toImport)(hydra.lib.maps.toList[hydra.module.Namespace,
        hydra.ext.haskell.syntax.ModuleName](namespaces.mapping))
   }
+  lazy val meta: hydra.ext.haskell.environment.HaskellModuleMetadata = hydra.ext.haskell.coder.gatherMetadata(defs)
+  def condImport[T0](flag: Boolean)(triple: T0): Seq[T0] = hydra.lib.logic.ifElse[Seq[T0]](flag)(Seq(triple))(Seq())
   lazy val standardImports: Seq[hydra.ext.haskell.syntax.Import] = {
     def toImport(triple: Tuple2[Tuple2[scala.Predef.String, Option[scala.Predef.String]], Seq[scala.Predef.String]]): hydra.ext.haskell.syntax.Import =
       {
@@ -100,13 +104,13 @@ def constructModule(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax
          hydra.ext.haskell.syntax.ModuleName]((x: scala.Predef.String) => x)(malias), spec)
     }
     hydra.lib.lists.map[Tuple2[Tuple2[scala.Predef.String, Option[scala.Predef.String]], Seq[scala.Predef.String]],
-       hydra.ext.haskell.syntax.Import](toImport)(hydra.lib.lists.concat2[Tuple2[Tuple2[scala.Predef.String,
-       Option[scala.Predef.String]], Seq[scala.Predef.String]]](Seq(Tuple2(Tuple2("Prelude", None), Seq("Enum",
-       "Ordering", "decodeFloat", "encodeFloat", "fail", "map", "pure", "sum")), Tuple2(Tuple2("Data.ByteString",
-       Some("B")), Seq()), Tuple2(Tuple2("Data.Int", Some("I")), Seq()), Tuple2(Tuple2("Data.List", Some("L")),
-       Seq()), Tuple2(Tuple2("Data.Map", Some("M")), Seq()), Tuple2(Tuple2("Data.Set", Some("S")), Seq())))(hydra.lib.logic.ifElse[Seq[Tuple2[Tuple2[scala.Predef.String,
+       hydra.ext.haskell.syntax.Import](toImport)(hydra.lib.lists.concat[Tuple2[Tuple2[scala.Predef.String,
+       Option[scala.Predef.String]], Seq[scala.Predef.String]]](Seq(Seq(Tuple2(Tuple2("Prelude", None),
+       Seq("Enum", "Ordering", "decodeFloat", "encodeFloat", "fail", "map", "pure", "sum"))), condImport(meta.usesByteString)(Tuple2(Tuple2("Data.ByteString",
+       Some("B")), Seq())), condImport(meta.usesInt)(Tuple2(Tuple2("Data.Int", Some("I")), Seq())), condImport(meta.usesMap)(Tuple2(Tuple2("Data.Map",
+       Some("M")), Seq())), condImport(meta.usesSet)(Tuple2(Tuple2("Data.Set", Some("S")), Seq())), hydra.lib.logic.ifElse[Seq[Tuple2[Tuple2[scala.Predef.String,
        Option[scala.Predef.String]], Seq[scala.Predef.String]]]](hydra.analysis.moduleContainsBinaryLiterals(mod))(Seq(Tuple2(Tuple2("Hydra.Lib.Literals",
-       Some("Literals")), Seq())))(Seq())))
+       Some("Literals")), Seq())))(Seq()))))
   }
   hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Seq[Seq[hydra.ext.haskell.syntax.DeclarationWithComments]],
      hydra.ext.haskell.syntax.Module](hydra.lib.eithers.mapList[hydra.module.Definition, Seq[hydra.ext.haskell.syntax.DeclarationWithComments],
@@ -117,6 +121,8 @@ def constructModule(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax
     Right(hydra.ext.haskell.syntax.Module(Some(hydra.ext.haskell.syntax.ModuleHead(mc, importName(h(mod.namespace)), Seq())), imports, decls))
   })
 }
+
+lazy val emptyMetadata: hydra.ext.haskell.environment.HaskellModuleMetadata = hydra.ext.haskell.environment.HaskellModuleMetadata(false, false, false, false)
 
 def encodeCaseExpression(depth: Int)(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName])(stmt: hydra.core.CaseStatement)(scrutinee: hydra.ext.haskell.syntax.Expression)(cx: hydra.context.Context)(g: hydra.graph.Graph): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.ext.haskell.syntax.Expression] =
@@ -518,6 +524,26 @@ def encodeTypeWithClassAssertions[T0](namespaces: hydra.module.Namespaces[hydra.
   }))
 }
 
+def extendMetaForTerm(meta: hydra.ext.haskell.environment.HaskellModuleMetadata)(term: hydra.core.Term): hydra.ext.haskell.environment.HaskellModuleMetadata =
+  term match
+  case hydra.core.Term.map(v_Term_map__) => hydra.ext.haskell.coder.setMetaUsesMap(true)(meta)
+  case hydra.core.Term.set(v_Term_set__) => hydra.ext.haskell.coder.setMetaUsesSet(true)(meta)
+  case _ => meta
+
+def extendMetaForType(meta: hydra.ext.haskell.environment.HaskellModuleMetadata)(typ: hydra.core.Type): hydra.ext.haskell.environment.HaskellModuleMetadata =
+  hydra.strip.deannotateType(typ) match
+  case hydra.core.Type.literal(v_Type_literal_lt) => v_Type_literal_lt match
+    case hydra.core.LiteralType.binary => hydra.ext.haskell.coder.setMetaUsesByteString(true)(meta)
+    case hydra.core.LiteralType.integer(v_LiteralType_integer_it) => v_LiteralType_integer_it match
+      case hydra.core.IntegerType.int8 => hydra.ext.haskell.coder.setMetaUsesInt(true)(meta)
+      case hydra.core.IntegerType.int16 => hydra.ext.haskell.coder.setMetaUsesInt(true)(meta)
+      case hydra.core.IntegerType.int64 => hydra.ext.haskell.coder.setMetaUsesInt(true)(meta)
+      case _ => meta
+    case _ => meta
+  case hydra.core.Type.map(v_Type_map__) => hydra.ext.haskell.coder.setMetaUsesMap(true)(meta)
+  case hydra.core.Type.set(v_Type_set__) => hydra.ext.haskell.coder.setMetaUsesSet(true)(meta)
+  case _ => meta
+
 def findOrdVariables(typ: hydra.core.Type): scala.collection.immutable.Set[hydra.core.Name] =
   {
   def fold(names: scala.collection.immutable.Set[hydra.core.Name])(`typ_`: hydra.core.Type): scala.collection.immutable.Set[hydra.core.Name] =
@@ -534,6 +560,28 @@ def findOrdVariables(typ: hydra.core.Type): scala.collection.immutable.Set[hydra
     case hydra.core.Type.variable(v_Type_variable_v) => hydra.lib.logic.ifElse[scala.collection.immutable.Set[hydra.core.Name]](isTypeVariable(v_Type_variable_v))(hydra.lib.sets.insert[hydra.core.Name](v_Type_variable_v)(names))(names)
     case _ => names
   hydra.rewriting.foldOverType(hydra.coders.TraversalOrder.pre)(fold)(hydra.lib.sets.empty[hydra.core.Name])(typ)
+}
+
+def gatherMetadata(defs: Seq[hydra.module.Definition]): hydra.ext.haskell.environment.HaskellModuleMetadata =
+  {
+  def addDef(meta: hydra.ext.haskell.environment.HaskellModuleMetadata)(`def`: hydra.module.Definition): hydra.ext.haskell.environment.HaskellModuleMetadata =
+    `def` match
+    case hydra.module.Definition.term(v_Definition_term_termDef) => {
+      lazy val term: hydra.core.Term = (v_Definition_term_termDef.term)
+      {
+        lazy val metaWithTerm: hydra.ext.haskell.environment.HaskellModuleMetadata = hydra.rewriting.foldOverTerm(hydra.coders.TraversalOrder.pre)((m: hydra.ext.haskell.environment.HaskellModuleMetadata) =>
+          (t: hydra.core.Term) => hydra.ext.haskell.coder.extendMetaForTerm(m)(t))(meta)(term)
+        hydra.lib.maybes.maybe[hydra.ext.haskell.environment.HaskellModuleMetadata, hydra.core.TypeScheme](metaWithTerm)((ts: hydra.core.TypeScheme) =>
+          hydra.rewriting.foldOverType(hydra.coders.TraversalOrder.pre)((m: hydra.ext.haskell.environment.HaskellModuleMetadata) =>
+          (t: hydra.core.Type) => hydra.ext.haskell.coder.extendMetaForType(m)(t))(metaWithTerm)(ts.`type`))(v_Definition_term_termDef.`type`)
+      }
+    }
+    case hydra.module.Definition.`type`(v_Definition_type_typeDef) => {
+      lazy val typ: hydra.core.Type = (v_Definition_type_typeDef.`type`)
+      hydra.rewriting.foldOverType(hydra.coders.TraversalOrder.pre)((m: hydra.ext.haskell.environment.HaskellModuleMetadata) =>
+        (t: hydra.core.Type) => hydra.ext.haskell.coder.extendMetaForType(m)(t))(meta)(typ)
+    }
+  hydra.lib.lists.foldl[hydra.ext.haskell.environment.HaskellModuleMetadata, hydra.module.Definition](addDef)(hydra.ext.haskell.coder.emptyMetadata)(defs)
 }
 
 def getImplicitTypeClasses(typ: hydra.core.Type): Map[hydra.core.Name, scala.collection.immutable.Set[hydra.classes.TypeClass]] =
@@ -588,6 +636,18 @@ def nameDecls(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.Modul
      scala.Predef.String], hydra.ext.haskell.syntax.DeclarationWithComments]((v1: Tuple2[scala.Predef.String,
      scala.Predef.String]) => toDecl("hydra.core.Name")(v1))(fieldDecls)))(Seq())
 }
+
+def setMetaUsesByteString(b: Boolean)(m: hydra.ext.haskell.environment.HaskellModuleMetadata): hydra.ext.haskell.environment.HaskellModuleMetadata =
+  hydra.ext.haskell.environment.HaskellModuleMetadata(b, (m.usesInt), (m.usesMap), (m.usesSet))
+
+def setMetaUsesInt(b: Boolean)(m: hydra.ext.haskell.environment.HaskellModuleMetadata): hydra.ext.haskell.environment.HaskellModuleMetadata =
+  hydra.ext.haskell.environment.HaskellModuleMetadata(m.usesByteString, b, (m.usesMap), (m.usesSet))
+
+def setMetaUsesMap(b: Boolean)(m: hydra.ext.haskell.environment.HaskellModuleMetadata): hydra.ext.haskell.environment.HaskellModuleMetadata =
+  hydra.ext.haskell.environment.HaskellModuleMetadata(m.usesByteString, (m.usesInt), b, (m.usesSet))
+
+def setMetaUsesSet(b: Boolean)(m: hydra.ext.haskell.environment.HaskellModuleMetadata): hydra.ext.haskell.environment.HaskellModuleMetadata =
+  hydra.ext.haskell.environment.HaskellModuleMetadata(m.usesByteString, (m.usesInt), (m.usesMap), b)
 
 def toDataDeclaration(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName])(`def`: hydra.module.TermDefinition)(cx: hydra.context.Context)(g: hydra.graph.Graph): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.ext.haskell.syntax.DeclarationWithComments] =

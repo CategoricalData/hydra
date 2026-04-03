@@ -25,10 +25,6 @@ import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Create an application pattern from a name and argument patterns

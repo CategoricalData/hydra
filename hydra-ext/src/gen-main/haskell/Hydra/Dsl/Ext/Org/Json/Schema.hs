@@ -9,11 +9,7 @@ import qualified Hydra.Ext.Org.Json.Schema as Schema
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
 
 additionalItemsAny :: Phantoms.TTerm Bool -> Phantoms.TTerm Schema.AdditionalItems
 additionalItemsAny x =

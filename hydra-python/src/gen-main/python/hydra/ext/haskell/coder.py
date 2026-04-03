@@ -19,6 +19,7 @@ import hydra.core
 import hydra.dependencies
 import hydra.encode.core
 import hydra.errors
+import hydra.ext.haskell.environment
 import hydra.ext.haskell.language
 import hydra.ext.haskell.serde
 import hydra.ext.haskell.syntax
@@ -197,6 +198,91 @@ def constant_for_type_name(tname: hydra.core.Name) -> str:
     r"""Generate a constant name for a type (e.g., '_TypeName')."""
 
     return hydra.lib.strings.cat2("_", hydra.names.local_name_of(tname))
+
+# Create an initial empty metadata record with all flags set to false.
+empty_metadata = hydra.ext.haskell.environment.HaskellModuleMetadata(False, False, False, False)
+
+def set_meta_uses_map(b: bool, m: hydra.ext.haskell.environment.HaskellModuleMetadata) -> hydra.ext.haskell.environment.HaskellModuleMetadata:
+    return hydra.ext.haskell.environment.HaskellModuleMetadata(m.uses_byte_string, m.uses_int, b, m.uses_set)
+
+def set_meta_uses_set(b: bool, m: hydra.ext.haskell.environment.HaskellModuleMetadata) -> hydra.ext.haskell.environment.HaskellModuleMetadata:
+    return hydra.ext.haskell.environment.HaskellModuleMetadata(m.uses_byte_string, m.uses_int, m.uses_map, b)
+
+def extend_meta_for_term(meta: hydra.ext.haskell.environment.HaskellModuleMetadata, term: hydra.core.Term) -> hydra.ext.haskell.environment.HaskellModuleMetadata:
+    r"""Extend metadata by analyzing a term for standard import usage (bottom-up step function)."""
+
+    match term:
+        case hydra.core.TermMap():
+            return set_meta_uses_map(True, meta)
+
+        case hydra.core.TermSet():
+            return set_meta_uses_set(True, meta)
+
+        case _:
+            return meta
+
+def set_meta_uses_byte_string(b: bool, m: hydra.ext.haskell.environment.HaskellModuleMetadata) -> hydra.ext.haskell.environment.HaskellModuleMetadata:
+    return hydra.ext.haskell.environment.HaskellModuleMetadata(b, m.uses_int, m.uses_map, m.uses_set)
+
+def set_meta_uses_int(b: bool, m: hydra.ext.haskell.environment.HaskellModuleMetadata) -> hydra.ext.haskell.environment.HaskellModuleMetadata:
+    return hydra.ext.haskell.environment.HaskellModuleMetadata(m.uses_byte_string, b, m.uses_map, m.uses_set)
+
+def extend_meta_for_type(meta: hydra.ext.haskell.environment.HaskellModuleMetadata, typ: hydra.core.Type):
+    def _hoist_hydra_ext_haskell_coder_extend_meta_for_type_1(meta, v1):
+        match v1:
+            case hydra.core.IntegerType.INT8:
+                return set_meta_uses_int(True, meta)
+
+            case hydra.core.IntegerType.INT16:
+                return set_meta_uses_int(True, meta)
+
+            case hydra.core.IntegerType.INT64:
+                return set_meta_uses_int(True, meta)
+
+            case _:
+                return meta
+    def _hoist_hydra_ext_haskell_coder_extend_meta_for_type_2(meta, v1):
+        match v1:
+            case hydra.core.LiteralTypeBinary():
+                return set_meta_uses_byte_string(True, meta)
+
+            case hydra.core.LiteralTypeInteger(value=it):
+                return _hoist_hydra_ext_haskell_coder_extend_meta_for_type_1(meta, it)
+
+            case _:
+                return meta
+    match hydra.strip.deannotate_type(typ):
+        case hydra.core.TypeLiteral(value=lt):
+            return _hoist_hydra_ext_haskell_coder_extend_meta_for_type_2(meta, lt)
+
+        case hydra.core.TypeMap():
+            return set_meta_uses_map(True, meta)
+
+        case hydra.core.TypeSet():
+            return set_meta_uses_set(True, meta)
+
+        case _:
+            return meta
+
+def gather_metadata(defs: frozenlist[hydra.module.Definition]) -> hydra.ext.haskell.environment.HaskellModuleMetadata:
+    r"""Gather metadata from definitions by bottom-up traversal of all terms and types."""
+
+    def add_def(meta: hydra.ext.haskell.environment.HaskellModuleMetadata, def_: hydra.module.Definition) -> hydra.ext.haskell.environment.HaskellModuleMetadata:
+        match def_:
+            case hydra.module.DefinitionTerm(value=term_def):
+                term = term_def.term
+                @lru_cache(1)
+                def meta_with_term() -> hydra.ext.haskell.environment.HaskellModuleMetadata:
+                    return hydra.rewriting.fold_over_term(hydra.coders.TraversalOrder.PRE, (lambda m, t: extend_meta_for_term(m, t)), meta, term)
+                return hydra.lib.maybes.maybe((lambda : meta_with_term()), (lambda ts: hydra.rewriting.fold_over_type(hydra.coders.TraversalOrder.PRE, (lambda m, t: extend_meta_for_type(m, t)), meta_with_term(), ts.type)), term_def.type)
+
+            case hydra.module.DefinitionType(value=type_def):
+                typ = type_def.type
+                return hydra.rewriting.fold_over_type(hydra.coders.TraversalOrder.PRE, (lambda m, t: extend_meta_for_type(m, t)), meta, typ)
+
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
+    return hydra.lib.lists.foldl((lambda x1, x2: add_def(x1, x2)), empty_metadata, defs)
 
 def encode_literal(l: hydra.core.Literal, cx: hydra.context.Context):
     def _hoist_hydra_ext_haskell_coder_encode_literal_1(v1):
@@ -807,6 +893,11 @@ def construct_module(namespaces: hydra.module.Namespaces[hydra.ext.haskell.synta
             return hydra.ext.haskell.syntax.Import(True, import_name(name()), Just(alias()), Nothing())
         return hydra.lib.lists.map((lambda x1: to_import(x1)), hydra.lib.maps.to_list(namespaces.mapping))
     @lru_cache(1)
+    def meta() -> hydra.ext.haskell.environment.HaskellModuleMetadata:
+        return gather_metadata(defs)
+    def cond_import(flag: bool, triple: T0) -> frozenlist[T0]:
+        return hydra.lib.logic.if_else(flag, (lambda : (triple,)), (lambda : ()))
+    @lru_cache(1)
     def standard_imports() -> frozenlist[hydra.ext.haskell.syntax.Import]:
         def to_import(triple: tuple[tuple[str, Maybe[str]], frozenlist[str]]) -> hydra.ext.haskell.syntax.Import:
             @lru_cache(1)
@@ -822,7 +913,7 @@ def construct_module(namespaces: hydra.module.Namespaces[hydra.ext.haskell.synta
             def spec() -> Maybe[hydra.ext.haskell.syntax.SpecImport]:
                 return hydra.lib.logic.if_else(hydra.lib.lists.null(hidden()), (lambda : Nothing()), (lambda : Just(cast(hydra.ext.haskell.syntax.SpecImport, hydra.ext.haskell.syntax.SpecImportHiding(hydra.lib.lists.map((lambda n: hydra.ext.haskell.syntax.ImportExportSpec(Nothing(), hydra.ext.haskell.utils.simple_name(n), Nothing())), hidden()))))))
             return hydra.ext.haskell.syntax.Import(hydra.lib.maybes.is_just(malias()), hydra.ext.haskell.syntax.ModuleName(name()), hydra.lib.maybes.map((lambda x: hydra.ext.haskell.syntax.ModuleName(x)), malias()), spec())
-        return hydra.lib.lists.map((lambda x1: to_import(x1)), hydra.lib.lists.concat2(((("Prelude", Nothing()), ("Enum", "Ordering", "decodeFloat", "encodeFloat", "fail", "map", "pure", "sum")), (("Data.ByteString", Just("B")), ()), (("Data.Int", Just("I")), ()), (("Data.List", Just("L")), ()), (("Data.Map", Just("M")), ()), (("Data.Set", Just("S")), ())), hydra.lib.logic.if_else(hydra.analysis.module_contains_binary_literals(mod), (lambda : ((("Hydra.Lib.Literals", Just("Literals")), ()),)), (lambda : ()))))
+        return hydra.lib.lists.map((lambda x1: to_import(x1)), hydra.lib.lists.concat((((("Prelude", Nothing()), ("Enum", "Ordering", "decodeFloat", "encodeFloat", "fail", "map", "pure", "sum")),), cond_import(meta().uses_byte_string, (("Data.ByteString", Just("B")), ())), cond_import(meta().uses_int, (("Data.Int", Just("I")), ())), cond_import(meta().uses_map, (("Data.Map", Just("M")), ())), cond_import(meta().uses_set, (("Data.Set", Just("S")), ())), hydra.lib.logic.if_else(hydra.analysis.module_contains_binary_literals(mod), (lambda : ((("Hydra.Lib.Literals", Just("Literals")), ()),)), (lambda : ())))))
     return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda x1: create_declarations(x1)), defs), (lambda decl_lists: (decls := hydra.lib.lists.concat(decl_lists), mc := mod.description, Right(hydra.ext.haskell.syntax.Module(Just(hydra.ext.haskell.syntax.ModuleHead(mc, import_name(h(mod.namespace)), ())), imports(), decls)))[2]))
 
 # The key used to track Haskell variable depth in annotations.

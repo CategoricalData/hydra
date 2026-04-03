@@ -21,11 +21,7 @@ import qualified Hydra.Strip as Strip
 import qualified Hydra.Substitution as Substitution
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Join two types, producing a list of type constraints.The comment is used to provide context for the constraints.
 joinTypes :: Context.Context -> Core.Type -> Core.Type -> String -> Either (Context.InContext Errors.UnificationError) [Typing.TypeConstraint]

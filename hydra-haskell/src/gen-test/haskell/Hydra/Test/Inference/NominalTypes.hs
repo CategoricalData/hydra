@@ -15,11 +15,6 @@ import qualified Hydra.Test.TestTerms as TestTerms
 import qualified Hydra.Test.TestTypes as TestTypes
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Nominal type tests
 allTests :: Testing.TestGroup

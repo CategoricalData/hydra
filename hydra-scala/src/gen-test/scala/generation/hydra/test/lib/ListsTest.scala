@@ -1093,6 +1093,216 @@ class ListsTest extends AnyFunSuite {
 
   }
 
+  // maybeAt
+
+  test("maybeAt - valid index") {
+
+    assert((
+
+      just(20:int32)) == (
+
+      just(20:int32)))
+
+  }
+
+  test("maybeAt - first element") {
+
+    assert((
+
+      just(10:int32)) == (
+
+      just(10:int32)))
+
+  }
+
+  test("maybeAt - last element") {
+
+    assert((
+
+      just(30:int32)) == (
+
+      just(30:int32)))
+
+  }
+
+  test("maybeAt - out of bounds") {
+
+    assert((
+
+      nothing) == (
+
+      nothing))
+
+  }
+
+  test("maybeAt - negative index") {
+
+    assert((
+
+      nothing) == (
+
+      nothing))
+
+  }
+
+  test("maybeAt - empty list") {
+
+    assert((
+
+      nothing) == (
+
+      nothing))
+
+  }
+
+  // maybeHead
+
+  test("maybeHead - non-empty int list") {
+
+    assert((
+
+      just(1:int32)) == (
+
+      just(1:int32)))
+
+  }
+
+  test("maybeHead - empty int list") {
+
+    assert((
+
+      nothing) == (
+
+      nothing))
+
+  }
+
+  test("maybeHead - single element") {
+
+    assert((
+
+      just(42:int32)) == (
+
+      just(42:int32)))
+
+  }
+
+  test("maybeHead - non-empty string list") {
+
+    assert((
+
+      just("hello")) == (
+
+      just("hello")))
+
+  }
+
+  test("maybeHead - empty string list") {
+
+    assert((
+
+      nothing) == (
+
+      nothing))
+
+  }
+
+  // maybeInit
+
+  test("maybeInit - three elements") {
+
+    assert((
+
+      just([1:int32, 2:int32])) == (
+
+      just([1:int32, 2:int32])))
+
+  }
+
+  test("maybeInit - single element") {
+
+    assert((
+
+      just([])) == (
+
+      just([])))
+
+  }
+
+  test("maybeInit - empty list") {
+
+    assert((
+
+      nothing) == (
+
+      nothing))
+
+  }
+
+  // maybeLast
+
+  test("maybeLast - three elements") {
+
+    assert((
+
+      just(3:int32)) == (
+
+      just(3:int32)))
+
+  }
+
+  test("maybeLast - single element") {
+
+    assert((
+
+      just(42:int32)) == (
+
+      just(42:int32)))
+
+  }
+
+  test("maybeLast - empty list") {
+
+    assert((
+
+      nothing) == (
+
+      nothing))
+
+  }
+
+  // maybeTail
+
+  test("maybeTail - three elements") {
+
+    assert((
+
+      just([2:int32, 3:int32])) == (
+
+      just([2:int32, 3:int32])))
+
+  }
+
+  test("maybeTail - single element") {
+
+    assert((
+
+      just([])) == (
+
+      just([])))
+
+  }
+
+  test("maybeTail - empty list") {
+
+    assert((
+
+      nothing) == (
+
+      nothing))
+
+  }
+
   // nub
 
   test("nub - remove duplicates") {

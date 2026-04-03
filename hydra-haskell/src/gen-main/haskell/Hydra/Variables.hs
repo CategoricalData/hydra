@@ -18,9 +18,6 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Rewriting as Rewriting
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
@@ -108,7 +105,7 @@ freeVariablesInTypeSimple :: Core.Type -> S.Set Core.Name
 freeVariablesInTypeSimple typ =
 
       let helper =
-              \types -> \typ -> case typ of
+              \types -> \typ2 -> case typ2 of
                 Core.TypeVariable v0 -> Sets.insert v0 types
                 _ -> types
       in (Rewriting.foldOverType Coders.TraversalOrderPre helper Sets.empty typ)
@@ -125,9 +122,9 @@ normalizeTypeVariablesInTerm term =
           substType =
                   \subst -> \typ ->
                     let rewrite =
-                            \recurse -> \typ -> case typ of
+                            \recurse -> \typ2 -> case typ2 of
                               Core.TypeVariable v0 -> Core.TypeVariable (replaceName subst v0)
-                              _ -> recurse typ
+                              _ -> recurse typ2
                     in (Rewriting.rewriteType rewrite typ)
           rewriteWithSubst =
                   \state -> \term0 ->
@@ -136,16 +133,16 @@ normalizeTypeVariablesInTerm term =
                         subst = Pairs.first sb
                         boundVars = Pairs.second sb
                         rewrite =
-                                \recurse -> \term -> case term of
+                                \recurse -> \term2 -> case term2 of
                                   Core.TermFunction v0 -> case v0 of
-                                    Core.FunctionElimination _ -> recurse term
+                                    Core.FunctionElimination _ -> recurse term2
                                     Core.FunctionLambda v1 ->
                                       let domain = Core.lambdaDomain v1
                                       in (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                         Core.lambdaParameter = (Core.lambdaParameter v1),
                                         Core.lambdaDomain = (Maybes.map (substType subst) domain),
                                         Core.lambdaBody = (rewriteWithSubst ((subst, boundVars), next) (Core.lambdaBody v1))})))
-                                    _ -> recurse term
+                                    _ -> recurse term2
                                   Core.TermLet v0 ->
                                     let bindings0 = Core.letBindings v0
                                         body0 = Core.letBody v0
@@ -203,7 +200,7 @@ normalizeTypeVariablesInTerm term =
                                   Core.TermTypeLambda v0 -> Core.TermTypeLambda (Core.TypeLambda {
                                     Core.typeLambdaParameter = (replaceName subst (Core.typeLambdaParameter v0)),
                                     Core.typeLambdaBody = (rewriteWithSubst ((subst, boundVars), next) (Core.typeLambdaBody v0))})
-                                  _ -> recurse term
+                                  _ -> recurse term2
                     in (Rewriting.rewriteTerm rewrite term0)
       in (rewriteWithSubst ((Maps.empty, Sets.empty), 0) term)
 
@@ -240,9 +237,9 @@ substituteTypeVariables :: M.Map Core.Name Core.Name -> Core.Type -> Core.Type
 substituteTypeVariables subst typ =
 
       let replace =
-              \recurse -> \typ -> case typ of
+              \recurse -> \typ2 -> case typ2 of
                 Core.TypeVariable v0 -> Core.TypeVariable (Maybes.fromMaybe v0 (Maps.lookup v0 subst))
-                _ -> recurse typ
+                _ -> recurse typ2
       in (Rewriting.rewriteType replace typ)
 
 -- | Substitute type variables throughout a term, including in type annotations, type applications, lambda domains, and type schemes
@@ -291,12 +288,12 @@ substituteVariable :: Core.Name -> Core.Name -> Core.Term -> Core.Term
 substituteVariable from to term =
 
       let replace =
-              \recurse -> \term -> case term of
+              \recurse -> \term2 -> case term2 of
                 Core.TermVariable v0 -> Core.TermVariable (Logic.ifElse (Equality.equal v0 from) to v0)
                 Core.TermFunction v0 -> case v0 of
-                  Core.FunctionLambda v1 -> Logic.ifElse (Equality.equal (Core.lambdaParameter v1) from) term (recurse term)
-                  _ -> recurse term
-                _ -> recurse term
+                  Core.FunctionLambda v1 -> Logic.ifElse (Equality.equal (Core.lambdaParameter v1) from) term2 (recurse term2)
+                  _ -> recurse term2
+                _ -> recurse term2
       in (Rewriting.rewriteTerm replace term)
 
 -- | Substitute multiple variables in a term
@@ -304,12 +301,12 @@ substituteVariables :: M.Map Core.Name Core.Name -> Core.Term -> Core.Term
 substituteVariables subst term =
 
       let replace =
-              \recurse -> \term -> case term of
+              \recurse -> \term2 -> case term2 of
                 Core.TermVariable v0 -> Core.TermVariable (Maybes.fromMaybe v0 (Maps.lookup v0 subst))
                 Core.TermFunction v0 -> case v0 of
-                  Core.FunctionLambda v1 -> Maybes.maybe (recurse term) (\_ -> term) (Maps.lookup (Core.lambdaParameter v1) subst)
-                  _ -> recurse term
-                _ -> recurse term
+                  Core.FunctionLambda v1 -> Maybes.maybe (recurse term2) (\_ -> term2) (Maps.lookup (Core.lambdaParameter v1) subst)
+                  _ -> recurse term2
+                _ -> recurse term2
       in (Rewriting.rewriteTerm replace term)
 
 -- | Rename all shadowed variables (both lambda parameters and let-bound variables that shadow lambda parameters) in a term.

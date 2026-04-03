@@ -11,11 +11,6 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Extend a graph by descending into a lambda body
 extendGraphForLambda :: Graph.Graph -> Core.Lambda -> Graph.Graph
@@ -100,11 +95,11 @@ fTypeToTypeScheme typ =
                 Core.TypeAnnotated v0 -> stripAnnotations (Core.annotatedTypeBody v0)
                 _ -> t
           gatherForall =
-                  \vars -> \typ -> case (stripAnnotations typ) of
+                  \vars -> \typ2 -> case (stripAnnotations typ2) of
                     Core.TypeForall v0 -> gatherForall (Lists.cons (Core.forallTypeParameter v0) vars) (Core.forallTypeBody v0)
                     _ -> Core.TypeScheme {
                       Core.typeSchemeVariables = (Lists.reverse vars),
-                      Core.typeSchemeType = typ,
+                      Core.typeSchemeType = typ2,
                       Core.typeSchemeConstraints = Nothing}
       in (gatherForall [] typ)
 
