@@ -248,7 +248,7 @@
                                                                                                   "function": {
                                                                                                     "application": {
                                                                                                       "argument": {"variable": "tx"},
-                                                                                                      "function": {"variable": "hydra.reduction.etaExpandTermNew"}}}}},
+                                                                                                      "function": {"variable": "hydra.reduction.etaExpandTerm"}}}}},
                                                                                               "function": {"variable": "hydra.adapt.pushTypeAppsInward"}}},
                                                                                           "function": {
                                                                                             "application": {
@@ -428,7 +428,7 @@
                                                                                               "type": {"variable": "hydra.core.TypeScheme"}}},
                                                                                           "type": {"variable": "hydra.core.Type"}}},
                                                                                       "type": {"variable": "hydra.core.Name"}}}}}}},
-                                                                          "function": {"variable": "hydra.environment.typesToElements"}}},
+                                                                          "function": {"variable": "hydra.environment.typesToDefinitions"}}},
                                                                       "type": [
                                                                         {
                                                                           "constraints": null,

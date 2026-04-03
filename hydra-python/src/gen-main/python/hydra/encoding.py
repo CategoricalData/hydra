@@ -139,7 +139,7 @@ def encode_map_type(mt: hydra.core.MapType) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("m"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("map"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.maps.bimap"))))), encode_type(mt.keys)))), encode_type(mt.values)))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("m")))))))))))))))
 
 def encode_optional_type(elem_type: hydra.core.Type) -> hydra.core.Term:
-    r"""Generate an encoder for an optional type."""
+    r"""Generate an encoder for a Maybe type."""
 
     return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("opt"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("maybe"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.maybes.map"))))), encode_type(elem_type)))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("opt")))))))))))))))
 
