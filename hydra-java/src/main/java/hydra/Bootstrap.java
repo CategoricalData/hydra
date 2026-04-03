@@ -1,7 +1,7 @@
 package hydra;
 
-import hydra.module.Module;
-import hydra.module.Namespace;
+import hydra.packaging.Module;
+import hydra.packaging.Namespace;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -119,7 +119,7 @@ public class Bootstrap {
         List<Namespace> allKernelNamespaces = new ArrayList<>(mainNamespaces);
         allKernelNamespaces.addAll(evalLibNamespaces);
         java.util.Map<hydra.core.Name, hydra.core.Type> schemaMap = Generation.bootstrapSchemaMap();
-        List<Module> mainMods = Generation.loadModulesFromJson(false, jsonDir,
+        List<Module> mainMods = Generation.loadModulesFromJson(jsonDir,
                 schemaMap, allKernelNamespaces);
         long stepTime = System.currentTimeMillis() - stepStart;
 
@@ -148,7 +148,7 @@ public class Bootstrap {
                 }
             }
             stepStart = System.currentTimeMillis();
-            coderMods = Generation.loadModulesFromJson(false, extJsonDir,
+            coderMods = Generation.loadModulesFromJson(extJsonDir,
                     schemaMap, extCoderNamespaces);
             stepTime = System.currentTimeMillis() - stepStart;
             System.out.println("  Loaded " + coderMods.size() + " modules.");
@@ -252,7 +252,7 @@ public class Bootstrap {
 
             stepStart = System.currentTimeMillis();
             List<Namespace> testNamespaces = Generation.readManifestField(jsonDir, "testModules");
-            List<Module> testMods = Generation.loadModulesFromJson(false, testJsonDir,
+            List<Module> testMods = Generation.loadModulesFromJson(testJsonDir,
                     schemaMap, testNamespaces);
             stepTime = System.currentTimeMillis() - stepStart;
 
