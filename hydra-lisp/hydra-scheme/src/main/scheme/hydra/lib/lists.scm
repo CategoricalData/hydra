@@ -18,6 +18,11 @@
           hydra_lib_lists_intersperse
           hydra_lib_lists_length
           hydra_lib_lists_map
+          hydra_lib_lists_maybe_at
+          hydra_lib_lists_maybe_head
+          hydra_lib_lists_maybe_init
+          hydra_lib_lists_maybe_last
+          hydra_lib_lists_maybe_tail
           hydra_lib_lists_nub
           hydra_lib_lists_null
           hydra_lib_lists_partition
@@ -229,6 +234,48 @@
       (lambda (f)
         (lambda (xs)
           (map f xs))))
+
+    ;; maybe_at :: Int -> [a] -> Maybe a
+    (define hydra_lib_lists_maybe_at
+      (lambda (n)
+        (lambda (xs)
+          (if (and (>= n 0) (< n (length xs)))
+              (list 'just (list-ref xs n))
+              (list 'nothing)))))
+
+    ;; maybe_head :: [a] -> Maybe a
+    (define hydra_lib_lists_maybe_head
+      (lambda (xs)
+        (if (null? xs)
+            (list 'nothing)
+            (list 'just (car xs)))))
+
+    ;; maybe_init :: [a] -> Maybe [a]
+    (define hydra_lib_lists_maybe_init
+      (lambda (xs)
+        (if (null? xs)
+            (list 'nothing)
+            (list 'just (let loop ((rest xs))
+                          (if (null? (cdr rest))
+                              '()
+                              (cons (car rest) (loop (cdr rest)))))))))
+
+    ;; maybe_last :: [a] -> Maybe a
+    (define hydra_lib_lists_maybe_last
+      (lambda (xs)
+        (if (null? xs)
+            (list 'nothing)
+            (list 'just (let loop ((rest xs))
+                          (if (null? (cdr rest))
+                              (car rest)
+                              (loop (cdr rest))))))))
+
+    ;; maybe_tail :: [a] -> Maybe [a]
+    (define hydra_lib_lists_maybe_tail
+      (lambda (xs)
+        (if (null? xs)
+            (list 'nothing)
+            (list 'just (cdr xs)))))
 
     ;; nub :: [a] -> [a]  (remove duplicates, keeping first occurrence)
     (define hydra_lib_lists_nub

@@ -117,6 +117,16 @@
             (push (substring s start len) acc))
           (nreverse acc)))))
 
+;; maybe_char_at :: Int -> String -> Maybe Int
+(defvar hydra_lib_strings_maybe_char_at
+  (lambda (n)
+    "Get the Unicode code point at a specific index, returning Nothing if out of bounds."
+    (lambda (s)
+      (let ((ms (hydra--ensure-multibyte s)))
+        (if (and (>= n 0) (< n (length ms)))
+            (list :just (aref (vconcat (string-to-list ms)) n))
+            (list :nothing))))))
+
 ;; null :: String -> Bool
 (defvar hydra_lib_strings_null
   (lambda (s)

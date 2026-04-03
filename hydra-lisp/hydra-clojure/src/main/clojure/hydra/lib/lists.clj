@@ -96,6 +96,41 @@
 (def hydra_lib_lists_map
   (fn [f] (fn [xs] (map f xs))))
 
+;; maybe_at :: Int -> [a] -> Maybe a
+(def hydra_lib_lists_maybe_at
+  (fn [n] (fn [xs]
+    (if (and (>= n 0) (< n (count xs)))
+      (list :just (nth xs n))
+      (list :nothing)))))
+
+;; maybe_head :: [a] -> Maybe a
+(def hydra_lib_lists_maybe_head
+  (fn [xs]
+    (if (empty? xs)
+      (list :nothing)
+      (list :just (first xs)))))
+
+;; maybe_init :: [a] -> Maybe [a]
+(def hydra_lib_lists_maybe_init
+  (fn [xs]
+    (if (empty? xs)
+      (list :nothing)
+      (list :just (or (butlast xs) ())))))
+
+;; maybe_last :: [a] -> Maybe a
+(def hydra_lib_lists_maybe_last
+  (fn [xs]
+    (if (empty? xs)
+      (list :nothing)
+      (list :just (last xs)))))
+
+;; maybe_tail :: [a] -> Maybe [a]
+(def hydra_lib_lists_maybe_tail
+  (fn [xs]
+    (if (empty? xs)
+      (list :nothing)
+      (list :just (rest xs)))))
+
 ;; nub :: [a] -> [a]  (remove duplicates, preserve order)
 (def hydra_lib_lists_nub
   (fn [xs]
