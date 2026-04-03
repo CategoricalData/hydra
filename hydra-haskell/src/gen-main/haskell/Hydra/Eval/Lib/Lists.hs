@@ -15,11 +15,6 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Reduction as Reduction
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Interpreter-friendly applicative apply for List terms.
 apply :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term

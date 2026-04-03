@@ -23,11 +23,6 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Show.Core as Core__
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Decode a YAML value to a record term
 decodeRecord :: Core.Name -> [(Core.FieldType, (Coders.Coder Core.Term Model.Node))] -> Context.Context -> Model.Node -> Either (Context.InContext Errors.Error) Core.Term

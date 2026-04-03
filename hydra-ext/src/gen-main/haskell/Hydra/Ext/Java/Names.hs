@@ -7,11 +7,6 @@ module Hydra.Ext.Java.Names where
 import qualified Hydra.Ext.Java.Syntax as Syntax
 import qualified Hydra.Lib.Lists as Lists
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 acceptMethodName :: String
 acceptMethodName = "accept"

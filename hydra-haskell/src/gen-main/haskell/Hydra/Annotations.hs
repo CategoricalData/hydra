@@ -26,9 +26,6 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Show.Core as Core____
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 

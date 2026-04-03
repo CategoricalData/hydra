@@ -9,11 +9,7 @@ import qualified Hydra.Ext.Cpp.Environment as Environment
 import qualified Hydra.Module as Module
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
 
 cppEnvironment :: Phantoms.TTerm (Module.Namespaces String) -> Phantoms.TTerm ([Core.Name], (M.Map Core.Name String)) -> Phantoms.TTerm Environment.CppEnvironment
 cppEnvironment namespaces boundTypeVariables =
