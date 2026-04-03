@@ -4,7 +4,7 @@ from __future__ import annotations
 import math
 from decimal import Decimal
 
-from hydra.dsl.python import frozenlist
+from hydra.dsl.python import frozenlist, Maybe, Just, Nothing
 
 
 import builtins as _builtins
@@ -105,6 +105,34 @@ def log(x: float) -> float:
 def log_base(base: float, x: float) -> float:
     """Return the logarithm of x to the given base."""
     return math.log(x, base)
+
+
+def maybe_div(x: int, y: int) -> Maybe[int]:
+    """Divide two integers, returning Nothing if the divisor is zero."""
+    return Nothing() if y == 0 else Just(x // y)
+
+
+def maybe_mod(x: int, y: int) -> Maybe[int]:
+    """Mathematical modulo, returning Nothing if the divisor is zero."""
+    return Nothing() if y == 0 else Just(x % y)
+
+
+def maybe_pred(x: int) -> Maybe[int]:
+    """Return the predecessor, returning Nothing if x is minBound."""
+    return Nothing() if x == -2147483648 else Just(x - 1)
+
+
+def maybe_rem(x: int, y: int) -> Maybe[int]:
+    """Integer remainder, returning Nothing if the divisor is zero."""
+    if y == 0:
+        return Nothing()
+    q = int(x / y)
+    return Just(x - q * y)
+
+
+def maybe_succ(x: int) -> Maybe[int]:
+    """Return the successor, returning Nothing if x is maxBound."""
+    return Nothing() if x == 2147483647 else Just(x + 1)
 
 
 def max_(x: int, y: int) -> int:

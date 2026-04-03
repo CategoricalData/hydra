@@ -23,6 +23,11 @@
           hydra_lib_math_logBase
           hydra_lib_math_log_base
           hydra_lib_math_max
+          hydra_lib_math_maybe_div
+          hydra_lib_math_maybe_mod
+          hydra_lib_math_maybe_pred
+          hydra_lib_math_maybe_rem
+          hydra_lib_math_maybe_succ
           hydra_lib_math_min
           hydra_lib_math_mod
           hydra_lib_math_mul
@@ -146,6 +151,44 @@
       (lambda (a)
         (lambda (b)
           (max a b))))
+
+    ;; maybe_div :: Int -> Int -> Maybe Int
+    (define hydra_lib_math_maybe_div
+      (lambda (a)
+        (lambda (b)
+          (if (= b 0)
+              (list 'nothing)
+              (list 'just (floor-quotient a b))))))
+
+    ;; maybe_mod :: Int -> Int -> Maybe Int
+    (define hydra_lib_math_maybe_mod
+      (lambda (a)
+        (lambda (b)
+          (if (= b 0)
+              (list 'nothing)
+              (list 'just (floor-remainder a b))))))
+
+    ;; maybe_pred :: Int -> Maybe Int
+    (define hydra_lib_math_maybe_pred
+      (lambda (n)
+        (if (= n -2147483648)
+            (list 'nothing)
+            (list 'just (- n 1)))))
+
+    ;; maybe_rem :: Int -> Int -> Maybe Int
+    (define hydra_lib_math_maybe_rem
+      (lambda (a)
+        (lambda (b)
+          (if (= b 0)
+              (list 'nothing)
+              (list 'just (truncate-remainder a b))))))
+
+    ;; maybe_succ :: Int -> Maybe Int
+    (define hydra_lib_math_maybe_succ
+      (lambda (n)
+        (if (= n 2147483647)
+            (list 'nothing)
+            (list 'just (+ n 1)))))
 
     ;; min :: Int -> Int -> Int
     (define hydra_lib_math_min

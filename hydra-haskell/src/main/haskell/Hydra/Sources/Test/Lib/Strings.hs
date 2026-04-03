@@ -48,6 +48,7 @@ allTests = define "allTests" $
       stringsIntercalate,
       stringsLength,
       stringsLines,
+      stringsMaybeCharAt,
       stringsNull,
       stringsSplitOn,
       stringsToList,
@@ -180,6 +181,18 @@ allTests = define "allTests" $
             (Strings.lines (Phantoms.string s))
             (Phantoms.list (Phantoms.string <$> result))
   
+      stringsMaybeCharAt = subgroup "maybeCharAt" [
+        test "first character" 0 "hello" (Just 104),
+        test "middle character" 2 "hello" (Just 108),
+        test "last character" 4 "hello" (Just 111),
+        test "out of bounds" 5 "hello" Nothing,
+        test "negative index" (-1) "hello" Nothing,
+        test "empty string" 0 "" Nothing]
+        where
+          test name idx s result = primCase name _strings_maybeCharAt [int32 idx, string s] (optionalInt32 result)
+          optionalInt32 Nothing = Core.termMaybe nothing
+          optionalInt32 (Just x) = Core.termMaybe $ just (int32 x)
+
       stringsNull = subgroup "null" [
         test "empty string" "" True,
         test "single character" "a" False,

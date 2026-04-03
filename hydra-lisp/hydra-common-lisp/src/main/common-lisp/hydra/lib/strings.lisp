@@ -110,6 +110,15 @@
             (push (subseq s start len) acc))
           (nreverse acc)))))
 
+;; maybe_char_at :: Int -> String -> Maybe Int
+;; Get the Unicode code point at a specific index, returning Nothing if out of bounds.
+(defvar hydra_lib_strings_maybe_char_at
+  (lambda (n)
+    (lambda (s)
+      (if (and (>= n 0) (< n (length s)))
+          (list :just (char-code (char s n)))
+          (list :nothing)))))
+
 ;; null :: String -> Bool
 ;; Check whether a string is empty.
 (defvar hydra_lib_strings_null

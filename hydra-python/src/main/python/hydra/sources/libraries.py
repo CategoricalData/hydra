@@ -306,6 +306,31 @@ def register_lists_primitives() -> dict[Name, Primitive]:
         qname(namespace, "map"), lists.map, [_a, _b],
         fun(a, b), prims.list_(a), prims.list_(b)
     )
+    # prim2: maybeAt :: Int32 -> [a] -> Maybe a
+    primitives[qname(namespace, "maybeAt")] = prims.prim2(
+        qname(namespace, "maybeAt"), lists.maybe_at, [_a],
+        prims.int32(), prims.list_(a), prims.optional(a)
+    )
+    # prim1: maybeHead :: [a] -> Maybe a
+    primitives[qname(namespace, "maybeHead")] = prims.prim1(
+        qname(namespace, "maybeHead"), lists.maybe_head, [_a],
+        prims.list_(a), prims.optional(a)
+    )
+    # prim1: maybeInit :: [a] -> Maybe [a]
+    primitives[qname(namespace, "maybeInit")] = prims.prim1(
+        qname(namespace, "maybeInit"), lists.maybe_init, [_a],
+        prims.list_(a), prims.optional(prims.list_(a))
+    )
+    # prim1: maybeLast :: [a] -> Maybe a
+    primitives[qname(namespace, "maybeLast")] = prims.prim1(
+        qname(namespace, "maybeLast"), lists.maybe_last, [_a],
+        prims.list_(a), prims.optional(a)
+    )
+    # prim1: maybeTail :: [a] -> Maybe [a]
+    primitives[qname(namespace, "maybeTail")] = prims.prim1(
+        qname(namespace, "maybeTail"), lists.maybe_tail, [_a],
+        prims.list_(a), prims.optional(prims.list_(a))
+    )
     # prim1: nub :: Eq a => [a] -> [a]
     primitives[qname(namespace, "nub")] = prims.prim1(
         qname(namespace, "nub"), lists.nub, [_aEq],
@@ -592,6 +617,21 @@ def register_math_primitives() -> dict[Name, Primitive]:
     )
     primitives[qname(namespace, "max")] = prims.prim2(
         qname(namespace, "max"), math.max, [], prims.int32(), prims.int32(), prims.int32()
+    )
+    primitives[qname(namespace, "maybeDiv")] = prims.prim2(
+        qname(namespace, "maybeDiv"), math.maybe_div, [], prims.int32(), prims.int32(), prims.optional(prims.int32())
+    )
+    primitives[qname(namespace, "maybeMod")] = prims.prim2(
+        qname(namespace, "maybeMod"), math.maybe_mod, [], prims.int32(), prims.int32(), prims.optional(prims.int32())
+    )
+    primitives[qname(namespace, "maybePred")] = prims.prim1(
+        qname(namespace, "maybePred"), math.maybe_pred, [], prims.int32(), prims.optional(prims.int32())
+    )
+    primitives[qname(namespace, "maybeRem")] = prims.prim2(
+        qname(namespace, "maybeRem"), math.maybe_rem, [], prims.int32(), prims.int32(), prims.optional(prims.int32())
+    )
+    primitives[qname(namespace, "maybeSucc")] = prims.prim1(
+        qname(namespace, "maybeSucc"), math.maybe_succ, [], prims.int32(), prims.optional(prims.int32())
     )
     primitives[qname(namespace, "min")] = prims.prim2(
         qname(namespace, "min"), math.min, [], prims.int32(), prims.int32(), prims.int32()
@@ -898,6 +938,9 @@ def register_strings_primitives() -> dict[Name, Primitive]:
     )
     primitives[qname(namespace, "lines")] = prims.prim1(
         qname(namespace, "lines"), strings.lines, [], prims.string(), prims.list_(prims.string())
+    )
+    primitives[qname(namespace, "maybeCharAt")] = prims.prim2(
+        qname(namespace, "maybeCharAt"), strings.maybe_char_at, [], prims.int32(), prims.string(), prims.optional(prims.int32())
     )
     primitives[qname(namespace, "null")] = prims.prim1(
         qname(namespace, "null"), strings.null, [], prims.string(), prims.boolean()

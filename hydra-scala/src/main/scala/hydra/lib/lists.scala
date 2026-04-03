@@ -30,6 +30,11 @@ object lists:
   def last[A](xs: Seq[A]): A = if xs.isEmpty then null.asInstanceOf[A] else xs.last
   def length[A](xs: Seq[A]): Int = xs.length
   def map[A, B](f: A => B)(xs: Seq[A]): Seq[B] = xs.map(f)
+  def maybeAt[A](i: Int)(xs: Seq[A]): Option[A] = if i >= 0 && i < xs.length then Some(xs(i)) else None
+  def maybeHead[A](xs: Seq[A]): Option[A] = xs.headOption
+  def maybeInit[A](xs: Seq[A]): Option[Seq[A]] = if xs.isEmpty then None else Some(xs.init)
+  def maybeLast[A](xs: Seq[A]): Option[A] = xs.lastOption
+  def maybeTail[A](xs: Seq[A]): Option[Seq[A]] = if xs.isEmpty then None else Some(xs.tail)
   def nub[A](xs: Seq[A]): Seq[A] = xs.distinct
   def `null`[A](xs: Seq[A]): Boolean = xs.isEmpty
   def partition[A](p: A => Boolean)(xs: Seq[A]): (Seq[A], Seq[A]) = xs.partition(p)

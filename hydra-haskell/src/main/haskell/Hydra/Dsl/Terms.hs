@@ -227,7 +227,7 @@ match tname def fields = TermFunction $ FunctionElimination $ EliminationUnion $
 nothing :: Term
 nothing = optional Nothing
 
--- | Create an optional (nullable) term
+-- | Create a Maybe (nullable) term
 -- Example: optional (Just (string "found"))
 optional :: Maybe Term -> Term
 optional = TermMaybe
