@@ -37,6 +37,14 @@ aggregateAnnotations getValue getX getAnns t =
               \rest -> \t2 -> Maybes.maybe rest (\yy -> toPairs (Lists.cons (Maps.toList (getAnns yy)) rest) (getX yy)) (getValue t2)
       in (Maps.fromList (Lists.concat (toPairs [] t)))
 
+-- | Extract comments/description from a Binding
+commentsFromBinding :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Errors.Error) (Maybe String)
+commentsFromBinding cx g b = getTermDescription cx g (Core.bindingTerm b)
+
+-- | Extract comments/description from a FieldType
+commentsFromFieldType :: Context.Context -> Graph.Graph -> Core.FieldType -> Either (Context.InContext Errors.Error) (Maybe String)
+commentsFromFieldType cx g ft = getTypeDescription cx g (Core.fieldTypeType ft)
+
 -- | Debug if the debug ID matches (Either version)
 debugIf :: Context.Context -> String -> String -> Either (Context.InContext Errors.Error) ()
 debugIf cx debugId message =

@@ -4697,7 +4697,7 @@
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {"variable": "graph"},
-                                                                  "function": {"variable": "hydra.lexical.lookupElement"}}}}},
+                                                                  "function": {"variable": "hydra.lexical.lookupBinding"}}}}},
                                                           "function": {
                                                             "typeApplication": {
                                                               "body": {
@@ -8855,7 +8855,7 @@
                                                                                                                                         "function": {
                                                                                                                                           "application": {
                                                                                                                                             "argument": {"variable": "graph"},
-                                                                                                                                            "function": {"variable": "hydra.lexical.dereferenceElement"}}}}},
+                                                                                                                                            "function": {"variable": "hydra.lexical.lookupBinding"}}}}},
                                                                                                                                     "type": [
                                                                                                                                       {
                                                                                                                                         "constraints": null,
@@ -10059,7 +10059,6 @@
     "hydra.errors",
     "hydra.graph",
     "hydra.json.model",
-    "hydra.module",
     "hydra.packaging",
     "hydra.parsing",
     "hydra.phantoms",

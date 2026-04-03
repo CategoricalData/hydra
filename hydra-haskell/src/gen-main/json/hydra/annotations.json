@@ -188,6 +188,125 @@
             "variables": ["t0", "t1", "t2", "t3"]}]}},
     {
       "term": {
+        "name": "hydra.annotations.commentsFromBinding",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {"literal": {"string": "Extract comments/description from a Binding"}}}],
+            "body": {
+              "function": {
+                "lambda": {
+                  "body": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "function": {
+                            "lambda": {
+                              "body": {
+                                "application": {
+                                  "argument": {
+                                    "application": {
+                                      "argument": {"variable": "b"},
+                                      "function": {
+                                        "function": {
+                                          "elimination": {"record": {"field": "term", "typeName": "hydra.core.Binding"}}}}}},
+                                  "function": {
+                                    "application": {
+                                      "argument": {"variable": "g"},
+                                      "function": {
+                                        "application": {
+                                          "argument": {"variable": "cx"},
+                                          "function": {"variable": "hydra.annotations.getTermDescription"}}}}}}},
+                              "domain": [{"variable": "hydra.core.Binding"}],
+                              "parameter": "b"}}},
+                        "domain": [{"variable": "hydra.graph.Graph"}],
+                        "parameter": "g"}}},
+                  "domain": [{"variable": "hydra.context.Context"}],
+                  "parameter": "cx"}}}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {
+                  "function": {
+                    "codomain": {
+                      "function": {
+                        "codomain": {
+                          "either": {
+                            "left": {
+                              "application": {
+                                "argument": {"variable": "hydra.errors.Error"},
+                                "function": {"variable": "hydra.context.InContext"}}},
+                            "right": {"maybe": {"literal": {"string": {}}}}}},
+                        "domain": {"variable": "hydra.core.Binding"}}},
+                    "domain": {"variable": "hydra.graph.Graph"}}},
+                "domain": {"variable": "hydra.context.Context"}}},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.annotations.commentsFromFieldType",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {"string": "Extract comments/description from a FieldType"}}}],
+            "body": {
+              "function": {
+                "lambda": {
+                  "body": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "function": {
+                            "lambda": {
+                              "body": {
+                                "application": {
+                                  "argument": {
+                                    "application": {
+                                      "argument": {"variable": "ft"},
+                                      "function": {
+                                        "function": {
+                                          "elimination": {"record": {"field": "type", "typeName": "hydra.core.FieldType"}}}}}},
+                                  "function": {
+                                    "application": {
+                                      "argument": {"variable": "g"},
+                                      "function": {
+                                        "application": {
+                                          "argument": {"variable": "cx"},
+                                          "function": {"variable": "hydra.annotations.getTypeDescription"}}}}}}},
+                              "domain": [{"variable": "hydra.core.FieldType"}],
+                              "parameter": "ft"}}},
+                        "domain": [{"variable": "hydra.graph.Graph"}],
+                        "parameter": "g"}}},
+                  "domain": [{"variable": "hydra.context.Context"}],
+                  "parameter": "cx"}}}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {
+                  "function": {
+                    "codomain": {
+                      "function": {
+                        "codomain": {
+                          "either": {
+                            "left": {
+                              "application": {
+                                "argument": {"variable": "hydra.errors.Error"},
+                                "function": {"variable": "hydra.context.InContext"}}},
+                            "right": {"maybe": {"literal": {"string": {}}}}}},
+                        "domain": {"variable": "hydra.core.FieldType"}}},
+                    "domain": {"variable": "hydra.graph.Graph"}}},
+                "domain": {"variable": "hydra.context.Context"}}},
+            "variables": []}]}},
+    {
+      "term": {
         "name": "hydra.annotations.debugIf",
         "term": {
           "annotated": {
@@ -3863,7 +3982,6 @@
     "hydra.errors",
     "hydra.graph",
     "hydra.json.model",
-    "hydra.module",
     "hydra.packaging",
     "hydra.parsing",
     "hydra.phantoms",

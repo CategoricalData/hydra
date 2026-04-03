@@ -13159,6 +13159,91 @@
             "variables": []}]}},
     {
       "term": {
+        "name": "hydra.checking.typeOfTerm",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {"literal": {"string": "Check the type of a term"}}}],
+            "body": {
+              "function": {
+                "lambda": {
+                  "body": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "function": {
+                            "lambda": {
+                              "body": {
+                                "application": {
+                                  "argument": {
+                                    "application": {
+                                      "argument": {"variable": "term"},
+                                      "function": {
+                                        "application": {
+                                          "argument": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Type"}}},
+                                          "function": {
+                                            "application": {
+                                              "argument": {"variable": "g"},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {"variable": "cx"},
+                                                  "function": {"variable": "hydra.checking.typeOf"}}}}}}}}},
+                                  "function": {
+                                    "application": {
+                                      "argument": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                              "type": {"variable": "hydra.core.Type"}}},
+                                          "type": {"variable": "hydra.context.Context"}}},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "typeApplication": {
+                                                  "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
+                                                  "type": {
+                                                    "pair": {
+                                                      "first": {"variable": "hydra.core.Type"},
+                                                      "second": {"variable": "hydra.context.Context"}}}}},
+                                              "type": {"variable": "hydra.core.Type"}}},
+                                          "type": {
+                                            "application": {
+                                              "argument": {"variable": "hydra.errors.Error"},
+                                              "function": {"variable": "hydra.context.InContext"}}}}}}}}},
+                              "domain": [{"variable": "hydra.core.Term"}],
+                              "parameter": "term"}}},
+                        "domain": [{"variable": "hydra.graph.Graph"}],
+                        "parameter": "g"}}},
+                  "domain": [{"variable": "hydra.context.Context"}],
+                  "parameter": "cx"}}}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {
+                  "function": {
+                    "codomain": {
+                      "function": {
+                        "codomain": {
+                          "either": {
+                            "left": {
+                              "application": {
+                                "argument": {"variable": "hydra.errors.Error"},
+                                "function": {"variable": "hydra.context.InContext"}}},
+                            "right": {"variable": "hydra.core.Type"}}},
+                        "domain": {"variable": "hydra.core.Term"}}},
+                    "domain": {"variable": "hydra.graph.Graph"}}},
+                "domain": {"variable": "hydra.context.Context"}}},
+            "variables": []}]}},
+    {
+      "term": {
         "name": "hydra.checking.typesAllEffectivelyEqual",
         "term": {
           "annotated": {
@@ -13530,7 +13615,6 @@
     "hydra.errors",
     "hydra.graph",
     "hydra.json.model",
-    "hydra.module",
     "hydra.packaging",
     "hydra.parsing",
     "hydra.phantoms",

@@ -52,10 +52,6 @@ chooseUniqueName reserved name =
                 in (Logic.ifElse (Sets.member candidate reserved) (tryName (Math.add index 1)) candidate)
       in (tryName 1)
 
--- | Look up an element in a graph
-dereferenceElement :: Graph.Graph -> Core.Name -> Maybe Core.Binding
-dereferenceElement graph name = lookupElement graph name
-
 -- | Resolve a schema type through a chain of zero or more typedefs
 dereferenceSchemaType :: Core.Name -> M.Map Core.Name Core.TypeScheme -> Maybe Core.TypeScheme
 dereferenceSchemaType name types =
@@ -80,7 +76,7 @@ dereferenceSchemaType name types =
 -- | Look up a binding by name in a graph, returning Either an error or the binding
 dereferenceVariable :: Graph.Graph -> Core.Name -> Either String Core.Binding
 dereferenceVariable graph name =
-    Maybes.maybe (Left (Strings.cat2 "no such element: " (Core.unName name))) (\right_ -> Right right_) (lookupElement graph name)
+    Maybes.maybe (Left (Strings.cat2 "no such element: " (Core.unName name))) (\right_ -> Right right_) (lookupBinding graph name)
 
 -- | Create a graph from a parent graph, schema types, and list of element bindings
 elementsToGraph :: Graph.Graph -> M.Map Core.Name Core.TypeScheme -> [Core.Binding] -> Graph.Graph
@@ -148,8 +144,8 @@ graphToBindings g =
         Core.bindingType = (Maps.lookup name (Graph.graphBoundTypes g))}) (Maps.toList (Graph.graphBoundTerms g))
 
 -- | Look up a binding in a graph by name
-lookupElement :: Graph.Graph -> Core.Name -> Maybe Core.Binding
-lookupElement graph name =
+lookupBinding :: Graph.Graph -> Core.Name -> Maybe Core.Binding
+lookupBinding graph name =
     Maybes.map (\term -> Core.Binding {
       Core.bindingName = name,
       Core.bindingTerm = term,
@@ -183,7 +179,7 @@ matchUnion cx graph tname pairs term =
       let stripped = Strip.deannotateAndDetypeTerm term
           mapping = Maps.fromList pairs
       in case stripped of
-        Core.TermVariable v0 -> Eithers.bind (requireElement cx graph v0) (\el -> matchUnion cx graph tname pairs (Core.bindingTerm el))
+        Core.TermVariable v0 -> Eithers.bind (requireBinding cx graph v0) (\el -> matchUnion cx graph tname pairs (Core.bindingTerm el))
         Core.TermUnion v0 ->
           let exp =
 
@@ -208,8 +204,8 @@ matchUnion cx graph tname pairs term =
 matchUnitField :: t0 -> t1 -> (t0, (t2 -> Either t3 t1))
 matchUnitField fname x = (fname, (\ignored -> Right x))
 
-requireElement :: Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Errors.Error) Core.Binding
-requireElement cx graph name =
+requireBinding :: Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Errors.Error) Core.Binding
+requireBinding cx graph name =
 
       let showAll = False
           ellipsis =
@@ -219,7 +215,7 @@ requireElement cx graph name =
                   Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "no such element: " (Core.unName name)) ". Available elements: {") (Strings.intercalate ", " (ellipsis (Lists.map Core.unName (Maps.keys (Graph.graphBoundTerms graph)))))) "}"
       in (Maybes.maybe (Left (Context.InContext {
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError errMsg)),
-        Context.inContextContext = cx})) (\x -> Right x) (dereferenceElement graph name))
+        Context.inContextContext = cx})) (\x -> Right x) (lookupBinding graph name))
 
 requirePrimitive :: Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Errors.Error) Graph.Primitive
 requirePrimitive cx graph name =

@@ -5,19 +5,19 @@
 module Hydra.Sources.Encode.Pg.Model where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Module as Module
+import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-module_ :: Module.Module
+module_ :: Packaging.Module
 module_ =
-    Module.Module {
-      Module.moduleNamespace = (Module.Namespace "hydra.encode.pg.model"),
-      Module.moduleDefinitions = [
-        Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.encode.pg.model.adjacentEdge"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+    Packaging.Module {
+      Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.pg.model"),
+      Packaging.moduleDefinitions = [
+        Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.adjacentEdge"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "v"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -119,7 +119,7 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.pg.model.AdjacentEdge"),
                                       Core.projectionField = (Core.Name "properties")})))),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})))}))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "v"],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -132,9 +132,9 @@ module_ =
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))})),
                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))})),
             Core.typeSchemeConstraints = Nothing}))}),
-        (Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.encode.pg.model.direction"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.direction"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
             Core.caseStatementTypeName = (Core.Name "hydra.pg.model.Direction"),
             Core.caseStatementDefault = Nothing,
             Core.caseStatementCases = [
@@ -294,15 +294,15 @@ module_ =
                                           Core.fieldName = (Core.Name "unit"),
                                           Core.fieldTerm = Core.TermUnit}}))}))),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))}]})))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.pg.model.Direction")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.typeSchemeConstraints = Nothing}))})),
-        (Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.encode.pg.model.edge"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.edge"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "v"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -421,7 +421,7 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
                                       Core.projectionField = (Core.Name "properties")})))),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})))}))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "v"],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -434,9 +434,9 @@ module_ =
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))})),
                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))})),
             Core.typeSchemeConstraints = Nothing}))})),
-        (Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.encode.pg.model.edgeLabel"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.edgeLabel"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -469,15 +469,15 @@ module_ =
                         Core.applicationArgument = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.pg.model.EdgeLabel")))),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))}))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.pg.model.EdgeLabel")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.typeSchemeConstraints = Nothing}))})),
-        (Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.encode.pg.model.edgeType"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.edgeType"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "t"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -596,7 +596,7 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
                                       Core.projectionField = (Core.Name "properties")})))),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})))}))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "t"],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -609,9 +609,9 @@ module_ =
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t"))})),
                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))})),
             Core.typeSchemeConstraints = Nothing}))})),
-        (Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.encode.pg.model.element"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.element"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "v"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
@@ -686,7 +686,7 @@ module_ =
                                         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.pg.model.edge")),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "v"))})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))}]}))))}))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "v"],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -699,9 +699,9 @@ module_ =
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))})),
                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))})),
             Core.typeSchemeConstraints = Nothing}))})),
-        (Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.encode.pg.model.elementKind"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.elementKind"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
             Core.caseStatementTypeName = (Core.Name "hydra.pg.model.ElementKind"),
             Core.caseStatementDefault = Nothing,
             Core.caseStatementCases = [
@@ -783,15 +783,15 @@ module_ =
                                           Core.fieldName = (Core.Name "unit"),
                                           Core.fieldTerm = Core.TermUnit}}))}))),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))}]})))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.pg.model.ElementKind")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.typeSchemeConstraints = Nothing}))})),
-        (Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.encode.pg.model.elementTree"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.elementTree"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "v"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -861,7 +861,7 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.pg.model.ElementTree"),
                                       Core.projectionField = (Core.Name "dependencies")})))),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})))}))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "v"],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -874,9 +874,9 @@ module_ =
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))})),
                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))})),
             Core.typeSchemeConstraints = Nothing}))})),
-        (Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.encode.pg.model.elementType"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.elementType"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "t"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
@@ -951,7 +951,7 @@ module_ =
                                         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.pg.model.edgeType")),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "t"))})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))}]}))))}))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "t"],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -964,9 +964,9 @@ module_ =
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t"))})),
                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))})),
             Core.typeSchemeConstraints = Nothing}))})),
-        (Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.encode.pg.model.elementTypeTree"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.elementTypeTree"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "t"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -1036,7 +1036,7 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.pg.model.ElementTypeTree"),
                                       Core.projectionField = (Core.Name "dependencies")})))),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})))}))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "t"],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -1049,9 +1049,9 @@ module_ =
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t"))})),
                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))})),
             Core.typeSchemeConstraints = Nothing}))})),
-        (Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.encode.pg.model.graph"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.graph"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "v"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -1136,7 +1136,7 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.pg.model.Graph"),
                                       Core.projectionField = (Core.Name "edges")})))),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})))}))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "v"],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -1152,9 +1152,9 @@ module_ =
               (Core.Name "v", Core.TypeVariableMetadata {
                 Core.typeVariableMetadataClasses = (S.fromList [
                   Core.Name "ordering"])})]))}))})),
-        (Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.encode.pg.model.graphSchema"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.graphSchema"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "t"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -1239,7 +1239,7 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.pg.model.GraphSchema"),
                                       Core.projectionField = (Core.Name "edges")})))),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})))}))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "t"],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -1252,9 +1252,9 @@ module_ =
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t"))})),
                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))})),
             Core.typeSchemeConstraints = Nothing}))})),
-        (Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.encode.pg.model.label"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.label"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
             Core.caseStatementTypeName = (Core.Name "hydra.pg.model.Label"),
             Core.caseStatementDefault = Nothing,
             Core.caseStatementCases = [
@@ -1322,15 +1322,15 @@ module_ =
                                   Core.fieldTerm = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.pg.model.edgeLabel")),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))}]})))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.pg.model.Label")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.typeSchemeConstraints = Nothing}))})),
-        (Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.encode.pg.model.lazyGraph"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.lazyGraph"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "v"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -1411,7 +1411,7 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.pg.model.LazyGraph"),
                                       Core.projectionField = (Core.Name "edges")})))),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})))}))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "v"],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -1424,9 +1424,9 @@ module_ =
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))})),
                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))})),
             Core.typeSchemeConstraints = Nothing}))})),
-        (Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.encode.pg.model.property"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.property"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "v"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -1481,7 +1481,7 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.pg.model.Property"),
                                       Core.projectionField = (Core.Name "value")})))),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})))}))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "v"],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -1494,9 +1494,9 @@ module_ =
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))})),
                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))})),
             Core.typeSchemeConstraints = Nothing}))})),
-        (Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.encode.pg.model.propertyKey"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.propertyKey"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -1529,15 +1529,15 @@ module_ =
                         Core.applicationArgument = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.pg.model.PropertyKey")))),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))}))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.pg.model.PropertyKey")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.typeSchemeConstraints = Nothing}))})),
-        (Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.encode.pg.model.propertyType"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.propertyType"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "t"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -1620,7 +1620,7 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.pg.model.PropertyType"),
                                       Core.projectionField = (Core.Name "required")})))),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})))}))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "t"],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -1633,9 +1633,9 @@ module_ =
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t"))})),
                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))})),
             Core.typeSchemeConstraints = Nothing}))})),
-        (Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.encode.pg.model.vertex"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.vertex"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "v"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -1720,7 +1720,7 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.pg.model.Vertex"),
                                       Core.projectionField = (Core.Name "properties")})))),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})))}))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "v"],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -1733,9 +1733,9 @@ module_ =
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))})),
                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))})),
             Core.typeSchemeConstraints = Nothing}))})),
-        (Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.encode.pg.model.vertexLabel"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.vertexLabel"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -1768,15 +1768,15 @@ module_ =
                         Core.applicationArgument = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.pg.model.VertexLabel")))),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))}))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.pg.model.VertexLabel")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.typeSchemeConstraints = Nothing}))})),
-        (Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.encode.pg.model.vertexType"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.vertexType"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "t"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -1861,7 +1861,7 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexType"),
                                       Core.projectionField = (Core.Name "properties")})))),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})))}))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "t"],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -1874,9 +1874,9 @@ module_ =
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t"))})),
                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))})),
             Core.typeSchemeConstraints = Nothing}))})),
-        (Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.encode.pg.model.vertexWithAdjacentEdges"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.vertexWithAdjacentEdges"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "v"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -1976,7 +1976,7 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexWithAdjacentEdges"),
                                       Core.projectionField = (Core.Name "outs")})))),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})))}))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "v"],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -1989,8 +1989,8 @@ module_ =
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))})),
                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))})),
             Core.typeSchemeConstraints = Nothing}))}))],
-      Module.moduleTermDependencies = [
-        Module.Namespace "hydra.encode.core"],
-      Module.moduleTypeDependencies = [
-        Module.Namespace "hydra.pg.model"],
-      Module.moduleDescription = (Just "Term encoders for hydra.pg.model")}
+      Packaging.moduleTermDependencies = [
+        Packaging.Namespace "hydra.encode.core"],
+      Packaging.moduleTypeDependencies = [
+        Packaging.Namespace "hydra.pg.model"],
+      Packaging.moduleDescription = (Just "Term encoders for hydra.pg.model")}

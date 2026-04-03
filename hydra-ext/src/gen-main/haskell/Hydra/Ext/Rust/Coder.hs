@@ -21,8 +21,8 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Util as Util
@@ -265,13 +265,13 @@ encodeTerm cx g term =
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected term variant")),
         Context.inContextContext = cx})
 
-encodeTermDefinition :: Context.Context -> t0 -> Module.TermDefinition -> Either (Context.InContext Errors.Error) Syntax.ItemWithComments
+encodeTermDefinition :: Context.Context -> t0 -> Packaging.TermDefinition -> Either (Context.InContext Errors.Error) Syntax.ItemWithComments
 encodeTermDefinition cx g tdef =
 
-      let name = Module.termDefinitionName tdef
-          term = Module.termDefinitionTerm tdef
+      let name = Packaging.termDefinitionName tdef
+          term = Packaging.termDefinitionTerm tdef
           lname = Formatting.convertCaseCamelToLowerSnake (Names.localNameOf name)
-          typ = Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeType (Module.termDefinitionType tdef)
+          typ = Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeType (Packaging.termDefinitionType tdef)
       in (Eithers.bind (encodeTerm cx g term) (\body -> Eithers.bind (encodeType cx g typ) (\retType -> Right (Syntax.ItemWithComments {
         Syntax.itemWithCommentsDoc = Nothing,
         Syntax.itemWithCommentsVisibility = Syntax.VisibilityPublic,
@@ -330,11 +330,11 @@ encodeType cx g t =
         Core.TypeVariable v0 -> Right (rustPath (Formatting.capitalize (Core.unName v0)))
         Core.TypeForall v0 -> encodeType cx g (Core.forallTypeBody v0)
 
-encodeTypeDefinition :: Context.Context -> t0 -> Module.TypeDefinition -> Either (Context.InContext Errors.Error) Syntax.ItemWithComments
+encodeTypeDefinition :: Context.Context -> t0 -> Packaging.TypeDefinition -> Either (Context.InContext Errors.Error) Syntax.ItemWithComments
 encodeTypeDefinition cx g tdef =
 
-      let name = Module.typeDefinitionName tdef
-          typ = Module.typeDefinitionType tdef
+      let name = Packaging.typeDefinitionName tdef
+          typ = Core.typeSchemeType (Packaging.typeDefinitionType tdef)
           lname = Formatting.capitalize (Names.localNameOf name)
           freeVars =
                   Lists.filter (\v -> Lists.null (Lists.tail (Strings.splitOn "." (Core.unName v)))) (Sets.toList (Variables.freeVariablesInType typ))
@@ -381,7 +381,7 @@ encodeTypeDefinition cx g tdef =
         Syntax.itemWithCommentsVisibility = Syntax.VisibilityPublic,
         Syntax.itemWithCommentsItem = item})))
 
-moduleToRust :: Module.Module -> [Module.Definition] -> Context.Context -> t0 -> Either (Context.InContext Errors.Error) (M.Map String String)
+moduleToRust :: Packaging.Module -> [Packaging.Definition] -> Context.Context -> t0 -> Either (Context.InContext Errors.Error) (M.Map String String)
 moduleToRust mod defs cx g =
 
       let partitioned = Environment.partitionDefinitions defs
@@ -392,7 +392,8 @@ moduleToRust mod defs cx g =
             crate = Syntax.Crate {
                   Syntax.crateItems = allItems}
             code = Serialization.printExpr (Serialization.parenthesize (Serde.crateToExpr crate))
-            filePath = Names.namespaceToFilePath Util.CaseConventionLowerSnake (Module.FileExtension "rs") (Module.moduleNamespace mod)
+            filePath =
+                    Names.namespaceToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "rs") (Packaging.moduleNamespace mod)
         in (Right (Maps.singleton filePath code)))))
 
 rustApply1 :: String -> Syntax.Type -> Syntax.Type

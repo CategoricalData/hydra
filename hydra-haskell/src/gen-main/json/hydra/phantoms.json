@@ -4,87 +4,96 @@
       "type": {
         "name": "hydra.phantoms.TBinding",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "An association of a named term (element) with a phantom type"}}}],
-            "body": {
-              "forall": {
-                "body": {
-                  "record": [
-                    {
-                      "name": "name",
-                      "type": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The name of the term"}}}],
-                          "body": {"variable": "hydra.core.Name"}}}},
-                    {
-                      "name": "term",
-                      "type": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The term with its phantom type"}}}],
-                          "body": {
-                            "application": {
-                              "argument": {"variable": "a"},
-                              "function": {"variable": "hydra.phantoms.TTerm"}}}}}}]},
-                "parameter": "a"}}}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "An association of a named term (element) with a phantom type"}}}],
+              "body": {
+                "forall": {
+                  "body": {
+                    "record": [
+                      {
+                        "name": "name",
+                        "type": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "@key": "description",
+                                "@value": {"literal": {"string": "The name of the term"}}}],
+                            "body": {"variable": "hydra.core.Name"}}}},
+                      {
+                        "name": "term",
+                        "type": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "@key": "description",
+                                "@value": {"literal": {"string": "The term with its phantom type"}}}],
+                            "body": {
+                              "application": {
+                                "argument": {"variable": "a"},
+                                "function": {"variable": "hydra.phantoms.TTerm"}}}}}}]},
+                  "parameter": "a"}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.phantoms.TTerm",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "An association of a term with a phantom type"}}}],
-            "body": {
-              "forall": {"body": {"wrap": {"variable": "hydra.core.Term"}}, "parameter": "a"}}}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "An association of a term with a phantom type"}}}],
+              "body": {
+                "forall": {"body": {"wrap": {"variable": "hydra.core.Term"}}, "parameter": "a"}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.phantoms.TTermDefinition",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "An association of a term definition with a phantom type"}}}],
-            "body": {
-              "forall": {
-                "body": {
-                  "record": [
-                    {
-                      "name": "name",
-                      "type": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The name of the term"}}}],
-                          "body": {"variable": "hydra.core.Name"}}}},
-                    {
-                      "name": "term",
-                      "type": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The term with its phantom type"}}}],
-                          "body": {
-                            "application": {
-                              "argument": {"variable": "a"},
-                              "function": {"variable": "hydra.phantoms.TTerm"}}}}}}]},
-                "parameter": "a"}}}}}}],
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "An association of a term definition with a phantom type"}}}],
+              "body": {
+                "forall": {
+                  "body": {
+                    "record": [
+                      {
+                        "name": "name",
+                        "type": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "@key": "description",
+                                "@value": {"literal": {"string": "The name of the term"}}}],
+                            "body": {"variable": "hydra.core.Name"}}}},
+                      {
+                        "name": "term",
+                        "type": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "@key": "description",
+                                "@value": {"literal": {"string": "The term with its phantom type"}}}],
+                            "body": {
+                              "application": {
+                                "argument": {"variable": "a"},
+                                "function": {"variable": "hydra.phantoms.TTerm"}}}}}}]},
+                  "parameter": "a"}}}},
+          "variables": []}}}],
   "description": ["Phantom types for use with Hydra DSLs"],
   "namespace": "hydra.phantoms",
   "termDependencies": ["hydra.core"],

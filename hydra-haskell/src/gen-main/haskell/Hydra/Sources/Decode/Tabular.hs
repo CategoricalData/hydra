@@ -5,17 +5,17 @@
 module Hydra.Sources.Decode.Tabular where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Module as Module
+import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
-module_ :: Module.Module
+module_ :: Packaging.Module
 module_ =
-    Module.Module {
-      Module.moduleNamespace = (Module.Namespace "hydra.decode.tabular"),
-      Module.moduleDefinitions = [
-        Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.decode.tabular.columnType"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+    Packaging.Module {
+      Packaging.moduleNamespace = (Packaging.Namespace "hydra.decode.tabular"),
+      Packaging.moduleDefinitions = [
+        Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.decode.tabular.columnType"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "cx"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -99,7 +99,7 @@ module_ =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))}))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
@@ -109,9 +109,9 @@ module_ =
                   Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
                   Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.tabular.ColumnType"))}))}))})),
             Core.typeSchemeConstraints = Nothing}))}),
-        (Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.decode.tabular.dataRow"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.decode.tabular.dataRow"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "v"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -173,7 +173,7 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))})))}))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "v"],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -194,9 +194,9 @@ module_ =
                       Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.tabular.DataRow")),
                       Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))}))}))}))}))})),
             Core.typeSchemeConstraints = Nothing}))})),
-        (Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.decode.tabular.headerRow"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.decode.tabular.headerRow"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "cx"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -303,7 +303,7 @@ module_ =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))}))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
@@ -313,9 +313,9 @@ module_ =
                   Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
                   Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.tabular.HeaderRow"))}))}))})),
             Core.typeSchemeConstraints = Nothing}))})),
-        (Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.decode.tabular.table"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.decode.tabular.table"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "v"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -408,7 +408,7 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))})))}))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "v"],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -429,9 +429,9 @@ module_ =
                       Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.tabular.Table")),
                       Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))}))}))}))}))})),
             Core.typeSchemeConstraints = Nothing}))})),
-        (Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.decode.tabular.tableType"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.decode.tabular.tableType"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "cx"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -517,7 +517,7 @@ module_ =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))}))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
@@ -527,13 +527,13 @@ module_ =
                   Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
                   Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.tabular.TableType"))}))}))})),
             Core.typeSchemeConstraints = Nothing}))}))],
-      Module.moduleTermDependencies = [
-        Module.Namespace "hydra.extract.core",
-        (Module.Namespace "hydra.lexical"),
-        (Module.Namespace "hydra.rewriting"),
-        (Module.Namespace "hydra.decode.core"),
-        (Module.Namespace "hydra.decode.relational")],
-      Module.moduleTypeDependencies = [
-        Module.Namespace "hydra.tabular",
-        (Module.Namespace "hydra.util")],
-      Module.moduleDescription = (Just "Term decoders for hydra.tabular")}
+      Packaging.moduleTermDependencies = [
+        Packaging.Namespace "hydra.extract.core",
+        (Packaging.Namespace "hydra.lexical"),
+        (Packaging.Namespace "hydra.rewriting"),
+        (Packaging.Namespace "hydra.decode.core"),
+        (Packaging.Namespace "hydra.decode.relational")],
+      Packaging.moduleTypeDependencies = [
+        Packaging.Namespace "hydra.tabular",
+        (Packaging.Namespace "hydra.util")],
+      Packaging.moduleDescription = (Just "Term decoders for hydra.tabular")}

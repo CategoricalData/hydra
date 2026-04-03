@@ -17,8 +17,8 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
@@ -44,15 +44,15 @@ encodeName :: Bool -> Util.CaseConvention -> Environment.PythonEnvironment -> Co
 encodeName isQualified conv env name =
 
       let namespaces = Environment.pythonEnvironmentNamespaces env
-          focusPair = Module.namespacesFocus namespaces
+          focusPair = Packaging.namespacesFocus namespaces
           focusNs = Pairs.first focusPair
           boundVars = Pairs.second (Environment.pythonEnvironmentBoundTypeVariables env)
           qualName = Names.qualifyName name
-          mns = Module.qualifiedNameNamespace qualName
-          local = Module.qualifiedNameLocal qualName
+          mns = Packaging.qualifiedNameNamespace qualName
+          local = Packaging.qualifiedNameLocal qualName
           pyLocal = sanitizePythonName (Formatting.convertCase Util.CaseConventionCamel conv local)
           pyNs =
-                  \nsVal -> Strings.intercalate "." (Lists.map (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake) (Strings.splitOn "." (Module.unNamespace nsVal)))
+                  \nsVal -> Strings.intercalate "." (Lists.map (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake) (Strings.splitOn "." (Packaging.unNamespace nsVal)))
       in (Logic.ifElse isQualified (Maybes.maybe (Logic.ifElse (Equality.equal mns (Just focusNs)) (Syntax.Name (Logic.ifElse useFutureAnnotations pyLocal (Serde.escapePythonString True pyLocal))) (Maybes.maybe (Syntax.Name pyLocal) (\nsVal -> Syntax.Name (Strings.cat2 (pyNs nsVal) (Strings.cat2 "." pyLocal))) mns)) (\n -> n) (Maps.lookup name boundVars)) (Syntax.Name pyLocal))
 
 -- | Encode a name as a fully qualified Python name
@@ -60,18 +60,18 @@ encodeNameQualified :: Environment.PythonEnvironment -> Core.Name -> Syntax.Name
 encodeNameQualified env name =
 
       let namespaces = Environment.pythonEnvironmentNamespaces env
-          focusPair = Module.namespacesFocus namespaces
+          focusPair = Packaging.namespacesFocus namespaces
           focusNs = Pairs.first focusPair
           boundVars = Pairs.second (Environment.pythonEnvironmentBoundTypeVariables env)
           qualName = Names.qualifyName name
-          mns = Module.qualifiedNameNamespace qualName
-          local = Module.qualifiedNameLocal qualName
+          mns = Packaging.qualifiedNameNamespace qualName
+          local = Packaging.qualifiedNameLocal qualName
       in (Maybes.maybe (Logic.ifElse (Equality.equal mns (Just focusNs)) (Syntax.Name (Logic.ifElse useFutureAnnotations local (Serde.escapePythonString True local))) (Syntax.Name (Strings.intercalate "." (Lists.map sanitizePythonName (Strings.splitOn "." (Core.unName name)))))) (\n -> n) (Maps.lookup name boundVars))
 
 -- | Encode a namespace as a Python dotted name
-encodeNamespace :: Module.Namespace -> Syntax.DottedName
+encodeNamespace :: Packaging.Namespace -> Syntax.DottedName
 encodeNamespace nsVal =
-    Syntax.DottedName (Lists.map (\part -> Syntax.Name (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake part)) (Strings.splitOn "." (Module.unNamespace nsVal)))
+    Syntax.DottedName (Lists.map (\part -> Syntax.Name (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake part)) (Strings.splitOn "." (Packaging.unNamespace nsVal)))
 
 -- | Encode a type variable name (capitalized)
 encodeTypeVariable :: Core.Name -> Syntax.Name
@@ -121,7 +121,7 @@ variableReference conv quoted env name =
                                       Syntax.powerRhs = Nothing}))}}}}}},
                         Syntax.comparisonRhs = []})]])
           namespaces = Environment.pythonEnvironmentNamespaces env
-          focusPair = Module.namespacesFocus namespaces
+          focusPair = Packaging.namespacesFocus namespaces
           focusNs = Pairs.first focusPair
           mns = Names.namespaceOf name
           sameNamespace = Maybes.maybe False (\ns -> Equality.equal ns focusNs) mns

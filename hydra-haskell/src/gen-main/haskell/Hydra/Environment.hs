@@ -18,9 +18,12 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Module as Module
+import qualified Hydra.Lib.Sets as Sets
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Scoping as Scoping
+import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Map as M
 
@@ -55,18 +58,42 @@ graphAsTypes cx graph els =
       in (Eithers.map Maps.fromList (Eithers.mapList toPair els))
 
 -- | Partition a list of definitions into type definitions and term definitions
-partitionDefinitions :: [Module.Definition] -> ([Module.TypeDefinition], [Module.TermDefinition])
+partitionDefinitions :: [Packaging.Definition] -> ([Packaging.TypeDefinition], [Packaging.TermDefinition])
 partitionDefinitions defs =
 
       let getType =
               \def -> case def of
-                Module.DefinitionType v0 -> Just v0
-                Module.DefinitionTerm _ -> Nothing
+                Packaging.DefinitionType v0 -> Just v0
+                Packaging.DefinitionTerm _ -> Nothing
           getTerm =
                   \def -> case def of
-                    Module.DefinitionType _ -> Nothing
-                    Module.DefinitionTerm v0 -> Just v0
+                    Packaging.DefinitionType _ -> Nothing
+                    Packaging.DefinitionTerm v0 -> Just v0
       in (Maybes.cat (Lists.map getType defs), (Maybes.cat (Lists.map getTerm defs)))
+
+-- | Reorder definitions: types first (with hydra.core.Name first among types), then topologically sorted terms
+reorderDefs :: [Packaging.Definition] -> [Packaging.Definition]
+reorderDefs defs =
+
+      let partitioned = partitionDefinitions defs
+          typeDefsRaw = Pairs.first partitioned
+          nameFirst =
+                  Lists.filter (\td -> Equality.equal (Packaging.typeDefinitionName td) (Core.Name "hydra.core.Name")) typeDefsRaw
+          nameRest =
+                  Lists.filter (\td -> Logic.not (Equality.equal (Packaging.typeDefinitionName td) (Core.Name "hydra.core.Name"))) typeDefsRaw
+          typeDefs =
+                  Lists.concat [
+                    Lists.map (\td -> Packaging.DefinitionType td) nameFirst,
+                    (Lists.map (\td -> Packaging.DefinitionType td) nameRest)]
+          termDefsWrapped = Lists.map (\td -> Packaging.DefinitionTerm td) (Pairs.second partitioned)
+          sortedTermDefs =
+                  Lists.concat (Sorting.topologicalSortNodes (\d -> case d of
+                    Packaging.DefinitionTerm v0 -> Packaging.termDefinitionName v0) (\d -> case d of
+                    Packaging.DefinitionTerm v0 -> Sets.toList (Variables.freeVariablesInTerm (Packaging.termDefinitionTerm v0))
+                    _ -> []) termDefsWrapped)
+      in (Lists.concat [
+        typeDefs,
+        sortedTermDefs])
 
 -- | Convert a schema graph to a typing environment (Either version)
 schemaGraphToTypingEnvironment :: Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (M.Map Core.Name Core.TypeScheme)
